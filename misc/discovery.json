@@ -1,54 +1,54 @@
 {
   "kind": "discovery#restDescription",
   "discoveryVersion": "v1",
-  "id": string,
-  "name": string,
-  "version": string,
-  "revision": string,
-  "title": string,
-  "description": string,
+  "id": "(string)",
+  "name": "(string)",
+  "version": "(string)",
+  "revision": "(string)",
+  "title": "(string)",
+  "description": "(string)",
   "icons": {
-    "x16": string,
-    "x32": string
+    "x16": "(string)",
+    "x32": "(string)"
   },
-  "documentationLink": string,
+  "documentationLink": "(string)",
   "labels": [
-    string
+    "(string)"
   ],
   "protocol": "rest",
-  "baseUrl": string,
-  "basePath": string,
-  "rootUrl": string,
-  "servicePath": string,
+  "baseUrl": "(string)",
+  "basePath": "(string)",
+  "rootUrl": "(string)",
+  "servicePath": "(string)",
   "batchPath": "batch",
   "parameters": {
-    (key): {
-      "id": string,
-      "type": string,
-      "$ref": string,
-      "description": string,
-      "default": string,
-      "required": boolean,
-      "format": string,
-      "pattern": string,
-      "minimum": string,
-      "maximum": string,
+    "(key)": {
+      "id": "(string)",
+      "type": "(string)",
+      "$ref": "(string)",
+      "description": "(string)",
+      "default": "(string)",
+      "required": true,
+      "format": "(string)",
+      "pattern": "(string)",
+      "minimum": "(string)",
+      "maximum": "(string)",
       "enum": [
-        string
+        "(string)"
       ],
       "enumDescriptions": [
-        string
+        "(string)"
       ],
-      "repeated": boolean,
-      "location": string,
+      "repeated": "(string)",
+      "location": "(string)",
       "properties": {
-        (key): (JsonSchema)
+        "(key)": "(JsonSchema)"
       },
-      "additionalProperties": (JsonSchema),
-      "items": (JsonSchema),
+      "additionalProperties": "(JsonSchema)",
+      "items": "(JsonSchema)",
       "annotations": {
         "required": [
-          string
+          "(string)"
         ]
       }
     }
@@ -56,193 +56,193 @@
   "auth": {
     "oauth2": {
       "scopes": {
-        (key): {
-          "description": string
+        "(key)": {
+          "description": "(string)"
         }
       }
     }
   },
   "features": [
-    string
+    "(string)"
   ],
   "schemas": {
-    (key): {
-      "id": string,
-      "type": string,
-      "$ref": string,
-      "description": string,
-      "default": string,
-      "required": boolean,
-      "format": string,
-      "pattern": string,
-      "minimum": string,
-      "maximum": string,
+    "(key)": {
+      "id": "(string)",
+      "type": "(string)",
+      "$ref": "(string)",
+      "description": "(string)",
+      "default": "(string)",
+      "required": true,
+      "format": "(string)",
+      "pattern": "(string)",
+      "minimum": "(string)",
+      "maximum": "(string)",
       "enum": [
-        string
+        "(string)"
       ],
       "enumDescriptions": [
-        string
+        "(string)"
       ],
-      "repeated": boolean,
-      "location": string,
+      "repeated": true,
+      "location": "(string)",
       "properties": {
-        (key): (JsonSchema)
+        "(key)": "(JsonSchema)"
       },
-      "additionalProperties": (JsonSchema),
-      "items": (JsonSchema),
+      "additionalProperties": "(JsonSchema)",
+      "items": "(JsonSchema)",
       "annotations": {
         "required": [
-          string
+          "(string)"
         ]
       }
     }
   },
   "methods": {
-    (key): {
-      "id": string,
-      "path": string,
-      "httpMethod": string,
-      "description": string,
+    "(key)": {
+      "id": "(string)",
+      "path": "(string)",
+      "httpMethod": "(string)",
+      "description": "(string)",
       "parameters": {
-        (key): {
-          "id": string,
-          "type": string,
-          "$ref": string,
-          "description": string,
-          "default": string,
-          "required": boolean,
-          "format": string,
-          "pattern": string,
-          "minimum": string,
-          "maximum": string,
+        "(key)": {
+          "id": "(string)",
+          "type": "(string)",
+          "$ref": "(string)",
+          "description": "(string)",
+          "default": "(string)",
+          "required": true,
+          "format": "(string)",
+          "pattern": "(string)",
+          "minimum": "(string)",
+          "maximum": "(string)",
           "enum": [
-            string
+            "(string)"
           ],
           "enumDescriptions": [
-            string
+            "(string)"
           ],
-          "repeated": boolean,
-          "location": string,
+          "repeated": true,
+          "location": "(string)",
           "properties": {
-            (key): (JsonSchema)
+            "(key)": "(JsonSchema)"
           },
-          "additionalProperties": (JsonSchema),
-          "items": (JsonSchema),
+          "additionalProperties": "(JsonSchema)",
+          "items": "(JsonSchema)",
           "annotations": {
             "required": [
-              string
+              "(string)"
             ]
           }
         }
       },
       "parameterOrder": [
-        string
+        "(string)"
       ],
       "request": {
-        "$ref": string
+        "$ref": "(string)"
       },
       "response": {
-        "$ref": string
+        "$ref": "(string)"
       },
       "scopes": [
-        (value)
+        "(string)"
       ],
-      "supportsMediaDownload": boolean,
-      "supportsMediaUpload": boolean,
+      "supportsMediaDownload": true,
+      "supportsMediaUpload": true,
       "mediaUpload": {
         "accept": [
-          string
+          "(string)"
         ],
-        "maxSize": string,
+        "maxSize": "(string)",
         "protocols": {
           "simple": {
             "multipart": true,
-            "path": string
+            "path": "(string)"
           },
           "resumable": {
             "multipart": true,
-            "path": string
+            "path": "(string)"
           }
         }
       },
-      "supportsSubscription": boolean
+      "supportsSubscription": true
     }
   },
   "resources": {
-    (key): {
+    "(key)": {
       "methods": {
-        (key): {
-          "id": string,
-          "path": string,
-          "httpMethod": string,
-          "description": string,
+        "(key)": {
+          "id": "(string)",
+          "path": "(string)",
+          "httpMethod": "(string)",
+          "description": "(string)",
           "parameters": {
-            (key): {
-              "id": string,
-              "type": string,
-              "$ref": string,
-              "description": string,
-              "default": string,
-              "required": boolean,
-              "format": string,
-              "pattern": string,
-              "minimum": string,
-              "maximum": string,
+            "(key)": {
+              "id": "(string)",
+              "type": "(string)",
+              "$ref": "(string)",
+              "description": "(string)",
+              "default": "(string)",
+              "required": true,
+              "format": "(string)",
+              "pattern": "(string)",
+              "minimum": "(string)",
+              "maximum": "(string)",
               "enum": [
-                string
+                "(string)"
               ],
               "enumDescriptions": [
-                string
+                "(string)"
               ],
-              "repeated": boolean,
-              "location": string,
+              "repeated": true,
+              "location": "(string)",
               "properties": {
-                (key): (JsonSchema)
+                "(key)": "(JsonSchema)"
               },
-              "additionalProperties": (JsonSchema),
-              "items": (JsonSchema),
+              "additionalProperties": "(JsonSchema)",
+              "items": "(JsonSchema)",
               "annotations": {
                 "required": [
-                  string
+                  "(string)"
                 ]
               }
             }
           },
           "parameterOrder": [
-            string
+            "(string)"
           ],
           "request": {
-            "$ref": string
+            "$ref": "(string)"
           },
           "response": {
-            "$ref": string
+            "$ref": "(string)"
           },
           "scopes": [
-            (value)
+            "(string)"
           ],
-          "supportsMediaDownload": boolean,
-          "supportsMediaUpload": boolean,
+          "supportsMediaDownload": true,
+          "supportsMediaUpload": true,
           "mediaUpload": {
             "accept": [
-              string
+              "(string)"
             ],
-            "maxSize": string,
+            "maxSize": "(string)",
             "protocols": {
               "simple": {
                 "multipart": true,
-                "path": string
+                "path": "(string)"
               },
               "resumable": {
                 "multipart": true,
-                "path": string
+                "path": "(string)"
               }
             }
           },
-          "supportsSubscription": boolean
+          "supportsSubscription": true
         }
       },
       "resources": {
-        (key): (RestResource)
+        "(key)": "(RestResource)"
       }
     }
   }
