@@ -1,0 +1,540 @@
+{
+ "kind": "discovery#restDescription",
+ "discoveryVersion": "v1",
+ "id": "logging:v1beta",
+ "name": "logging",
+ "version": "v1beta",
+ "revision": "20141028",
+ "title": "Logging API",
+ "description": "Read and write access to logged events.",
+ "ownerDomain": "google.com",
+ "ownerName": "Google",
+ "icons": {
+  "x16": "http://www.google.com/images/icons/product/search-16.gif",
+  "x32": "http://www.google.com/images/icons/product/search-32.gif"
+ },
+ "documentationLink": "http://developers.google.com",
+ "protocol": "rest",
+ "baseUrl": "https://www.googleapis.com/logging/v1beta/",
+ "basePath": "/logging/v1beta/",
+ "rootUrl": "https://www.googleapis.com/",
+ "servicePath": "logging/v1beta/",
+ "batchPath": "batch",
+ "parameters": {
+  "alt": {
+   "type": "string",
+   "description": "Data format for the response.",
+   "default": "json",
+   "enum": [
+    "json"
+   ],
+   "enumDescriptions": [
+    "Responses with Content-Type of application/json"
+   ],
+   "location": "query"
+  },
+  "fields": {
+   "type": "string",
+   "description": "Selector specifying which fields to include in a partial response.",
+   "location": "query"
+  },
+  "key": {
+   "type": "string",
+   "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.",
+   "location": "query"
+  },
+  "oauth_token": {
+   "type": "string",
+   "description": "OAuth 2.0 token for the current user.",
+   "location": "query"
+  },
+  "prettyPrint": {
+   "type": "boolean",
+   "description": "Returns response with indentations and line breaks.",
+   "default": "true",
+   "location": "query"
+  },
+  "quotaUser": {
+   "type": "string",
+   "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. Overrides userIp if both are provided.",
+   "location": "query"
+  },
+  "userIp": {
+   "type": "string",
+   "description": "IP address of the site where the request originates. Use this if you want to enforce per-user limits.",
+   "location": "query"
+  }
+ },
+ "schemas": {
+  "Any": {
+   "id": "Any",
+   "type": "object",
+   "description": "Any contains an arbitrary serialized message along with a URL that describes the type of the serialized message.",
+   "externalTypeName": "google.protobuf.Any",
+   "properties": {
+    "typeUrl": {
+     "type": "string",
+     "description": "A URL that resolves to a google.protobuf.Type value."
+    },
+    "value": {
+     "type": "string",
+     "description": "Serialized data of the specified type.\n\nNote: the field is optional since if we are converting between formats and the type could not be resolved, we store the original data pre-conversion in other fields (TBD).",
+     "format": "byte"
+    }
+   }
+  },
+  "Label": {
+   "id": "Label",
+   "type": "object",
+   "description": "A key-value pair applied to a given object.",
+   "externalTypeName": "tech.label.Label",
+   "properties": {
+    "key": {
+     "type": "string",
+     "description": "The key of a label is a syntactically valid URL (as per RFC 1738) with the \"scheme\" and initial slashes omitted and with the additional restrictions noted below. Each key should be globally unique. The \"host\" portion is called the \"namespace\" and is not necessarily resolvable to a network endpoint. Instead, the namespace indicates what system or entity defines the semantics of the label. Namespaces do not restrict the set of objects to which a label may be associated.\n\nKeys are defined by the following grammar:\n\nkey = hostname \"/\" kpath kpath = ksegment *[ \"/\" ksegment ] ksegment = alphadigit | *[ alphadigit | \"-\" | \"_\" | \".\" ]\n\nwhere \"hostname\" and \"alphadigit\" are defined as in RFC 1738.\n\nExample key: spanner.google.com/universe"
+    },
+    "numValue": {
+     "type": "string",
+     "description": "An integer value.",
+     "format": "int64"
+    },
+    "strValue": {
+     "type": "string",
+     "description": "A string value."
+    }
+   }
+  },
+  "ListLogSinksResponse": {
+   "id": "ListLogSinksResponse",
+   "type": "object",
+   "description": "Result returned from ListLogSinks.",
+   "externalTypeName": "google.logging.v1.ListLogSinksResponse",
+   "properties": {
+    "sinks": {
+     "type": "array",
+     "description": "These may be partial sinks where only name is populated.",
+     "items": {
+      "$ref": "LogSink"
+     }
+    }
+   }
+  },
+  "ListLogsResponse": {
+   "id": "ListLogsResponse",
+   "type": "object",
+   "description": "Result returned from ListLogs.",
+   "externalTypeName": "google.logging.v1.ListLogsResponse",
+   "properties": {
+    "logs": {
+     "type": "array",
+     "description": "A list of log resources.",
+     "items": {
+      "$ref": "Log"
+     }
+    },
+    "nextPageToken": {
+     "type": "string",
+     "description": "Pagination: If there are more results, retrieve them by invoking ListLogs again with the same arguments and this next_page_token."
+    }
+   }
+  },
+  "Log": {
+   "id": "Log",
+   "type": "object",
+   "description": "A log object.",
+   "externalTypeName": "google.logging.v1.Log",
+   "properties": {
+    "displayName": {
+     "type": "string",
+     "description": "Name to be used when displaying the log to the user (e.g., in a UI)"
+    },
+    "name": {
+     "type": "string",
+     "description": "REQUIRED: log name"
+    },
+    "payloadType": {
+     "type": "string",
+     "description": "Type URL describing the expected payload type for the log."
+    }
+   }
+  },
+  "LogEntry": {
+   "id": "LogEntry",
+   "type": "object",
+   "description": "An individual entry in a log.",
+   "externalTypeName": "google.logging.v1.LogEntry",
+   "properties": {
+    "insertId": {
+     "type": "string",
+     "description": "Unique ID used to deduplicate log entries. If provided, the logging service will attempt to reject multiple log entries on the same log with the same insert_id that are sent within the previous N minutes. Deduplication may occur asynchronously, so the client may not receive an error if the entry is recognized as a duplicate."
+    },
+    "log": {
+     "type": "string",
+     "description": "OUTPUT-ONLY: The log resource that this entry belongs to."
+    },
+    "metadata": {
+     "$ref": "LogEntryMetadata",
+     "description": "Metadata for the log entry."
+    },
+    "protoPayload": {
+     "$ref": "Any",
+     "description": "Contains a structured (protocol buffer) log entry. If the data type in proto_payload is known by the logging system, JSON clients will receive it in JSON; otherwise, the client will receive it as a serialized proto and must decode it. See google.protobuf.Any for more details."
+    },
+    "textPayload": {
+     "type": "string",
+     "description": "Contains a text representation of the log entry."
+    }
+   }
+  },
+  "LogEntryMetadata": {
+   "id": "LogEntryMetadata",
+   "type": "object",
+   "description": "Additional data that is associated with a log entry.",
+   "externalTypeName": "google.logging.v1.LogEntryMetadata",
+   "properties": {
+    "labels": {
+     "type": "array",
+     "description": "Labels are not yet fully supported (as of May 2014). Callers are expected to populate one of the following sets of labels describing the source of the log entry, so they can be transformed to a cloud.CloudTask proto:\n\nApp Engine: service: \"appengine.googleapis.com\" labels: appengine.googleapis.com/module_id appengine.googleapis.com/version_id and one of: appengine.googleapis.com/replica_index appengine.googleapis.com/clone_id or the Compute Engine labels (resource_type/resource_id) below\n\nCompute Engine: service: \"compute.googleapis.com\" labels: compute.googleapis.com/resource_type = \"instance\" compute.googleapis.com/resource_id\n\nOther labels may be supplied, but are currently ignored and not stored with the log entry.",
+     "items": {
+      "$ref": "Label"
+     }
+    },
+    "projectId": {
+     "type": "string",
+     "description": "If the log entry is from a Google Cloud Platform source, this must be the project ID of the service that generated the entry. Otherwise, the caller may populate this with whatever project name or ID is meaningful, or leave it unset."
+    },
+    "region": {
+     "type": "string",
+     "description": "If the log entry is from a Google Cloud Platform source, this must be the region of the source (e.g., us-central1) if it has one, or unset if \"region\" isn't meaningful for the service.\n\nFor non-Google Cloud Platform sources, the caller may populate this with whatever location name is meaningful, or leave it unset."
+    },
+    "serviceName": {
+     "type": "string",
+     "description": "If the log entry is from a Google Cloud Platform source, this must be the official API name of the service (e.g., compute.googleapis.com). Otherwise, the caller may populate this with whatever service name is meaningful, or leave it unset."
+    },
+    "severity": {
+     "type": "string",
+     "description": "The severity of the log entry.",
+     "enum": [
+      "alert",
+      "critical",
+      "debug",
+      "default",
+      "emergency",
+      "error",
+      "info",
+      "notice",
+      "warning"
+     ],
+     "enumDescriptions": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+     ]
+    },
+    "timeNanos": {
+     "type": "string",
+     "description": "REQUIRED: The time the event described by the log entry occurred, in nanoseconds since the Unix epoch.",
+     "format": "int64"
+    },
+    "timestamp": {
+     "$ref": "Timestamp",
+     "description": "REQUIRED: The time the event described by the log entry occurred."
+    },
+    "userId": {
+     "type": "string",
+     "description": "If the log entry applies to an action taken by an authenticated user, this field must contain the user identifier (a fully qualified email address) of the user that requested or performed the action. May be empty if the event described by the log entry doesn't have an associated user."
+    },
+    "zone": {
+     "type": "string",
+     "description": "If the log entry is from a Google Cloud Platform source, this must be the zone of the source (e.g., us-central1-a) if it has one, or unset if \"zone\" isn't meaningful for the service.\n\nFor non-Google Cloud Platform sources, the caller may populate this with whatever location name is meaningful, or leave it unset."
+    }
+   }
+  },
+  "LogError": {
+   "id": "LogError",
+   "type": "object",
+   "description": "An object that describes a problem in a sink or the sink's configuration.",
+   "externalTypeName": "google.logging.v1.LogError",
+   "properties": {
+    "resource": {
+     "type": "string",
+     "description": "The resource associated with the error. It may be different from the sink destination. E.g. the sink may point to a BigQuery dataset, but the error may refer to a table resource inside the dataset."
+    },
+    "status": {
+     "$ref": "Status",
+     "description": "The description of the last error observed."
+    },
+    "timeNanos": {
+     "type": "string",
+     "description": "The last time the error was observed, in nanoseconds since the Unix epoch.",
+     "format": "int64"
+    }
+   }
+  },
+  "LogSink": {
+   "id": "LogSink",
+   "type": "object",
+   "description": "An object that describes where a log may be written.",
+   "externalTypeName": "google.logging.v1.LogSink",
+   "properties": {
+    "destination": {
+     "type": "string",
+     "description": "The resource to send log entries to. The supported sink resource types are:\n\nGoogle Cloud Storage: storage.googleapis.com/{bucket} bucket.storage.googleapis.com/ Google BigQuery: bigquery.googleapis.com/projects/{projectId}/datasets/{datasetId}\n\nCurrently the logging service supports at most one sink of each type per log resource."
+    },
+    "errors": {
+     "type": "array",
+     "description": "All active errors found for this sink. [output only]",
+     "items": {
+      "$ref": "LogError"
+     }
+    },
+    "name": {
+     "type": "string",
+     "description": "The name of this sink. This is a client-assigned identifier for the resource."
+    }
+   }
+  },
+  "Status": {
+   "id": "Status",
+   "type": "object",
+   "externalTypeName": "google.rpc.Status",
+   "properties": {
+    "code": {
+     "type": "integer",
+     "description": "This is the status code. For Google APIs, this code must be the Canonical Error Code.",
+     "format": "int32"
+    },
+    "details": {
+     "type": "array",
+     "description": "This is a list of messages that carry the error details. There will be a common set of message types for APIs to use.",
+     "items": {
+      "$ref": "Any"
+     }
+    },
+    "message": {
+     "type": "string",
+     "description": "This is a human readable error string."
+    }
+   }
+  },
+  "Timestamp": {
+   "id": "Timestamp",
+   "type": "object",
+   "description": "A Timestamp represents a point in time independent of any time zone or calendar, represented as seconds and fractions of seconds at nanosecond resolution in UTC Epoch time. It is encoded using the Proleptic Gregorian Calendar which extends the Gregorian calendar backwards to year one. It is encoded assuming all minutes are 60 seconds long, i.e. leap seconds are \"smeared\" so that no leap second table is needed for interpretation. Range is from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59.999999999Z.\n\nExample 1: compute Timestamp from POSIX time().\n\nTimestamp timestamp; timestamp.set_seconds(time(NULL)); timestamp.set_nanos(0);\n\nExample 2: compute Timestamp from POSIX gettimeofday().\n\nstruct timeval tv; gettimeofday(&tv, NULL);\n\nTimestamp timestamp; timestamp.set_seconds(tv.tv_sec); timestamp.set_nanos(tv.tv_usec * 1000);\n\nExample 3: compute Timestamp from Win32 GetSystemTimeAsFileTime().\n\nFILETIME ft; GetSystemTimeAsFileTime(&ft); UINT64 ticks = (((UINT64)ft.dwHighDateTime) \u003c\u003c 32) | ft.dwLowDateTime;\n\n// A Windows tick is 100 nanoseconds. Windows epoch 1601-01-01T00:00:00Z // is 11644473600 seconds before Unix epoch 1970-01-01T00:00:00Z. Timestamp timestamp; timestamp.set_seconds((INT64) ((ticks / 10000000) - 11644473600LL)); timestamp.set_nanos((INT32) ((ticks % 10000000) * 100));\n\nExample 4: compute Timestamp from Java System.currentTimeMillis().\n\nlong millis = System.currentTimeMillis();\n\nTimestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000) .setNanos((millis % 1000) * 1000000).build();",
+   "externalTypeName": "google.protobuf.Timestamp",
+   "properties": {
+    "nanos": {
+     "type": "integer",
+     "description": "Positive fractions of a second at nanosecond resolution. Negative second values with fractions may still have positive nanos values that count forward in time. Must be from 0 to 999,999,999 inclusive.",
+     "format": "int32"
+    },
+    "seconds": {
+     "type": "string",
+     "description": "Positive or negative seconds of UTC time since Unix epoch 1970-01-01T00:00:00Z. Must be from from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59Z inclusive.",
+     "format": "int64"
+    }
+   }
+  },
+  "WriteLogEntriesRequest": {
+   "id": "WriteLogEntriesRequest",
+   "type": "object",
+   "description": "The parameters to WriteLogEntries.",
+   "externalTypeName": "google.logging.v1.WriteLogEntriesRequest",
+   "properties": {
+    "commonLabels": {
+     "type": "array",
+     "description": "Labels that apply to all entries in this request. If a conflicting label key is present in the per-entry LogEntryMetadata.label list, it overrides the value specified here.\n\nSee the documentation for LogEntryMetadata.labels for additional notes.",
+     "items": {
+      "$ref": "Label"
+     }
+    },
+    "entries": {
+     "type": "array",
+     "description": "Log entries to insert.",
+     "items": {
+      "$ref": "LogEntry"
+     }
+    }
+   }
+  }
+ },
+ "resources": {
+  "projects": {
+   "resources": {
+    "logs": {
+     "methods": {
+      "list": {
+       "id": "logging.projects.logs.list",
+       "path": "{+project}/logs",
+       "httpMethod": "GET",
+       "description": "Lists log resources belonging to the specified project.\n\nRequires https://www.googleapis.com/auth/logging.read scope.",
+       "parameters": {
+        "pageSize": {
+         "type": "integer",
+         "description": "Pagination: maximum number of results to return per page",
+         "format": "int32",
+         "location": "query"
+        },
+        "pageToken": {
+         "type": "string",
+         "description": "Pagination: a next_page_token previously returned from ListLogs",
+         "location": "query"
+        },
+        "project": {
+         "type": "string",
+         "description": "The project ID for which to list the log resources.",
+         "required": true,
+         "location": "path"
+        }
+       },
+       "parameterOrder": [
+        "project"
+       ],
+       "response": {
+        "$ref": "ListLogsResponse"
+       }
+      }
+     },
+     "resources": {
+      "entries": {
+       "methods": {
+        "write": {
+         "id": "logging.projects.logs.entries.write",
+         "path": "{+log}/entries:write",
+         "httpMethod": "POST",
+         "description": "Creates several log entries in a log.\n\nRequires https://www.googleapis.com/auth/logging.write scope.",
+         "parameters": {
+          "log": {
+           "type": "string",
+           "description": "The log resource into which to insert the log entries.",
+           "required": true,
+           "location": "path"
+          }
+         },
+         "parameterOrder": [
+          "log"
+         ],
+         "request": {
+          "$ref": "WriteLogEntriesRequest"
+         }
+        }
+       }
+      },
+      "sinks": {
+       "methods": {
+        "delete": {
+         "id": "logging.projects.logs.sinks.delete",
+         "path": "{+sink}",
+         "httpMethod": "DELETE",
+         "description": "Deletes the specified log sink. Requires https://www.googleapis.com/auth/logging.admin scope.",
+         "parameters": {
+          "sink": {
+           "type": "string",
+           "required": true,
+           "location": "path"
+          }
+         },
+         "parameterOrder": [
+          "sink"
+         ]
+        },
+        "get": {
+         "id": "logging.projects.logs.sinks.get",
+         "path": "{+sink}",
+         "httpMethod": "GET",
+         "description": "Get the specified log sink resource. Requires https://www.googleapis.com/auth/logging.read scope.",
+         "parameters": {
+          "sink": {
+           "type": "string",
+           "description": "Obsolete: field numbers 1-3",
+           "required": true,
+           "location": "path"
+          }
+         },
+         "parameterOrder": [
+          "sink"
+         ],
+         "response": {
+          "$ref": "LogSink"
+         }
+        },
+        "list": {
+         "id": "logging.projects.logs.sinks.list",
+         "path": "{+log}/sinks",
+         "httpMethod": "GET",
+         "description": "List log sinks associated with the specified log. Requires https://www.googleapis.com/auth/logging.read scope.",
+         "parameters": {
+          "log": {
+           "type": "string",
+           "description": "Obsolete: field numbers 1 and 2.",
+           "required": true,
+           "location": "path"
+          }
+         },
+         "parameterOrder": [
+          "log"
+         ],
+         "response": {
+          "$ref": "ListLogSinksResponse"
+         }
+        },
+        "patch": {
+         "id": "logging.projects.logs.sinks.patch",
+         "path": "{+sink}",
+         "httpMethod": "PATCH",
+         "description": "Create or update the specified log sink resource. Requires https://www.googleapis.com/auth/logging.admin scope. This method supports patch semantics.",
+         "parameters": {
+          "sink": {
+           "type": "string",
+           "description": "Obsolete: field numbers 1-3",
+           "required": true,
+           "location": "path"
+          }
+         },
+         "parameterOrder": [
+          "sink"
+         ],
+         "request": {
+          "$ref": "LogSink"
+         },
+         "response": {
+          "$ref": "LogSink"
+         }
+        },
+        "update": {
+         "id": "logging.projects.logs.sinks.update",
+         "path": "{+sink}",
+         "httpMethod": "PUT",
+         "description": "Create or update the specified log sink resource. Requires https://www.googleapis.com/auth/logging.admin scope.",
+         "parameters": {
+          "sink": {
+           "type": "string",
+           "description": "Obsolete: field numbers 1-3",
+           "required": true,
+           "location": "path"
+          }
+         },
+         "parameterOrder": [
+          "sink"
+         ],
+         "request": {
+          "$ref": "LogSink"
+         },
+         "response": {
+          "$ref": "LogSink"
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ }
+}
