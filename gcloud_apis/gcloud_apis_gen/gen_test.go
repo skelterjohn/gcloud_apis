@@ -14,36 +14,40 @@ See the License for the specific language governing permissions and
 limitations under the License.                                                  
 */
 
-package discovery
+package main
 
 import (
-	"github.com/googlecloudplatform/gcloud/gcloud_apis/discovery_docs"
-	"strings"
+	"os"
+	"os/exec"
+	"path/filepath"
 	"testing"
 )
 
-var simpleDoc = `
-{
-  "discoveryVersion": "v1"
-}
-`
-
-func TestSimpleLoad(t *testing.T) {
-	doc, err := LoadDiscovery(strings.NewReader(simpleDoc))
+func TestGeneratedCodeCompiles(t *testing.T) {
+	workspace := os.TempDir()
+	commands_tmp := filepath.Join(workspace, "commands")
+	clients_tmp := filepath.Join(workspace, "clients")
+	err := os.MkdirAll(commands_tmp, 0777)
 	if err != nil {
-		t.Errorf(err.Error())
+		t.Error(err)
 	}
-	if doc.DiscoveryVersion != "v1" {
-		t.Errorf("did not get version, expected %q, got %q", "v1", doc.DiscoveryVersion)
-	}
-}
-
-func TestLoadAutoscalerV1beta2(t *testing.T) {
-	doc, err := LoadDiscovery(strings.NewReader(discovery_docs.AutoscalerV1beta2))
+	err = os.MkdirAll(clients_tmp, 0777)
 	if err != nil {
-		t.Errorf(err.Error())
+		t.Error(err)
 	}
-	if doc.DiscoveryVersion != "v1" {
-		t.Errorf("did not get version, expected %q, got %q", "v1", doc.DiscoveryVersion)
+	err = exec.Command(
+		"gcloud_apis_gen",
+		"--discovery-dir", "../discovery_docs/",
+		"--clients-dir", clients_tmp,
+		"--commands-dir", commands_tmp).Run()
+	if err != nil {
+		t.Error(err)
+	}
+	cmd := exec.Command(
+		"go", "build", ".")
+	cmd.Dir = commands_tmp
+	err = cmd.Run()
+	if err != nil {
+		t.Error(err)
 	}
 }
