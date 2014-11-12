@@ -1,3 +1,19 @@
+/*
+Copyright 2014 Google Inc. All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 package commands_util
 
 import (
@@ -12,18 +28,19 @@ func considerCase(t *testing.T, foo func() map[string]interface{}, input interfa
 
 	var result map[string]interface{}
 
-	defer func() {
-		panicMsg := recover()
-		expectedPanicMsg, ok := expected["panic"]
-		if panicMsg == nil != !ok {
-			errf("panic", panicMsg, expectedPanicMsg)
-			return
-		}
-		if !reflect.DeepEqual(panicMsg, expectedPanicMsg) {
-			errf("panic", panicMsg, expectedPanicMsg)
-			return
-		}
-	}()
+	if expectedPanicMsg, ok := expected["panic"]; ok {
+		defer func() {
+			panicMsg := recover()
+			if panicMsg == nil {
+				errf("panic", panicMsg, expectedPanicMsg)
+				return
+			}
+			if !reflect.DeepEqual(panicMsg, expectedPanicMsg) {
+				errf("panic", panicMsg, expectedPanicMsg)
+				return
+			}
+		}()
+	}
 	result = foo()
 	if len(result) != len(expected) {
 		for key, expectedValue := range expected {

@@ -201,6 +201,7 @@ func writeCommandsSource(commands_dir string, docs map[string]*discovery.Discove
 				addResource(serviceName+capitalize(subServiceName), subResource)
 			}
 		}
+
 		for serviceName, resource := range doc.Resources {
 			addResource(serviceName, resource)
 		}
