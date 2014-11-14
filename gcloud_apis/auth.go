@@ -23,6 +23,17 @@ import (
 	"os"
 )
 
+type gcloudTransport struct {
+	transport http.RoundTripper
+}
+
+func (gt gcloudTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	req.Header.Add("User-Agent", "Cloud SDK Command Line Tool")
+	req.Header.Add("User-Agent", "gcloud")
+	req.Header.Add("User-Agent", "gcloud_apis")
+	return gt.transport.RoundTrip(req)
+}
+
 /*
 This auth function is a bootstrap until better integration with
 gcloud auth can be provided. To use, set (and export) the environment
@@ -32,7 +43,6 @@ future, gcloud_apis will be able to fetch credential information from
 the same place as gcloud, and will be usable without setting this
 environment variable.
 */
-
 func getAuthenticatedClient() (*http.Client, error) {
 	flow, err := oauth2.New(
 		oauth2.Client(
@@ -64,7 +74,7 @@ func getAuthenticatedClient() (*http.Client, error) {
 	oauth2Transport := flow.NewTransportFromToken(token)
 
 	client := &http.Client{
-		Transport: oauth2Transport,
+		Transport: gcloudTransport{oauth2Transport},
 	}
 
 	return client, nil
