@@ -23,6 +23,18 @@ import (
 	"os"
 )
 
+type memoryTokenStore struct {
+	token *oauth2.Token
+}
+
+func (s memoryTokenStore) ReadToken() (*oauth2.Token, error) {
+	return s.token, nil
+}
+
+func (s memoryTokenStore) WriteToken(*oauth2.Token) {
+	return
+}
+
 type gcloudTransport struct {
 	transport http.RoundTripper
 }
@@ -71,7 +83,10 @@ func getAuthenticatedClient() (*http.Client, error) {
 		RefreshToken: refreshToken,
 	}
 
-	oauth2Transport := flow.NewTransportFromToken(token)
+	oauth2Transport, err := flow.NewTransportFromTokenStore(memoryTokenStore{token})
+	if err != nil {
+		return nil, err
+	}
 
 	client := &http.Client{
 		Transport: gcloudTransport{oauth2Transport},
