@@ -1,6 +1,0 @@
-gcloud is the command-line interface for the Google Cloud Platform, and this
-repository hosts pieces of it that are written in go.
-
-Currently only 'gcloud_apis' is hosted here, and can be installed via
-  $ go get github.com/googlecloudplatform/gcloud/gcloud_apis
-See gcloud_apis/README for details.
