@@ -18,22 +18,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/golang/oauth2"
+	"golang.org/x/oauth2"
 	"net/http"
 	"os"
 )
-
-type memoryTokenStore struct {
-	token *oauth2.Token
-}
-
-func (s memoryTokenStore) ReadToken() (*oauth2.Token, error) {
-	return s.token, nil
-}
-
-func (s memoryTokenStore) WriteToken(*oauth2.Token) {
-	return
-}
 
 type gcloudTransport struct {
 	transport http.RoundTripper
@@ -56,26 +44,20 @@ the same place as gcloud, and will be usable without setting this
 environment variable.
 */
 func getAuthenticatedClient() (*http.Client, error) {
-	flow, err := oauth2.New(
-		oauth2.Client(
-			"32555940559.apps.googleusercontent.com",
-			"ZmssLNjJy2998hD4CTg2ejr2",
-		),
-		oauth2.Scope(
-			"https://www.googleapis.com/auth/cloud-platform",
-		),
-		oauth2.Endpoint(
-			"https://accounts.google.com/o/oauth2/auth",
-			"https://accounts.google.com/o/oauth2/token",
-		),
-	)
-	if err != nil {
-		return nil, err
+
+	conf := oauth2.Config{
+		ClientID: "32555940559.apps.googleusercontent.com",
+		ClientSecret: "ZmssLNjJy2998hD4CTg2ejr2",
+		Endpoint: oauth2.Endpoint{
+			AuthURL: "https://accounts.google.com/o/oauth2/auth",
+			TokenURL: "https://accounts.google.com/o/oauth2/token",
+		},
+		Scopes: []string{"https://www.googleapis.com/auth/cloud-platform"},
 	}
 
 	refreshToken := os.Getenv("GCLOUD_APIS_REFRESH_TOKEN")
 	if refreshToken == "" {
-		err = fmt.Errorf("no refresh token found in GCLOUD_APIS_REFRESH_TOKEN")
+		err := fmt.Errorf("no refresh token found in GCLOUD_APIS_REFRESH_TOKEN")
 		return nil, err
 	}
 
@@ -83,9 +65,10 @@ func getAuthenticatedClient() (*http.Client, error) {
 		RefreshToken: refreshToken,
 	}
 
-	oauth2Transport, err := flow.NewTransportFromTokenStore(memoryTokenStore{token})
-	if err != nil {
-		return nil, err
+	tokenSource := conf.TokenSource(oauth2.NoContext, token)
+
+	oauth2Transport := &oauth2.Transport{
+		Source: tokenSource,
 	}
 
 	client := &http.Client{
