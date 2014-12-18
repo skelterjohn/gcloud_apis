@@ -2,17 +2,17 @@
 //
 // Usage example:
 //
-//   import "code.google.com/p/google-api-go-client/developerprojects/v1"
+//   import "google.golang.org/api/developerprojects/v1"
 //   ...
 //   developerprojectsService, err := developerprojects.New(oauthHttpClient)
 package developerprojects
 
 import (
 	"bytes"
-	"code.google.com/p/google-api-go-client/googleapi"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"google.golang.org/api/googleapi"
 	"io"
 	"net/http"
 	"net/url"

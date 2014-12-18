@@ -2,17 +2,17 @@
 //
 // Usage example:
 //
-//   import "code.google.com/p/google-api-go-client/source/v0"
+//   import "google.golang.org/api/source/v0"
 //   ...
 //   sourceService, err := source.New(oauthHttpClient)
 package source
 
 import (
 	"bytes"
-	"code.google.com/p/google-api-go-client/googleapi"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"google.golang.org/api/googleapi"
 	"io"
 	"net/http"
 	"net/url"

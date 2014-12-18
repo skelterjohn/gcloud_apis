@@ -7,7 +7,7 @@ echo 'cleaning old generated code...'
 rm -rf ./clients/*
 rm -rf ./commands/*
 echo 'building client generator...'
-go get code.google.com/p/google-api-go-client/google-api-go-generator
+go get google.golang.org/api/google-api-go-generator
 echo 'building gcloud_apis_gen...'
 go get ./gcloud_apis_gen || exit 1
 echo 'generating command source for gcloud_apis...'
