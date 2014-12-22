@@ -12,7 +12,7 @@
 
 1. Download and install `gcloud_apis` with the Go tool:
 	```sh
-	$ go get github.com/googlecloudplatform/gcloud/gcloud_apis
+	$ go get github.com/GoogleCloudPlatform/gcloud/gcloud_apis
 	```
 
 2. Make sure you have an authenticated user account with `gcloud`:

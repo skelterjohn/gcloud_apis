@@ -17,7 +17,7 @@ limitations under the License.
 package discovery
 
 import (
-	"github.com/googlecloudplatform/gcloud/gcloud_apis/discovery_docs"
+	"github.com/GoogleCloudPlatform/gcloud/gcloud_apis/discovery_docs"
 	"strings"
 	"testing"
 )

@@ -26,7 +26,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/googlecloudplatform/gcloud/gcloud_apis/gcloud_apis_gen/discovery"
+	"github.com/GoogleCloudPlatform/gcloud/gcloud_apis/gcloud_apis_gen/discovery"
 )
 
 func capitalize(s string) string {
@@ -113,7 +113,7 @@ func writeCommandsSource(commands_dir string, docs map[string]*discovery.Discove
 		}
 		var info InfoForFile
 		info.ClientImportPath = fmt.Sprintf(
-			"github.com/googlecloudplatform/gcloud/gcloud_apis/clients/%s/%s",
+			"github.com/GoogleCloudPlatform/gcloud/gcloud_apis/clients/%s/%s",
 			doc.Name, doc.Version)
 
 		var addResource func(serviceName string, resource discovery.Resource)

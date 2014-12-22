@@ -94,7 +94,7 @@ import (
   "strings"
 
   api_client "{{.ClientImportPath}}"
-  "github.com/googlecloudplatform/gcloud/gcloud_apis/commands_util"
+  "github.com/GoogleCloudPlatform/gcloud/gcloud_apis/commands_util"
 )
 
 // some generated code may not use all imported libs
