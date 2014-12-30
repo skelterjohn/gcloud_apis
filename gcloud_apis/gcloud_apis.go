@@ -20,7 +20,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/googlecloudplatform/gcloud/gcloud_apis/commands"
+	"github.com/GoogleCloudPlatform/gcloud/gcloud_apis/commands"
 )
 
 func Usage() {

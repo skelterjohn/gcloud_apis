@@ -1,5 +1,7 @@
 # gcloud
 
+[![Build Status](https://travis-ci.org/GoogleCloudPlatform/gcloud.svg?branch=master)](https://travis-ci.org/GoogleCloudPlatform/gcloud)
+
 `gcloud` is the command-line interface (CLI) for the Google Cloud Platform.
 
 To install `gcloud`, download the [Cloud SDK](https://cloud.google.com/sdk/#Quick_Start).  For more information about the Cloud SDK, visit [https://cloud.google.com/sdk/](https://cloud.google.com/sdk/).
@@ -12,11 +14,11 @@ This repository hosts `gcloud` components that are written in Go.
 
 	Install via:
 	```sh
-	$ go get github.com/googlecloudplatform/gcloud/gcloud_apis
+	$ go get github.com/GoogleCloudPlatform/gcloud/gcloud_apis
 	```
 
-	See [gcloud_apis/README](https://github.com/GoogleCloudPlatform/gcloud/blob/master/gcloud_apis/README) for details.
+	See [gcloud_apis/README](https://github.com/GoogleCloudPlatform/gcloud/blob/master/gcloud_apis/README.md) for details.
 
 ## Contributing
 
-Want to contribute? Great! First, read [this page](https://github.com/GoogleCloudPlatform/gcloud/blob/master/CONTRIBUTING) (including the small print at the end).
+Want to contribute? Great! First, read [this page](https://github.com/GoogleCloudPlatform/gcloud/blob/master/CONTRIBUTING.md) (including the small print at the end).

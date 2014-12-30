@@ -18,7 +18,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/googlecloudplatform/gcloud/gcloud_apis/commands"
+	"github.com/GoogleCloudPlatform/gcloud/gcloud_apis/commands"
 	"os"
 	"sort"
 	"strings"
