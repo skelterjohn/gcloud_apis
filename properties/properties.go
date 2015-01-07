@@ -69,9 +69,31 @@ func NewProperties() *Properties {
 	return &properties
 }
 
-func (prop *Properties) ReadFrom(r io.Reader) error {
-	var err error
-	s := bufio.NewScanner(r)
+type readCounter struct {
+	io.Reader
+	n int64
+}
+
+func (rc *readCounter) Read(buf []byte) (n int, err error) {
+	n, err = rc.Reader.Read(buf)
+	rc.n += int64(n)
+	return
+}
+
+type writeCounter struct {
+	io.Writer
+	n int64
+}
+
+func (wc *writeCounter) Write(buf []byte) (n int, err error) {
+	n, err = wc.Writer.Write(buf)
+	wc.n += int64(n)
+	return
+}
+
+func (prop *Properties) ReadFrom(r io.Reader) (int64, error) {
+	rc := readCounter{r, 0}
+	s := bufio.NewScanner(&rc)
 	sect := &Section{}
 	sectname := ""
 	skip := true
@@ -106,7 +128,7 @@ func (prop *Properties) ReadFrom(r io.Reader) error {
 			prop.value = val[2]
 		}
 	}
-	return err
+	return rc.n, s.Err()
 }
 
 // return value of given property name from given section
@@ -118,7 +140,7 @@ func (properties *Properties) Get(section string, propname string) (string, erro
 	}
 	prop, ok = sect.values[propname]
 	if !ok {
-		return "", fmt.Errorf("Unknown property in section %s", propname, section)
+		return "", fmt.Errorf("Unknown property in section %s: %s", section, propname)
 	}
 	return prop.value, nil
 }
@@ -130,27 +152,28 @@ func (properties *Properties) Set(section string, propname string, value string)
 	}
 	prop, ok := sect.values[propname]
 	if !ok {
-		return fmt.Errorf("Property assignment to unknown property %s in section", propname, section)
+		return fmt.Errorf("Property assignment to unknown property %s in section %s", propname, section)
 	}
 	prop.value = value
 	return nil
 }
 
 // Write properties to properties file
-func (properties *Properties) WriteTo(w io.Writer) error {
+func (properties *Properties) WriteTo(w io.Writer) (int64, error) {
+	wc := writeCounter{w, 0}
 	for sname, section := range properties.sections {
-		_, err := fmt.Fprintf(w, "[%s]\n", sname)
+		_, err := fmt.Fprintf(&wc, "[%s]\n", sname)
 		if err != nil {
-			return err
+			return wc.n, err
 		}
 		for name, prop := range section.values {
-			_, err := fmt.Fprintf(w, "%s = %s\n", name, prop.value)
+			_, err := fmt.Fprintf(&wc, "%s = %s\n", name, prop.value)
 			if err != nil {
-				return err
+				return wc.n, err
 			}
 		}
 	}
-	return nil
+	return wc.n, nil
 }
 func GetWorkspacePropFile() string {
 	curdir, _ := filepath.Abs(".")
@@ -225,7 +248,7 @@ func (properties *Properties) LoadPropertiesFiles() error {
 				log.Fatal(err)
 			}
 			defer file.Close()
-			err = properties.ReadFrom(file)
+			_, err = properties.ReadFrom(file)
 		}
 	}
 	return err

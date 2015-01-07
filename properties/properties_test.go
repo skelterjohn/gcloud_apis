@@ -147,7 +147,7 @@ func TestPropertiesGetSimple(t *testing.T) {
 			t.Errorf("unable to create file %s", paths[2])
 		}
 		defer file.Close()
-		err = p.WriteTo(file)
+		_, err = p.WriteTo(file)
 		if err != nil {
 			t.Errorf("unable to dump properties into %s", paths[2])
 		}
