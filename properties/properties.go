@@ -28,44 +28,47 @@ var (
 	blankLine = regexp.MustCompile(`^\s*$`)
 )
 
-func newSection() *Section {
-	return &Section{
-		values: make(map[string]*Property),
-	}
-}
-
 func NewProperties() *Properties {
-	properties := Properties{}
-	properties.sections = map[string]*Section{}
-	auth := newSection()
-	auth.values["auth_host"] = &Property{}
-	auth.values["token_host"] = &Property{}
-	auth.values["disable_ssl_validation"] = &Property{}
-	auth.values["client_id"] = &Property{}
-	auth.values["client_secret"] = &Property{}
-	properties.sections["auth"] = auth
-	component_manager := newSection()
-	component_manager.values["additional_repositories"] = &Property{}
-	component_manager.values["disable_update_check"] = &Property{}
-	component_manager.values["fixed_sdk_version"] = &Property{}
-	component_manager.values["snapshop_url"] = &Property{}
-	properties.sections["component_manager"] = component_manager
-	core := newSection()
-	core.values["account"] = &Property{}
-	core.values["credentialed_hosted_repo_domains"] = &Property{}
-	core.values["disable_color"] = &Property{}
-	core.values["disable_prompts"] = &Property{}
-	core.values["disable_usage_reporting"] = &Property{}
-	core.values["api_host"] = &Property{}
-	core.values["project"] = &Property{}
-	core.values["user_output_enabled"] = &Property{}
-	core.values["verbosity"] = &Property{}
-	properties.sections["core"] = core
-	compute := newSection()
-	compute.values["region"] = &Property{}
-	compute.values["zone"] = &Property{}
-	properties.sections["compute"] = compute
-	return &properties
+	return &Properties{
+		sections: map[string]*Section{
+			"auth": &Section{
+				values: map[string]*Property{
+					"auth_host":              &Property{},
+					"token_host":             &Property{},
+					"disable_ssl_validation": &Property{},
+					"client_id":              &Property{},
+					"client_secret":          &Property{},
+				},
+			},
+			"component_manager": &Section{
+				values: map[string]*Property{
+					"additional_repositories": &Property{},
+					"disable_update_check":    &Property{},
+					"fixed_sdk_version":       &Property{},
+					"snapshop_url":            &Property{},
+				},
+			},
+			"core": &Section{
+				values: map[string]*Property{
+					"account":                          &Property{},
+					"credentialed_hosted_repo_domains": &Property{},
+					"disable_color":                    &Property{},
+					"disable_prompts":                  &Property{},
+					"disable_usage_reporting":          &Property{},
+					"api_host":                         &Property{},
+					"project":                          &Property{},
+					"user_output_enabled":              &Property{},
+					"verbosity":                        &Property{},
+				},
+			},
+			"compute": &Section{
+				values: map[string]*Property{
+					"region": &Property{},
+					"zone":   &Property{},
+				},
+			},
+		},
+	}
 }
 
 type readCounter struct {
@@ -132,12 +135,11 @@ func (prop *Properties) ReadFrom(r io.Reader) (int64, error) {
 
 // return value of given property name from given section
 func (properties *Properties) Get(section string, propname string) (string, error) {
-	var prop *Property
 	sect, ok := properties.sections[section]
 	if !ok {
 		return "", fmt.Errorf("Unknown Properties section %s", section)
 	}
-	prop, ok = sect.values[propname]
+	prop, ok := sect.values[propname]
 	if !ok {
 		return "", fmt.Errorf("Unknown property in section %s: %s", section, propname)
 	}
@@ -223,15 +225,13 @@ func GetInstallDirPropFile() string {
 	}
 	if _, err := os.Stat(path); err == nil {
 		return path
-	} else {
-		return ""
 	}
+	return ""
 }
 
 func (properties *Properties) LoadPropertiesFiles() error {
-	var path string
-	var i int
-	for i = 0; i <= 2; i++ {
+	for i := 0; i <= 2; i++ {
+		var path string
 		switch i {
 		case 0:
 			path = GetInstallDirPropFile()
