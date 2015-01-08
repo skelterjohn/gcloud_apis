@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"log"
 	"os"
 	"os/user"
 	"path/filepath"
@@ -232,7 +231,6 @@ func GetInstallDirPropFile() string {
 func (properties *Properties) LoadPropertiesFiles() error {
 	var path string
 	var i int
-	var err error
 	for i = 0; i <= 2; i++ {
 		switch i {
 		case 0:
@@ -245,11 +243,15 @@ func (properties *Properties) LoadPropertiesFiles() error {
 		if len(path) > 0 {
 			file, err := os.Open(path)
 			if err != nil {
-				log.Fatal(err)
+				return err
 			}
 			defer file.Close()
 			_, err = properties.ReadFrom(file)
+			if err != nil {
+				return err
+			}
 		}
 	}
-	return err
+
+	return nil
 }
