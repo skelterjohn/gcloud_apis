@@ -18,16 +18,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/GoogleCloudPlatform/gcloud/gcloud_apis/commands"
-	"os"
 	"sort"
 	"strings"
 )
 
-func UsageForList() {
-	fmt.Println("usage issue")
-	os.Exit(1)
-}
+import (
+	"github.com/GoogleCloudPlatform/gcloud/gcloud_apis/commands"
+)
 
 func ListMethods(prefix string) error {
 	listedThings := map[string]bool{}
@@ -54,7 +51,7 @@ func ListMethods(prefix string) error {
 	}
 
 	if len(listedThings) == 0 {
-		return fmt.Errorf("no listing for %q\n", prefix)
+		return fmt.Errorf("no listing for %q", prefix)
 	}
 
 	var listedThingSlice []string

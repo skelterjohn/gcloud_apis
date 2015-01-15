@@ -108,6 +108,25 @@ var _ = os.Stdin
 
 var methodFormat = `{{define "api_method"}}
 func {{.FuncName}}(context Context, args ...string) error {
+
+  usageFunc := func() {
+    usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+    {{if .Method.Request.Ref}}
+    usageBits += " REQUEST_FILE|-"
+    {{end}}
+    {{if .HasQuery}}
+    {{ range $k, $p := .Method.Parameters}}{{  if eq $p.Location "query"}}
+    {{   if $p.Required}}
+    usageBits += " --{{$k}}=VALUE"
+    {{   else}}
+    usageBits += " [--{{$k}}=VALUE]"
+    {{   end}}
+    {{  end}}{{ end}}
+    {{end}}
+    fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+    os.Exit(1)
+  }
+
   api_service, err := api_client.New(context.Client)
   if err != nil {
     return err
@@ -115,8 +134,8 @@ func {{.FuncName}}(context Context, args ...string) error {
   service := api_client.New{{.ServiceName}}Service(api_service)
 
   {{if .HasQuery}}queryParamNames := map[string]bool{
-    {{range $k, $p := .Method.Parameters}}{{if eq $p.Location "query"}}"{{$k}}": {{$p.Required}},
-    {{end}}{{end}}
+    {{ range $k, $p := .Method.Parameters}}{{  if eq $p.Location "query"}}"{{$k}}": {{$p.Required}},
+    {{  end}}{{ end}}
   }{{end}}
 
   {{if .HasFlags}}args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -132,7 +151,7 @@ func {{.FuncName}}(context Context, args ...string) error {
 
   // Only positional arguments should remain in args.
   {{if .Method.Request.Ref}}if len(args) == 0 || len(args) > 2 {
-    commands_util.UsageForMethod(context.InvocationMethod, "{{.Method.HttpMethod}}")
+    usageFunc()
   }
 
   request := &api_client.{{.Method.Request.Ref}}{}
@@ -143,7 +162,7 @@ func {{.FuncName}}(context Context, args ...string) error {
     }
   }
 
-  {{if .Method.SupportsMediaUpload}}
+  {{ if .Method.SupportsMediaUpload}}
   var media io.Reader
   if len(args) == 3 {
     if args[2] == "-" {
@@ -155,9 +174,9 @@ func {{.FuncName}}(context Context, args ...string) error {
       }
     }
   }
-  {{end}}
+  {{ end}}
 
-  {{if .HasQuery}}
+  {{ if .HasQuery}}
   // Any flags that aren't query parameters are applied to the request.
   keyValues := map[string]string{}
   for k, v := range flagValues {
@@ -165,19 +184,19 @@ func {{.FuncName}}(context Context, args ...string) error {
       keyValues[k] = v
     }
   }
-  {{else}}
+  {{ else}}
   keyValues := flagValues
-  {{end}}
+  {{ end}}
   err = commands_util.OverwriteRequestWithValues(&request, keyValues)
   if err != nil {
     return err
   }{{else}}if len(args) != 1 {
-    commands_util.UsageForMethod(context.InvocationMethod, "{{.Method.HttpMethod}}")
+    usageFunc()
   }
   {{end}}
 
   expectedParams := []string{
-    {{range .PositionalParams}}{{if .QueryName}}{{else}}"{{.ParamName}}",{{end}}
+    {{range .PositionalParams}}{{ if .QueryName}}{{ else}}"{{.ParamName}}",{{ end}}
     {{end}}}
   paramValues := strings.Split(args[0], "/")
   if len(paramValues) != len(expectedParams) {
@@ -185,14 +204,14 @@ func {{.FuncName}}(context Context, args ...string) error {
   }
 
   {{range $i, $v := .PositionalParams}}{{/*
-    */}}{{if .QueryName}}
+    */}}{{ if .QueryName}}
     param_{{.ParamName}}, err := commands_util.ConvertValue_{{.Type}}(flagValues["{{.QueryName}}"])
     if err != nil {
       return err
     }{{/*
-    */}}{{else}}
+    */}}{{ else}}
     param_{{.ParamName}} := paramValues[{{$i}}]{{/*
-    */}}{{end}}{{/*
+    */}}{{ end}}{{/*
   */}}{{end}}
 
   call := service.{{.ServiceMethodName}}({{/*
@@ -205,14 +224,14 @@ func {{.FuncName}}(context Context, args ...string) error {
   )
   
   {{if .QueryFuncs}}// Set query parameters.
-  {{range $name, $querydata := .QueryFuncs}}if value, ok := flagValues["{{$name}}"]; ok {
+  {{ range $name, $querydata := .QueryFuncs}}if value, ok := flagValues["{{$name}}"]; ok {
       query_{{$name}}, err := commands_util.ConvertValue_{{$querydata.Type}}(value)
       if err != nil {
         return err
       }
       call.{{$querydata.FuncName}}(query_{{$name}})
     }
-  {{end}}
+  {{ end}}
   {{end}}
 
   {{if .Method.SupportsMediaUpload}}

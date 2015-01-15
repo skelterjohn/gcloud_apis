@@ -17,14 +17,25 @@ limitations under the License.
 package main
 
 import (
-	"log"
+	"fmt"
 	"os"
+)
 
+import (
 	"github.com/GoogleCloudPlatform/gcloud/gcloud_apis/commands"
 )
 
 func Usage() {
-	log.Fatal("usage issue")
+	fmt.Fprintf(os.Stderr, `Usage:
+	gcloud_apis list [METHOD|PARTIAL_METHOD]
+	gcloud_apis METHOD [PARAM[/PARAM]*] [--KEY=VALUE]* [REQUEST_BODY]
+`)
+	os.Exit(1)
+}
+
+func problem(err error) {
+	fmt.Fprintln(os.Stderr, err)
+	os.Exit(2)
 }
 
 func main() {
@@ -43,17 +54,18 @@ func main() {
 		}
 		err := ListMethods(prefix)
 		if err != nil {
-			log.Fatal(err)
+			problem(err)
 		}
 	default:
 		methodToRun := os.Args[1]
 		methodFunc, ok := commands.AllMethods[methodToRun]
 		if !ok {
-			log.Fatalf("unknown method %q. To list methods, run '$ gcloud_apis list'.", methodToRun)
+			fmt.Fprintf(os.Stderr, "Unknown method %q. To list methods, run '$ gcloud_apis list'.\n", methodToRun)
+			os.Exit(1)
 		}
 		client, err := getAuthenticatedClient()
 		if err != nil {
-			log.Fatal(err)
+			problem(err)
 		}
 		context := commands.Context{
 			InvocationMethod: methodToRun,
@@ -62,7 +74,7 @@ func main() {
 
 		err = methodFunc(context, os.Args[2:]...)
 		if err != nil {
-			log.Fatal(err)
+			problem(err)
 		}
 	}
 
