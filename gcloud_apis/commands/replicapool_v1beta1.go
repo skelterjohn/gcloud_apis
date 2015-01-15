@@ -37,7 +37,7 @@ func Replicapool_v1beta1_PoolsDelete(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -155,7 +155,7 @@ func Replicapool_v1beta1_PoolsInsert(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -387,7 +387,7 @@ func Replicapool_v1beta1_PoolsUpdatetemplate(context Context, args ...string) er
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -455,7 +455,7 @@ func Replicapool_v1beta1_ReplicasDelete(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)

@@ -137,7 +137,7 @@ func Autoscaler_v1beta2_AutoscalersInsert(context Context, args ...string) error
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -303,7 +303,7 @@ func Autoscaler_v1beta2_AutoscalersPatch(context Context, args ...string) error 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -377,7 +377,7 @@ func Autoscaler_v1beta2_AutoscalersUpdate(context Context, args ...string) error
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)

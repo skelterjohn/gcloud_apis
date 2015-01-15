@@ -20,9 +20,7 @@ import (
 	"fmt"
 	"sort"
 	"strings"
-)
 
-import (
 	"github.com/GoogleCloudPlatform/gcloud/gcloud_apis/commands"
 )
 

@@ -37,7 +37,7 @@ func Dns_v1beta1_ChangesCreate(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -263,7 +263,7 @@ func Dns_v1beta1_ManagedZonesCreate(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)

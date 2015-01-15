@@ -19,9 +19,7 @@ package main
 import (
 	"fmt"
 	"os"
-)
 
-import (
 	"github.com/GoogleCloudPlatform/gcloud/gcloud_apis/commands"
 )
 

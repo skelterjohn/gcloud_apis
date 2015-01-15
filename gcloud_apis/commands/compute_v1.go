@@ -229,7 +229,7 @@ func Compute_v1_AddressesInsert(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -491,7 +491,7 @@ func Compute_v1_BackendServicesGetHealth(context Context, args ...string) error 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -563,7 +563,7 @@ func Compute_v1_BackendServicesInsert(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -725,7 +725,7 @@ func Compute_v1_BackendServicesPatch(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -797,7 +797,7 @@ func Compute_v1_BackendServicesUpdate(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1197,7 +1197,7 @@ func Compute_v1_DisksCreateSnapshot(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1371,7 +1371,7 @@ func Compute_v1_DisksInsert(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		usageBits += " [--sourceImage=VALUE]"
 
@@ -1660,7 +1660,7 @@ func Compute_v1_FirewallsInsert(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1822,7 +1822,7 @@ func Compute_v1_FirewallsPatch(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1894,7 +1894,7 @@ func Compute_v1_FirewallsUpdate(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -2158,7 +2158,7 @@ func Compute_v1_ForwardingRulesInsert(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -2324,7 +2324,7 @@ func Compute_v1_ForwardingRulesSetTarget(context Context, args ...string) error 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -2494,7 +2494,7 @@ func Compute_v1_GlobalAddressesInsert(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -2752,7 +2752,7 @@ func Compute_v1_GlobalForwardingRulesInsert(context Context, args ...string) err
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -2914,7 +2914,7 @@ func Compute_v1_GlobalForwardingRulesSetTarget(context Context, args ...string) 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -3356,7 +3356,7 @@ func Compute_v1_HttpHealthChecksInsert(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -3518,7 +3518,7 @@ func Compute_v1_HttpHealthChecksPatch(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -3590,7 +3590,7 @@ func Compute_v1_HttpHealthChecksUpdate(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -3710,7 +3710,7 @@ func Compute_v1_ImagesDeprecate(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -3830,7 +3830,7 @@ func Compute_v1_ImagesInsert(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -4088,7 +4088,7 @@ func Compute_v1_InstanceTemplatesInsert(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -4250,7 +4250,7 @@ func Compute_v1_InstancesAddAccessConfig(context Context, args ...string) error 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		usageBits += " --networkInterface=VALUE"
 
@@ -4438,7 +4438,7 @@ func Compute_v1_InstancesAttachDisk(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -4811,7 +4811,7 @@ func Compute_v1_InstancesInsert(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -5105,7 +5105,7 @@ func Compute_v1_InstancesSetMetadata(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -5179,7 +5179,7 @@ func Compute_v1_InstancesSetScheduling(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -5253,7 +5253,7 @@ func Compute_v1_InstancesSetTags(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -5707,7 +5707,7 @@ func Compute_v1_NetworksInsert(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -5915,7 +5915,7 @@ func Compute_v1_ProjectsSetCommonInstanceMetadata(context Context, args ...strin
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -5985,7 +5985,7 @@ func Compute_v1_ProjectsSetUsageExportBucket(context Context, args ...string) er
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -6479,7 +6479,7 @@ func Compute_v1_RoutesInsert(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -6925,7 +6925,7 @@ func Compute_v1_TargetHttpProxiesInsert(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -7087,7 +7087,7 @@ func Compute_v1_TargetHttpProxiesSetUrlMap(context Context, args ...string) erro
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -7351,7 +7351,7 @@ func Compute_v1_TargetInstancesInsert(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -7517,7 +7517,7 @@ func Compute_v1_TargetPoolsAddHealthCheck(context Context, args ...string) error
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -7591,7 +7591,7 @@ func Compute_v1_TargetPoolsAddInstance(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -7857,7 +7857,7 @@ func Compute_v1_TargetPoolsGetHealth(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -7931,7 +7931,7 @@ func Compute_v1_TargetPoolsInsert(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -8097,7 +8097,7 @@ func Compute_v1_TargetPoolsRemoveHealthCheck(context Context, args ...string) er
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -8171,7 +8171,7 @@ func Compute_v1_TargetPoolsRemoveInstance(context Context, args ...string) error
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -8245,7 +8245,7 @@ func Compute_v1_TargetPoolsSetBackup(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		usageBits += " [--failoverRatio=VALUE]"
 
@@ -8442,7 +8442,7 @@ func Compute_v1_UrlMapsInsert(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -8604,7 +8604,7 @@ func Compute_v1_UrlMapsPatch(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -8676,7 +8676,7 @@ func Compute_v1_UrlMapsUpdate(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -8748,7 +8748,7 @@ func Compute_v1_UrlMapsValidate(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|-"
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)

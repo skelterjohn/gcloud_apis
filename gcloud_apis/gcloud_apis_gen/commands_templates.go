@@ -112,7 +112,7 @@ func {{.FuncName}}(context Context, args ...string) error {
   usageFunc := func() {
     usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
     {{if .Method.Request.Ref}}
-    usageBits += " REQUEST_FILE|-"
+    usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
     {{end}}
     {{if .HasQuery}}
     {{ range $k, $p := .Method.Parameters}}{{  if eq $p.Location "query"}}
