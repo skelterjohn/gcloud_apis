@@ -129,7 +129,7 @@ func Container_v1beta1_ProjectsZonesClustersCreate(context Context, args ...stri
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)

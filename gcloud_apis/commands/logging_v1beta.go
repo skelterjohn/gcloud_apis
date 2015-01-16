@@ -37,7 +37,7 @@ func Logging_v1beta_ProjectsLogsEntriesWrite(context Context, args ...string) er
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -315,7 +315,7 @@ func Logging_v1beta_ProjectsLogsSinksPatch(context Context, args ...string) erro
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -385,7 +385,7 @@ func Logging_v1beta_ProjectsLogsSinksUpdate(context Context, args ...string) err
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)

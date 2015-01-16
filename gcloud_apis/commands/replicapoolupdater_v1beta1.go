@@ -135,7 +135,7 @@ func Replicapoolupdater_v1beta1_UpdatesInsert(context Context, args ...string) e
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)

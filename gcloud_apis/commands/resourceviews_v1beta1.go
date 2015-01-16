@@ -37,7 +37,7 @@ func Resourceviews_v1beta1_RegionViewsAddresources(context Context, args ...stri
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -199,7 +199,7 @@ func Resourceviews_v1beta1_RegionViewsInsert(context Context, args ...string) er
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -441,7 +441,7 @@ func Resourceviews_v1beta1_RegionViewsRemoveresources(context Context, args ...s
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -509,7 +509,7 @@ func Resourceviews_v1beta1_ZoneViewsAddresources(context Context, args ...string
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -671,7 +671,7 @@ func Resourceviews_v1beta1_ZoneViewsInsert(context Context, args ...string) erro
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -913,7 +913,7 @@ func Resourceviews_v1beta1_ZoneViewsRemoveresources(context Context, args ...str
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)

@@ -241,7 +241,7 @@ func Sql_v1beta3_InstancesClone(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -359,7 +359,7 @@ func Sql_v1beta3_InstancesExport(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -479,7 +479,7 @@ func Sql_v1beta3_InstancesImport(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -551,7 +551,7 @@ func Sql_v1beta3_InstancesInsert(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -703,7 +703,7 @@ func Sql_v1beta3_InstancesPatch(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -995,7 +995,7 @@ func Sql_v1beta3_InstancesSetRootPassword(context Context, args ...string) error
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1067,7 +1067,7 @@ func Sql_v1beta3_InstancesUpdate(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1373,7 +1373,7 @@ func Sql_v1beta3_SslCertsInsert(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
-		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
