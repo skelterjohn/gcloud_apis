@@ -33,6 +33,14 @@ var _ = io.Copy
 var _ = os.Stdin
 
 func Autoscaler_v1beta2_AutoscalersDelete(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -41,7 +49,7 @@ func Autoscaler_v1beta2_AutoscalersDelete(context Context, args ...string) error
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "DELETE")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -75,6 +83,14 @@ func Autoscaler_v1beta2_AutoscalersDelete(context Context, args ...string) error
 }
 
 func Autoscaler_v1beta2_AutoscalersGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -83,7 +99,7 @@ func Autoscaler_v1beta2_AutoscalersGet(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -117,6 +133,16 @@ func Autoscaler_v1beta2_AutoscalersGet(context Context, args ...string) error {
 }
 
 func Autoscaler_v1beta2_AutoscalersInsert(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -130,7 +156,7 @@ func Autoscaler_v1beta2_AutoscalersInsert(context Context, args ...string) error
 
 	// Only positional arguments should remain in args.
 	if len(args) == 0 || len(args) > 2 {
-		commands_util.UsageForMethod(context.InvocationMethod, "POST")
+		usageFunc()
 	}
 
 	request := &api_client.Autoscaler{}
@@ -179,6 +205,20 @@ func Autoscaler_v1beta2_AutoscalersInsert(context Context, args ...string) error
 }
 
 func Autoscaler_v1beta2_AutoscalersList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -204,7 +244,7 @@ func Autoscaler_v1beta2_AutoscalersList(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -259,6 +299,16 @@ func Autoscaler_v1beta2_AutoscalersList(context Context, args ...string) error {
 }
 
 func Autoscaler_v1beta2_AutoscalersPatch(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -272,7 +322,7 @@ func Autoscaler_v1beta2_AutoscalersPatch(context Context, args ...string) error 
 
 	// Only positional arguments should remain in args.
 	if len(args) == 0 || len(args) > 2 {
-		commands_util.UsageForMethod(context.InvocationMethod, "PATCH")
+		usageFunc()
 	}
 
 	request := &api_client.Autoscaler{}
@@ -323,6 +373,16 @@ func Autoscaler_v1beta2_AutoscalersPatch(context Context, args ...string) error 
 }
 
 func Autoscaler_v1beta2_AutoscalersUpdate(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -336,7 +396,7 @@ func Autoscaler_v1beta2_AutoscalersUpdate(context Context, args ...string) error
 
 	// Only positional arguments should remain in args.
 	if len(args) == 0 || len(args) > 2 {
-		commands_util.UsageForMethod(context.InvocationMethod, "PUT")
+		usageFunc()
 	}
 
 	request := &api_client.Autoscaler{}
@@ -387,6 +447,14 @@ func Autoscaler_v1beta2_AutoscalersUpdate(context Context, args ...string) error
 }
 
 func Autoscaler_v1beta2_ZoneOperationsDelete(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -395,7 +463,7 @@ func Autoscaler_v1beta2_ZoneOperationsDelete(context Context, args ...string) er
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "DELETE")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -423,6 +491,14 @@ func Autoscaler_v1beta2_ZoneOperationsDelete(context Context, args ...string) er
 }
 
 func Autoscaler_v1beta2_ZoneOperationsGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -431,7 +507,7 @@ func Autoscaler_v1beta2_ZoneOperationsGet(context Context, args ...string) error
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -465,6 +541,20 @@ func Autoscaler_v1beta2_ZoneOperationsGet(context Context, args ...string) error
 }
 
 func Autoscaler_v1beta2_ZoneOperationsList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -490,7 +580,7 @@ func Autoscaler_v1beta2_ZoneOperationsList(context Context, args ...string) erro
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -545,6 +635,20 @@ func Autoscaler_v1beta2_ZoneOperationsList(context Context, args ...string) erro
 }
 
 func Autoscaler_v1beta2_ZonesList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -570,7 +674,7 @@ func Autoscaler_v1beta2_ZonesList(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{

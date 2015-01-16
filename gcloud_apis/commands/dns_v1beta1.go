@@ -33,6 +33,16 @@ var _ = io.Copy
 var _ = os.Stdin
 
 func Dns_v1beta1_ChangesCreate(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -46,7 +56,7 @@ func Dns_v1beta1_ChangesCreate(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) == 0 || len(args) > 2 {
-		commands_util.UsageForMethod(context.InvocationMethod, "POST")
+		usageFunc()
 	}
 
 	request := &api_client.Change{}
@@ -95,6 +105,14 @@ func Dns_v1beta1_ChangesCreate(context Context, args ...string) error {
 }
 
 func Dns_v1beta1_ChangesGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -103,7 +121,7 @@ func Dns_v1beta1_ChangesGet(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -137,6 +155,22 @@ func Dns_v1beta1_ChangesGet(context Context, args ...string) error {
 }
 
 func Dns_v1beta1_ChangesList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		usageBits += " [--sortBy=VALUE]"
+
+		usageBits += " [--sortOrder=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -163,7 +197,7 @@ func Dns_v1beta1_ChangesList(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -225,6 +259,16 @@ func Dns_v1beta1_ChangesList(context Context, args ...string) error {
 }
 
 func Dns_v1beta1_ManagedZonesCreate(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -238,7 +282,7 @@ func Dns_v1beta1_ManagedZonesCreate(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) == 0 || len(args) > 2 {
-		commands_util.UsageForMethod(context.InvocationMethod, "POST")
+		usageFunc()
 	}
 
 	request := &api_client.ManagedZone{}
@@ -285,6 +329,14 @@ func Dns_v1beta1_ManagedZonesCreate(context Context, args ...string) error {
 }
 
 func Dns_v1beta1_ManagedZonesDelete(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -293,7 +345,7 @@ func Dns_v1beta1_ManagedZonesDelete(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "DELETE")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -319,6 +371,14 @@ func Dns_v1beta1_ManagedZonesDelete(context Context, args ...string) error {
 }
 
 func Dns_v1beta1_ManagedZonesGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -327,7 +387,7 @@ func Dns_v1beta1_ManagedZonesGet(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -359,6 +419,18 @@ func Dns_v1beta1_ManagedZonesGet(context Context, args ...string) error {
 }
 
 func Dns_v1beta1_ManagedZonesList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -383,7 +455,7 @@ func Dns_v1beta1_ManagedZonesList(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -429,6 +501,14 @@ func Dns_v1beta1_ManagedZonesList(context Context, args ...string) error {
 }
 
 func Dns_v1beta1_ProjectsGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -437,7 +517,7 @@ func Dns_v1beta1_ProjectsGet(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -467,6 +547,22 @@ func Dns_v1beta1_ProjectsGet(context Context, args ...string) error {
 }
 
 func Dns_v1beta1_ResourceRecordSetsList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--name=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		usageBits += " [--type=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -493,7 +589,7 @@ func Dns_v1beta1_ResourceRecordSetsList(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{

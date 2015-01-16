@@ -33,6 +33,16 @@ var _ = io.Copy
 var _ = os.Stdin
 
 func Resourceviews_v1beta1_RegionViewsAddresources(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -46,7 +56,7 @@ func Resourceviews_v1beta1_RegionViewsAddresources(context Context, args ...stri
 
 	// Only positional arguments should remain in args.
 	if len(args) == 0 || len(args) > 2 {
-		commands_util.UsageForMethod(context.InvocationMethod, "POST")
+		usageFunc()
 	}
 
 	request := &api_client.RegionViewsAddResourcesRequest{}
@@ -91,6 +101,14 @@ func Resourceviews_v1beta1_RegionViewsAddresources(context Context, args ...stri
 }
 
 func Resourceviews_v1beta1_RegionViewsDelete(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -99,7 +117,7 @@ func Resourceviews_v1beta1_RegionViewsDelete(context Context, args ...string) er
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "DELETE")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -127,6 +145,14 @@ func Resourceviews_v1beta1_RegionViewsDelete(context Context, args ...string) er
 }
 
 func Resourceviews_v1beta1_RegionViewsGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -135,7 +161,7 @@ func Resourceviews_v1beta1_RegionViewsGet(context Context, args ...string) error
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -169,6 +195,16 @@ func Resourceviews_v1beta1_RegionViewsGet(context Context, args ...string) error
 }
 
 func Resourceviews_v1beta1_RegionViewsInsert(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -182,7 +218,7 @@ func Resourceviews_v1beta1_RegionViewsInsert(context Context, args ...string) er
 
 	// Only positional arguments should remain in args.
 	if len(args) == 0 || len(args) > 2 {
-		commands_util.UsageForMethod(context.InvocationMethod, "POST")
+		usageFunc()
 	}
 
 	request := &api_client.ResourceView{}
@@ -231,6 +267,18 @@ func Resourceviews_v1beta1_RegionViewsInsert(context Context, args ...string) er
 }
 
 func Resourceviews_v1beta1_RegionViewsList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -255,7 +303,7 @@ func Resourceviews_v1beta1_RegionViewsList(context Context, args ...string) erro
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -303,6 +351,18 @@ func Resourceviews_v1beta1_RegionViewsList(context Context, args ...string) erro
 }
 
 func Resourceviews_v1beta1_RegionViewsListresources(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -327,7 +387,7 @@ func Resourceviews_v1beta1_RegionViewsListresources(context Context, args ...str
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "POST")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -377,6 +437,16 @@ func Resourceviews_v1beta1_RegionViewsListresources(context Context, args ...str
 }
 
 func Resourceviews_v1beta1_RegionViewsRemoveresources(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -390,7 +460,7 @@ func Resourceviews_v1beta1_RegionViewsRemoveresources(context Context, args ...s
 
 	// Only positional arguments should remain in args.
 	if len(args) == 0 || len(args) > 2 {
-		commands_util.UsageForMethod(context.InvocationMethod, "POST")
+		usageFunc()
 	}
 
 	request := &api_client.RegionViewsRemoveResourcesRequest{}
@@ -435,6 +505,16 @@ func Resourceviews_v1beta1_RegionViewsRemoveresources(context Context, args ...s
 }
 
 func Resourceviews_v1beta1_ZoneViewsAddresources(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -448,7 +528,7 @@ func Resourceviews_v1beta1_ZoneViewsAddresources(context Context, args ...string
 
 	// Only positional arguments should remain in args.
 	if len(args) == 0 || len(args) > 2 {
-		commands_util.UsageForMethod(context.InvocationMethod, "POST")
+		usageFunc()
 	}
 
 	request := &api_client.ZoneViewsAddResourcesRequest{}
@@ -493,6 +573,14 @@ func Resourceviews_v1beta1_ZoneViewsAddresources(context Context, args ...string
 }
 
 func Resourceviews_v1beta1_ZoneViewsDelete(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -501,7 +589,7 @@ func Resourceviews_v1beta1_ZoneViewsDelete(context Context, args ...string) erro
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "DELETE")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -529,6 +617,14 @@ func Resourceviews_v1beta1_ZoneViewsDelete(context Context, args ...string) erro
 }
 
 func Resourceviews_v1beta1_ZoneViewsGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -537,7 +633,7 @@ func Resourceviews_v1beta1_ZoneViewsGet(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -571,6 +667,16 @@ func Resourceviews_v1beta1_ZoneViewsGet(context Context, args ...string) error {
 }
 
 func Resourceviews_v1beta1_ZoneViewsInsert(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -584,7 +690,7 @@ func Resourceviews_v1beta1_ZoneViewsInsert(context Context, args ...string) erro
 
 	// Only positional arguments should remain in args.
 	if len(args) == 0 || len(args) > 2 {
-		commands_util.UsageForMethod(context.InvocationMethod, "POST")
+		usageFunc()
 	}
 
 	request := &api_client.ResourceView{}
@@ -633,6 +739,18 @@ func Resourceviews_v1beta1_ZoneViewsInsert(context Context, args ...string) erro
 }
 
 func Resourceviews_v1beta1_ZoneViewsList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -657,7 +775,7 @@ func Resourceviews_v1beta1_ZoneViewsList(context Context, args ...string) error 
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -705,6 +823,18 @@ func Resourceviews_v1beta1_ZoneViewsList(context Context, args ...string) error 
 }
 
 func Resourceviews_v1beta1_ZoneViewsListresources(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -729,7 +859,7 @@ func Resourceviews_v1beta1_ZoneViewsListresources(context Context, args ...strin
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "POST")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -779,6 +909,16 @@ func Resourceviews_v1beta1_ZoneViewsListresources(context Context, args ...strin
 }
 
 func Resourceviews_v1beta1_ZoneViewsRemoveresources(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -792,7 +932,7 @@ func Resourceviews_v1beta1_ZoneViewsRemoveresources(context Context, args ...str
 
 	// Only positional arguments should remain in args.
 	if len(args) == 0 || len(args) > 2 {
-		commands_util.UsageForMethod(context.InvocationMethod, "POST")
+		usageFunc()
 	}
 
 	request := &api_client.ZoneViewsRemoveResourcesRequest{}

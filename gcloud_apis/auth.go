@@ -46,10 +46,10 @@ environment variable.
 func getAuthenticatedClient() (*http.Client, error) {
 
 	conf := oauth2.Config{
-		ClientID: "32555940559.apps.googleusercontent.com",
+		ClientID:     "32555940559.apps.googleusercontent.com",
 		ClientSecret: "ZmssLNjJy2998hD4CTg2ejr2",
 		Endpoint: oauth2.Endpoint{
-			AuthURL: "https://accounts.google.com/o/oauth2/auth",
+			AuthURL:  "https://accounts.google.com/o/oauth2/auth",
 			TokenURL: "https://accounts.google.com/o/oauth2/token",
 		},
 		Scopes: []string{"https://www.googleapis.com/auth/cloud-platform"},

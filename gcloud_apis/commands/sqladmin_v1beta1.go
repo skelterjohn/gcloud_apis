@@ -33,6 +33,16 @@ var _ = io.Copy
 var _ = os.Stdin
 
 func Sql_v1beta1_BackupRunsGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " --dueTime=VALUE"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -56,7 +66,7 @@ func Sql_v1beta1_BackupRunsGet(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -94,6 +104,20 @@ func Sql_v1beta1_BackupRunsGet(context Context, args ...string) error {
 }
 
 func Sql_v1beta1_BackupRunsList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " --backupConfiguration=VALUE"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -119,7 +143,7 @@ func Sql_v1beta1_BackupRunsList(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -171,6 +195,14 @@ func Sql_v1beta1_BackupRunsList(context Context, args ...string) error {
 }
 
 func Sql_v1beta1_InstancesDelete(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -179,7 +211,7 @@ func Sql_v1beta1_InstancesDelete(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "DELETE")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -211,6 +243,16 @@ func Sql_v1beta1_InstancesDelete(context Context, args ...string) error {
 }
 
 func Sql_v1beta1_InstancesExport(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -224,7 +266,7 @@ func Sql_v1beta1_InstancesExport(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) == 0 || len(args) > 2 {
-		commands_util.UsageForMethod(context.InvocationMethod, "POST")
+		usageFunc()
 	}
 
 	request := &api_client.InstancesExportRequest{}
@@ -273,6 +315,14 @@ func Sql_v1beta1_InstancesExport(context Context, args ...string) error {
 }
 
 func Sql_v1beta1_InstancesGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -281,7 +331,7 @@ func Sql_v1beta1_InstancesGet(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -313,6 +363,16 @@ func Sql_v1beta1_InstancesGet(context Context, args ...string) error {
 }
 
 func Sql_v1beta1_InstancesImport(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -326,7 +386,7 @@ func Sql_v1beta1_InstancesImport(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) == 0 || len(args) > 2 {
-		commands_util.UsageForMethod(context.InvocationMethod, "POST")
+		usageFunc()
 	}
 
 	request := &api_client.InstancesImportRequest{}
@@ -375,6 +435,16 @@ func Sql_v1beta1_InstancesImport(context Context, args ...string) error {
 }
 
 func Sql_v1beta1_InstancesInsert(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -388,7 +458,7 @@ func Sql_v1beta1_InstancesInsert(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) == 0 || len(args) > 2 {
-		commands_util.UsageForMethod(context.InvocationMethod, "POST")
+		usageFunc()
 	}
 
 	request := &api_client.DatabaseInstance{}
@@ -435,6 +505,18 @@ func Sql_v1beta1_InstancesInsert(context Context, args ...string) error {
 }
 
 func Sql_v1beta1_InstancesList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -459,7 +541,7 @@ func Sql_v1beta1_InstancesList(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -505,6 +587,16 @@ func Sql_v1beta1_InstancesList(context Context, args ...string) error {
 }
 
 func Sql_v1beta1_InstancesPatch(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -518,7 +610,7 @@ func Sql_v1beta1_InstancesPatch(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) == 0 || len(args) > 2 {
-		commands_util.UsageForMethod(context.InvocationMethod, "PATCH")
+		usageFunc()
 	}
 
 	request := &api_client.DatabaseInstance{}
@@ -567,6 +659,14 @@ func Sql_v1beta1_InstancesPatch(context Context, args ...string) error {
 }
 
 func Sql_v1beta1_InstancesRestart(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -575,7 +675,7 @@ func Sql_v1beta1_InstancesRestart(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "POST")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -607,6 +707,18 @@ func Sql_v1beta1_InstancesRestart(context Context, args ...string) error {
 }
 
 func Sql_v1beta1_InstancesRestoreBackup(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " --backupConfiguration=VALUE"
+
+		usageBits += " --dueTime=VALUE"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -631,7 +743,7 @@ func Sql_v1beta1_InstancesRestoreBackup(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "POST")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -671,6 +783,16 @@ func Sql_v1beta1_InstancesRestoreBackup(context Context, args ...string) error {
 }
 
 func Sql_v1beta1_InstancesUpdate(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -684,7 +806,7 @@ func Sql_v1beta1_InstancesUpdate(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) == 0 || len(args) > 2 {
-		commands_util.UsageForMethod(context.InvocationMethod, "PUT")
+		usageFunc()
 	}
 
 	request := &api_client.DatabaseInstance{}
@@ -733,6 +855,14 @@ func Sql_v1beta1_InstancesUpdate(context Context, args ...string) error {
 }
 
 func Sql_v1beta1_OperationsGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -741,7 +871,7 @@ func Sql_v1beta1_OperationsGet(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -775,6 +905,18 @@ func Sql_v1beta1_OperationsGet(context Context, args ...string) error {
 }
 
 func Sql_v1beta1_OperationsList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -799,7 +941,7 @@ func Sql_v1beta1_OperationsList(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -847,6 +989,14 @@ func Sql_v1beta1_OperationsList(context Context, args ...string) error {
 }
 
 func Sql_v1beta1_TiersList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -855,7 +1005,7 @@ func Sql_v1beta1_TiersList(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{}

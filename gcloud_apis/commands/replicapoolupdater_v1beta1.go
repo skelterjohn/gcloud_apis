@@ -33,6 +33,14 @@ var _ = io.Copy
 var _ = os.Stdin
 
 func Replicapoolupdater_v1beta1_UpdatesCancel(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -41,7 +49,7 @@ func Replicapoolupdater_v1beta1_UpdatesCancel(context Context, args ...string) e
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "POST")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -71,6 +79,14 @@ func Replicapoolupdater_v1beta1_UpdatesCancel(context Context, args ...string) e
 }
 
 func Replicapoolupdater_v1beta1_UpdatesGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -79,7 +95,7 @@ func Replicapoolupdater_v1beta1_UpdatesGet(context Context, args ...string) erro
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -115,6 +131,16 @@ func Replicapoolupdater_v1beta1_UpdatesGet(context Context, args ...string) erro
 }
 
 func Replicapoolupdater_v1beta1_UpdatesInsert(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -128,7 +154,7 @@ func Replicapoolupdater_v1beta1_UpdatesInsert(context Context, args ...string) e
 
 	// Only positional arguments should remain in args.
 	if len(args) == 0 || len(args) > 2 {
-		commands_util.UsageForMethod(context.InvocationMethod, "POST")
+		usageFunc()
 	}
 
 	request := &api_client.Update{}
@@ -179,6 +205,18 @@ func Replicapoolupdater_v1beta1_UpdatesInsert(context Context, args ...string) e
 }
 
 func Replicapoolupdater_v1beta1_UpdatesList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -203,7 +241,7 @@ func Replicapoolupdater_v1beta1_UpdatesList(context Context, args ...string) err
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -253,6 +291,14 @@ func Replicapoolupdater_v1beta1_UpdatesList(context Context, args ...string) err
 }
 
 func Replicapoolupdater_v1beta1_UpdatesPause(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -261,7 +307,7 @@ func Replicapoolupdater_v1beta1_UpdatesPause(context Context, args ...string) er
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "POST")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -291,6 +337,14 @@ func Replicapoolupdater_v1beta1_UpdatesPause(context Context, args ...string) er
 }
 
 func Replicapoolupdater_v1beta1_UpdatesRollback(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -299,7 +353,7 @@ func Replicapoolupdater_v1beta1_UpdatesRollback(context Context, args ...string)
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "POST")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -329,6 +383,14 @@ func Replicapoolupdater_v1beta1_UpdatesRollback(context Context, args ...string)
 }
 
 func Replicapoolupdater_v1beta1_UpdatesRollforward(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -337,7 +399,7 @@ func Replicapoolupdater_v1beta1_UpdatesRollforward(context Context, args ...stri
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "POST")
+		usageFunc()
 	}
 
 	expectedParams := []string{

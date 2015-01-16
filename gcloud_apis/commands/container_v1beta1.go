@@ -33,6 +33,14 @@ var _ = io.Copy
 var _ = os.Stdin
 
 func Container_v1beta1_ProjectsClustersList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -41,7 +49,7 @@ func Container_v1beta1_ProjectsClustersList(context Context, args ...string) err
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -71,6 +79,14 @@ func Container_v1beta1_ProjectsClustersList(context Context, args ...string) err
 }
 
 func Container_v1beta1_ProjectsOperationsList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -79,7 +95,7 @@ func Container_v1beta1_ProjectsOperationsList(context Context, args ...string) e
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -109,6 +125,16 @@ func Container_v1beta1_ProjectsOperationsList(context Context, args ...string) e
 }
 
 func Container_v1beta1_ProjectsZonesClustersCreate(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -122,7 +148,7 @@ func Container_v1beta1_ProjectsZonesClustersCreate(context Context, args ...stri
 
 	// Only positional arguments should remain in args.
 	if len(args) == 0 || len(args) > 2 {
-		commands_util.UsageForMethod(context.InvocationMethod, "POST")
+		usageFunc()
 	}
 
 	request := &api_client.CreateClusterRequest{}
@@ -171,6 +197,14 @@ func Container_v1beta1_ProjectsZonesClustersCreate(context Context, args ...stri
 }
 
 func Container_v1beta1_ProjectsZonesClustersDelete(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -179,7 +213,7 @@ func Container_v1beta1_ProjectsZonesClustersDelete(context Context, args ...stri
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "DELETE")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -213,6 +247,14 @@ func Container_v1beta1_ProjectsZonesClustersDelete(context Context, args ...stri
 }
 
 func Container_v1beta1_ProjectsZonesClustersGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -221,7 +263,7 @@ func Container_v1beta1_ProjectsZonesClustersGet(context Context, args ...string)
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -255,6 +297,14 @@ func Container_v1beta1_ProjectsZonesClustersGet(context Context, args ...string)
 }
 
 func Container_v1beta1_ProjectsZonesClustersList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -263,7 +313,7 @@ func Container_v1beta1_ProjectsZonesClustersList(context Context, args ...string
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -295,6 +345,14 @@ func Container_v1beta1_ProjectsZonesClustersList(context Context, args ...string
 }
 
 func Container_v1beta1_ProjectsZonesOperationsGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -303,7 +361,7 @@ func Container_v1beta1_ProjectsZonesOperationsGet(context Context, args ...strin
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -337,6 +395,14 @@ func Container_v1beta1_ProjectsZonesOperationsGet(context Context, args ...strin
 }
 
 func Container_v1beta1_ProjectsZonesOperationsList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -345,7 +411,7 @@ func Container_v1beta1_ProjectsZonesOperationsList(context Context, args ...stri
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{

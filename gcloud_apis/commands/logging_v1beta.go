@@ -33,6 +33,16 @@ var _ = io.Copy
 var _ = os.Stdin
 
 func Logging_v1beta_ProjectsLogsEntriesWrite(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -46,7 +56,7 @@ func Logging_v1beta_ProjectsLogsEntriesWrite(context Context, args ...string) er
 
 	// Only positional arguments should remain in args.
 	if len(args) == 0 || len(args) > 2 {
-		commands_util.UsageForMethod(context.InvocationMethod, "POST")
+		usageFunc()
 	}
 
 	request := &api_client.WriteLogEntriesRequest{}
@@ -87,6 +97,18 @@ func Logging_v1beta_ProjectsLogsEntriesWrite(context Context, args ...string) er
 }
 
 func Logging_v1beta_ProjectsLogsList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--pageSize=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -111,7 +133,7 @@ func Logging_v1beta_ProjectsLogsList(context Context, args ...string) error {
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -157,6 +179,14 @@ func Logging_v1beta_ProjectsLogsList(context Context, args ...string) error {
 }
 
 func Logging_v1beta_ProjectsLogsSinksDelete(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -165,7 +195,7 @@ func Logging_v1beta_ProjectsLogsSinksDelete(context Context, args ...string) err
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "DELETE")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -189,6 +219,14 @@ func Logging_v1beta_ProjectsLogsSinksDelete(context Context, args ...string) err
 }
 
 func Logging_v1beta_ProjectsLogsSinksGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -197,7 +235,7 @@ func Logging_v1beta_ProjectsLogsSinksGet(context Context, args ...string) error 
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -227,6 +265,14 @@ func Logging_v1beta_ProjectsLogsSinksGet(context Context, args ...string) error 
 }
 
 func Logging_v1beta_ProjectsLogsSinksList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -235,7 +281,7 @@ func Logging_v1beta_ProjectsLogsSinksList(context Context, args ...string) error
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
-		commands_util.UsageForMethod(context.InvocationMethod, "GET")
+		usageFunc()
 	}
 
 	expectedParams := []string{
@@ -265,6 +311,16 @@ func Logging_v1beta_ProjectsLogsSinksList(context Context, args ...string) error
 }
 
 func Logging_v1beta_ProjectsLogsSinksPatch(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -278,7 +334,7 @@ func Logging_v1beta_ProjectsLogsSinksPatch(context Context, args ...string) erro
 
 	// Only positional arguments should remain in args.
 	if len(args) == 0 || len(args) > 2 {
-		commands_util.UsageForMethod(context.InvocationMethod, "PATCH")
+		usageFunc()
 	}
 
 	request := &api_client.LogSink{}
@@ -325,6 +381,16 @@ func Logging_v1beta_ProjectsLogsSinksPatch(context Context, args ...string) erro
 }
 
 func Logging_v1beta_ProjectsLogsSinksUpdate(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " REQUEST_FILE|- [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
 	api_service, err := api_client.New(context.Client)
 	if err != nil {
 		return err
@@ -338,7 +404,7 @@ func Logging_v1beta_ProjectsLogsSinksUpdate(context Context, args ...string) err
 
 	// Only positional arguments should remain in args.
 	if len(args) == 0 || len(args) > 2 {
-		commands_util.UsageForMethod(context.InvocationMethod, "PUT")
+		usageFunc()
 	}
 
 	request := &api_client.LogSink{}

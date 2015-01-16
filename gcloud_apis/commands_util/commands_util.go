@@ -44,15 +44,10 @@ func OverwriteRequestWithValues(requestObject interface{}, keyValues map[string]
 	for key, val := range keyValues {
 		err := Overwrite(requestObject, key, val)
 		if err != nil {
-			return err
+			return fmt.Errorf("for key \"--%s\": while evaluating %s", key, err)
 		}
 	}
 	return nil
-}
-
-func UsageForMethod(methodId string, httpMethod string) {
-	fmt.Println("usage issue")
-	os.Exit(1)
 }
 
 func ErrForWrongParams(expectedParams, paramValues, args []string) error {
@@ -60,9 +55,9 @@ func ErrForWrongParams(expectedParams, paramValues, args []string) error {
 	if len(expectedParams) > 1 {
 		value += "s"
 	}
-	expectedArgument := strings.Join(expectedParams, "/")
+	expectedArgument := strings.ToUpper(strings.Join(expectedParams, "/"))
 	return fmt.Errorf(
-		"expected %d %s for %q, but %q has %d",
+		"expected %d %s for %s, but %q has %d.",
 		len(expectedParams), value, expectedArgument, args[0], len(paramValues))
 }
 
