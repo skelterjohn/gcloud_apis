@@ -43,14 +43,7 @@ func main() {
 
 	switch os.Args[1] {
 	case "list":
-		if len(os.Args) > 3 {
-			Usage()
-		}
-		prefix := ""
-		if len(os.Args) == 3 {
-			prefix = os.Args[2]
-		}
-		err := ListMethods(prefix)
+		err := ListMethods(os.Args[2:])
 		if err != nil {
 			problem(err)
 		}
