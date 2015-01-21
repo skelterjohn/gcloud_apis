@@ -25,7 +25,6 @@ import (
 )
 
 func ListMethods(args []string) error {
-
 	fullNames := false
 	for i, arg := range args {
 		if arg == "--full" {
