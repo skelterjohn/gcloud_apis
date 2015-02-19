@@ -24,12 +24,36 @@ import (
 	"github.com/GoogleCloudPlatform/gcloud/gcloud_apis/commands"
 )
 
-func ListMethods(prefix string) error {
+func ListMethods(args []string) error {
+	fullNames := false
+	for i, arg := range args {
+		if arg == "--full" {
+			fullNames = true
+			args = append(args[:i], args[i+1:]...)
+			break
+		}
+	}
+
+	if len(args) > 1 {
+		Usage()
+	}
+	prefix := ""
+	if len(args) == 1 {
+		prefix = args[0]
+	}
+	return listMethods(prefix, fullNames)
+}
+
+func listMethods(prefix string, fullNames bool) error {
 	listedThings := map[string]bool{}
 	if prefix == "" {
 		for methodName := range commands.AllMethods {
-			methodPrefix := strings.SplitN(methodName, ".", 2)[0]
-			listedThings[methodPrefix] = true
+			if fullNames {
+				listedThings[methodName] = true
+			} else {
+				methodPrefix := strings.SplitN(methodName, ".", 2)[0]
+				listedThings[methodPrefix] = true
+			}
 		}
 	} else {
 		for methodName := range commands.AllMethods {
@@ -39,7 +63,7 @@ func ListMethods(prefix string) error {
 			}
 			if strings.HasPrefix(methodName, prefix+".") {
 				firstUntypedDot := strings.Index(methodName[len(prefix)+1:], ".")
-				if firstUntypedDot != -1 {
+				if !fullNames && firstUntypedDot != -1 {
 					listedThings[methodName[:firstUntypedDot+len(prefix)+1]] = true
 				} else {
 					listedThings[methodName] = true
