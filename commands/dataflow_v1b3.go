@@ -23,8 +23,8 @@ import (
 	"os"
 	"strings"
 
-	api_client "github.com/GoogleCloudPlatform/gcloud/gcloud_apis/clients/dataflow/v1b3"
-	"github.com/GoogleCloudPlatform/gcloud/gcloud_apis/commands_util"
+	api_client "github.com/skelterjohn/gcloud_apis/clients/dataflow/v1b3"
+	"github.com/skelterjohn/gcloud_apis/commands_util"
 )
 
 // some generated code may not use all imported libs
