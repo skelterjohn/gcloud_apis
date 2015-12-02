@@ -21,7 +21,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/GoogleCloudPlatform/gcloud/gcloud_apis/commands"
+	"github.com/skelterjohn/gcloud_apis/commands"
 )
 
 func ListMethods(args []string) error {
