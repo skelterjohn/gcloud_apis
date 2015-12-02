@@ -251,6 +251,7 @@ func writeClientsSource(discovery_dir, clients_dir string, docs map[string]*disc
 		cmd := exec.Command(
 			"google-api-go-generator",
 			"-api_json_file", discovery_file,
+			"-api_pkg_base", "github.com/skelterjohn/gcloud_apis/clients",
 			"-output", client_source_file)
 		err = cmd.Run()
 		if err != nil {

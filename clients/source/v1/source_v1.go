@@ -4,7 +4,7 @@
 //
 // Usage example:
 //
-//   import "google.golang.org/api/source/v1"
+//   import "github.com/skelterjohn/gcloud_apis/clients/source/v1"
 //   ...
 //   sourceService, err := source.New(oauthHttpClient)
 package source
@@ -14,7 +14,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"google.golang.org/api/googleapi"
+	context "golang.org/x/net/context"
+	ctxhttp "golang.org/x/net/context/ctxhttp"
+	gensupport "google.golang.org/api/gensupport"
+	googleapi "google.golang.org/api/googleapi"
 	"io"
 	"net/http"
 	"net/url"
@@ -30,9 +33,12 @@ var _ = fmt.Sprintf
 var _ = json.NewDecoder
 var _ = io.Copy
 var _ = url.Parse
+var _ = gensupport.MarshalJSON
 var _ = googleapi.Version
 var _ = errors.New
 var _ = strings.Replace
+var _ = context.Canceled
+var _ = ctxhttp.Do
 
 const apiId = "source:v1"
 const apiName = "source"
@@ -56,12 +62,20 @@ func New(client *http.Client) (*Service, error) {
 }
 
 type Service struct {
-	client   *http.Client
-	BasePath string // API endpoint base URL
+	client    *http.Client
+	BasePath  string // API endpoint base URL
+	UserAgent string // optional additional User-Agent fragment
 
 	Projects *ProjectsService
 
 	V1 *V1Service
+}
+
+func (s *Service) userAgent() string {
+	if s.UserAgent == "" {
+		return googleapi.UserAgent
+	}
+	return googleapi.UserAgent + " " + s.UserAgent
 }
 
 func NewProjectsService(s *Service) *ProjectsService {
@@ -202,6 +216,7 @@ type V1Service struct {
 	s *Service
 }
 
+// Action: An action to perform on a file in a workspace.
 type Action struct {
 	// CopyAction: A CopyAction.
 	CopyAction *CopyAction `json:"copyAction,omitempty"`
@@ -211,65 +226,166 @@ type Action struct {
 
 	// WriteAction: A WriteAction.
 	WriteAction *WriteAction `json:"writeAction,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "CopyAction") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *Action) MarshalJSON() ([]byte, error) {
+	type noMethod Action
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// Alias: An alias is a named reference to a revision. Examples include
+// git
+// branches and tags.
 type Alias struct {
 	// Kind: The alias kind.
+	//
+	// Possible values:
+	//   "ANY" - ANY is used to indicate to ListAliases to return aliases of
+	// all kinds,
+	// and when used with GetAlias, the GetAlias function will return a
+	// FIXED,
+	// or MOVABLE, in that priority order. Using ANY
+	// with CreateAlias or DeleteAlias will result in an error.
+	//   "FIXED" - Git tag
+	//   "MOVABLE" - Git branch
+	//   "MERCURIAL_BRANCH_DEPRECATED"
+	//   "OTHER" - OTHER is used to fetch non-standard aliases, which are
+	// none
+	// of the kinds above or below. For example, if a git repo
+	// has a ref named "refs/foo/bar", it is considered to be OTHER.
+	//   "SPECIAL_DEPRECATED" - DO NOT USE.
 	Kind string `json:"kind,omitempty"`
 
 	// Name: The alias name.
 	Name string `json:"name,omitempty"`
 
 	// RevisionId: The revision referred to by this alias.
-	// For git tags and
-	// branches, this is the corresponding hash.
+	// For git tags and branches, this is the corresponding hash.
 	RevisionId string `json:"revisionId,omitempty"`
 
 	// WorkspaceNames: The list of workspace names whose alias is this
 	// one.
 	// NOT YET IMPLEMENTED (b/16943429).
 	WorkspaceNames []string `json:"workspaceNames,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "Kind") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *Alias) MarshalJSON() ([]byte, error) {
+	type noMethod Alias
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// AliasContext: An alias to a repo revision.
 type AliasContext struct {
 	// Kind: The alias kind.
+	//
+	// Possible values:
+	//   "ANY" - Do not use.
+	//   "FIXED" - Git tag
+	//   "MOVABLE" - Git branch
+	//   "OTHER" - OTHER is used to specify non-standard aliases, those not
+	// of the kinds
+	// above. For example, if a Git repo has a ref named "refs/foo/bar",
+	// it
+	// is considered to be of kind OTHER.
 	Kind string `json:"kind,omitempty"`
 
 	// Name: The alias name.
 	Name string `json:"name,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Kind") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *AliasContext) MarshalJSON() ([]byte, error) {
+	type noMethod AliasContext
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// ChangedFileInfo: Represents file information.
 type ChangedFileInfo struct {
 	// FromPath: Related file path for copies or renames.
 	//
-	// For copies, the
-	// type will be ADDED and the from_path will point to the
-	// source of the
-	// copy. For renames, the type will be ADDED, the from_path
-	// will point
-	// to the source of the rename, and another ChangedFileInfo record
-	// with
-	// that path will appear with type DELETED. In other words, a rename
-	// is
+	// For copies, the type will be ADDED and the from_path will point to
+	// the
+	// source of the copy. For renames, the type will be ADDED, the
+	// from_path
+	// will point to the source of the rename, and another ChangedFileInfo
+	// record
+	// with that path will appear with type DELETED. In other words, a
+	// rename is
 	// represented as a copy plus a delete of the old path.
 	FromPath string `json:"fromPath,omitempty"`
 
 	// Hash: A hex-encoded hash for the file.
-	// Not necessarily a hash of the
-	// file's contents. Two paths in the same
-	// revision with the same hash
-	// have the same contents with high probability.
-	// Empty if the operation
-	// is CONFLICTED.
+	// Not necessarily a hash of the file's contents. Two paths in the
+	// same
+	// revision with the same hash have the same contents with high
+	// probability.
+	// Empty if the operation is CONFLICTED.
 	Hash string `json:"hash,omitempty"`
 
 	// Operation: The operation type for the file.
+	//
+	// Possible values:
+	//   "OPERATION_UNSPECIFIED" - No operation was specified.
+	//   "ADDED" - The file was added.
+	//   "DELETED" - The file was deleted.
+	//   "MODIFIED" - The file was modified.
+	//   "CONFLICTED" - The result of merging the file is a conflict.
+	// The CONFLICTED type only appears in Workspace.changed_files
+	// or
+	// Snapshot.changed_files when the workspace is in a merge state.
 	Operation string `json:"operation,omitempty"`
 
 	// Path: The path of the file.
 	Path string `json:"path,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "FromPath") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *ChangedFileInfo) MarshalJSON() ([]byte, error) {
+	type noMethod ChangedFileInfo
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// CloudRepoSourceContext: A CloudRepoSourceContext denotes a particular
+// revision in a cloud
+// repo (a repo hosted by the Google Cloud Platform).
 type CloudRepoSourceContext struct {
 	// AliasContext: An alias, which may be a branch or tag.
 	AliasContext *AliasContext `json:"aliasContext,omitempty"`
@@ -282,8 +398,27 @@ type CloudRepoSourceContext struct {
 
 	// RevisionId: A revision ID.
 	RevisionId string `json:"revisionId,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "AliasContext") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *CloudRepoSourceContext) MarshalJSON() ([]byte, error) {
+	type noMethod CloudRepoSourceContext
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// CloudWorkspaceId: A CloudWorkspaceId is a unique identifier for a
+// cloud workspace.
+// A cloud workspace is a place associated with a repo where modified
+// files
+// can be stored before they are committed.
 type CloudWorkspaceId struct {
 	// Name: The unique name of the workspace within the repo.  This is the
 	// name
@@ -292,18 +427,48 @@ type CloudWorkspaceId struct {
 
 	// RepoId: The ID of the repo containing the workspace.
 	RepoId *RepoId `json:"repoId,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Name") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *CloudWorkspaceId) MarshalJSON() ([]byte, error) {
+	type noMethod CloudWorkspaceId
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// CloudWorkspaceSourceContext: A CloudWorkspaceSourceContext denotes a
+// workspace at a particular snapshot.
 type CloudWorkspaceSourceContext struct {
 	// SnapshotId: The ID of the snapshot.
-	// An empty snapshot_id refers to
-	// the most recent snapshot.
+	// An empty snapshot_id refers to the most recent snapshot.
 	SnapshotId string `json:"snapshotId,omitempty"`
 
 	// WorkspaceId: The ID of the workspace.
 	WorkspaceId *CloudWorkspaceId `json:"workspaceId,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "SnapshotId") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *CloudWorkspaceSourceContext) MarshalJSON() ([]byte, error) {
+	type noMethod CloudWorkspaceSourceContext
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// CommitWorkspaceRequest: Request for CommitWorkspace.
 type CommitWorkspaceRequest struct {
 	// Author: required
 	Author string `json:"author,omitempty"`
@@ -323,8 +488,27 @@ type CommitWorkspaceRequest struct {
 
 	// WorkspaceId: The ID of the workspace.
 	WorkspaceId *CloudWorkspaceId `json:"workspaceId,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Author") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *CommitWorkspaceRequest) MarshalJSON() ([]byte, error) {
+	type noMethod CommitWorkspaceRequest
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// CopyAction: Copy the contents of the file at from_path in the
+// specified revision or
+// snapshot to to_path.
+//
+// To rename a file, copy it to the new path and delete the old.
 type CopyAction struct {
 	// FromPath: The path to copy from.
 	FromPath string `json:"fromPath,omitempty"`
@@ -337,63 +521,104 @@ type CopyAction struct {
 
 	// ToPath: The path to copy to.
 	ToPath string `json:"toPath,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "FromPath") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *CopyAction) MarshalJSON() ([]byte, error) {
+	type noMethod CopyAction
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// CreateWorkspaceRequest: Request for CreateWorkspace.
 type CreateWorkspaceRequest struct {
 	// Actions: An ordered sequence of actions to perform in the workspace.
 	// Can be empty.
-	// Specifying actions here instead of using
-	// ModifyWorkspace saves one RPC.
+	// Specifying actions here instead of using ModifyWorkspace saves one
+	// RPC.
 	Actions []*Action `json:"actions,omitempty"`
 
 	RepoId *RepoId `json:"repoId,omitempty"`
 
 	// Workspace: The following fields of workspace, with the allowable
 	// exception of
-	// baseline, must be set. No other fields of workspace
-	// should be set.
+	// baseline, must be set. No other fields of workspace should be
+	// set.
 	//
 	// id.name
-	// Provides the name of the workspace and must
-	// be unique within the repo.
-	// Note: Do not set field id.repo_id.  The
-	// repo_id is provided above as a
-	// CreateWorkspaceRequest
-	// field.
+	// Provides the name of the workspace and must be unique within the
+	// repo.
+	// Note: Do not set field id.repo_id.  The repo_id is provided above as
+	// a
+	// CreateWorkspaceRequest field.
 	//
 	// alias:
-	// If alias names an existing movable alias, the
-	// workspace's baseline
+	// If alias names an existing movable alias, the workspace's baseline
 	// is set to the alias's revision.
 	//
-	// If alias does
-	// not name an existing movable alias, then the workspace is
-	// created
-	// with no baseline. When the workspace is committed, a new
+	// If alias does not name an existing movable alias, then the workspace
+	// is
+	// created with no baseline. When the workspace is committed, a new
 	// root
 	// revision is created with no parents. The new revision becomes
 	// the
-	// workspace's baseline and the alias name is used to create a
-	// movable alias
+	// workspace's baseline and the alias name is used to create a movable
+	// alias
 	// referring to the revision.
 	//
 	// baseline:
-	// A revision ID
-	// (hexadecimal string) for sequencing. If non-empty, alias
-	// must name an
-	// existing movable alias and baseline must match the alias's
-	// revision
-	// ID.
+	// A revision ID (hexadecimal string) for sequencing. If non-empty,
+	// alias
+	// must name an existing movable alias and baseline must match the
+	// alias's
+	// revision ID.
 	Workspace *Workspace `json:"workspace,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Actions") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *CreateWorkspaceRequest) MarshalJSON() ([]byte, error) {
+	type noMethod CreateWorkspaceRequest
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// DeleteAction: Delete a file or directory. I
 type DeleteAction struct {
 	// Path: The path of the file or directory. If path refers to
 	// a
 	// directory, the directory and its contents are deleted.
 	Path string `json:"path,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Path") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *DeleteAction) MarshalJSON() ([]byte, error) {
+	type noMethod DeleteAction
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// DirectoryEntry: Information about a directory.
 type DirectoryEntry struct {
 	// Info: Information about the entry.
 	Info *FileInfo `json:"info,omitempty"`
@@ -407,14 +632,51 @@ type DirectoryEntry struct {
 
 	// Name: Name of the entry relative to the directory.
 	Name string `json:"name,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Info") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *DirectoryEntry) MarshalJSON() ([]byte, error) {
+	type noMethod DirectoryEntry
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// Empty: A generic empty message that you can re-use to avoid defining
+// duplicated
+// empty messages in your APIs. A typical example is to use it as the
+// request
+// or the response type of an API method. For instance:
+//
+//     service Foo {
+//       rpc Bar(google.protobuf.Empty) returns
+// (google.protobuf.Empty);
+//     }
+//
+// The JSON representation for `Empty` is empty JSON object `{}`.
 type Empty struct {
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
 }
 
+// ExternalReference: A submodule or subrepository.
 type ExternalReference struct {
 }
 
+// File: A file, with contents and metadata.
+//
+// Pagination can be used to limit the size of the file. Otherwise,
+// there is a
+// default max size for the contents. Whether the file has been
+// truncated can
+// be determined by comparing len(contents) to info.Size.
 type File struct {
 	// Contents: The contents of the file.
 	Contents string `json:"contents,omitempty"`
@@ -424,8 +686,23 @@ type File struct {
 
 	// Path: The path to the file starting from the root of the revision.
 	Path string `json:"path,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Contents") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *File) MarshalJSON() ([]byte, error) {
+	type noMethod File
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// FileInfo: File metadata, including a hash of the file contents.
 type FileInfo struct {
 	// Hash: A hex-encoded cryptographic hash of the file's contents,
 	// possibly with other data.
@@ -433,21 +710,42 @@ type FileInfo struct {
 
 	// IsText: An educated guess as to whether the file is human-readable
 	// text, or
-	// binary. Typically available only when file contents are
-	// retrieved (since
-	// the guess depends on examining a prefix of the
-	// contents), but some systems
+	// binary. Typically available only when file contents are retrieved
+	// (since
+	// the guess depends on examining a prefix of the contents), but some
+	// systems
 	// might store this metadata for every file.
 	IsText bool `json:"isText,omitempty"`
 
 	// Mode: The mode of the file: an executable, a symbolic link, or
 	// neither.
+	//
+	// Possible values:
+	//   "FILE_MODE_UNSPECIFIED" - No file mode was specified.
+	//   "NORMAL" - Neither a symbolic link nor executable.
+	//   "SYMLINK" - A symbolic link.
+	//   "EXECUTABLE" - An executable.
 	Mode string `json:"mode,omitempty"`
 
 	// Size: The size of the file in bytes.
 	Size int64 `json:"size,omitempty,string"`
+
+	// ForceSendFields is a list of field names (e.g. "Hash") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *FileInfo) MarshalJSON() ([]byte, error) {
+	type noMethod FileInfo
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// GerritSourceContext: A SourceContext referring to a Gerrit project.
 type GerritSourceContext struct {
 	// AliasContext: An alias, which may be a branch or tag.
 	AliasContext *AliasContext `json:"aliasContext,omitempty"`
@@ -458,8 +756,7 @@ type GerritSourceContext struct {
 	// GerritProject: The full project name within the host. Projects may be
 	// nested, so
 	// "project/subproject" is a valid project name.
-	// The "repo
-	// name" is hostURI/project.
+	// The "repo name" is hostURI/project.
 	GerritProject string `json:"gerritProject,omitempty"`
 
 	// HostUri: The URI of a running Gerrit instance.
@@ -467,13 +764,49 @@ type GerritSourceContext struct {
 
 	// RevisionId: A revision (commit) ID.
 	RevisionId string `json:"revisionId,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "AliasContext") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *GerritSourceContext) MarshalJSON() ([]byte, error) {
+	type noMethod GerritSourceContext
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// GetRevisionsResponse: Response for GetRevisions.
 type GetRevisionsResponse struct {
 	// Revisions: The revisions.
 	Revisions []*Revision `json:"revisions,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "Revisions") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *GetRevisionsResponse) MarshalJSON() ([]byte, error) {
+	type noMethod GetRevisionsResponse
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// GitSourceContext: A GitSourceContext denotes a particular revision in
+// a third party Git
+// repository (e.g. GitHub).
 type GitSourceContext struct {
 	// RevisionId: Git commit hash.
 	// required.
@@ -481,15 +814,29 @@ type GitSourceContext struct {
 
 	// Url: Git repository URL.
 	Url string `json:"url,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "RevisionId") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *GitSourceContext) MarshalJSON() ([]byte, error) {
+	type noMethod GitSourceContext
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// ListAliasesResponse: Response for ListAliases.
 type ListAliasesResponse struct {
 	// Aliases: The list of aliases.
 	Aliases []*Alias `json:"aliases,omitempty"`
 
 	// NextPageToken: Use as the value of page_token in the next
-	// call to
-	// obtain the next page of results.
+	// call to obtain the next page of results.
 	// If empty, there are no more results.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
@@ -497,15 +844,33 @@ type ListAliasesResponse struct {
 	// specified in the
 	// request.
 	TotalAliases int64 `json:"totalAliases,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "Aliases") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *ListAliasesResponse) MarshalJSON() ([]byte, error) {
+	type noMethod ListAliasesResponse
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// ListChangedFilesRequest: Request for ListChangedFiles.
 type ListChangedFilesRequest struct {
 	// PageSize: The maximum number of values to return.
 	PageSize int64 `json:"pageSize,omitempty"`
 
 	// PageToken: The value of next_page_token from the previous call.
-	// Omit
-	// for the first page.
+	// Omit for the first page.
 	PageToken string `json:"pageToken,omitempty"`
 
 	// SourceContext1: The first source context to compare.
@@ -513,15 +878,29 @@ type ListChangedFilesRequest struct {
 
 	// SourceContext2: The second source context to compare.
 	SourceContext2 *SourceContext `json:"sourceContext2,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "PageSize") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *ListChangedFilesRequest) MarshalJSON() ([]byte, error) {
+	type noMethod ListChangedFilesRequest
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// ListChangedFilesResponse: Response for ListChangedFiles.
 type ListChangedFilesResponse struct {
 	// ChangedFiles: Note: ChangedFileInfo.from_path is not set here.
 	// ListChangedFiles does not
 	// perform rename/copy detection.
 	//
-	// The
-	// ChangedFileInfo.Type describes the changes from source_context1
+	// The ChangedFileInfo.Type describes the changes from source_context1
 	// to
 	// source_context2. Thus ADDED would mean a file is not present
 	// in
@@ -529,68 +908,180 @@ type ListChangedFilesResponse struct {
 	ChangedFiles []*ChangedFileInfo `json:"changedFiles,omitempty"`
 
 	// NextPageToken: Use as the value of page_token in the next
-	// call to
-	// obtain the next page of results.
+	// call to obtain the next page of results.
 	// If empty, there are no more results.
 	NextPageToken string `json:"nextPageToken,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "ChangedFiles") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *ListChangedFilesResponse) MarshalJSON() ([]byte, error) {
+	type noMethod ListChangedFilesResponse
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// ListFilesResponse: Response for ListFiles.
 type ListFilesResponse struct {
 	// Files: info.size and contents are not set.
 	Files []*File `json:"files,omitempty"`
 
 	// NextPageToken: Use as the value of page_token in the next
-	// call to
-	// obtain the next page of results.
+	// call to obtain the next page of results.
 	// If empty, there are no more results.
 	NextPageToken string `json:"nextPageToken,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "Files") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *ListFilesResponse) MarshalJSON() ([]byte, error) {
+	type noMethod ListFilesResponse
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// ListReposResponse: Response for ListRepos.
 type ListReposResponse struct {
 	// Repos: The listed repos.
 	Repos []*Repo `json:"repos,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "Repos") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *ListReposResponse) MarshalJSON() ([]byte, error) {
+	type noMethod ListReposResponse
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// ListRevisionsResponse: Response for ListRevisions.
 type ListRevisionsResponse struct {
 	// NextPageToken: Use as the value of page_token in the next
-	// call to
-	// obtain the next page of results.
+	// call to obtain the next page of results.
 	// If empty, there are no more results.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
 	// Revisions: The list of revisions.
 	Revisions []*Revision `json:"revisions,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "NextPageToken") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *ListRevisionsResponse) MarshalJSON() ([]byte, error) {
+	type noMethod ListRevisionsResponse
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// ListSnapshotsResponse: Response for ListSnapshots.
 type ListSnapshotsResponse struct {
 	// NextPageToken: Use as the value of page_token in the next
-	// call to
-	// obtain the next page of results.
+	// call to obtain the next page of results.
 	// If empty, there are no more results.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
 	// Snapshots: The list of snapshots.
 	Snapshots []*Snapshot `json:"snapshots,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "NextPageToken") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *ListSnapshotsResponse) MarshalJSON() ([]byte, error) {
+	type noMethod ListSnapshotsResponse
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// ListWorkspacesResponse: Response for ListWorkspaces.
 type ListWorkspacesResponse struct {
 	// Workspaces: The listed workspaces.
 	Workspaces []*Workspace `json:"workspaces,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "Workspaces") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *ListWorkspacesResponse) MarshalJSON() ([]byte, error) {
+	type noMethod ListWorkspacesResponse
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// MergeInfo: MergeInfo holds information needed while resolving
+// merges, and
+// refreshes that
+// involve conflicts.
 type MergeInfo struct {
 	// CommonAncestorRevisionId: Revision ID of the closest common ancestor
 	// of the file trees that are
-	// participating in a refresh or merge.
-	// During a refresh, the common
-	// ancestor is the baseline of the
-	// workspace.  During a merge of two
-	// branches, the common ancestor is
-	// derived from the workspace baseline and
-	// the alias of the branch being
-	// merged in.  The repository state at the
-	// common ancestor provides the
-	// base version for a three-way merge.
+	// participating in a refresh or merge.  During a refresh, the
+	// common
+	// ancestor is the baseline of the workspace.  During a merge of
+	// two
+	// branches, the common ancestor is derived from the workspace baseline
+	// and
+	// the alias of the branch being merged in.  The repository state at
+	// the
+	// common ancestor provides the base version for a three-way merge.
 	CommonAncestorRevisionId string `json:"commonAncestorRevisionId,omitempty"`
 
 	// IsRefresh: If true, a refresh operation is in progress.  If false, a
@@ -600,44 +1091,73 @@ type MergeInfo struct {
 
 	// OtherRevisionId: During a refresh, the ID of the revision with which
 	// the workspace is being
-	// refreshed. This is the revision ID to which
-	// the workspace's alias refers
-	// at the time of the RefreshWorkspace
-	// call. During a merge, the ID of the
-	// revision that's being merged into
-	// the workspace's alias. This is the
-	// revision_id field of the
-	// MergeRequest.
+	// refreshed. This is the revision ID to which the workspace's alias
+	// refers
+	// at the time of the RefreshWorkspace call. During a merge, the ID of
+	// the
+	// revision that's being merged into the workspace's alias. This is
+	// the
+	// revision_id field of the MergeRequest.
 	OtherRevisionId string `json:"otherRevisionId,omitempty"`
 
 	// WorkspaceAfterSnapshotId: The workspace snapshot immediately after
 	// the refresh or merge RPC
-	// completes.  If a file has conflicts, this
-	// snapshot contains the
+	// completes.  If a file has conflicts, this snapshot contains
+	// the
 	// version of the file with conflict markers.
 	WorkspaceAfterSnapshotId string `json:"workspaceAfterSnapshotId,omitempty"`
 
 	// WorkspaceBeforeSnapshotId: During a refresh, the snapshot ID of the
 	// latest change to the workspace
-	// before the refresh.  During a merge,
-	// the workspace's baseline, which is
-	// identical to the commit hash of
-	// the workspace's alias before initiating
+	// before the refresh.  During a merge, the workspace's baseline, which
+	// is
+	// identical to the commit hash of the workspace's alias before
+	// initiating
 	// the merge.
 	WorkspaceBeforeSnapshotId string `json:"workspaceBeforeSnapshotId,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g.
+	// "CommonAncestorRevisionId") to unconditionally include in API
+	// requests. By default, fields with empty values are omitted from API
+	// requests. However, any non-pointer, non-interface field appearing in
+	// ForceSendFields will be sent to the server regardless of whether the
+	// field is empty or not. This may be used to include empty fields in
+	// Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *MergeInfo) MarshalJSON() ([]byte, error) {
+	type noMethod MergeInfo
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// MergeRequest: Request for Merge.
 type MergeRequest struct {
 	// RevisionId: The other revision to be merged.
 	RevisionId string `json:"revisionId,omitempty"`
 
 	// WorkspaceId: The workspace to use for the merge. The revision
 	// referred to
-	// by the workspace's alias will be one of the revisions
-	// merged.
+	// by the workspace's alias will be one of the revisions merged.
 	WorkspaceId *CloudWorkspaceId `json:"workspaceId,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "RevisionId") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *MergeRequest) MarshalJSON() ([]byte, error) {
+	type noMethod MergeRequest
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// ModifyWorkspaceRequest: Request for ModifyWorkspace.
 type ModifyWorkspaceRequest struct {
 	// Actions: An ordered sequence of actions to perform in the workspace.
 	// May not be
@@ -651,16 +1171,50 @@ type ModifyWorkspaceRequest struct {
 
 	// WorkspaceId: The ID of the workspace.
 	WorkspaceId *CloudWorkspaceId `json:"workspaceId,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Actions") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *ModifyWorkspaceRequest) MarshalJSON() ([]byte, error) {
+	type noMethod ModifyWorkspaceRequest
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// ProjectRepoId: Selects a repo using a Google Cloud Platform project
+// ID
+// (e.g. winged-cargo-31) and a repo name within that project.
 type ProjectRepoId struct {
 	// ProjectId: The ID of the project.
 	ProjectId string `json:"projectId,omitempty"`
 
 	// RepoName: The name of the repo. Leave empty for the default repo.
 	RepoName string `json:"repoName,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "ProjectId") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *ProjectRepoId) MarshalJSON() ([]byte, error) {
+	type noMethod ProjectRepoId
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// ReadResponse: Response to read request. Exactly one of entries, file
+// or external_reference
+// will be populated, depending on what the path in the request denotes.
 type ReadResponse struct {
 	// Entries: Contains the directory entries if the request specifies a
 	// directory.
@@ -674,26 +1228,60 @@ type ReadResponse struct {
 	File *File `json:"file,omitempty"`
 
 	// NextPageToken: Use as the value of page_token in the next
-	// call to
-	// obtain the next page of results.
+	// call to obtain the next page of results.
 	// If empty, there are no more results.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
 	// SourceContext: Returns the SourceContext actually used, resolving any
 	// alias in the input
-	// SourceContext into its revision ID and returning
-	// the actual current
-	// snapshot ID if the read was from a workspace with
-	// an unspecified snapshot
+	// SourceContext into its revision ID and returning the actual
+	// current
+	// snapshot ID if the read was from a workspace with an unspecified
+	// snapshot
 	// ID.
 	SourceContext *SourceContext `json:"sourceContext,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "Entries") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *ReadResponse) MarshalJSON() ([]byte, error) {
+	type noMethod ReadResponse
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// RefreshWorkspaceRequest: Request for RefreshWorkspace.
 type RefreshWorkspaceRequest struct {
 	// WorkspaceId: The ID of the workspace.
 	WorkspaceId *CloudWorkspaceId `json:"workspaceId,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "WorkspaceId") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *RefreshWorkspaceRequest) MarshalJSON() ([]byte, error) {
+	type noMethod RefreshWorkspaceRequest
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// Repo: A repository (or repo) stores files for a version-control
+// system.
 type Repo struct {
 	// CreateTime: Timestamp when the repo was created.
 	CreateTime string `json:"createTime,omitempty"`
@@ -707,8 +1295,7 @@ type Repo struct {
 	// 63
 	// characters long. The - character can appear in the middle
 	// positions.
-	// (Names must satisfy the regular
-	// expression
+	// (Names must satisfy the regular expression
 	// a-z{1,61}[a-z0-9].)
 	Name string `json:"name,omitempty"`
 
@@ -723,20 +1310,63 @@ type Repo struct {
 	RepoSyncConfig *RepoSyncConfig `json:"repoSyncConfig,omitempty"`
 
 	// State: The state the repo is in.
+	//
+	// Possible values:
+	//   "STATE_UNSPECIFIED" - No state was specified.
+	//   "LIVE" - The repo is live and available for use.
+	//   "DELETED" - The repo has been deleted.
 	State string `json:"state,omitempty"`
 
 	// Vcs: The version control system of the repo.
+	//
+	// Possible values:
+	//   "VCS_UNSPECIFIED" - No version control system was specified.
+	//   "GIT" - The Git version control system.
 	Vcs string `json:"vcs,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "CreateTime") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *Repo) MarshalJSON() ([]byte, error) {
+	type noMethod Repo
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// RepoId: A unique identifier for a cloud repo.
 type RepoId struct {
 	// ProjectRepoId: A combination of a project ID and a repo name.
 	ProjectRepoId *ProjectRepoId `json:"projectRepoId,omitempty"`
 
 	// Uid: A server-assigned, globally unique identifier.
 	Uid string `json:"uid,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "ProjectRepoId") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *RepoId) MarshalJSON() ([]byte, error) {
+	type noMethod RepoId
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// RepoSyncConfig: RepoSync configuration information.
 type RepoSyncConfig struct {
 	// ExternalRepoUrl: If this repo is enabled for RepoSync, this will be
 	// the URL of the
@@ -744,39 +1374,93 @@ type RepoSyncConfig struct {
 	ExternalRepoUrl string `json:"externalRepoUrl,omitempty"`
 
 	// Status: The status of RepoSync.
+	//
+	// Possible values:
+	//   "REPO_SYNC_STATUS_UNSPECIFIED" - No RepoSync status was specified.
+	//   "OK" - RepoSync is working.
+	//   "FAILED_AUTH" - RepoSync failed because of
+	// authorization/authentication.
+	//   "FAILED_OTHER" - RepoSync failed for a reason other than auth.
+	//   "FAILED_NOT_FOUND" - RepoSync failed because the repository was not
+	// found.
 	Status string `json:"status,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "ExternalRepoUrl") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *RepoSyncConfig) MarshalJSON() ([]byte, error) {
+	type noMethod RepoSyncConfig
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// ResolveFilesRequest: Request for ResolveFiles.
 type ResolveFilesRequest struct {
 	// ResolvedPaths: Files that should be marked as resolved in the
 	// workspace.  All files in
-	// resolved_paths must currently be in the
-	// CONFLICTED state in
-	// Workspace.changed_files.  NOTE: Changing a file's
-	// contents to match the
-	// contents in the workspace baseline, then
-	// calling ResolveFiles on it, will
-	// cause the file to be removed from
-	// the changed_files list entirely.
-	// If resolved_paths is empty,
-	// INVALID_ARGUMENT is returned.
-	// If resolved_paths contains duplicates,
-	// INVALID_ARGUMENT is returned.
-	// If resolved_paths contains a path that
-	// was never unresolved,
-	// or has already been resolved,
-	// FAILED_PRECONDITION is returned.
+	// resolved_paths must currently be in the CONFLICTED state
+	// in
+	// Workspace.changed_files.  NOTE: Changing a file's contents to match
+	// the
+	// contents in the workspace baseline, then calling ResolveFiles on it,
+	// will
+	// cause the file to be removed from the changed_files list entirely.
+	// If resolved_paths is empty, INVALID_ARGUMENT is returned.
+	// If resolved_paths contains duplicates, INVALID_ARGUMENT is
+	// returned.
+	// If resolved_paths contains a path that was never unresolved,
+	// or has already been resolved, FAILED_PRECONDITION is returned.
 	ResolvedPaths []string `json:"resolvedPaths,omitempty"`
 
 	// WorkspaceId: The ID of the workspace.
 	WorkspaceId *CloudWorkspaceId `json:"workspaceId,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "ResolvedPaths") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *ResolveFilesRequest) MarshalJSON() ([]byte, error) {
+	type noMethod ResolveFilesRequest
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// RevertRefreshRequest: Request for RevertRefresh.
 type RevertRefreshRequest struct {
 	// WorkspaceId: The ID of the workspace.
 	WorkspaceId *CloudWorkspaceId `json:"workspaceId,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "WorkspaceId") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *RevertRefreshRequest) MarshalJSON() ([]byte, error) {
+	type noMethod RevertRefreshRequest
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// Revision: A revision is a snapshot of a file tree, with associated
+// metadata. This
+// message contains metadata only. Use the Read or
+// ReadFromWorkspaceOrAlias
+// rpcs to read the contents of the revision's file tree.
 type Revision struct {
 	// Author: The name of the user who wrote the revision. (In Git, this
 	// can
@@ -790,14 +1474,10 @@ type Revision struct {
 	ChangedFiles []*ChangedFileInfo `json:"changedFiles,omitempty"`
 
 	// ChangedFilesUnknown: In some cases changed-file
-	// information is
-	// generated asynchronously. So there is a period
-	// of time when it is not
-	// available. This field encodes that fact.
-	// (An empty changed_files
-	// field is not sufficient, since it is
-	// possible for a revision to have
-	// no changed files.)
+	// information is generated asynchronously. So there is a period
+	// of time when it is not available. This field encodes that fact.
+	// (An empty changed_files field is not sufficient, since it is
+	// possible for a revision to have no changed files.)
 	ChangedFilesUnknown bool `json:"changedFilesUnknown,omitempty"`
 
 	// CommitMessage: The message added by the committer.
@@ -821,8 +1501,30 @@ type Revision struct {
 
 	// ParentIds: The revision IDs of this revision's parents.
 	ParentIds []string `json:"parentIds,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "Author") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *Revision) MarshalJSON() ([]byte, error) {
+	type noMethod Revision
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// Snapshot: A snapshot is a version of a workspace. Each change to a
+// workspace's files
+// creates a new snapshot. A workspace consists of a sequence of
+// snapshots.
 type Snapshot struct {
 	// ChangedFiles: The set of files modified in this snapshot, relative to
 	// the workspace
@@ -834,8 +1536,29 @@ type Snapshot struct {
 
 	// SnapshotId: The ID of the snapshot.
 	SnapshotId string `json:"snapshotId,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "ChangedFiles") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *Snapshot) MarshalJSON() ([]byte, error) {
+	type noMethod Snapshot
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// SourceContext: A SourceContext is a reference to a tree of files. A
+// SourceContext together
+// with a path point to a unique revision of a single file or directory.
 type SourceContext struct {
 	// CloudRepo: A SourceContext referring to a revision in a cloud repo.
 	CloudRepo *CloudRepoSourceContext `json:"cloudRepo,omitempty"`
@@ -850,8 +1573,29 @@ type SourceContext struct {
 	// Git: A SourceContext referring to any third party Git repo (e.g.
 	// GitHub).
 	Git *GitSourceContext `json:"git,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "CloudRepo") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *SourceContext) MarshalJSON() ([]byte, error) {
+	type noMethod SourceContext
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// Workspace: A Cloud Workspace stores modified files before they are
+// committed to
+// a repo. This message contains metadata. Use the Read
+// or
+// ReadFromWorkspaceOrAlias methods to read files from the
+// workspace,
+// and use ModifyWorkspace to change files.
 type Workspace struct {
 	// Alias: The alias associated with the workspace. When the workspace is
 	// committed,
@@ -880,87 +1624,150 @@ type Workspace struct {
 	// to
 	// RefreshWorkspace which results in conflicts.
 	MergeInfo *MergeInfo `json:"mergeInfo,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "Alias") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *Workspace) MarshalJSON() ([]byte, error) {
+	type noMethod Workspace
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// WriteAction: Create or modify a file.
 type WriteAction struct {
 	// Contents: The new contents of the file.
 	Contents string `json:"contents,omitempty"`
 
 	// Mode: The new mode of the file.
+	//
+	// Possible values:
+	//   "FILE_MODE_UNSPECIFIED" - No file mode was specified.
+	//   "NORMAL" - Neither a symbolic link nor executable.
+	//   "SYMLINK" - A symbolic link.
+	//   "EXECUTABLE" - An executable.
 	Mode string `json:"mode,omitempty"`
 
 	// Path: The path of the file to write.
 	Path string `json:"path,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Contents") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *WriteAction) MarshalJSON() ([]byte, error) {
+	type noMethod WriteAction
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
 // method id "source.projects.repos.create":
 
 type ProjectsReposCreateCall struct {
-	s         *Service
-	projectId string
-	repo      *Repo
-	opt_      map[string]interface{}
+	s          *Service
+	projectId  string
+	repo       *Repo
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
 }
 
 // Create: Creates a repo in the given project. The provided repo
 // message should have
-// its name field set to the desired repo name. No
-// other repo fields should
-// be set. Omitting the name is the same as
-// specifying "default"
+// its name field set to the desired repo name. No other repo fields
+// should
+// be set. Omitting the name is the same as specifying "default"
 //
-// Repo names must satisfy the regular
-// expression
-// `a-z{1,61}[a-z0-9]`. (Note that repo names must contain
-// at
-// least three characters and may not contain underscores.) The
-// special name
-// "default" is the default repo for the project; this is
-// the repo shown when
-// visiting the Cloud Developers Console, and can be
-// accessed via git's HTTP
-// protocol at
-// `https://source.developers.google.com/p/PROJECT_ID`. You may
-// create
-// other repos with this API and access them
+// Repo names must satisfy the regular expression
+// `a-z{1,61}[a-z0-9]`. (Note that repo names must contain at
+// least three characters and may not contain underscores.) The special
+// name
+// "default" is the default repo for the project; this is the repo shown
+// when
+// visiting the Cloud Developers Console, and can be accessed via git's
+// HTTP
+// protocol at `https://source.developers.google.com/p/PROJECT_ID`. You
+// may
+// create other repos with this API and access them
 // at
 // `https://source.developers.google.com/p/PROJECT_ID/r/NAME`.
 func (r *ProjectsReposService) Create(projectId string, repo *Repo) *ProjectsReposCreateCall {
-	c := &ProjectsReposCreateCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repo = repo
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposCreateCall) Fields(s ...googleapi.Field) *ProjectsReposCreateCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposCreateCall) Do() (*Repo, error) {
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposCreateCall) Context(ctx context.Context) *ProjectsReposCreateCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposCreateCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
 	body, err := googleapi.WithoutDataWrapper.JSONReader(c.repo)
 	if err != nil {
 		return nil, err
 	}
 	ctype := "application/json"
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
 	})
 	req.Header.Set("Content-Type", ctype)
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.create" call.
+// Exactly one of *Repo or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Repo.ServerResponse.Header or (if a response was returned at all) in
+// error.(*googleapi.Error).Header. Use googleapi.IsNotModified to check
+// whether the returned error was because http.StatusNotModified was
+// returned.
+func (c *ProjectsReposCreateCall) Do() (*Repo, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -968,7 +1775,12 @@ func (c *ProjectsReposCreateCall) Do() (*Repo, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *Repo
+	ret := &Repo{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -1006,15 +1818,16 @@ func (c *ProjectsReposCreateCall) Do() (*Repo, error) {
 // method id "source.projects.repos.delete":
 
 type ProjectsReposDeleteCall struct {
-	s         *Service
-	projectId string
-	repoName  string
-	opt_      map[string]interface{}
+	s          *Service
+	projectId  string
+	repoName   string
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
 }
 
 // Delete: Deletes a repo.
 func (r *ProjectsReposService) Delete(projectId string, repoName string) *ProjectsReposDeleteCall {
-	c := &ProjectsReposDeleteCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	return c
@@ -1023,37 +1836,61 @@ func (r *ProjectsReposService) Delete(projectId string, repoName string) *Projec
 // Uid sets the optional parameter "uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposDeleteCall) Uid(uid string) *ProjectsReposDeleteCall {
-	c.opt_["uid"] = uid
+	c.urlParams_.Set("uid", uid)
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposDeleteCall) Fields(s ...googleapi.Field) *ProjectsReposDeleteCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposDeleteCall) Do() (*Empty, error) {
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposDeleteCall) Context(ctx context.Context) *ProjectsReposDeleteCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposDeleteCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["uid"]; ok {
-		params.Set("uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
 		"repoName":  c.repoName,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.delete" call.
+// Exactly one of *Empty or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Empty.ServerResponse.Header or (if a response was returned at all)
+// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
+// check whether the returned error was because http.StatusNotModified
+// was returned.
+func (c *ProjectsReposDeleteCall) Do() (*Empty, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -1061,7 +1898,12 @@ func (c *ProjectsReposDeleteCall) Do() (*Empty, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *Empty
+	ret := &Empty{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -1108,15 +1950,17 @@ func (c *ProjectsReposDeleteCall) Do() (*Empty, error) {
 // method id "source.projects.repos.get":
 
 type ProjectsReposGetCall struct {
-	s         *Service
-	projectId string
-	repoName  string
-	opt_      map[string]interface{}
+	s            *Service
+	projectId    string
+	repoName     string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
 }
 
 // Get: Returns information about a repo.
 func (r *ProjectsReposService) Get(projectId string, repoName string) *ProjectsReposGetCall {
-	c := &ProjectsReposGetCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	return c
@@ -1125,37 +1969,74 @@ func (r *ProjectsReposService) Get(projectId string, repoName string) *ProjectsR
 // Uid sets the optional parameter "uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposGetCall) Uid(uid string) *ProjectsReposGetCall {
-	c.opt_["uid"] = uid
+	c.urlParams_.Set("uid", uid)
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposGetCall) Fields(s ...googleapi.Field) *ProjectsReposGetCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposGetCall) Do() (*Repo, error) {
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *ProjectsReposGetCall) IfNoneMatch(entityTag string) *ProjectsReposGetCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposGetCall) Context(ctx context.Context) *ProjectsReposGetCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposGetCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["uid"]; ok {
-		params.Set("uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
 		"repoName":  c.repoName,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		req.Header.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.get" call.
+// Exactly one of *Repo or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Repo.ServerResponse.Header or (if a response was returned at all) in
+// error.(*googleapi.Error).Header. Use googleapi.IsNotModified to check
+// whether the returned error was because http.StatusNotModified was
+// returned.
+func (c *ProjectsReposGetCall) Do() (*Repo, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -1163,7 +2044,12 @@ func (c *ProjectsReposGetCall) Do() (*Repo, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *Repo
+	ret := &Repo{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -1210,44 +2096,85 @@ func (c *ProjectsReposGetCall) Do() (*Repo, error) {
 // method id "source.projects.repos.list":
 
 type ProjectsReposListCall struct {
-	s         *Service
-	projectId string
-	opt_      map[string]interface{}
+	s            *Service
+	projectId    string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
 }
 
 // List: Returns all repos belonging to a project, specified by its
 // project ID. The
-// response list is sorted by name with the default repo
-// listed first.
+// response list is sorted by name with the default repo listed first.
 func (r *ProjectsReposService) List(projectId string) *ProjectsReposListCall {
-	c := &ProjectsReposListCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposListCall) Fields(s ...googleapi.Field) *ProjectsReposListCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposListCall) Do() (*ListReposResponse, error) {
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *ProjectsReposListCall) IfNoneMatch(entityTag string) *ProjectsReposListCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposListCall) Context(ctx context.Context) *ProjectsReposListCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposListCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		req.Header.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.list" call.
+// Exactly one of *ListReposResponse or error will be non-nil. Any
+// non-2xx status code is an error. Response headers are in either
+// *ListReposResponse.ServerResponse.Header or (if a response was
+// returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *ProjectsReposListCall) Do() (*ListReposResponse, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -1255,7 +2182,12 @@ func (c *ProjectsReposListCall) Do() (*ListReposResponse, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *ListReposResponse
+	ret := &ListReposResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -1294,57 +2226,84 @@ type ProjectsReposMergeCall struct {
 	projectId    string
 	repoName     string
 	mergerequest *MergeRequest
-	opt_         map[string]interface{}
+	urlParams_   gensupport.URLParams
+	ctx_         context.Context
 }
 
 // Merge: Merges a revision into a movable alias, using a workspace
 // associated with
-// that alias to store modified files. The workspace
-// must not have any
-// modified files. Note that Merge neither creates the
-// workspace nor commits
-// it; those actions must be done separately.
-// Returns ABORTED when the
-// workspace is simultaneously modified by
-// another client.
+// that alias to store modified files. The workspace must not have
+// any
+// modified files. Note that Merge neither creates the workspace nor
+// commits
+// it; those actions must be done separately. Returns ABORTED when
+// the
+// workspace is simultaneously modified by another client.
 func (r *ProjectsReposService) Merge(projectId string, repoName string, mergerequest *MergeRequest) *ProjectsReposMergeCall {
-	c := &ProjectsReposMergeCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposMergeCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	c.mergerequest = mergerequest
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposMergeCall) Fields(s ...googleapi.Field) *ProjectsReposMergeCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposMergeCall) Do() (*Workspace, error) {
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposMergeCall) Context(ctx context.Context) *ProjectsReposMergeCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposMergeCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
 	body, err := googleapi.WithoutDataWrapper.JSONReader(c.mergerequest)
 	if err != nil {
 		return nil, err
 	}
 	ctype := "application/json"
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}:merge")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
 		"repoName":  c.repoName,
 	})
 	req.Header.Set("Content-Type", ctype)
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.merge" call.
+// Exactly one of *Workspace or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *Workspace.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *ProjectsReposMergeCall) Do() (*Workspace, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -1352,7 +2311,12 @@ func (c *ProjectsReposMergeCall) Do() (*Workspace, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *Workspace
+	ret := &Workspace{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -1397,18 +2361,19 @@ func (c *ProjectsReposMergeCall) Do() (*Workspace, error) {
 // method id "source.projects.repos.aliases.create":
 
 type ProjectsReposAliasesCreateCall struct {
-	s         *Service
-	projectId string
-	repoName  string
-	alias     *Alias
-	opt_      map[string]interface{}
+	s          *Service
+	projectId  string
+	repoName   string
+	alias      *Alias
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
 }
 
 // Create: Creates a new alias. It is an ALREADY_EXISTS error if an
 // alias with that
 // name and kind already exists.
 func (r *ProjectsReposAliasesService) Create(projectId string, repoName string, alias *Alias) *ProjectsReposAliasesCreateCall {
-	c := &ProjectsReposAliasesCreateCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposAliasesCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	c.alias = alias
@@ -1418,43 +2383,67 @@ func (r *ProjectsReposAliasesService) Create(projectId string, repoName string, 
 // Uid sets the optional parameter "uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposAliasesCreateCall) Uid(uid string) *ProjectsReposAliasesCreateCall {
-	c.opt_["uid"] = uid
+	c.urlParams_.Set("uid", uid)
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposAliasesCreateCall) Fields(s ...googleapi.Field) *ProjectsReposAliasesCreateCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposAliasesCreateCall) Do() (*Alias, error) {
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposAliasesCreateCall) Context(ctx context.Context) *ProjectsReposAliasesCreateCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposAliasesCreateCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
 	body, err := googleapi.WithoutDataWrapper.JSONReader(c.alias)
 	if err != nil {
 		return nil, err
 	}
 	ctype := "application/json"
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["uid"]; ok {
-		params.Set("uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/aliases")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
 		"repoName":  c.repoName,
 	})
 	req.Header.Set("Content-Type", ctype)
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.aliases.create" call.
+// Exactly one of *Alias or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Alias.ServerResponse.Header or (if a response was returned at all)
+// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
+// check whether the returned error was because http.StatusNotModified
+// was returned.
+func (c *ProjectsReposAliasesCreateCall) Do() (*Alias, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -1462,7 +2451,12 @@ func (c *ProjectsReposAliasesCreateCall) Do() (*Alias, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *Alias
+	ret := &Alias{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -1512,23 +2506,24 @@ func (c *ProjectsReposAliasesCreateCall) Do() (*Alias, error) {
 // method id "source.projects.repos.aliases.delete":
 
 type ProjectsReposAliasesDeleteCall struct {
-	s         *Service
-	projectId string
-	repoName  string
-	kind      string
-	name      string
-	opt_      map[string]interface{}
+	s          *Service
+	projectId  string
+	repoName   string
+	kind       string
+	name       string
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
 }
 
 // Delete: Deletes the alias with the given name and kind. Kind cannot
 // be ANY.  If
-// the alias does not exist, NOT_FOUND is returned.  If the
-// request provides
-// a revision ID and the alias does not refer to that
-// revision, ABORTED is
+// the alias does not exist, NOT_FOUND is returned.  If the request
+// provides
+// a revision ID and the alias does not refer to that revision, ABORTED
+// is
 // returned.
 func (r *ProjectsReposAliasesService) Delete(projectId string, repoName string, kind string, name string) *ProjectsReposAliasesDeleteCall {
-	c := &ProjectsReposAliasesDeleteCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposAliasesDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	c.kind = kind
@@ -1539,40 +2534,38 @@ func (r *ProjectsReposAliasesService) Delete(projectId string, repoName string, 
 // RevisionId sets the optional parameter "revisionId": If non-empty,
 // must match the revision that the alias refers to.
 func (c *ProjectsReposAliasesDeleteCall) RevisionId(revisionId string) *ProjectsReposAliasesDeleteCall {
-	c.opt_["revisionId"] = revisionId
+	c.urlParams_.Set("revisionId", revisionId)
 	return c
 }
 
 // Uid sets the optional parameter "uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposAliasesDeleteCall) Uid(uid string) *ProjectsReposAliasesDeleteCall {
-	c.opt_["uid"] = uid
+	c.urlParams_.Set("uid", uid)
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposAliasesDeleteCall) Fields(s ...googleapi.Field) *ProjectsReposAliasesDeleteCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposAliasesDeleteCall) Do() (*Empty, error) {
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposAliasesDeleteCall) Context(ctx context.Context) *ProjectsReposAliasesDeleteCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposAliasesDeleteCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["revisionId"]; ok {
-		params.Set("revisionId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["uid"]; ok {
-		params.Set("uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/aliases/{kind}/{name}")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
@@ -1580,8 +2573,31 @@ func (c *ProjectsReposAliasesDeleteCall) Do() (*Empty, error) {
 		"kind":      c.kind,
 		"name":      c.name,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.aliases.delete" call.
+// Exactly one of *Empty or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Empty.ServerResponse.Header or (if a response was returned at all)
+// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
+// check whether the returned error was because http.StatusNotModified
+// was returned.
+func (c *ProjectsReposAliasesDeleteCall) Do() (*Empty, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -1589,7 +2605,12 @@ func (c *ProjectsReposAliasesDeleteCall) Do() (*Empty, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *Empty
+	ret := &Empty{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -1663,19 +2684,21 @@ func (c *ProjectsReposAliasesDeleteCall) Do() (*Empty, error) {
 // method id "source.projects.repos.aliases.get":
 
 type ProjectsReposAliasesGetCall struct {
-	s         *Service
-	projectId string
-	repoName  string
-	kind      string
-	name      string
-	opt_      map[string]interface{}
+	s            *Service
+	projectId    string
+	repoName     string
+	kind         string
+	name         string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
 }
 
 // Get: Returns information about an alias. Kind ANY returns a FIXED
 // or
 // MOVABLE alias, in that order, and ignores all other kinds.
 func (r *ProjectsReposAliasesService) Get(projectId string, repoName string, kind string, name string) *ProjectsReposAliasesGetCall {
-	c := &ProjectsReposAliasesGetCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposAliasesGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	c.kind = kind
@@ -1686,30 +2709,41 @@ func (r *ProjectsReposAliasesService) Get(projectId string, repoName string, kin
 // Uid sets the optional parameter "uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposAliasesGetCall) Uid(uid string) *ProjectsReposAliasesGetCall {
-	c.opt_["uid"] = uid
+	c.urlParams_.Set("uid", uid)
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposAliasesGetCall) Fields(s ...googleapi.Field) *ProjectsReposAliasesGetCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposAliasesGetCall) Do() (*Alias, error) {
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *ProjectsReposAliasesGetCall) IfNoneMatch(entityTag string) *ProjectsReposAliasesGetCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposAliasesGetCall) Context(ctx context.Context) *ProjectsReposAliasesGetCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposAliasesGetCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["uid"]; ok {
-		params.Set("uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/aliases/{kind}/{name}")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
@@ -1717,8 +2751,34 @@ func (c *ProjectsReposAliasesGetCall) Do() (*Alias, error) {
 		"kind":      c.kind,
 		"name":      c.name,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		req.Header.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.aliases.get" call.
+// Exactly one of *Alias or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Alias.ServerResponse.Header or (if a response was returned at all)
+// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
+// check whether the returned error was because http.StatusNotModified
+// was returned.
+func (c *ProjectsReposAliasesGetCall) Do() (*Alias, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -1726,7 +2786,12 @@ func (c *ProjectsReposAliasesGetCall) Do() (*Alias, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *Alias
+	ret := &Alias{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -1795,18 +2860,20 @@ func (c *ProjectsReposAliasesGetCall) Do() (*Alias, error) {
 // method id "source.projects.repos.aliases.list":
 
 type ProjectsReposAliasesListCall struct {
-	s         *Service
-	projectId string
-	repoName  string
-	opt_      map[string]interface{}
+	s            *Service
+	projectId    string
+	repoName     string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
 }
 
 // List: Returns a list of aliases of the given kind. Kind ANY returns
 // all aliases
-// in the repo. The order in which the aliases are returned
-// is undefined.
+// in the repo. The order in which the aliases are returned is
+// undefined.
 func (r *ProjectsReposAliasesService) List(projectId string, repoName string) *ProjectsReposAliasesListCall {
-	c := &ProjectsReposAliasesListCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposAliasesListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	return c
@@ -1814,15 +2881,23 @@ func (r *ProjectsReposAliasesService) List(projectId string, repoName string) *P
 
 // Kind sets the optional parameter "kind": Return only aliases of this
 // kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "MERCURIAL_BRANCH_DEPRECATED"
+//   "OTHER"
+//   "SPECIAL_DEPRECATED"
 func (c *ProjectsReposAliasesListCall) Kind(kind string) *ProjectsReposAliasesListCall {
-	c.opt_["kind"] = kind
+	c.urlParams_.Set("kind", kind)
 	return c
 }
 
 // PageSize sets the optional parameter "pageSize": The maximum number
 // of values to return.
 func (c *ProjectsReposAliasesListCall) PageSize(pageSize int64) *ProjectsReposAliasesListCall {
-	c.opt_["pageSize"] = pageSize
+	c.urlParams_.Set("pageSize", fmt.Sprint(pageSize))
 	return c
 }
 
@@ -1830,53 +2905,81 @@ func (c *ProjectsReposAliasesListCall) PageSize(pageSize int64) *ProjectsReposAl
 // next_page_token from the previous call.
 // Omit for the first page.
 func (c *ProjectsReposAliasesListCall) PageToken(pageToken string) *ProjectsReposAliasesListCall {
-	c.opt_["pageToken"] = pageToken
+	c.urlParams_.Set("pageToken", pageToken)
 	return c
 }
 
 // Uid sets the optional parameter "uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposAliasesListCall) Uid(uid string) *ProjectsReposAliasesListCall {
-	c.opt_["uid"] = uid
+	c.urlParams_.Set("uid", uid)
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposAliasesListCall) Fields(s ...googleapi.Field) *ProjectsReposAliasesListCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposAliasesListCall) Do() (*ListAliasesResponse, error) {
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *ProjectsReposAliasesListCall) IfNoneMatch(entityTag string) *ProjectsReposAliasesListCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposAliasesListCall) Context(ctx context.Context) *ProjectsReposAliasesListCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposAliasesListCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["kind"]; ok {
-		params.Set("kind", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["pageSize"]; ok {
-		params.Set("pageSize", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["pageToken"]; ok {
-		params.Set("pageToken", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["uid"]; ok {
-		params.Set("uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/aliases")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
 		"repoName":  c.repoName,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		req.Header.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.aliases.list" call.
+// Exactly one of *ListAliasesResponse or error will be non-nil. Any
+// non-2xx status code is an error. Response headers are in either
+// *ListAliasesResponse.ServerResponse.Header or (if a response was
+// returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *ProjectsReposAliasesListCall) Do() (*ListAliasesResponse, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -1884,7 +2987,12 @@ func (c *ProjectsReposAliasesListCall) Do() (*ListAliasesResponse, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *ListAliasesResponse
+	ret := &ListAliasesResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -1955,21 +3063,22 @@ func (c *ProjectsReposAliasesListCall) Do() (*ListAliasesResponse, error) {
 // method id "source.projects.repos.aliases.listFiles":
 
 type ProjectsReposAliasesListFilesCall struct {
-	s         *Service
-	projectId string
-	repoName  string
-	kind      string
-	name      string
-	opt_      map[string]interface{}
+	s            *Service
+	projectId    string
+	repoName     string
+	kind         string
+	name         string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
 }
 
 // ListFiles: ListFiles returns a list of all files in a SourceContext.
 // The
 // information about each file includes its path and its hash.
-// The
-// result is ordered by path. Pagination is supported.
+// The result is ordered by path. Pagination is supported.
 func (r *ProjectsReposAliasesService) ListFiles(projectId string, repoName string, kind string, name string) *ProjectsReposAliasesListFilesCall {
-	c := &ProjectsReposAliasesListFilesCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposAliasesListFilesCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	c.kind = kind
@@ -1980,26 +3089,24 @@ func (r *ProjectsReposAliasesService) ListFiles(projectId string, repoName strin
 // AliasName sets the optional parameter "aliasName": The name of an
 // alias (branch, tag, etc.).
 func (c *ProjectsReposAliasesListFilesCall) AliasName(aliasName string) *ProjectsReposAliasesListFilesCall {
-	c.opt_["aliasName"] = aliasName
+	c.urlParams_.Set("aliasName", aliasName)
 	return c
 }
 
 // CloudWorkspaceSnapshotId sets the optional parameter
 // "cloudWorkspace.snapshotId": The ID of the snapshot.
-// An empty
-// snapshot_id refers to the most recent snapshot.
+// An empty snapshot_id refers to the most recent snapshot.
 func (c *ProjectsReposAliasesListFilesCall) CloudWorkspaceSnapshotId(cloudWorkspaceSnapshotId string) *ProjectsReposAliasesListFilesCall {
-	c.opt_["cloudWorkspace.snapshotId"] = cloudWorkspaceSnapshotId
+	c.urlParams_.Set("cloudWorkspace.snapshotId", cloudWorkspaceSnapshotId)
 	return c
 }
 
 // CloudWorkspaceWorkspaceIdName sets the optional parameter
 // "cloudWorkspace.workspaceId.name": The unique name of the workspace
 // within the repo.  This is the name
-// chosen by the client in the Source
-// API's CreateWorkspace method.
+// chosen by the client in the Source API's CreateWorkspace method.
 func (c *ProjectsReposAliasesListFilesCall) CloudWorkspaceWorkspaceIdName(cloudWorkspaceWorkspaceIdName string) *ProjectsReposAliasesListFilesCall {
-	c.opt_["cloudWorkspace.workspaceId.name"] = cloudWorkspaceWorkspaceIdName
+	c.urlParams_.Set("cloudWorkspace.workspaceId.name", cloudWorkspaceWorkspaceIdName)
 	return c
 }
 
@@ -2008,7 +3115,7 @@ func (c *ProjectsReposAliasesListFilesCall) CloudWorkspaceWorkspaceIdName(cloudW
 // "cloudWorkspace.workspaceId.repoId.projectRepoId.projectId": The ID
 // of the project.
 func (c *ProjectsReposAliasesListFilesCall) CloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId(cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId string) *ProjectsReposAliasesListFilesCall {
-	c.opt_["cloudWorkspace.workspaceId.repoId.projectRepoId.projectId"] = cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId
+	c.urlParams_.Set("cloudWorkspace.workspaceId.repoId.projectRepoId.projectId", cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId)
 	return c
 }
 
@@ -2017,7 +3124,7 @@ func (c *ProjectsReposAliasesListFilesCall) CloudWorkspaceWorkspaceIdRepoIdProje
 // "cloudWorkspace.workspaceId.repoId.projectRepoId.repoName": The name
 // of the repo. Leave empty for the default repo.
 func (c *ProjectsReposAliasesListFilesCall) CloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName(cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName string) *ProjectsReposAliasesListFilesCall {
-	c.opt_["cloudWorkspace.workspaceId.repoId.projectRepoId.repoName"] = cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName
+	c.urlParams_.Set("cloudWorkspace.workspaceId.repoId.projectRepoId.repoName", cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName)
 	return c
 }
 
@@ -2025,53 +3132,58 @@ func (c *ProjectsReposAliasesListFilesCall) CloudWorkspaceWorkspaceIdRepoIdProje
 // "cloudWorkspace.workspaceId.repoId.uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposAliasesListFilesCall) CloudWorkspaceWorkspaceIdRepoIdUid(cloudWorkspaceWorkspaceIdRepoIdUid string) *ProjectsReposAliasesListFilesCall {
-	c.opt_["cloudWorkspace.workspaceId.repoId.uid"] = cloudWorkspaceWorkspaceIdRepoIdUid
+	c.urlParams_.Set("cloudWorkspace.workspaceId.repoId.uid", cloudWorkspaceWorkspaceIdRepoIdUid)
 	return c
 }
 
 // GerritAliasContextKind sets the optional parameter
 // "gerrit.aliasContext.kind": The alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
 func (c *ProjectsReposAliasesListFilesCall) GerritAliasContextKind(gerritAliasContextKind string) *ProjectsReposAliasesListFilesCall {
-	c.opt_["gerrit.aliasContext.kind"] = gerritAliasContextKind
+	c.urlParams_.Set("gerrit.aliasContext.kind", gerritAliasContextKind)
 	return c
 }
 
 // GerritAliasContextName sets the optional parameter
 // "gerrit.aliasContext.name": The alias name.
 func (c *ProjectsReposAliasesListFilesCall) GerritAliasContextName(gerritAliasContextName string) *ProjectsReposAliasesListFilesCall {
-	c.opt_["gerrit.aliasContext.name"] = gerritAliasContextName
+	c.urlParams_.Set("gerrit.aliasContext.name", gerritAliasContextName)
 	return c
 }
 
 // GerritAliasName sets the optional parameter "gerrit.aliasName": The
 // name of an alias (branch, tag, etc.).
 func (c *ProjectsReposAliasesListFilesCall) GerritAliasName(gerritAliasName string) *ProjectsReposAliasesListFilesCall {
-	c.opt_["gerrit.aliasName"] = gerritAliasName
+	c.urlParams_.Set("gerrit.aliasName", gerritAliasName)
 	return c
 }
 
 // GerritGerritProject sets the optional parameter
 // "gerrit.gerritProject": The full project name within the host.
 // Projects may be nested, so
-// "project/subproject" is a valid project
-// name.
+// "project/subproject" is a valid project name.
 // The "repo name" is hostURI/project.
 func (c *ProjectsReposAliasesListFilesCall) GerritGerritProject(gerritGerritProject string) *ProjectsReposAliasesListFilesCall {
-	c.opt_["gerrit.gerritProject"] = gerritGerritProject
+	c.urlParams_.Set("gerrit.gerritProject", gerritGerritProject)
 	return c
 }
 
 // GerritHostUri sets the optional parameter "gerrit.hostUri": The URI
 // of a running Gerrit instance.
 func (c *ProjectsReposAliasesListFilesCall) GerritHostUri(gerritHostUri string) *ProjectsReposAliasesListFilesCall {
-	c.opt_["gerrit.hostUri"] = gerritHostUri
+	c.urlParams_.Set("gerrit.hostUri", gerritHostUri)
 	return c
 }
 
 // GerritRevisionId sets the optional parameter "gerrit.revisionId": A
 // revision (commit) ID.
 func (c *ProjectsReposAliasesListFilesCall) GerritRevisionId(gerritRevisionId string) *ProjectsReposAliasesListFilesCall {
-	c.opt_["gerrit.revisionId"] = gerritRevisionId
+	c.urlParams_.Set("gerrit.revisionId", gerritRevisionId)
 	return c
 }
 
@@ -2079,20 +3191,20 @@ func (c *ProjectsReposAliasesListFilesCall) GerritRevisionId(gerritRevisionId st
 // commit hash.
 // required.
 func (c *ProjectsReposAliasesListFilesCall) GitRevisionId(gitRevisionId string) *ProjectsReposAliasesListFilesCall {
-	c.opt_["git.revisionId"] = gitRevisionId
+	c.urlParams_.Set("git.revisionId", gitRevisionId)
 	return c
 }
 
 // GitUrl sets the optional parameter "git.url": Git repository URL.
 func (c *ProjectsReposAliasesListFilesCall) GitUrl(gitUrl string) *ProjectsReposAliasesListFilesCall {
-	c.opt_["git.url"] = gitUrl
+	c.urlParams_.Set("git.url", gitUrl)
 	return c
 }
 
 // PageSize sets the optional parameter "pageSize": The maximum number
 // of values to return.
 func (c *ProjectsReposAliasesListFilesCall) PageSize(pageSize int64) *ProjectsReposAliasesListFilesCall {
-	c.opt_["pageSize"] = pageSize
+	c.urlParams_.Set("pageSize", fmt.Sprint(pageSize))
 	return c
 }
 
@@ -2100,94 +3212,54 @@ func (c *ProjectsReposAliasesListFilesCall) PageSize(pageSize int64) *ProjectsRe
 // next_page_token from the previous call.
 // Omit for the first page.
 func (c *ProjectsReposAliasesListFilesCall) PageToken(pageToken string) *ProjectsReposAliasesListFilesCall {
-	c.opt_["pageToken"] = pageToken
+	c.urlParams_.Set("pageToken", pageToken)
 	return c
 }
 
 // RevisionId sets the optional parameter "revisionId": A revision ID.
 func (c *ProjectsReposAliasesListFilesCall) RevisionId(revisionId string) *ProjectsReposAliasesListFilesCall {
-	c.opt_["revisionId"] = revisionId
+	c.urlParams_.Set("revisionId", revisionId)
 	return c
 }
 
 // Uid sets the optional parameter "uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposAliasesListFilesCall) Uid(uid string) *ProjectsReposAliasesListFilesCall {
-	c.opt_["uid"] = uid
+	c.urlParams_.Set("uid", uid)
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposAliasesListFilesCall) Fields(s ...googleapi.Field) *ProjectsReposAliasesListFilesCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposAliasesListFilesCall) Do() (*ListFilesResponse, error) {
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *ProjectsReposAliasesListFilesCall) IfNoneMatch(entityTag string) *ProjectsReposAliasesListFilesCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposAliasesListFilesCall) Context(ctx context.Context) *ProjectsReposAliasesListFilesCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposAliasesListFilesCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["aliasName"]; ok {
-		params.Set("aliasName", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudWorkspace.snapshotId"]; ok {
-		params.Set("cloudWorkspace.snapshotId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudWorkspace.workspaceId.name"]; ok {
-		params.Set("cloudWorkspace.workspaceId.name", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudWorkspace.workspaceId.repoId.projectRepoId.projectId"]; ok {
-		params.Set("cloudWorkspace.workspaceId.repoId.projectRepoId.projectId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudWorkspace.workspaceId.repoId.projectRepoId.repoName"]; ok {
-		params.Set("cloudWorkspace.workspaceId.repoId.projectRepoId.repoName", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudWorkspace.workspaceId.repoId.uid"]; ok {
-		params.Set("cloudWorkspace.workspaceId.repoId.uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.aliasContext.kind"]; ok {
-		params.Set("gerrit.aliasContext.kind", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.aliasContext.name"]; ok {
-		params.Set("gerrit.aliasContext.name", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.aliasName"]; ok {
-		params.Set("gerrit.aliasName", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.gerritProject"]; ok {
-		params.Set("gerrit.gerritProject", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.hostUri"]; ok {
-		params.Set("gerrit.hostUri", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.revisionId"]; ok {
-		params.Set("gerrit.revisionId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["git.revisionId"]; ok {
-		params.Set("git.revisionId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["git.url"]; ok {
-		params.Set("git.url", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["pageSize"]; ok {
-		params.Set("pageSize", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["pageToken"]; ok {
-		params.Set("pageToken", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["revisionId"]; ok {
-		params.Set("revisionId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["uid"]; ok {
-		params.Set("uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/aliases/{kind}/{name}:listFiles")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
@@ -2195,8 +3267,34 @@ func (c *ProjectsReposAliasesListFilesCall) Do() (*ListFilesResponse, error) {
 		"kind":      c.kind,
 		"name":      c.name,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		req.Header.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.aliases.listFiles" call.
+// Exactly one of *ListFilesResponse or error will be non-nil. Any
+// non-2xx status code is an error. Response headers are in either
+// *ListFilesResponse.ServerResponse.Header or (if a response was
+// returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *ProjectsReposAliasesListFilesCall) Do() (*ListFilesResponse, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -2204,7 +3302,12 @@ func (c *ProjectsReposAliasesListFilesCall) Do() (*ListFilesResponse, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *ListFilesResponse
+	ret := &ListFilesResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -2363,23 +3466,24 @@ func (c *ProjectsReposAliasesListFilesCall) Do() (*ListFilesResponse, error) {
 // method id "source.projects.repos.aliases.update":
 
 type ProjectsReposAliasesUpdateCall struct {
-	s         *Service
-	projectId string
-	repoName  string
-	aliasesId string
-	alias     *Alias
-	opt_      map[string]interface{}
+	s          *Service
+	projectId  string
+	repoName   string
+	aliasesId  string
+	alias      *Alias
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
 }
 
 // Update: Updates the alias with the given name and kind. Kind cannot
 // be ANY.  If
-// the alias does not exist, NOT_FOUND is returned. If the
-// request provides
-// an old revision ID and the alias does not refer to
-// that revision, ABORTED
+// the alias does not exist, NOT_FOUND is returned. If the request
+// provides
+// an old revision ID and the alias does not refer to that revision,
+// ABORTED
 // is returned.
 func (r *ProjectsReposAliasesService) Update(projectId string, repoName string, aliasesId string, alias *Alias) *ProjectsReposAliasesUpdateCall {
-	c := &ProjectsReposAliasesUpdateCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposAliasesUpdateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	c.aliasesId = aliasesId
@@ -2390,45 +3494,43 @@ func (r *ProjectsReposAliasesService) Update(projectId string, repoName string, 
 // OldRevisionId sets the optional parameter "oldRevisionId": If
 // non-empty, must match the revision that the alias refers to.
 func (c *ProjectsReposAliasesUpdateCall) OldRevisionId(oldRevisionId string) *ProjectsReposAliasesUpdateCall {
-	c.opt_["oldRevisionId"] = oldRevisionId
+	c.urlParams_.Set("oldRevisionId", oldRevisionId)
 	return c
 }
 
 // Uid sets the optional parameter "uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposAliasesUpdateCall) Uid(uid string) *ProjectsReposAliasesUpdateCall {
-	c.opt_["uid"] = uid
+	c.urlParams_.Set("uid", uid)
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposAliasesUpdateCall) Fields(s ...googleapi.Field) *ProjectsReposAliasesUpdateCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposAliasesUpdateCall) Do() (*Alias, error) {
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposAliasesUpdateCall) Context(ctx context.Context) *ProjectsReposAliasesUpdateCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposAliasesUpdateCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
 	body, err := googleapi.WithoutDataWrapper.JSONReader(c.alias)
 	if err != nil {
 		return nil, err
 	}
 	ctype := "application/json"
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["oldRevisionId"]; ok {
-		params.Set("oldRevisionId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["uid"]; ok {
-		params.Set("uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/aliases/{aliasesId}")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PUT", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
@@ -2436,8 +3538,31 @@ func (c *ProjectsReposAliasesUpdateCall) Do() (*Alias, error) {
 		"aliasesId": c.aliasesId,
 	})
 	req.Header.Set("Content-Type", ctype)
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.aliases.update" call.
+// Exactly one of *Alias or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Alias.ServerResponse.Header or (if a response was returned at all)
+// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
+// check whether the returned error was because http.StatusNotModified
+// was returned.
+func (c *ProjectsReposAliasesUpdateCall) Do() (*Alias, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -2445,7 +3570,12 @@ func (c *ProjectsReposAliasesUpdateCall) Do() (*Alias, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *Alias
+	ret := &Alias{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -2506,20 +3636,21 @@ func (c *ProjectsReposAliasesUpdateCall) Do() (*Alias, error) {
 // method id "source.projects.repos.aliases.files.get":
 
 type ProjectsReposAliasesFilesGetCall struct {
-	s         *Service
-	projectId string
-	repoName  string
-	kind      string
-	name      string
-	path      string
-	opt_      map[string]interface{}
+	s            *Service
+	projectId    string
+	repoName     string
+	kind         string
+	name         string
+	path         string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
 }
 
 // Get: Read is given a SourceContext and path, and returns
-// file or
-// directory information about that path.
+// file or directory information about that path.
 func (r *ProjectsReposAliasesFilesService) Get(projectId string, repoName string, kind string, name string, path string) *ProjectsReposAliasesFilesGetCall {
-	c := &ProjectsReposAliasesFilesGetCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposAliasesFilesGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	c.kind = kind
@@ -2531,26 +3662,24 @@ func (r *ProjectsReposAliasesFilesService) Get(projectId string, repoName string
 // AliasName sets the optional parameter "aliasName": The name of an
 // alias (branch, tag, etc.).
 func (c *ProjectsReposAliasesFilesGetCall) AliasName(aliasName string) *ProjectsReposAliasesFilesGetCall {
-	c.opt_["aliasName"] = aliasName
+	c.urlParams_.Set("aliasName", aliasName)
 	return c
 }
 
 // CloudWorkspaceSnapshotId sets the optional parameter
 // "cloudWorkspace.snapshotId": The ID of the snapshot.
-// An empty
-// snapshot_id refers to the most recent snapshot.
+// An empty snapshot_id refers to the most recent snapshot.
 func (c *ProjectsReposAliasesFilesGetCall) CloudWorkspaceSnapshotId(cloudWorkspaceSnapshotId string) *ProjectsReposAliasesFilesGetCall {
-	c.opt_["cloudWorkspace.snapshotId"] = cloudWorkspaceSnapshotId
+	c.urlParams_.Set("cloudWorkspace.snapshotId", cloudWorkspaceSnapshotId)
 	return c
 }
 
 // CloudWorkspaceWorkspaceIdName sets the optional parameter
 // "cloudWorkspace.workspaceId.name": The unique name of the workspace
 // within the repo.  This is the name
-// chosen by the client in the Source
-// API's CreateWorkspace method.
+// chosen by the client in the Source API's CreateWorkspace method.
 func (c *ProjectsReposAliasesFilesGetCall) CloudWorkspaceWorkspaceIdName(cloudWorkspaceWorkspaceIdName string) *ProjectsReposAliasesFilesGetCall {
-	c.opt_["cloudWorkspace.workspaceId.name"] = cloudWorkspaceWorkspaceIdName
+	c.urlParams_.Set("cloudWorkspace.workspaceId.name", cloudWorkspaceWorkspaceIdName)
 	return c
 }
 
@@ -2559,7 +3688,7 @@ func (c *ProjectsReposAliasesFilesGetCall) CloudWorkspaceWorkspaceIdName(cloudWo
 // "cloudWorkspace.workspaceId.repoId.projectRepoId.projectId": The ID
 // of the project.
 func (c *ProjectsReposAliasesFilesGetCall) CloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId(cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId string) *ProjectsReposAliasesFilesGetCall {
-	c.opt_["cloudWorkspace.workspaceId.repoId.projectRepoId.projectId"] = cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId
+	c.urlParams_.Set("cloudWorkspace.workspaceId.repoId.projectRepoId.projectId", cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId)
 	return c
 }
 
@@ -2568,7 +3697,7 @@ func (c *ProjectsReposAliasesFilesGetCall) CloudWorkspaceWorkspaceIdRepoIdProjec
 // "cloudWorkspace.workspaceId.repoId.projectRepoId.repoName": The name
 // of the repo. Leave empty for the default repo.
 func (c *ProjectsReposAliasesFilesGetCall) CloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName(cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName string) *ProjectsReposAliasesFilesGetCall {
-	c.opt_["cloudWorkspace.workspaceId.repoId.projectRepoId.repoName"] = cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName
+	c.urlParams_.Set("cloudWorkspace.workspaceId.repoId.projectRepoId.repoName", cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName)
 	return c
 }
 
@@ -2576,53 +3705,58 @@ func (c *ProjectsReposAliasesFilesGetCall) CloudWorkspaceWorkspaceIdRepoIdProjec
 // "cloudWorkspace.workspaceId.repoId.uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposAliasesFilesGetCall) CloudWorkspaceWorkspaceIdRepoIdUid(cloudWorkspaceWorkspaceIdRepoIdUid string) *ProjectsReposAliasesFilesGetCall {
-	c.opt_["cloudWorkspace.workspaceId.repoId.uid"] = cloudWorkspaceWorkspaceIdRepoIdUid
+	c.urlParams_.Set("cloudWorkspace.workspaceId.repoId.uid", cloudWorkspaceWorkspaceIdRepoIdUid)
 	return c
 }
 
 // GerritAliasContextKind sets the optional parameter
 // "gerrit.aliasContext.kind": The alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
 func (c *ProjectsReposAliasesFilesGetCall) GerritAliasContextKind(gerritAliasContextKind string) *ProjectsReposAliasesFilesGetCall {
-	c.opt_["gerrit.aliasContext.kind"] = gerritAliasContextKind
+	c.urlParams_.Set("gerrit.aliasContext.kind", gerritAliasContextKind)
 	return c
 }
 
 // GerritAliasContextName sets the optional parameter
 // "gerrit.aliasContext.name": The alias name.
 func (c *ProjectsReposAliasesFilesGetCall) GerritAliasContextName(gerritAliasContextName string) *ProjectsReposAliasesFilesGetCall {
-	c.opt_["gerrit.aliasContext.name"] = gerritAliasContextName
+	c.urlParams_.Set("gerrit.aliasContext.name", gerritAliasContextName)
 	return c
 }
 
 // GerritAliasName sets the optional parameter "gerrit.aliasName": The
 // name of an alias (branch, tag, etc.).
 func (c *ProjectsReposAliasesFilesGetCall) GerritAliasName(gerritAliasName string) *ProjectsReposAliasesFilesGetCall {
-	c.opt_["gerrit.aliasName"] = gerritAliasName
+	c.urlParams_.Set("gerrit.aliasName", gerritAliasName)
 	return c
 }
 
 // GerritGerritProject sets the optional parameter
 // "gerrit.gerritProject": The full project name within the host.
 // Projects may be nested, so
-// "project/subproject" is a valid project
-// name.
+// "project/subproject" is a valid project name.
 // The "repo name" is hostURI/project.
 func (c *ProjectsReposAliasesFilesGetCall) GerritGerritProject(gerritGerritProject string) *ProjectsReposAliasesFilesGetCall {
-	c.opt_["gerrit.gerritProject"] = gerritGerritProject
+	c.urlParams_.Set("gerrit.gerritProject", gerritGerritProject)
 	return c
 }
 
 // GerritHostUri sets the optional parameter "gerrit.hostUri": The URI
 // of a running Gerrit instance.
 func (c *ProjectsReposAliasesFilesGetCall) GerritHostUri(gerritHostUri string) *ProjectsReposAliasesFilesGetCall {
-	c.opt_["gerrit.hostUri"] = gerritHostUri
+	c.urlParams_.Set("gerrit.hostUri", gerritHostUri)
 	return c
 }
 
 // GerritRevisionId sets the optional parameter "gerrit.revisionId": A
 // revision (commit) ID.
 func (c *ProjectsReposAliasesFilesGetCall) GerritRevisionId(gerritRevisionId string) *ProjectsReposAliasesFilesGetCall {
-	c.opt_["gerrit.revisionId"] = gerritRevisionId
+	c.urlParams_.Set("gerrit.revisionId", gerritRevisionId)
 	return c
 }
 
@@ -2630,131 +3764,85 @@ func (c *ProjectsReposAliasesFilesGetCall) GerritRevisionId(gerritRevisionId str
 // commit hash.
 // required.
 func (c *ProjectsReposAliasesFilesGetCall) GitRevisionId(gitRevisionId string) *ProjectsReposAliasesFilesGetCall {
-	c.opt_["git.revisionId"] = gitRevisionId
+	c.urlParams_.Set("git.revisionId", gitRevisionId)
 	return c
 }
 
 // GitUrl sets the optional parameter "git.url": Git repository URL.
 func (c *ProjectsReposAliasesFilesGetCall) GitUrl(gitUrl string) *ProjectsReposAliasesFilesGetCall {
-	c.opt_["git.url"] = gitUrl
+	c.urlParams_.Set("git.url", gitUrl)
 	return c
 }
 
 // PageSize sets the optional parameter "pageSize": The maximum number
 // of values to return.
 func (c *ProjectsReposAliasesFilesGetCall) PageSize(pageSize int64) *ProjectsReposAliasesFilesGetCall {
-	c.opt_["pageSize"] = pageSize
+	c.urlParams_.Set("pageSize", fmt.Sprint(pageSize))
 	return c
 }
 
 // PageToken sets the optional parameter "pageToken": The value of
 // next_page_token from the previous call.
-// Omit for the first page, or
-// if using start_index.
+// Omit for the first page, or if using start_index.
 func (c *ProjectsReposAliasesFilesGetCall) PageToken(pageToken string) *ProjectsReposAliasesFilesGetCall {
-	c.opt_["pageToken"] = pageToken
+	c.urlParams_.Set("pageToken", pageToken)
 	return c
 }
 
 // RevisionId sets the optional parameter "revisionId": A revision ID.
 func (c *ProjectsReposAliasesFilesGetCall) RevisionId(revisionId string) *ProjectsReposAliasesFilesGetCall {
-	c.opt_["revisionId"] = revisionId
+	c.urlParams_.Set("revisionId", revisionId)
 	return c
 }
 
 // StartPosition sets the optional parameter "startPosition": If path
 // refers to a file, the position of the first byte of its contents
-// to
-// return. If path refers to a directory, the position of the first
+// to return. If path refers to a directory, the position of the first
 // entry
-// in the listing. If page_token is specified, this field is
-// ignored.
+// in the listing. If page_token is specified, this field is ignored.
 func (c *ProjectsReposAliasesFilesGetCall) StartPosition(startPosition int64) *ProjectsReposAliasesFilesGetCall {
-	c.opt_["startPosition"] = startPosition
+	c.urlParams_.Set("startPosition", fmt.Sprint(startPosition))
 	return c
 }
 
 // Uid sets the optional parameter "uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposAliasesFilesGetCall) Uid(uid string) *ProjectsReposAliasesFilesGetCall {
-	c.opt_["uid"] = uid
+	c.urlParams_.Set("uid", uid)
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposAliasesFilesGetCall) Fields(s ...googleapi.Field) *ProjectsReposAliasesFilesGetCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposAliasesFilesGetCall) Do() (*ReadResponse, error) {
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *ProjectsReposAliasesFilesGetCall) IfNoneMatch(entityTag string) *ProjectsReposAliasesFilesGetCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposAliasesFilesGetCall) Context(ctx context.Context) *ProjectsReposAliasesFilesGetCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposAliasesFilesGetCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["aliasName"]; ok {
-		params.Set("aliasName", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudWorkspace.snapshotId"]; ok {
-		params.Set("cloudWorkspace.snapshotId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudWorkspace.workspaceId.name"]; ok {
-		params.Set("cloudWorkspace.workspaceId.name", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudWorkspace.workspaceId.repoId.projectRepoId.projectId"]; ok {
-		params.Set("cloudWorkspace.workspaceId.repoId.projectRepoId.projectId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudWorkspace.workspaceId.repoId.projectRepoId.repoName"]; ok {
-		params.Set("cloudWorkspace.workspaceId.repoId.projectRepoId.repoName", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudWorkspace.workspaceId.repoId.uid"]; ok {
-		params.Set("cloudWorkspace.workspaceId.repoId.uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.aliasContext.kind"]; ok {
-		params.Set("gerrit.aliasContext.kind", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.aliasContext.name"]; ok {
-		params.Set("gerrit.aliasContext.name", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.aliasName"]; ok {
-		params.Set("gerrit.aliasName", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.gerritProject"]; ok {
-		params.Set("gerrit.gerritProject", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.hostUri"]; ok {
-		params.Set("gerrit.hostUri", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.revisionId"]; ok {
-		params.Set("gerrit.revisionId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["git.revisionId"]; ok {
-		params.Set("git.revisionId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["git.url"]; ok {
-		params.Set("git.url", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["pageSize"]; ok {
-		params.Set("pageSize", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["pageToken"]; ok {
-		params.Set("pageToken", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["revisionId"]; ok {
-		params.Set("revisionId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["startPosition"]; ok {
-		params.Set("startPosition", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["uid"]; ok {
-		params.Set("uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/aliases/{kind}/{name}/files/{+path}")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
@@ -2763,8 +3851,34 @@ func (c *ProjectsReposAliasesFilesGetCall) Do() (*ReadResponse, error) {
 		"name":      c.name,
 		"path":      c.path,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		req.Header.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.aliases.files.get" call.
+// Exactly one of *ReadResponse or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *ReadResponse.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *ProjectsReposAliasesFilesGetCall) Do() (*ReadResponse, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -2772,7 +3886,12 @@ func (c *ProjectsReposAliasesFilesGetCall) Do() (*ReadResponse, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *ReadResponse
+	ret := &ReadResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -2945,21 +4064,23 @@ func (c *ProjectsReposAliasesFilesGetCall) Do() (*ReadResponse, error) {
 // method id "source.projects.repos.files.readFromWorkspaceOrAlias":
 
 type ProjectsReposFilesReadFromWorkspaceOrAliasCall struct {
-	s         *Service
-	projectId string
-	repoName  string
-	path      string
-	opt_      map[string]interface{}
+	s            *Service
+	projectId    string
+	repoName     string
+	path         string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
 }
 
 // ReadFromWorkspaceOrAlias: ReadFromWorkspaceOrAlias performs a Read
 // using either the most recent
-// snapshot of the given workspace, if the
-// workspace exists, or the
-// revision referred to by the given alias if
-// the workspace does not exist.
+// snapshot of the given workspace, if the workspace exists, or
+// the
+// revision referred to by the given alias if the workspace does not
+// exist.
 func (r *ProjectsReposFilesService) ReadFromWorkspaceOrAlias(projectId string, repoName string, path string) *ProjectsReposFilesReadFromWorkspaceOrAliasCall {
-	c := &ProjectsReposFilesReadFromWorkspaceOrAliasCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposFilesReadFromWorkspaceOrAliasCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	c.path = path
@@ -2969,14 +4090,14 @@ func (r *ProjectsReposFilesService) ReadFromWorkspaceOrAlias(projectId string, r
 // Alias sets the optional parameter "alias": MOVABLE alias to read
 // from, if the workspace doesn't exist.
 func (c *ProjectsReposFilesReadFromWorkspaceOrAliasCall) Alias(alias string) *ProjectsReposFilesReadFromWorkspaceOrAliasCall {
-	c.opt_["alias"] = alias
+	c.urlParams_.Set("alias", alias)
 	return c
 }
 
 // PageSize sets the optional parameter "pageSize": The maximum number
 // of values to return.
 func (c *ProjectsReposFilesReadFromWorkspaceOrAliasCall) PageSize(pageSize int64) *ProjectsReposFilesReadFromWorkspaceOrAliasCall {
-	c.opt_["pageSize"] = pageSize
+	c.urlParams_.Set("pageSize", fmt.Sprint(pageSize))
 	return c
 }
 
@@ -2984,79 +4105,99 @@ func (c *ProjectsReposFilesReadFromWorkspaceOrAliasCall) PageSize(pageSize int64
 // next_page_token from the previous call.
 // Omit for the first page.
 func (c *ProjectsReposFilesReadFromWorkspaceOrAliasCall) PageToken(pageToken string) *ProjectsReposFilesReadFromWorkspaceOrAliasCall {
-	c.opt_["pageToken"] = pageToken
+	c.urlParams_.Set("pageToken", pageToken)
 	return c
 }
 
 // StartPosition sets the optional parameter "startPosition": If path
 // refers to a file, the position of the first byte of its contents
-// to
-// return. If path refers to a directory, the position of the first
+// to return. If path refers to a directory, the position of the first
 // entry
-// in the listing. If page_token is specified, this field is
-// ignored.
+// in the listing. If page_token is specified, this field is ignored.
 func (c *ProjectsReposFilesReadFromWorkspaceOrAliasCall) StartPosition(startPosition int64) *ProjectsReposFilesReadFromWorkspaceOrAliasCall {
-	c.opt_["startPosition"] = startPosition
+	c.urlParams_.Set("startPosition", fmt.Sprint(startPosition))
 	return c
 }
 
 // Uid sets the optional parameter "uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposFilesReadFromWorkspaceOrAliasCall) Uid(uid string) *ProjectsReposFilesReadFromWorkspaceOrAliasCall {
-	c.opt_["uid"] = uid
+	c.urlParams_.Set("uid", uid)
 	return c
 }
 
 // WorkspaceName sets the optional parameter "workspaceName": Workspace
 // to read from, if it exists.
 func (c *ProjectsReposFilesReadFromWorkspaceOrAliasCall) WorkspaceName(workspaceName string) *ProjectsReposFilesReadFromWorkspaceOrAliasCall {
-	c.opt_["workspaceName"] = workspaceName
+	c.urlParams_.Set("workspaceName", workspaceName)
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposFilesReadFromWorkspaceOrAliasCall) Fields(s ...googleapi.Field) *ProjectsReposFilesReadFromWorkspaceOrAliasCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposFilesReadFromWorkspaceOrAliasCall) Do() (*ReadResponse, error) {
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *ProjectsReposFilesReadFromWorkspaceOrAliasCall) IfNoneMatch(entityTag string) *ProjectsReposFilesReadFromWorkspaceOrAliasCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposFilesReadFromWorkspaceOrAliasCall) Context(ctx context.Context) *ProjectsReposFilesReadFromWorkspaceOrAliasCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposFilesReadFromWorkspaceOrAliasCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["alias"]; ok {
-		params.Set("alias", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["pageSize"]; ok {
-		params.Set("pageSize", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["pageToken"]; ok {
-		params.Set("pageToken", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["startPosition"]; ok {
-		params.Set("startPosition", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["uid"]; ok {
-		params.Set("uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["workspaceName"]; ok {
-		params.Set("workspaceName", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/files/{+path}:readFromWorkspaceOrAlias")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
 		"repoName":  c.repoName,
 		"path":      c.path,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		req.Header.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.files.readFromWorkspaceOrAlias" call.
+// Exactly one of *ReadResponse or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *ReadResponse.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *ProjectsReposFilesReadFromWorkspaceOrAliasCall) Do() (*ReadResponse, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -3064,7 +4205,12 @@ func (c *ProjectsReposFilesReadFromWorkspaceOrAliasCall) Do() (*ReadResponse, er
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *ReadResponse
+	ret := &ReadResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -3146,16 +4292,18 @@ func (c *ProjectsReposFilesReadFromWorkspaceOrAliasCall) Do() (*ReadResponse, er
 // method id "source.projects.repos.revisions.get":
 
 type ProjectsReposRevisionsGetCall struct {
-	s          *Service
-	projectId  string
-	repoName   string
-	revisionId string
-	opt_       map[string]interface{}
+	s            *Service
+	projectId    string
+	repoName     string
+	revisionId   string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
 }
 
 // Get: Retrieves revision metadata for a single revision.
 func (r *ProjectsReposRevisionsService) Get(projectId string, repoName string, revisionId string) *ProjectsReposRevisionsGetCall {
-	c := &ProjectsReposRevisionsGetCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposRevisionsGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	c.revisionId = revisionId
@@ -3165,38 +4313,75 @@ func (r *ProjectsReposRevisionsService) Get(projectId string, repoName string, r
 // Uid sets the optional parameter "uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposRevisionsGetCall) Uid(uid string) *ProjectsReposRevisionsGetCall {
-	c.opt_["uid"] = uid
+	c.urlParams_.Set("uid", uid)
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposRevisionsGetCall) Fields(s ...googleapi.Field) *ProjectsReposRevisionsGetCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposRevisionsGetCall) Do() (*Revision, error) {
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *ProjectsReposRevisionsGetCall) IfNoneMatch(entityTag string) *ProjectsReposRevisionsGetCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposRevisionsGetCall) Context(ctx context.Context) *ProjectsReposRevisionsGetCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposRevisionsGetCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["uid"]; ok {
-		params.Set("uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/revisions/{revisionId}")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId":  c.projectId,
 		"repoName":   c.repoName,
 		"revisionId": c.revisionId,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		req.Header.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.revisions.get" call.
+// Exactly one of *Revision or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Revision.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *ProjectsReposRevisionsGetCall) Do() (*Revision, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -3204,7 +4389,12 @@ func (c *ProjectsReposRevisionsGetCall) Do() (*Revision, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *Revision
+	ret := &Revision{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -3258,17 +4448,19 @@ func (c *ProjectsReposRevisionsGetCall) Do() (*Revision, error) {
 // method id "source.projects.repos.revisions.getBatchGet":
 
 type ProjectsReposRevisionsGetBatchGetCall struct {
-	s         *Service
-	projectId string
-	repoName  string
-	opt_      map[string]interface{}
+	s            *Service
+	projectId    string
+	repoName     string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
 }
 
 // GetBatchGet: Retrieves revision metadata for several revisions at
 // once. It returns an
 // error if any retrieval fails.
 func (r *ProjectsReposRevisionsService) GetBatchGet(projectId string, repoName string) *ProjectsReposRevisionsGetBatchGetCall {
-	c := &ProjectsReposRevisionsGetBatchGetCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposRevisionsGetBatchGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	return c
@@ -3276,48 +4468,82 @@ func (r *ProjectsReposRevisionsService) GetBatchGet(projectId string, repoName s
 
 // RevisionIds sets the optional parameter "revisionIds": The revision
 // IDs to retrieve.
-func (c *ProjectsReposRevisionsGetBatchGetCall) RevisionIds(revisionIds string) *ProjectsReposRevisionsGetBatchGetCall {
-	c.opt_["revisionIds"] = revisionIds
+func (c *ProjectsReposRevisionsGetBatchGetCall) RevisionIds(revisionIds ...string) *ProjectsReposRevisionsGetBatchGetCall {
+	c.urlParams_.SetMulti("revisionIds", append([]string{}, revisionIds...))
 	return c
 }
 
 // Uid sets the optional parameter "uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposRevisionsGetBatchGetCall) Uid(uid string) *ProjectsReposRevisionsGetBatchGetCall {
-	c.opt_["uid"] = uid
+	c.urlParams_.Set("uid", uid)
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposRevisionsGetBatchGetCall) Fields(s ...googleapi.Field) *ProjectsReposRevisionsGetBatchGetCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposRevisionsGetBatchGetCall) Do() (*GetRevisionsResponse, error) {
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *ProjectsReposRevisionsGetBatchGetCall) IfNoneMatch(entityTag string) *ProjectsReposRevisionsGetBatchGetCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposRevisionsGetBatchGetCall) Context(ctx context.Context) *ProjectsReposRevisionsGetBatchGetCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposRevisionsGetBatchGetCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["revisionIds"]; ok {
-		params.Set("revisionIds", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["uid"]; ok {
-		params.Set("uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/revisions:batchGet")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
 		"repoName":  c.repoName,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		req.Header.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.revisions.getBatchGet" call.
+// Exactly one of *GetRevisionsResponse or error will be non-nil. Any
+// non-2xx status code is an error. Response headers are in either
+// *GetRevisionsResponse.ServerResponse.Header or (if a response was
+// returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *ProjectsReposRevisionsGetBatchGetCall) Do() (*GetRevisionsResponse, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -3325,7 +4551,12 @@ func (c *ProjectsReposRevisionsGetBatchGetCall) Do() (*GetRevisionsResponse, err
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *GetRevisionsResponse
+	ret := &GetRevisionsResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -3378,10 +4609,12 @@ func (c *ProjectsReposRevisionsGetBatchGetCall) Do() (*GetRevisionsResponse, err
 // method id "source.projects.repos.revisions.list":
 
 type ProjectsReposRevisionsListCall struct {
-	s         *Service
-	projectId string
-	repoName  string
-	opt_      map[string]interface{}
+	s            *Service
+	projectId    string
+	repoName     string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
 }
 
 // List: Retrieves all revisions topologically between the starts and
@@ -3390,7 +4623,7 @@ type ProjectsReposRevisionsListCall struct {
 // revision
 // has two parents).
 func (r *ProjectsReposRevisionsService) List(projectId string, repoName string) *ProjectsReposRevisionsListCall {
-	c := &ProjectsReposRevisionsListCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposRevisionsListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	return c
@@ -3398,19 +4631,18 @@ func (r *ProjectsReposRevisionsService) List(projectId string, repoName string) 
 
 // Ends sets the optional parameter "ends": Revision IDs (hexadecimal
 // strings) that specify where the listing ends. If
-// this field is
-// present, the listing will contain only revisions that
+// this field is present, the listing will contain only revisions that
 // are
 // topologically between starts and ends, inclusive.
-func (c *ProjectsReposRevisionsListCall) Ends(ends string) *ProjectsReposRevisionsListCall {
-	c.opt_["ends"] = ends
+func (c *ProjectsReposRevisionsListCall) Ends(ends ...string) *ProjectsReposRevisionsListCall {
+	c.urlParams_.SetMulti("ends", append([]string{}, ends...))
 	return c
 }
 
 // PageSize sets the optional parameter "pageSize": The maximum number
 // of values to return.
 func (c *ProjectsReposRevisionsListCall) PageSize(pageSize int64) *ProjectsReposRevisionsListCall {
-	c.opt_["pageSize"] = pageSize
+	c.urlParams_.Set("pageSize", fmt.Sprint(pageSize))
 	return c
 }
 
@@ -3418,85 +4650,108 @@ func (c *ProjectsReposRevisionsListCall) PageSize(pageSize int64) *ProjectsRepos
 // next_page_token from the previous call.
 // Omit for the first page.
 func (c *ProjectsReposRevisionsListCall) PageToken(pageToken string) *ProjectsReposRevisionsListCall {
-	c.opt_["pageToken"] = pageToken
+	c.urlParams_.Set("pageToken", pageToken)
 	return c
 }
 
 // Path sets the optional parameter "path": List only those revisions
 // that modify path.
 func (c *ProjectsReposRevisionsListCall) Path(path string) *ProjectsReposRevisionsListCall {
-	c.opt_["path"] = path
+	c.urlParams_.Set("path", path)
 	return c
 }
 
 // Starts sets the optional parameter "starts": Revision IDs
 // (hexadecimal strings) that specify where the listing
-// begins. If
-// empty, the repo heads (revisions with no children) are used.
-func (c *ProjectsReposRevisionsListCall) Starts(starts string) *ProjectsReposRevisionsListCall {
-	c.opt_["starts"] = starts
+// begins. If empty, the repo heads (revisions with no children) are
+// used.
+func (c *ProjectsReposRevisionsListCall) Starts(starts ...string) *ProjectsReposRevisionsListCall {
+	c.urlParams_.SetMulti("starts", append([]string{}, starts...))
 	return c
 }
 
 // Uid sets the optional parameter "uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposRevisionsListCall) Uid(uid string) *ProjectsReposRevisionsListCall {
-	c.opt_["uid"] = uid
+	c.urlParams_.Set("uid", uid)
 	return c
 }
 
 // WalkDirection sets the optional parameter "walkDirection": The
 // direction to walk the graph.
+//
+// Possible values:
+//   "BACKWARD"
+//   "FORWARD"
 func (c *ProjectsReposRevisionsListCall) WalkDirection(walkDirection string) *ProjectsReposRevisionsListCall {
-	c.opt_["walkDirection"] = walkDirection
+	c.urlParams_.Set("walkDirection", walkDirection)
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposRevisionsListCall) Fields(s ...googleapi.Field) *ProjectsReposRevisionsListCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposRevisionsListCall) Do() (*ListRevisionsResponse, error) {
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *ProjectsReposRevisionsListCall) IfNoneMatch(entityTag string) *ProjectsReposRevisionsListCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposRevisionsListCall) Context(ctx context.Context) *ProjectsReposRevisionsListCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposRevisionsListCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["ends"]; ok {
-		params.Set("ends", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["pageSize"]; ok {
-		params.Set("pageSize", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["pageToken"]; ok {
-		params.Set("pageToken", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["path"]; ok {
-		params.Set("path", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["starts"]; ok {
-		params.Set("starts", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["uid"]; ok {
-		params.Set("uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["walkDirection"]; ok {
-		params.Set("walkDirection", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/revisions")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
 		"repoName":  c.repoName,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		req.Header.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.revisions.list" call.
+// Exactly one of *ListRevisionsResponse or error will be non-nil. Any
+// non-2xx status code is an error. Response headers are in either
+// *ListRevisionsResponse.ServerResponse.Header or (if a response was
+// returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *ProjectsReposRevisionsListCall) Do() (*ListRevisionsResponse, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -3504,7 +4759,12 @@ func (c *ProjectsReposRevisionsListCall) Do() (*ListRevisionsResponse, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *ListRevisionsResponse
+	ret := &ListRevisionsResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -3588,20 +4848,21 @@ func (c *ProjectsReposRevisionsListCall) Do() (*ListRevisionsResponse, error) {
 // method id "source.projects.repos.revisions.listFiles":
 
 type ProjectsReposRevisionsListFilesCall struct {
-	s          *Service
-	projectId  string
-	repoName   string
-	revisionId string
-	opt_       map[string]interface{}
+	s            *Service
+	projectId    string
+	repoName     string
+	revisionId   string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
 }
 
 // ListFiles: ListFiles returns a list of all files in a SourceContext.
 // The
 // information about each file includes its path and its hash.
-// The
-// result is ordered by path. Pagination is supported.
+// The result is ordered by path. Pagination is supported.
 func (r *ProjectsReposRevisionsService) ListFiles(projectId string, repoName string, revisionId string) *ProjectsReposRevisionsListFilesCall {
-	c := &ProjectsReposRevisionsListFilesCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposRevisionsListFilesCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	c.revisionId = revisionId
@@ -3610,41 +4871,45 @@ func (r *ProjectsReposRevisionsService) ListFiles(projectId string, repoName str
 
 // AliasContextKind sets the optional parameter "aliasContext.kind": The
 // alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
 func (c *ProjectsReposRevisionsListFilesCall) AliasContextKind(aliasContextKind string) *ProjectsReposRevisionsListFilesCall {
-	c.opt_["aliasContext.kind"] = aliasContextKind
+	c.urlParams_.Set("aliasContext.kind", aliasContextKind)
 	return c
 }
 
 // AliasContextName sets the optional parameter "aliasContext.name": The
 // alias name.
 func (c *ProjectsReposRevisionsListFilesCall) AliasContextName(aliasContextName string) *ProjectsReposRevisionsListFilesCall {
-	c.opt_["aliasContext.name"] = aliasContextName
+	c.urlParams_.Set("aliasContext.name", aliasContextName)
 	return c
 }
 
 // AliasName sets the optional parameter "aliasName": The name of an
 // alias (branch, tag, etc.).
 func (c *ProjectsReposRevisionsListFilesCall) AliasName(aliasName string) *ProjectsReposRevisionsListFilesCall {
-	c.opt_["aliasName"] = aliasName
+	c.urlParams_.Set("aliasName", aliasName)
 	return c
 }
 
 // CloudWorkspaceSnapshotId sets the optional parameter
 // "cloudWorkspace.snapshotId": The ID of the snapshot.
-// An empty
-// snapshot_id refers to the most recent snapshot.
+// An empty snapshot_id refers to the most recent snapshot.
 func (c *ProjectsReposRevisionsListFilesCall) CloudWorkspaceSnapshotId(cloudWorkspaceSnapshotId string) *ProjectsReposRevisionsListFilesCall {
-	c.opt_["cloudWorkspace.snapshotId"] = cloudWorkspaceSnapshotId
+	c.urlParams_.Set("cloudWorkspace.snapshotId", cloudWorkspaceSnapshotId)
 	return c
 }
 
 // CloudWorkspaceWorkspaceIdName sets the optional parameter
 // "cloudWorkspace.workspaceId.name": The unique name of the workspace
 // within the repo.  This is the name
-// chosen by the client in the Source
-// API's CreateWorkspace method.
+// chosen by the client in the Source API's CreateWorkspace method.
 func (c *ProjectsReposRevisionsListFilesCall) CloudWorkspaceWorkspaceIdName(cloudWorkspaceWorkspaceIdName string) *ProjectsReposRevisionsListFilesCall {
-	c.opt_["cloudWorkspace.workspaceId.name"] = cloudWorkspaceWorkspaceIdName
+	c.urlParams_.Set("cloudWorkspace.workspaceId.name", cloudWorkspaceWorkspaceIdName)
 	return c
 }
 
@@ -3653,7 +4918,7 @@ func (c *ProjectsReposRevisionsListFilesCall) CloudWorkspaceWorkspaceIdName(clou
 // "cloudWorkspace.workspaceId.repoId.projectRepoId.projectId": The ID
 // of the project.
 func (c *ProjectsReposRevisionsListFilesCall) CloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId(cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId string) *ProjectsReposRevisionsListFilesCall {
-	c.opt_["cloudWorkspace.workspaceId.repoId.projectRepoId.projectId"] = cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId
+	c.urlParams_.Set("cloudWorkspace.workspaceId.repoId.projectRepoId.projectId", cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId)
 	return c
 }
 
@@ -3662,7 +4927,7 @@ func (c *ProjectsReposRevisionsListFilesCall) CloudWorkspaceWorkspaceIdRepoIdPro
 // "cloudWorkspace.workspaceId.repoId.projectRepoId.repoName": The name
 // of the repo. Leave empty for the default repo.
 func (c *ProjectsReposRevisionsListFilesCall) CloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName(cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName string) *ProjectsReposRevisionsListFilesCall {
-	c.opt_["cloudWorkspace.workspaceId.repoId.projectRepoId.repoName"] = cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName
+	c.urlParams_.Set("cloudWorkspace.workspaceId.repoId.projectRepoId.repoName", cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName)
 	return c
 }
 
@@ -3670,53 +4935,58 @@ func (c *ProjectsReposRevisionsListFilesCall) CloudWorkspaceWorkspaceIdRepoIdPro
 // "cloudWorkspace.workspaceId.repoId.uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposRevisionsListFilesCall) CloudWorkspaceWorkspaceIdRepoIdUid(cloudWorkspaceWorkspaceIdRepoIdUid string) *ProjectsReposRevisionsListFilesCall {
-	c.opt_["cloudWorkspace.workspaceId.repoId.uid"] = cloudWorkspaceWorkspaceIdRepoIdUid
+	c.urlParams_.Set("cloudWorkspace.workspaceId.repoId.uid", cloudWorkspaceWorkspaceIdRepoIdUid)
 	return c
 }
 
 // GerritAliasContextKind sets the optional parameter
 // "gerrit.aliasContext.kind": The alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
 func (c *ProjectsReposRevisionsListFilesCall) GerritAliasContextKind(gerritAliasContextKind string) *ProjectsReposRevisionsListFilesCall {
-	c.opt_["gerrit.aliasContext.kind"] = gerritAliasContextKind
+	c.urlParams_.Set("gerrit.aliasContext.kind", gerritAliasContextKind)
 	return c
 }
 
 // GerritAliasContextName sets the optional parameter
 // "gerrit.aliasContext.name": The alias name.
 func (c *ProjectsReposRevisionsListFilesCall) GerritAliasContextName(gerritAliasContextName string) *ProjectsReposRevisionsListFilesCall {
-	c.opt_["gerrit.aliasContext.name"] = gerritAliasContextName
+	c.urlParams_.Set("gerrit.aliasContext.name", gerritAliasContextName)
 	return c
 }
 
 // GerritAliasName sets the optional parameter "gerrit.aliasName": The
 // name of an alias (branch, tag, etc.).
 func (c *ProjectsReposRevisionsListFilesCall) GerritAliasName(gerritAliasName string) *ProjectsReposRevisionsListFilesCall {
-	c.opt_["gerrit.aliasName"] = gerritAliasName
+	c.urlParams_.Set("gerrit.aliasName", gerritAliasName)
 	return c
 }
 
 // GerritGerritProject sets the optional parameter
 // "gerrit.gerritProject": The full project name within the host.
 // Projects may be nested, so
-// "project/subproject" is a valid project
-// name.
+// "project/subproject" is a valid project name.
 // The "repo name" is hostURI/project.
 func (c *ProjectsReposRevisionsListFilesCall) GerritGerritProject(gerritGerritProject string) *ProjectsReposRevisionsListFilesCall {
-	c.opt_["gerrit.gerritProject"] = gerritGerritProject
+	c.urlParams_.Set("gerrit.gerritProject", gerritGerritProject)
 	return c
 }
 
 // GerritHostUri sets the optional parameter "gerrit.hostUri": The URI
 // of a running Gerrit instance.
 func (c *ProjectsReposRevisionsListFilesCall) GerritHostUri(gerritHostUri string) *ProjectsReposRevisionsListFilesCall {
-	c.opt_["gerrit.hostUri"] = gerritHostUri
+	c.urlParams_.Set("gerrit.hostUri", gerritHostUri)
 	return c
 }
 
 // GerritRevisionId sets the optional parameter "gerrit.revisionId": A
 // revision (commit) ID.
 func (c *ProjectsReposRevisionsListFilesCall) GerritRevisionId(gerritRevisionId string) *ProjectsReposRevisionsListFilesCall {
-	c.opt_["gerrit.revisionId"] = gerritRevisionId
+	c.urlParams_.Set("gerrit.revisionId", gerritRevisionId)
 	return c
 }
 
@@ -3724,20 +4994,20 @@ func (c *ProjectsReposRevisionsListFilesCall) GerritRevisionId(gerritRevisionId 
 // commit hash.
 // required.
 func (c *ProjectsReposRevisionsListFilesCall) GitRevisionId(gitRevisionId string) *ProjectsReposRevisionsListFilesCall {
-	c.opt_["git.revisionId"] = gitRevisionId
+	c.urlParams_.Set("git.revisionId", gitRevisionId)
 	return c
 }
 
 // GitUrl sets the optional parameter "git.url": Git repository URL.
 func (c *ProjectsReposRevisionsListFilesCall) GitUrl(gitUrl string) *ProjectsReposRevisionsListFilesCall {
-	c.opt_["git.url"] = gitUrl
+	c.urlParams_.Set("git.url", gitUrl)
 	return c
 }
 
 // PageSize sets the optional parameter "pageSize": The maximum number
 // of values to return.
 func (c *ProjectsReposRevisionsListFilesCall) PageSize(pageSize int64) *ProjectsReposRevisionsListFilesCall {
-	c.opt_["pageSize"] = pageSize
+	c.urlParams_.Set("pageSize", fmt.Sprint(pageSize))
 	return c
 }
 
@@ -3745,99 +5015,82 @@ func (c *ProjectsReposRevisionsListFilesCall) PageSize(pageSize int64) *Projects
 // next_page_token from the previous call.
 // Omit for the first page.
 func (c *ProjectsReposRevisionsListFilesCall) PageToken(pageToken string) *ProjectsReposRevisionsListFilesCall {
-	c.opt_["pageToken"] = pageToken
+	c.urlParams_.Set("pageToken", pageToken)
 	return c
 }
 
 // Uid sets the optional parameter "uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposRevisionsListFilesCall) Uid(uid string) *ProjectsReposRevisionsListFilesCall {
-	c.opt_["uid"] = uid
+	c.urlParams_.Set("uid", uid)
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposRevisionsListFilesCall) Fields(s ...googleapi.Field) *ProjectsReposRevisionsListFilesCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposRevisionsListFilesCall) Do() (*ListFilesResponse, error) {
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *ProjectsReposRevisionsListFilesCall) IfNoneMatch(entityTag string) *ProjectsReposRevisionsListFilesCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposRevisionsListFilesCall) Context(ctx context.Context) *ProjectsReposRevisionsListFilesCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposRevisionsListFilesCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["aliasContext.kind"]; ok {
-		params.Set("aliasContext.kind", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["aliasContext.name"]; ok {
-		params.Set("aliasContext.name", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["aliasName"]; ok {
-		params.Set("aliasName", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudWorkspace.snapshotId"]; ok {
-		params.Set("cloudWorkspace.snapshotId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudWorkspace.workspaceId.name"]; ok {
-		params.Set("cloudWorkspace.workspaceId.name", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudWorkspace.workspaceId.repoId.projectRepoId.projectId"]; ok {
-		params.Set("cloudWorkspace.workspaceId.repoId.projectRepoId.projectId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudWorkspace.workspaceId.repoId.projectRepoId.repoName"]; ok {
-		params.Set("cloudWorkspace.workspaceId.repoId.projectRepoId.repoName", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudWorkspace.workspaceId.repoId.uid"]; ok {
-		params.Set("cloudWorkspace.workspaceId.repoId.uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.aliasContext.kind"]; ok {
-		params.Set("gerrit.aliasContext.kind", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.aliasContext.name"]; ok {
-		params.Set("gerrit.aliasContext.name", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.aliasName"]; ok {
-		params.Set("gerrit.aliasName", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.gerritProject"]; ok {
-		params.Set("gerrit.gerritProject", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.hostUri"]; ok {
-		params.Set("gerrit.hostUri", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.revisionId"]; ok {
-		params.Set("gerrit.revisionId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["git.revisionId"]; ok {
-		params.Set("git.revisionId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["git.url"]; ok {
-		params.Set("git.url", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["pageSize"]; ok {
-		params.Set("pageSize", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["pageToken"]; ok {
-		params.Set("pageToken", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["uid"]; ok {
-		params.Set("uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/revisions/{revisionId}:listFiles")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId":  c.projectId,
 		"repoName":   c.repoName,
 		"revisionId": c.revisionId,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		req.Header.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.revisions.listFiles" call.
+// Exactly one of *ListFilesResponse or error will be non-nil. Any
+// non-2xx status code is an error. Response headers are in either
+// *ListFilesResponse.ServerResponse.Header or (if a response was
+// returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *ProjectsReposRevisionsListFilesCall) Do() (*ListFilesResponse, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -3845,7 +5098,12 @@ func (c *ProjectsReposRevisionsListFilesCall) Do() (*ListFilesResponse, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *ListFilesResponse
+	ret := &ListFilesResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -4002,19 +5260,20 @@ func (c *ProjectsReposRevisionsListFilesCall) Do() (*ListFilesResponse, error) {
 // method id "source.projects.repos.revisions.files.get":
 
 type ProjectsReposRevisionsFilesGetCall struct {
-	s          *Service
-	projectId  string
-	repoName   string
-	revisionId string
-	path       string
-	opt_       map[string]interface{}
+	s            *Service
+	projectId    string
+	repoName     string
+	revisionId   string
+	path         string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
 }
 
 // Get: Read is given a SourceContext and path, and returns
-// file or
-// directory information about that path.
+// file or directory information about that path.
 func (r *ProjectsReposRevisionsFilesService) Get(projectId string, repoName string, revisionId string, path string) *ProjectsReposRevisionsFilesGetCall {
-	c := &ProjectsReposRevisionsFilesGetCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposRevisionsFilesGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	c.revisionId = revisionId
@@ -4024,41 +5283,45 @@ func (r *ProjectsReposRevisionsFilesService) Get(projectId string, repoName stri
 
 // AliasContextKind sets the optional parameter "aliasContext.kind": The
 // alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
 func (c *ProjectsReposRevisionsFilesGetCall) AliasContextKind(aliasContextKind string) *ProjectsReposRevisionsFilesGetCall {
-	c.opt_["aliasContext.kind"] = aliasContextKind
+	c.urlParams_.Set("aliasContext.kind", aliasContextKind)
 	return c
 }
 
 // AliasContextName sets the optional parameter "aliasContext.name": The
 // alias name.
 func (c *ProjectsReposRevisionsFilesGetCall) AliasContextName(aliasContextName string) *ProjectsReposRevisionsFilesGetCall {
-	c.opt_["aliasContext.name"] = aliasContextName
+	c.urlParams_.Set("aliasContext.name", aliasContextName)
 	return c
 }
 
 // AliasName sets the optional parameter "aliasName": The name of an
 // alias (branch, tag, etc.).
 func (c *ProjectsReposRevisionsFilesGetCall) AliasName(aliasName string) *ProjectsReposRevisionsFilesGetCall {
-	c.opt_["aliasName"] = aliasName
+	c.urlParams_.Set("aliasName", aliasName)
 	return c
 }
 
 // CloudWorkspaceSnapshotId sets the optional parameter
 // "cloudWorkspace.snapshotId": The ID of the snapshot.
-// An empty
-// snapshot_id refers to the most recent snapshot.
+// An empty snapshot_id refers to the most recent snapshot.
 func (c *ProjectsReposRevisionsFilesGetCall) CloudWorkspaceSnapshotId(cloudWorkspaceSnapshotId string) *ProjectsReposRevisionsFilesGetCall {
-	c.opt_["cloudWorkspace.snapshotId"] = cloudWorkspaceSnapshotId
+	c.urlParams_.Set("cloudWorkspace.snapshotId", cloudWorkspaceSnapshotId)
 	return c
 }
 
 // CloudWorkspaceWorkspaceIdName sets the optional parameter
 // "cloudWorkspace.workspaceId.name": The unique name of the workspace
 // within the repo.  This is the name
-// chosen by the client in the Source
-// API's CreateWorkspace method.
+// chosen by the client in the Source API's CreateWorkspace method.
 func (c *ProjectsReposRevisionsFilesGetCall) CloudWorkspaceWorkspaceIdName(cloudWorkspaceWorkspaceIdName string) *ProjectsReposRevisionsFilesGetCall {
-	c.opt_["cloudWorkspace.workspaceId.name"] = cloudWorkspaceWorkspaceIdName
+	c.urlParams_.Set("cloudWorkspace.workspaceId.name", cloudWorkspaceWorkspaceIdName)
 	return c
 }
 
@@ -4067,7 +5330,7 @@ func (c *ProjectsReposRevisionsFilesGetCall) CloudWorkspaceWorkspaceIdName(cloud
 // "cloudWorkspace.workspaceId.repoId.projectRepoId.projectId": The ID
 // of the project.
 func (c *ProjectsReposRevisionsFilesGetCall) CloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId(cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId string) *ProjectsReposRevisionsFilesGetCall {
-	c.opt_["cloudWorkspace.workspaceId.repoId.projectRepoId.projectId"] = cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId
+	c.urlParams_.Set("cloudWorkspace.workspaceId.repoId.projectRepoId.projectId", cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId)
 	return c
 }
 
@@ -4076,7 +5339,7 @@ func (c *ProjectsReposRevisionsFilesGetCall) CloudWorkspaceWorkspaceIdRepoIdProj
 // "cloudWorkspace.workspaceId.repoId.projectRepoId.repoName": The name
 // of the repo. Leave empty for the default repo.
 func (c *ProjectsReposRevisionsFilesGetCall) CloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName(cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName string) *ProjectsReposRevisionsFilesGetCall {
-	c.opt_["cloudWorkspace.workspaceId.repoId.projectRepoId.repoName"] = cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName
+	c.urlParams_.Set("cloudWorkspace.workspaceId.repoId.projectRepoId.repoName", cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName)
 	return c
 }
 
@@ -4084,53 +5347,58 @@ func (c *ProjectsReposRevisionsFilesGetCall) CloudWorkspaceWorkspaceIdRepoIdProj
 // "cloudWorkspace.workspaceId.repoId.uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposRevisionsFilesGetCall) CloudWorkspaceWorkspaceIdRepoIdUid(cloudWorkspaceWorkspaceIdRepoIdUid string) *ProjectsReposRevisionsFilesGetCall {
-	c.opt_["cloudWorkspace.workspaceId.repoId.uid"] = cloudWorkspaceWorkspaceIdRepoIdUid
+	c.urlParams_.Set("cloudWorkspace.workspaceId.repoId.uid", cloudWorkspaceWorkspaceIdRepoIdUid)
 	return c
 }
 
 // GerritAliasContextKind sets the optional parameter
 // "gerrit.aliasContext.kind": The alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
 func (c *ProjectsReposRevisionsFilesGetCall) GerritAliasContextKind(gerritAliasContextKind string) *ProjectsReposRevisionsFilesGetCall {
-	c.opt_["gerrit.aliasContext.kind"] = gerritAliasContextKind
+	c.urlParams_.Set("gerrit.aliasContext.kind", gerritAliasContextKind)
 	return c
 }
 
 // GerritAliasContextName sets the optional parameter
 // "gerrit.aliasContext.name": The alias name.
 func (c *ProjectsReposRevisionsFilesGetCall) GerritAliasContextName(gerritAliasContextName string) *ProjectsReposRevisionsFilesGetCall {
-	c.opt_["gerrit.aliasContext.name"] = gerritAliasContextName
+	c.urlParams_.Set("gerrit.aliasContext.name", gerritAliasContextName)
 	return c
 }
 
 // GerritAliasName sets the optional parameter "gerrit.aliasName": The
 // name of an alias (branch, tag, etc.).
 func (c *ProjectsReposRevisionsFilesGetCall) GerritAliasName(gerritAliasName string) *ProjectsReposRevisionsFilesGetCall {
-	c.opt_["gerrit.aliasName"] = gerritAliasName
+	c.urlParams_.Set("gerrit.aliasName", gerritAliasName)
 	return c
 }
 
 // GerritGerritProject sets the optional parameter
 // "gerrit.gerritProject": The full project name within the host.
 // Projects may be nested, so
-// "project/subproject" is a valid project
-// name.
+// "project/subproject" is a valid project name.
 // The "repo name" is hostURI/project.
 func (c *ProjectsReposRevisionsFilesGetCall) GerritGerritProject(gerritGerritProject string) *ProjectsReposRevisionsFilesGetCall {
-	c.opt_["gerrit.gerritProject"] = gerritGerritProject
+	c.urlParams_.Set("gerrit.gerritProject", gerritGerritProject)
 	return c
 }
 
 // GerritHostUri sets the optional parameter "gerrit.hostUri": The URI
 // of a running Gerrit instance.
 func (c *ProjectsReposRevisionsFilesGetCall) GerritHostUri(gerritHostUri string) *ProjectsReposRevisionsFilesGetCall {
-	c.opt_["gerrit.hostUri"] = gerritHostUri
+	c.urlParams_.Set("gerrit.hostUri", gerritHostUri)
 	return c
 }
 
 // GerritRevisionId sets the optional parameter "gerrit.revisionId": A
 // revision (commit) ID.
 func (c *ProjectsReposRevisionsFilesGetCall) GerritRevisionId(gerritRevisionId string) *ProjectsReposRevisionsFilesGetCall {
-	c.opt_["gerrit.revisionId"] = gerritRevisionId
+	c.urlParams_.Set("gerrit.revisionId", gerritRevisionId)
 	return c
 }
 
@@ -4138,128 +5406,79 @@ func (c *ProjectsReposRevisionsFilesGetCall) GerritRevisionId(gerritRevisionId s
 // commit hash.
 // required.
 func (c *ProjectsReposRevisionsFilesGetCall) GitRevisionId(gitRevisionId string) *ProjectsReposRevisionsFilesGetCall {
-	c.opt_["git.revisionId"] = gitRevisionId
+	c.urlParams_.Set("git.revisionId", gitRevisionId)
 	return c
 }
 
 // GitUrl sets the optional parameter "git.url": Git repository URL.
 func (c *ProjectsReposRevisionsFilesGetCall) GitUrl(gitUrl string) *ProjectsReposRevisionsFilesGetCall {
-	c.opt_["git.url"] = gitUrl
+	c.urlParams_.Set("git.url", gitUrl)
 	return c
 }
 
 // PageSize sets the optional parameter "pageSize": The maximum number
 // of values to return.
 func (c *ProjectsReposRevisionsFilesGetCall) PageSize(pageSize int64) *ProjectsReposRevisionsFilesGetCall {
-	c.opt_["pageSize"] = pageSize
+	c.urlParams_.Set("pageSize", fmt.Sprint(pageSize))
 	return c
 }
 
 // PageToken sets the optional parameter "pageToken": The value of
 // next_page_token from the previous call.
-// Omit for the first page, or
-// if using start_index.
+// Omit for the first page, or if using start_index.
 func (c *ProjectsReposRevisionsFilesGetCall) PageToken(pageToken string) *ProjectsReposRevisionsFilesGetCall {
-	c.opt_["pageToken"] = pageToken
+	c.urlParams_.Set("pageToken", pageToken)
 	return c
 }
 
 // StartPosition sets the optional parameter "startPosition": If path
 // refers to a file, the position of the first byte of its contents
-// to
-// return. If path refers to a directory, the position of the first
+// to return. If path refers to a directory, the position of the first
 // entry
-// in the listing. If page_token is specified, this field is
-// ignored.
+// in the listing. If page_token is specified, this field is ignored.
 func (c *ProjectsReposRevisionsFilesGetCall) StartPosition(startPosition int64) *ProjectsReposRevisionsFilesGetCall {
-	c.opt_["startPosition"] = startPosition
+	c.urlParams_.Set("startPosition", fmt.Sprint(startPosition))
 	return c
 }
 
 // Uid sets the optional parameter "uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposRevisionsFilesGetCall) Uid(uid string) *ProjectsReposRevisionsFilesGetCall {
-	c.opt_["uid"] = uid
+	c.urlParams_.Set("uid", uid)
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposRevisionsFilesGetCall) Fields(s ...googleapi.Field) *ProjectsReposRevisionsFilesGetCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposRevisionsFilesGetCall) Do() (*ReadResponse, error) {
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *ProjectsReposRevisionsFilesGetCall) IfNoneMatch(entityTag string) *ProjectsReposRevisionsFilesGetCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposRevisionsFilesGetCall) Context(ctx context.Context) *ProjectsReposRevisionsFilesGetCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposRevisionsFilesGetCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["aliasContext.kind"]; ok {
-		params.Set("aliasContext.kind", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["aliasContext.name"]; ok {
-		params.Set("aliasContext.name", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["aliasName"]; ok {
-		params.Set("aliasName", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudWorkspace.snapshotId"]; ok {
-		params.Set("cloudWorkspace.snapshotId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudWorkspace.workspaceId.name"]; ok {
-		params.Set("cloudWorkspace.workspaceId.name", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudWorkspace.workspaceId.repoId.projectRepoId.projectId"]; ok {
-		params.Set("cloudWorkspace.workspaceId.repoId.projectRepoId.projectId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudWorkspace.workspaceId.repoId.projectRepoId.repoName"]; ok {
-		params.Set("cloudWorkspace.workspaceId.repoId.projectRepoId.repoName", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudWorkspace.workspaceId.repoId.uid"]; ok {
-		params.Set("cloudWorkspace.workspaceId.repoId.uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.aliasContext.kind"]; ok {
-		params.Set("gerrit.aliasContext.kind", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.aliasContext.name"]; ok {
-		params.Set("gerrit.aliasContext.name", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.aliasName"]; ok {
-		params.Set("gerrit.aliasName", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.gerritProject"]; ok {
-		params.Set("gerrit.gerritProject", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.hostUri"]; ok {
-		params.Set("gerrit.hostUri", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.revisionId"]; ok {
-		params.Set("gerrit.revisionId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["git.revisionId"]; ok {
-		params.Set("git.revisionId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["git.url"]; ok {
-		params.Set("git.url", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["pageSize"]; ok {
-		params.Set("pageSize", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["pageToken"]; ok {
-		params.Set("pageToken", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["startPosition"]; ok {
-		params.Set("startPosition", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["uid"]; ok {
-		params.Set("uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/revisions/{revisionId}/files/{+path}")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId":  c.projectId,
@@ -4267,8 +5486,34 @@ func (c *ProjectsReposRevisionsFilesGetCall) Do() (*ReadResponse, error) {
 		"revisionId": c.revisionId,
 		"path":       c.path,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		req.Header.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.revisions.files.get" call.
+// Exactly one of *ReadResponse or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *ReadResponse.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *ProjectsReposRevisionsFilesGetCall) Do() (*ReadResponse, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -4276,7 +5521,12 @@ func (c *ProjectsReposRevisionsFilesGetCall) Do() (*ReadResponse, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *ReadResponse
+	ret := &ReadResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -4452,21 +5702,21 @@ type ProjectsReposWorkspacesCommitWorkspaceCall struct {
 	repoName               string
 	name                   string
 	commitworkspacerequest *CommitWorkspaceRequest
-	opt_                   map[string]interface{}
+	urlParams_             gensupport.URLParams
+	ctx_                   context.Context
 }
 
 // CommitWorkspace: Commits some or all of the modified files in a
 // workspace. This creates a
-// new revision in the repo with the
-// workspace's contents. Returns ABORTED if the workspace ID
-// in the
-// request contains a snapshot ID and it is not the same as
+// new revision in the repo with the workspace's contents. Returns
+// ABORTED if the workspace ID
+// in the request contains a snapshot ID and it is not the same as
 // the
 // workspace's current snapshot ID or if the workspace is
 // simultaneously
 // modified by another client.
 func (r *ProjectsReposWorkspacesService) CommitWorkspace(projectId string, repoName string, name string, commitworkspacerequest *CommitWorkspaceRequest) *ProjectsReposWorkspacesCommitWorkspaceCall {
-	c := &ProjectsReposWorkspacesCommitWorkspaceCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposWorkspacesCommitWorkspaceCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	c.name = name
@@ -4474,28 +5724,32 @@ func (r *ProjectsReposWorkspacesService) CommitWorkspace(projectId string, repoN
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposWorkspacesCommitWorkspaceCall) Fields(s ...googleapi.Field) *ProjectsReposWorkspacesCommitWorkspaceCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposWorkspacesCommitWorkspaceCall) Do() (*Workspace, error) {
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposWorkspacesCommitWorkspaceCall) Context(ctx context.Context) *ProjectsReposWorkspacesCommitWorkspaceCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposWorkspacesCommitWorkspaceCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
 	body, err := googleapi.WithoutDataWrapper.JSONReader(c.commitworkspacerequest)
 	if err != nil {
 		return nil, err
 	}
 	ctype := "application/json"
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/workspaces/{name}:commitWorkspace")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
@@ -4503,8 +5757,31 @@ func (c *ProjectsReposWorkspacesCommitWorkspaceCall) Do() (*Workspace, error) {
 		"name":      c.name,
 	})
 	req.Header.Set("Content-Type", ctype)
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.workspaces.commitWorkspace" call.
+// Exactly one of *Workspace or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *Workspace.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *ProjectsReposWorkspacesCommitWorkspaceCall) Do() (*Workspace, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -4512,7 +5789,12 @@ func (c *ProjectsReposWorkspacesCommitWorkspaceCall) Do() (*Workspace, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *Workspace
+	ret := &Workspace{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -4568,48 +5850,76 @@ type ProjectsReposWorkspacesCreateCall struct {
 	projectId              string
 	repoName               string
 	createworkspacerequest *CreateWorkspaceRequest
-	opt_                   map[string]interface{}
+	urlParams_             gensupport.URLParams
+	ctx_                   context.Context
 }
 
 // Create: Creates a workspace.
 func (r *ProjectsReposWorkspacesService) Create(projectId string, repoName string, createworkspacerequest *CreateWorkspaceRequest) *ProjectsReposWorkspacesCreateCall {
-	c := &ProjectsReposWorkspacesCreateCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposWorkspacesCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	c.createworkspacerequest = createworkspacerequest
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposWorkspacesCreateCall) Fields(s ...googleapi.Field) *ProjectsReposWorkspacesCreateCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposWorkspacesCreateCall) Do() (*Workspace, error) {
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposWorkspacesCreateCall) Context(ctx context.Context) *ProjectsReposWorkspacesCreateCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposWorkspacesCreateCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
 	body, err := googleapi.WithoutDataWrapper.JSONReader(c.createworkspacerequest)
 	if err != nil {
 		return nil, err
 	}
 	ctype := "application/json"
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/workspaces")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
 		"repoName":  c.repoName,
 	})
 	req.Header.Set("Content-Type", ctype)
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.workspaces.create" call.
+// Exactly one of *Workspace or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *Workspace.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *ProjectsReposWorkspacesCreateCall) Do() (*Workspace, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -4617,7 +5927,12 @@ func (c *ProjectsReposWorkspacesCreateCall) Do() (*Workspace, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *Workspace
+	ret := &Workspace{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -4662,20 +5977,21 @@ func (c *ProjectsReposWorkspacesCreateCall) Do() (*Workspace, error) {
 // method id "source.projects.repos.workspaces.delete":
 
 type ProjectsReposWorkspacesDeleteCall struct {
-	s         *Service
-	projectId string
-	repoName  string
-	name      string
-	opt_      map[string]interface{}
+	s          *Service
+	projectId  string
+	repoName   string
+	name       string
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
 }
 
 // Delete: Deletes a workspace. Uncommitted changes are lost. If the
 // workspace does
-// not exist, NOT_FOUND is returned. Returns ABORTED when
-// the workspace is
+// not exist, NOT_FOUND is returned. Returns ABORTED when the workspace
+// is
 // simultaneously modified by another client.
 func (r *ProjectsReposWorkspacesService) Delete(projectId string, repoName string, name string) *ProjectsReposWorkspacesDeleteCall {
-	c := &ProjectsReposWorkspacesDeleteCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposWorkspacesDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	c.name = name
@@ -4687,48 +6003,69 @@ func (r *ProjectsReposWorkspacesService) Delete(projectId string, repoName strin
 // to
 // the workspace, or ABORTED is returned.
 func (c *ProjectsReposWorkspacesDeleteCall) CurrentSnapshotId(currentSnapshotId string) *ProjectsReposWorkspacesDeleteCall {
-	c.opt_["currentSnapshotId"] = currentSnapshotId
+	c.urlParams_.Set("currentSnapshotId", currentSnapshotId)
 	return c
 }
 
 // Uid sets the optional parameter "uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposWorkspacesDeleteCall) Uid(uid string) *ProjectsReposWorkspacesDeleteCall {
-	c.opt_["uid"] = uid
+	c.urlParams_.Set("uid", uid)
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposWorkspacesDeleteCall) Fields(s ...googleapi.Field) *ProjectsReposWorkspacesDeleteCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposWorkspacesDeleteCall) Do() (*Empty, error) {
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposWorkspacesDeleteCall) Context(ctx context.Context) *ProjectsReposWorkspacesDeleteCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposWorkspacesDeleteCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["currentSnapshotId"]; ok {
-		params.Set("currentSnapshotId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["uid"]; ok {
-		params.Set("uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/workspaces/{name}")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
 		"repoName":  c.repoName,
 		"name":      c.name,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.workspaces.delete" call.
+// Exactly one of *Empty or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Empty.ServerResponse.Header or (if a response was returned at all)
+// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
+// check whether the returned error was because http.StatusNotModified
+// was returned.
+func (c *ProjectsReposWorkspacesDeleteCall) Do() (*Empty, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -4736,7 +6073,12 @@ func (c *ProjectsReposWorkspacesDeleteCall) Do() (*Empty, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *Empty
+	ret := &Empty{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -4795,16 +6137,18 @@ func (c *ProjectsReposWorkspacesDeleteCall) Do() (*Empty, error) {
 // method id "source.projects.repos.workspaces.get":
 
 type ProjectsReposWorkspacesGetCall struct {
-	s         *Service
-	projectId string
-	repoName  string
-	name      string
-	opt_      map[string]interface{}
+	s            *Service
+	projectId    string
+	repoName     string
+	name         string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
 }
 
 // Get: Returns workspace metadata.
 func (r *ProjectsReposWorkspacesService) Get(projectId string, repoName string, name string) *ProjectsReposWorkspacesGetCall {
-	c := &ProjectsReposWorkspacesGetCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposWorkspacesGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	c.name = name
@@ -4814,38 +6158,75 @@ func (r *ProjectsReposWorkspacesService) Get(projectId string, repoName string, 
 // Uid sets the optional parameter "uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposWorkspacesGetCall) Uid(uid string) *ProjectsReposWorkspacesGetCall {
-	c.opt_["uid"] = uid
+	c.urlParams_.Set("uid", uid)
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposWorkspacesGetCall) Fields(s ...googleapi.Field) *ProjectsReposWorkspacesGetCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposWorkspacesGetCall) Do() (*Workspace, error) {
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *ProjectsReposWorkspacesGetCall) IfNoneMatch(entityTag string) *ProjectsReposWorkspacesGetCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposWorkspacesGetCall) Context(ctx context.Context) *ProjectsReposWorkspacesGetCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposWorkspacesGetCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["uid"]; ok {
-		params.Set("uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/workspaces/{name}")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
 		"repoName":  c.repoName,
 		"name":      c.name,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		req.Header.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.workspaces.get" call.
+// Exactly one of *Workspace or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *Workspace.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *ProjectsReposWorkspacesGetCall) Do() (*Workspace, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -4853,7 +6234,12 @@ func (c *ProjectsReposWorkspacesGetCall) Do() (*Workspace, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *Workspace
+	ret := &Workspace{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -4907,15 +6293,17 @@ func (c *ProjectsReposWorkspacesGetCall) Do() (*Workspace, error) {
 // method id "source.projects.repos.workspaces.list":
 
 type ProjectsReposWorkspacesListCall struct {
-	s         *Service
-	projectId string
-	repoName  string
-	opt_      map[string]interface{}
+	s            *Service
+	projectId    string
+	repoName     string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
 }
 
 // List: Returns all workspaces belonging to a repo.
 func (r *ProjectsReposWorkspacesService) List(projectId string, repoName string) *ProjectsReposWorkspacesListCall {
-	c := &ProjectsReposWorkspacesListCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposWorkspacesListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	return c
@@ -4924,48 +6312,87 @@ func (r *ProjectsReposWorkspacesService) List(projectId string, repoName string)
 // Uid sets the optional parameter "uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposWorkspacesListCall) Uid(uid string) *ProjectsReposWorkspacesListCall {
-	c.opt_["uid"] = uid
+	c.urlParams_.Set("uid", uid)
 	return c
 }
 
 // View sets the optional parameter "view": Specifies which parts of the
 // Workspace resource should be returned in the
 // response.
+//
+// Possible values:
+//   "STANDARD"
+//   "MINIMAL"
+//   "FULL"
 func (c *ProjectsReposWorkspacesListCall) View(view string) *ProjectsReposWorkspacesListCall {
-	c.opt_["view"] = view
+	c.urlParams_.Set("view", view)
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposWorkspacesListCall) Fields(s ...googleapi.Field) *ProjectsReposWorkspacesListCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposWorkspacesListCall) Do() (*ListWorkspacesResponse, error) {
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *ProjectsReposWorkspacesListCall) IfNoneMatch(entityTag string) *ProjectsReposWorkspacesListCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposWorkspacesListCall) Context(ctx context.Context) *ProjectsReposWorkspacesListCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposWorkspacesListCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["uid"]; ok {
-		params.Set("uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["view"]; ok {
-		params.Set("view", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/workspaces")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
 		"repoName":  c.repoName,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		req.Header.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.workspaces.list" call.
+// Exactly one of *ListWorkspacesResponse or error will be non-nil. Any
+// non-2xx status code is an error. Response headers are in either
+// *ListWorkspacesResponse.ServerResponse.Header or (if a response was
+// returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *ProjectsReposWorkspacesListCall) Do() (*ListWorkspacesResponse, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -4973,7 +6400,12 @@ func (c *ProjectsReposWorkspacesListCall) Do() (*ListWorkspacesResponse, error) 
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *ListWorkspacesResponse
+	ret := &ListWorkspacesResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -5030,20 +6462,21 @@ func (c *ProjectsReposWorkspacesListCall) Do() (*ListWorkspacesResponse, error) 
 // method id "source.projects.repos.workspaces.listFiles":
 
 type ProjectsReposWorkspacesListFilesCall struct {
-	s         *Service
-	projectId string
-	repoName  string
-	name      string
-	opt_      map[string]interface{}
+	s            *Service
+	projectId    string
+	repoName     string
+	name         string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
 }
 
 // ListFiles: ListFiles returns a list of all files in a SourceContext.
 // The
 // information about each file includes its path and its hash.
-// The
-// result is ordered by path. Pagination is supported.
+// The result is ordered by path. Pagination is supported.
 func (r *ProjectsReposWorkspacesService) ListFiles(projectId string, repoName string, name string) *ProjectsReposWorkspacesListFilesCall {
-	c := &ProjectsReposWorkspacesListFilesCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposWorkspacesListFilesCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	c.name = name
@@ -5052,29 +6485,35 @@ func (r *ProjectsReposWorkspacesService) ListFiles(projectId string, repoName st
 
 // CloudRepoAliasContextKind sets the optional parameter
 // "cloudRepo.aliasContext.kind": The alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
 func (c *ProjectsReposWorkspacesListFilesCall) CloudRepoAliasContextKind(cloudRepoAliasContextKind string) *ProjectsReposWorkspacesListFilesCall {
-	c.opt_["cloudRepo.aliasContext.kind"] = cloudRepoAliasContextKind
+	c.urlParams_.Set("cloudRepo.aliasContext.kind", cloudRepoAliasContextKind)
 	return c
 }
 
 // CloudRepoAliasContextName sets the optional parameter
 // "cloudRepo.aliasContext.name": The alias name.
 func (c *ProjectsReposWorkspacesListFilesCall) CloudRepoAliasContextName(cloudRepoAliasContextName string) *ProjectsReposWorkspacesListFilesCall {
-	c.opt_["cloudRepo.aliasContext.name"] = cloudRepoAliasContextName
+	c.urlParams_.Set("cloudRepo.aliasContext.name", cloudRepoAliasContextName)
 	return c
 }
 
 // CloudRepoAliasName sets the optional parameter "cloudRepo.aliasName":
 // The name of an alias (branch, tag, etc.).
 func (c *ProjectsReposWorkspacesListFilesCall) CloudRepoAliasName(cloudRepoAliasName string) *ProjectsReposWorkspacesListFilesCall {
-	c.opt_["cloudRepo.aliasName"] = cloudRepoAliasName
+	c.urlParams_.Set("cloudRepo.aliasName", cloudRepoAliasName)
 	return c
 }
 
 // CloudRepoRepoIdProjectRepoIdProjectId sets the optional parameter
 // "cloudRepo.repoId.projectRepoId.projectId": The ID of the project.
 func (c *ProjectsReposWorkspacesListFilesCall) CloudRepoRepoIdProjectRepoIdProjectId(cloudRepoRepoIdProjectRepoIdProjectId string) *ProjectsReposWorkspacesListFilesCall {
-	c.opt_["cloudRepo.repoId.projectRepoId.projectId"] = cloudRepoRepoIdProjectRepoIdProjectId
+	c.urlParams_.Set("cloudRepo.repoId.projectRepoId.projectId", cloudRepoRepoIdProjectRepoIdProjectId)
 	return c
 }
 
@@ -5082,7 +6521,7 @@ func (c *ProjectsReposWorkspacesListFilesCall) CloudRepoRepoIdProjectRepoIdProje
 // "cloudRepo.repoId.projectRepoId.repoName": The name of the repo.
 // Leave empty for the default repo.
 func (c *ProjectsReposWorkspacesListFilesCall) CloudRepoRepoIdProjectRepoIdRepoName(cloudRepoRepoIdProjectRepoIdRepoName string) *ProjectsReposWorkspacesListFilesCall {
-	c.opt_["cloudRepo.repoId.projectRepoId.repoName"] = cloudRepoRepoIdProjectRepoIdRepoName
+	c.urlParams_.Set("cloudRepo.repoId.projectRepoId.repoName", cloudRepoRepoIdProjectRepoIdRepoName)
 	return c
 }
 
@@ -5090,60 +6529,65 @@ func (c *ProjectsReposWorkspacesListFilesCall) CloudRepoRepoIdProjectRepoIdRepoN
 // "cloudRepo.repoId.uid": A server-assigned, globally unique
 // identifier.
 func (c *ProjectsReposWorkspacesListFilesCall) CloudRepoRepoIdUid(cloudRepoRepoIdUid string) *ProjectsReposWorkspacesListFilesCall {
-	c.opt_["cloudRepo.repoId.uid"] = cloudRepoRepoIdUid
+	c.urlParams_.Set("cloudRepo.repoId.uid", cloudRepoRepoIdUid)
 	return c
 }
 
 // CloudRepoRevisionId sets the optional parameter
 // "cloudRepo.revisionId": A revision ID.
 func (c *ProjectsReposWorkspacesListFilesCall) CloudRepoRevisionId(cloudRepoRevisionId string) *ProjectsReposWorkspacesListFilesCall {
-	c.opt_["cloudRepo.revisionId"] = cloudRepoRevisionId
+	c.urlParams_.Set("cloudRepo.revisionId", cloudRepoRevisionId)
 	return c
 }
 
 // GerritAliasContextKind sets the optional parameter
 // "gerrit.aliasContext.kind": The alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
 func (c *ProjectsReposWorkspacesListFilesCall) GerritAliasContextKind(gerritAliasContextKind string) *ProjectsReposWorkspacesListFilesCall {
-	c.opt_["gerrit.aliasContext.kind"] = gerritAliasContextKind
+	c.urlParams_.Set("gerrit.aliasContext.kind", gerritAliasContextKind)
 	return c
 }
 
 // GerritAliasContextName sets the optional parameter
 // "gerrit.aliasContext.name": The alias name.
 func (c *ProjectsReposWorkspacesListFilesCall) GerritAliasContextName(gerritAliasContextName string) *ProjectsReposWorkspacesListFilesCall {
-	c.opt_["gerrit.aliasContext.name"] = gerritAliasContextName
+	c.urlParams_.Set("gerrit.aliasContext.name", gerritAliasContextName)
 	return c
 }
 
 // GerritAliasName sets the optional parameter "gerrit.aliasName": The
 // name of an alias (branch, tag, etc.).
 func (c *ProjectsReposWorkspacesListFilesCall) GerritAliasName(gerritAliasName string) *ProjectsReposWorkspacesListFilesCall {
-	c.opt_["gerrit.aliasName"] = gerritAliasName
+	c.urlParams_.Set("gerrit.aliasName", gerritAliasName)
 	return c
 }
 
 // GerritGerritProject sets the optional parameter
 // "gerrit.gerritProject": The full project name within the host.
 // Projects may be nested, so
-// "project/subproject" is a valid project
-// name.
+// "project/subproject" is a valid project name.
 // The "repo name" is hostURI/project.
 func (c *ProjectsReposWorkspacesListFilesCall) GerritGerritProject(gerritGerritProject string) *ProjectsReposWorkspacesListFilesCall {
-	c.opt_["gerrit.gerritProject"] = gerritGerritProject
+	c.urlParams_.Set("gerrit.gerritProject", gerritGerritProject)
 	return c
 }
 
 // GerritHostUri sets the optional parameter "gerrit.hostUri": The URI
 // of a running Gerrit instance.
 func (c *ProjectsReposWorkspacesListFilesCall) GerritHostUri(gerritHostUri string) *ProjectsReposWorkspacesListFilesCall {
-	c.opt_["gerrit.hostUri"] = gerritHostUri
+	c.urlParams_.Set("gerrit.hostUri", gerritHostUri)
 	return c
 }
 
 // GerritRevisionId sets the optional parameter "gerrit.revisionId": A
 // revision (commit) ID.
 func (c *ProjectsReposWorkspacesListFilesCall) GerritRevisionId(gerritRevisionId string) *ProjectsReposWorkspacesListFilesCall {
-	c.opt_["gerrit.revisionId"] = gerritRevisionId
+	c.urlParams_.Set("gerrit.revisionId", gerritRevisionId)
 	return c
 }
 
@@ -5151,20 +6595,20 @@ func (c *ProjectsReposWorkspacesListFilesCall) GerritRevisionId(gerritRevisionId
 // commit hash.
 // required.
 func (c *ProjectsReposWorkspacesListFilesCall) GitRevisionId(gitRevisionId string) *ProjectsReposWorkspacesListFilesCall {
-	c.opt_["git.revisionId"] = gitRevisionId
+	c.urlParams_.Set("git.revisionId", gitRevisionId)
 	return c
 }
 
 // GitUrl sets the optional parameter "git.url": Git repository URL.
 func (c *ProjectsReposWorkspacesListFilesCall) GitUrl(gitUrl string) *ProjectsReposWorkspacesListFilesCall {
-	c.opt_["git.url"] = gitUrl
+	c.urlParams_.Set("git.url", gitUrl)
 	return c
 }
 
 // PageSize sets the optional parameter "pageSize": The maximum number
 // of values to return.
 func (c *ProjectsReposWorkspacesListFilesCall) PageSize(pageSize int64) *ProjectsReposWorkspacesListFilesCall {
-	c.opt_["pageSize"] = pageSize
+	c.urlParams_.Set("pageSize", fmt.Sprint(pageSize))
 	return c
 }
 
@@ -5172,7 +6616,7 @@ func (c *ProjectsReposWorkspacesListFilesCall) PageSize(pageSize int64) *Project
 // next_page_token from the previous call.
 // Omit for the first page.
 func (c *ProjectsReposWorkspacesListFilesCall) PageToken(pageToken string) *ProjectsReposWorkspacesListFilesCall {
-	c.opt_["pageToken"] = pageToken
+	c.urlParams_.Set("pageToken", pageToken)
 	return c
 }
 
@@ -5180,99 +6624,82 @@ func (c *ProjectsReposWorkspacesListFilesCall) PageToken(pageToken string) *Proj
 // snapshot.
 // An empty snapshot_id refers to the most recent snapshot.
 func (c *ProjectsReposWorkspacesListFilesCall) SnapshotId(snapshotId string) *ProjectsReposWorkspacesListFilesCall {
-	c.opt_["snapshotId"] = snapshotId
+	c.urlParams_.Set("snapshotId", snapshotId)
 	return c
 }
 
 // Uid sets the optional parameter "uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposWorkspacesListFilesCall) Uid(uid string) *ProjectsReposWorkspacesListFilesCall {
-	c.opt_["uid"] = uid
+	c.urlParams_.Set("uid", uid)
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposWorkspacesListFilesCall) Fields(s ...googleapi.Field) *ProjectsReposWorkspacesListFilesCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposWorkspacesListFilesCall) Do() (*ListFilesResponse, error) {
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *ProjectsReposWorkspacesListFilesCall) IfNoneMatch(entityTag string) *ProjectsReposWorkspacesListFilesCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposWorkspacesListFilesCall) Context(ctx context.Context) *ProjectsReposWorkspacesListFilesCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposWorkspacesListFilesCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["cloudRepo.aliasContext.kind"]; ok {
-		params.Set("cloudRepo.aliasContext.kind", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudRepo.aliasContext.name"]; ok {
-		params.Set("cloudRepo.aliasContext.name", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudRepo.aliasName"]; ok {
-		params.Set("cloudRepo.aliasName", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudRepo.repoId.projectRepoId.projectId"]; ok {
-		params.Set("cloudRepo.repoId.projectRepoId.projectId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudRepo.repoId.projectRepoId.repoName"]; ok {
-		params.Set("cloudRepo.repoId.projectRepoId.repoName", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudRepo.repoId.uid"]; ok {
-		params.Set("cloudRepo.repoId.uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudRepo.revisionId"]; ok {
-		params.Set("cloudRepo.revisionId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.aliasContext.kind"]; ok {
-		params.Set("gerrit.aliasContext.kind", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.aliasContext.name"]; ok {
-		params.Set("gerrit.aliasContext.name", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.aliasName"]; ok {
-		params.Set("gerrit.aliasName", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.gerritProject"]; ok {
-		params.Set("gerrit.gerritProject", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.hostUri"]; ok {
-		params.Set("gerrit.hostUri", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.revisionId"]; ok {
-		params.Set("gerrit.revisionId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["git.revisionId"]; ok {
-		params.Set("git.revisionId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["git.url"]; ok {
-		params.Set("git.url", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["pageSize"]; ok {
-		params.Set("pageSize", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["pageToken"]; ok {
-		params.Set("pageToken", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["snapshotId"]; ok {
-		params.Set("snapshotId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["uid"]; ok {
-		params.Set("uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/workspaces/{name}:listFiles")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
 		"repoName":  c.repoName,
 		"name":      c.name,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		req.Header.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.workspaces.listFiles" call.
+// Exactly one of *ListFilesResponse or error will be non-nil. Any
+// non-2xx status code is an error. Response headers are in either
+// *ListFilesResponse.ServerResponse.Header or (if a response was
+// returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *ProjectsReposWorkspacesListFilesCall) Do() (*ListFilesResponse, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -5280,7 +6707,12 @@ func (c *ProjectsReposWorkspacesListFilesCall) Do() (*ListFilesResponse, error) 
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *ListFilesResponse
+	ret := &ListFilesResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -5442,18 +6874,19 @@ type ProjectsReposWorkspacesModifyWorkspaceCall struct {
 	repoName               string
 	name                   string
 	modifyworkspacerequest *ModifyWorkspaceRequest
-	opt_                   map[string]interface{}
+	urlParams_             gensupport.URLParams
+	ctx_                   context.Context
 }
 
 // ModifyWorkspace: Applies an ordered sequence of file modification
 // actions to a workspace.
-// Returns ABORTED if current_snapshot_id in the
-// request does not refer to
-// the most recent update to the workspace or
-// if the workspace is
+// Returns ABORTED if current_snapshot_id in the request does not refer
+// to
+// the most recent update to the workspace or if the workspace
+// is
 // simultaneously modified by another client.
 func (r *ProjectsReposWorkspacesService) ModifyWorkspace(projectId string, repoName string, name string, modifyworkspacerequest *ModifyWorkspaceRequest) *ProjectsReposWorkspacesModifyWorkspaceCall {
-	c := &ProjectsReposWorkspacesModifyWorkspaceCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposWorkspacesModifyWorkspaceCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	c.name = name
@@ -5461,28 +6894,32 @@ func (r *ProjectsReposWorkspacesService) ModifyWorkspace(projectId string, repoN
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposWorkspacesModifyWorkspaceCall) Fields(s ...googleapi.Field) *ProjectsReposWorkspacesModifyWorkspaceCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposWorkspacesModifyWorkspaceCall) Do() (*Workspace, error) {
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposWorkspacesModifyWorkspaceCall) Context(ctx context.Context) *ProjectsReposWorkspacesModifyWorkspaceCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposWorkspacesModifyWorkspaceCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
 	body, err := googleapi.WithoutDataWrapper.JSONReader(c.modifyworkspacerequest)
 	if err != nil {
 		return nil, err
 	}
 	ctype := "application/json"
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/workspaces/{name}:modifyWorkspace")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
@@ -5490,8 +6927,31 @@ func (c *ProjectsReposWorkspacesModifyWorkspaceCall) Do() (*Workspace, error) {
 		"name":      c.name,
 	})
 	req.Header.Set("Content-Type", ctype)
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.workspaces.modifyWorkspace" call.
+// Exactly one of *Workspace or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *Workspace.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *ProjectsReposWorkspacesModifyWorkspaceCall) Do() (*Workspace, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -5499,7 +6959,12 @@ func (c *ProjectsReposWorkspacesModifyWorkspaceCall) Do() (*Workspace, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *Workspace
+	ret := &Workspace{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -5556,33 +7021,33 @@ type ProjectsReposWorkspacesRefreshWorkspaceCall struct {
 	repoName                string
 	name                    string
 	refreshworkspacerequest *RefreshWorkspaceRequest
-	opt_                    map[string]interface{}
+	urlParams_              gensupport.URLParams
+	ctx_                    context.Context
 }
 
 // RefreshWorkspace: Brings a workspace up to date by merging in the
 // changes made between its
-// baseline and the revision to which its alias
-// currently refers.
-// FAILED_PRECONDITION is returned if the alias refers
-// to a revision that is
-// not a descendant of the workspace baseline, or
-// if the workspace has no
-// baseline. Returns ABORTED when the workspace
-// is simultaneously modified by
+// baseline and the revision to which its alias currently
+// refers.
+// FAILED_PRECONDITION is returned if the alias refers to a revision
+// that is
+// not a descendant of the workspace baseline, or if the workspace has
+// no
+// baseline. Returns ABORTED when the workspace is simultaneously
+// modified by
 // another client.
 //
-// A refresh may involve
-// merging files in the workspace with files in the
-// current alias
-// revision. If this merge results in conflicts, then the
-// workspace is
-// in a merge state: the merge_info field of Workspace will
+// A refresh may involve merging files in the workspace with files in
+// the
+// current alias revision. If this merge results in conflicts, then
+// the
+// workspace is in a merge state: the merge_info field of Workspace will
 // be
 // populated, and conflicting files in the workspace will contain
 // conflict
 // markers.
 func (r *ProjectsReposWorkspacesService) RefreshWorkspace(projectId string, repoName string, name string, refreshworkspacerequest *RefreshWorkspaceRequest) *ProjectsReposWorkspacesRefreshWorkspaceCall {
-	c := &ProjectsReposWorkspacesRefreshWorkspaceCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposWorkspacesRefreshWorkspaceCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	c.name = name
@@ -5590,28 +7055,32 @@ func (r *ProjectsReposWorkspacesService) RefreshWorkspace(projectId string, repo
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposWorkspacesRefreshWorkspaceCall) Fields(s ...googleapi.Field) *ProjectsReposWorkspacesRefreshWorkspaceCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposWorkspacesRefreshWorkspaceCall) Do() (*Workspace, error) {
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposWorkspacesRefreshWorkspaceCall) Context(ctx context.Context) *ProjectsReposWorkspacesRefreshWorkspaceCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposWorkspacesRefreshWorkspaceCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
 	body, err := googleapi.WithoutDataWrapper.JSONReader(c.refreshworkspacerequest)
 	if err != nil {
 		return nil, err
 	}
 	ctype := "application/json"
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/workspaces/{name}:refreshWorkspace")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
@@ -5619,8 +7088,31 @@ func (c *ProjectsReposWorkspacesRefreshWorkspaceCall) Do() (*Workspace, error) {
 		"name":      c.name,
 	})
 	req.Header.Set("Content-Type", ctype)
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.workspaces.refreshWorkspace" call.
+// Exactly one of *Workspace or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *Workspace.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *ProjectsReposWorkspacesRefreshWorkspaceCall) Do() (*Workspace, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -5628,7 +7120,12 @@ func (c *ProjectsReposWorkspacesRefreshWorkspaceCall) Do() (*Workspace, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *Workspace
+	ret := &Workspace{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -5685,15 +7182,16 @@ type ProjectsReposWorkspacesResolveFilesCall struct {
 	repoName            string
 	name                string
 	resolvefilesrequest *ResolveFilesRequest
-	opt_                map[string]interface{}
+	urlParams_          gensupport.URLParams
+	ctx_                context.Context
 }
 
 // ResolveFiles: Marks files modified as part of a merge as having been
 // resolved. Returns
-// ABORTED when the workspace is simultaneously
-// modified by another client.
+// ABORTED when the workspace is simultaneously modified by another
+// client.
 func (r *ProjectsReposWorkspacesService) ResolveFiles(projectId string, repoName string, name string, resolvefilesrequest *ResolveFilesRequest) *ProjectsReposWorkspacesResolveFilesCall {
-	c := &ProjectsReposWorkspacesResolveFilesCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposWorkspacesResolveFilesCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	c.name = name
@@ -5701,28 +7199,32 @@ func (r *ProjectsReposWorkspacesService) ResolveFiles(projectId string, repoName
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposWorkspacesResolveFilesCall) Fields(s ...googleapi.Field) *ProjectsReposWorkspacesResolveFilesCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposWorkspacesResolveFilesCall) Do() (*Workspace, error) {
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposWorkspacesResolveFilesCall) Context(ctx context.Context) *ProjectsReposWorkspacesResolveFilesCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposWorkspacesResolveFilesCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
 	body, err := googleapi.WithoutDataWrapper.JSONReader(c.resolvefilesrequest)
 	if err != nil {
 		return nil, err
 	}
 	ctype := "application/json"
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/workspaces/{name}:resolveFiles")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
@@ -5730,8 +7232,31 @@ func (c *ProjectsReposWorkspacesResolveFilesCall) Do() (*Workspace, error) {
 		"name":      c.name,
 	})
 	req.Header.Set("Content-Type", ctype)
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.workspaces.resolveFiles" call.
+// Exactly one of *Workspace or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *Workspace.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *ProjectsReposWorkspacesResolveFilesCall) Do() (*Workspace, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -5739,7 +7264,12 @@ func (c *ProjectsReposWorkspacesResolveFilesCall) Do() (*Workspace, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *Workspace
+	ret := &Workspace{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -5796,21 +7326,21 @@ type ProjectsReposWorkspacesRevertRefreshCall struct {
 	repoName             string
 	name                 string
 	revertrefreshrequest *RevertRefreshRequest
-	opt_                 map[string]interface{}
+	urlParams_           gensupport.URLParams
+	ctx_                 context.Context
 }
 
 // RevertRefresh: If a call to RefreshWorkspace results in conflicts,
 // use RevertRefresh to
-// restore the workspace to the state it was in
-// before the refresh.  Returns
-// FAILED_PRECONDITION if not preceded by a
-// call to RefreshWorkspace, or if
-// there are no unresolved conflicts
-// remaining. Returns ABORTED when the
-// workspace is simultaneously
-// modified by another client.
+// restore the workspace to the state it was in before the refresh.
+// Returns
+// FAILED_PRECONDITION if not preceded by a call to RefreshWorkspace, or
+// if
+// there are no unresolved conflicts remaining. Returns ABORTED when
+// the
+// workspace is simultaneously modified by another client.
 func (r *ProjectsReposWorkspacesService) RevertRefresh(projectId string, repoName string, name string, revertrefreshrequest *RevertRefreshRequest) *ProjectsReposWorkspacesRevertRefreshCall {
-	c := &ProjectsReposWorkspacesRevertRefreshCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposWorkspacesRevertRefreshCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	c.name = name
@@ -5818,28 +7348,32 @@ func (r *ProjectsReposWorkspacesService) RevertRefresh(projectId string, repoNam
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposWorkspacesRevertRefreshCall) Fields(s ...googleapi.Field) *ProjectsReposWorkspacesRevertRefreshCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposWorkspacesRevertRefreshCall) Do() (*Workspace, error) {
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposWorkspacesRevertRefreshCall) Context(ctx context.Context) *ProjectsReposWorkspacesRevertRefreshCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposWorkspacesRevertRefreshCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
 	body, err := googleapi.WithoutDataWrapper.JSONReader(c.revertrefreshrequest)
 	if err != nil {
 		return nil, err
 	}
 	ctype := "application/json"
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/workspaces/{name}:revertRefresh")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
@@ -5847,8 +7381,31 @@ func (c *ProjectsReposWorkspacesRevertRefreshCall) Do() (*Workspace, error) {
 		"name":      c.name,
 	})
 	req.Header.Set("Content-Type", ctype)
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.workspaces.revertRefresh" call.
+// Exactly one of *Workspace or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *Workspace.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *ProjectsReposWorkspacesRevertRefreshCall) Do() (*Workspace, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -5856,7 +7413,12 @@ func (c *ProjectsReposWorkspacesRevertRefreshCall) Do() (*Workspace, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *Workspace
+	ret := &Workspace{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -5908,19 +7470,20 @@ func (c *ProjectsReposWorkspacesRevertRefreshCall) Do() (*Workspace, error) {
 // method id "source.projects.repos.workspaces.files.get":
 
 type ProjectsReposWorkspacesFilesGetCall struct {
-	s         *Service
-	projectId string
-	repoName  string
-	name      string
-	path      string
-	opt_      map[string]interface{}
+	s            *Service
+	projectId    string
+	repoName     string
+	name         string
+	path         string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
 }
 
 // Get: Read is given a SourceContext and path, and returns
-// file or
-// directory information about that path.
+// file or directory information about that path.
 func (r *ProjectsReposWorkspacesFilesService) Get(projectId string, repoName string, name string, path string) *ProjectsReposWorkspacesFilesGetCall {
-	c := &ProjectsReposWorkspacesFilesGetCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposWorkspacesFilesGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	c.name = name
@@ -5930,29 +7493,35 @@ func (r *ProjectsReposWorkspacesFilesService) Get(projectId string, repoName str
 
 // CloudRepoAliasContextKind sets the optional parameter
 // "cloudRepo.aliasContext.kind": The alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
 func (c *ProjectsReposWorkspacesFilesGetCall) CloudRepoAliasContextKind(cloudRepoAliasContextKind string) *ProjectsReposWorkspacesFilesGetCall {
-	c.opt_["cloudRepo.aliasContext.kind"] = cloudRepoAliasContextKind
+	c.urlParams_.Set("cloudRepo.aliasContext.kind", cloudRepoAliasContextKind)
 	return c
 }
 
 // CloudRepoAliasContextName sets the optional parameter
 // "cloudRepo.aliasContext.name": The alias name.
 func (c *ProjectsReposWorkspacesFilesGetCall) CloudRepoAliasContextName(cloudRepoAliasContextName string) *ProjectsReposWorkspacesFilesGetCall {
-	c.opt_["cloudRepo.aliasContext.name"] = cloudRepoAliasContextName
+	c.urlParams_.Set("cloudRepo.aliasContext.name", cloudRepoAliasContextName)
 	return c
 }
 
 // CloudRepoAliasName sets the optional parameter "cloudRepo.aliasName":
 // The name of an alias (branch, tag, etc.).
 func (c *ProjectsReposWorkspacesFilesGetCall) CloudRepoAliasName(cloudRepoAliasName string) *ProjectsReposWorkspacesFilesGetCall {
-	c.opt_["cloudRepo.aliasName"] = cloudRepoAliasName
+	c.urlParams_.Set("cloudRepo.aliasName", cloudRepoAliasName)
 	return c
 }
 
 // CloudRepoRepoIdProjectRepoIdProjectId sets the optional parameter
 // "cloudRepo.repoId.projectRepoId.projectId": The ID of the project.
 func (c *ProjectsReposWorkspacesFilesGetCall) CloudRepoRepoIdProjectRepoIdProjectId(cloudRepoRepoIdProjectRepoIdProjectId string) *ProjectsReposWorkspacesFilesGetCall {
-	c.opt_["cloudRepo.repoId.projectRepoId.projectId"] = cloudRepoRepoIdProjectRepoIdProjectId
+	c.urlParams_.Set("cloudRepo.repoId.projectRepoId.projectId", cloudRepoRepoIdProjectRepoIdProjectId)
 	return c
 }
 
@@ -5960,7 +7529,7 @@ func (c *ProjectsReposWorkspacesFilesGetCall) CloudRepoRepoIdProjectRepoIdProjec
 // "cloudRepo.repoId.projectRepoId.repoName": The name of the repo.
 // Leave empty for the default repo.
 func (c *ProjectsReposWorkspacesFilesGetCall) CloudRepoRepoIdProjectRepoIdRepoName(cloudRepoRepoIdProjectRepoIdRepoName string) *ProjectsReposWorkspacesFilesGetCall {
-	c.opt_["cloudRepo.repoId.projectRepoId.repoName"] = cloudRepoRepoIdProjectRepoIdRepoName
+	c.urlParams_.Set("cloudRepo.repoId.projectRepoId.repoName", cloudRepoRepoIdProjectRepoIdRepoName)
 	return c
 }
 
@@ -5968,60 +7537,65 @@ func (c *ProjectsReposWorkspacesFilesGetCall) CloudRepoRepoIdProjectRepoIdRepoNa
 // "cloudRepo.repoId.uid": A server-assigned, globally unique
 // identifier.
 func (c *ProjectsReposWorkspacesFilesGetCall) CloudRepoRepoIdUid(cloudRepoRepoIdUid string) *ProjectsReposWorkspacesFilesGetCall {
-	c.opt_["cloudRepo.repoId.uid"] = cloudRepoRepoIdUid
+	c.urlParams_.Set("cloudRepo.repoId.uid", cloudRepoRepoIdUid)
 	return c
 }
 
 // CloudRepoRevisionId sets the optional parameter
 // "cloudRepo.revisionId": A revision ID.
 func (c *ProjectsReposWorkspacesFilesGetCall) CloudRepoRevisionId(cloudRepoRevisionId string) *ProjectsReposWorkspacesFilesGetCall {
-	c.opt_["cloudRepo.revisionId"] = cloudRepoRevisionId
+	c.urlParams_.Set("cloudRepo.revisionId", cloudRepoRevisionId)
 	return c
 }
 
 // GerritAliasContextKind sets the optional parameter
 // "gerrit.aliasContext.kind": The alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
 func (c *ProjectsReposWorkspacesFilesGetCall) GerritAliasContextKind(gerritAliasContextKind string) *ProjectsReposWorkspacesFilesGetCall {
-	c.opt_["gerrit.aliasContext.kind"] = gerritAliasContextKind
+	c.urlParams_.Set("gerrit.aliasContext.kind", gerritAliasContextKind)
 	return c
 }
 
 // GerritAliasContextName sets the optional parameter
 // "gerrit.aliasContext.name": The alias name.
 func (c *ProjectsReposWorkspacesFilesGetCall) GerritAliasContextName(gerritAliasContextName string) *ProjectsReposWorkspacesFilesGetCall {
-	c.opt_["gerrit.aliasContext.name"] = gerritAliasContextName
+	c.urlParams_.Set("gerrit.aliasContext.name", gerritAliasContextName)
 	return c
 }
 
 // GerritAliasName sets the optional parameter "gerrit.aliasName": The
 // name of an alias (branch, tag, etc.).
 func (c *ProjectsReposWorkspacesFilesGetCall) GerritAliasName(gerritAliasName string) *ProjectsReposWorkspacesFilesGetCall {
-	c.opt_["gerrit.aliasName"] = gerritAliasName
+	c.urlParams_.Set("gerrit.aliasName", gerritAliasName)
 	return c
 }
 
 // GerritGerritProject sets the optional parameter
 // "gerrit.gerritProject": The full project name within the host.
 // Projects may be nested, so
-// "project/subproject" is a valid project
-// name.
+// "project/subproject" is a valid project name.
 // The "repo name" is hostURI/project.
 func (c *ProjectsReposWorkspacesFilesGetCall) GerritGerritProject(gerritGerritProject string) *ProjectsReposWorkspacesFilesGetCall {
-	c.opt_["gerrit.gerritProject"] = gerritGerritProject
+	c.urlParams_.Set("gerrit.gerritProject", gerritGerritProject)
 	return c
 }
 
 // GerritHostUri sets the optional parameter "gerrit.hostUri": The URI
 // of a running Gerrit instance.
 func (c *ProjectsReposWorkspacesFilesGetCall) GerritHostUri(gerritHostUri string) *ProjectsReposWorkspacesFilesGetCall {
-	c.opt_["gerrit.hostUri"] = gerritHostUri
+	c.urlParams_.Set("gerrit.hostUri", gerritHostUri)
 	return c
 }
 
 // GerritRevisionId sets the optional parameter "gerrit.revisionId": A
 // revision (commit) ID.
 func (c *ProjectsReposWorkspacesFilesGetCall) GerritRevisionId(gerritRevisionId string) *ProjectsReposWorkspacesFilesGetCall {
-	c.opt_["gerrit.revisionId"] = gerritRevisionId
+	c.urlParams_.Set("gerrit.revisionId", gerritRevisionId)
 	return c
 }
 
@@ -6029,29 +7603,28 @@ func (c *ProjectsReposWorkspacesFilesGetCall) GerritRevisionId(gerritRevisionId 
 // commit hash.
 // required.
 func (c *ProjectsReposWorkspacesFilesGetCall) GitRevisionId(gitRevisionId string) *ProjectsReposWorkspacesFilesGetCall {
-	c.opt_["git.revisionId"] = gitRevisionId
+	c.urlParams_.Set("git.revisionId", gitRevisionId)
 	return c
 }
 
 // GitUrl sets the optional parameter "git.url": Git repository URL.
 func (c *ProjectsReposWorkspacesFilesGetCall) GitUrl(gitUrl string) *ProjectsReposWorkspacesFilesGetCall {
-	c.opt_["git.url"] = gitUrl
+	c.urlParams_.Set("git.url", gitUrl)
 	return c
 }
 
 // PageSize sets the optional parameter "pageSize": The maximum number
 // of values to return.
 func (c *ProjectsReposWorkspacesFilesGetCall) PageSize(pageSize int64) *ProjectsReposWorkspacesFilesGetCall {
-	c.opt_["pageSize"] = pageSize
+	c.urlParams_.Set("pageSize", fmt.Sprint(pageSize))
 	return c
 }
 
 // PageToken sets the optional parameter "pageToken": The value of
 // next_page_token from the previous call.
-// Omit for the first page, or
-// if using start_index.
+// Omit for the first page, or if using start_index.
 func (c *ProjectsReposWorkspacesFilesGetCall) PageToken(pageToken string) *ProjectsReposWorkspacesFilesGetCall {
-	c.opt_["pageToken"] = pageToken
+	c.urlParams_.Set("pageToken", pageToken)
 	return c
 }
 
@@ -6059,106 +7632,58 @@ func (c *ProjectsReposWorkspacesFilesGetCall) PageToken(pageToken string) *Proje
 // snapshot.
 // An empty snapshot_id refers to the most recent snapshot.
 func (c *ProjectsReposWorkspacesFilesGetCall) SnapshotId(snapshotId string) *ProjectsReposWorkspacesFilesGetCall {
-	c.opt_["snapshotId"] = snapshotId
+	c.urlParams_.Set("snapshotId", snapshotId)
 	return c
 }
 
 // StartPosition sets the optional parameter "startPosition": If path
 // refers to a file, the position of the first byte of its contents
-// to
-// return. If path refers to a directory, the position of the first
+// to return. If path refers to a directory, the position of the first
 // entry
-// in the listing. If page_token is specified, this field is
-// ignored.
+// in the listing. If page_token is specified, this field is ignored.
 func (c *ProjectsReposWorkspacesFilesGetCall) StartPosition(startPosition int64) *ProjectsReposWorkspacesFilesGetCall {
-	c.opt_["startPosition"] = startPosition
+	c.urlParams_.Set("startPosition", fmt.Sprint(startPosition))
 	return c
 }
 
 // Uid sets the optional parameter "uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposWorkspacesFilesGetCall) Uid(uid string) *ProjectsReposWorkspacesFilesGetCall {
-	c.opt_["uid"] = uid
+	c.urlParams_.Set("uid", uid)
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposWorkspacesFilesGetCall) Fields(s ...googleapi.Field) *ProjectsReposWorkspacesFilesGetCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposWorkspacesFilesGetCall) Do() (*ReadResponse, error) {
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *ProjectsReposWorkspacesFilesGetCall) IfNoneMatch(entityTag string) *ProjectsReposWorkspacesFilesGetCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposWorkspacesFilesGetCall) Context(ctx context.Context) *ProjectsReposWorkspacesFilesGetCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposWorkspacesFilesGetCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["cloudRepo.aliasContext.kind"]; ok {
-		params.Set("cloudRepo.aliasContext.kind", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudRepo.aliasContext.name"]; ok {
-		params.Set("cloudRepo.aliasContext.name", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudRepo.aliasName"]; ok {
-		params.Set("cloudRepo.aliasName", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudRepo.repoId.projectRepoId.projectId"]; ok {
-		params.Set("cloudRepo.repoId.projectRepoId.projectId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudRepo.repoId.projectRepoId.repoName"]; ok {
-		params.Set("cloudRepo.repoId.projectRepoId.repoName", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudRepo.repoId.uid"]; ok {
-		params.Set("cloudRepo.repoId.uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudRepo.revisionId"]; ok {
-		params.Set("cloudRepo.revisionId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.aliasContext.kind"]; ok {
-		params.Set("gerrit.aliasContext.kind", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.aliasContext.name"]; ok {
-		params.Set("gerrit.aliasContext.name", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.aliasName"]; ok {
-		params.Set("gerrit.aliasName", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.gerritProject"]; ok {
-		params.Set("gerrit.gerritProject", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.hostUri"]; ok {
-		params.Set("gerrit.hostUri", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.revisionId"]; ok {
-		params.Set("gerrit.revisionId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["git.revisionId"]; ok {
-		params.Set("git.revisionId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["git.url"]; ok {
-		params.Set("git.url", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["pageSize"]; ok {
-		params.Set("pageSize", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["pageToken"]; ok {
-		params.Set("pageToken", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["snapshotId"]; ok {
-		params.Set("snapshotId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["startPosition"]; ok {
-		params.Set("startPosition", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["uid"]; ok {
-		params.Set("uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/workspaces/{name}/files/{+path}")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
@@ -6166,8 +7691,34 @@ func (c *ProjectsReposWorkspacesFilesGetCall) Do() (*ReadResponse, error) {
 		"name":      c.name,
 		"path":      c.path,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		req.Header.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.workspaces.files.get" call.
+// Exactly one of *ReadResponse or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *ReadResponse.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *ProjectsReposWorkspacesFilesGetCall) Do() (*ReadResponse, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -6175,7 +7726,12 @@ func (c *ProjectsReposWorkspacesFilesGetCall) Do() (*ReadResponse, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *ReadResponse
+	ret := &ReadResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -6346,17 +7902,19 @@ func (c *ProjectsReposWorkspacesFilesGetCall) Do() (*ReadResponse, error) {
 // method id "source.projects.repos.workspaces.snapshots.get":
 
 type ProjectsReposWorkspacesSnapshotsGetCall struct {
-	s          *Service
-	projectId  string
-	repoName   string
-	name       string
-	snapshotId string
-	opt_       map[string]interface{}
+	s            *Service
+	projectId    string
+	repoName     string
+	name         string
+	snapshotId   string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
 }
 
 // Get: Gets a workspace snapshot.
 func (r *ProjectsReposWorkspacesSnapshotsService) Get(projectId string, repoName string, name string, snapshotId string) *ProjectsReposWorkspacesSnapshotsGetCall {
-	c := &ProjectsReposWorkspacesSnapshotsGetCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposWorkspacesSnapshotsGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	c.name = name
@@ -6367,30 +7925,41 @@ func (r *ProjectsReposWorkspacesSnapshotsService) Get(projectId string, repoName
 // Uid sets the optional parameter "uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposWorkspacesSnapshotsGetCall) Uid(uid string) *ProjectsReposWorkspacesSnapshotsGetCall {
-	c.opt_["uid"] = uid
+	c.urlParams_.Set("uid", uid)
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposWorkspacesSnapshotsGetCall) Fields(s ...googleapi.Field) *ProjectsReposWorkspacesSnapshotsGetCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposWorkspacesSnapshotsGetCall) Do() (*Snapshot, error) {
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *ProjectsReposWorkspacesSnapshotsGetCall) IfNoneMatch(entityTag string) *ProjectsReposWorkspacesSnapshotsGetCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposWorkspacesSnapshotsGetCall) Context(ctx context.Context) *ProjectsReposWorkspacesSnapshotsGetCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposWorkspacesSnapshotsGetCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["uid"]; ok {
-		params.Set("uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/workspaces/{name}/snapshots/{snapshotId}")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId":  c.projectId,
@@ -6398,8 +7967,34 @@ func (c *ProjectsReposWorkspacesSnapshotsGetCall) Do() (*Snapshot, error) {
 		"name":       c.name,
 		"snapshotId": c.snapshotId,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		req.Header.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.workspaces.snapshots.get" call.
+// Exactly one of *Snapshot or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Snapshot.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *ProjectsReposWorkspacesSnapshotsGetCall) Do() (*Snapshot, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -6407,7 +8002,12 @@ func (c *ProjectsReposWorkspacesSnapshotsGetCall) Do() (*Snapshot, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *Snapshot
+	ret := &Snapshot{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -6468,18 +8068,20 @@ func (c *ProjectsReposWorkspacesSnapshotsGetCall) Do() (*Snapshot, error) {
 // method id "source.projects.repos.workspaces.snapshots.list":
 
 type ProjectsReposWorkspacesSnapshotsListCall struct {
-	s         *Service
-	projectId string
-	repoName  string
-	name      string
-	opt_      map[string]interface{}
+	s            *Service
+	projectId    string
+	repoName     string
+	name         string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
 }
 
 // List: Lists all the snapshots made to a workspace, sorted from most
 // recent to
 // least recent.
 func (r *ProjectsReposWorkspacesSnapshotsService) List(projectId string, repoName string, name string) *ProjectsReposWorkspacesSnapshotsListCall {
-	c := &ProjectsReposWorkspacesSnapshotsListCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposWorkspacesSnapshotsListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	c.name = name
@@ -6489,7 +8091,7 @@ func (r *ProjectsReposWorkspacesSnapshotsService) List(projectId string, repoNam
 // PageSize sets the optional parameter "pageSize": The maximum number
 // of values to return.
 func (c *ProjectsReposWorkspacesSnapshotsListCall) PageSize(pageSize int64) *ProjectsReposWorkspacesSnapshotsListCall {
-	c.opt_["pageSize"] = pageSize
+	c.urlParams_.Set("pageSize", fmt.Sprint(pageSize))
 	return c
 }
 
@@ -6497,51 +8099,82 @@ func (c *ProjectsReposWorkspacesSnapshotsListCall) PageSize(pageSize int64) *Pro
 // next_page_token from the previous call.
 // Omit for the first page.
 func (c *ProjectsReposWorkspacesSnapshotsListCall) PageToken(pageToken string) *ProjectsReposWorkspacesSnapshotsListCall {
-	c.opt_["pageToken"] = pageToken
+	c.urlParams_.Set("pageToken", pageToken)
 	return c
 }
 
 // Uid sets the optional parameter "uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposWorkspacesSnapshotsListCall) Uid(uid string) *ProjectsReposWorkspacesSnapshotsListCall {
-	c.opt_["uid"] = uid
+	c.urlParams_.Set("uid", uid)
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposWorkspacesSnapshotsListCall) Fields(s ...googleapi.Field) *ProjectsReposWorkspacesSnapshotsListCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposWorkspacesSnapshotsListCall) Do() (*ListSnapshotsResponse, error) {
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *ProjectsReposWorkspacesSnapshotsListCall) IfNoneMatch(entityTag string) *ProjectsReposWorkspacesSnapshotsListCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposWorkspacesSnapshotsListCall) Context(ctx context.Context) *ProjectsReposWorkspacesSnapshotsListCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposWorkspacesSnapshotsListCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["pageSize"]; ok {
-		params.Set("pageSize", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["pageToken"]; ok {
-		params.Set("pageToken", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["uid"]; ok {
-		params.Set("uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/workspaces/{name}/snapshots")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
 		"repoName":  c.repoName,
 		"name":      c.name,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		req.Header.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.workspaces.snapshots.list" call.
+// Exactly one of *ListSnapshotsResponse or error will be non-nil. Any
+// non-2xx status code is an error. Response headers are in either
+// *ListSnapshotsResponse.ServerResponse.Header or (if a response was
+// returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *ProjectsReposWorkspacesSnapshotsListCall) Do() (*ListSnapshotsResponse, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -6549,7 +8182,12 @@ func (c *ProjectsReposWorkspacesSnapshotsListCall) Do() (*ListSnapshotsResponse,
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *ListSnapshotsResponse
+	ret := &ListSnapshotsResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -6614,21 +8252,22 @@ func (c *ProjectsReposWorkspacesSnapshotsListCall) Do() (*ListSnapshotsResponse,
 // method id "source.projects.repos.workspaces.snapshots.listFiles":
 
 type ProjectsReposWorkspacesSnapshotsListFilesCall struct {
-	s          *Service
-	projectId  string
-	repoName   string
-	name       string
-	snapshotId string
-	opt_       map[string]interface{}
+	s            *Service
+	projectId    string
+	repoName     string
+	name         string
+	snapshotId   string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
 }
 
 // ListFiles: ListFiles returns a list of all files in a SourceContext.
 // The
 // information about each file includes its path and its hash.
-// The
-// result is ordered by path. Pagination is supported.
+// The result is ordered by path. Pagination is supported.
 func (r *ProjectsReposWorkspacesSnapshotsService) ListFiles(projectId string, repoName string, name string, snapshotId string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c := &ProjectsReposWorkspacesSnapshotsListFilesCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposWorkspacesSnapshotsListFilesCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	c.name = name
@@ -6638,29 +8277,35 @@ func (r *ProjectsReposWorkspacesSnapshotsService) ListFiles(projectId string, re
 
 // CloudRepoAliasContextKind sets the optional parameter
 // "cloudRepo.aliasContext.kind": The alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
 func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) CloudRepoAliasContextKind(cloudRepoAliasContextKind string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.opt_["cloudRepo.aliasContext.kind"] = cloudRepoAliasContextKind
+	c.urlParams_.Set("cloudRepo.aliasContext.kind", cloudRepoAliasContextKind)
 	return c
 }
 
 // CloudRepoAliasContextName sets the optional parameter
 // "cloudRepo.aliasContext.name": The alias name.
 func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) CloudRepoAliasContextName(cloudRepoAliasContextName string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.opt_["cloudRepo.aliasContext.name"] = cloudRepoAliasContextName
+	c.urlParams_.Set("cloudRepo.aliasContext.name", cloudRepoAliasContextName)
 	return c
 }
 
 // CloudRepoAliasName sets the optional parameter "cloudRepo.aliasName":
 // The name of an alias (branch, tag, etc.).
 func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) CloudRepoAliasName(cloudRepoAliasName string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.opt_["cloudRepo.aliasName"] = cloudRepoAliasName
+	c.urlParams_.Set("cloudRepo.aliasName", cloudRepoAliasName)
 	return c
 }
 
 // CloudRepoRepoIdProjectRepoIdProjectId sets the optional parameter
 // "cloudRepo.repoId.projectRepoId.projectId": The ID of the project.
 func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) CloudRepoRepoIdProjectRepoIdProjectId(cloudRepoRepoIdProjectRepoIdProjectId string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.opt_["cloudRepo.repoId.projectRepoId.projectId"] = cloudRepoRepoIdProjectRepoIdProjectId
+	c.urlParams_.Set("cloudRepo.repoId.projectRepoId.projectId", cloudRepoRepoIdProjectRepoIdProjectId)
 	return c
 }
 
@@ -6668,7 +8313,7 @@ func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) CloudRepoRepoIdProjectRe
 // "cloudRepo.repoId.projectRepoId.repoName": The name of the repo.
 // Leave empty for the default repo.
 func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) CloudRepoRepoIdProjectRepoIdRepoName(cloudRepoRepoIdProjectRepoIdRepoName string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.opt_["cloudRepo.repoId.projectRepoId.repoName"] = cloudRepoRepoIdProjectRepoIdRepoName
+	c.urlParams_.Set("cloudRepo.repoId.projectRepoId.repoName", cloudRepoRepoIdProjectRepoIdRepoName)
 	return c
 }
 
@@ -6676,60 +8321,65 @@ func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) CloudRepoRepoIdProjectRe
 // "cloudRepo.repoId.uid": A server-assigned, globally unique
 // identifier.
 func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) CloudRepoRepoIdUid(cloudRepoRepoIdUid string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.opt_["cloudRepo.repoId.uid"] = cloudRepoRepoIdUid
+	c.urlParams_.Set("cloudRepo.repoId.uid", cloudRepoRepoIdUid)
 	return c
 }
 
 // CloudRepoRevisionId sets the optional parameter
 // "cloudRepo.revisionId": A revision ID.
 func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) CloudRepoRevisionId(cloudRepoRevisionId string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.opt_["cloudRepo.revisionId"] = cloudRepoRevisionId
+	c.urlParams_.Set("cloudRepo.revisionId", cloudRepoRevisionId)
 	return c
 }
 
 // GerritAliasContextKind sets the optional parameter
 // "gerrit.aliasContext.kind": The alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
 func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) GerritAliasContextKind(gerritAliasContextKind string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.opt_["gerrit.aliasContext.kind"] = gerritAliasContextKind
+	c.urlParams_.Set("gerrit.aliasContext.kind", gerritAliasContextKind)
 	return c
 }
 
 // GerritAliasContextName sets the optional parameter
 // "gerrit.aliasContext.name": The alias name.
 func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) GerritAliasContextName(gerritAliasContextName string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.opt_["gerrit.aliasContext.name"] = gerritAliasContextName
+	c.urlParams_.Set("gerrit.aliasContext.name", gerritAliasContextName)
 	return c
 }
 
 // GerritAliasName sets the optional parameter "gerrit.aliasName": The
 // name of an alias (branch, tag, etc.).
 func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) GerritAliasName(gerritAliasName string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.opt_["gerrit.aliasName"] = gerritAliasName
+	c.urlParams_.Set("gerrit.aliasName", gerritAliasName)
 	return c
 }
 
 // GerritGerritProject sets the optional parameter
 // "gerrit.gerritProject": The full project name within the host.
 // Projects may be nested, so
-// "project/subproject" is a valid project
-// name.
+// "project/subproject" is a valid project name.
 // The "repo name" is hostURI/project.
 func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) GerritGerritProject(gerritGerritProject string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.opt_["gerrit.gerritProject"] = gerritGerritProject
+	c.urlParams_.Set("gerrit.gerritProject", gerritGerritProject)
 	return c
 }
 
 // GerritHostUri sets the optional parameter "gerrit.hostUri": The URI
 // of a running Gerrit instance.
 func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) GerritHostUri(gerritHostUri string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.opt_["gerrit.hostUri"] = gerritHostUri
+	c.urlParams_.Set("gerrit.hostUri", gerritHostUri)
 	return c
 }
 
 // GerritRevisionId sets the optional parameter "gerrit.revisionId": A
 // revision (commit) ID.
 func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) GerritRevisionId(gerritRevisionId string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.opt_["gerrit.revisionId"] = gerritRevisionId
+	c.urlParams_.Set("gerrit.revisionId", gerritRevisionId)
 	return c
 }
 
@@ -6737,20 +8387,20 @@ func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) GerritRevisionId(gerritR
 // commit hash.
 // required.
 func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) GitRevisionId(gitRevisionId string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.opt_["git.revisionId"] = gitRevisionId
+	c.urlParams_.Set("git.revisionId", gitRevisionId)
 	return c
 }
 
 // GitUrl sets the optional parameter "git.url": Git repository URL.
 func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) GitUrl(gitUrl string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.opt_["git.url"] = gitUrl
+	c.urlParams_.Set("git.url", gitUrl)
 	return c
 }
 
 // PageSize sets the optional parameter "pageSize": The maximum number
 // of values to return.
 func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) PageSize(pageSize int64) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.opt_["pageSize"] = pageSize
+	c.urlParams_.Set("pageSize", fmt.Sprint(pageSize))
 	return c
 }
 
@@ -6758,88 +8408,48 @@ func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) PageSize(pageSize int64)
 // next_page_token from the previous call.
 // Omit for the first page.
 func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) PageToken(pageToken string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.opt_["pageToken"] = pageToken
+	c.urlParams_.Set("pageToken", pageToken)
 	return c
 }
 
 // Uid sets the optional parameter "uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) Uid(uid string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.opt_["uid"] = uid
+	c.urlParams_.Set("uid", uid)
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) Fields(s ...googleapi.Field) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) Do() (*ListFilesResponse, error) {
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) IfNoneMatch(entityTag string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) Context(ctx context.Context) *ProjectsReposWorkspacesSnapshotsListFilesCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["cloudRepo.aliasContext.kind"]; ok {
-		params.Set("cloudRepo.aliasContext.kind", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudRepo.aliasContext.name"]; ok {
-		params.Set("cloudRepo.aliasContext.name", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudRepo.aliasName"]; ok {
-		params.Set("cloudRepo.aliasName", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudRepo.repoId.projectRepoId.projectId"]; ok {
-		params.Set("cloudRepo.repoId.projectRepoId.projectId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudRepo.repoId.projectRepoId.repoName"]; ok {
-		params.Set("cloudRepo.repoId.projectRepoId.repoName", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudRepo.repoId.uid"]; ok {
-		params.Set("cloudRepo.repoId.uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudRepo.revisionId"]; ok {
-		params.Set("cloudRepo.revisionId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.aliasContext.kind"]; ok {
-		params.Set("gerrit.aliasContext.kind", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.aliasContext.name"]; ok {
-		params.Set("gerrit.aliasContext.name", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.aliasName"]; ok {
-		params.Set("gerrit.aliasName", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.gerritProject"]; ok {
-		params.Set("gerrit.gerritProject", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.hostUri"]; ok {
-		params.Set("gerrit.hostUri", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.revisionId"]; ok {
-		params.Set("gerrit.revisionId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["git.revisionId"]; ok {
-		params.Set("git.revisionId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["git.url"]; ok {
-		params.Set("git.url", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["pageSize"]; ok {
-		params.Set("pageSize", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["pageToken"]; ok {
-		params.Set("pageToken", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["uid"]; ok {
-		params.Set("uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/workspaces/{name}/snapshots/{snapshotId}:listFiles")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId":  c.projectId,
@@ -6847,8 +8457,34 @@ func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) Do() (*ListFilesResponse
 		"name":       c.name,
 		"snapshotId": c.snapshotId,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		req.Header.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.workspaces.snapshots.listFiles" call.
+// Exactly one of *ListFilesResponse or error will be non-nil. Any
+// non-2xx status code is an error. Response headers are in either
+// *ListFilesResponse.ServerResponse.Header or (if a response was
+// returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) Do() (*ListFilesResponse, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -6856,7 +8492,12 @@ func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) Do() (*ListFilesResponse
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *ListFilesResponse
+	ret := &ListFilesResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -7015,20 +8656,21 @@ func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) Do() (*ListFilesResponse
 // method id "source.projects.repos.workspaces.snapshots.files.get":
 
 type ProjectsReposWorkspacesSnapshotsFilesGetCall struct {
-	s          *Service
-	projectId  string
-	repoName   string
-	name       string
-	snapshotId string
-	path       string
-	opt_       map[string]interface{}
+	s            *Service
+	projectId    string
+	repoName     string
+	name         string
+	snapshotId   string
+	path         string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
 }
 
 // Get: Read is given a SourceContext and path, and returns
-// file or
-// directory information about that path.
+// file or directory information about that path.
 func (r *ProjectsReposWorkspacesSnapshotsFilesService) Get(projectId string, repoName string, name string, snapshotId string, path string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c := &ProjectsReposWorkspacesSnapshotsFilesGetCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsReposWorkspacesSnapshotsFilesGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.repoName = repoName
 	c.name = name
@@ -7039,29 +8681,35 @@ func (r *ProjectsReposWorkspacesSnapshotsFilesService) Get(projectId string, rep
 
 // CloudRepoAliasContextKind sets the optional parameter
 // "cloudRepo.aliasContext.kind": The alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
 func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) CloudRepoAliasContextKind(cloudRepoAliasContextKind string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.opt_["cloudRepo.aliasContext.kind"] = cloudRepoAliasContextKind
+	c.urlParams_.Set("cloudRepo.aliasContext.kind", cloudRepoAliasContextKind)
 	return c
 }
 
 // CloudRepoAliasContextName sets the optional parameter
 // "cloudRepo.aliasContext.name": The alias name.
 func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) CloudRepoAliasContextName(cloudRepoAliasContextName string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.opt_["cloudRepo.aliasContext.name"] = cloudRepoAliasContextName
+	c.urlParams_.Set("cloudRepo.aliasContext.name", cloudRepoAliasContextName)
 	return c
 }
 
 // CloudRepoAliasName sets the optional parameter "cloudRepo.aliasName":
 // The name of an alias (branch, tag, etc.).
 func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) CloudRepoAliasName(cloudRepoAliasName string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.opt_["cloudRepo.aliasName"] = cloudRepoAliasName
+	c.urlParams_.Set("cloudRepo.aliasName", cloudRepoAliasName)
 	return c
 }
 
 // CloudRepoRepoIdProjectRepoIdProjectId sets the optional parameter
 // "cloudRepo.repoId.projectRepoId.projectId": The ID of the project.
 func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) CloudRepoRepoIdProjectRepoIdProjectId(cloudRepoRepoIdProjectRepoIdProjectId string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.opt_["cloudRepo.repoId.projectRepoId.projectId"] = cloudRepoRepoIdProjectRepoIdProjectId
+	c.urlParams_.Set("cloudRepo.repoId.projectRepoId.projectId", cloudRepoRepoIdProjectRepoIdProjectId)
 	return c
 }
 
@@ -7069,7 +8717,7 @@ func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) CloudRepoRepoIdProjectRep
 // "cloudRepo.repoId.projectRepoId.repoName": The name of the repo.
 // Leave empty for the default repo.
 func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) CloudRepoRepoIdProjectRepoIdRepoName(cloudRepoRepoIdProjectRepoIdRepoName string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.opt_["cloudRepo.repoId.projectRepoId.repoName"] = cloudRepoRepoIdProjectRepoIdRepoName
+	c.urlParams_.Set("cloudRepo.repoId.projectRepoId.repoName", cloudRepoRepoIdProjectRepoIdRepoName)
 	return c
 }
 
@@ -7077,60 +8725,65 @@ func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) CloudRepoRepoIdProjectRep
 // "cloudRepo.repoId.uid": A server-assigned, globally unique
 // identifier.
 func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) CloudRepoRepoIdUid(cloudRepoRepoIdUid string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.opt_["cloudRepo.repoId.uid"] = cloudRepoRepoIdUid
+	c.urlParams_.Set("cloudRepo.repoId.uid", cloudRepoRepoIdUid)
 	return c
 }
 
 // CloudRepoRevisionId sets the optional parameter
 // "cloudRepo.revisionId": A revision ID.
 func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) CloudRepoRevisionId(cloudRepoRevisionId string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.opt_["cloudRepo.revisionId"] = cloudRepoRevisionId
+	c.urlParams_.Set("cloudRepo.revisionId", cloudRepoRevisionId)
 	return c
 }
 
 // GerritAliasContextKind sets the optional parameter
 // "gerrit.aliasContext.kind": The alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
 func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) GerritAliasContextKind(gerritAliasContextKind string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.opt_["gerrit.aliasContext.kind"] = gerritAliasContextKind
+	c.urlParams_.Set("gerrit.aliasContext.kind", gerritAliasContextKind)
 	return c
 }
 
 // GerritAliasContextName sets the optional parameter
 // "gerrit.aliasContext.name": The alias name.
 func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) GerritAliasContextName(gerritAliasContextName string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.opt_["gerrit.aliasContext.name"] = gerritAliasContextName
+	c.urlParams_.Set("gerrit.aliasContext.name", gerritAliasContextName)
 	return c
 }
 
 // GerritAliasName sets the optional parameter "gerrit.aliasName": The
 // name of an alias (branch, tag, etc.).
 func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) GerritAliasName(gerritAliasName string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.opt_["gerrit.aliasName"] = gerritAliasName
+	c.urlParams_.Set("gerrit.aliasName", gerritAliasName)
 	return c
 }
 
 // GerritGerritProject sets the optional parameter
 // "gerrit.gerritProject": The full project name within the host.
 // Projects may be nested, so
-// "project/subproject" is a valid project
-// name.
+// "project/subproject" is a valid project name.
 // The "repo name" is hostURI/project.
 func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) GerritGerritProject(gerritGerritProject string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.opt_["gerrit.gerritProject"] = gerritGerritProject
+	c.urlParams_.Set("gerrit.gerritProject", gerritGerritProject)
 	return c
 }
 
 // GerritHostUri sets the optional parameter "gerrit.hostUri": The URI
 // of a running Gerrit instance.
 func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) GerritHostUri(gerritHostUri string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.opt_["gerrit.hostUri"] = gerritHostUri
+	c.urlParams_.Set("gerrit.hostUri", gerritHostUri)
 	return c
 }
 
 // GerritRevisionId sets the optional parameter "gerrit.revisionId": A
 // revision (commit) ID.
 func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) GerritRevisionId(gerritRevisionId string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.opt_["gerrit.revisionId"] = gerritRevisionId
+	c.urlParams_.Set("gerrit.revisionId", gerritRevisionId)
 	return c
 }
 
@@ -7138,125 +8791,79 @@ func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) GerritRevisionId(gerritRe
 // commit hash.
 // required.
 func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) GitRevisionId(gitRevisionId string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.opt_["git.revisionId"] = gitRevisionId
+	c.urlParams_.Set("git.revisionId", gitRevisionId)
 	return c
 }
 
 // GitUrl sets the optional parameter "git.url": Git repository URL.
 func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) GitUrl(gitUrl string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.opt_["git.url"] = gitUrl
+	c.urlParams_.Set("git.url", gitUrl)
 	return c
 }
 
 // PageSize sets the optional parameter "pageSize": The maximum number
 // of values to return.
 func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) PageSize(pageSize int64) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.opt_["pageSize"] = pageSize
+	c.urlParams_.Set("pageSize", fmt.Sprint(pageSize))
 	return c
 }
 
 // PageToken sets the optional parameter "pageToken": The value of
 // next_page_token from the previous call.
-// Omit for the first page, or
-// if using start_index.
+// Omit for the first page, or if using start_index.
 func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) PageToken(pageToken string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.opt_["pageToken"] = pageToken
+	c.urlParams_.Set("pageToken", pageToken)
 	return c
 }
 
 // StartPosition sets the optional parameter "startPosition": If path
 // refers to a file, the position of the first byte of its contents
-// to
-// return. If path refers to a directory, the position of the first
+// to return. If path refers to a directory, the position of the first
 // entry
-// in the listing. If page_token is specified, this field is
-// ignored.
+// in the listing. If page_token is specified, this field is ignored.
 func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) StartPosition(startPosition int64) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.opt_["startPosition"] = startPosition
+	c.urlParams_.Set("startPosition", fmt.Sprint(startPosition))
 	return c
 }
 
 // Uid sets the optional parameter "uid": A server-assigned, globally
 // unique identifier.
 func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) Uid(uid string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.opt_["uid"] = uid
+	c.urlParams_.Set("uid", uid)
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) Fields(s ...googleapi.Field) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) Do() (*ReadResponse, error) {
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) IfNoneMatch(entityTag string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) Context(ctx context.Context) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["cloudRepo.aliasContext.kind"]; ok {
-		params.Set("cloudRepo.aliasContext.kind", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudRepo.aliasContext.name"]; ok {
-		params.Set("cloudRepo.aliasContext.name", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudRepo.aliasName"]; ok {
-		params.Set("cloudRepo.aliasName", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudRepo.repoId.projectRepoId.projectId"]; ok {
-		params.Set("cloudRepo.repoId.projectRepoId.projectId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudRepo.repoId.projectRepoId.repoName"]; ok {
-		params.Set("cloudRepo.repoId.projectRepoId.repoName", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudRepo.repoId.uid"]; ok {
-		params.Set("cloudRepo.repoId.uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["cloudRepo.revisionId"]; ok {
-		params.Set("cloudRepo.revisionId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.aliasContext.kind"]; ok {
-		params.Set("gerrit.aliasContext.kind", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.aliasContext.name"]; ok {
-		params.Set("gerrit.aliasContext.name", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.aliasName"]; ok {
-		params.Set("gerrit.aliasName", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.gerritProject"]; ok {
-		params.Set("gerrit.gerritProject", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.hostUri"]; ok {
-		params.Set("gerrit.hostUri", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["gerrit.revisionId"]; ok {
-		params.Set("gerrit.revisionId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["git.revisionId"]; ok {
-		params.Set("git.revisionId", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["git.url"]; ok {
-		params.Set("git.url", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["pageSize"]; ok {
-		params.Set("pageSize", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["pageToken"]; ok {
-		params.Set("pageToken", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["startPosition"]; ok {
-		params.Set("startPosition", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["uid"]; ok {
-		params.Set("uid", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}/workspaces/{name}/snapshots/{snapshotId}/files/{+path}")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId":  c.projectId,
@@ -7265,8 +8872,34 @@ func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) Do() (*ReadResponse, erro
 		"snapshotId": c.snapshotId,
 		"path":       c.path,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		req.Header.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.workspaces.snapshots.files.get" call.
+// Exactly one of *ReadResponse or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *ReadResponse.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) Do() (*ReadResponse, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -7274,7 +8907,12 @@ func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) Do() (*ReadResponse, erro
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *ReadResponse
+	ret := &ReadResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -7449,57 +9087,83 @@ func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) Do() (*ReadResponse, erro
 type V1ListChangedFilesCall struct {
 	s                       *Service
 	listchangedfilesrequest *ListChangedFilesRequest
-	opt_                    map[string]interface{}
+	urlParams_              gensupport.URLParams
+	ctx_                    context.Context
 }
 
 // ListChangedFiles: ListChangedFiles computes the files that have
 // changed between two revisions
-// or workspace snapshots in the same
-// repo. It returns a list of
+// or workspace snapshots in the same repo. It returns a list
+// of
 // ChangeFileInfos.
 //
-// ListChangedFiles does
-// not perform copy/rename detection, so the from_path of
-// ChangeFileInfo
-// is unset. Examine the changed_files field of the Revision
-// resource to
-// determine copy/rename information.
+// ListChangedFiles does not perform copy/rename detection, so the
+// from_path of
+// ChangeFileInfo is unset. Examine the changed_files field of the
+// Revision
+// resource to determine copy/rename information.
 //
-// The result is ordered by path.
-// Pagination is supported.
+// The result is ordered by path. Pagination is supported.
 func (r *V1Service) ListChangedFiles(listchangedfilesrequest *ListChangedFilesRequest) *V1ListChangedFilesCall {
-	c := &V1ListChangedFilesCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &V1ListChangedFilesCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.listchangedfilesrequest = listchangedfilesrequest
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *V1ListChangedFilesCall) Fields(s ...googleapi.Field) *V1ListChangedFilesCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *V1ListChangedFilesCall) Do() (*ListChangedFilesResponse, error) {
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *V1ListChangedFilesCall) Context(ctx context.Context) *V1ListChangedFilesCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *V1ListChangedFilesCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
 	body, err := googleapi.WithoutDataWrapper.JSONReader(c.listchangedfilesrequest)
 	if err != nil {
 		return nil, err
 	}
 	ctype := "application/json"
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1:listChangedFiles")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	googleapi.SetOpaque(req.URL)
 	req.Header.Set("Content-Type", ctype)
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.listChangedFiles" call.
+// Exactly one of *ListChangedFilesResponse or error will be non-nil.
+// Any non-2xx status code is an error. Response headers are in either
+// *ListChangedFilesResponse.ServerResponse.Header or (if a response was
+// returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *V1ListChangedFilesCall) Do() (*ListChangedFilesResponse, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -7507,7 +9171,12 @@ func (c *V1ListChangedFilesCall) Do() (*ListChangedFilesResponse, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *ListChangedFilesResponse
+	ret := &ListChangedFilesResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}

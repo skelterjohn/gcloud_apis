@@ -4,7 +4,7 @@
 //
 // Usage example:
 //
-//   import "google.golang.org/api/cloudfunctions/v1beta1"
+//   import "github.com/skelterjohn/gcloud_apis/clients/cloudfunctions/v1beta1"
 //   ...
 //   cloudfunctionsService, err := cloudfunctions.New(oauthHttpClient)
 package cloudfunctions
@@ -14,7 +14,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"google.golang.org/api/googleapi"
+	context "golang.org/x/net/context"
+	ctxhttp "golang.org/x/net/context/ctxhttp"
+	gensupport "google.golang.org/api/gensupport"
+	googleapi "google.golang.org/api/googleapi"
 	"io"
 	"net/http"
 	"net/url"
@@ -30,9 +33,12 @@ var _ = fmt.Sprintf
 var _ = json.NewDecoder
 var _ = io.Copy
 var _ = url.Parse
+var _ = gensupport.MarshalJSON
 var _ = googleapi.Version
 var _ = errors.New
 var _ = strings.Replace
+var _ = context.Canceled
+var _ = ctxhttp.Do
 
 const apiId = "cloudfunctions:v1beta1"
 const apiName = "cloudfunctions"
@@ -56,12 +62,20 @@ func New(client *http.Client) (*Service, error) {
 }
 
 type Service struct {
-	client   *http.Client
-	BasePath string // API endpoint base URL
+	client    *http.Client
+	BasePath  string // API endpoint base URL
+	UserAgent string // optional additional User-Agent fragment
 
 	Operations *OperationsService
 
 	Projects *ProjectsService
+}
+
+func (s *Service) userAgent() string {
+	if s.UserAgent == "" {
+		return googleapi.UserAgent
+	}
+	return googleapi.UserAgent + " " + s.UserAgent
 }
 
 func NewOperationsService(s *Service) *OperationsService {
@@ -106,6 +120,7 @@ type ProjectsRegionsFunctionsService struct {
 	s *Service
 }
 
+// CallFunctionResponse: Response of CallFunction method.
 type CallFunctionResponse struct {
 	// Error: Either system or user-function generated error. Set if
 	// execution
@@ -117,16 +132,36 @@ type CallFunctionResponse struct {
 
 	// Result: Result populated for successful execution of synchronous
 	// function. Will
-	// not be populated if function does not return a result
-	// through context.
+	// not be populated if function does not return a result through
+	// context.
 	Result string `json:"result,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "Error") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *CallFunctionResponse) MarshalJSON() ([]byte, error) {
+	type noMethod CallFunctionResponse
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// FunctionTrigger: Describes binding of computation to the event
+// source.
 type FunctionTrigger struct {
 	// GsUri: Google Cloud Storage resource whose changes trigger the
 	// events.
-	// Currently, it must have the form gs://<bucket>/ (that is, it
-	// must refer
+	// Currently, it must have the form gs://<bucket>/ (that is, it must
+	// refer
 	// to a bucket, rather than an object).
 	GsUri string `json:"gsUri,omitempty"`
 
@@ -136,19 +171,36 @@ type FunctionTrigger struct {
 	// WebTrigger: A web endpoint (e.g. HTTP) type of source that can be
 	// trigger via URL.
 	WebTrigger *WebTrigger `json:"webTrigger,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "GsUri") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *FunctionTrigger) MarshalJSON() ([]byte, error) {
+	type noMethod FunctionTrigger
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// HostedFunction: Describes a cloud function that contains user
+// computation executed in
+// response to an event. It encapsulate function and triggers
+// configurations.
 type HostedFunction struct {
 	// EntryPoint: The name of the function (as defined in source code) that
 	// will be
-	// executed. Defaults to the resource name suffix, if not
-	// specified. For
-	// backward compatibility, if function with given name is
-	// not found, then the
-	// system will try to use function named
-	// 'function'.
-	// For Node.js this is name of a function exported by the
-	// module specified
+	// executed. Defaults to the resource name suffix, if not specified.
+	// For
+	// backward compatibility, if function with given name is not found,
+	// then the
+	// system will try to use function named 'function'.
+	// For Node.js this is name of a function exported by the module
+	// specified
 	// in source_location.
 	EntryPoint string `json:"entryPoint,omitempty"`
 
@@ -158,8 +210,8 @@ type HostedFunction struct {
 
 	// LatestOperation: [Output only] Name of the most recent operation
 	// modifying the function. If
-	// the function status is DEPLOYING or
-	// DELETING, then it points to the active
+	// the function status is DEPLOYING or DELETING, then it points to the
+	// active
 	// operation.
 	LatestOperation string `json:"latestOperation,omitempty"`
 
@@ -170,8 +222,8 @@ type HostedFunction struct {
 
 	// OauthScopes: The set of Google API scopes to be made available to the
 	// function while
-	// it is being executed. Values should be in the format
-	// of scope
+	// it is being executed. Values should be in the format of
+	// scope
 	// developer codes, for example:
 	// "https://www.googleapis.com/auth/compute".
 	OauthScopes []string `json:"oauthScopes,omitempty"`
@@ -181,29 +233,78 @@ type HostedFunction struct {
 	SourceRepository *SourceRepository `json:"sourceRepository,omitempty"`
 
 	// Status: [Output only] Status of the function deployment.
+	//
+	// Possible values:
+	//   "STATUS_UNSPECIFIED" - Status not specified.
+	//   "READY" - Successfully deployed.
+	//   "FAILED" - Not deployed correctly - behavior is undefined. The item
+	// should be updated
+	// or deleted to move it out of this state.
+	//   "DEPLOYING" - Creation or update in progress.
+	//   "DELETING" - Deletion in progress.
 	Status string `json:"status,omitempty"`
 
 	// Triggers: List of triggers.
 	Triggers []*FunctionTrigger `json:"triggers,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "EntryPoint") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *HostedFunction) MarshalJSON() ([]byte, error) {
+	type noMethod HostedFunction
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// ListFunctionsResponse: Response for the ListFunctions method.
 type ListFunctionsResponse struct {
 	// Functions: The functions that match the request.
 	Functions []*HostedFunction `json:"functions,omitempty"`
 
 	// NextPageToken: If not empty, indicates that there may be more
 	// functions that match
-	// the request; this value should be passed in a
-	// new ListFunctionsRequest
+	// the request; this value should be passed in a new
+	// ListFunctionsRequest
 	// to get more functions.
 	NextPageToken string `json:"nextPageToken,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "Functions") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *ListFunctionsResponse) MarshalJSON() ([]byte, error) {
+	type noMethod ListFunctionsResponse
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// Operation: This resource represents a long-running operation that is
+// the result of a
+// network API call.
 type Operation struct {
 	// Done: If the value is `false`, it means the operation is still in
 	// progress.
-	// If true, the operation is completed, and either `error` or
-	// `response` is
+	// If true, the operation is completed, and either `error` or `response`
+	// is
 	// available.
 	Done bool `json:"done,omitempty"`
 
@@ -212,49 +313,64 @@ type Operation struct {
 
 	// Metadata: Service-specific metadata associated with the operation.
 	// It typically
-	// contains progress information and common metadata such
-	// as create time.
-	// Some services might not provide such metadata.  Any
-	// method that returns a
-	// long-running operation should document the
-	// metadata type, if any.
-	Metadata *OperationMetadata `json:"metadata,omitempty"`
+	// contains progress information and common metadata such as create
+	// time.
+	// Some services might not provide such metadata.  Any method that
+	// returns a
+	// long-running operation should document the metadata type, if any.
+	Metadata OperationMetadata `json:"metadata,omitempty"`
 
 	// Name: The server-assigned name, which is only unique within the same
 	// service that
-	// originally returns it. If you use the default HTTP
-	// mapping above, the
-	// `name` should have the format of
-	// `operations/some/unique/name`.
+	// originally returns it. If you use the default HTTP mapping above,
+	// the
+	// `name` should have the format of `operations/some/unique/name`.
 	Name string `json:"name,omitempty"`
 
 	// Response: The normal response of the operation in case of success.
 	// If the original
-	// method returns no data on success, such as `Delete`,
-	// the response is
+	// method returns no data on success, such as `Delete`, the response
+	// is
 	// `google.protobuf.Empty`.  If the original method is
 	// standard
-	// `Get`/`Create`/`Update`, the response should be the
-	// resource.  For other
-	// methods, the response should have the type
-	// `XxxResponse`, where `Xxx`
-	// is the original method name.  For example,
-	// if the original method name
-	// is `TakeSnapshot()`, the inferred
-	// response type is
+	// `Get`/`Create`/`Update`, the response should be the resource.  For
+	// other
+	// methods, the response should have the type `XxxResponse`, where
+	// `Xxx`
+	// is the original method name.  For example, if the original method
+	// name
+	// is `TakeSnapshot()`, the inferred response type
+	// is
 	// `TakeSnapshotResponse`.
-	Response *OperationResponse `json:"response,omitempty"`
+	Response OperationResponse `json:"response,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "Done") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
-type OperationMetadata struct {
+func (s *Operation) MarshalJSON() ([]byte, error) {
+	type noMethod Operation
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-type OperationResponse struct {
-}
+type OperationMetadata interface{}
 
+type OperationResponse interface{}
+
+// OperationMetadata1: Metadata describing an Operation
 type OperationMetadata1 struct {
 	// Request: The original request that started the operation.
-	Request *OperationMetadataRequest `json:"request,omitempty"`
+	Request OperationMetadataRequest `json:"request,omitempty"`
 
 	// Target: Target of the operation - for
 	// example
@@ -262,12 +378,33 @@ type OperationMetadata1 struct {
 	Target string `json:"target,omitempty"`
 
 	// Type: Type of operation.
+	//
+	// Possible values:
+	//   "OPERATION_UNSPECIFIED" - Unknown operation type.
+	//   "CREATE_FUNCTION" - Triggered by CreateFunction call
+	//   "UPDATE_FUNCTION" - Triggered by UpdateFunction call
+	//   "DELETE_FUNCTION" - Triggered by DeleteFunction call.
 	Type string `json:"type,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Request") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
-type OperationMetadataRequest struct {
+func (s *OperationMetadata1) MarshalJSON() ([]byte, error) {
+	type noMethod OperationMetadata1
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
+type OperationMetadataRequest interface{}
+
+// SourceRepository: Describes the location of the function source in a
+// remote repository.
 type SourceRepository struct {
 	// Branch: The name of the branch from which the function should be
 	// fetched.
@@ -275,20 +412,19 @@ type SourceRepository struct {
 
 	// DeployedRevision: [Output only] The id of the revision that was
 	// resolved at the moment of
-	// function creation or update. For example
-	// when a user deployed from a
-	// branch, it will be the revision id of the
-	// latest change on this branch at
-	// that time. If user deployed from
-	// revision then this value will be always
-	// equal to the revision
-	// specified by the user.
+	// function creation or update. For example when a user deployed from
+	// a
+	// branch, it will be the revision id of the latest change on this
+	// branch at
+	// that time. If user deployed from revision then this value will be
+	// always
+	// equal to the revision specified by the user.
 	DeployedRevision string `json:"deployedRevision,omitempty"`
 
 	// RepositoryUrl: URL to the hosted repository where the function is
 	// defined. Only paths in
-	// https://source.developers.google.com domain
-	// are supported. The path should
+	// https://source.developers.google.com domain are supported. The path
+	// should
 	// contain the name of the repository.
 	RepositoryUrl string `json:"repositoryUrl,omitempty"`
 
@@ -299,10 +435,10 @@ type SourceRepository struct {
 
 	// SourcePath: The path within the repository where the function is
 	// defined. The path
-	// should point to the directory where cloud functions
-	// files are located. Use
-	// '/' if the function is defined directly in the
-	// root directory of a
+	// should point to the directory where cloud functions files are
+	// located. Use
+	// '/' if the function is defined directly in the root directory of
+	// a
 	// repository.
 	SourcePath string `json:"sourcePath,omitempty"`
 
@@ -312,8 +448,101 @@ type SourceRepository struct {
 	// from
 	// which the function should be fetched.
 	Tag string `json:"tag,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Branch") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
+func (s *SourceRepository) MarshalJSON() ([]byte, error) {
+	type noMethod SourceRepository
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// Status: The `Status` type defines a logical error model that is
+// suitable for different
+// programming environments, including REST APIs and RPC APIs. It is
+// used by
+// [gRPC](https://github.com/grpc). The error model is designed to
+// be:
+//
+// - Simple to use and understand for most users
+// - Flexible enough to meet unexpected needs
+//
+// # Overview
+//
+// The `Status` message contains three pieces of data: error code, error
+// message,
+// and error details. The error code should be an enum value
+// of
+// google.rpc.Code, but it may accept additional error codes if needed.
+// The
+// error message should be a developer-facing English message that
+// helps
+// developers *understand* and *resolve* the error. If a localized
+// user-facing
+// error message is needed, put the localized message in the error
+// details or
+// localize it in the client. The optional error details may contain
+// arbitrary
+// information about the error. There is a predefined set of error
+// detail types
+// in the package `google.rpc` which can be used for common error
+// conditions.
+//
+// # Language mapping
+//
+// The `Status` message is the logical representation of the error
+// model, but it
+// is not necessarily the actual wire format. When the `Status` message
+// is
+// exposed in different client libraries and different wire protocols,
+// it can be
+// mapped differently. For example, it will likely be mapped to some
+// exceptions
+// in Java, but more likely mapped to some error codes in C.
+//
+// # Other uses
+//
+// The error model and the `Status` message can be used in a variety
+// of
+// environments, either with or without APIs, to provide a
+// consistent developer experience across different
+// environments.
+//
+// Example uses of this error model include:
+//
+// - Partial errors. If a service needs to return partial errors to the
+// client,
+//     it may embed the `Status` in the normal response to indicate the
+// partial
+//     errors.
+//
+// - Workflow errors. A typical workflow has multiple steps. Each step
+// may
+//     have a `Status` message for error reporting purpose.
+//
+// - Batch operations. If a client uses batch request and batch
+// response, the
+//     `Status` message should be used directly inside batch response,
+// one for
+//     each error sub-response.
+//
+// - Asynchronous operations. If an API call embeds asynchronous
+// operation
+//     results in its response, the status of those operations should
+// be
+//     represented directly using the `Status` message.
+//
+// - Logging. If some API errors are stored in logs, the message
+// `Status` could
+//     be used directly after any stripping needed for security/privacy
+// reasons.
 type Status struct {
 	// Code: The status code, which should be an enum value of
 	// google.rpc.Code.
@@ -322,69 +551,143 @@ type Status struct {
 	// Details: A list of messages that carry the error details.  There will
 	// be a
 	// common set of message types for APIs to use.
-	Details []*StatusDetails `json:"details,omitempty"`
+	Details []StatusDetails `json:"details,omitempty"`
 
 	// Message: A developer-facing error message, which should be in
 	// English. Any
-	// user-facing error message should be localized and sent
-	// in the
+	// user-facing error message should be localized and sent in
+	// the
 	// google.rpc.Status.details field, or localized by the client.
 	Message string `json:"message,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Code") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
 }
 
-type StatusDetails struct {
+func (s *Status) MarshalJSON() ([]byte, error) {
+	type noMethod Status
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
+type StatusDetails interface{}
+
+// WebTrigger: Describes WebTrigger, could be used to connect web hooks
+// to function.
 type WebTrigger struct {
 	// Protocol: Protocol accepted by WebTrigger.
+	//
+	// Possible values:
+	//   "HTTP" - HTTP protocol
 	Protocol string `json:"protocol,omitempty"`
 
 	// Url: [Output only] The deployed url for the function.
 	Url string `json:"url,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Protocol") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *WebTrigger) MarshalJSON() ([]byte, error) {
+	type noMethod WebTrigger
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
 // method id "cloudfunctions.operations.get":
 
 type OperationsGetCall struct {
-	s    *Service
-	name string
-	opt_ map[string]interface{}
+	s            *Service
+	name         string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
 }
 
 // Get: Gets the latest state of a long-running operation.  Clients can
 // use this
-// method to poll the operation result at intervals as
-// recommended by the API
+// method to poll the operation result at intervals as recommended by
+// the API
 // service.
 func (r *OperationsService) Get(name string) *OperationsGetCall {
-	c := &OperationsGetCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &OperationsGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *OperationsGetCall) Fields(s ...googleapi.Field) *OperationsGetCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *OperationsGetCall) Do() (*Operation, error) {
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *OperationsGetCall) IfNoneMatch(entityTag string) *OperationsGetCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *OperationsGetCall) Context(ctx context.Context) *OperationsGetCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *OperationsGetCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+name}")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"name": c.name,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		req.Header.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "cloudfunctions.operations.get" call.
+// Exactly one of *Operation or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *Operation.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *OperationsGetCall) Do() (*Operation, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -392,7 +695,12 @@ func (c *OperationsGetCall) Do() (*Operation, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *Operation
+	ret := &Operation{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -428,16 +736,17 @@ func (c *OperationsGetCall) Do() (*Operation, error) {
 // method id "cloudfunctions.projects.regions.functions.call":
 
 type ProjectsRegionsFunctionsCallCall struct {
-	s    *Service
-	name string
-	opt_ map[string]interface{}
+	s          *Service
+	name       string
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
 }
 
 // Call: Invokes synchronously deployed function. To be used for
 // testing, very
 // limited traffic allowed.
 func (r *ProjectsRegionsFunctionsService) Call(name string) *ProjectsRegionsFunctionsCallCall {
-	c := &ProjectsRegionsFunctionsCallCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsRegionsFunctionsCallCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
 	return c
 }
@@ -445,36 +754,60 @@ func (r *ProjectsRegionsFunctionsService) Call(name string) *ProjectsRegionsFunc
 // Data sets the optional parameter "data": Input to be passed to the
 // function.
 func (c *ProjectsRegionsFunctionsCallCall) Data(data string) *ProjectsRegionsFunctionsCallCall {
-	c.opt_["data"] = data
+	c.urlParams_.Set("data", data)
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsRegionsFunctionsCallCall) Fields(s ...googleapi.Field) *ProjectsRegionsFunctionsCallCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsRegionsFunctionsCallCall) Do() (*CallFunctionResponse, error) {
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsRegionsFunctionsCallCall) Context(ctx context.Context) *ProjectsRegionsFunctionsCallCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsRegionsFunctionsCallCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["data"]; ok {
-		params.Set("data", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+name}:call")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"name": c.name,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "cloudfunctions.projects.regions.functions.call" call.
+// Exactly one of *CallFunctionResponse or error will be non-nil. Any
+// non-2xx status code is an error. Response headers are in either
+// *CallFunctionResponse.ServerResponse.Header or (if a response was
+// returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *ProjectsRegionsFunctionsCallCall) Do() (*CallFunctionResponse, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -482,7 +815,12 @@ func (c *ProjectsRegionsFunctionsCallCall) Do() (*CallFunctionResponse, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *CallFunctionResponse
+	ret := &CallFunctionResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -526,50 +864,77 @@ type ProjectsRegionsFunctionsCreateCall struct {
 	s              *Service
 	location       string
 	hostedfunction *HostedFunction
-	opt_           map[string]interface{}
+	urlParams_     gensupport.URLParams
+	ctx_           context.Context
 }
 
 // Create: Creates a new function. If a function with the given name
 // already exists in
-// the specified project, it will return
-// ALREADY_EXISTS error.
+// the specified project, it will return ALREADY_EXISTS error.
 //
 func (r *ProjectsRegionsFunctionsService) Create(location string, hostedfunction *HostedFunction) *ProjectsRegionsFunctionsCreateCall {
-	c := &ProjectsRegionsFunctionsCreateCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsRegionsFunctionsCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.location = location
 	c.hostedfunction = hostedfunction
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsRegionsFunctionsCreateCall) Fields(s ...googleapi.Field) *ProjectsRegionsFunctionsCreateCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsRegionsFunctionsCreateCall) Do() (*Operation, error) {
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsRegionsFunctionsCreateCall) Context(ctx context.Context) *ProjectsRegionsFunctionsCreateCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsRegionsFunctionsCreateCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
 	body, err := googleapi.WithoutDataWrapper.JSONReader(c.hostedfunction)
 	if err != nil {
 		return nil, err
 	}
 	ctype := "application/json"
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+location}/functions")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"location": c.location,
 	})
 	req.Header.Set("Content-Type", ctype)
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "cloudfunctions.projects.regions.functions.create" call.
+// Exactly one of *Operation or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *Operation.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *ProjectsRegionsFunctionsCreateCall) Do() (*Operation, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -577,7 +942,12 @@ func (c *ProjectsRegionsFunctionsCreateCall) Do() (*Operation, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *Operation
+	ret := &Operation{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -616,46 +986,74 @@ func (c *ProjectsRegionsFunctionsCreateCall) Do() (*Operation, error) {
 // method id "cloudfunctions.projects.regions.functions.delete":
 
 type ProjectsRegionsFunctionsDeleteCall struct {
-	s    *Service
-	name string
-	opt_ map[string]interface{}
+	s          *Service
+	name       string
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
 }
 
 // Delete: Deletes a function with the given name from the specified
 // project. If the
-// given function is used by some trigger, the trigger
-// will be updated to
+// given function is used by some trigger, the trigger will be updated
+// to
 // remove this function.
 //
 func (r *ProjectsRegionsFunctionsService) Delete(name string) *ProjectsRegionsFunctionsDeleteCall {
-	c := &ProjectsRegionsFunctionsDeleteCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsRegionsFunctionsDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsRegionsFunctionsDeleteCall) Fields(s ...googleapi.Field) *ProjectsRegionsFunctionsDeleteCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsRegionsFunctionsDeleteCall) Do() (*Operation, error) {
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsRegionsFunctionsDeleteCall) Context(ctx context.Context) *ProjectsRegionsFunctionsDeleteCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsRegionsFunctionsDeleteCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+name}")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"name": c.name,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "cloudfunctions.projects.regions.functions.delete" call.
+// Exactly one of *Operation or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *Operation.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *ProjectsRegionsFunctionsDeleteCall) Do() (*Operation, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -663,7 +1061,12 @@ func (c *ProjectsRegionsFunctionsDeleteCall) Do() (*Operation, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *Operation
+	ret := &Operation{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -699,42 +1102,84 @@ func (c *ProjectsRegionsFunctionsDeleteCall) Do() (*Operation, error) {
 // method id "cloudfunctions.projects.regions.functions.get":
 
 type ProjectsRegionsFunctionsGetCall struct {
-	s    *Service
-	name string
-	opt_ map[string]interface{}
+	s            *Service
+	name         string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
 }
 
 // Get: Returns a function with the given name from the requested
 // project.
 func (r *ProjectsRegionsFunctionsService) Get(name string) *ProjectsRegionsFunctionsGetCall {
-	c := &ProjectsRegionsFunctionsGetCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsRegionsFunctionsGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsRegionsFunctionsGetCall) Fields(s ...googleapi.Field) *ProjectsRegionsFunctionsGetCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsRegionsFunctionsGetCall) Do() (*HostedFunction, error) {
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *ProjectsRegionsFunctionsGetCall) IfNoneMatch(entityTag string) *ProjectsRegionsFunctionsGetCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsRegionsFunctionsGetCall) Context(ctx context.Context) *ProjectsRegionsFunctionsGetCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsRegionsFunctionsGetCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+name}")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"name": c.name,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		req.Header.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "cloudfunctions.projects.regions.functions.get" call.
+// Exactly one of *HostedFunction or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *HostedFunction.ServerResponse.Header or (if a response was returned
+// at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *ProjectsRegionsFunctionsGetCall) Do() (*HostedFunction, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -742,7 +1187,12 @@ func (c *ProjectsRegionsFunctionsGetCall) Do() (*HostedFunction, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *HostedFunction
+	ret := &HostedFunction{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -778,15 +1228,17 @@ func (c *ProjectsRegionsFunctionsGetCall) Do() (*HostedFunction, error) {
 // method id "cloudfunctions.projects.regions.functions.list":
 
 type ProjectsRegionsFunctionsListCall struct {
-	s        *Service
-	location string
-	opt_     map[string]interface{}
+	s            *Service
+	location     string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
 }
 
 // List: Returns a list of all functions that belong to the requested
 // project.
 func (r *ProjectsRegionsFunctionsService) List(location string) *ProjectsRegionsFunctionsListCall {
-	c := &ProjectsRegionsFunctionsListCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsRegionsFunctionsListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.location = location
 	return c
 }
@@ -794,50 +1246,83 @@ func (r *ProjectsRegionsFunctionsService) List(location string) *ProjectsRegions
 // PageSize sets the optional parameter "pageSize": Maximum number of
 // functions to return.
 func (c *ProjectsRegionsFunctionsListCall) PageSize(pageSize int64) *ProjectsRegionsFunctionsListCall {
-	c.opt_["pageSize"] = pageSize
+	c.urlParams_.Set("pageSize", fmt.Sprint(pageSize))
 	return c
 }
 
 // PageToken sets the optional parameter "pageToken": The value returned
 // by the last ListFunctionsResponse; indicates that
-// this is a
-// continuation of a prior ListFunctions call, and that the
-// system
-// should return the next page of data.
+// this is a continuation of a prior ListFunctions call, and that
+// the
+// system should return the next page of data.
 func (c *ProjectsRegionsFunctionsListCall) PageToken(pageToken string) *ProjectsRegionsFunctionsListCall {
-	c.opt_["pageToken"] = pageToken
+	c.urlParams_.Set("pageToken", pageToken)
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsRegionsFunctionsListCall) Fields(s ...googleapi.Field) *ProjectsRegionsFunctionsListCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsRegionsFunctionsListCall) Do() (*ListFunctionsResponse, error) {
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *ProjectsRegionsFunctionsListCall) IfNoneMatch(entityTag string) *ProjectsRegionsFunctionsListCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsRegionsFunctionsListCall) Context(ctx context.Context) *ProjectsRegionsFunctionsListCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsRegionsFunctionsListCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["pageSize"]; ok {
-		params.Set("pageSize", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["pageToken"]; ok {
-		params.Set("pageToken", fmt.Sprintf("%v", v))
-	}
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+location}/functions")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"location": c.location,
 	})
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		req.Header.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "cloudfunctions.projects.regions.functions.list" call.
+// Exactly one of *ListFunctionsResponse or error will be non-nil. Any
+// non-2xx status code is an error. Response headers are in either
+// *ListFunctionsResponse.ServerResponse.Header or (if a response was
+// returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *ProjectsRegionsFunctionsListCall) Do() (*ListFunctionsResponse, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -845,7 +1330,12 @@ func (c *ProjectsRegionsFunctionsListCall) Do() (*ListFunctionsResponse, error) 
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *ListFunctionsResponse
+	ret := &ListFunctionsResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
@@ -895,47 +1385,75 @@ type ProjectsRegionsFunctionsUpdateCall struct {
 	s              *Service
 	name           string
 	hostedfunction *HostedFunction
-	opt_           map[string]interface{}
+	urlParams_     gensupport.URLParams
+	ctx_           context.Context
 }
 
 // Update: Updates existing function.
 //
 func (r *ProjectsRegionsFunctionsService) Update(name string, hostedfunction *HostedFunction) *ProjectsRegionsFunctionsUpdateCall {
-	c := &ProjectsRegionsFunctionsUpdateCall{s: r.s, opt_: make(map[string]interface{})}
+	c := &ProjectsRegionsFunctionsUpdateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
 	c.hostedfunction = hostedfunction
 	return c
 }
 
-// Fields allows partial responses to be retrieved.
-// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
 func (c *ProjectsRegionsFunctionsUpdateCall) Fields(s ...googleapi.Field) *ProjectsRegionsFunctionsUpdateCall {
-	c.opt_["fields"] = googleapi.CombineFields(s)
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
 
-func (c *ProjectsRegionsFunctionsUpdateCall) Do() (*Operation, error) {
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsRegionsFunctionsUpdateCall) Context(ctx context.Context) *ProjectsRegionsFunctionsUpdateCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsRegionsFunctionsUpdateCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
 	body, err := googleapi.WithoutDataWrapper.JSONReader(c.hostedfunction)
 	if err != nil {
 		return nil, err
 	}
 	ctype := "application/json"
-	params := make(url.Values)
-	params.Set("alt", "json")
-	if v, ok := c.opt_["fields"]; ok {
-		params.Set("fields", fmt.Sprintf("%v", v))
-	}
+	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+name}")
-	urls += "?" + params.Encode()
+	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PUT", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"name": c.name,
 	})
 	req.Header.Set("Content-Type", ctype)
-	req.Header.Set("User-Agent", "google-api-go-client/0.5")
-	res, err := c.s.client.Do(req)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "cloudfunctions.projects.regions.functions.update" call.
+// Exactly one of *Operation or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *Operation.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *ProjectsRegionsFunctionsUpdateCall) Do() (*Operation, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -943,7 +1461,12 @@ func (c *ProjectsRegionsFunctionsUpdateCall) Do() (*Operation, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	var ret *Operation
+	ret := &Operation{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
 	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
 		return nil, err
 	}
