@@ -47,7 +47,7 @@ func OverwriteRequestWithValues(requestObject interface{}, keyValues map[string]
 	for key, val := range keyValues {
 		err := overwrite.Overwrite(requestObject, key, val)
 		if err != nil {
-			return fmt.Errorf("for key \"--%s\": while evaluating %s", key, err)
+			return fmt.Errorf("for key \"--%s\" while evaluating %s: %s", key, val, err)
 		}
 	}
 	return nil
