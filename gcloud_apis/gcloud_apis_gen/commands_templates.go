@@ -101,6 +101,7 @@ import (
 var _ = fmt.Println
 var _ = io.Copy
 var _ = os.Stdin
+var _ = strings.Split
 
 {{range .Methods}}{{template "api_method" .}}{{end}}
 
@@ -198,20 +199,23 @@ func {{.FuncName}}(context Context, args ...string) error {
   expectedParams := []string{
     {{range .PositionalParams}}{{ if .QueryName}}{{ else}}"{{.ParamName}}",{{ end}}
     {{end}}}
-  paramValues := strings.Split(args[0], "/")
+  paramValues := commands_util.SplitParamValues(args[0])
   if len(paramValues) != len(expectedParams) {
     return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
   }
 
   {{range $i, $v := .PositionalParams}}{{/*
-    */}}{{ if .QueryName}}
+    */}}{{if .QueryName}}
     param_{{.ParamName}}, err := commands_util.ConvertValue_{{.Type}}(flagValues["{{.QueryName}}"])
     if err != nil {
       return err
     }{{/*
-    */}}{{ else}}
-    param_{{.ParamName}} := paramValues[{{$i}}]{{/*
-    */}}{{ end}}{{/*
+    */}}{{else}}
+    param_{{.ParamName}}, err := commands_util.ConvertValue_{{.Type}}(paramValues[{{$i}}])
+    if err != nil {
+      return err
+    }{{/*
+    */}}{{end}}{{/*
   */}}{{end}}
 
   call := service.{{.ServiceMethodName}}({{/*

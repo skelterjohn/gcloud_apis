@@ -24,6 +24,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"unicode"
 )
 
 func PopulateRequestFromFilename(requestObject interface{}, filename string) error {
@@ -109,4 +110,22 @@ func PrintResponse(response interface{}) error {
 	}
 	_, err := fmt.Println(&indentedBuf)
 	return err
+}
+
+/*
+Get each of the tokens from a joined arg. Tokens are considered to be joined
+by whatever the first character is. If the first character is in [a-zA-Z0-9],
+a slash is assumed.
+*/
+func SplitParamValues(arg string) (params []string) {
+	if len(arg) == 0 {
+		return []string{}
+	}
+	sep := "/"
+	firstLetter := rune(arg[0])
+	if !(unicode.IsDigit(firstLetter) || unicode.IsLetter(firstLetter)) {
+		sep = arg[0:1]
+		arg = arg[1:]
+	}
+	return strings.Split(arg, sep)
 }

@@ -30,7 +30,11 @@ import (
 )
 
 func capitalize(s string) string {
-	return strings.ToUpper(s[:1]) + s[1:]
+	segments := strings.Split(s, "_")
+	for i := range segments {
+		segments[i] = strings.ToUpper(segments[i][:1]) + segments[i][1:]
+	}
+	return strings.Join(segments, "")
 }
 
 func serviceMethodName(methodId string) string {
@@ -138,6 +142,7 @@ func writeCommandsSource(commands_dir string, docs map[string]*discovery.Discove
 				positionalParams := map[string]PositionalParam{}
 				methodInfo.QueryFuncs = make(map[string]QueryFuncInfo)
 				for paramName, paramData := range method.Parameters {
+					paramName = strings.Replace(paramName, ".", "_", -1)
 					var paramType string
 					switch paramData.Type {
 					case "string":
@@ -249,7 +254,7 @@ func writeClientsSource(discovery_dir, clients_dir string, docs map[string]*disc
 			"-output", client_source_file)
 		err = cmd.Run()
 		if err != nil {
-			return fmt.Errorf("could not generate client: %s", err.Error())
+			return fmt.Errorf("could not generate client for %s: %s", discovery_file, err.Error())
 		}
 	}
 	return nil

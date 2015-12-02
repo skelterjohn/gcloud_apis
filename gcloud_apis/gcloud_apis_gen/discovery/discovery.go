@@ -107,6 +107,7 @@ type JsonSchema interface{}
 type Method struct {
 	Id             string
 	Path           string
+    FlatPath       string
 	HttpMethod     string
 	Parameters     map[string]Parameter
 	ParameterOrder []string
