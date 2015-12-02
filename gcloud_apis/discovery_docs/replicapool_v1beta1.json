@@ -4,7 +4,7 @@
  "id": "replicapool:v1beta1",
  "name": "replicapool",
  "version": "v1beta1",
- "revision": "20141029",
+ "revision": "20151130",
  "title": "Replica Pool API",
  "description": "The Replica Pool API allows users to declaratively provision and manage groups of Google Compute Engine instances based on a common template.",
  "ownerDomain": "google.com",
@@ -73,6 +73,9 @@
    "scopes": {
     "https://www.googleapis.com/auth/cloud-platform": {
      "description": "View and manage your data across Google Cloud Platform services"
+    },
+    "https://www.googleapis.com/auth/cloud-platform.read-only": {
+     "description": "View your data across Google Cloud Platform services"
     },
     "https://www.googleapis.com/auth/ndev.cloudman": {
      "description": "View and manage your Google Cloud Platform management resources and deployment status information"
@@ -727,6 +730,7 @@
      },
      "scopes": [
       "https://www.googleapis.com/auth/cloud-platform",
+      "https://www.googleapis.com/auth/cloud-platform.read-only",
       "https://www.googleapis.com/auth/ndev.cloudman",
       "https://www.googleapis.com/auth/ndev.cloudman.readonly",
       "https://www.googleapis.com/auth/replicapool",
@@ -810,6 +814,7 @@
      },
      "scopes": [
       "https://www.googleapis.com/auth/cloud-platform",
+      "https://www.googleapis.com/auth/cloud-platform.read-only",
       "https://www.googleapis.com/auth/ndev.cloudman",
       "https://www.googleapis.com/auth/ndev.cloudman.readonly",
       "https://www.googleapis.com/auth/replicapool",
@@ -995,6 +1000,7 @@
      },
      "scopes": [
       "https://www.googleapis.com/auth/cloud-platform",
+      "https://www.googleapis.com/auth/cloud-platform.read-only",
       "https://www.googleapis.com/auth/ndev.cloudman",
       "https://www.googleapis.com/auth/ndev.cloudman.readonly",
       "https://www.googleapis.com/auth/replicapool",
@@ -1050,6 +1056,7 @@
      },
      "scopes": [
       "https://www.googleapis.com/auth/cloud-platform",
+      "https://www.googleapis.com/auth/cloud-platform.read-only",
       "https://www.googleapis.com/auth/ndev.cloudman",
       "https://www.googleapis.com/auth/ndev.cloudman.readonly",
       "https://www.googleapis.com/auth/replicapool",

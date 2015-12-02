@@ -31,6 +31,7 @@ import (
 var _ = fmt.Println
 var _ = io.Copy
 var _ = os.Stdin
+var _ = strings.Split
 
 func Autoscaler_v1beta2_AutoscalersDelete(context Context, args ...string) error {
 
@@ -57,14 +58,23 @@ func Autoscaler_v1beta2_AutoscalersDelete(context Context, args ...string) error
 		"zone",
 		"autoscaler",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_autoscaler := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_autoscaler, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_project, param_zone, param_autoscaler)
 
@@ -107,14 +117,23 @@ func Autoscaler_v1beta2_AutoscalersGet(context Context, args ...string) error {
 		"zone",
 		"autoscaler",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_autoscaler := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_autoscaler, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_zone, param_autoscaler)
 
@@ -178,13 +197,19 @@ func Autoscaler_v1beta2_AutoscalersInsert(context Context, args ...string) error
 		"project",
 		"zone",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_project, param_zone,
 		request,
@@ -251,13 +276,19 @@ func Autoscaler_v1beta2_AutoscalersList(context Context, args ...string) error {
 		"project",
 		"zone",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project, param_zone)
 
@@ -345,14 +376,23 @@ func Autoscaler_v1beta2_AutoscalersPatch(context Context, args ...string) error 
 		"zone",
 		"autoscaler",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_autoscaler := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_autoscaler, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Patch(param_project, param_zone, param_autoscaler,
 		request,
@@ -419,14 +459,23 @@ func Autoscaler_v1beta2_AutoscalersUpdate(context Context, args ...string) error
 		"zone",
 		"autoscaler",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_autoscaler := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_autoscaler, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Update(param_project, param_zone, param_autoscaler,
 		request,
@@ -471,14 +520,23 @@ func Autoscaler_v1beta2_ZoneOperationsDelete(context Context, args ...string) er
 		"zone",
 		"operation",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_operation := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_operation, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_project, param_zone, param_operation)
 
@@ -515,14 +573,23 @@ func Autoscaler_v1beta2_ZoneOperationsGet(context Context, args ...string) error
 		"zone",
 		"operation",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_operation := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_operation, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_zone, param_operation)
 
@@ -587,13 +654,19 @@ func Autoscaler_v1beta2_ZoneOperationsList(context Context, args ...string) erro
 		"project",
 		"zone",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project, param_zone)
 
@@ -680,12 +753,15 @@ func Autoscaler_v1beta2_ZonesList(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project)
 

@@ -41,6 +41,9 @@ const basePath = "https://www.googleapis.com/compute/v1/projects/"
 
 // OAuth2 scopes used by this API.
 const (
+	// View and manage your data across Google Cloud Platform services
+	CloudPlatformScope = "https://www.googleapis.com/auth/cloud-platform"
+
 	// View and manage your Google Compute Engine resources
 	ComputeScope = "https://www.googleapis.com/auth/compute"
 
@@ -63,6 +66,7 @@ func New(client *http.Client) (*Service, error) {
 	}
 	s := &Service{client: client, BasePath: basePath}
 	s.Addresses = NewAddressesService(s)
+	s.Autoscalers = NewAutoscalersService(s)
 	s.BackendServices = NewBackendServicesService(s)
 	s.DiskTypes = NewDiskTypesService(s)
 	s.Disks = NewDisksService(s)
@@ -72,7 +76,10 @@ func New(client *http.Client) (*Service, error) {
 	s.GlobalForwardingRules = NewGlobalForwardingRulesService(s)
 	s.GlobalOperations = NewGlobalOperationsService(s)
 	s.HttpHealthChecks = NewHttpHealthChecksService(s)
+	s.HttpsHealthChecks = NewHttpsHealthChecksService(s)
 	s.Images = NewImagesService(s)
+	s.InstanceGroupManagers = NewInstanceGroupManagersService(s)
+	s.InstanceGroups = NewInstanceGroupsService(s)
 	s.InstanceTemplates = NewInstanceTemplatesService(s)
 	s.Instances = NewInstancesService(s)
 	s.Licenses = NewLicensesService(s)
@@ -83,10 +90,14 @@ func New(client *http.Client) (*Service, error) {
 	s.Regions = NewRegionsService(s)
 	s.Routes = NewRoutesService(s)
 	s.Snapshots = NewSnapshotsService(s)
+	s.SslCertificates = NewSslCertificatesService(s)
 	s.TargetHttpProxies = NewTargetHttpProxiesService(s)
+	s.TargetHttpsProxies = NewTargetHttpsProxiesService(s)
 	s.TargetInstances = NewTargetInstancesService(s)
 	s.TargetPools = NewTargetPoolsService(s)
+	s.TargetVpnGateways = NewTargetVpnGatewaysService(s)
 	s.UrlMaps = NewUrlMapsService(s)
+	s.VpnTunnels = NewVpnTunnelsService(s)
 	s.ZoneOperations = NewZoneOperationsService(s)
 	s.Zones = NewZonesService(s)
 	return s, nil
@@ -97,6 +108,8 @@ type Service struct {
 	BasePath string // API endpoint base URL
 
 	Addresses *AddressesService
+
+	Autoscalers *AutoscalersService
 
 	BackendServices *BackendServicesService
 
@@ -116,7 +129,13 @@ type Service struct {
 
 	HttpHealthChecks *HttpHealthChecksService
 
+	HttpsHealthChecks *HttpsHealthChecksService
+
 	Images *ImagesService
+
+	InstanceGroupManagers *InstanceGroupManagersService
+
+	InstanceGroups *InstanceGroupsService
 
 	InstanceTemplates *InstanceTemplatesService
 
@@ -138,13 +157,21 @@ type Service struct {
 
 	Snapshots *SnapshotsService
 
+	SslCertificates *SslCertificatesService
+
 	TargetHttpProxies *TargetHttpProxiesService
+
+	TargetHttpsProxies *TargetHttpsProxiesService
 
 	TargetInstances *TargetInstancesService
 
 	TargetPools *TargetPoolsService
 
+	TargetVpnGateways *TargetVpnGatewaysService
+
 	UrlMaps *UrlMapsService
+
+	VpnTunnels *VpnTunnelsService
 
 	ZoneOperations *ZoneOperationsService
 
@@ -157,6 +184,15 @@ func NewAddressesService(s *Service) *AddressesService {
 }
 
 type AddressesService struct {
+	s *Service
+}
+
+func NewAutoscalersService(s *Service) *AutoscalersService {
+	rs := &AutoscalersService{s: s}
+	return rs
+}
+
+type AutoscalersService struct {
 	s *Service
 }
 
@@ -241,12 +277,39 @@ type HttpHealthChecksService struct {
 	s *Service
 }
 
+func NewHttpsHealthChecksService(s *Service) *HttpsHealthChecksService {
+	rs := &HttpsHealthChecksService{s: s}
+	return rs
+}
+
+type HttpsHealthChecksService struct {
+	s *Service
+}
+
 func NewImagesService(s *Service) *ImagesService {
 	rs := &ImagesService{s: s}
 	return rs
 }
 
 type ImagesService struct {
+	s *Service
+}
+
+func NewInstanceGroupManagersService(s *Service) *InstanceGroupManagersService {
+	rs := &InstanceGroupManagersService{s: s}
+	return rs
+}
+
+type InstanceGroupManagersService struct {
+	s *Service
+}
+
+func NewInstanceGroupsService(s *Service) *InstanceGroupsService {
+	rs := &InstanceGroupsService{s: s}
+	return rs
+}
+
+type InstanceGroupsService struct {
 	s *Service
 }
 
@@ -340,12 +403,30 @@ type SnapshotsService struct {
 	s *Service
 }
 
+func NewSslCertificatesService(s *Service) *SslCertificatesService {
+	rs := &SslCertificatesService{s: s}
+	return rs
+}
+
+type SslCertificatesService struct {
+	s *Service
+}
+
 func NewTargetHttpProxiesService(s *Service) *TargetHttpProxiesService {
 	rs := &TargetHttpProxiesService{s: s}
 	return rs
 }
 
 type TargetHttpProxiesService struct {
+	s *Service
+}
+
+func NewTargetHttpsProxiesService(s *Service) *TargetHttpsProxiesService {
+	rs := &TargetHttpsProxiesService{s: s}
+	return rs
+}
+
+type TargetHttpsProxiesService struct {
 	s *Service
 }
 
@@ -367,12 +448,30 @@ type TargetPoolsService struct {
 	s *Service
 }
 
+func NewTargetVpnGatewaysService(s *Service) *TargetVpnGatewaysService {
+	rs := &TargetVpnGatewaysService{s: s}
+	return rs
+}
+
+type TargetVpnGatewaysService struct {
+	s *Service
+}
+
 func NewUrlMapsService(s *Service) *UrlMapsService {
 	rs := &UrlMapsService{s: s}
 	return rs
 }
 
 type UrlMapsService struct {
+	s *Service
+}
+
+func NewVpnTunnelsService(s *Service) *VpnTunnelsService {
+	rs := &VpnTunnelsService{s: s}
+	return rs
+}
+
+type VpnTunnelsService struct {
 	s *Service
 }
 
@@ -395,209 +494,458 @@ type ZonesService struct {
 }
 
 type AccessConfig struct {
-	// Kind: Type of the resource.
+	// Kind: [Output Only] Type of the resource. Always compute#accessConfig
+	// for access configs.
 	Kind string `json:"kind,omitempty"`
 
 	// Name: Name of this access configuration.
 	Name string `json:"name,omitempty"`
 
 	// NatIP: An external IP address associated with this instance. Specify
-	// an unused static IP address available to the project. If not
-	// specified, the external IP will be drawn from a shared ephemeral
-	// pool.
+	// an unused static external IP address available to the project or
+	// leave this field undefined to use an IP from a shared ephemeral IP
+	// address pool. If you specify a static external IP address, it must
+	// live in the same region as the zone of the instance.
 	NatIP string `json:"natIP,omitempty"`
 
-	// Type: Type of configuration. Must be set to "ONE_TO_ONE_NAT". This
-	// configures port-for-port NAT to the internet.
+	// Type: The type of configuration. The default and only option is
+	// ONE_TO_ONE_NAT.
 	Type string `json:"type,omitempty"`
 }
 
 type Address struct {
-	// Address: The IP address represented by this resource.
+	// Address: The static external IP address represented by this resource.
 	Address string `json:"address,omitempty"`
 
-	// CreationTimestamp: Creation timestamp in RFC3339 text format (output
-	// only).
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
 
 	// Description: An optional textual description of the resource;
 	// provided by the client when the resource is created.
 	Description string `json:"description,omitempty"`
 
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
+	Id uint64 `json:"id,omitempty,string"`
+
+	// Kind: [Output Only] Type of the resource. Always compute#address for
+	// addresses.
+	Kind string `json:"kind,omitempty"`
+
+	// Name: Name of the resource; provided by the client when the resource
+	// is created. The name must be 1-63 characters long, and comply with
+	// RFC1035. Specifically, the name must be 1-63 characters long and
+	// match the regular expression [a-z]([-a-z0-9]*[a-z0-9])? which means
+	// the first character must be a lowercase letter, and all following
+	// characters must be a dash, lowercase letter, or digit, except the
+	// last character, which cannot be a dash.
+	Name string `json:"name,omitempty"`
+
+	// Region: [Output Only] URL of the region where the regional address
+	// resides. This field is not applicable to global addresses.
+	Region string `json:"region,omitempty"`
+
+	// SelfLink: [Output Only] Server-defined URL for the resource.
+	SelfLink string `json:"selfLink,omitempty"`
+
+	// Status: [Output Only] The status of the address, which can be either
+	// IN_USE or RESERVED. An address that is RESERVED is currently reserved
+	// and available to use. An IN_USE address is currently being used by
+	// another resource and is not available.
+	Status string `json:"status,omitempty"`
+
+	// Users: [Output Only] The URLs of the resources that are using this
+	// address.
+	Users []string `json:"users,omitempty"`
+}
+
+type AddressAggregatedList struct {
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
+	Id string `json:"id,omitempty"`
+
+	// Items: [Output Only] A map of scoped address lists.
+	Items map[string]AddressesScopedList `json:"items,omitempty"`
+
+	// Kind: [Output Only] Type of resource. Always
+	// compute#addressAggregatedList for aggregated lists of addresses.
+	Kind string `json:"kind,omitempty"`
+
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
+	NextPageToken string `json:"nextPageToken,omitempty"`
+
+	// SelfLink: [Output Only] Server-defined URL for this resource.
+	SelfLink string `json:"selfLink,omitempty"`
+}
+
+type AddressList struct {
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
+	Id string `json:"id,omitempty"`
+
+	// Items: [Output Only] A list of Address resources.
+	Items []*Address `json:"items,omitempty"`
+
+	// Kind: [Output Only] Type of resource. Always compute#addressList for
+	// lists of addresses.
+	Kind string `json:"kind,omitempty"`
+
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
+	NextPageToken string `json:"nextPageToken,omitempty"`
+
+	// SelfLink: [Output Only] Server-defined URL for the resource.
+	SelfLink string `json:"selfLink,omitempty"`
+}
+
+type AddressesScopedList struct {
+	// Addresses: [Output Only] List of addresses contained in this scope.
+	Addresses []*Address `json:"addresses,omitempty"`
+
+	// Warning: [Output Only] Informational warning which replaces the list
+	// of addresses when the list is empty.
+	Warning *AddressesScopedListWarning `json:"warning,omitempty"`
+}
+
+type AddressesScopedListWarning struct {
+	// Code: [Output Only] The warning type identifier for this warning.
+	Code string `json:"code,omitempty"`
+
+	// Data: [Output Only] Metadata for this warning in key: value format.
+	Data []*AddressesScopedListWarningData `json:"data,omitempty"`
+
+	// Message: [Output Only] Optional human-readable details for this
+	// warning.
+	Message string `json:"message,omitempty"`
+}
+
+type AddressesScopedListWarningData struct {
+	// Key: [Output Only] A key for the warning data.
+	Key string `json:"key,omitempty"`
+
+	// Value: [Output Only] A warning data value corresponding to the key.
+	Value string `json:"value,omitempty"`
+}
+
+type AttachedDisk struct {
+	// AutoDelete: Specifies whether the disk will be auto-deleted when the
+	// instance is deleted (but not when the disk is detached from the
+	// instance).
+	AutoDelete bool `json:"autoDelete,omitempty"`
+
+	// Boot: Indicates that this is a boot disk. The virtual machine will
+	// use the first partition of the disk for its root filesystem.
+	Boot bool `json:"boot,omitempty"`
+
+	// DeviceName: Specifies a unique device name of your choice that is
+	// reflected into the /dev/disk/by-id/google-* tree of a Linux operating
+	// system running within the instance. This name can be used to
+	// reference the device for mounting, resizing, and so on, from within
+	// the instance.
+	//
+	// If not specified, the server chooses a default device
+	// name to apply to this disk, in the form persistent-disks-x, where x
+	// is a number assigned by Google Compute Engine. This field is only
+	// applicable for persistent disks.
+	DeviceName string `json:"deviceName,omitempty"`
+
+	// Index: Assigns a zero-based index to this disk, where 0 is reserved
+	// for the boot disk. For example, if you have many disks attached to an
+	// instance, each disk would have a unique index number. If not
+	// specified, the server will choose an appropriate value.
+	Index int64 `json:"index,omitempty"`
+
+	// InitializeParams: [Input Only] Specifies the parameters for a new
+	// disk that will be created alongside the new instance. Use
+	// initialization parameters to create boot disks or local SSDs attached
+	// to the new instance.
+	//
+	// This property is mutually exclusive with the
+	// source property; you can only define one or the other, but not both.
+	InitializeParams *AttachedDiskInitializeParams `json:"initializeParams,omitempty"`
+
+	// Interface: Specifies the disk interface to use for attaching this
+	// disk, either SCSI or NVME. The default is SCSI. For performance
+	// characteristics of SCSI over NVMe, see Local SSD performance.
+	Interface string `json:"interface,omitempty"`
+
+	// Kind: [Output Only] Type of the resource. Always compute#attachedDisk
+	// for attached disks.
+	Kind string `json:"kind,omitempty"`
+
+	// Licenses: [Output Only] Any valid publicly visible licenses.
+	Licenses []string `json:"licenses,omitempty"`
+
+	// Mode: The mode in which to attach this disk, either READ_WRITE or
+	// READ_ONLY. If not specified, the default is to attach the disk in
+	// READ_WRITE mode.
+	Mode string `json:"mode,omitempty"`
+
+	// Source: Specifies a valid partial or full URL to an existing
+	// Persistent Disk resource. This field is only applicable for
+	// persistent disks.
+	Source string `json:"source,omitempty"`
+
+	// Type: Specifies the type of the disk, either SCRATCH or PERSISTENT.
+	// If not specified, the default is PERSISTENT.
+	Type string `json:"type,omitempty"`
+}
+
+type AttachedDiskInitializeParams struct {
+	// DiskName: Specifies the disk name. If not specified, the default is
+	// to use the name of the instance.
+	DiskName string `json:"diskName,omitempty"`
+
+	// DiskSizeGb: Specifies the size of the disk in base-2 GB.
+	DiskSizeGb int64 `json:"diskSizeGb,omitempty,string"`
+
+	// DiskType: Specifies the disk type to use to create the instance. If
+	// not specified, the default is pd-standard, specified using the full
+	// URL. For
+	// example:
+	//
+	// https://www.googleapis.com/compute/v1/projects/project/zones
+	// /zone/diskTypes/pd-standard
+	//
+	// Other values include pd-ssd and
+	// local-ssd. If you define this field, you can provide either the full
+	// or partial URL. For example, the following are valid values:
+	// -
+	// https://www.googleapis.com/compute/v1/projects/project/zones/zone/disk
+	// Types/diskType
+	// - projects/project/zones/zone/diskTypes/diskType
+	// -
+	// zones/zone/diskTypes/diskType
+	DiskType string `json:"diskType,omitempty"`
+
+	// SourceImage: A source image used to create the disk. You can provide
+	// a private (custom) image, and Compute Engine will use the
+	// corresponding image from your project. For
+	// example:
+	//
+	// global/images/my-private-image
+	//
+	// Or you can provide an
+	// image from a publicly-available project. For example, to use a Debian
+	// image from the debian-cloud project, make sure to include the project
+	// in the
+	// URL:
+	//
+	// projects/debian-cloud/global/images/debian-7-wheezy-vYYYYMMDD
+	//
+	//
+	// where vYYYYMMDD is the image version. The fully-qualified URL will
+	// also work in both cases.
+	SourceImage string `json:"sourceImage,omitempty"`
+}
+
+type Autoscaler struct {
+	// AutoscalingPolicy: Autoscaling configuration.
+	AutoscalingPolicy *AutoscalingPolicy `json:"autoscalingPolicy,omitempty"`
+
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
+	CreationTimestamp string `json:"creationTimestamp,omitempty"`
+
+	// Description: An optional textual description of the resource;
+	// provided by the client when the resource is created.
+	Description string `json:"description,omitempty"`
+
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
 	Id uint64 `json:"id,omitempty,string"`
 
 	// Kind: Type of the resource.
 	Kind string `json:"kind,omitempty"`
 
-	// Name: Name of the resource; provided by the client when the resource
+	// Name: Name of the resource. Provided by the client when the resource
 	// is created. The name must be 1-63 characters long, and comply with
-	// RFC1035.
+	// RFC1035. Specifically, the name must be 1-63 characters long and
+	// match the regular expression [a-z]([-a-z0-9]*[a-z0-9])? which means
+	// the first character must be a lowercase letter, and all following
+	// characters must be a dash, lowercase letter, or digit, except the
+	// last character, which cannot be a dash.
 	Name string `json:"name,omitempty"`
 
-	// Region: URL of the region where the regional address resides (output
-	// only). This field is not applicable to global addresses.
-	Region string `json:"region,omitempty"`
-
-	// SelfLink: Server defined URL for the resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for the resource.
 	SelfLink string `json:"selfLink,omitempty"`
 
-	// Status: The status of the address (output only).
-	Status string `json:"status,omitempty"`
+	// Target: URL of Instance Group Manager or Replica Pool which will be
+	// controlled by Autoscaler.
+	Target string `json:"target,omitempty"`
 
-	// Users: The resources that are using this address resource.
-	Users []string `json:"users,omitempty"`
+	// Zone: [Output Only] URL of the zone where the instance group resides.
+	Zone string `json:"zone,omitempty"`
 }
 
-type AddressAggregatedList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+type AutoscalerAggregatedList struct {
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
 	Id string `json:"id,omitempty"`
 
-	// Items: A map of scoped address lists.
-	Items map[string]AddressesScopedList `json:"items,omitempty"`
+	// Items: A map of scoped autoscaler lists.
+	Items map[string]AutoscalersScopedList `json:"items,omitempty"`
 
 	// Kind: Type of resource.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
-type AddressList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+type AutoscalerList struct {
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
 	Id string `json:"id,omitempty"`
 
-	// Items: The address resources.
-	Items []*Address `json:"items,omitempty"`
+	// Items: A list of Autoscaler resources.
+	Items []*Autoscaler `json:"items,omitempty"`
 
 	// Kind: Type of resource.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for the resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
-type AddressesScopedList struct {
-	// Addresses: List of addresses contained in this scope.
-	Addresses []*Address `json:"addresses,omitempty"`
+type AutoscalersScopedList struct {
+	// Autoscalers: List of autoscalers contained in this scope.
+	Autoscalers []*Autoscaler `json:"autoscalers,omitempty"`
 
-	// Warning: Informational warning which replaces the list of addresses
+	// Warning: Informational warning which replaces the list of autoscalers
 	// when the list is empty.
-	Warning *AddressesScopedListWarning `json:"warning,omitempty"`
+	Warning *AutoscalersScopedListWarning `json:"warning,omitempty"`
 }
 
-type AddressesScopedListWarning struct {
-	// Code: The warning type identifier for this warning.
+type AutoscalersScopedListWarning struct {
+	// Code: [Output Only] The warning type identifier for this warning.
 	Code string `json:"code,omitempty"`
 
-	// Data: Metadata for this warning in 'key: value' format.
-	Data []*AddressesScopedListWarningData `json:"data,omitempty"`
+	// Data: [Output Only] Metadata for this warning in key: value format.
+	Data []*AutoscalersScopedListWarningData `json:"data,omitempty"`
 
-	// Message: Optional human-readable details for this warning.
+	// Message: [Output Only] Optional human-readable details for this
+	// warning.
 	Message string `json:"message,omitempty"`
 }
 
-type AddressesScopedListWarningData struct {
-	// Key: A key for the warning data.
+type AutoscalersScopedListWarningData struct {
+	// Key: [Output Only] A key for the warning data.
 	Key string `json:"key,omitempty"`
 
-	// Value: A warning data value corresponding to the key.
+	// Value: [Output Only] A warning data value corresponding to the key.
 	Value string `json:"value,omitempty"`
 }
 
-type AttachedDisk struct {
-	// AutoDelete: Whether the disk will be auto-deleted when the instance
-	// is deleted (but not when the disk is detached from the instance).
-	AutoDelete bool `json:"autoDelete,omitempty"`
+type AutoscalingPolicy struct {
+	// CoolDownPeriodSec: The number of seconds that the Autoscaler should
+	// wait between two succeeding changes to the number of virtual
+	// machines. You should define an interval that is at least as long as
+	// the initialization time of a virtual machine and the time it may take
+	// for replica pool to create the virtual machine. The default is 60
+	// seconds.
+	CoolDownPeriodSec int64 `json:"coolDownPeriodSec,omitempty"`
 
-	// Boot: Indicates that this is a boot disk. VM will use the first
-	// partition of the disk for its root filesystem.
-	Boot bool `json:"boot,omitempty"`
+	// CpuUtilization: TODO(jbartosik): Add support for scaling based on
+	// muliple utilization metrics (take max recommendation). Exactly one
+	// utilization policy should be provided. Configuration parameters of
+	// CPU based autoscaling policy.
+	CpuUtilization *AutoscalingPolicyCpuUtilization `json:"cpuUtilization,omitempty"`
 
-	// DeviceName: Persistent disk only; must be unique within the instance
-	// when specified. This represents a unique device name that is
-	// reflected into the /dev/ tree of a Linux operating system running
-	// within the instance. If not specified, a default will be chosen by
-	// the system.
-	DeviceName string `json:"deviceName,omitempty"`
+	// CustomMetricUtilizations: Configuration parameters of autoscaling
+	// based on custom metric.
+	CustomMetricUtilizations []*AutoscalingPolicyCustomMetricUtilization `json:"customMetricUtilizations,omitempty"`
 
-	// Index: A zero-based index to assign to this disk, where 0 is reserved
-	// for the boot disk. If not specified, the server will choose an
-	// appropriate value (output only).
-	Index int64 `json:"index,omitempty"`
+	// LoadBalancingUtilization: Configuration parameters of autoscaling
+	// based on load balancer.
+	LoadBalancingUtilization *AutoscalingPolicyLoadBalancingUtilization `json:"loadBalancingUtilization,omitempty"`
 
-	// InitializeParams: Initialization parameters.
-	InitializeParams *AttachedDiskInitializeParams `json:"initializeParams,omitempty"`
+	// MaxNumReplicas: The maximum number of replicas that the Autoscaler
+	// can scale up to. This field is required for config to be effective.
+	// Maximum number of replicas should be not lower than minimal number of
+	// replicas. Absolute limit for this value is defined in Autoscaler
+	// backend.
+	MaxNumReplicas int64 `json:"maxNumReplicas,omitempty"`
 
-	Interface string `json:"interface,omitempty"`
-
-	// Kind: Type of the resource.
-	Kind string `json:"kind,omitempty"`
-
-	// Licenses: Public visible licenses.
-	Licenses []string `json:"licenses,omitempty"`
-
-	// Mode: The mode in which to attach this disk, either "READ_WRITE" or
-	// "READ_ONLY".
-	Mode string `json:"mode,omitempty"`
-
-	// Source: Persistent disk only; the URL of the persistent disk
-	// resource.
-	Source string `json:"source,omitempty"`
-
-	// Type: Type of the disk, either "SCRATCH" or "PERSISTENT". Note that
-	// persistent disks must be created before you can specify them here.
-	Type string `json:"type,omitempty"`
+	// MinNumReplicas: The minimum number of replicas that the Autoscaler
+	// can scale down to. Can't be less than 0. If not provided Autoscaler
+	// will choose default value depending on maximal number of replicas.
+	MinNumReplicas int64 `json:"minNumReplicas,omitempty"`
 }
 
-type AttachedDiskInitializeParams struct {
-	// DiskName: Name of the disk (when not provided defaults to the name of
-	// the instance).
-	DiskName string `json:"diskName,omitempty"`
+type AutoscalingPolicyCpuUtilization struct {
+	// UtilizationTarget: The target utilization that the Autoscaler should
+	// maintain. It is represented as a fraction of used cores. For example:
+	// 6 cores used in 8-core VM are represented here as 0.75. Must be a
+	// float value between (0, 1]. If not defined, the default is 0.8.
+	UtilizationTarget float64 `json:"utilizationTarget,omitempty"`
+}
 
-	// DiskSizeGb: Size of the disk in base-2 GB.
-	DiskSizeGb int64 `json:"diskSizeGb,omitempty,string"`
+type AutoscalingPolicyCustomMetricUtilization struct {
+	// Metric: Identifier of the metric. It should be a Cloud Monitoring
+	// metric. The metric can not have negative values. The metric should be
+	// an utilization metric (increasing number of VMs handling requests x
+	// times should reduce average value of the metric roughly x times). For
+	// example you could use:
+	// compute.googleapis.com/instance/network/received_bytes_count.
+	Metric string `json:"metric,omitempty"`
 
-	// DiskType: URL of the disk type resource describing which disk type to
-	// use to create the disk; provided by the client when the disk is
-	// created.
-	DiskType string `json:"diskType,omitempty"`
+	// UtilizationTarget: Target value of the metric which Autoscaler should
+	// maintain. Must be a positive value.
+	UtilizationTarget float64 `json:"utilizationTarget,omitempty"`
 
-	// SourceImage: The source image used to create this disk.
-	SourceImage string `json:"sourceImage,omitempty"`
+	// UtilizationTargetType: Defines type in which utilization_target is
+	// expressed.
+	UtilizationTargetType string `json:"utilizationTargetType,omitempty"`
+}
+
+type AutoscalingPolicyLoadBalancingUtilization struct {
+	// UtilizationTarget: Fraction of backend capacity utilization (set in
+	// HTTP load balancing configuration) that Autoscaler should maintain.
+	// Must be a positive float value. If not defined, the default is 0.8.
+	// For example if your maxRatePerInstance capacity (in HTTP Load
+	// Balancing configuration) is set at 10 and you would like to keep
+	// number of instances such that each instance receives 7 QPS on
+	// average, set this to 0.7.
+	UtilizationTarget float64 `json:"utilizationTarget,omitempty"`
 }
 
 type Backend struct {
-	// BalancingMode: The balancing mode of this backend, default is
-	// UTILIZATION.
+	// BalancingMode: Specifies the balancing mode for this backend. The
+	// default is UTILIZATION but available values are UTILIZATION and RATE.
 	BalancingMode string `json:"balancingMode,omitempty"`
 
-	// CapacityScaler: The multiplier (a value between 0 and 1e6) of the max
-	// capacity (CPU or RPS, depending on 'balancingMode') the group should
-	// serve up to. 0 means the group is totally drained. Default value is
-	// 1. Valid range is [0, 1e6].
+	// CapacityScaler: A multiplier applied to the group's maximum servicing
+	// capacity (either UTILIZATION or RATE). Default value is 1, which
+	// means the group will serve up to 100% of its configured CPU or RPS
+	// (depending on balancingMode). A setting of 0 means the group is
+	// completely drained, offering 0% of its available CPU or RPS. Valid
+	// range is [0.0,1.0].
 	CapacityScaler float64 `json:"capacityScaler,omitempty"`
 
-	// Description: An optional textual description of the resource, which
-	// is provided by the client when the resource is created.
+	// Description: An optional textual description of the resource.
+	// Provided by the client when the resource is created.
 	Description string `json:"description,omitempty"`
 
-	// Group: URL of a zonal Cloud Resource View resource. This resource
-	// view defines the list of instances that serve traffic. Member virtual
-	// machine instances from each resource view must live in the same zone
-	// as the resource view itself. No two backends in a backend service are
-	// allowed to use same Resource View resource.
+	// Group: The fully-qualified URL of a zonal Instance Group resource.
+	// This instance group defines the list of instances that serve traffic.
+	// Member virtual machine instances from each instance group must live
+	// in the same zone as the instance group itself. No two backends in a
+	// backend service are allowed to use same Instance Group
+	// resource.
+	//
+	// Note that you must specify an Instance Group resource
+	// using the fully-qualified URL, rather than a partial URL.
 	Group string `json:"group,omitempty"`
 
 	// MaxRate: The max RPS of the group. Can be used with either balancing
@@ -611,9 +959,9 @@ type Backend struct {
 	// maxRatePerInstance must be set.
 	MaxRatePerInstance float64 `json:"maxRatePerInstance,omitempty"`
 
-	// MaxUtilization: Used when 'balancingMode' is UTILIZATION. This ratio
+	// MaxUtilization: Used when balancingMode is UTILIZATION. This ratio
 	// defines the CPU utilization target for the group. The default is 0.8.
-	// Valid range is [0, 1].
+	// Valid range is [0.0, 1.0].
 	MaxUtilization float64 `json:"maxUtilization,omitempty"`
 }
 
@@ -621,12 +969,12 @@ type BackendService struct {
 	// Backends: The list of backends that serve this BackendService.
 	Backends []*Backend `json:"backends,omitempty"`
 
-	// CreationTimestamp: Creation timestamp in RFC3339 text format (output
-	// only).
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
 
-	// Description: An optional textual description of the resource;
-	// provided by the client when the resource is created.
+	// Description: An optional textual description of the resource.
+	// Provided by the client when the resource is created.
 	Description string `json:"description,omitempty"`
 
 	// Fingerprint: Fingerprint of this resource. A hash of the contents
@@ -635,24 +983,30 @@ type BackendService struct {
 	// fingerprint must be provided in order to update the BackendService.
 	Fingerprint string `json:"fingerprint,omitempty"`
 
-	// HealthChecks: The list of URLs to the HttpHealthCheck resource for
-	// health checking this BackendService. Currently at most one health
-	// check can be specified, and a health check is required.
+	// HealthChecks: The list of URLs to the HttpHealthCheck or
+	// HttpsHealthCheck resource for health checking this BackendService.
+	// Currently at most one health check can be specified, and a health
+	// check is required.
 	HealthChecks []string `json:"healthChecks,omitempty"`
 
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
 	Id uint64 `json:"id,omitempty,string"`
 
-	// Kind: Type of the resource.
+	// Kind: [Output Only] Type of resource. Always compute#backendService
+	// for backend services.
 	Kind string `json:"kind,omitempty"`
 
-	// Name: Name of the resource; provided by the client when the resource
+	// Name: Name of the resource. Provided by the client when the resource
 	// is created. The name must be 1-63 characters long, and comply with
-	// RFC1035.
+	// RFC1035. Specifically, the name must be 1-63 characters long and
+	// match the regular expression [a-z]([-a-z0-9]*[a-z0-9])? which means
+	// the first character must be a lowercase letter, and all following
+	// characters must be a dash, lowercase letter, or digit, except the
+	// last character, which cannot be a dash.
 	Name string `json:"name,omitempty"`
 
-	// Port: Deprecated in favor of port_name. The TCP port to connect on
+	// Port: Deprecated in favor of port name. The TCP port to connect on
 	// the backend. The default value is 80.
 	Port int64 `json:"port,omitempty"`
 
@@ -662,7 +1016,7 @@ type BackendService struct {
 
 	Protocol string `json:"protocol,omitempty"`
 
-	// SelfLink: Server defined URL for the resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for the resource.
 	SelfLink string `json:"selfLink,omitempty"`
 
 	// TimeoutSec: How many seconds to wait for the backend before
@@ -673,26 +1027,28 @@ type BackendService struct {
 type BackendServiceGroupHealth struct {
 	HealthStatus []*HealthStatus `json:"healthStatus,omitempty"`
 
-	// Kind: Type of resource.
+	// Kind: [Output Only] Type of resource. Always
+	// compute#backendServiceGroupHealth for the health of backend services.
 	Kind string `json:"kind,omitempty"`
 }
 
 type BackendServiceList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
 	Id string `json:"id,omitempty"`
 
-	// Items: The BackendService resources.
+	// Items: A list of BackendService resources.
 	Items []*BackendService `json:"items,omitempty"`
 
-	// Kind: Type of resource.
+	// Kind: [Output Only] Type of resource. Always
+	// compute#backendServiceList for lists of backend services.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
@@ -709,248 +1065,338 @@ type DeprecationStatus struct {
 	// deprecation state of this resource will be changed to OBSOLETE.
 	Obsolete string `json:"obsolete,omitempty"`
 
-	// Replacement: A URL of the suggested replacement for the deprecated
-	// resource. The deprecated resource and its replacement must be
-	// resources of the same kind.
+	// Replacement: The URL of the suggested replacement for a deprecated
+	// resource. The suggested replacement resource must be the same kind of
+	// resource as the deprecated resource.
 	Replacement string `json:"replacement,omitempty"`
 
-	// State: The deprecation state. Can be "DEPRECATED", "OBSOLETE", or
-	// "DELETED". Operations which create a new resource using a
-	// "DEPRECATED" resource will return successfully, but with a warning
-	// indicating the deprecated resource and recommending its replacement.
-	// New uses of "OBSOLETE" or "DELETED" resources will result in an
-	// error.
+	// State: The deprecation state of this resource. This can be
+	// DEPRECATED, OBSOLETE, or DELETED. Operations which create a new
+	// resource using a DEPRECATED resource will return successfully, but
+	// with a warning indicating the deprecated resource and recommending
+	// its replacement. Operations which use OBSOLETE or DELETED resources
+	// will be rejected and result in an error.
 	State string `json:"state,omitempty"`
 }
 
 type Disk struct {
-	// CreationTimestamp: Creation timestamp in RFC3339 text format (output
-	// only).
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
 
 	// Description: An optional textual description of the resource;
 	// provided by the client when the resource is created.
 	Description string `json:"description,omitempty"`
 
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] The unique identifier for the resource. This
+	// identifier is defined by the server.
 	Id uint64 `json:"id,omitempty,string"`
 
-	// Kind: Type of the resource.
+	// Kind: [Output Only] Type of the resource. Always compute#disk for
+	// disks.
 	Kind string `json:"kind,omitempty"`
 
-	// Licenses: Public visible licenses.
+	// LastAttachTimestamp: [Output Only] Last attach timestamp in RFC3339
+	// text format.
+	LastAttachTimestamp string `json:"lastAttachTimestamp,omitempty"`
+
+	// LastDetachTimestamp: [Output Only] Last detach timestamp in RFC3339
+	// text format.
+	LastDetachTimestamp string `json:"lastDetachTimestamp,omitempty"`
+
+	// Licenses: Any applicable publicly visible licenses.
 	Licenses []string `json:"licenses,omitempty"`
 
 	// Name: Name of the resource; provided by the client when the resource
 	// is created. The name must be 1-63 characters long, and comply with
-	// RFC1035.
+	// RFC1035. Specifically, the name must be 1-63 characters long and
+	// match the regular expression [a-z]([-a-z0-9]*[a-z0-9])? which means
+	// the first character must be a lowercase letter, and all following
+	// characters must be a dash, lowercase letter, or digit, except the
+	// last character, which cannot be a dash.
 	Name string `json:"name,omitempty"`
 
 	// Options: Internal use only.
 	Options string `json:"options,omitempty"`
 
-	// SelfLink: Server defined URL for the resource (output only).
+	// SelfLink: [Output Only] Server-defined fully-qualified URL for this
+	// resource.
 	SelfLink string `json:"selfLink,omitempty"`
 
-	// SizeGb: Size of the persistent disk, specified in GB. This parameter
-	// is optional when creating a disk from a disk image or a snapshot,
-	// otherwise it is required.
+	// SizeGb: Size of the persistent disk, specified in GB. You can specify
+	// this field when creating a persistent disk using the sourceImage or
+	// sourceSnapshot parameter, or specify it alone to create an empty
+	// persistent disk.
+	//
+	// If you specify this field along with sourceImage or
+	// sourceSnapshot, the value of sizeGb must not be less than the size of
+	// the sourceImage or the size of the snapshot.
 	SizeGb int64 `json:"sizeGb,omitempty,string"`
 
-	// SourceImage: The source image used to create this disk.
+	// SourceImage: The source image used to create this disk. If the source
+	// image is deleted from the system, this field will not be set, even if
+	// an image with the same name has been re-created.
+	//
+	// When creating a
+	// disk, you can provide a private (custom) image using the following
+	// input, and Compute Engine will use the corresponding image from your
+	// project. For example:
+	//
+	// global/images/my-private-image
+	//
+	// Or you can
+	// provide an image from a publicly-available project. For example, to
+	// use a Debian image from the debian-cloud project, make sure to
+	// include the project in the
+	// URL:
+	//
+	// projects/debian-cloud/global/images/debian-7-wheezy-vYYYYMMDD
+	//
+	//
+	// where vYYYYMMDD is the image version. The fully-qualified URL will
+	// also work in both cases.
 	SourceImage string `json:"sourceImage,omitempty"`
 
-	// SourceImageId: The 'id' value of the image used to create this disk.
-	// This value may be used to determine whether the disk was created from
-	// the current or a previous instance of a given image.
+	// SourceImageId: The ID value of the image used to create this disk.
+	// This value identifies the exact image that was used to create this
+	// persistent disk. For example, if you created the persistent disk from
+	// an image that was later deleted and recreated under the same name,
+	// the source image ID would identify the exact version of the image
+	// that was used.
 	SourceImageId string `json:"sourceImageId,omitempty"`
 
-	// SourceSnapshot: The source snapshot used to create this disk.
+	// SourceSnapshot: The source snapshot used to create this disk. You can
+	// provide this as a partial or full URL to the resource. For example,
+	// the following are valid values:
+	// -
+	// https://www.googleapis.com/compute/v1/projects/project/global/snapshot
+	// s/snapshot
+	// - projects/project/global/snapshots/snapshot
+	// -
+	// global/snapshots/snapshot
 	SourceSnapshot string `json:"sourceSnapshot,omitempty"`
 
-	// SourceSnapshotId: The 'id' value of the snapshot used to create this
-	// disk. This value may be used to determine whether the disk was
-	// created from the current or a previous instance of a given disk
-	// snapshot.
+	// SourceSnapshotId: [Output Only] The unique ID of the snapshot used to
+	// create this disk. This value identifies the exact snapshot that was
+	// used to create this persistent disk. For example, if you created the
+	// persistent disk from a snapshot that was later deleted and recreated
+	// under the same name, the source snapshot ID would identify the exact
+	// version of the snapshot that was used.
 	SourceSnapshotId string `json:"sourceSnapshotId,omitempty"`
 
-	// Status: The status of disk creation (output only).
+	// Status: [Output Only] The status of disk creation. Applicable
+	// statuses includes: CREATING, FAILED, READY, RESTORING.
 	Status string `json:"status,omitempty"`
 
 	// Type: URL of the disk type resource describing which disk type to use
 	// to create the disk; provided by the client when the disk is created.
 	Type string `json:"type,omitempty"`
 
-	// Zone: URL of the zone where the disk resides (output only).
+	// Users: Links to the users of the disk (attached instances) in form:
+	// project/zones/zone/instances/instance
+	Users []string `json:"users,omitempty"`
+
+	// Zone: [Output Only] URL of the zone where the disk resides.
 	Zone string `json:"zone,omitempty"`
 }
 
 type DiskAggregatedList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] The unique identifier for the resource. This
+	// identifier is defined by the server.
 	Id string `json:"id,omitempty"`
 
-	// Items: A map of scoped disk lists.
+	// Items: [Output Only] A map of scoped disk lists.
 	Items map[string]DisksScopedList `json:"items,omitempty"`
 
-	// Kind: Type of resource.
+	// Kind: [Output Only] Type of resource. Always
+	// compute#diskAggregatedList for aggregated lists of persistent disks.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
 type DiskList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] The unique identifier for the resource. This
+	// identifier is defined by the server.
 	Id string `json:"id,omitempty"`
 
-	// Items: The persistent disk resources.
+	// Items: [Output Only] A list of persistent disks.
 	Items []*Disk `json:"items,omitempty"`
 
-	// Kind: Type of resource.
+	// Kind: [Output Only] Type of resource. Always compute#diskList for
+	// lists of disks.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
+type DiskMoveRequest struct {
+	// DestinationZone: The URL of the destination zone to move the disk to.
+	// This can be a full or partial URL. For example, the following are all
+	// valid URLs to a zone:
+	// -
+	// https://www.googleapis.com/compute/v1/projects/project/zones/zone
+	// -
+	// projects/project/zones/zone
+	// - zones/zone
+	DestinationZone string `json:"destinationZone,omitempty"`
+
+	// TargetDisk: The URL of the target disk to move. This can be a full or
+	// partial URL. For example, the following are all valid URLs to a disk:
+	//
+	// -
+	// https://www.googleapis.com/compute/v1/projects/project/zones/zone/disk
+	// s/disk
+	// - projects/project/zones/zone/disks/disk
+	// -
+	// zones/zone/disks/disk
+	TargetDisk string `json:"targetDisk,omitempty"`
+}
+
 type DiskType struct {
-	// CreationTimestamp: Creation timestamp in RFC3339 text format (output
-	// only).
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
 
-	// DefaultDiskSizeGb: Server defined default disk size in gb (output
-	// only).
+	// DefaultDiskSizeGb: [Output Only] Server-defined default disk size in
+	// GB.
 	DefaultDiskSizeGb int64 `json:"defaultDiskSizeGb,omitempty,string"`
 
-	// Deprecated: The deprecation status associated with this disk type.
+	// Deprecated: [Output Only] The deprecation status associated with this
+	// disk type.
 	Deprecated *DeprecationStatus `json:"deprecated,omitempty"`
 
-	// Description: An optional textual description of the resource.
+	// Description: [Output Only] An optional textual description of the
+	// resource.
 	Description string `json:"description,omitempty"`
 
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
 	Id uint64 `json:"id,omitempty,string"`
 
-	// Kind: Type of the resource.
+	// Kind: [Output Only] Type of the resource. Always compute#diskType for
+	// disk types.
 	Kind string `json:"kind,omitempty"`
 
-	// Name: Name of the resource.
+	// Name: [Output Only] Name of the resource.
 	Name string `json:"name,omitempty"`
 
-	// SelfLink: Server defined URL for the resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for the resource.
 	SelfLink string `json:"selfLink,omitempty"`
 
-	// ValidDiskSize: An optional textual descroption of the valid disk
-	// size, e.g., "10GB-10TB".
+	// ValidDiskSize: [Output Only] An optional textual description of the
+	// valid disk size, such as "10GB-10TB".
 	ValidDiskSize string `json:"validDiskSize,omitempty"`
 
-	// Zone: Url of the zone where the disk type resides (output only).
+	// Zone: [Output Only] URL of the zone where the disk type resides.
 	Zone string `json:"zone,omitempty"`
 }
 
 type DiskTypeAggregatedList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
 	Id string `json:"id,omitempty"`
 
-	// Items: A map of scoped disk type lists.
+	// Items: [Output Only] A map of scoped disk type lists.
 	Items map[string]DiskTypesScopedList `json:"items,omitempty"`
 
-	// Kind: Type of resource.
+	// Kind: [Output Only] Type of resource. Always
+	// compute#diskTypeAggregatedList.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
 type DiskTypeList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
 	Id string `json:"id,omitempty"`
 
-	// Items: The disk type resources.
+	// Items: [Output Only] A list of Disk Type resources.
 	Items []*DiskType `json:"items,omitempty"`
 
-	// Kind: Type of resource.
+	// Kind: [Output Only] Type of resource. Always compute#diskTypeList for
+	// disk types.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
 type DiskTypesScopedList struct {
-	// DiskTypes: List of disk types contained in this scope.
+	// DiskTypes: [Output Only] List of disk types contained in this scope.
 	DiskTypes []*DiskType `json:"diskTypes,omitempty"`
 
-	// Warning: Informational warning which replaces the list of disk types
-	// when the list is empty.
+	// Warning: [Output Only] Informational warning which replaces the list
+	// of disk types when the list is empty.
 	Warning *DiskTypesScopedListWarning `json:"warning,omitempty"`
 }
 
 type DiskTypesScopedListWarning struct {
-	// Code: The warning type identifier for this warning.
+	// Code: [Output Only] The warning type identifier for this warning.
 	Code string `json:"code,omitempty"`
 
-	// Data: Metadata for this warning in 'key: value' format.
+	// Data: [Output Only] Metadata for this warning in key: value format.
 	Data []*DiskTypesScopedListWarningData `json:"data,omitempty"`
 
-	// Message: Optional human-readable details for this warning.
+	// Message: [Output Only] Optional human-readable details for this
+	// warning.
 	Message string `json:"message,omitempty"`
 }
 
 type DiskTypesScopedListWarningData struct {
-	// Key: A key for the warning data.
+	// Key: [Output Only] A key for the warning data.
 	Key string `json:"key,omitempty"`
 
-	// Value: A warning data value corresponding to the key.
+	// Value: [Output Only] A warning data value corresponding to the key.
 	Value string `json:"value,omitempty"`
 }
 
 type DisksScopedList struct {
-	// Disks: List of disks contained in this scope.
+	// Disks: [Output Only] List of disks contained in this scope.
 	Disks []*Disk `json:"disks,omitempty"`
 
-	// Warning: Informational warning which replaces the list of disks when
-	// the list is empty.
+	// Warning: [Output Only] Informational warning which replaces the list
+	// of disks when the list is empty.
 	Warning *DisksScopedListWarning `json:"warning,omitempty"`
 }
 
 type DisksScopedListWarning struct {
-	// Code: The warning type identifier for this warning.
+	// Code: [Output Only] The warning type identifier for this warning.
 	Code string `json:"code,omitempty"`
 
-	// Data: Metadata for this warning in 'key: value' format.
+	// Data: [Output Only] Metadata for this warning in key: value format.
 	Data []*DisksScopedListWarningData `json:"data,omitempty"`
 
-	// Message: Optional human-readable details for this warning.
+	// Message: [Output Only] Optional human-readable details for this
+	// warning.
 	Message string `json:"message,omitempty"`
 }
 
 type DisksScopedListWarningData struct {
-	// Key: A key for the warning data.
+	// Key: [Output Only] A key for the warning data.
 	Key string `json:"key,omitempty"`
 
-	// Value: A warning data value corresponding to the key.
+	// Value: [Output Only] A warning data value corresponding to the key.
 	Value string `json:"value,omitempty"`
 }
 
@@ -960,85 +1406,111 @@ type Firewall struct {
 	// connection.
 	Allowed []*FirewallAllowed `json:"allowed,omitempty"`
 
-	// CreationTimestamp: Creation timestamp in RFC3339 text format (output
-	// only).
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
 
 	// Description: An optional textual description of the resource;
 	// provided by the client when the resource is created.
 	Description string `json:"description,omitempty"`
 
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] The unique identifier for the resource. This
+	// identifier is defined by the server.
 	Id uint64 `json:"id,omitempty,string"`
 
-	// Kind: Type of the resource.
+	// Kind: [Output Ony] Type of the resource. Always compute#firewall for
+	// firewall rules.
 	Kind string `json:"kind,omitempty"`
 
 	// Name: Name of the resource; provided by the client when the resource
 	// is created. The name must be 1-63 characters long, and comply with
-	// RFC1035.
+	// RFC1035. Specifically, the name must be 1-63 characters long and
+	// match the regular expression [a-z]([-a-z0-9]*[a-z0-9])? which means
+	// the first character must be a lowercase letter, and all following
+	// characters must be a dash, lowercase letter, or digit, except the
+	// last character, which cannot be a dash.
 	Name string `json:"name,omitempty"`
 
-	// Network: URL of the network to which this firewall is applied;
-	// provided by the client when the firewall is created.
+	// Network: URL of the network resource for this firewall rule. This
+	// field is required for creating an instance but optional when creating
+	// a firewall rule. If not specified when creating a firewall rule, the
+	// default network is used:
+	// global/networks/default
+	// If you choose to
+	// specify this property, you can specify the network as a full or
+	// partial URL. For example, the following are all valid URLs:
+	// -
+	// https://www.googleapis.com/compute/v1/projects/myproject/global/networ
+	// ks/my-network
+	// - projects/myproject/global/networks/my-network
+	// -
+	// global/networks/default
 	Network string `json:"network,omitempty"`
 
-	// SelfLink: Server defined URL for the resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for the resource.
 	SelfLink string `json:"selfLink,omitempty"`
 
-	// SourceRanges: A list of IP address blocks expressed in CIDR format
-	// which this rule applies to. One or both of sourceRanges and
-	// sourceTags may be set; an inbound connection is allowed if either the
-	// range or the tag of the source matches.
+	// SourceRanges: The IP address blocks that this rule applies to,
+	// expressed in CIDR format. One or both of sourceRanges and sourceTags
+	// may be set.
+	//
+	// If both properties are set, an inbound connection is
+	// allowed if the range matches the sourceRanges OR the tag of the
+	// source matches the sourceTags property. The connection does not need
+	// to match both properties.
 	SourceRanges []string `json:"sourceRanges,omitempty"`
 
 	// SourceTags: A list of instance tags which this rule applies to. One
-	// or both of sourceRanges and sourceTags may be set; an inbound
-	// connection is allowed if either the range or the tag of the source
-	// matches.
+	// or both of sourceRanges and sourceTags may be set.
+	//
+	// If both
+	// properties are set, an inbound connection is allowed if the range
+	// matches the sourceRanges OR the tag of the source matches the
+	// sourceTags property. The connection does not need to match both
+	// properties.
 	SourceTags []string `json:"sourceTags,omitempty"`
 
 	// TargetTags: A list of instance tags indicating sets of instances
-	// located on network which may make network connections as specified in
-	// allowed. If no targetTags are specified, the firewall rule applies to
-	// all instances on the specified network.
+	// located in the network that may make network connections as specified
+	// in allowed[]. If no targetTags are specified, the firewall rule
+	// applies to all instances on the specified network.
 	TargetTags []string `json:"targetTags,omitempty"`
 }
 
 type FirewallAllowed struct {
-	// IPProtocol: Required; this is the IP protocol that is allowed for
-	// this rule. This can either be one of the following well known
-	// protocol strings ["tcp", "udp", "icmp", "esp", "ah", "sctp"], or the
-	// IP protocol number.
+	// IPProtocol: The IP protocol that is allowed for this rule. The
+	// protocol type is required when creating a firewall. This value can
+	// either be one of the following well known protocol strings (tcp, udp,
+	// icmp, esp, ah, sctp), or the IP protocol number.
 	IPProtocol string `json:"IPProtocol,omitempty"`
 
-	// Ports: An optional list of ports which are allowed. It is an error to
-	// specify this for any protocol that isn't UDP or TCP. Each entry must
-	// be either an integer or a range. If not specified, connections
-	// through any port are allowed.
+	// Ports: An optional list of ports which are allowed. This field is
+	// only applicable for UDP or TCP protocol. Each entry must be either an
+	// integer or a range. If not specified, connections through any port
+	// are allowed
 	//
-	// Example inputs include: ["22"],
-	// ["80","443"] and ["12345-12349"].
+	// Example inputs include: ["22"], ["80","443"], and
+	// ["12345-12349"].
 	Ports []string `json:"ports,omitempty"`
 }
 
 type FirewallList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] The unique identifier for the resource. This
+	// identifier is defined by the server.
 	Id string `json:"id,omitempty"`
 
-	// Items: The firewall resources.
+	// Items: [Output Only] A list of Firewall resources.
 	Items []*Firewall `json:"items,omitempty"`
 
-	// Kind: Type of resource.
+	// Kind: [Output Only] Type of resource. Always compute#firewallList for
+	// lists of firewalls.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
@@ -1051,55 +1523,59 @@ type ForwardingRule struct {
 	// regional) will be assigned.
 	IPAddress string `json:"IPAddress,omitempty"`
 
-	// IPProtocol: The IP protocol to which this rule applies, valid options
-	// are 'TCP', 'UDP', 'ESP', 'AH' or 'SCTP'.
+	// IPProtocol: The IP protocol to which this rule applies. Valid options
+	// are TCP, UDP, ESP, AH or SCTP.
 	IPProtocol string `json:"IPProtocol,omitempty"`
 
-	// CreationTimestamp: Creation timestamp in RFC3339 text format (output
-	// only).
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
 
 	// Description: An optional textual description of the resource;
 	// provided by the client when the resource is created.
 	Description string `json:"description,omitempty"`
 
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
 	Id uint64 `json:"id,omitempty,string"`
 
-	// Kind: Type of the resource.
+	// Kind: [Output Only] Type of the resource. Always
+	// compute#forwardingRule.
 	Kind string `json:"kind,omitempty"`
 
 	// Name: Name of the resource; provided by the client when the resource
 	// is created. The name must be 1-63 characters long, and comply with
-	// RFC1035.
+	// RFC1035. Specifically, the name must be 1-63 characters long and
+	// match the regular expression [a-z]([-a-z0-9]*[a-z0-9])? which means
+	// the first character must be a lowercase letter, and all following
+	// characters must be a dash, lowercase letter, or digit, except the
+	// last character, which cannot be a dash.
 	Name string `json:"name,omitempty"`
 
-	// PortRange: Applicable only when 'IPProtocol' is 'TCP', 'UDP' or
-	// 'SCTP', only packets addressed to ports in the specified range will
-	// be forwarded to 'target'. If 'portRange' is left empty (default
-	// value), all ports are forwarded. Forwarding rules with the same
-	// [IPAddress, IPProtocol] pair must have disjoint port ranges.
+	// PortRange: Applicable only when IPProtocol is TCP, UDP, or SCTP, only
+	// packets addressed to ports in the specified range will be forwarded
+	// to target. Forwarding rules with the same [IPAddress, IPProtocol]
+	// pair must have disjoint port ranges.
 	PortRange string `json:"portRange,omitempty"`
 
-	// Region: URL of the region where the regional forwarding rule resides
-	// (output only). This field is not applicable to global forwarding
+	// Region: [Output Only] URL of the region where the regional forwarding
+	// rule resides. This field is not applicable to global forwarding
 	// rules.
 	Region string `json:"region,omitempty"`
 
-	// SelfLink: Server defined URL for the resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for the resource.
 	SelfLink string `json:"selfLink,omitempty"`
 
 	// Target: The URL of the target resource to receive the matched
 	// traffic. For regional forwarding rules, this target must live in the
 	// same region as the forwarding rule. For global forwarding rules, this
-	// target must be a global TargetHttpProxy resource.
+	// target must be a global TargetHttpProxy or TargetHttpsProxy resource.
 	Target string `json:"target,omitempty"`
 }
 
 type ForwardingRuleAggregatedList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
 	Id string `json:"id,omitempty"`
 
 	// Items: A map of scoped forwarding rule lists.
@@ -1108,30 +1584,30 @@ type ForwardingRuleAggregatedList struct {
 	// Kind: Type of resource.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
 type ForwardingRuleList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource. Set by the
+	// server.
 	Id string `json:"id,omitempty"`
 
-	// Items: The ForwardingRule resources.
+	// Items: A list of ForwardingRule resources.
 	Items []*ForwardingRule `json:"items,omitempty"`
 
 	// Kind: Type of resource.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
@@ -1145,21 +1621,22 @@ type ForwardingRulesScopedList struct {
 }
 
 type ForwardingRulesScopedListWarning struct {
-	// Code: The warning type identifier for this warning.
+	// Code: [Output Only] The warning type identifier for this warning.
 	Code string `json:"code,omitempty"`
 
-	// Data: Metadata for this warning in 'key: value' format.
+	// Data: [Output Only] Metadata for this warning in key: value format.
 	Data []*ForwardingRulesScopedListWarningData `json:"data,omitempty"`
 
-	// Message: Optional human-readable details for this warning.
+	// Message: [Output Only] Optional human-readable details for this
+	// warning.
 	Message string `json:"message,omitempty"`
 }
 
 type ForwardingRulesScopedListWarningData struct {
-	// Key: A key for the warning data.
+	// Key: [Output Only] A key for the warning data.
 	Key string `json:"key,omitempty"`
 
-	// Value: A warning data value corresponding to the key.
+	// Value: [Output Only] A warning data value corresponding to the key.
 	Value string `json:"value,omitempty"`
 }
 
@@ -1182,16 +1659,17 @@ type HealthStatus struct {
 }
 
 type HostRule struct {
+	// Description: An optional textual description.
 	Description string `json:"description,omitempty"`
 
 	// Hosts: The list of host patterns to match. They must be valid
-	// hostnames except that they may start with *. or *-. The * acts like a
-	// glob and will match any string of atoms (separated by .s and -s) to
-	// the left.
+	// hostnames, except * will match any string of ([a-z0-9-.]*). In that
+	// case, * must be the first character and must be followed in the
+	// pattern by either - or ..
 	Hosts []string `json:"hosts,omitempty"`
 
-	// PathMatcher: The name of the PathMatcher to match the path portion of
-	// the URL, if the this HostRule matches the URL's host portion.
+	// PathMatcher: The name of the PathMatcher to use to match the path
+	// portion of the URL if the hostRule matches the URL's host portion.
 	PathMatcher string `json:"pathMatcher,omitempty"`
 }
 
@@ -1200,16 +1678,16 @@ type HttpHealthCheck struct {
 	// default value is 5 seconds.
 	CheckIntervalSec int64 `json:"checkIntervalSec,omitempty"`
 
-	// CreationTimestamp: Creation timestamp in RFC3339 text format (output
-	// only).
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
 
 	// Description: An optional textual description of the resource;
 	// provided by the client when the resource is created.
 	Description string `json:"description,omitempty"`
 
-	// HealthyThreshold: A so-far unhealthy VM will be marked healthy after
-	// this many consecutive successes. The default value is 2.
+	// HealthyThreshold: A so-far unhealthy instance will be marked healthy
+	// after this many consecutive successes. The default value is 2.
 	HealthyThreshold int64 `json:"healthyThreshold,omitempty"`
 
 	// Host: The value of the host header in the HTTP health check request.
@@ -1217,16 +1695,20 @@ type HttpHealthCheck struct {
 	// health check is performed will be used.
 	Host string `json:"host,omitempty"`
 
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource. Defined by the
+	// server.
 	Id uint64 `json:"id,omitempty,string"`
 
 	// Kind: Type of the resource.
 	Kind string `json:"kind,omitempty"`
 
-	// Name: Name of the resource; provided by the client when the resource
+	// Name: Name of the resource. Provided by the client when the resource
 	// is created. The name must be 1-63 characters long, and comply with
-	// RFC1035.
+	// RFC1035. Specifically, the name must be 1-63 characters long and
+	// match the regular expression [a-z]([-a-z0-9]*[a-z0-9])? which means
+	// the first character must be a lowercase letter, and all following
+	// characters must be a dash, lowercase letter, or digit, except the
+	// last character, which cannot be a dash.
 	Name string `json:"name,omitempty"`
 
 	// Port: The TCP port number for the HTTP health check request. The
@@ -1237,34 +1719,115 @@ type HttpHealthCheck struct {
 	// default value is "/".
 	RequestPath string `json:"requestPath,omitempty"`
 
-	// SelfLink: Server defined URL for the resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for the resource.
 	SelfLink string `json:"selfLink,omitempty"`
 
 	// TimeoutSec: How long (in seconds) to wait before claiming failure.
-	// The default value is 5 seconds.
+	// The default value is 5 seconds. It is invalid for timeoutSec to have
+	// greater value than checkIntervalSec.
 	TimeoutSec int64 `json:"timeoutSec,omitempty"`
 
-	// UnhealthyThreshold: A so-far healthy VM will be marked unhealthy
-	// after this many consecutive failures. The default value is 2.
+	// UnhealthyThreshold: A so-far healthy instance will be marked
+	// unhealthy after this many consecutive failures. The default value is
+	// 2.
 	UnhealthyThreshold int64 `json:"unhealthyThreshold,omitempty"`
 }
 
 type HttpHealthCheckList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource. Defined by the
+	// server.
 	Id string `json:"id,omitempty"`
 
-	// Items: The HttpHealthCheck resources.
+	// Items: A list of HttpHealthCheck resources.
 	Items []*HttpHealthCheck `json:"items,omitempty"`
 
 	// Kind: Type of resource.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
+	SelfLink string `json:"selfLink,omitempty"`
+}
+
+type HttpsHealthCheck struct {
+	// CheckIntervalSec: How often (in seconds) to send a health check. The
+	// default value is 5 seconds.
+	CheckIntervalSec int64 `json:"checkIntervalSec,omitempty"`
+
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
+	CreationTimestamp string `json:"creationTimestamp,omitempty"`
+
+	// Description: An optional textual description of the resource;
+	// provided by the client when the resource is created.
+	Description string `json:"description,omitempty"`
+
+	// HealthyThreshold: A so-far unhealthy instance will be marked healthy
+	// after this many consecutive successes. The default value is 2.
+	HealthyThreshold int64 `json:"healthyThreshold,omitempty"`
+
+	// Host: The value of the host header in the HTTPS health check request.
+	// If left empty (default value), the public IP on behalf of which this
+	// health check is performed will be used.
+	Host string `json:"host,omitempty"`
+
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
+	Id uint64 `json:"id,omitempty,string"`
+
+	// Kind: Type of the resource.
+	Kind string `json:"kind,omitempty"`
+
+	// Name: Name of the resource. Provided by the client when the resource
+	// is created. The name must be 1-63 characters long, and comply with
+	// RFC1035. Specifically, the name must be 1-63 characters long and
+	// match the regular expression [a-z]([-a-z0-9]*[a-z0-9])? which means
+	// the first character must be a lowercase letter, and all following
+	// characters must be a dash, lowercase letter, or digit, except the
+	// last character, which cannot be a dash.
+	Name string `json:"name,omitempty"`
+
+	// Port: The TCP port number for the HTTPS health check request. The
+	// default value is 443.
+	Port int64 `json:"port,omitempty"`
+
+	// RequestPath: The request path of the HTTPS health check request. The
+	// default value is "/".
+	RequestPath string `json:"requestPath,omitempty"`
+
+	// SelfLink: [Output Only] Server-defined URL for the resource.
+	SelfLink string `json:"selfLink,omitempty"`
+
+	// TimeoutSec: How long (in seconds) to wait before claiming failure.
+	// The default value is 5 seconds. It is invalid for timeoutSec to have
+	// a greater value than checkIntervalSec.
+	TimeoutSec int64 `json:"timeoutSec,omitempty"`
+
+	// UnhealthyThreshold: A so-far healthy instance will be marked
+	// unhealthy after this many consecutive failures. The default value is
+	// 2.
+	UnhealthyThreshold int64 `json:"unhealthyThreshold,omitempty"`
+}
+
+type HttpsHealthCheckList struct {
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
+	Id string `json:"id,omitempty"`
+
+	// Items: A list of HttpsHealthCheck resources.
+	Items []*HttpsHealthCheck `json:"items,omitempty"`
+
+	// Kind: Type of resource.
+	Kind string `json:"kind,omitempty"`
+
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
+	NextPageToken string `json:"nextPageToken,omitempty"`
+
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
@@ -1273,8 +1836,8 @@ type Image struct {
 	// Cloud Storage (in bytes).
 	ArchiveSizeBytes int64 `json:"archiveSizeBytes,omitempty,string"`
 
-	// CreationTimestamp: Creation timestamp in RFC3339 text format (output
-	// only).
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
 
 	// Deprecated: The deprecation status associated with this image.
@@ -1284,56 +1847,69 @@ type Image struct {
 	// client when the resource is created.
 	Description string `json:"description,omitempty"`
 
-	// DiskSizeGb: Size of the image when restored onto a disk (in GiB).
+	// DiskSizeGb: Size of the image when restored onto a persistent disk
+	// (in GB).
 	DiskSizeGb int64 `json:"diskSizeGb,omitempty,string"`
 
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] The unique identifier for the resource. This
+	// identifier is defined by the server.
 	Id uint64 `json:"id,omitempty,string"`
 
-	// Kind: Type of the resource.
+	// Kind: [Output Only] Type of the resource. Always compute#image for
+	// images.
 	Kind string `json:"kind,omitempty"`
 
-	// Licenses: Public visible licenses.
+	// Licenses: Any applicable publicly visible licenses.
 	Licenses []string `json:"licenses,omitempty"`
 
 	// Name: Name of the resource; provided by the client when the resource
 	// is created. The name must be 1-63 characters long, and comply with
-	// RFC1035.
+	// RFC1035. Specifically, the name must be 1-63 characters long and
+	// match the regular expression [a-z]([-a-z0-9]*[a-z0-9])? which means
+	// the first character must be a lowercase letter, and all following
+	// characters must be a dash, lowercase letter, or digit, except the
+	// last character, which cannot be a dash.
 	Name string `json:"name,omitempty"`
 
-	// RawDisk: The raw disk image parameters.
+	// RawDisk: The parameters of the raw disk image.
 	RawDisk *ImageRawDisk `json:"rawDisk,omitempty"`
 
-	// SelfLink: Server defined URL for the resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for the resource.
 	SelfLink string `json:"selfLink,omitempty"`
 
-	// SourceDisk: The source disk used to create this image.
+	// SourceDisk: URL of the The source disk used to create this image.
+	// This can be a full or valid partial URL. You must provide either this
+	// property or the rawDisk.source property but not both to create an
+	// image. For example, the following are valid values:
+	// -
+	// https://www.googleapis.com/compute/v1/projects/project/zones/zone/disk
+	// /disk
+	// - projects/project/zones/zone/disk/disk
+	// -
+	// zones/zone/disks/disk
 	SourceDisk string `json:"sourceDisk,omitempty"`
 
-	// SourceDiskId: The 'id' value of the disk used to create this image.
+	// SourceDiskId: The ID value of the disk used to create this image.
 	// This value may be used to determine whether the image was taken from
 	// the current or a previous instance of a given disk name.
 	SourceDiskId string `json:"sourceDiskId,omitempty"`
 
-	// SourceType: Must be "RAW"; provided by the client when the disk image
-	// is created.
+	// SourceType: The type of the image used to create this disk. The
+	// default and only value is RAW
 	SourceType string `json:"sourceType,omitempty"`
 
-	// Status: Status of the image (output only). It will be one of the
-	// following READY - after image has been successfully created and is
-	// ready for use FAILED - if creating the image fails for some reason
-	// PENDING - the image creation is in progress An image can be used to
-	// create other resources suck as instances only after the image has
-	// been successfully created and the status is set to READY.
+	// Status: [Output Only] The status of the image. An image can be used
+	// to create other resources, such as instances, only after the image
+	// has been successfully created and the status is set to READY.
+	// Possible values are FAILED, PENDING, or READY.
 	Status string `json:"status,omitempty"`
 }
 
 type ImageRawDisk struct {
 	// ContainerType: The format used to encode and transmit the block
-	// device. Should be TAR. This is just a container and transmission
-	// format and not a runtime format. Provided by the client when the disk
-	// image is created.
+	// device, which should be TAR. This is just a container and
+	// transmission format and not a runtime format. Provided by the client
+	// when the disk image is created.
 	ContainerType string `json:"containerType,omitempty"`
 
 	// Sha1Checksum: An optional SHA1 checksum of the disk image before
@@ -1341,39 +1917,42 @@ type ImageRawDisk struct {
 	Sha1Checksum string `json:"sha1Checksum,omitempty"`
 
 	// Source: The full Google Cloud Storage URL where the disk image is
-	// stored; provided by the client when the disk image is created.
+	// stored. You must provide either this property or the sourceDisk
+	// property but not both.
 	Source string `json:"source,omitempty"`
 }
 
 type ImageList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] The unique identifier for the resource. This
+	// identifier is defined by the server.
 	Id string `json:"id,omitempty"`
 
-	// Items: The disk image resources.
+	// Items: [Output Only] A list of Image resources.
 	Items []*Image `json:"items,omitempty"`
 
 	// Kind: Type of resource.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
 type Instance struct {
-	// CanIpForward: Allows this instance to send packets with source IP
-	// addresses other than its own and receive packets with destination IP
-	// addresses other than its own. If this instance will be used as an IP
-	// gateway or it will be set as the next-hop in a Route resource, say
-	// true. If unsure, leave this set to false.
+	// CanIpForward: Allows this instance to send and receive packets with
+	// non-matching destination or source IPs. This is required if you plan
+	// to use this instance to forward routes. For more information, see
+	// Enabling IP Forwarding.
 	CanIpForward bool `json:"canIpForward,omitempty"`
 
-	// CreationTimestamp: Creation timestamp in RFC3339 text format (output
-	// only).
+	// CpuPlatform: [Output Only] The CPU platform used by this instance.
+	CpuPlatform string `json:"cpuPlatform,omitempty"`
+
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
 
 	// Description: An optional textual description of the resource;
@@ -1384,235 +1963,710 @@ type Instance struct {
 	// must be created before you can assign them.
 	Disks []*AttachedDisk `json:"disks,omitempty"`
 
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource. This identifier
+	// is defined by the server.
 	Id uint64 `json:"id,omitempty,string"`
 
-	// Kind: Type of the resource.
+	// Kind: [Output Only] Type of the resource. Always compute#instance for
+	// instances.
 	Kind string `json:"kind,omitempty"`
 
-	// MachineType: URL of the machine type resource describing which
-	// machine type to use to host the instance; provided by the client when
-	// the instance is created.
+	// MachineType: Full or partial URL of the machine type resource to use
+	// for this instance, in the format: zones/zone/machineTypes/
+	// machine-type. This is provided by the client when the instance is
+	// created. For example, the following is a valid partial url to a
+	// predefined machine
+	// type:
+	//
+	// zones/us-central1-f/machineTypes/n1-standard-1
+	//
+	// To create a
+	// custom machine type, provide a URL to a machine type in the following
+	// format, where CPUS is 1 or an even number up to 32 (2, 4, 6, ... 24,
+	// etc), and MEMORY is the total memory for this instance. Memory must
+	// be a multiple of 256 MB and must be supplied in MB (e.g. 5 GB of
+	// memory is 5120 MB):
+	//
+	// zones/zone/machineTypes/custom-CPUS-MEMORY
+	//
+	// For
+	// example: zones/us-central1-f/machineTypes/custom-4-5120
+	//
+	// For a full
+	// list of restrictions, read the Specifications for custom machine
+	// types.
 	MachineType string `json:"machineType,omitempty"`
 
-	// Metadata: Metadata key/value pairs assigned to this instance.
-	// Consists of custom metadata or predefined keys; see Instance
-	// documentation for more information.
+	// Metadata: The metadata key/value pairs assigned to this instance.
+	// This includes custom metadata and predefined keys.
 	Metadata *Metadata `json:"metadata,omitempty"`
 
 	// Name: Name of the resource; provided by the client when the resource
 	// is created. The name must be 1-63 characters long, and comply with
-	// RFC1035.
+	// RFC1035. Specifically, the name must be 1-63 characters long and
+	// match the regular expression [a-z]([-a-z0-9]*[a-z0-9])? which means
+	// the first character must be a lowercase letter, and all following
+	// characters must be a dash, lowercase letter, or digit, except the
+	// last character, which cannot be a dash.
 	Name string `json:"name,omitempty"`
 
-	// NetworkInterfaces: Array of configurations for this interface. This
-	// specifies how this interface is configured to interact with other
-	// network services, such as connecting to the internet. Currently,
-	// ONE_TO_ONE_NAT is the only access config supported. If there are no
-	// accessConfigs specified, then this instance will have no external
-	// internet access.
+	// NetworkInterfaces: An array of configurations for this interface.
+	// This specifies how this interface is configured to interact with
+	// other network services, such as connecting to the internet.
 	NetworkInterfaces []*NetworkInterface `json:"networkInterfaces,omitempty"`
 
 	// Scheduling: Scheduling options for this instance.
 	Scheduling *Scheduling `json:"scheduling,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 
-	// ServiceAccounts: A list of service accounts each with specified
-	// scopes, for which access tokens are to be made available to the
-	// instance through metadata queries.
+	// ServiceAccounts: A list of service accounts, with their specified
+	// scopes, authorized for this instance. Service accounts generate
+	// access tokens that can be accessed through the metadata server and
+	// used to authenticate applications on the instance. See Authenticating
+	// from Google Compute Engine for more information.
 	ServiceAccounts []*ServiceAccount `json:"serviceAccounts,omitempty"`
 
-	// Status: Instance status. One of the following values: "PROVISIONING",
-	// "STAGING", "RUNNING", "STOPPING", "STOPPED", "TERMINATED" (output
-	// only).
+	// Status: [Output Only] The status of the instance. One of the
+	// following values: PROVISIONING, STAGING, RUNNING, STOPPING, and
+	// TERMINATED.
 	Status string `json:"status,omitempty"`
 
-	// StatusMessage: An optional, human-readable explanation of the status
-	// (output only).
+	// StatusMessage: [Output Only] An optional, human-readable explanation
+	// of the status.
 	StatusMessage string `json:"statusMessage,omitempty"`
 
-	// Tags: A list of tags to be applied to this instance. Used to identify
-	// valid sources or targets for network firewalls. Provided by the
-	// client on instance creation. The tags can be later modified by the
-	// setTags method. Each tag within the list must comply with RFC1035.
+	// Tags: A list of tags to appy to this instance. Tags are used to
+	// identify valid sources or targets for network firewalls and are
+	// specified by the client during instance creation. The tags can be
+	// later modified by the setTags method. Each tag within the list must
+	// comply with RFC1035.
 	Tags *Tags `json:"tags,omitempty"`
 
-	// Zone: URL of the zone where the instance resides (output only).
+	// Zone: [Output Only] URL of the zone where the instance resides.
 	Zone string `json:"zone,omitempty"`
 }
 
 type InstanceAggregatedList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] The unique identifier for the resource. This
+	// identifier is defined by the server.
 	Id string `json:"id,omitempty"`
 
-	// Items: A map of scoped instance lists.
+	// Items: [Output Only] A map of scoped instance lists.
 	Items map[string]InstancesScopedList `json:"items,omitempty"`
 
-	// Kind: Type of resource.
+	// Kind: [Output Only] Type of resource. Always
+	// compute#instanceAggregatedList for aggregated lists of Instance
+	// resources.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
+}
+
+type InstanceGroup struct {
+	// CreationTimestamp: [Output Only] The creation timestamp for this
+	// instance group in RFC3339 text format.
+	CreationTimestamp string `json:"creationTimestamp,omitempty"`
+
+	// Description: An optional text description for the instance group.
+	Description string `json:"description,omitempty"`
+
+	// Fingerprint: [Output Only] The fingerprint of the named ports. The
+	// system uses this fingerprint to detect conflicts when multiple users
+	// change the named ports concurrently.
+	Fingerprint string `json:"fingerprint,omitempty"`
+
+	// Id: [Output Only] A unique identifier for this resource type. The
+	// server generates this identifier.
+	Id uint64 `json:"id,omitempty,string"`
+
+	// Kind: [Output Only] The resource type, which is always
+	// compute#instanceGroup for instance groups.
+	Kind string `json:"kind,omitempty"`
+
+	// Name: The name of the instance group. The name must be 1-63
+	// characters long, and comply with RFC1035.
+	Name string `json:"name,omitempty"`
+
+	// NamedPorts: Assigns a name to a port number. For example: {name:
+	// "http", port: 80}
+	//
+	// This allows the system to reference ports by the
+	// assigned name instead of a port number. Named ports can also contain
+	// multiple ports. For example: [{name: "http", port: 80},{name: "http",
+	// port: 8080}]
+	//
+	// Named ports apply to all instances in this instance
+	// group.
+	NamedPorts []*NamedPort `json:"namedPorts,omitempty"`
+
+	// Network: [Output Only] The URL of the network to which all instances
+	// in the instance group belong.
+	Network string `json:"network,omitempty"`
+
+	// SelfLink: [Output Only] The URL for this instance group. The server
+	// generates this URL.
+	SelfLink string `json:"selfLink,omitempty"`
+
+	// Size: [Output Only] The total number of instances in the instance
+	// group.
+	Size int64 `json:"size,omitempty"`
+
+	// Zone: [Output Only] The URL of the zone where the instance group is
+	// located.
+	Zone string `json:"zone,omitempty"`
+}
+
+type InstanceGroupAggregatedList struct {
+	// Id: [Output Only] A unique identifier for this aggregated list of
+	// instance groups. The server generates this identifier.
+	Id string `json:"id,omitempty"`
+
+	// Items: A map of scoped instance group lists.
+	Items map[string]InstanceGroupsScopedList `json:"items,omitempty"`
+
+	// Kind: [Output Only] The resource type, which is always
+	// compute#instanceGroupAggregatedList for aggregated lists of instance
+	// groups.
+	Kind string `json:"kind,omitempty"`
+
+	// NextPageToken: [Output Only] A token that is used to continue a
+	// truncated list request.
+	NextPageToken string `json:"nextPageToken,omitempty"`
+
+	// SelfLink: [Output Only] The URL for this resource type. The server
+	// generates this URL.
+	SelfLink string `json:"selfLink,omitempty"`
+}
+
+type InstanceGroupList struct {
+	// Id: [Output Only] A unique identifier for this list of instance
+	// groups. The server generates this identifier.
+	Id string `json:"id,omitempty"`
+
+	// Items: A list of instance groups.
+	Items []*InstanceGroup `json:"items,omitempty"`
+
+	// Kind: [Output Only] The resource type, which is always
+	// compute#instanceGroupList for instance group lists.
+	Kind string `json:"kind,omitempty"`
+
+	// NextPageToken: [Output Only] A token that is used to continue a
+	// truncated list request.
+	NextPageToken string `json:"nextPageToken,omitempty"`
+
+	// SelfLink: [Output Only] The URL for this resource type. The server
+	// generates this URL.
+	SelfLink string `json:"selfLink,omitempty"`
+}
+
+type InstanceGroupManager struct {
+	// BaseInstanceName: The base instance name to use for instances in this
+	// group. The value must be 1-58 characters long. Instances are named by
+	// appending a hyphen and a random four-character string to the base
+	// instance name. The base instance name must comply with RFC1035.
+	BaseInstanceName string `json:"baseInstanceName,omitempty"`
+
+	// CreationTimestamp: [Output Only] The creation timestamp for this
+	// managed instance group in RFC3339 text format.
+	CreationTimestamp string `json:"creationTimestamp,omitempty"`
+
+	// CurrentActions: [Output Only] The list of instance actions and the
+	// number of instances in this managed instance group that are scheduled
+	// for each of those actions.
+	CurrentActions *InstanceGroupManagerActionsSummary `json:"currentActions,omitempty"`
+
+	// Description: An optional text description for the managed instance
+	// group.
+	Description string `json:"description,omitempty"`
+
+	// Fingerprint: [Output Only] The fingerprint of the target pools
+	// information. You can use this optional field for optimistic locking
+	// when you update the target pool entries.
+	Fingerprint string `json:"fingerprint,omitempty"`
+
+	// Id: [Output Only] A unique identifier for this resource type. The
+	// server generates this identifier.
+	Id uint64 `json:"id,omitempty,string"`
+
+	// InstanceGroup: [Output Only] The URL of the Instance Group resource.
+	InstanceGroup string `json:"instanceGroup,omitempty"`
+
+	// InstanceTemplate: The URL of the instance template that is specified
+	// for this managed instance group. The group uses this template to
+	// create all new instances in the managed instance group.
+	InstanceTemplate string `json:"instanceTemplate,omitempty"`
+
+	// Kind: [Output Only] The resource type, which is always
+	// compute#instanceGroupManager for managed instance groups.
+	Kind string `json:"kind,omitempty"`
+
+	// Name: The name of the managed instance group. The name must be 1-63
+	// characters long, and comply with RFC1035.
+	Name string `json:"name,omitempty"`
+
+	// NamedPorts: Named ports configured for the Instance Groups
+	// complementary to this Instance Group Manager.
+	NamedPorts []*NamedPort `json:"namedPorts,omitempty"`
+
+	// SelfLink: [Output Only] The URL for this managed instance group. The
+	// server defines this URL.
+	SelfLink string `json:"selfLink,omitempty"`
+
+	// TargetPools: The URLs for all TargetPool resources to which instances
+	// in the instanceGroup field are added. The target pools automatically
+	// apply to all of the instances in the managed instance group.
+	TargetPools []string `json:"targetPools,omitempty"`
+
+	// TargetSize: The target number of running instances for this managed
+	// instance group. Deleting or abandoning instances reduces this number.
+	// Resizing the group changes this number.
+	TargetSize int64 `json:"targetSize,omitempty"`
+
+	// Zone: The name of the zone where the managed instance group is
+	// located.
+	Zone string `json:"zone,omitempty"`
+}
+
+type InstanceGroupManagerActionsSummary struct {
+	// Abandoning: [Output Only] The total number of instances in the
+	// managed instance group that are scheduled to be abandoned. Abandoning
+	// an instance removes it from the managed instance group without
+	// deleting it.
+	Abandoning int64 `json:"abandoning,omitempty"`
+
+	// Creating: [Output Only] The number of instances in the managed
+	// instance group that are scheduled to be created or are currently
+	// being created.
+	Creating int64 `json:"creating,omitempty"`
+
+	// Deleting: [Output Only] The number of instances in the managed
+	// instance group that are scheduled to be deleted or are currently
+	// being deleted.
+	Deleting int64 `json:"deleting,omitempty"`
+
+	// None: [Output Only] The number of instances in the managed instance
+	// group that are running and have no scheduled actions.
+	None int64 `json:"none,omitempty"`
+
+	// Recreating: [Output Only] The number of instances in the managed
+	// instance group that are scheduled to be recreated or are currently
+	// being being recreated. Recreating an instance deletes the existing
+	// root persistent disk and creates a new disk from the image that is
+	// defined in the instance template.
+	Recreating int64 `json:"recreating,omitempty"`
+
+	// Refreshing: [Output Only] The number of instances in the managed
+	// instance group that are being reconfigured with properties that do
+	// not require a restart or a recreate action. For example, setting or
+	// removing target pools for the instance.
+	Refreshing int64 `json:"refreshing,omitempty"`
+
+	// Restarting: [Output Only] The number of instances in the managed
+	// instance group that are scheduled to be restarted or are currently
+	// being restarted.
+	Restarting int64 `json:"restarting,omitempty"`
+}
+
+type InstanceGroupManagerAggregatedList struct {
+	// Id: [Output Only] A unique identifier for this aggregated list of
+	// managed instance groups. The server generates this identifier.
+	Id string `json:"id,omitempty"`
+
+	// Items: [Output Only] A map of filtered managed instance group lists.
+	Items map[string]InstanceGroupManagersScopedList `json:"items,omitempty"`
+
+	// Kind: [Output Only] The resource type, which is always
+	// compute#instanceGroupManagerAggregatedList for an aggregated list of
+	// managed instance groups.
+	Kind string `json:"kind,omitempty"`
+
+	// NextPageToken: [Output Only] A token that is used to continue a
+	// truncated list request.
+	NextPageToken string `json:"nextPageToken,omitempty"`
+
+	// SelfLink: [Output Only] The URL for this resource type. The server
+	// generates this URL.
+	SelfLink string `json:"selfLink,omitempty"`
+}
+
+type InstanceGroupManagerList struct {
+	// Id: [Output Only] A unique identifier for this resource type. The
+	// server generates this identifier.
+	Id string `json:"id,omitempty"`
+
+	// Items: [Output Only] A list of managed instance groups.
+	Items []*InstanceGroupManager `json:"items,omitempty"`
+
+	// Kind: [Output Only] The resource type, which is always
+	// compute#instanceGroupManagerList for a list of managed instance
+	// groups.
+	Kind string `json:"kind,omitempty"`
+
+	// NextPageToken: [Output Only] A token that is used to continue a
+	// truncated list request.
+	NextPageToken string `json:"nextPageToken,omitempty"`
+
+	// SelfLink: [Output Only] The URL for this resource type. The server
+	// generates this URL.
+	SelfLink string `json:"selfLink,omitempty"`
+}
+
+type InstanceGroupManagersAbandonInstancesRequest struct {
+	// Instances: The URL for one or more instances to abandon from the
+	// managed instance group.
+	Instances []string `json:"instances,omitempty"`
+}
+
+type InstanceGroupManagersDeleteInstancesRequest struct {
+	// Instances: The list of instances to delete from this managed instance
+	// group. Specify one or more instance URLs.
+	Instances []string `json:"instances,omitempty"`
+}
+
+type InstanceGroupManagersListManagedInstancesResponse struct {
+	// ManagedInstances: [Output Only] The list of instances in the managed
+	// instance group.
+	ManagedInstances []*ManagedInstance `json:"managedInstances,omitempty"`
+}
+
+type InstanceGroupManagersRecreateInstancesRequest struct {
+	// Instances: The URL for one or more instances to recreate.
+	Instances []string `json:"instances,omitempty"`
+}
+
+type InstanceGroupManagersScopedList struct {
+	// InstanceGroupManagers: [Output Only] The list of managed instance
+	// groups that are contained in the specified project and zone.
+	InstanceGroupManagers []*InstanceGroupManager `json:"instanceGroupManagers,omitempty"`
+
+	// Warning: [Output Only] The warning that replaces the list of managed
+	// instance groups when the list is empty.
+	Warning *InstanceGroupManagersScopedListWarning `json:"warning,omitempty"`
+}
+
+type InstanceGroupManagersScopedListWarning struct {
+	// Code: [Output Only] The warning type identifier for this warning.
+	Code string `json:"code,omitempty"`
+
+	// Data: [Output Only] Metadata for this warning in key: value format.
+	Data []*InstanceGroupManagersScopedListWarningData `json:"data,omitempty"`
+
+	// Message: [Output Only] Optional human-readable details for this
+	// warning.
+	Message string `json:"message,omitempty"`
+}
+
+type InstanceGroupManagersScopedListWarningData struct {
+	// Key: [Output Only] A key for the warning data.
+	Key string `json:"key,omitempty"`
+
+	// Value: [Output Only] A warning data value corresponding to the key.
+	Value string `json:"value,omitempty"`
+}
+
+type InstanceGroupManagersSetInstanceTemplateRequest struct {
+	// InstanceTemplate: The URL of the instance template that is specified
+	// for this managed instance group. The group uses this template to
+	// create all new instances in the managed instance group.
+	InstanceTemplate string `json:"instanceTemplate,omitempty"`
+}
+
+type InstanceGroupManagersSetTargetPoolsRequest struct {
+	// Fingerprint: The fingerprint of the target pools information. Use
+	// this optional property to prevent conflicts when multiple users
+	// change the target pools settings concurrently. Obtain the fingerprint
+	// with the instanceGroupManagers.get method. Then, include the
+	// fingerprint in your request to ensure that you do not overwrite
+	// changes that were applied from another concurrent request.
+	Fingerprint string `json:"fingerprint,omitempty"`
+
+	// TargetPools: The list of target pool URLs that instances in this
+	// managed instance group belong to. The managed instance group applies
+	// these target pools to all of the instances in the group. Existing
+	// instances and new instances in the group all receive these target
+	// pool settings.
+	TargetPools []string `json:"targetPools,omitempty"`
+}
+
+type InstanceGroupsAddInstancesRequest struct {
+	// Instances: The list of instances to add to the instance group.
+	Instances []*InstanceReference `json:"instances,omitempty"`
+}
+
+type InstanceGroupsListInstances struct {
+	// Id: [Output Only] A unique identifier for this list of instance
+	// groups. The server generates this identifier.
+	Id string `json:"id,omitempty"`
+
+	// Items: [Output Only] A list of instances and any named ports that are
+	// assigned to those instances.
+	Items []*InstanceWithNamedPorts `json:"items,omitempty"`
+
+	// Kind: [Output Only] The resource type, which is always
+	// compute#instanceGroupsListInstances for lists of instance groups.
+	Kind string `json:"kind,omitempty"`
+
+	// NextPageToken: [Output Only] A token that is used to continue a
+	// truncated list request.
+	NextPageToken string `json:"nextPageToken,omitempty"`
+
+	// SelfLink: [Output Only] The URL for this list of instance groups. The
+	// server generates this URL.
+	SelfLink string `json:"selfLink,omitempty"`
+}
+
+type InstanceGroupsListInstancesRequest struct {
+	// InstanceState: A filter for the state of the instances in the
+	// instance group. Valid options are ALL or RUNNING. If you do not
+	// specify this parameter the list includes all instances regardless of
+	// their state.
+	InstanceState string `json:"instanceState,omitempty"`
+}
+
+type InstanceGroupsRemoveInstancesRequest struct {
+	// Instances: The list of instances to remove from the instance group.
+	Instances []*InstanceReference `json:"instances,omitempty"`
+}
+
+type InstanceGroupsScopedList struct {
+	// InstanceGroups: [Output Only] The list of instance groups that are
+	// contained in this scope.
+	InstanceGroups []*InstanceGroup `json:"instanceGroups,omitempty"`
+
+	// Warning: [Output Only] An informational warning that replaces the
+	// list of instance groups when the list is empty.
+	Warning *InstanceGroupsScopedListWarning `json:"warning,omitempty"`
+}
+
+type InstanceGroupsScopedListWarning struct {
+	// Code: [Output Only] The warning type identifier for this warning.
+	Code string `json:"code,omitempty"`
+
+	// Data: [Output Only] Metadata for this warning in key: value format.
+	Data []*InstanceGroupsScopedListWarningData `json:"data,omitempty"`
+
+	// Message: [Output Only] Optional human-readable details for this
+	// warning.
+	Message string `json:"message,omitempty"`
+}
+
+type InstanceGroupsScopedListWarningData struct {
+	// Key: [Output Only] A key for the warning data.
+	Key string `json:"key,omitempty"`
+
+	// Value: [Output Only] A warning data value corresponding to the key.
+	Value string `json:"value,omitempty"`
+}
+
+type InstanceGroupsSetNamedPortsRequest struct {
+	// Fingerprint: The fingerprint of the named ports information for this
+	// instance group. Use this optional property to prevent conflicts when
+	// multiple users change the named ports settings concurrently. Obtain
+	// the fingerprint with the instanceGroups.get method. Then, include the
+	// fingerprint in your request to ensure that you do not overwrite
+	// changes that were applied from another concurrent request.
+	Fingerprint string `json:"fingerprint,omitempty"`
+
+	// NamedPorts: The list of named ports to set for this instance group.
+	NamedPorts []*NamedPort `json:"namedPorts,omitempty"`
 }
 
 type InstanceList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] The unique identifier for the resource. This
+	// identifier is defined by the server.
 	Id string `json:"id,omitempty"`
 
-	// Items: A list of instance resources.
+	// Items: [Output Only] A list of Instance resources.
 	Items []*Instance `json:"items,omitempty"`
 
-	// Kind: Type of resource.
+	// Kind: [Output Only] Type of resource. Always compute#instanceList for
+	// lists of Instance resources.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
+type InstanceMoveRequest struct {
+	// DestinationZone: The URL of the destination zone to move the instance
+	// to. This can be a full or partial URL. For example, the following are
+	// all valid URLs to a zone:
+	// -
+	// https://www.googleapis.com/compute/v1/projects/project/zones/zone
+	// -
+	// projects/project/zones/zone
+	// - zones/zone
+	DestinationZone string `json:"destinationZone,omitempty"`
+
+	// TargetInstance: The URL of the target instance to move. This can be a
+	// full or partial URL. For example, the following are all valid URLs to
+	// an instance:
+	// -
+	// https://www.googleapis.com/compute/v1/projects/project/zones/zone/inst
+	// ances/instance
+	// - projects/project/zones/zone/instances/instance
+	// -
+	// zones/zone/instances/instance
+	TargetInstance string `json:"targetInstance,omitempty"`
+}
+
 type InstanceProperties struct {
-	// CanIpForward: Allows instances created based on this template to send
-	// packets with source IP addresses other than their own and receive
-	// packets with destination IP addresses other than their own. If these
-	// instances will be used as an IP gateway or it will be set as the
-	// next-hop in a Route resource, say true. If unsure, leave this set to
-	// false.
+	// CanIpForward: Enables instances created based on this template to
+	// send packets with source IP addresses other than their own and
+	// receive packets with destination IP addresses other than their own.
+	// If these instances will be used as an IP gateway or it will be set as
+	// the next-hop in a Route resource, specify true. If unsure, leave this
+	// set to false. See the canIpForward documentation for more
+	// information.
 	CanIpForward bool `json:"canIpForward,omitempty"`
 
-	// Description: An optional textual description for the instances
-	// created based on the instance template resource; provided by the
-	// client when the template is created.
+	// Description: An optional text description for the instances that are
+	// created from this instance template.
 	Description string `json:"description,omitempty"`
 
-	// Disks: Array of disks associated with instance created based on this
-	// template.
+	// Disks: An array of disks that are associated with the instances that
+	// are created from this template.
 	Disks []*AttachedDisk `json:"disks,omitempty"`
 
-	// MachineType: Name of the machine type resource describing which
-	// machine type to use to host the instances created based on this
-	// template; provided by the client when the instance template is
-	// created.
+	// MachineType: The machine type to use for instances that are created
+	// from this template.
 	MachineType string `json:"machineType,omitempty"`
 
-	// Metadata: Metadata key/value pairs assigned to instances created
-	// based on this template. Consists of custom metadata or predefined
-	// keys; see Instance documentation for more information.
+	// Metadata: The metadata key/value pairs to assign to instances that
+	// are created from this template. These pairs can consist of custom
+	// metadata or predefined keys. See Project and instance metadata for
+	// more information.
 	Metadata *Metadata `json:"metadata,omitempty"`
 
-	// NetworkInterfaces: Array of configurations for this interface. This
-	// specifies how this interface is configured to interact with other
-	// network services, such as connecting to the internet. Currently,
-	// ONE_TO_ONE_NAT is the only access config supported. If there are no
-	// accessConfigs specified, then this instances created based based on
-	// this template will have no external internet access.
+	// NetworkInterfaces: An array of network access configurations for this
+	// interface.
 	NetworkInterfaces []*NetworkInterface `json:"networkInterfaces,omitempty"`
 
-	// Scheduling: Scheduling options for the instances created based on
-	// this template.
+	// Scheduling: Specifies the scheduling options for the instances that
+	// are created from this template.
 	Scheduling *Scheduling `json:"scheduling,omitempty"`
 
-	// ServiceAccounts: A list of service accounts each with specified
-	// scopes, for which access tokens are to be made available to the
-	// instances created based on this template, through metadata queries.
+	// ServiceAccounts: A list of service accounts with specified scopes.
+	// Access tokens for these service accounts are available to the
+	// instances that are created from this template. Use metadata queries
+	// to obtain the access tokens for these instances.
 	ServiceAccounts []*ServiceAccount `json:"serviceAccounts,omitempty"`
 
-	// Tags: A list of tags to be applied to the instances created based on
-	// this template used to identify valid sources or targets for network
-	// firewalls. Provided by the client on instance creation. The tags can
-	// be later modified by the setTags method. Each tag within the list
-	// must comply with RFC1035.
+	// Tags: A list of tags to apply to the instances that are created from
+	// this template. The tags identify valid sources or targets for network
+	// firewalls. The setTags method can modify this list of tags. Each tag
+	// within the list must comply with RFC1035.
 	Tags *Tags `json:"tags,omitempty"`
 }
 
 type InstanceReference struct {
+	// Instance: The URL for a specific instance.
 	Instance string `json:"instance,omitempty"`
 }
 
 type InstanceTemplate struct {
-	// CreationTimestamp: Creation timestamp in RFC3339 text format (output
-	// only).
+	// CreationTimestamp: [Output Only] The creation timestamp for this
+	// instance template in RFC3339 text format.
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
 
-	// Description: An optional textual description of the instance template
-	// resource; provided by the client when the resource is created.
+	// Description: An optional text description for the instance template.
 	Description string `json:"description,omitempty"`
 
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] A unique identifier for this instance template. The
+	// server defines this identifier.
 	Id uint64 `json:"id,omitempty,string"`
 
-	// Kind: Type of the resource.
+	// Kind: [Output Only] The resource type, which is always
+	// compute#instanceTemplate for instance templates.
 	Kind string `json:"kind,omitempty"`
 
-	// Name: Name of the instance template resource; provided by the client
-	// when the resource is created. The name must be 1-63 characters long,
-	// and comply with RFC1035
+	// Name: Name of the resource; provided by the client when the resource
+	// is created. The name must be 1-63 characters long, and comply with
+	// RFC1035. Specifically, the name must be 1-63 characters long and
+	// match the regular expression [a-z]([-a-z0-9]*[a-z0-9])? which means
+	// the first character must be a lowercase letter, and all following
+	// characters must be a dash, lowercase letter, or digit, except the
+	// last character, which cannot be a dash.
 	Name string `json:"name,omitempty"`
 
-	// Properties: The instance properties portion of this instance template
-	// resource.
+	// Properties: The instance properties for this instance template.
 	Properties *InstanceProperties `json:"properties,omitempty"`
 
-	// SelfLink: Server defined URL for the resource (output only).
+	// SelfLink: [Output Only] The URL for this instance template. The
+	// server defines this URL.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
 type InstanceTemplateList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] A unique identifier for this instance template. The
+	// server defines this identifier.
 	Id string `json:"id,omitempty"`
 
-	// Items: A list of instance template resources.
+	// Items: [Output Only] list of InstanceTemplate resources.
 	Items []*InstanceTemplate `json:"items,omitempty"`
 
-	// Kind: Type of resource.
+	// Kind: [Output Only] The resource type, which is always
+	// compute#instanceTemplatesListResponse for instance template lists.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token that is used to continue a
+	// truncated list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] The URL for this instance template list. The
+	// server defines this URL.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
+type InstanceWithNamedPorts struct {
+	// Instance: [Output Only] The URL of the instance.
+	Instance string `json:"instance,omitempty"`
+
+	// NamedPorts: [Output Only] The named ports that belong to this
+	// instance group.
+	NamedPorts []*NamedPort `json:"namedPorts,omitempty"`
+
+	// Status: [Output Only] The status of the instance.
+	Status string `json:"status,omitempty"`
+}
+
 type InstancesScopedList struct {
-	// Instances: List of instances contained in this scope.
+	// Instances: [Output Only] List of instances contained in this scope.
 	Instances []*Instance `json:"instances,omitempty"`
 
-	// Warning: Informational warning which replaces the list of instances
-	// when the list is empty.
+	// Warning: [Output Only] Informational warning which replaces the list
+	// of instances when the list is empty.
 	Warning *InstancesScopedListWarning `json:"warning,omitempty"`
 }
 
 type InstancesScopedListWarning struct {
-	// Code: The warning type identifier for this warning.
+	// Code: [Output Only] The warning type identifier for this warning.
 	Code string `json:"code,omitempty"`
 
-	// Data: Metadata for this warning in 'key: value' format.
+	// Data: [Output Only] Metadata for this warning in key: value format.
 	Data []*InstancesScopedListWarningData `json:"data,omitempty"`
 
-	// Message: Optional human-readable details for this warning.
+	// Message: [Output Only] Optional human-readable details for this
+	// warning.
 	Message string `json:"message,omitempty"`
 }
 
 type InstancesScopedListWarningData struct {
-	// Key: A key for the warning data.
+	// Key: [Output Only] A key for the warning data.
 	Key string `json:"key,omitempty"`
 
-	// Value: A warning data value corresponding to the key.
+	// Value: [Output Only] A warning data value corresponding to the key.
 	Value string `json:"value,omitempty"`
 }
 
@@ -1621,63 +2675,69 @@ type License struct {
 	// running software that contains this license on an instance.
 	ChargesUseFee bool `json:"chargesUseFee,omitempty"`
 
-	// Kind: Type of resource.
+	// Kind: [Output Only] Type of resource. Always compute#license for
+	// licenses.
 	Kind string `json:"kind,omitempty"`
 
-	// Name: Name of the resource; provided by the client when the resource
-	// is created. The name must be 1-63 characters long, and comply with
-	// RFC1035.
+	// Name: [Output Only] Name of the resource. The name is 1-63 characters
+	// long and complies with RFC1035.
 	Name string `json:"name,omitempty"`
 
-	// SelfLink: Server defined URL for the resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for the resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
 type MachineType struct {
-	// CreationTimestamp: Creation timestamp in RFC3339 text format (output
-	// only).
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
 
-	// Deprecated: The deprecation status associated with this machine type.
+	// Deprecated: [Output Only] The deprecation status associated with this
+	// machine type.
 	Deprecated *DeprecationStatus `json:"deprecated,omitempty"`
 
-	// Description: An optional textual description of the resource.
+	// Description: [Output Only] An optional textual description of the
+	// resource.
 	Description string `json:"description,omitempty"`
 
-	// GuestCpus: Count of CPUs exposed to the instance.
+	// GuestCpus: [Output Only] The tumber of CPUs exposed to the instance.
 	GuestCpus int64 `json:"guestCpus,omitempty"`
 
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
 	Id uint64 `json:"id,omitempty,string"`
 
-	// ImageSpaceGb: Space allotted for the image, defined in GB.
+	// ImageSpaceGb: [Deprecated] This property is deprecated and will never
+	// be populated with any relevant values.
 	ImageSpaceGb int64 `json:"imageSpaceGb,omitempty"`
 
 	// Kind: Type of the resource.
 	Kind string `json:"kind,omitempty"`
 
-	// MaximumPersistentDisks: Maximum persistent disks allowed.
+	// MaximumPersistentDisks: [Output Only] Maximum persistent disks
+	// allowed.
 	MaximumPersistentDisks int64 `json:"maximumPersistentDisks,omitempty"`
 
-	// MaximumPersistentDisksSizeGb: Maximum total persistent disks size
-	// (GB) allowed.
+	// MaximumPersistentDisksSizeGb: [Output Only] Maximum total persistent
+	// disks size (GB) allowed.
 	MaximumPersistentDisksSizeGb int64 `json:"maximumPersistentDisksSizeGb,omitempty,string"`
 
-	// MemoryMb: Physical memory assigned to the instance, defined in MB.
+	// MemoryMb: [Output Only] The amount of physical memory available to
+	// the instance, defined in MB.
 	MemoryMb int64 `json:"memoryMb,omitempty"`
 
-	// Name: Name of the resource.
+	// Name: [Output Only] Name of the resource.
 	Name string `json:"name,omitempty"`
 
-	// ScratchDisks: List of extended scratch disks assigned to the
-	// instance.
+	// ScratchDisks: [Output Only] List of extended scratch disks assigned
+	// to the instance.
 	ScratchDisks []*MachineTypeScratchDisks `json:"scratchDisks,omitempty"`
 
-	// SelfLink: Server defined URL for the resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for the resource.
 	SelfLink string `json:"selfLink,omitempty"`
 
-	// Zone: Url of the zone where the machine type resides (output only).
+	// Zone: [Output Only] The name of the zone where the machine type
+	// resides, such as us-central1-a.
 	Zone string `json:"zone,omitempty"`
 }
 
@@ -1687,82 +2747,156 @@ type MachineTypeScratchDisks struct {
 }
 
 type MachineTypeAggregatedList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
 	Id string `json:"id,omitempty"`
 
-	// Items: A map of scoped machine type lists.
+	// Items: [Output Only] A map of scoped machine type lists.
 	Items map[string]MachineTypesScopedList `json:"items,omitempty"`
 
-	// Kind: Type of resource.
+	// Kind: [Output Only] Type of resource. Always
+	// compute#machineTypeAggregatedList for aggregated lists of machine
+	// types.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
 type MachineTypeList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
 	Id string `json:"id,omitempty"`
 
-	// Items: The machine type resources.
+	// Items: [Output Only] A list of Machine Type resources.
 	Items []*MachineType `json:"items,omitempty"`
 
-	// Kind: Type of resource.
+	// Kind: [Output Only] Type of resource. Always compute#machineTypeList
+	// for lists of machine types.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
 type MachineTypesScopedList struct {
-	// MachineTypes: List of machine types contained in this scope.
+	// MachineTypes: [Output Only] List of machine types contained in this
+	// scope.
 	MachineTypes []*MachineType `json:"machineTypes,omitempty"`
 
-	// Warning: Informational warning which replaces the list of machine
-	// types when the list is empty.
+	// Warning: [Output Only] An informational warning that appears when the
+	// machine types list is empty.
 	Warning *MachineTypesScopedListWarning `json:"warning,omitempty"`
 }
 
 type MachineTypesScopedListWarning struct {
-	// Code: The warning type identifier for this warning.
+	// Code: [Output Only] The warning type identifier for this warning.
 	Code string `json:"code,omitempty"`
 
-	// Data: Metadata for this warning in 'key: value' format.
+	// Data: [Output Only] Metadata for this warning in key: value format.
 	Data []*MachineTypesScopedListWarningData `json:"data,omitempty"`
 
-	// Message: Optional human-readable details for this warning.
+	// Message: [Output Only] Optional human-readable details for this
+	// warning.
 	Message string `json:"message,omitempty"`
 }
 
 type MachineTypesScopedListWarningData struct {
-	// Key: A key for the warning data.
+	// Key: [Output Only] A key for the warning data.
 	Key string `json:"key,omitempty"`
 
-	// Value: A warning data value corresponding to the key.
+	// Value: [Output Only] A warning data value corresponding to the key.
 	Value string `json:"value,omitempty"`
 }
 
+type ManagedInstance struct {
+	// CurrentAction: [Output Only] The current action that the managed
+	// instance group has scheduled for the instance. Possible values:
+	// -
+	// NONE The instance is running, and the managed instance group does not
+	// have any scheduled actions for this instance.
+	// - CREATING The managed
+	// instance group is creating this instance.
+	// - RECREATING The managed
+	// instance group is recreating this instance.
+	// - DELETING The managed
+	// instance group is permanently deleting this instance.
+	// - ABANDONING
+	// The managed instance group is abandoning this instance. The instance
+	// will be removed from the instance group and from any target pools
+	// that are associated with this group.
+	// - RESTARTING The managed
+	// instance group is restarting the instance.
+	// - REFRESHING The managed
+	// instance group is applying configuration changes to the instance
+	// without stopping it. For example, the group can update the target
+	// pool list for an instance without stopping that instance.
+	CurrentAction string `json:"currentAction,omitempty"`
+
+	// Id: [Output only] The unique identifier for this resource. This field
+	// is empty when instance does not exist.
+	Id uint64 `json:"id,omitempty,string"`
+
+	// Instance: [Output Only] The URL of the instance. The URL can exist
+	// even if the instance has not yet been created.
+	Instance string `json:"instance,omitempty"`
+
+	// InstanceStatus: [Output Only] The status of the instance. This field
+	// is empty when the instance does not exist.
+	InstanceStatus string `json:"instanceStatus,omitempty"`
+
+	// LastAttempt: [Output Only] Information about the last attempt to
+	// create or delete the instance.
+	LastAttempt *ManagedInstanceLastAttempt `json:"lastAttempt,omitempty"`
+}
+
+type ManagedInstanceLastAttempt struct {
+	// Errors: [Output Only] Encountered errors during the last attempt to
+	// create or delete the instance.
+	Errors *ManagedInstanceLastAttemptErrors `json:"errors,omitempty"`
+}
+
+type ManagedInstanceLastAttemptErrors struct {
+	// Errors: [Output Only] The array of errors encountered while
+	// processing this operation.
+	Errors []*ManagedInstanceLastAttemptErrorsErrors `json:"errors,omitempty"`
+}
+
+type ManagedInstanceLastAttemptErrorsErrors struct {
+	// Code: [Output Only] The error type identifier for this error.
+	Code string `json:"code,omitempty"`
+
+	// Location: [Output Only] Indicates the field in the request which
+	// caused the error. This property is optional.
+	Location string `json:"location,omitempty"`
+
+	// Message: [Output Only] An optional, human-readable error message.
+	Message string `json:"message,omitempty"`
+}
+
 type Metadata struct {
-	// Fingerprint: Fingerprint of this resource. A hash of the metadata's
-	// contents. This field is used for optimistic locking. An up-to-date
-	// metadata fingerprint must be provided in order to modify metadata.
+	// Fingerprint: Specifies a fingerprint for this request, which is
+	// essentially a hash of the metadata's contents and used for optimistic
+	// locking. The fingerprint is initially generated by Compute Engine and
+	// changes after every request to modify or update metadata. You must
+	// always provide an up-to-date fingerprint hash in order to update or
+	// change metadata.
 	Fingerprint string `json:"fingerprint,omitempty"`
 
 	// Items: Array of key/value pairs. The total size of all keys and
 	// values must be less than 512 KB.
 	Items []*MetadataItems `json:"items,omitempty"`
 
-	// Kind: Type of the resource.
+	// Kind: [Output Only] Type of the resource. Always compute#metadata for
+	// metadata.
 	Kind string `json:"kind,omitempty"`
 }
 
@@ -1781,281 +2915,314 @@ type MetadataItems struct {
 	Value string `json:"value,omitempty"`
 }
 
+type NamedPort struct {
+	// Name: The name for this named port. The name must be 1-63 characters
+	// long, and comply with RFC1035.
+	Name string `json:"name,omitempty"`
+
+	// Port: The port number, which can be a value between 1 and 65535.
+	Port int64 `json:"port,omitempty"`
+}
+
 type Network struct {
-	// IPv4Range: Required; The range of internal addresses that are legal
-	// on this network. This range is a CIDR specification, for example:
+	// IPv4Range: The range of internal addresses that are legal on this
+	// network. This range is a CIDR specification, for example:
 	// 192.168.0.0/16. Provided by the client when the network is created.
 	IPv4Range string `json:"IPv4Range,omitempty"`
 
-	// CreationTimestamp: Creation timestamp in RFC3339 text format (output
-	// only).
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
 
-	// Description: An optional textual description of the resource;
-	// provided by the client when the resource is created.
+	// Description: An optional textual description of the resource.
+	// Provided by the client when the resource is created.
 	Description string `json:"description,omitempty"`
 
-	// GatewayIPv4: An optional address that is used for default routing to
-	// other networks. This must be within the range specified by IPv4Range,
-	// and is typically the first usable address in that range. If not
-	// specified, the default value is the first usable address in
-	// IPv4Range.
+	// GatewayIPv4: A gateway address for default routing to other networks.
+	// This value is read only and is selected by the Google Compute Engine,
+	// typically as the first usable address in the IPv4Range.
 	GatewayIPv4 string `json:"gatewayIPv4,omitempty"`
 
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] The unique identifier for the resource. This
+	// identifier is defined by the server.
 	Id uint64 `json:"id,omitempty,string"`
 
-	// Kind: Type of the resource.
+	// Kind: [Output Only] Type of the resource. Always compute#network for
+	// networks.
 	Kind string `json:"kind,omitempty"`
 
-	// Name: Name of the resource; provided by the client when the resource
+	// Name: Name of the resource. Provided by the client when the resource
 	// is created. The name must be 1-63 characters long, and comply with
-	// RFC1035.
+	// RFC1035. Specifically, the name must be 1-63 characters long and
+	// match the regular expression [a-z]([-a-z0-9]*[a-z0-9])? which means
+	// the first character must be a lowercase letter, and all following
+	// characters must be a dash, lowercase letter, or digit, except the
+	// last character, which cannot be a dash.
 	Name string `json:"name,omitempty"`
 
-	// SelfLink: Server defined URL for the resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for the resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
 type NetworkInterface struct {
-	// AccessConfigs: Array of configurations for this interface. This
-	// specifies how this interface is configured to interact with other
-	// network services, such as connecting to the internet. Currently,
-	// ONE_TO_ONE_NAT is the only access config supported. If there are no
-	// accessConfigs specified, then this instance will have no external
-	// internet access.
+	// AccessConfigs: An array of configurations for this interface.
+	// Currently, ONE_TO_ONE_NAT is the only access config supported. If
+	// there are no accessConfigs specified, then this instance will have no
+	// external internet access.
 	AccessConfigs []*AccessConfig `json:"accessConfigs,omitempty"`
 
-	// Name: Name of the network interface, determined by the server; for
-	// network devices, these are e.g. eth0, eth1, etc. (output only).
+	// Name: [Output Only] The name of the network interface, generated by
+	// the server. For network devices, these are eth0, eth1, etc.
 	Name string `json:"name,omitempty"`
 
-	// Network: URL of the network resource attached to this interface.
+	// Network: URL of the network resource for this instance. This is
+	// required for creating an instance but optional when creating a
+	// firewall rule. If not specified when creating a firewall rule, the
+	// default network is used:
+	//
+	// global/networks/default
+	//
+	// If you specify
+	// this property, you can specify the network as a full or partial URL.
+	// For example, the following are all valid URLs:
+	// -
+	// https://www.googleapis.com/compute/v1/projects/project/global/networks
+	// /network
+	// - projects/project/global/networks/network
+	// -
+	// global/networks/default
 	Network string `json:"network,omitempty"`
 
-	// NetworkIP: An optional IPV4 internal network address assigned to the
-	// instance for this network interface (output only).
+	// NetworkIP: [Output Only] An optional IPV4 internal network address
+	// assigned to the instance for this network interface.
 	NetworkIP string `json:"networkIP,omitempty"`
 }
 
 type NetworkList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] The unique identifier for the resource. This
+	// identifier is defined by the server.
 	Id string `json:"id,omitempty"`
 
-	// Items: The network resources.
+	// Items: [Output Only] A list of Network resources.
 	Items []*Network `json:"items,omitempty"`
 
-	// Kind: Type of resource.
+	// Kind: [Output Only] Type of resource. Always compute#networkList for
+	// lists of networks.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource .
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
 type Operation struct {
-	// ClientOperationId: An optional identifier specified by the client
-	// when the mutation was initiated. Must be unique for all operation
-	// resources in the project (output only).
+	// ClientOperationId: [Output Only] An optional identifier specified by
+	// the client when the mutation was initiated. Must be unique for all
+	// Operation resources in the project.
 	ClientOperationId string `json:"clientOperationId,omitempty"`
 
-	// CreationTimestamp: Creation timestamp in RFC3339 text format (output
-	// only).
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
 
-	// EndTime: The time that this operation was completed. This is in RFC
-	// 3339 format (output only).
+	// Description: [Output Only] An optional textual description of the
+	// operation; set when the operation is created.
+	Description string `json:"description,omitempty"`
+
+	// EndTime: [Output Only] The time that this operation was completed.
+	// This value is in RFC3339 text format.
 	EndTime string `json:"endTime,omitempty"`
 
-	// Error: If errors occurred during processing of this operation, this
-	// field will be populated (output only).
+	// Error: [Output Only] If errors are generated during processing of the
+	// operation, this field will be populated.
 	Error *OperationError `json:"error,omitempty"`
 
-	// HttpErrorMessage: If operation fails, the HTTP error message
-	// returned, e.g. NOT FOUND. (output only).
+	// HttpErrorMessage: [Output Only] If the operation fails, this field
+	// contains the HTTP error message that was returned, such as NOT FOUND.
 	HttpErrorMessage string `json:"httpErrorMessage,omitempty"`
 
-	// HttpErrorStatusCode: If operation fails, the HTTP error status code
-	// returned, e.g. 404. (output only).
+	// HttpErrorStatusCode: [Output Only] If the operation fails, this field
+	// contains the HTTP error message that was returned, such as 404.
 	HttpErrorStatusCode int64 `json:"httpErrorStatusCode,omitempty"`
 
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] The unique identifier for the resource. This
+	// identifier is defined by the server.
 	Id uint64 `json:"id,omitempty,string"`
 
-	// InsertTime: The time that this operation was requested. This is in
-	// RFC 3339 format (output only).
+	// InsertTime: [Output Only] The time that this operation was requested.
+	// This value is in RFC3339 text format.
 	InsertTime string `json:"insertTime,omitempty"`
 
-	// Kind: Type of the resource.
+	// Kind: [Output Only] Type of the resource. Always compute#operation
+	// for Operation resources.
 	Kind string `json:"kind,omitempty"`
 
-	// Name: Name of the resource (output only).
+	// Name: [Output Only] Name of the resource.
 	Name string `json:"name,omitempty"`
 
-	// OperationType: Type of the operation. Examples include "insert",
-	// "update", and "delete" (output only).
+	// OperationType: [Output Only] Type of the operation, which can be
+	// insert, update, or delete.
 	OperationType string `json:"operationType,omitempty"`
 
-	// Progress: An optional progress indicator that ranges from 0 to 100.
-	// There is no requirement that this be linear or support any
-	// granularity of operations. This should not be used to guess at when
-	// the operation will be complete. This number should be monotonically
-	// increasing as the operation progresses (output only).
+	// Progress: [Output Only] An optional progress indicator that ranges
+	// from 0 to 100. There is no requirement that this be linear or support
+	// any granularity of operations. This should not be used to guess at
+	// when the operation will be complete. This number should monotonically
+	// increase as the operation progresses.
 	Progress int64 `json:"progress,omitempty"`
 
-	// Region: URL of the region where the operation resides (output only).
+	// Region: [Output Only] URL of the region where the operation resides.
+	// Only applicable for regional resources.
 	Region string `json:"region,omitempty"`
 
-	// SelfLink: Server defined URL for the resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for the resource.
 	SelfLink string `json:"selfLink,omitempty"`
 
-	// StartTime: The time that this operation was started by the server.
-	// This is in RFC 3339 format (output only).
+	// StartTime: [Output Only] The time that this operation was started by
+	// the server. This value is in RFC3339 text format.
 	StartTime string `json:"startTime,omitempty"`
 
-	// Status: Status of the operation. Can be one of the following:
-	// "PENDING", "RUNNING", or "DONE" (output only).
+	// Status: [Output Only] The status of the operation, which can be one
+	// of the following: PENDING, RUNNING, or DONE.
 	Status string `json:"status,omitempty"`
 
-	// StatusMessage: An optional textual description of the current status
-	// of the operation (output only).
+	// StatusMessage: [Output Only] An optional textual description of the
+	// current status of the operation.
 	StatusMessage string `json:"statusMessage,omitempty"`
 
-	// TargetId: Unique target id which identifies a particular incarnation
-	// of the target (output only).
+	// TargetId: [Output Only] The unique target ID, which identifies a
+	// specific incarnation of the target resource.
 	TargetId uint64 `json:"targetId,omitempty,string"`
 
-	// TargetLink: URL of the resource the operation is mutating (output
-	// only).
+	// TargetLink: [Output Only] The URL of the resource that the operation
+	// is modifying.
 	TargetLink string `json:"targetLink,omitempty"`
 
-	// User: User who requested the operation, for example
-	// "user@example.com" (output only).
+	// User: [Output Only] User who requested the operation, for example:
+	// user@example.com.
 	User string `json:"user,omitempty"`
 
-	// Warnings: If warning messages generated during processing of this
-	// operation, this field will be populated (output only).
+	// Warnings: [Output Only] If warning messages are generated during
+	// processing of the operation, this field will be populated.
 	Warnings []*OperationWarnings `json:"warnings,omitempty"`
 
-	// Zone: URL of the zone where the operation resides (output only).
+	// Zone: [Output Only] URL of the zone where the operation resides.
 	Zone string `json:"zone,omitempty"`
 }
 
 type OperationError struct {
-	// Errors: The array of errors encountered while processing this
-	// operation.
+	// Errors: [Output Only] The array of errors encountered while
+	// processing this operation.
 	Errors []*OperationErrorErrors `json:"errors,omitempty"`
 }
 
 type OperationErrorErrors struct {
-	// Code: The error type identifier for this error.
+	// Code: [Output Only] The error type identifier for this error.
 	Code string `json:"code,omitempty"`
 
-	// Location: Indicates the field in the request which caused the error.
-	// This property is optional.
+	// Location: [Output Only] Indicates the field in the request which
+	// caused the error. This property is optional.
 	Location string `json:"location,omitempty"`
 
-	// Message: An optional, human-readable error message.
+	// Message: [Output Only] An optional, human-readable error message.
 	Message string `json:"message,omitempty"`
 }
 
 type OperationWarnings struct {
-	// Code: The warning type identifier for this warning.
+	// Code: [Output Only] The warning type identifier for this warning.
 	Code string `json:"code,omitempty"`
 
-	// Data: Metadata for this warning in 'key: value' format.
+	// Data: [Output Only] Metadata for this warning in key: value format.
 	Data []*OperationWarningsData `json:"data,omitempty"`
 
-	// Message: Optional human-readable details for this warning.
+	// Message: [Output Only] Optional human-readable details for this
+	// warning.
 	Message string `json:"message,omitempty"`
 }
 
 type OperationWarningsData struct {
-	// Key: A key for the warning data.
+	// Key: [Output Only] A key for the warning data.
 	Key string `json:"key,omitempty"`
 
-	// Value: A warning data value corresponding to the key.
+	// Value: [Output Only] A warning data value corresponding to the key.
 	Value string `json:"value,omitempty"`
 }
 
 type OperationAggregatedList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] The unique identifier for the resource. This
+	// identifier is defined by the server.
 	Id string `json:"id,omitempty"`
 
-	// Items: A map of scoped operation lists.
+	// Items: [Output Only] A map of scoped operation lists.
 	Items map[string]OperationsScopedList `json:"items,omitempty"`
 
-	// Kind: Type of resource.
+	// Kind: [Output Only] Type of resource. Always
+	// compute#operationAggregatedList for aggregated lists of operations.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
 type OperationList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] The unique identifier for the resource. This
+	// identifier is defined by the server.
 	Id string `json:"id,omitempty"`
 
-	// Items: The operation resources.
+	// Items: [Output Only] The Operation resources.
 	Items []*Operation `json:"items,omitempty"`
 
-	// Kind: Type of resource.
+	// Kind: [Output Only] Type of resource. Always compute#operations for
+	// Operations resource.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncate.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
 type OperationsScopedList struct {
-	// Operations: List of operations contained in this scope.
+	// Operations: [Output Only] List of operations contained in this scope.
 	Operations []*Operation `json:"operations,omitempty"`
 
-	// Warning: Informational warning which replaces the list of operations
-	// when the list is empty.
+	// Warning: [Output Only] Informational warning which replaces the list
+	// of operations when the list is empty.
 	Warning *OperationsScopedListWarning `json:"warning,omitempty"`
 }
 
 type OperationsScopedListWarning struct {
-	// Code: The warning type identifier for this warning.
+	// Code: [Output Only] The warning type identifier for this warning.
 	Code string `json:"code,omitempty"`
 
-	// Data: Metadata for this warning in 'key: value' format.
+	// Data: [Output Only] Metadata for this warning in key: value format.
 	Data []*OperationsScopedListWarningData `json:"data,omitempty"`
 
-	// Message: Optional human-readable details for this warning.
+	// Message: [Output Only] Optional human-readable details for this
+	// warning.
 	Message string `json:"message,omitempty"`
 }
 
 type OperationsScopedListWarningData struct {
-	// Key: A key for the warning data.
+	// Key: [Output Only] A key for the warning data.
 	Key string `json:"key,omitempty"`
 
-	// Value: A warning data value corresponding to the key.
+	// Value: [Output Only] A warning data value corresponding to the key.
 	Value string `json:"value,omitempty"`
 }
 
 type PathMatcher struct {
-	// DefaultService: The URL to the BackendService resource. This will be
-	// used if none of the 'pathRules' defined by this PathMatcher is met by
-	// the URL's path portion.
 	DefaultService string `json:"defaultService,omitempty"`
 
+	// Description: An optional textual description of the resource.
 	Description string `json:"description,omitempty"`
 
 	// Name: The name to which this PathMatcher is referred by the HostRule.
@@ -2079,30 +3246,37 @@ type PathRule struct {
 
 type Project struct {
 	// CommonInstanceMetadata: Metadata key/value pairs available to all
-	// instances contained in this project.
+	// instances contained in this project. See Custom metadata for more
+	// information.
 	CommonInstanceMetadata *Metadata `json:"commonInstanceMetadata,omitempty"`
 
-	// CreationTimestamp: Creation timestamp in RFC3339 text format (output
-	// only).
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
 
 	// Description: An optional textual description of the resource.
 	Description string `json:"description,omitempty"`
 
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// EnabledFeatures: Restricted features enabled for use on this project.
+	EnabledFeatures []string `json:"enabledFeatures,omitempty"`
+
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server. This is not the project ID, and is just a unique ID used by
+	// Compute Engine to identify resources.
 	Id uint64 `json:"id,omitempty,string"`
 
-	// Kind: Type of the resource.
+	// Kind: [Output Only] Type of the resource. Always compute#project for
+	// projects.
 	Kind string `json:"kind,omitempty"`
 
-	// Name: Name of the resource.
+	// Name: The project ID. For example: my-example-project. Use the
+	// project ID to make requests to Compute Engine.
 	Name string `json:"name,omitempty"`
 
-	// Quotas: Quotas assigned to this project.
+	// Quotas: [Output Only] Quotas assigned to this project.
 	Quotas []*Quota `json:"quotas,omitempty"`
 
-	// SelfLink: Server defined URL for the resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for the resource.
 	SelfLink string `json:"selfLink,omitempty"`
 
 	// UsageExportLocation: The location in Cloud Storage and naming method
@@ -2111,67 +3285,70 @@ type Project struct {
 }
 
 type Quota struct {
-	// Limit: Quota limit for this metric.
+	// Limit: [Output Only] Quota limit for this metric.
 	Limit float64 `json:"limit,omitempty"`
 
-	// Metric: Name of the quota metric.
+	// Metric: [Output Only] Name of the quota metric.
 	Metric string `json:"metric,omitempty"`
 
-	// Usage: Current usage of this metric.
+	// Usage: [Output Only] Current usage of this metric.
 	Usage float64 `json:"usage,omitempty"`
 }
 
 type Region struct {
-	// CreationTimestamp: Creation timestamp in RFC3339 text format (output
-	// only).
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
 
-	// Deprecated: The deprecation status associated with this region.
+	// Deprecated: [Output Only] The deprecation status associated with this
+	// region.
 	Deprecated *DeprecationStatus `json:"deprecated,omitempty"`
 
-	// Description: Textual description of the resource.
+	// Description: [Output Only] Textual description of the resource.
 	Description string `json:"description,omitempty"`
 
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server .
 	Id uint64 `json:"id,omitempty,string"`
 
-	// Kind: Type of the resource.
+	// Kind: [Output Only] Type of the resource. Always compute#region for
+	// regions.
 	Kind string `json:"kind,omitempty"`
 
-	// Name: Name of the resource.
+	// Name: [Output Only] Name of the resource.
 	Name string `json:"name,omitempty"`
 
-	// Quotas: Quotas assigned to this region.
+	// Quotas: [Output Only] Quotas assigned to this region.
 	Quotas []*Quota `json:"quotas,omitempty"`
 
-	// SelfLink: Server defined URL for the resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for the resource.
 	SelfLink string `json:"selfLink,omitempty"`
 
-	// Status: Status of the region, "UP" or "DOWN".
+	// Status: [Output Only] Status of the region, either UP or DOWN.
 	Status string `json:"status,omitempty"`
 
-	// Zones: A list of zones homed in this region, in the form of resource
-	// URLs.
+	// Zones: [Output Only] A list of zones available in this region, in the
+	// form of resource URLs.
 	Zones []string `json:"zones,omitempty"`
 }
 
 type RegionList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
 	Id string `json:"id,omitempty"`
 
-	// Items: The region resources.
+	// Items: [Output Only] A list of Region resources.
 	Items []*Region `json:"items,omitempty"`
 
-	// Kind: Type of resource.
+	// Kind: [Output Only] Type of resource. Always compute#regionList for
+	// lists of regions.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
@@ -2182,39 +3359,49 @@ type ResourceGroupReference struct {
 }
 
 type Route struct {
-	// CreationTimestamp: Creation timestamp in RFC3339 text format (output
-	// only).
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
 
-	// Description: An optional textual description of the resource;
-	// provided by the client when the resource is created.
+	// Description: An optional textual description of the resource.
+	// Provided by the client when the resource is created.
 	Description string `json:"description,omitempty"`
 
-	// DestRange: Which packets does this route apply to?
+	// DestRange: The destination range of outgoing packets that this route
+	// applies to.
 	DestRange string `json:"destRange,omitempty"`
 
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource. Defined by the
+	// server.
 	Id uint64 `json:"id,omitempty,string"`
 
-	// Kind: Type of the resource.
+	// Kind: [Output Only] Type of this resource. Always compute#routes for
+	// Route resources.
 	Kind string `json:"kind,omitempty"`
 
 	// Name: Name of the resource; provided by the client when the resource
 	// is created. The name must be 1-63 characters long, and comply with
-	// RFC1035.
+	// RFC1035. Specifically, the name must be 1-63 characters long and
+	// match the regular expression [a-z]([-a-z0-9]*[a-z0-9])? which means
+	// the first character must be a lowercase letter, and all following
+	// characters must be a dash, lowercase letter, or digit, except the
+	// last character, which cannot be a dash.
 	Name string `json:"name,omitempty"`
 
-	// Network: URL of the network to which this route is applied; provided
-	// by the client when the route is created.
+	// Network: Fully-qualified URL of the network that this route applies
+	// to.
 	Network string `json:"network,omitempty"`
 
 	// NextHopGateway: The URL to a gateway that should handle matching
-	// packets.
+	// packets. Currently, this is only the internet gateway:
+	// projects/<project-id>/global/gateways/default-internet-gateway
 	NextHopGateway string `json:"nextHopGateway,omitempty"`
 
-	// NextHopInstance: The URL to an instance that should handle matching
-	// packets.
+	// NextHopInstance: The fully-qualified URL to an instance that should
+	// handle matching packets. For
+	// example:
+	// https://www.googleapis.com/compute/v1/projects/project/zones/
+	// zone/instances/
 	NextHopInstance string `json:"nextHopInstance,omitempty"`
 
 	// NextHopIp: The network IP address of an instance that should handle
@@ -2225,79 +3412,93 @@ type Route struct {
 	// matching packets.
 	NextHopNetwork string `json:"nextHopNetwork,omitempty"`
 
+	// NextHopVpnTunnel: The URL to a VpnTunnel that should handle matching
+	// packets.
+	NextHopVpnTunnel string `json:"nextHopVpnTunnel,omitempty"`
+
 	// Priority: Breaks ties between Routes of equal specificity. Routes
 	// with smaller values win when tied with routes with larger values.
+	// Default value is 1000. A valid range is between 0 and 65535.
 	Priority int64 `json:"priority,omitempty"`
 
-	// SelfLink: Server defined URL for the resource (output only).
+	// SelfLink: [Output Only] Server-defined fully-qualified URL for this
+	// resource.
 	SelfLink string `json:"selfLink,omitempty"`
 
 	// Tags: A list of instance tags to which this route applies.
 	Tags []string `json:"tags,omitempty"`
 
-	// Warnings: If potential misconfigurations are detected for this route,
-	// this field will be populated with warning messages.
+	// Warnings: [Output Only] If potential misconfigurations are detected
+	// for this route, this field will be populated with warning messages.
 	Warnings []*RouteWarnings `json:"warnings,omitempty"`
 }
 
 type RouteWarnings struct {
-	// Code: The warning type identifier for this warning.
+	// Code: [Output Only] The warning type identifier for this warning.
 	Code string `json:"code,omitempty"`
 
-	// Data: Metadata for this warning in 'key: value' format.
+	// Data: [Output Only] Metadata for this warning in key: value format.
 	Data []*RouteWarningsData `json:"data,omitempty"`
 
-	// Message: Optional human-readable details for this warning.
+	// Message: [Output Only] Optional human-readable details for this
+	// warning.
 	Message string `json:"message,omitempty"`
 }
 
 type RouteWarningsData struct {
-	// Key: A key for the warning data.
+	// Key: [Output Only] A key for the warning data.
 	Key string `json:"key,omitempty"`
 
-	// Value: A warning data value corresponding to the key.
+	// Value: [Output Only] A warning data value corresponding to the key.
 	Value string `json:"value,omitempty"`
 }
 
 type RouteList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource. Defined by the
+	// server.
 	Id string `json:"id,omitempty"`
 
-	// Items: The route resources.
+	// Items: A list of Route resources.
 	Items []*Route `json:"items,omitempty"`
 
 	// Kind: Type of resource.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
 type Scheduling struct {
-	// AutomaticRestart: Whether the Instance should be automatically
-	// restarted whenever it is terminated by Compute Engine (not terminated
-	// by user).
+	// AutomaticRestart: Specifies whether the instance should be
+	// automatically restarted if it is terminated by Compute Engine (not
+	// terminated by a user). You can only set the automatic restart option
+	// for standard instances. Preemptible instances cannot be automatically
+	// restarted.
 	AutomaticRestart bool `json:"automaticRestart,omitempty"`
 
-	// OnHostMaintenance: How the instance should behave when the host
-	// machine undergoes maintenance that may temporarily impact instance
-	// performance.
+	// OnHostMaintenance: Defines the maintenance behavior for this
+	// instance. For standard instances, the default behavior is MIGRATE.
+	// For preemptible instances, the default and only possible behavior is
+	// TERMINATE. For more information, see Setting maintenance behavior.
 	OnHostMaintenance string `json:"onHostMaintenance,omitempty"`
+
+	// Preemptible: Whether the instance is preemptible.
+	Preemptible bool `json:"preemptible,omitempty"`
 }
 
 type SerialPortOutput struct {
-	// Contents: The contents of the console output.
+	// Contents: [Output Only] The contents of the console output.
 	Contents string `json:"contents,omitempty"`
 
-	// Kind: Type of the resource.
+	// Kind: [Output Only] Type of the resource. Always
+	// compute#serialPortOutput for serial port output.
 	Kind string `json:"kind,omitempty"`
 
-	// SelfLink: Server defined URL for the resource (output only).
+	// SelfLink: [Output Only] Server defined URL for the resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
@@ -2311,23 +3512,23 @@ type ServiceAccount struct {
 }
 
 type Snapshot struct {
-	// CreationTimestamp: Creation timestamp in RFC3339 text format (output
-	// only).
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
 
 	// Description: An optional textual description of the resource;
 	// provided by the client when the resource is created.
 	Description string `json:"description,omitempty"`
 
-	// DiskSizeGb: Size of the persistent disk snapshot, specified in GB
-	// (output only).
+	// DiskSizeGb: [Output Only] Size of the snapshot, specified in GB.
 	DiskSizeGb int64 `json:"diskSizeGb,omitempty,string"`
 
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] The unique identifier for the resource. This
+	// identifier is defined by the server.
 	Id uint64 `json:"id,omitempty,string"`
 
-	// Kind: Type of the resource.
+	// Kind: [Output Only] Type of the resource. Always compute#snapshot for
+	// Snapshot resources.
 	Kind string `json:"kind,omitempty"`
 
 	// Licenses: Public visible licenses.
@@ -2335,58 +3536,126 @@ type Snapshot struct {
 
 	// Name: Name of the resource; provided by the client when the resource
 	// is created. The name must be 1-63 characters long, and comply with
-	// RFC1035.
+	// RFC1035. Specifically, the name must be 1-63 characters long and
+	// match the regular expression [a-z]([-a-z0-9]*[a-z0-9])? which means
+	// the first character must be a lowercase letter, and all following
+	// characters must be a dash, lowercase letter, or digit, except the
+	// last character, which cannot be a dash.
 	Name string `json:"name,omitempty"`
 
-	// SelfLink: Server defined URL for the resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for the resource.
 	SelfLink string `json:"selfLink,omitempty"`
 
 	// SourceDisk: The source disk used to create this snapshot.
 	SourceDisk string `json:"sourceDisk,omitempty"`
 
-	// SourceDiskId: The 'id' value of the disk used to create this
-	// snapshot. This value may be used to determine whether the snapshot
-	// was taken from the current or a previous instance of a given disk
-	// name.
+	// SourceDiskId: [Output Only] The ID value of the disk used to create
+	// this snapshot. This value may be used to determine whether the
+	// snapshot was taken from the current or a previous instance of a given
+	// disk name.
 	SourceDiskId string `json:"sourceDiskId,omitempty"`
 
-	// Status: The status of the persistent disk snapshot (output only).
+	// Status: [Output Only] The status of the snapshot.
 	Status string `json:"status,omitempty"`
 
-	// StorageBytes: A size of the the storage used by the snapshot. As
-	// snapshots share storage this number is expected to change with
-	// snapshot creation/deletion.
+	// StorageBytes: [Output Only] A size of the the storage used by the
+	// snapshot. As snapshots share storage, this number is expected to
+	// change with snapshot creation/deletion.
 	StorageBytes int64 `json:"storageBytes,omitempty,string"`
 
-	// StorageBytesStatus: An indicator whether storageBytes is in a stable
-	// state, or it is being adjusted as a result of shared storage
-	// reallocation.
+	// StorageBytesStatus: [Output Only] An indicator whether storageBytes
+	// is in a stable state or it is being adjusted as a result of shared
+	// storage reallocation.
 	StorageBytesStatus string `json:"storageBytesStatus,omitempty"`
 }
 
 type SnapshotList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] The unique identifier for the resource. This
+	// identifier is defined by the server.
 	Id string `json:"id,omitempty"`
 
-	// Items: The persistent snapshot resources.
+	// Items: A list of Snapshot resources.
 	Items []*Snapshot `json:"items,omitempty"`
 
 	// Kind: Type of resource.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
+	SelfLink string `json:"selfLink,omitempty"`
+}
+
+type SslCertificate struct {
+	// Certificate: A local certificate file. The certificate must be in PEM
+	// format. The certificate chain must be no greater than 5 certs long.
+	// The chain must include at least one intermediate cert.
+	Certificate string `json:"certificate,omitempty"`
+
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
+	CreationTimestamp string `json:"creationTimestamp,omitempty"`
+
+	// Description: An optional textual description of the resource.
+	// Provided by the client when the resource is created.
+	Description string `json:"description,omitempty"`
+
+	// Id: [Output Only] Unique identifier for the resource. Defined by the
+	// server.
+	Id uint64 `json:"id,omitempty,string"`
+
+	// Kind: [Output Only] Type of the resource. Always
+	// compute#sslCertificate for SSL certificates.
+	Kind string `json:"kind,omitempty"`
+
+	// Name: Name of the resource. Provided by the client when the resource
+	// is created. The name must be 1-63 characters long, and comply with
+	// RFC1035. Specifically, the name must be 1-63 characters long and
+	// match the regular expression [a-z]([-a-z0-9]*[a-z0-9])? which means
+	// the first character must be a lowercase letter, and all following
+	// characters must be a dash, lowercase letter, or digit, except the
+	// last character, which cannot be a dash.
+	Name string `json:"name,omitempty"`
+
+	// PrivateKey: A write-only private key in PEM format. Only insert RPCs
+	// will include this field.
+	PrivateKey string `json:"privateKey,omitempty"`
+
+	// SelfLink: [Output only] Server-defined URL for the resource.
+	SelfLink string `json:"selfLink,omitempty"`
+}
+
+type SslCertificateList struct {
+	// Id: [Output Only] Unique identifier for the resource. Defined by the
+	// server.
+	Id string `json:"id,omitempty"`
+
+	// Items: A list of SslCertificate resources.
+	Items []*SslCertificate `json:"items,omitempty"`
+
+	// Kind: Type of resource.
+	Kind string `json:"kind,omitempty"`
+
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
+	NextPageToken string `json:"nextPageToken,omitempty"`
+
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
 type Tags struct {
-	// Fingerprint: Fingerprint of this resource. A hash of the tags stored
-	// in this object. This field is used optimistic locking. An up-to-date
-	// tags fingerprint must be provided in order to modify tags.
+	// Fingerprint: Specifies a fingerprint for this request, which is
+	// essentially a hash of the metadata's contents and used for optimistic
+	// locking. The fingerprint is initially generated by Compute Engine and
+	// changes after every request to modify or update metadata. You must
+	// always provide an up-to-date fingerprint hash in order to update or
+	// change metadata.
+	//
+	// To see the latest fingerprint, make get() request
+	// to the instance.
 	Fingerprint string `json:"fingerprint,omitempty"`
 
 	// Items: An array of tags. Each tag must be 1-63 characters long, and
@@ -2395,27 +3664,32 @@ type Tags struct {
 }
 
 type TargetHttpProxy struct {
-	// CreationTimestamp: Creation timestamp in RFC3339 text format (output
-	// only).
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
 
 	// Description: An optional textual description of the resource;
 	// provided by the client when the resource is created.
 	Description string `json:"description,omitempty"`
 
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource. Defined by the
+	// server.
 	Id uint64 `json:"id,omitempty,string"`
 
-	// Kind: Type of the resource.
+	// Kind: [Output Only] Type of resource. Always compute#operation for
+	// Operation resources.
 	Kind string `json:"kind,omitempty"`
 
 	// Name: Name of the resource; provided by the client when the resource
 	// is created. The name must be 1-63 characters long, and comply with
-	// RFC1035.
+	// RFC1035. Specifically, the name must be 1-63 characters long and
+	// match the regular expression [a-z]([-a-z0-9]*[a-z0-9])? which means
+	// the first character must be a lowercase letter, and all following
+	// characters must be a dash, lowercase letter, or digit, except the
+	// last character, which cannot be a dash.
 	Name string `json:"name,omitempty"`
 
-	// SelfLink: Server defined URL for the resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for the resource.
 	SelfLink string `json:"selfLink,omitempty"`
 
 	// UrlMap: URL to the UrlMap resource that defines the mapping from URL
@@ -2424,35 +3698,100 @@ type TargetHttpProxy struct {
 }
 
 type TargetHttpProxyList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
 	Id string `json:"id,omitempty"`
 
-	// Items: The TargetHttpProxy resources.
+	// Items: A list of TargetHttpProxy resources.
 	Items []*TargetHttpProxy `json:"items,omitempty"`
+
+	// Kind: Type of resource. Always compute#targetHttpProxyList for lists
+	// of Target HTTP proxies.
+	Kind string `json:"kind,omitempty"`
+
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
+	NextPageToken string `json:"nextPageToken,omitempty"`
+
+	// SelfLink: [Output Only] Server-defined URL for this resource.
+	SelfLink string `json:"selfLink,omitempty"`
+}
+
+type TargetHttpsProxiesSetSslCertificatesRequest struct {
+	// SslCertificates: New set of URLs to SslCertificate resources to
+	// associate with this TargetHttpProxy. Currently exactly one ssl
+	// certificate must be specified.
+	SslCertificates []string `json:"sslCertificates,omitempty"`
+}
+
+type TargetHttpsProxy struct {
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
+	CreationTimestamp string `json:"creationTimestamp,omitempty"`
+
+	// Description: An optional textual description of the resource.
+	// Provided by the client when the resource is created.
+	Description string `json:"description,omitempty"`
+
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
+	Id uint64 `json:"id,omitempty,string"`
+
+	// Kind: Type of the resource.
+	Kind string `json:"kind,omitempty"`
+
+	// Name: Name of the resource. Provided by the client when the resource
+	// is created. The name must be 1-63 characters long, and comply with
+	// RFC1035. Specifically, the name must be 1-63 characters long and
+	// match the regular expression [a-z]([-a-z0-9]*[a-z0-9])? which means
+	// the first character must be a lowercase letter, and all following
+	// characters must be a dash, lowercase letter, or digit, except the
+	// last character, which cannot be a dash.
+	Name string `json:"name,omitempty"`
+
+	// SelfLink: [Output Only] Server-defined URL for the resource.
+	SelfLink string `json:"selfLink,omitempty"`
+
+	// SslCertificates: URLs to SslCertificate resources that are used to
+	// authenticate connections to Backends. Currently exactly one SSL
+	// certificate must be specified.
+	SslCertificates []string `json:"sslCertificates,omitempty"`
+
+	// UrlMap: URL to the UrlMap resource that defines the mapping from URL
+	// to the BackendService.
+	UrlMap string `json:"urlMap,omitempty"`
+}
+
+type TargetHttpsProxyList struct {
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
+	Id string `json:"id,omitempty"`
+
+	// Items: A list of TargetHttpsProxy resources.
+	Items []*TargetHttpsProxy `json:"items,omitempty"`
 
 	// Kind: Type of resource.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
 type TargetInstance struct {
-	// CreationTimestamp: Creation timestamp in RFC3339 text format (output
-	// only).
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
 
 	// Description: An optional textual description of the resource;
 	// provided by the client when the resource is created.
 	Description string `json:"description,omitempty"`
 
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
 	Id uint64 `json:"id,omitempty,string"`
 
 	// Instance: The URL to the instance that terminates the relevant
@@ -2462,26 +3801,30 @@ type TargetInstance struct {
 	// Kind: Type of the resource.
 	Kind string `json:"kind,omitempty"`
 
-	// Name: Name of the resource; provided by the client when the resource
+	// Name: Name of the resource. Provided by the client when the resource
 	// is created. The name must be 1-63 characters long, and comply with
-	// RFC1035.
+	// RFC1035. Specifically, the name must be 1-63 characters long and
+	// match the regular expression [a-z]([-a-z0-9]*[a-z0-9])? which means
+	// the first character must be a lowercase letter, and all following
+	// characters must be a dash, lowercase letter, or digit, except the
+	// last character, which cannot be a dash.
 	Name string `json:"name,omitempty"`
 
-	// NatPolicy: NAT option controlling how IPs are NAT'ed to the VM.
+	// NatPolicy: NAT option controlling how IPs are NAT'ed to the instance.
 	// Currently only NO_NAT (default value) is supported.
 	NatPolicy string `json:"natPolicy,omitempty"`
 
-	// SelfLink: Server defined URL for the resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for the resource.
 	SelfLink string `json:"selfLink,omitempty"`
 
-	// Zone: URL of the zone where the target instance resides (output
-	// only).
+	// Zone: [Output Only] URL of the zone where the target instance
+	// resides.
 	Zone string `json:"zone,omitempty"`
 }
 
 type TargetInstanceAggregatedList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
 	Id string `json:"id,omitempty"`
 
 	// Items: A map of scoped target instance lists.
@@ -2490,30 +3833,30 @@ type TargetInstanceAggregatedList struct {
 	// Kind: Type of resource.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
 type TargetInstanceList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
 	Id string `json:"id,omitempty"`
 
-	// Items: The TargetInstance resources.
+	// Items: A list of TargetInstance resources.
 	Items []*TargetInstance `json:"items,omitempty"`
 
 	// Kind: Type of resource.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
@@ -2527,45 +3870,46 @@ type TargetInstancesScopedList struct {
 }
 
 type TargetInstancesScopedListWarning struct {
-	// Code: The warning type identifier for this warning.
+	// Code: [Output Only] The warning type identifier for this warning.
 	Code string `json:"code,omitempty"`
 
-	// Data: Metadata for this warning in 'key: value' format.
+	// Data: [Output Only] Metadata for this warning in key: value format.
 	Data []*TargetInstancesScopedListWarningData `json:"data,omitempty"`
 
-	// Message: Optional human-readable details for this warning.
+	// Message: [Output Only] Optional human-readable details for this
+	// warning.
 	Message string `json:"message,omitempty"`
 }
 
 type TargetInstancesScopedListWarningData struct {
-	// Key: A key for the warning data.
+	// Key: [Output Only] A key for the warning data.
 	Key string `json:"key,omitempty"`
 
-	// Value: A warning data value corresponding to the key.
+	// Value: [Output Only] A warning data value corresponding to the key.
 	Value string `json:"value,omitempty"`
 }
 
 type TargetPool struct {
 	// BackupPool: This field is applicable only when the containing target
 	// pool is serving a forwarding rule as the primary pool, and its
-	// 'failoverRatio' field is properly set to a value between [0,
+	// failoverRatio field is properly set to a value between [0,
 	// 1].
 	//
-	// 'backupPool' and 'failoverRatio' together define the fallback
-	// behavior of the primary target pool: if the ratio of the healthy VMs
-	// in the primary pool is at or below 'failoverRatio', traffic arriving
-	// at the load-balanced IP will be directed to the backup pool.
+	// backupPool and failoverRatio together define the fallback
+	// behavior of the primary target pool: if the ratio of the healthy
+	// instances in the primary pool is at or below failoverRatio, traffic
+	// arriving at the load-balanced IP will be directed to the backup
+	// pool.
 	//
-	// In case
-	// where 'failoverRatio' and 'backupPool' are not set, or all the VMs in
-	// the backup pool are unhealthy, the traffic will be directed back to
-	// the primary pool in the "force" mode, where traffic will be spread to
-	// the healthy VMs with the best effort, or to all VMs when no VM is
-	// healthy.
+	// In case where failoverRatio and backupPool are not set, or all
+	// the instances in the backup pool are unhealthy, the traffic will be
+	// directed back to the primary pool in the "force" mode, where traffic
+	// will be spread to the healthy instances with the best effort, or to
+	// all instances when no instance is healthy.
 	BackupPool string `json:"backupPool,omitempty"`
 
-	// CreationTimestamp: Creation timestamp in RFC3339 text format (output
-	// only).
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
 
 	// Description: An optional textual description of the resource;
@@ -2577,62 +3921,69 @@ type TargetPool struct {
 	// not as a backup pool to some other target pool). The value of the
 	// field must be in [0, 1].
 	//
-	// If set, 'backupPool' must also be set. They
+	// If set, backupPool must also be set. They
 	// together define the fallback behavior of the primary target pool: if
-	// the ratio of the healthy VMs in the primary pool is at or below this
-	// number, traffic arriving at the load-balanced IP will be directed to
-	// the backup pool.
+	// the ratio of the healthy instances in the primary pool is at or below
+	// this number, traffic arriving at the load-balanced IP will be
+	// directed to the backup pool.
 	//
-	// In case where 'failoverRatio' is not set or all the
-	// VMs in the backup pool are unhealthy, the traffic will be directed
-	// back to the primary pool in the "force" mode, where traffic will be
-	// spread to the healthy VMs with the best effort, or to all VMs when no
-	// VM is healthy.
+	// In case where failoverRatio is not set
+	// or all the instances in the backup pool are unhealthy, the traffic
+	// will be directed back to the primary pool in the "force" mode, where
+	// traffic will be spread to the healthy instances with the best effort,
+	// or to all instances when no instance is healthy.
 	FailoverRatio float64 `json:"failoverRatio,omitempty"`
 
 	// HealthChecks: A list of URLs to the HttpHealthCheck resource. A
-	// member VM in this pool is considered healthy if and only if all
-	// specified health checks pass. An empty list means all member VMs will
-	// be considered healthy at all times.
+	// member instance in this pool is considered healthy if and only if all
+	// specified health checks pass. An empty list means all member
+	// instances will be considered healthy at all times.
 	HealthChecks []string `json:"healthChecks,omitempty"`
 
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
 	Id uint64 `json:"id,omitempty,string"`
 
-	// Instances: A list of resource URLs to the member VMs serving this
-	// pool. They must live in zones contained in the same region as this
-	// pool.
+	// Instances: A list of resource URLs to the member virtual machines
+	// serving this pool. They must live in zones contained in the same
+	// region as this pool.
 	Instances []string `json:"instances,omitempty"`
 
 	// Kind: Type of the resource.
 	Kind string `json:"kind,omitempty"`
 
-	// Name: Name of the resource; provided by the client when the resource
+	// Name: Name of the resource. Provided by the client when the resource
 	// is created. The name must be 1-63 characters long, and comply with
-	// RFC1035.
+	// RFC1035. Specifically, the name must be 1-63 characters long and
+	// match the regular expression [a-z]([-a-z0-9]*[a-z0-9])? which means
+	// the first character must be a lowercase letter, and all following
+	// characters must be a dash, lowercase letter, or digit, except the
+	// last character, which cannot be a dash.
 	Name string `json:"name,omitempty"`
 
-	// Region: URL of the region where the target pool resides (output
-	// only).
+	// Region: [Output Only] URL of the region where the target pool
+	// resides.
 	Region string `json:"region,omitempty"`
 
-	// SelfLink: Server defined URL for the resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for the resource.
 	SelfLink string `json:"selfLink,omitempty"`
 
 	// SessionAffinity: Sesssion affinity option, must be one of the
-	// following values: 'NONE': Connections from the same client IP may go
-	// to any VM in the pool; 'CLIENT_IP': Connections from the same client
-	// IP will go to the same VM in the pool while that VM remains healthy.
-	// 'CLIENT_IP_PROTO': Connections from the same client IP with the same
-	// IP protocol will go to the same VM in the pool while that VM remains
-	// healthy.
+	// following values:
+	// NONE: Connections from the same client IP may go to
+	// any instance in the pool.
+	// CLIENT_IP: Connections from the same client
+	// IP will go to the same instance in the pool while that instance
+	// remains healthy.
+	// CLIENT_IP_PROTO: Connections from the same client IP
+	// with the same IP protocol will go to the same instance in the pool
+	// while that instance remains healthy.
 	SessionAffinity string `json:"sessionAffinity,omitempty"`
 }
 
 type TargetPoolAggregatedList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource. Defined by the
+	// server.
 	Id string `json:"id,omitempty"`
 
 	// Items: A map of scoped target pool lists.
@@ -2641,11 +3992,11 @@ type TargetPoolAggregatedList struct {
 	// Kind: Type of resource.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
@@ -2657,21 +4008,21 @@ type TargetPoolInstanceHealth struct {
 }
 
 type TargetPoolList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource. Defined by the
+	// server.
 	Id string `json:"id,omitempty"`
 
-	// Items: The TargetPool resources.
+	// Items: A list of TargetPool resources.
 	Items []*TargetPool `json:"items,omitempty"`
 
 	// Kind: Type of resource.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
@@ -2705,26 +4056,148 @@ type TargetPoolsScopedList struct {
 }
 
 type TargetPoolsScopedListWarning struct {
-	// Code: The warning type identifier for this warning.
+	// Code: [Output Only] The warning type identifier for this warning.
 	Code string `json:"code,omitempty"`
 
-	// Data: Metadata for this warning in 'key: value' format.
+	// Data: [Output Only] Metadata for this warning in key: value format.
 	Data []*TargetPoolsScopedListWarningData `json:"data,omitempty"`
 
-	// Message: Optional human-readable details for this warning.
+	// Message: [Output Only] Optional human-readable details for this
+	// warning.
 	Message string `json:"message,omitempty"`
 }
 
 type TargetPoolsScopedListWarningData struct {
-	// Key: A key for the warning data.
+	// Key: [Output Only] A key for the warning data.
 	Key string `json:"key,omitempty"`
 
-	// Value: A warning data value corresponding to the key.
+	// Value: [Output Only] A warning data value corresponding to the key.
 	Value string `json:"value,omitempty"`
 }
 
 type TargetReference struct {
 	Target string `json:"target,omitempty"`
+}
+
+type TargetVpnGateway struct {
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
+	CreationTimestamp string `json:"creationTimestamp,omitempty"`
+
+	// Description: An optional textual description of the resource.
+	// Provided by the client when the resource is created.
+	Description string `json:"description,omitempty"`
+
+	// ForwardingRules: [Output Only] A list of URLs to the ForwardingRule
+	// resources. ForwardingRules are created using
+	// compute.forwardingRules.insert and associated to a VPN gateway.
+	ForwardingRules []string `json:"forwardingRules,omitempty"`
+
+	// Id: [Output Only] Unique identifier for the resource. Defined by the
+	// server.
+	Id uint64 `json:"id,omitempty,string"`
+
+	// Kind: [Output Only] Type of resource. Always compute#targetVpnGateway
+	// for target VPN gateways.
+	Kind string `json:"kind,omitempty"`
+
+	// Name: Name of the resource; provided by the client when the resource
+	// is created. The name must be 1-63 characters long, and comply with
+	// RFC1035. Specifically, the name must be 1-63 characters long and
+	// match the regular expression [a-z]([-a-z0-9]*[a-z0-9])? which means
+	// the first character must be a lowercase letter, and all following
+	// characters must be a dash, lowercase letter, or digit, except the
+	// last character, which cannot be a dash.
+	Name string `json:"name,omitempty"`
+
+	// Network: URL of the network to which this VPN gateway is attached.
+	// Provided by the client when the VPN gateway is created.
+	Network string `json:"network,omitempty"`
+
+	// Region: [Output Only] URL of the region where the target VPN gateway
+	// resides.
+	Region string `json:"region,omitempty"`
+
+	// SelfLink: [Output Only] Server-defined URL for the resource.
+	SelfLink string `json:"selfLink,omitempty"`
+
+	// Status: [Output Only] The status of the VPN gateway.
+	Status string `json:"status,omitempty"`
+
+	// Tunnels: [Output Only] A list of URLs to VpnTunnel resources.
+	// VpnTunnels are created using compute.vpntunnels.insert and associated
+	// to a VPN gateway.
+	Tunnels []string `json:"tunnels,omitempty"`
+}
+
+type TargetVpnGatewayAggregatedList struct {
+	// Id: [Output Only] Unique identifier for the resource. Defined by the
+	// server.
+	Id string `json:"id,omitempty"`
+
+	// Items: A map of scoped target vpn gateway lists.
+	Items map[string]TargetVpnGatewaysScopedList `json:"items,omitempty"`
+
+	// Kind: [Output Only] Type of resource. Always compute#targetVpnGateway
+	// for target VPN gateways.
+	Kind string `json:"kind,omitempty"`
+
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
+	NextPageToken string `json:"nextPageToken,omitempty"`
+
+	// SelfLink: [Output Only] Server-defined URL for the resource.
+	SelfLink string `json:"selfLink,omitempty"`
+}
+
+type TargetVpnGatewayList struct {
+	// Id: [Output Only] Unique identifier for the resource. Defined by the
+	// server.
+	Id string `json:"id,omitempty"`
+
+	// Items: [Output Only] A list of TargetVpnGateway resources.
+	Items []*TargetVpnGateway `json:"items,omitempty"`
+
+	// Kind: [Output Only] Type of resource. Always compute#targetVpnGateway
+	// for target VPN gateways.
+	Kind string `json:"kind,omitempty"`
+
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
+	NextPageToken string `json:"nextPageToken,omitempty"`
+
+	// SelfLink: [Output Only] Server-defined URL for the resource.
+	SelfLink string `json:"selfLink,omitempty"`
+}
+
+type TargetVpnGatewaysScopedList struct {
+	// TargetVpnGateways: [Output Only] List of target vpn gateways
+	// contained in this scope.
+	TargetVpnGateways []*TargetVpnGateway `json:"targetVpnGateways,omitempty"`
+
+	// Warning: [Output Only] Informational warning which replaces the list
+	// of addresses when the list is empty.
+	Warning *TargetVpnGatewaysScopedListWarning `json:"warning,omitempty"`
+}
+
+type TargetVpnGatewaysScopedListWarning struct {
+	// Code: [Output Only] The warning type identifier for this warning.
+	Code string `json:"code,omitempty"`
+
+	// Data: [Output Only] Metadata for this warning in key: value format.
+	Data []*TargetVpnGatewaysScopedListWarningData `json:"data,omitempty"`
+
+	// Message: [Output Only] Optional human-readable details for this
+	// warning.
+	Message string `json:"message,omitempty"`
+}
+
+type TargetVpnGatewaysScopedListWarningData struct {
+	// Key: [Output Only] A key for the warning data.
+	Key string `json:"key,omitempty"`
+
+	// Value: [Output Only] A warning data value corresponding to the key.
+	Value string `json:"value,omitempty"`
 }
 
 type TestFailure struct {
@@ -2738,16 +4211,16 @@ type TestFailure struct {
 }
 
 type UrlMap struct {
-	// CreationTimestamp: Creation timestamp in RFC3339 text format (output
-	// only).
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
 
 	// DefaultService: The URL of the BackendService resource if none of the
 	// hostRules match.
 	DefaultService string `json:"defaultService,omitempty"`
 
-	// Description: An optional textual description of the resource;
-	// provided by the client when the resource is created.
+	// Description: An optional textual description of the resource.
+	// Provided by the client when the resource is created.
 	Description string `json:"description,omitempty"`
 
 	// Fingerprint: Fingerprint of this resource. A hash of the contents
@@ -2759,22 +4232,26 @@ type UrlMap struct {
 	// HostRules: The list of HostRules to use against the URL.
 	HostRules []*HostRule `json:"hostRules,omitempty"`
 
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource. Set by the
+	// server.
 	Id uint64 `json:"id,omitempty,string"`
 
 	// Kind: Type of the resource.
 	Kind string `json:"kind,omitempty"`
 
-	// Name: Name of the resource; provided by the client when the resource
+	// Name: Name of the resource. Provided by the client when the resource
 	// is created. The name must be 1-63 characters long, and comply with
-	// RFC1035.
+	// RFC1035. Specifically, the name must be 1-63 characters long and
+	// match the regular expression [a-z]([-a-z0-9]*[a-z0-9])? which means
+	// the first character must be a lowercase letter, and all following
+	// characters must be a dash, lowercase letter, or digit, except the
+	// last character, which cannot be a dash.
 	Name string `json:"name,omitempty"`
 
 	// PathMatchers: The list of named PathMatchers to use against the URL.
 	PathMatchers []*PathMatcher `json:"pathMatchers,omitempty"`
 
-	// SelfLink: Server defined URL for the resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for the resource.
 	SelfLink string `json:"selfLink,omitempty"`
 
 	// Tests: The list of expected URL mappings. Request to update this
@@ -2783,21 +4260,21 @@ type UrlMap struct {
 }
 
 type UrlMapList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource. Set by the
+	// server.
 	Id string `json:"id,omitempty"`
 
-	// Items: The UrlMap resources.
+	// Items: A list of UrlMap resources.
 	Items []*UrlMap `json:"items,omitempty"`
 
 	// Kind: Type of resource.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
@@ -2847,85 +4324,219 @@ type UrlMapsValidateResponse struct {
 type UsageExportLocation struct {
 	// BucketName: The name of an existing bucket in Cloud Storage where the
 	// usage report object is stored. The Google Service Account is granted
-	// write access to this bucket. This is simply the bucket name, with no
-	// "gs://" or "https://storage.googleapis.com/" in front of it.
+	// write access to this bucket. This is just the bucket name, with no
+	// gs:// or https://storage.googleapis.com/ in front of it.
 	BucketName string `json:"bucketName,omitempty"`
 
 	// ReportNamePrefix: An optional prefix for the name of the usage report
-	// object stored in bucket_name. If not supplied, defaults to "usage_".
-	// The report is stored as a CSV file named _gce_.csv. where  is the day
-	// of the usage according to Pacific Time. The prefix should conform to
-	// Cloud Storage object naming conventions.
+	// object stored in bucketName. If not supplied, defaults to usage. The
+	// report is stored as a CSV file named
+	// report_name_prefix_gce_YYYYMMDD.csv where YYYYMMDD is the day of the
+	// usage according to Pacific Time. If you supply a prefix, it should
+	// conform to Cloud Storage object naming conventions.
 	ReportNamePrefix string `json:"reportNamePrefix,omitempty"`
 }
 
-type Zone struct {
-	// CreationTimestamp: Creation timestamp in RFC3339 text format (output
-	// only).
+type VpnTunnel struct {
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
 
-	// Deprecated: The deprecation status associated with this zone.
-	Deprecated *DeprecationStatus `json:"deprecated,omitempty"`
-
-	// Description: Textual description of the resource.
+	// Description: An optional textual description of the resource.
+	// Provided by the client when the resource is created.
 	Description string `json:"description,omitempty"`
 
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// DetailedStatus: [Output Only] Detailed status message for the VPN
+	// tunnel.
+	DetailedStatus string `json:"detailedStatus,omitempty"`
+
+	// Id: [Output Only] Unique identifier for the resource. Defined by the
+	// server.
 	Id uint64 `json:"id,omitempty,string"`
 
-	// Kind: Type of the resource.
+	// IkeVersion: IKE protocol version to use when establishing the VPN
+	// tunnel with peer VPN gateway. Acceptable IKE versions are 1 or 2.
+	// Default version is 2.
+	IkeVersion int64 `json:"ikeVersion,omitempty"`
+
+	// Kind: [Output Only] Type of resource. Always compute#vpnTunnel for
+	// VPN tunnels.
 	Kind string `json:"kind,omitempty"`
 
-	// MaintenanceWindows: Scheduled maintenance windows for the zone. When
-	// the zone is in a maintenance window, all resources which reside in
-	// the zone will be unavailable.
-	MaintenanceWindows []*ZoneMaintenanceWindows `json:"maintenanceWindows,omitempty"`
-
-	// Name: Name of the resource.
+	// Name: Name of the resource; provided by the client when the resource
+	// is created. The name must be 1-63 characters long, and comply with
+	// RFC1035. Specifically, the name must be 1-63 characters long and
+	// match the regular expression [a-z]([-a-z0-9]*[a-z0-9])? which means
+	// the first character must be a lowercase letter, and all following
+	// characters must be a dash, lowercase letter, or digit, except the
+	// last character, which cannot be a dash.
 	Name string `json:"name,omitempty"`
 
-	// Region: Full URL reference to the region which hosts the zone (output
-	// only).
+	// PeerIp: IP address of the peer VPN gateway.
+	PeerIp string `json:"peerIp,omitempty"`
+
+	// Region: [Output Only] URL of the region where the VPN tunnel resides.
 	Region string `json:"region,omitempty"`
 
-	// SelfLink: Server defined URL for the resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for the resource.
 	SelfLink string `json:"selfLink,omitempty"`
 
-	// Status: Status of the zone. "UP" or "DOWN".
+	// SharedSecret: Shared secret used to set the secure session between
+	// the GCE VPN gateway and the peer VPN gateway.
+	SharedSecret string `json:"sharedSecret,omitempty"`
+
+	// SharedSecretHash: Hash of the shared secret.
+	SharedSecretHash string `json:"sharedSecretHash,omitempty"`
+
+	// Status: [Output Only] The status of the VPN tunnel.
+	Status string `json:"status,omitempty"`
+
+	// TargetVpnGateway: URL of the VPN gateway to which this VPN tunnel is
+	// associated. Provided by the client when the VPN tunnel is created.
+	TargetVpnGateway string `json:"targetVpnGateway,omitempty"`
+}
+
+type VpnTunnelAggregatedList struct {
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
+	Id string `json:"id,omitempty"`
+
+	// Items: [Output Only] A map of scoped vpn tunnel lists.
+	Items map[string]VpnTunnelsScopedList `json:"items,omitempty"`
+
+	// Kind: [Output Only] Type of resource. Always compute#vpnTunnel for
+	// VPN tunnels.
+	Kind string `json:"kind,omitempty"`
+
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
+	NextPageToken string `json:"nextPageToken,omitempty"`
+
+	// SelfLink: [Output Only] Server-defined URL for this resource.
+	SelfLink string `json:"selfLink,omitempty"`
+}
+
+type VpnTunnelList struct {
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
+	Id string `json:"id,omitempty"`
+
+	// Items: [Output Only] A list of VpnTunnel resources.
+	Items []*VpnTunnel `json:"items,omitempty"`
+
+	// Kind: [Output Only] Type of resource. Always compute#vpnTunnel for
+	// VPN tunnels.
+	Kind string `json:"kind,omitempty"`
+
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
+	NextPageToken string `json:"nextPageToken,omitempty"`
+
+	// SelfLink: [Output Only] Server-defined URL for the resource.
+	SelfLink string `json:"selfLink,omitempty"`
+}
+
+type VpnTunnelsScopedList struct {
+	// VpnTunnels: List of vpn tunnels contained in this scope.
+	VpnTunnels []*VpnTunnel `json:"vpnTunnels,omitempty"`
+
+	// Warning: Informational warning which replaces the list of addresses
+	// when the list is empty.
+	Warning *VpnTunnelsScopedListWarning `json:"warning,omitempty"`
+}
+
+type VpnTunnelsScopedListWarning struct {
+	// Code: [Output Only] The warning type identifier for this warning.
+	Code string `json:"code,omitempty"`
+
+	// Data: [Output Only] Metadata for this warning in key: value format.
+	Data []*VpnTunnelsScopedListWarningData `json:"data,omitempty"`
+
+	// Message: [Output Only] Optional human-readable details for this
+	// warning.
+	Message string `json:"message,omitempty"`
+}
+
+type VpnTunnelsScopedListWarningData struct {
+	// Key: [Output Only] A key for the warning data.
+	Key string `json:"key,omitempty"`
+
+	// Value: [Output Only] A warning data value corresponding to the key.
+	Value string `json:"value,omitempty"`
+}
+
+type Zone struct {
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
+	CreationTimestamp string `json:"creationTimestamp,omitempty"`
+
+	// Deprecated: [Output Only] The deprecation status associated with this
+	// zone.
+	Deprecated *DeprecationStatus `json:"deprecated,omitempty"`
+
+	// Description: [Output Only] Textual description of the resource.
+	Description string `json:"description,omitempty"`
+
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
+	Id uint64 `json:"id,omitempty,string"`
+
+	// Kind: [Output Only] Type of the resource. Always kind#zone for zones.
+	Kind string `json:"kind,omitempty"`
+
+	// MaintenanceWindows: [Output Only] Any scheduled maintenance windows
+	// for this zone. When the zone is in a maintenance window, all
+	// resources which reside in the zone will be unavailable. For more
+	// information, see Maintenance Windows
+	MaintenanceWindows []*ZoneMaintenanceWindows `json:"maintenanceWindows,omitempty"`
+
+	// Name: [Output Only] Name of the resource.
+	Name string `json:"name,omitempty"`
+
+	// Region: [Output Only] Full URL reference to the region which hosts
+	// the zone.
+	Region string `json:"region,omitempty"`
+
+	// SelfLink: [Output Only] Server-defined URL for the resource.
+	SelfLink string `json:"selfLink,omitempty"`
+
+	// Status: [Output Only] Status of the zone, either UP or DOWN.
 	Status string `json:"status,omitempty"`
 }
 
 type ZoneMaintenanceWindows struct {
-	// BeginTime: Begin time of the maintenance window, in RFC 3339 format.
+	// BeginTime: [Output Only] Starting time of the maintenance window, in
+	// RFC3339 format.
 	BeginTime string `json:"beginTime,omitempty"`
 
-	// Description: Textual description of the maintenance window.
+	// Description: [Output Only] Textual description of the maintenance
+	// window.
 	Description string `json:"description,omitempty"`
 
-	// EndTime: End time of the maintenance window, in RFC 3339 format.
+	// EndTime: [Output Only] Ending time of the maintenance window, in
+	// RFC3339 format.
 	EndTime string `json:"endTime,omitempty"`
 
-	// Name: Name of the maintenance window.
+	// Name: [Output Only] Name of the maintenance window.
 	Name string `json:"name,omitempty"`
 }
 
 type ZoneList struct {
-	// Id: Unique identifier for the resource; defined by the server (output
-	// only).
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
 	Id string `json:"id,omitempty"`
 
-	// Items: The zone resources.
+	// Items: [Output Only] A list of Zone resources.
 	Items []*Zone `json:"items,omitempty"`
 
 	// Kind: Type of resource.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: A token used to continue a truncated list request
-	// (output only).
+	// NextPageToken: [Output Only] A token used to continue a truncated
+	// list request.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
@@ -2944,24 +4555,51 @@ func (r *AddressesService) AggregatedList(project string) *AddressesAggregatedLi
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *AddressesAggregatedListCall) Filter(filter string) *AddressesAggregatedListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *AddressesAggregatedListCall) MaxResults(maxResults int64) *AddressesAggregatedListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *AddressesAggregatedListCall) PageToken(pageToken string) *AddressesAggregatedListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -3020,13 +4658,13 @@ func (c *AddressesAggregatedListCall) Do() (*AddressAggregatedList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -3034,12 +4672,12 @@ func (c *AddressesAggregatedListCall) Do() (*AddressAggregatedList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -3051,6 +4689,7 @@ func (c *AddressesAggregatedListCall) Do() (*AddressAggregatedList, error) {
 	//     "$ref": "AddressAggregatedList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -3132,14 +4771,14 @@ func (c *AddressesDeleteCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "region": {
-	//       "description": "Name of the region scoping this request.",
+	//       "description": "The name of the region for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -3151,6 +4790,7 @@ func (c *AddressesDeleteCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -3231,14 +4871,14 @@ func (c *AddressesGetCall) Do() (*Address, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "region": {
-	//       "description": "Name of the region scoping this request.",
+	//       "description": "The name of the region for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -3250,6 +4890,7 @@ func (c *AddressesGetCall) Do() (*Address, error) {
 	//     "$ref": "Address"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -3329,14 +4970,14 @@ func (c *AddressesInsertCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "region": {
-	//       "description": "Name of the region scoping this request.",
+	//       "description": "The name of the region for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -3351,6 +4992,7 @@ func (c *AddressesInsertCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -3375,24 +5017,51 @@ func (r *AddressesService) List(project string, region string) *AddressesListCal
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *AddressesListCall) Filter(filter string) *AddressesListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *AddressesListCall) MaxResults(maxResults int64) *AddressesListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *AddressesListCall) PageToken(pageToken string) *AddressesListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -3453,13 +5122,13 @@ func (c *AddressesListCall) Do() (*AddressList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -3467,19 +5136,19 @@ func (c *AddressesListCall) Do() (*AddressList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "region": {
-	//       "description": "Name of the region scoping this request.",
+	//       "description": "The name of the region for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -3491,8 +5160,867 @@ func (c *AddressesListCall) Do() (*AddressList, error) {
 	//     "$ref": "AddressList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.autoscalers.aggregatedList":
+
+type AutoscalersAggregatedListCall struct {
+	s       *Service
+	project string
+	opt_    map[string]interface{}
+}
+
+// AggregatedList: Retrieves the list of autoscalers grouped by scope.
+func (r *AutoscalersService) AggregatedList(project string) *AutoscalersAggregatedListCall {
+	c := &AutoscalersAggregatedListCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	return c
+}
+
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
+func (c *AutoscalersAggregatedListCall) Filter(filter string) *AutoscalersAggregatedListCall {
+	c.opt_["filter"] = filter
+	return c
+}
+
+// MaxResults sets the optional parameter "maxResults": Maximum count of
+// results to be returned.
+func (c *AutoscalersAggregatedListCall) MaxResults(maxResults int64) *AutoscalersAggregatedListCall {
+	c.opt_["maxResults"] = maxResults
+	return c
+}
+
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
+func (c *AutoscalersAggregatedListCall) PageToken(pageToken string) *AutoscalersAggregatedListCall {
+	c.opt_["pageToken"] = pageToken
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *AutoscalersAggregatedListCall) Fields(s ...googleapi.Field) *AutoscalersAggregatedListCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *AutoscalersAggregatedListCall) Do() (*AutoscalerAggregatedList, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["filter"]; ok {
+		params.Set("filter", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["maxResults"]; ok {
+		params.Set("maxResults", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["pageToken"]; ok {
+		params.Set("pageToken", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/aggregated/autoscalers")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *AutoscalerAggregatedList
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Retrieves the list of autoscalers grouped by scope.",
+	//   "httpMethod": "GET",
+	//   "id": "compute.autoscalers.aggregatedList",
+	//   "parameterOrder": [
+	//     "project"
+	//   ],
+	//   "parameters": {
+	//     "filter": {
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "maxResults": {
+	//       "default": "500",
+	//       "description": "Maximum count of results to be returned.",
+	//       "format": "uint32",
+	//       "location": "query",
+	//       "maximum": "500",
+	//       "minimum": "0",
+	//       "type": "integer"
+	//     },
+	//     "pageToken": {
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/aggregated/autoscalers",
+	//   "response": {
+	//     "$ref": "AutoscalerAggregatedList"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute",
+	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.autoscalers.delete":
+
+type AutoscalersDeleteCall struct {
+	s          *Service
+	project    string
+	zone       string
+	autoscaler string
+	opt_       map[string]interface{}
+}
+
+// Delete: Deletes the specified autoscaler resource.
+func (r *AutoscalersService) Delete(project string, zone string, autoscaler string) *AutoscalersDeleteCall {
+	c := &AutoscalersDeleteCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	c.autoscaler = autoscaler
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *AutoscalersDeleteCall) Fields(s ...googleapi.Field) *AutoscalersDeleteCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *AutoscalersDeleteCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/autoscalers/{autoscaler}")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("DELETE", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":    c.project,
+		"zone":       c.zone,
+		"autoscaler": c.autoscaler,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Deletes the specified autoscaler resource.",
+	//   "httpMethod": "DELETE",
+	//   "id": "compute.autoscalers.delete",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "autoscaler"
+	//   ],
+	//   "parameters": {
+	//     "autoscaler": {
+	//       "description": "Name of the persistent autoscaler resource to delete.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "Name of the zone scoping this request.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/autoscalers/{autoscaler}",
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.autoscalers.get":
+
+type AutoscalersGetCall struct {
+	s          *Service
+	project    string
+	zone       string
+	autoscaler string
+	opt_       map[string]interface{}
+}
+
+// Get: Returns the specified autoscaler resource.
+func (r *AutoscalersService) Get(project string, zone string, autoscaler string) *AutoscalersGetCall {
+	c := &AutoscalersGetCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	c.autoscaler = autoscaler
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *AutoscalersGetCall) Fields(s ...googleapi.Field) *AutoscalersGetCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *AutoscalersGetCall) Do() (*Autoscaler, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/autoscalers/{autoscaler}")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":    c.project,
+		"zone":       c.zone,
+		"autoscaler": c.autoscaler,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Autoscaler
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Returns the specified autoscaler resource.",
+	//   "httpMethod": "GET",
+	//   "id": "compute.autoscalers.get",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "autoscaler"
+	//   ],
+	//   "parameters": {
+	//     "autoscaler": {
+	//       "description": "Name of the persistent autoscaler resource to return.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "Name of the zone scoping this request.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/autoscalers/{autoscaler}",
+	//   "response": {
+	//     "$ref": "Autoscaler"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute",
+	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.autoscalers.insert":
+
+type AutoscalersInsertCall struct {
+	s          *Service
+	project    string
+	zone       string
+	autoscaler *Autoscaler
+	opt_       map[string]interface{}
+}
+
+// Insert: Creates an autoscaler resource in the specified project using
+// the data included in the request.
+func (r *AutoscalersService) Insert(project string, zone string, autoscaler *Autoscaler) *AutoscalersInsertCall {
+	c := &AutoscalersInsertCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	c.autoscaler = autoscaler
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *AutoscalersInsertCall) Fields(s ...googleapi.Field) *AutoscalersInsertCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *AutoscalersInsertCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.autoscaler)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/autoscalers")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+		"zone":    c.zone,
+	})
+	req.Header.Set("Content-Type", ctype)
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Creates an autoscaler resource in the specified project using the data included in the request.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.autoscalers.insert",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "Name of the zone scoping this request.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/autoscalers",
+	//   "request": {
+	//     "$ref": "Autoscaler"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.autoscalers.list":
+
+type AutoscalersListCall struct {
+	s       *Service
+	project string
+	zone    string
+	opt_    map[string]interface{}
+}
+
+// List: Retrieves the list of autoscaler resources contained within the
+// specified zone.
+func (r *AutoscalersService) List(project string, zone string) *AutoscalersListCall {
+	c := &AutoscalersListCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	return c
+}
+
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
+func (c *AutoscalersListCall) Filter(filter string) *AutoscalersListCall {
+	c.opt_["filter"] = filter
+	return c
+}
+
+// MaxResults sets the optional parameter "maxResults": Maximum count of
+// results to be returned.
+func (c *AutoscalersListCall) MaxResults(maxResults int64) *AutoscalersListCall {
+	c.opt_["maxResults"] = maxResults
+	return c
+}
+
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
+func (c *AutoscalersListCall) PageToken(pageToken string) *AutoscalersListCall {
+	c.opt_["pageToken"] = pageToken
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *AutoscalersListCall) Fields(s ...googleapi.Field) *AutoscalersListCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *AutoscalersListCall) Do() (*AutoscalerList, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["filter"]; ok {
+		params.Set("filter", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["maxResults"]; ok {
+		params.Set("maxResults", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["pageToken"]; ok {
+		params.Set("pageToken", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/autoscalers")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+		"zone":    c.zone,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *AutoscalerList
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Retrieves the list of autoscaler resources contained within the specified zone.",
+	//   "httpMethod": "GET",
+	//   "id": "compute.autoscalers.list",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone"
+	//   ],
+	//   "parameters": {
+	//     "filter": {
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "maxResults": {
+	//       "default": "500",
+	//       "description": "Maximum count of results to be returned.",
+	//       "format": "uint32",
+	//       "location": "query",
+	//       "maximum": "500",
+	//       "minimum": "0",
+	//       "type": "integer"
+	//     },
+	//     "pageToken": {
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "Name of the zone scoping this request.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/autoscalers",
+	//   "response": {
+	//     "$ref": "AutoscalerList"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute",
+	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.autoscalers.patch":
+
+type AutoscalersPatchCall struct {
+	s           *Service
+	project     string
+	zone        string
+	autoscaler  string
+	autoscaler2 *Autoscaler
+	opt_        map[string]interface{}
+}
+
+// Patch: Updates an autoscaler resource in the specified project using
+// the data included in the request. This method supports patch
+// semantics.
+func (r *AutoscalersService) Patch(project string, zone string, autoscaler string, autoscaler2 *Autoscaler) *AutoscalersPatchCall {
+	c := &AutoscalersPatchCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	c.autoscaler = autoscaler
+	c.autoscaler2 = autoscaler2
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *AutoscalersPatchCall) Fields(s ...googleapi.Field) *AutoscalersPatchCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *AutoscalersPatchCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.autoscaler2)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
+	params := make(url.Values)
+	params.Set("alt", "json")
+	params.Set("autoscaler", fmt.Sprintf("%v", c.autoscaler))
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/autoscalers")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("PATCH", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+		"zone":    c.zone,
+	})
+	req.Header.Set("Content-Type", ctype)
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Updates an autoscaler resource in the specified project using the data included in the request. This method supports patch semantics.",
+	//   "httpMethod": "PATCH",
+	//   "id": "compute.autoscalers.patch",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "autoscaler"
+	//   ],
+	//   "parameters": {
+	//     "autoscaler": {
+	//       "description": "Name of the autoscaler resource to update.",
+	//       "location": "query",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "Name of the zone scoping this request.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/autoscalers",
+	//   "request": {
+	//     "$ref": "Autoscaler"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.autoscalers.update":
+
+type AutoscalersUpdateCall struct {
+	s          *Service
+	project    string
+	zone       string
+	autoscaler *Autoscaler
+	opt_       map[string]interface{}
+}
+
+// Update: Updates an autoscaler resource in the specified project using
+// the data included in the request.
+func (r *AutoscalersService) Update(project string, zone string, autoscaler *Autoscaler) *AutoscalersUpdateCall {
+	c := &AutoscalersUpdateCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	c.autoscaler = autoscaler
+	return c
+}
+
+// Autoscaler sets the optional parameter "autoscaler": Name of the
+// autoscaler resource to update.
+func (c *AutoscalersUpdateCall) Autoscaler(autoscaler string) *AutoscalersUpdateCall {
+	c.opt_["autoscaler"] = autoscaler
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *AutoscalersUpdateCall) Fields(s ...googleapi.Field) *AutoscalersUpdateCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *AutoscalersUpdateCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.autoscaler)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["autoscaler"]; ok {
+		params.Set("autoscaler", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/autoscalers")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("PUT", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+		"zone":    c.zone,
+	})
+	req.Header.Set("Content-Type", ctype)
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Updates an autoscaler resource in the specified project using the data included in the request.",
+	//   "httpMethod": "PUT",
+	//   "id": "compute.autoscalers.update",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone"
+	//   ],
+	//   "parameters": {
+	//     "autoscaler": {
+	//       "description": "Name of the autoscaler resource to update.",
+	//       "location": "query",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "Name of the zone scoping this request.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/autoscalers",
+	//   "request": {
+	//     "$ref": "Autoscaler"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
 
@@ -3568,7 +6096,7 @@ func (c *BackendServicesDeleteCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -3580,6 +6108,7 @@ func (c *BackendServicesDeleteCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -3656,7 +6185,7 @@ func (c *BackendServicesGetCall) Do() (*BackendService, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -3668,6 +6197,7 @@ func (c *BackendServicesGetCall) Do() (*BackendService, error) {
 	//     "$ref": "BackendService"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -3768,6 +6298,7 @@ func (c *BackendServicesGetHealthCall) Do() (*BackendServiceGroupHealth, error) 
 	//     "$ref": "BackendServiceGroupHealth"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -3843,7 +6374,7 @@ func (c *BackendServicesInsertCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -3858,6 +6389,7 @@ func (c *BackendServicesInsertCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -3880,24 +6412,51 @@ func (r *BackendServicesService) List(project string) *BackendServicesListCall {
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *BackendServicesListCall) Filter(filter string) *BackendServicesListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *BackendServicesListCall) MaxResults(maxResults int64) *BackendServicesListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *BackendServicesListCall) PageToken(pageToken string) *BackendServicesListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -3956,13 +6515,13 @@ func (c *BackendServicesListCall) Do() (*BackendServiceList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -3970,12 +6529,12 @@ func (c *BackendServicesListCall) Do() (*BackendServiceList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -3987,6 +6546,7 @@ func (c *BackendServicesListCall) Do() (*BackendServiceList, error) {
 	//     "$ref": "BackendServiceList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -4073,7 +6633,7 @@ func (c *BackendServicesPatchCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -4088,6 +6648,7 @@ func (c *BackendServicesPatchCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -4172,7 +6733,7 @@ func (c *BackendServicesUpdateCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -4187,6 +6748,7 @@ func (c *BackendServicesUpdateCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -4209,24 +6771,51 @@ func (r *DiskTypesService) AggregatedList(project string) *DiskTypesAggregatedLi
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *DiskTypesAggregatedListCall) Filter(filter string) *DiskTypesAggregatedListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *DiskTypesAggregatedListCall) MaxResults(maxResults int64) *DiskTypesAggregatedListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *DiskTypesAggregatedListCall) PageToken(pageToken string) *DiskTypesAggregatedListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -4285,13 +6874,13 @@ func (c *DiskTypesAggregatedListCall) Do() (*DiskTypeAggregatedList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -4299,12 +6888,12 @@ func (c *DiskTypesAggregatedListCall) Do() (*DiskTypeAggregatedList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -4316,6 +6905,7 @@ func (c *DiskTypesAggregatedListCall) Do() (*DiskTypeAggregatedList, error) {
 	//     "$ref": "DiskTypeAggregatedList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -4397,14 +6987,14 @@ func (c *DiskTypesGetCall) Do() (*DiskType, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "zone": {
-	//       "description": "Name of the zone scoping this request.",
+	//       "description": "The name of the zone for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -4416,6 +7006,7 @@ func (c *DiskTypesGetCall) Do() (*DiskType, error) {
 	//     "$ref": "DiskType"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -4441,24 +7032,51 @@ func (r *DiskTypesService) List(project string, zone string) *DiskTypesListCall 
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *DiskTypesListCall) Filter(filter string) *DiskTypesListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *DiskTypesListCall) MaxResults(maxResults int64) *DiskTypesListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *DiskTypesListCall) PageToken(pageToken string) *DiskTypesListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -4519,13 +7137,13 @@ func (c *DiskTypesListCall) Do() (*DiskTypeList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -4533,19 +7151,19 @@ func (c *DiskTypesListCall) Do() (*DiskTypeList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "zone": {
-	//       "description": "Name of the zone scoping this request.",
+	//       "description": "The name of the zone for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -4557,6 +7175,7 @@ func (c *DiskTypesListCall) Do() (*DiskTypeList, error) {
 	//     "$ref": "DiskTypeList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -4579,24 +7198,51 @@ func (r *DisksService) AggregatedList(project string) *DisksAggregatedListCall {
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *DisksAggregatedListCall) Filter(filter string) *DisksAggregatedListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *DisksAggregatedListCall) MaxResults(maxResults int64) *DisksAggregatedListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *DisksAggregatedListCall) PageToken(pageToken string) *DisksAggregatedListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -4655,13 +7301,13 @@ func (c *DisksAggregatedListCall) Do() (*DiskAggregatedList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -4669,12 +7315,12 @@ func (c *DisksAggregatedListCall) Do() (*DiskAggregatedList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -4686,6 +7332,7 @@ func (c *DisksAggregatedListCall) Do() (*DiskAggregatedList, error) {
 	//     "$ref": "DiskAggregatedList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -4704,7 +7351,7 @@ type DisksCreateSnapshotCall struct {
 	opt_     map[string]interface{}
 }
 
-// CreateSnapshot:
+// CreateSnapshot: Creates a snapshot of this disk.
 func (r *DisksService) CreateSnapshot(project string, zone string, disk string, snapshot *Snapshot) *DisksCreateSnapshotCall {
 	c := &DisksCreateSnapshotCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
@@ -4758,6 +7405,7 @@ func (c *DisksCreateSnapshotCall) Do() (*Operation, error) {
 	}
 	return ret, nil
 	// {
+	//   "description": "Creates a snapshot of this disk.",
 	//   "httpMethod": "POST",
 	//   "id": "compute.disks.createSnapshot",
 	//   "parameterOrder": [
@@ -4767,21 +7415,21 @@ func (c *DisksCreateSnapshotCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "disk": {
-	//       "description": "Name of the persistent disk resource to snapshot.",
+	//       "description": "Name of the persistent disk to snapshot.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "zone": {
-	//       "description": "Name of the zone scoping this request.",
+	//       "description": "The name of the zone for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -4796,6 +7444,7 @@ func (c *DisksCreateSnapshotCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -4812,7 +7461,10 @@ type DisksDeleteCall struct {
 	opt_    map[string]interface{}
 }
 
-// Delete: Deletes the specified persistent disk resource.
+// Delete: Deletes the specified persistent disk. Deleting a disk
+// removes its data permanently and is irreversible. However, deleting a
+// disk does not delete any snapshots previously made from the disk. You
+// must separately delete snapshots.
 func (r *DisksService) Delete(project string, zone string, disk string) *DisksDeleteCall {
 	c := &DisksDeleteCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
@@ -4859,7 +7511,7 @@ func (c *DisksDeleteCall) Do() (*Operation, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Deletes the specified persistent disk resource.",
+	//   "description": "Deletes the specified persistent disk. Deleting a disk removes its data permanently and is irreversible. However, deleting a disk does not delete any snapshots previously made from the disk. You must separately delete snapshots.",
 	//   "httpMethod": "DELETE",
 	//   "id": "compute.disks.delete",
 	//   "parameterOrder": [
@@ -4869,21 +7521,21 @@ func (c *DisksDeleteCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "disk": {
-	//       "description": "Name of the persistent disk resource to delete.",
+	//       "description": "Name of the persistent disk to delete.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "zone": {
-	//       "description": "Name of the zone scoping this request.",
+	//       "description": "The name of the zone for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -4895,6 +7547,7 @@ func (c *DisksDeleteCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -4911,7 +7564,7 @@ type DisksGetCall struct {
 	opt_    map[string]interface{}
 }
 
-// Get: Returns the specified persistent disk resource.
+// Get: Returns a specified persistent disk.
 func (r *DisksService) Get(project string, zone string, disk string) *DisksGetCall {
 	c := &DisksGetCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
@@ -4958,7 +7611,7 @@ func (c *DisksGetCall) Do() (*Disk, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Returns the specified persistent disk resource.",
+	//   "description": "Returns a specified persistent disk.",
 	//   "httpMethod": "GET",
 	//   "id": "compute.disks.get",
 	//   "parameterOrder": [
@@ -4968,21 +7621,21 @@ func (c *DisksGetCall) Do() (*Disk, error) {
 	//   ],
 	//   "parameters": {
 	//     "disk": {
-	//       "description": "Name of the persistent disk resource to return.",
+	//       "description": "Name of the persistent disk to return.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "zone": {
-	//       "description": "Name of the zone scoping this request.",
+	//       "description": "The name of the zone for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -4994,6 +7647,7 @@ func (c *DisksGetCall) Do() (*Disk, error) {
 	//     "$ref": "Disk"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -5011,8 +7665,8 @@ type DisksInsertCall struct {
 	opt_    map[string]interface{}
 }
 
-// Insert: Creates a persistent disk resource in the specified project
-// using the data included in the request.
+// Insert: Creates a persistent disk in the specified project using the
+// data included in the request.
 func (r *DisksService) Insert(project string, zone string, disk *Disk) *DisksInsertCall {
 	c := &DisksInsertCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
@@ -5074,7 +7728,7 @@ func (c *DisksInsertCall) Do() (*Operation, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Creates a persistent disk resource in the specified project using the data included in the request.",
+	//   "description": "Creates a persistent disk in the specified project using the data included in the request.",
 	//   "httpMethod": "POST",
 	//   "id": "compute.disks.insert",
 	//   "parameterOrder": [
@@ -5083,7 +7737,7 @@ func (c *DisksInsertCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -5095,7 +7749,7 @@ func (c *DisksInsertCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "zone": {
-	//       "description": "Name of the zone scoping this request.",
+	//       "description": "The name of the zone for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -5110,6 +7764,7 @@ func (c *DisksInsertCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -5125,8 +7780,8 @@ type DisksListCall struct {
 	opt_    map[string]interface{}
 }
 
-// List: Retrieves the list of persistent disk resources contained
-// within the specified zone.
+// List: Retrieves the list of persistent disks contained within the
+// specified zone.
 func (r *DisksService) List(project string, zone string) *DisksListCall {
 	c := &DisksListCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
@@ -5134,24 +7789,51 @@ func (r *DisksService) List(project string, zone string) *DisksListCall {
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *DisksListCall) Filter(filter string) *DisksListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *DisksListCall) MaxResults(maxResults int64) *DisksListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *DisksListCall) PageToken(pageToken string) *DisksListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -5203,7 +7885,7 @@ func (c *DisksListCall) Do() (*DiskList, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Retrieves the list of persistent disk resources contained within the specified zone.",
+	//   "description": "Retrieves the list of persistent disks contained within the specified zone.",
 	//   "httpMethod": "GET",
 	//   "id": "compute.disks.list",
 	//   "parameterOrder": [
@@ -5212,13 +7894,13 @@ func (c *DisksListCall) Do() (*DiskList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -5226,19 +7908,19 @@ func (c *DisksListCall) Do() (*DiskList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "zone": {
-	//       "description": "Name of the zone scoping this request.",
+	//       "description": "The name of the zone for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -5250,6 +7932,7 @@ func (c *DisksListCall) Do() (*DiskList, error) {
 	//     "$ref": "DiskList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -5327,7 +8010,7 @@ func (c *FirewallsDeleteCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -5339,6 +8022,7 @@ func (c *FirewallsDeleteCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -5415,7 +8099,7 @@ func (c *FirewallsGetCall) Do() (*Firewall, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -5427,6 +8111,7 @@ func (c *FirewallsGetCall) Do() (*Firewall, error) {
 	//     "$ref": "Firewall"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -5502,7 +8187,7 @@ func (c *FirewallsInsertCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -5517,6 +8202,7 @@ func (c *FirewallsInsertCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -5539,24 +8225,51 @@ func (r *FirewallsService) List(project string) *FirewallsListCall {
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *FirewallsListCall) Filter(filter string) *FirewallsListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *FirewallsListCall) MaxResults(maxResults int64) *FirewallsListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *FirewallsListCall) PageToken(pageToken string) *FirewallsListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -5615,13 +8328,13 @@ func (c *FirewallsListCall) Do() (*FirewallList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -5629,12 +8342,12 @@ func (c *FirewallsListCall) Do() (*FirewallList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -5646,6 +8359,7 @@ func (c *FirewallsListCall) Do() (*FirewallList, error) {
 	//     "$ref": "FirewallList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -5732,7 +8446,7 @@ func (c *FirewallsPatchCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -5747,6 +8461,7 @@ func (c *FirewallsPatchCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -5832,7 +8547,7 @@ func (c *FirewallsUpdateCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -5847,6 +8562,7 @@ func (c *FirewallsUpdateCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -5869,24 +8585,51 @@ func (r *ForwardingRulesService) AggregatedList(project string) *ForwardingRules
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *ForwardingRulesAggregatedListCall) Filter(filter string) *ForwardingRulesAggregatedListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *ForwardingRulesAggregatedListCall) MaxResults(maxResults int64) *ForwardingRulesAggregatedListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *ForwardingRulesAggregatedListCall) PageToken(pageToken string) *ForwardingRulesAggregatedListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -5945,13 +8688,13 @@ func (c *ForwardingRulesAggregatedListCall) Do() (*ForwardingRuleAggregatedList,
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -5959,12 +8702,12 @@ func (c *ForwardingRulesAggregatedListCall) Do() (*ForwardingRuleAggregatedList,
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -5976,6 +8719,7 @@ func (c *ForwardingRulesAggregatedListCall) Do() (*ForwardingRuleAggregatedList,
 	//     "$ref": "ForwardingRuleAggregatedList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -6057,7 +8801,7 @@ func (c *ForwardingRulesDeleteCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -6076,6 +8820,7 @@ func (c *ForwardingRulesDeleteCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -6156,7 +8901,7 @@ func (c *ForwardingRulesGetCall) Do() (*ForwardingRule, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -6175,6 +8920,7 @@ func (c *ForwardingRulesGetCall) Do() (*ForwardingRule, error) {
 	//     "$ref": "ForwardingRule"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -6254,7 +9000,7 @@ func (c *ForwardingRulesInsertCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -6276,6 +9022,7 @@ func (c *ForwardingRulesInsertCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -6300,24 +9047,51 @@ func (r *ForwardingRulesService) List(project string, region string) *Forwarding
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *ForwardingRulesListCall) Filter(filter string) *ForwardingRulesListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *ForwardingRulesListCall) MaxResults(maxResults int64) *ForwardingRulesListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *ForwardingRulesListCall) PageToken(pageToken string) *ForwardingRulesListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -6378,13 +9152,13 @@ func (c *ForwardingRulesListCall) Do() (*ForwardingRuleList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -6392,12 +9166,12 @@ func (c *ForwardingRulesListCall) Do() (*ForwardingRuleList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -6416,6 +9190,7 @@ func (c *ForwardingRulesListCall) Do() (*ForwardingRuleList, error) {
 	//     "$ref": "ForwardingRuleList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -6434,7 +9209,8 @@ type ForwardingRulesSetTargetCall struct {
 	opt_            map[string]interface{}
 }
 
-// SetTarget: Changes target url for forwarding rule.
+// SetTarget: Changes target URL for forwarding rule. The new target
+// should be of the same type as the old target.
 func (r *ForwardingRulesService) SetTarget(project string, region string, forwardingRule string, targetreference *TargetReference) *ForwardingRulesSetTargetCall {
 	c := &ForwardingRulesSetTargetCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
@@ -6488,7 +9264,7 @@ func (c *ForwardingRulesSetTargetCall) Do() (*Operation, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Changes target url for forwarding rule.",
+	//   "description": "Changes target URL for forwarding rule. The new target should be of the same type as the old target.",
 	//   "httpMethod": "POST",
 	//   "id": "compute.forwardingRules.setTarget",
 	//   "parameterOrder": [
@@ -6505,7 +9281,7 @@ func (c *ForwardingRulesSetTargetCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -6527,6 +9303,7 @@ func (c *ForwardingRulesSetTargetCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -6603,7 +9380,7 @@ func (c *GlobalAddressesDeleteCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -6615,6 +9392,7 @@ func (c *GlobalAddressesDeleteCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -6691,7 +9469,7 @@ func (c *GlobalAddressesGetCall) Do() (*Address, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -6703,6 +9481,7 @@ func (c *GlobalAddressesGetCall) Do() (*Address, error) {
 	//     "$ref": "Address"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -6778,7 +9557,7 @@ func (c *GlobalAddressesInsertCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -6793,6 +9572,7 @@ func (c *GlobalAddressesInsertCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -6814,24 +9594,51 @@ func (r *GlobalAddressesService) List(project string) *GlobalAddressesListCall {
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *GlobalAddressesListCall) Filter(filter string) *GlobalAddressesListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *GlobalAddressesListCall) MaxResults(maxResults int64) *GlobalAddressesListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *GlobalAddressesListCall) PageToken(pageToken string) *GlobalAddressesListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -6890,13 +9697,13 @@ func (c *GlobalAddressesListCall) Do() (*AddressList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -6904,12 +9711,12 @@ func (c *GlobalAddressesListCall) Do() (*AddressList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -6921,6 +9728,7 @@ func (c *GlobalAddressesListCall) Do() (*AddressList, error) {
 	//     "$ref": "AddressList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -6998,7 +9806,7 @@ func (c *GlobalForwardingRulesDeleteCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -7010,6 +9818,7 @@ func (c *GlobalForwardingRulesDeleteCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -7086,7 +9895,7 @@ func (c *GlobalForwardingRulesGetCall) Do() (*ForwardingRule, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -7098,6 +9907,7 @@ func (c *GlobalForwardingRulesGetCall) Do() (*ForwardingRule, error) {
 	//     "$ref": "ForwardingRule"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -7173,7 +9983,7 @@ func (c *GlobalForwardingRulesInsertCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -7188,6 +9998,7 @@ func (c *GlobalForwardingRulesInsertCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -7210,24 +10021,51 @@ func (r *GlobalForwardingRulesService) List(project string) *GlobalForwardingRul
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *GlobalForwardingRulesListCall) Filter(filter string) *GlobalForwardingRulesListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *GlobalForwardingRulesListCall) MaxResults(maxResults int64) *GlobalForwardingRulesListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *GlobalForwardingRulesListCall) PageToken(pageToken string) *GlobalForwardingRulesListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -7286,13 +10124,13 @@ func (c *GlobalForwardingRulesListCall) Do() (*ForwardingRuleList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -7300,12 +10138,12 @@ func (c *GlobalForwardingRulesListCall) Do() (*ForwardingRuleList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -7317,6 +10155,7 @@ func (c *GlobalForwardingRulesListCall) Do() (*ForwardingRuleList, error) {
 	//     "$ref": "ForwardingRuleList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -7334,7 +10173,8 @@ type GlobalForwardingRulesSetTargetCall struct {
 	opt_            map[string]interface{}
 }
 
-// SetTarget: Changes target url for forwarding rule.
+// SetTarget: Changes target URL for forwarding rule. The new target
+// should be of the same type as the old target.
 func (r *GlobalForwardingRulesService) SetTarget(project string, forwardingRule string, targetreference *TargetReference) *GlobalForwardingRulesSetTargetCall {
 	c := &GlobalForwardingRulesSetTargetCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
@@ -7386,7 +10226,7 @@ func (c *GlobalForwardingRulesSetTargetCall) Do() (*Operation, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Changes target url for forwarding rule.",
+	//   "description": "Changes target URL for forwarding rule. The new target should be of the same type as the old target.",
 	//   "httpMethod": "POST",
 	//   "id": "compute.globalForwardingRules.setTarget",
 	//   "parameterOrder": [
@@ -7402,7 +10242,7 @@ func (c *GlobalForwardingRulesSetTargetCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -7417,6 +10257,7 @@ func (c *GlobalForwardingRulesSetTargetCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -7439,24 +10280,51 @@ func (r *GlobalOperationsService) AggregatedList(project string) *GlobalOperatio
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *GlobalOperationsAggregatedListCall) Filter(filter string) *GlobalOperationsAggregatedListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *GlobalOperationsAggregatedListCall) MaxResults(maxResults int64) *GlobalOperationsAggregatedListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *GlobalOperationsAggregatedListCall) PageToken(pageToken string) *GlobalOperationsAggregatedListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -7515,13 +10383,13 @@ func (c *GlobalOperationsAggregatedListCall) Do() (*OperationAggregatedList, err
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -7529,12 +10397,12 @@ func (c *GlobalOperationsAggregatedListCall) Do() (*OperationAggregatedList, err
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -7546,6 +10414,7 @@ func (c *GlobalOperationsAggregatedListCall) Do() (*OperationAggregatedList, err
 	//     "$ref": "OperationAggregatedList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -7562,7 +10431,7 @@ type GlobalOperationsDeleteCall struct {
 	opt_      map[string]interface{}
 }
 
-// Delete: Deletes the specified operation resource.
+// Delete: Deletes the specified Operations resource.
 func (r *GlobalOperationsService) Delete(project string, operation string) *GlobalOperationsDeleteCall {
 	c := &GlobalOperationsDeleteCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
@@ -7603,7 +10472,7 @@ func (c *GlobalOperationsDeleteCall) Do() error {
 	}
 	return nil
 	// {
-	//   "description": "Deletes the specified operation resource.",
+	//   "description": "Deletes the specified Operations resource.",
 	//   "httpMethod": "DELETE",
 	//   "id": "compute.globalOperations.delete",
 	//   "parameterOrder": [
@@ -7612,14 +10481,14 @@ func (c *GlobalOperationsDeleteCall) Do() error {
 	//   ],
 	//   "parameters": {
 	//     "operation": {
-	//       "description": "Name of the operation resource to delete.",
+	//       "description": "Name of the Operations resource to delete.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -7628,6 +10497,7 @@ func (c *GlobalOperationsDeleteCall) Do() error {
 	//   },
 	//   "path": "{project}/global/operations/{operation}",
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -7643,7 +10513,7 @@ type GlobalOperationsGetCall struct {
 	opt_      map[string]interface{}
 }
 
-// Get: Retrieves the specified operation resource.
+// Get: Retrieves the specified Operations resource.
 func (r *GlobalOperationsService) Get(project string, operation string) *GlobalOperationsGetCall {
 	c := &GlobalOperationsGetCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
@@ -7688,7 +10558,7 @@ func (c *GlobalOperationsGetCall) Do() (*Operation, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Retrieves the specified operation resource.",
+	//   "description": "Retrieves the specified Operations resource.",
 	//   "httpMethod": "GET",
 	//   "id": "compute.globalOperations.get",
 	//   "parameterOrder": [
@@ -7697,14 +10567,14 @@ func (c *GlobalOperationsGetCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "operation": {
-	//       "description": "Name of the operation resource to return.",
+	//       "description": "Name of the Operations resource to return.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -7716,6 +10586,7 @@ func (c *GlobalOperationsGetCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -7731,7 +10602,7 @@ type GlobalOperationsListCall struct {
 	opt_    map[string]interface{}
 }
 
-// List: Retrieves the list of operation resources contained within the
+// List: Retrieves the list of Operation resources contained within the
 // specified project.
 func (r *GlobalOperationsService) List(project string) *GlobalOperationsListCall {
 	c := &GlobalOperationsListCall{s: r.s, opt_: make(map[string]interface{})}
@@ -7739,24 +10610,51 @@ func (r *GlobalOperationsService) List(project string) *GlobalOperationsListCall
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *GlobalOperationsListCall) Filter(filter string) *GlobalOperationsListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *GlobalOperationsListCall) MaxResults(maxResults int64) *GlobalOperationsListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *GlobalOperationsListCall) PageToken(pageToken string) *GlobalOperationsListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -7807,7 +10705,7 @@ func (c *GlobalOperationsListCall) Do() (*OperationList, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Retrieves the list of operation resources contained within the specified project.",
+	//   "description": "Retrieves the list of Operation resources contained within the specified project.",
 	//   "httpMethod": "GET",
 	//   "id": "compute.globalOperations.list",
 	//   "parameterOrder": [
@@ -7815,13 +10713,13 @@ func (c *GlobalOperationsListCall) Do() (*OperationList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -7829,12 +10727,12 @@ func (c *GlobalOperationsListCall) Do() (*OperationList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -7846,6 +10744,7 @@ func (c *GlobalOperationsListCall) Do() (*OperationList, error) {
 	//     "$ref": "OperationList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -7923,7 +10822,7 @@ func (c *HttpHealthChecksDeleteCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -7935,6 +10834,7 @@ func (c *HttpHealthChecksDeleteCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -8011,7 +10911,7 @@ func (c *HttpHealthChecksGetCall) Do() (*HttpHealthCheck, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -8023,6 +10923,7 @@ func (c *HttpHealthChecksGetCall) Do() (*HttpHealthCheck, error) {
 	//     "$ref": "HttpHealthCheck"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -8098,7 +10999,7 @@ func (c *HttpHealthChecksInsertCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -8113,6 +11014,7 @@ func (c *HttpHealthChecksInsertCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -8135,24 +11037,51 @@ func (r *HttpHealthChecksService) List(project string) *HttpHealthChecksListCall
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *HttpHealthChecksListCall) Filter(filter string) *HttpHealthChecksListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *HttpHealthChecksListCall) MaxResults(maxResults int64) *HttpHealthChecksListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *HttpHealthChecksListCall) PageToken(pageToken string) *HttpHealthChecksListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -8211,13 +11140,13 @@ func (c *HttpHealthChecksListCall) Do() (*HttpHealthCheckList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -8225,12 +11154,12 @@ func (c *HttpHealthChecksListCall) Do() (*HttpHealthCheckList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -8242,6 +11171,7 @@ func (c *HttpHealthChecksListCall) Do() (*HttpHealthCheckList, error) {
 	//     "$ref": "HttpHealthCheckList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -8329,7 +11259,7 @@ func (c *HttpHealthChecksPatchCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -8344,6 +11274,7 @@ func (c *HttpHealthChecksPatchCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -8429,7 +11360,7 @@ func (c *HttpHealthChecksUpdateCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -8444,6 +11375,637 @@ func (c *HttpHealthChecksUpdateCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.httpsHealthChecks.delete":
+
+type HttpsHealthChecksDeleteCall struct {
+	s                *Service
+	project          string
+	httpsHealthCheck string
+	opt_             map[string]interface{}
+}
+
+// Delete: Deletes the specified HttpsHealthCheck resource.
+func (r *HttpsHealthChecksService) Delete(project string, httpsHealthCheck string) *HttpsHealthChecksDeleteCall {
+	c := &HttpsHealthChecksDeleteCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.httpsHealthCheck = httpsHealthCheck
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *HttpsHealthChecksDeleteCall) Fields(s ...googleapi.Field) *HttpsHealthChecksDeleteCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *HttpsHealthChecksDeleteCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/global/httpsHealthChecks/{httpsHealthCheck}")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("DELETE", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":          c.project,
+		"httpsHealthCheck": c.httpsHealthCheck,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Deletes the specified HttpsHealthCheck resource.",
+	//   "httpMethod": "DELETE",
+	//   "id": "compute.httpsHealthChecks.delete",
+	//   "parameterOrder": [
+	//     "project",
+	//     "httpsHealthCheck"
+	//   ],
+	//   "parameters": {
+	//     "httpsHealthCheck": {
+	//       "description": "Name of the HttpsHealthCheck resource to delete.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/global/httpsHealthChecks/{httpsHealthCheck}",
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.httpsHealthChecks.get":
+
+type HttpsHealthChecksGetCall struct {
+	s                *Service
+	project          string
+	httpsHealthCheck string
+	opt_             map[string]interface{}
+}
+
+// Get: Returns the specified HttpsHealthCheck resource.
+func (r *HttpsHealthChecksService) Get(project string, httpsHealthCheck string) *HttpsHealthChecksGetCall {
+	c := &HttpsHealthChecksGetCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.httpsHealthCheck = httpsHealthCheck
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *HttpsHealthChecksGetCall) Fields(s ...googleapi.Field) *HttpsHealthChecksGetCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *HttpsHealthChecksGetCall) Do() (*HttpsHealthCheck, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/global/httpsHealthChecks/{httpsHealthCheck}")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":          c.project,
+		"httpsHealthCheck": c.httpsHealthCheck,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *HttpsHealthCheck
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Returns the specified HttpsHealthCheck resource.",
+	//   "httpMethod": "GET",
+	//   "id": "compute.httpsHealthChecks.get",
+	//   "parameterOrder": [
+	//     "project",
+	//     "httpsHealthCheck"
+	//   ],
+	//   "parameters": {
+	//     "httpsHealthCheck": {
+	//       "description": "Name of the HttpsHealthCheck resource to return.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/global/httpsHealthChecks/{httpsHealthCheck}",
+	//   "response": {
+	//     "$ref": "HttpsHealthCheck"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute",
+	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.httpsHealthChecks.insert":
+
+type HttpsHealthChecksInsertCall struct {
+	s                *Service
+	project          string
+	httpshealthcheck *HttpsHealthCheck
+	opt_             map[string]interface{}
+}
+
+// Insert: Creates a HttpsHealthCheck resource in the specified project
+// using the data included in the request.
+func (r *HttpsHealthChecksService) Insert(project string, httpshealthcheck *HttpsHealthCheck) *HttpsHealthChecksInsertCall {
+	c := &HttpsHealthChecksInsertCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.httpshealthcheck = httpshealthcheck
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *HttpsHealthChecksInsertCall) Fields(s ...googleapi.Field) *HttpsHealthChecksInsertCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *HttpsHealthChecksInsertCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.httpshealthcheck)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/global/httpsHealthChecks")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+	})
+	req.Header.Set("Content-Type", ctype)
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Creates a HttpsHealthCheck resource in the specified project using the data included in the request.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.httpsHealthChecks.insert",
+	//   "parameterOrder": [
+	//     "project"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/global/httpsHealthChecks",
+	//   "request": {
+	//     "$ref": "HttpsHealthCheck"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.httpsHealthChecks.list":
+
+type HttpsHealthChecksListCall struct {
+	s       *Service
+	project string
+	opt_    map[string]interface{}
+}
+
+// List: Retrieves the list of HttpsHealthCheck resources available to
+// the specified project.
+func (r *HttpsHealthChecksService) List(project string) *HttpsHealthChecksListCall {
+	c := &HttpsHealthChecksListCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	return c
+}
+
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
+func (c *HttpsHealthChecksListCall) Filter(filter string) *HttpsHealthChecksListCall {
+	c.opt_["filter"] = filter
+	return c
+}
+
+// MaxResults sets the optional parameter "maxResults": Maximum count of
+// results to be returned.
+func (c *HttpsHealthChecksListCall) MaxResults(maxResults int64) *HttpsHealthChecksListCall {
+	c.opt_["maxResults"] = maxResults
+	return c
+}
+
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
+func (c *HttpsHealthChecksListCall) PageToken(pageToken string) *HttpsHealthChecksListCall {
+	c.opt_["pageToken"] = pageToken
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *HttpsHealthChecksListCall) Fields(s ...googleapi.Field) *HttpsHealthChecksListCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *HttpsHealthChecksListCall) Do() (*HttpsHealthCheckList, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["filter"]; ok {
+		params.Set("filter", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["maxResults"]; ok {
+		params.Set("maxResults", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["pageToken"]; ok {
+		params.Set("pageToken", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/global/httpsHealthChecks")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *HttpsHealthCheckList
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Retrieves the list of HttpsHealthCheck resources available to the specified project.",
+	//   "httpMethod": "GET",
+	//   "id": "compute.httpsHealthChecks.list",
+	//   "parameterOrder": [
+	//     "project"
+	//   ],
+	//   "parameters": {
+	//     "filter": {
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "maxResults": {
+	//       "default": "500",
+	//       "description": "Maximum count of results to be returned.",
+	//       "format": "uint32",
+	//       "location": "query",
+	//       "maximum": "500",
+	//       "minimum": "0",
+	//       "type": "integer"
+	//     },
+	//     "pageToken": {
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/global/httpsHealthChecks",
+	//   "response": {
+	//     "$ref": "HttpsHealthCheckList"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute",
+	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.httpsHealthChecks.patch":
+
+type HttpsHealthChecksPatchCall struct {
+	s                *Service
+	project          string
+	httpsHealthCheck string
+	httpshealthcheck *HttpsHealthCheck
+	opt_             map[string]interface{}
+}
+
+// Patch: Updates a HttpsHealthCheck resource in the specified project
+// using the data included in the request. This method supports patch
+// semantics.
+func (r *HttpsHealthChecksService) Patch(project string, httpsHealthCheck string, httpshealthcheck *HttpsHealthCheck) *HttpsHealthChecksPatchCall {
+	c := &HttpsHealthChecksPatchCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.httpsHealthCheck = httpsHealthCheck
+	c.httpshealthcheck = httpshealthcheck
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *HttpsHealthChecksPatchCall) Fields(s ...googleapi.Field) *HttpsHealthChecksPatchCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *HttpsHealthChecksPatchCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.httpshealthcheck)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/global/httpsHealthChecks/{httpsHealthCheck}")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("PATCH", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":          c.project,
+		"httpsHealthCheck": c.httpsHealthCheck,
+	})
+	req.Header.Set("Content-Type", ctype)
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Updates a HttpsHealthCheck resource in the specified project using the data included in the request. This method supports patch semantics.",
+	//   "httpMethod": "PATCH",
+	//   "id": "compute.httpsHealthChecks.patch",
+	//   "parameterOrder": [
+	//     "project",
+	//     "httpsHealthCheck"
+	//   ],
+	//   "parameters": {
+	//     "httpsHealthCheck": {
+	//       "description": "Name of the HttpsHealthCheck resource to update.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/global/httpsHealthChecks/{httpsHealthCheck}",
+	//   "request": {
+	//     "$ref": "HttpsHealthCheck"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.httpsHealthChecks.update":
+
+type HttpsHealthChecksUpdateCall struct {
+	s                *Service
+	project          string
+	httpsHealthCheck string
+	httpshealthcheck *HttpsHealthCheck
+	opt_             map[string]interface{}
+}
+
+// Update: Updates a HttpsHealthCheck resource in the specified project
+// using the data included in the request.
+func (r *HttpsHealthChecksService) Update(project string, httpsHealthCheck string, httpshealthcheck *HttpsHealthCheck) *HttpsHealthChecksUpdateCall {
+	c := &HttpsHealthChecksUpdateCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.httpsHealthCheck = httpsHealthCheck
+	c.httpshealthcheck = httpshealthcheck
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *HttpsHealthChecksUpdateCall) Fields(s ...googleapi.Field) *HttpsHealthChecksUpdateCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *HttpsHealthChecksUpdateCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.httpshealthcheck)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/global/httpsHealthChecks/{httpsHealthCheck}")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("PUT", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":          c.project,
+		"httpsHealthCheck": c.httpsHealthCheck,
+	})
+	req.Header.Set("Content-Type", ctype)
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Updates a HttpsHealthCheck resource in the specified project using the data included in the request.",
+	//   "httpMethod": "PUT",
+	//   "id": "compute.httpsHealthChecks.update",
+	//   "parameterOrder": [
+	//     "project",
+	//     "httpsHealthCheck"
+	//   ],
+	//   "parameters": {
+	//     "httpsHealthCheck": {
+	//       "description": "Name of the HttpsHealthCheck resource to update.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/global/httpsHealthChecks/{httpsHealthCheck}",
+	//   "request": {
+	//     "$ref": "HttpsHealthCheck"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -8520,7 +12082,7 @@ func (c *ImagesDeleteCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -8532,6 +12094,7 @@ func (c *ImagesDeleteCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -8548,8 +12111,10 @@ type ImagesDeprecateCall struct {
 	opt_              map[string]interface{}
 }
 
-// Deprecate: Sets the deprecation status of an image. If no message
-// body is given, clears the deprecation status instead.
+// Deprecate: Sets the deprecation status of an image.
+//
+// If an empty
+// request body is given, clears the deprecation status instead.
 func (r *ImagesService) Deprecate(project string, image string, deprecationstatus *DeprecationStatus) *ImagesDeprecateCall {
 	c := &ImagesDeprecateCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
@@ -8601,7 +12166,7 @@ func (c *ImagesDeprecateCall) Do() (*Operation, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Sets the deprecation status of an image. If no message body is given, clears the deprecation status instead.",
+	//   "description": "Sets the deprecation status of an image.\n\nIf an empty request body is given, clears the deprecation status instead.",
 	//   "httpMethod": "POST",
 	//   "id": "compute.images.deprecate",
 	//   "parameterOrder": [
@@ -8617,7 +12182,7 @@ func (c *ImagesDeprecateCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -8632,6 +12197,7 @@ func (c *ImagesDeprecateCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -8708,7 +12274,7 @@ func (c *ImagesGetCall) Do() (*Image, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -8720,6 +12286,7 @@ func (c *ImagesGetCall) Do() (*Image, error) {
 	//     "$ref": "Image"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -8795,7 +12362,7 @@ func (c *ImagesInsertCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -8810,6 +12377,7 @@ func (c *ImagesInsertCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/devstorage.full_control",
 	//     "https://www.googleapis.com/auth/devstorage.read_only",
@@ -8827,32 +12395,66 @@ type ImagesListCall struct {
 	opt_    map[string]interface{}
 }
 
-// List: Retrieves the list of image resources available to the
-// specified project.
+// List: Retrieves the list of private images available to the specified
+// project. Private images are images you create that belong to your
+// project. This method does not get any images that belong to other
+// projects, including publicly-available images, like Debian 7. If you
+// want to get a list of publicly-available images, use this method to
+// make a request to the respective image project, such as debian-cloud
+// or windows-cloud.
+//
+// See Accessing images for more information.
 func (r *ImagesService) List(project string) *ImagesListCall {
 	c := &ImagesListCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *ImagesListCall) Filter(filter string) *ImagesListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *ImagesListCall) MaxResults(maxResults int64) *ImagesListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *ImagesListCall) PageToken(pageToken string) *ImagesListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -8903,7 +12505,7 @@ func (c *ImagesListCall) Do() (*ImageList, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Retrieves the list of image resources available to the specified project.",
+	//   "description": "Retrieves the list of private images available to the specified project. Private images are images you create that belong to your project. This method does not get any images that belong to other projects, including publicly-available images, like Debian 7. If you want to get a list of publicly-available images, use this method to make a request to the respective image project, such as debian-cloud or windows-cloud.\n\nSee Accessing images for more information.",
 	//   "httpMethod": "GET",
 	//   "id": "compute.images.list",
 	//   "parameterOrder": [
@@ -8911,13 +12513,13 @@ func (c *ImagesListCall) Do() (*ImageList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -8925,12 +12527,12 @@ func (c *ImagesListCall) Do() (*ImageList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -8942,8 +12544,2574 @@ func (c *ImagesListCall) Do() (*ImageList, error) {
 	//     "$ref": "ImageList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.instanceGroupManagers.abandonInstances":
+
+type InstanceGroupManagersAbandonInstancesCall struct {
+	s                                            *Service
+	project                                      string
+	zone                                         string
+	instanceGroupManager                         string
+	instancegroupmanagersabandoninstancesrequest *InstanceGroupManagersAbandonInstancesRequest
+	opt_                                         map[string]interface{}
+}
+
+// AbandonInstances: Schedules a group action to remove the specified
+// instances from the managed instance group. Abandoning an instance
+// does not delete the instance, but it does remove the instance from
+// any target pools that are applied by the managed instance group. This
+// method reduces the targetSize of the managed instance group by the
+// number of instances that you abandon. This operation is marked as
+// DONE when the action is scheduled even if the instances have not yet
+// been removed from the group. You must separately verify the status of
+// the abandoning action with the listmanagedinstances method.
+func (r *InstanceGroupManagersService) AbandonInstances(project string, zone string, instanceGroupManager string, instancegroupmanagersabandoninstancesrequest *InstanceGroupManagersAbandonInstancesRequest) *InstanceGroupManagersAbandonInstancesCall {
+	c := &InstanceGroupManagersAbandonInstancesCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	c.instanceGroupManager = instanceGroupManager
+	c.instancegroupmanagersabandoninstancesrequest = instancegroupmanagersabandoninstancesrequest
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *InstanceGroupManagersAbandonInstancesCall) Fields(s ...googleapi.Field) *InstanceGroupManagersAbandonInstancesCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *InstanceGroupManagersAbandonInstancesCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.instancegroupmanagersabandoninstancesrequest)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/instanceGroupManagers/{instanceGroupManager}/abandonInstances")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":              c.project,
+		"zone":                 c.zone,
+		"instanceGroupManager": c.instanceGroupManager,
+	})
+	req.Header.Set("Content-Type", ctype)
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Schedules a group action to remove the specified instances from the managed instance group. Abandoning an instance does not delete the instance, but it does remove the instance from any target pools that are applied by the managed instance group. This method reduces the targetSize of the managed instance group by the number of instances that you abandon. This operation is marked as DONE when the action is scheduled even if the instances have not yet been removed from the group. You must separately verify the status of the abandoning action with the listmanagedinstances method.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.instanceGroupManagers.abandonInstances",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "instanceGroupManager"
+	//   ],
+	//   "parameters": {
+	//     "instanceGroupManager": {
+	//       "description": "The name of the managed instance group.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone where the managed instance group is located.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/instanceGroupManagers/{instanceGroupManager}/abandonInstances",
+	//   "request": {
+	//     "$ref": "InstanceGroupManagersAbandonInstancesRequest"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.instanceGroupManagers.aggregatedList":
+
+type InstanceGroupManagersAggregatedListCall struct {
+	s       *Service
+	project string
+	opt_    map[string]interface{}
+}
+
+// AggregatedList: Retrieves the list of managed instance groups and
+// groups them by zone.
+func (r *InstanceGroupManagersService) AggregatedList(project string) *InstanceGroupManagersAggregatedListCall {
+	c := &InstanceGroupManagersAggregatedListCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	return c
+}
+
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
+func (c *InstanceGroupManagersAggregatedListCall) Filter(filter string) *InstanceGroupManagersAggregatedListCall {
+	c.opt_["filter"] = filter
+	return c
+}
+
+// MaxResults sets the optional parameter "maxResults": Maximum count of
+// results to be returned.
+func (c *InstanceGroupManagersAggregatedListCall) MaxResults(maxResults int64) *InstanceGroupManagersAggregatedListCall {
+	c.opt_["maxResults"] = maxResults
+	return c
+}
+
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
+func (c *InstanceGroupManagersAggregatedListCall) PageToken(pageToken string) *InstanceGroupManagersAggregatedListCall {
+	c.opt_["pageToken"] = pageToken
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *InstanceGroupManagersAggregatedListCall) Fields(s ...googleapi.Field) *InstanceGroupManagersAggregatedListCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *InstanceGroupManagersAggregatedListCall) Do() (*InstanceGroupManagerAggregatedList, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["filter"]; ok {
+		params.Set("filter", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["maxResults"]; ok {
+		params.Set("maxResults", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["pageToken"]; ok {
+		params.Set("pageToken", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/aggregated/instanceGroupManagers")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *InstanceGroupManagerAggregatedList
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Retrieves the list of managed instance groups and groups them by zone.",
+	//   "httpMethod": "GET",
+	//   "id": "compute.instanceGroupManagers.aggregatedList",
+	//   "parameterOrder": [
+	//     "project"
+	//   ],
+	//   "parameters": {
+	//     "filter": {
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "maxResults": {
+	//       "default": "500",
+	//       "description": "Maximum count of results to be returned.",
+	//       "format": "uint32",
+	//       "location": "query",
+	//       "maximum": "500",
+	//       "minimum": "0",
+	//       "type": "integer"
+	//     },
+	//     "pageToken": {
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/aggregated/instanceGroupManagers",
+	//   "response": {
+	//     "$ref": "InstanceGroupManagerAggregatedList"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute",
+	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.instanceGroupManagers.delete":
+
+type InstanceGroupManagersDeleteCall struct {
+	s                    *Service
+	project              string
+	zone                 string
+	instanceGroupManager string
+	opt_                 map[string]interface{}
+}
+
+// Delete: Deletes the specified managed instance group and all of the
+// instances in that group.
+func (r *InstanceGroupManagersService) Delete(project string, zone string, instanceGroupManager string) *InstanceGroupManagersDeleteCall {
+	c := &InstanceGroupManagersDeleteCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	c.instanceGroupManager = instanceGroupManager
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *InstanceGroupManagersDeleteCall) Fields(s ...googleapi.Field) *InstanceGroupManagersDeleteCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *InstanceGroupManagersDeleteCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/instanceGroupManagers/{instanceGroupManager}")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("DELETE", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":              c.project,
+		"zone":                 c.zone,
+		"instanceGroupManager": c.instanceGroupManager,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Deletes the specified managed instance group and all of the instances in that group.",
+	//   "httpMethod": "DELETE",
+	//   "id": "compute.instanceGroupManagers.delete",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "instanceGroupManager"
+	//   ],
+	//   "parameters": {
+	//     "instanceGroupManager": {
+	//       "description": "The name of the managed instance group to delete.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone where the managed instance group is located.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/instanceGroupManagers/{instanceGroupManager}",
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.instanceGroupManagers.deleteInstances":
+
+type InstanceGroupManagersDeleteInstancesCall struct {
+	s                                           *Service
+	project                                     string
+	zone                                        string
+	instanceGroupManager                        string
+	instancegroupmanagersdeleteinstancesrequest *InstanceGroupManagersDeleteInstancesRequest
+	opt_                                        map[string]interface{}
+}
+
+// DeleteInstances: Schedules a group action to delete the specified
+// instances in the managed instance group. The instances are also
+// removed from any target pools of which they were a member. This
+// method reduces the targetSize of the managed instance group by the
+// number of instances that you delete. This operation is marked as DONE
+// when the action is scheduled even if the instances are still being
+// deleted. You must separately verify the status of the deleting action
+// with the listmanagedinstances method.
+func (r *InstanceGroupManagersService) DeleteInstances(project string, zone string, instanceGroupManager string, instancegroupmanagersdeleteinstancesrequest *InstanceGroupManagersDeleteInstancesRequest) *InstanceGroupManagersDeleteInstancesCall {
+	c := &InstanceGroupManagersDeleteInstancesCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	c.instanceGroupManager = instanceGroupManager
+	c.instancegroupmanagersdeleteinstancesrequest = instancegroupmanagersdeleteinstancesrequest
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *InstanceGroupManagersDeleteInstancesCall) Fields(s ...googleapi.Field) *InstanceGroupManagersDeleteInstancesCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *InstanceGroupManagersDeleteInstancesCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.instancegroupmanagersdeleteinstancesrequest)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/instanceGroupManagers/{instanceGroupManager}/deleteInstances")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":              c.project,
+		"zone":                 c.zone,
+		"instanceGroupManager": c.instanceGroupManager,
+	})
+	req.Header.Set("Content-Type", ctype)
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Schedules a group action to delete the specified instances in the managed instance group. The instances are also removed from any target pools of which they were a member. This method reduces the targetSize of the managed instance group by the number of instances that you delete. This operation is marked as DONE when the action is scheduled even if the instances are still being deleted. You must separately verify the status of the deleting action with the listmanagedinstances method.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.instanceGroupManagers.deleteInstances",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "instanceGroupManager"
+	//   ],
+	//   "parameters": {
+	//     "instanceGroupManager": {
+	//       "description": "The name of the managed instance group.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone where the managed instance group is located.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/instanceGroupManagers/{instanceGroupManager}/deleteInstances",
+	//   "request": {
+	//     "$ref": "InstanceGroupManagersDeleteInstancesRequest"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.instanceGroupManagers.get":
+
+type InstanceGroupManagersGetCall struct {
+	s                    *Service
+	project              string
+	zone                 string
+	instanceGroupManager string
+	opt_                 map[string]interface{}
+}
+
+// Get: Returns all of the details about the specified managed instance
+// group.
+func (r *InstanceGroupManagersService) Get(project string, zone string, instanceGroupManager string) *InstanceGroupManagersGetCall {
+	c := &InstanceGroupManagersGetCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	c.instanceGroupManager = instanceGroupManager
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *InstanceGroupManagersGetCall) Fields(s ...googleapi.Field) *InstanceGroupManagersGetCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *InstanceGroupManagersGetCall) Do() (*InstanceGroupManager, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/instanceGroupManagers/{instanceGroupManager}")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":              c.project,
+		"zone":                 c.zone,
+		"instanceGroupManager": c.instanceGroupManager,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *InstanceGroupManager
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Returns all of the details about the specified managed instance group.",
+	//   "httpMethod": "GET",
+	//   "id": "compute.instanceGroupManagers.get",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "instanceGroupManager"
+	//   ],
+	//   "parameters": {
+	//     "instanceGroupManager": {
+	//       "description": "The name of the managed instance group.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone where the managed instance group is located.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/instanceGroupManagers/{instanceGroupManager}",
+	//   "response": {
+	//     "$ref": "InstanceGroupManager"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute",
+	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.instanceGroupManagers.insert":
+
+type InstanceGroupManagersInsertCall struct {
+	s                    *Service
+	project              string
+	zone                 string
+	instancegroupmanager *InstanceGroupManager
+	opt_                 map[string]interface{}
+}
+
+// Insert: Creates a managed instance group using the information that
+// you specify in the request. After the group is created, it schedules
+// an action to create instances in the group using the specified
+// instance template. This operation is marked as DONE when the group is
+// created even if the instances in the group have not yet been created.
+// You must separately verify the status of the individual instances
+// with the listmanagedinstances method.
+func (r *InstanceGroupManagersService) Insert(project string, zone string, instancegroupmanager *InstanceGroupManager) *InstanceGroupManagersInsertCall {
+	c := &InstanceGroupManagersInsertCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	c.instancegroupmanager = instancegroupmanager
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *InstanceGroupManagersInsertCall) Fields(s ...googleapi.Field) *InstanceGroupManagersInsertCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *InstanceGroupManagersInsertCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.instancegroupmanager)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/instanceGroupManagers")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+		"zone":    c.zone,
+	})
+	req.Header.Set("Content-Type", ctype)
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Creates a managed instance group using the information that you specify in the request. After the group is created, it schedules an action to create instances in the group using the specified instance template. This operation is marked as DONE when the group is created even if the instances in the group have not yet been created. You must separately verify the status of the individual instances with the listmanagedinstances method.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.instanceGroupManagers.insert",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone where you want to create the managed instance group.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/instanceGroupManagers",
+	//   "request": {
+	//     "$ref": "InstanceGroupManager"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.instanceGroupManagers.list":
+
+type InstanceGroupManagersListCall struct {
+	s       *Service
+	project string
+	zone    string
+	opt_    map[string]interface{}
+}
+
+// List: Retrieves a list of managed instance groups that are contained
+// within the specified project and zone.
+func (r *InstanceGroupManagersService) List(project string, zone string) *InstanceGroupManagersListCall {
+	c := &InstanceGroupManagersListCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	return c
+}
+
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
+func (c *InstanceGroupManagersListCall) Filter(filter string) *InstanceGroupManagersListCall {
+	c.opt_["filter"] = filter
+	return c
+}
+
+// MaxResults sets the optional parameter "maxResults": Maximum count of
+// results to be returned.
+func (c *InstanceGroupManagersListCall) MaxResults(maxResults int64) *InstanceGroupManagersListCall {
+	c.opt_["maxResults"] = maxResults
+	return c
+}
+
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
+func (c *InstanceGroupManagersListCall) PageToken(pageToken string) *InstanceGroupManagersListCall {
+	c.opt_["pageToken"] = pageToken
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *InstanceGroupManagersListCall) Fields(s ...googleapi.Field) *InstanceGroupManagersListCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *InstanceGroupManagersListCall) Do() (*InstanceGroupManagerList, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["filter"]; ok {
+		params.Set("filter", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["maxResults"]; ok {
+		params.Set("maxResults", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["pageToken"]; ok {
+		params.Set("pageToken", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/instanceGroupManagers")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+		"zone":    c.zone,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *InstanceGroupManagerList
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Retrieves a list of managed instance groups that are contained within the specified project and zone.",
+	//   "httpMethod": "GET",
+	//   "id": "compute.instanceGroupManagers.list",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone"
+	//   ],
+	//   "parameters": {
+	//     "filter": {
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "maxResults": {
+	//       "default": "500",
+	//       "description": "Maximum count of results to be returned.",
+	//       "format": "uint32",
+	//       "location": "query",
+	//       "maximum": "500",
+	//       "minimum": "0",
+	//       "type": "integer"
+	//     },
+	//     "pageToken": {
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone where the managed instance group is located.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/instanceGroupManagers",
+	//   "response": {
+	//     "$ref": "InstanceGroupManagerList"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute",
+	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.instanceGroupManagers.listManagedInstances":
+
+type InstanceGroupManagersListManagedInstancesCall struct {
+	s                    *Service
+	project              string
+	zone                 string
+	instanceGroupManager string
+	opt_                 map[string]interface{}
+}
+
+// ListManagedInstances: Lists all of the instances in the managed
+// instance group. Each instance in the list has a currentAction, which
+// indicates the action that the managed instance group is performing on
+// the instance. For example, if the group is still creating an
+// instance, the currentAction is CREATING. If a previous action failed,
+// the list displays the errors for that failed action.
+func (r *InstanceGroupManagersService) ListManagedInstances(project string, zone string, instanceGroupManager string) *InstanceGroupManagersListManagedInstancesCall {
+	c := &InstanceGroupManagersListManagedInstancesCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	c.instanceGroupManager = instanceGroupManager
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *InstanceGroupManagersListManagedInstancesCall) Fields(s ...googleapi.Field) *InstanceGroupManagersListManagedInstancesCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *InstanceGroupManagersListManagedInstancesCall) Do() (*InstanceGroupManagersListManagedInstancesResponse, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/instanceGroupManagers/{instanceGroupManager}/listManagedInstances")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":              c.project,
+		"zone":                 c.zone,
+		"instanceGroupManager": c.instanceGroupManager,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *InstanceGroupManagersListManagedInstancesResponse
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Lists all of the instances in the managed instance group. Each instance in the list has a currentAction, which indicates the action that the managed instance group is performing on the instance. For example, if the group is still creating an instance, the currentAction is CREATING. If a previous action failed, the list displays the errors for that failed action.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.instanceGroupManagers.listManagedInstances",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "instanceGroupManager"
+	//   ],
+	//   "parameters": {
+	//     "instanceGroupManager": {
+	//       "description": "The name of the managed instance group.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone where the managed instance group is located.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/instanceGroupManagers/{instanceGroupManager}/listManagedInstances",
+	//   "response": {
+	//     "$ref": "InstanceGroupManagersListManagedInstancesResponse"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute",
+	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.instanceGroupManagers.recreateInstances":
+
+type InstanceGroupManagersRecreateInstancesCall struct {
+	s                                             *Service
+	project                                       string
+	zone                                          string
+	instanceGroupManager                          string
+	instancegroupmanagersrecreateinstancesrequest *InstanceGroupManagersRecreateInstancesRequest
+	opt_                                          map[string]interface{}
+}
+
+// RecreateInstances: Schedules a group action to recreate the specified
+// instances in the managed instance group. The instances are deleted
+// and recreated using the current instance template for the managed
+// instance group. This operation is marked as DONE when the action is
+// scheduled even if the instances have not yet been recreated. You must
+// separately verify the status of the recreating action with the
+// listmanagedinstances method.
+func (r *InstanceGroupManagersService) RecreateInstances(project string, zone string, instanceGroupManager string, instancegroupmanagersrecreateinstancesrequest *InstanceGroupManagersRecreateInstancesRequest) *InstanceGroupManagersRecreateInstancesCall {
+	c := &InstanceGroupManagersRecreateInstancesCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	c.instanceGroupManager = instanceGroupManager
+	c.instancegroupmanagersrecreateinstancesrequest = instancegroupmanagersrecreateinstancesrequest
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *InstanceGroupManagersRecreateInstancesCall) Fields(s ...googleapi.Field) *InstanceGroupManagersRecreateInstancesCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *InstanceGroupManagersRecreateInstancesCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.instancegroupmanagersrecreateinstancesrequest)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/instanceGroupManagers/{instanceGroupManager}/recreateInstances")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":              c.project,
+		"zone":                 c.zone,
+		"instanceGroupManager": c.instanceGroupManager,
+	})
+	req.Header.Set("Content-Type", ctype)
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Schedules a group action to recreate the specified instances in the managed instance group. The instances are deleted and recreated using the current instance template for the managed instance group. This operation is marked as DONE when the action is scheduled even if the instances have not yet been recreated. You must separately verify the status of the recreating action with the listmanagedinstances method.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.instanceGroupManagers.recreateInstances",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "instanceGroupManager"
+	//   ],
+	//   "parameters": {
+	//     "instanceGroupManager": {
+	//       "description": "The name of the managed instance group.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone where the managed instance group is located.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/instanceGroupManagers/{instanceGroupManager}/recreateInstances",
+	//   "request": {
+	//     "$ref": "InstanceGroupManagersRecreateInstancesRequest"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.instanceGroupManagers.resize":
+
+type InstanceGroupManagersResizeCall struct {
+	s                    *Service
+	project              string
+	zone                 string
+	instanceGroupManager string
+	size                 int64
+	opt_                 map[string]interface{}
+}
+
+// Resize: Resizes the managed instance group. If you increase the size,
+// the group creates new instances using the current instance template.
+// If you decrease the size, the group deletes instances. The resize
+// operation is marked DONE when the resize actions are scheduled even
+// if the group has not yet added or deleted any instances. You must
+// separately verify the status of the creating or deleting actions with
+// the listmanagedinstances method.
+func (r *InstanceGroupManagersService) Resize(project string, zone string, instanceGroupManager string, size int64) *InstanceGroupManagersResizeCall {
+	c := &InstanceGroupManagersResizeCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	c.instanceGroupManager = instanceGroupManager
+	c.size = size
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *InstanceGroupManagersResizeCall) Fields(s ...googleapi.Field) *InstanceGroupManagersResizeCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *InstanceGroupManagersResizeCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	params.Set("size", fmt.Sprintf("%v", c.size))
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/instanceGroupManagers/{instanceGroupManager}/resize")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":              c.project,
+		"zone":                 c.zone,
+		"instanceGroupManager": c.instanceGroupManager,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Resizes the managed instance group. If you increase the size, the group creates new instances using the current instance template. If you decrease the size, the group deletes instances. The resize operation is marked DONE when the resize actions are scheduled even if the group has not yet added or deleted any instances. You must separately verify the status of the creating or deleting actions with the listmanagedinstances method.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.instanceGroupManagers.resize",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "instanceGroupManager",
+	//     "size"
+	//   ],
+	//   "parameters": {
+	//     "instanceGroupManager": {
+	//       "description": "The name of the managed instance group.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "size": {
+	//       "description": "The number of running instances that the managed instance group should maintain at any given time. The group automatically adds or removes instances to maintain the number of instances specified by this parameter.",
+	//       "format": "int32",
+	//       "location": "query",
+	//       "required": true,
+	//       "type": "integer"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone where the managed instance group is located.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/instanceGroupManagers/{instanceGroupManager}/resize",
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.instanceGroupManagers.setInstanceTemplate":
+
+type InstanceGroupManagersSetInstanceTemplateCall struct {
+	s                                               *Service
+	project                                         string
+	zone                                            string
+	instanceGroupManager                            string
+	instancegroupmanagerssetinstancetemplaterequest *InstanceGroupManagersSetInstanceTemplateRequest
+	opt_                                            map[string]interface{}
+}
+
+// SetInstanceTemplate: Specifies the instance template to use when
+// creating new instances in this group. The templates for existing
+// instances in the group do not change unless you recreate them.
+func (r *InstanceGroupManagersService) SetInstanceTemplate(project string, zone string, instanceGroupManager string, instancegroupmanagerssetinstancetemplaterequest *InstanceGroupManagersSetInstanceTemplateRequest) *InstanceGroupManagersSetInstanceTemplateCall {
+	c := &InstanceGroupManagersSetInstanceTemplateCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	c.instanceGroupManager = instanceGroupManager
+	c.instancegroupmanagerssetinstancetemplaterequest = instancegroupmanagerssetinstancetemplaterequest
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *InstanceGroupManagersSetInstanceTemplateCall) Fields(s ...googleapi.Field) *InstanceGroupManagersSetInstanceTemplateCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *InstanceGroupManagersSetInstanceTemplateCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.instancegroupmanagerssetinstancetemplaterequest)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/instanceGroupManagers/{instanceGroupManager}/setInstanceTemplate")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":              c.project,
+		"zone":                 c.zone,
+		"instanceGroupManager": c.instanceGroupManager,
+	})
+	req.Header.Set("Content-Type", ctype)
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Specifies the instance template to use when creating new instances in this group. The templates for existing instances in the group do not change unless you recreate them.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.instanceGroupManagers.setInstanceTemplate",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "instanceGroupManager"
+	//   ],
+	//   "parameters": {
+	//     "instanceGroupManager": {
+	//       "description": "The name of the managed instance group.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone where the managed instance group is located.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/instanceGroupManagers/{instanceGroupManager}/setInstanceTemplate",
+	//   "request": {
+	//     "$ref": "InstanceGroupManagersSetInstanceTemplateRequest"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.instanceGroupManagers.setTargetPools":
+
+type InstanceGroupManagersSetTargetPoolsCall struct {
+	s                                          *Service
+	project                                    string
+	zone                                       string
+	instanceGroupManager                       string
+	instancegroupmanagerssettargetpoolsrequest *InstanceGroupManagersSetTargetPoolsRequest
+	opt_                                       map[string]interface{}
+}
+
+// SetTargetPools: Modifies the target pools to which all instances in
+// this managed instance group are assigned. The target pools
+// automatically apply to all of the instances in the managed instance
+// group. This operation is marked DONE when you make the request even
+// if the instances have not yet been added to their target pools. The
+// change might take some time to apply to all of the instances in the
+// group depending on the size of the group.
+func (r *InstanceGroupManagersService) SetTargetPools(project string, zone string, instanceGroupManager string, instancegroupmanagerssettargetpoolsrequest *InstanceGroupManagersSetTargetPoolsRequest) *InstanceGroupManagersSetTargetPoolsCall {
+	c := &InstanceGroupManagersSetTargetPoolsCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	c.instanceGroupManager = instanceGroupManager
+	c.instancegroupmanagerssettargetpoolsrequest = instancegroupmanagerssettargetpoolsrequest
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *InstanceGroupManagersSetTargetPoolsCall) Fields(s ...googleapi.Field) *InstanceGroupManagersSetTargetPoolsCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *InstanceGroupManagersSetTargetPoolsCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.instancegroupmanagerssettargetpoolsrequest)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/instanceGroupManagers/{instanceGroupManager}/setTargetPools")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":              c.project,
+		"zone":                 c.zone,
+		"instanceGroupManager": c.instanceGroupManager,
+	})
+	req.Header.Set("Content-Type", ctype)
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Modifies the target pools to which all instances in this managed instance group are assigned. The target pools automatically apply to all of the instances in the managed instance group. This operation is marked DONE when you make the request even if the instances have not yet been added to their target pools. The change might take some time to apply to all of the instances in the group depending on the size of the group.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.instanceGroupManagers.setTargetPools",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "instanceGroupManager"
+	//   ],
+	//   "parameters": {
+	//     "instanceGroupManager": {
+	//       "description": "The name of the managed instance group.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone where the managed instance group is located.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/instanceGroupManagers/{instanceGroupManager}/setTargetPools",
+	//   "request": {
+	//     "$ref": "InstanceGroupManagersSetTargetPoolsRequest"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.instanceGroups.addInstances":
+
+type InstanceGroupsAddInstancesCall struct {
+	s                                 *Service
+	project                           string
+	zone                              string
+	instanceGroup                     string
+	instancegroupsaddinstancesrequest *InstanceGroupsAddInstancesRequest
+	opt_                              map[string]interface{}
+}
+
+// AddInstances: Adds a list of instances to the specified instance
+// group. All of the instances in the instance group must be in the same
+// network/subnetwork.
+func (r *InstanceGroupsService) AddInstances(project string, zone string, instanceGroup string, instancegroupsaddinstancesrequest *InstanceGroupsAddInstancesRequest) *InstanceGroupsAddInstancesCall {
+	c := &InstanceGroupsAddInstancesCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	c.instanceGroup = instanceGroup
+	c.instancegroupsaddinstancesrequest = instancegroupsaddinstancesrequest
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *InstanceGroupsAddInstancesCall) Fields(s ...googleapi.Field) *InstanceGroupsAddInstancesCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *InstanceGroupsAddInstancesCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.instancegroupsaddinstancesrequest)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/instanceGroups/{instanceGroup}/addInstances")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":       c.project,
+		"zone":          c.zone,
+		"instanceGroup": c.instanceGroup,
+	})
+	req.Header.Set("Content-Type", ctype)
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Adds a list of instances to the specified instance group. All of the instances in the instance group must be in the same network/subnetwork.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.instanceGroups.addInstances",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "instanceGroup"
+	//   ],
+	//   "parameters": {
+	//     "instanceGroup": {
+	//       "description": "The name of the instance group where you are adding instances.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone where the instance group is located.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/instanceGroups/{instanceGroup}/addInstances",
+	//   "request": {
+	//     "$ref": "InstanceGroupsAddInstancesRequest"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.instanceGroups.aggregatedList":
+
+type InstanceGroupsAggregatedListCall struct {
+	s       *Service
+	project string
+	opt_    map[string]interface{}
+}
+
+// AggregatedList: Retrieves the list of instance groups and sorts them
+// by zone.
+func (r *InstanceGroupsService) AggregatedList(project string) *InstanceGroupsAggregatedListCall {
+	c := &InstanceGroupsAggregatedListCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	return c
+}
+
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
+func (c *InstanceGroupsAggregatedListCall) Filter(filter string) *InstanceGroupsAggregatedListCall {
+	c.opt_["filter"] = filter
+	return c
+}
+
+// MaxResults sets the optional parameter "maxResults": Maximum count of
+// results to be returned.
+func (c *InstanceGroupsAggregatedListCall) MaxResults(maxResults int64) *InstanceGroupsAggregatedListCall {
+	c.opt_["maxResults"] = maxResults
+	return c
+}
+
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
+func (c *InstanceGroupsAggregatedListCall) PageToken(pageToken string) *InstanceGroupsAggregatedListCall {
+	c.opt_["pageToken"] = pageToken
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *InstanceGroupsAggregatedListCall) Fields(s ...googleapi.Field) *InstanceGroupsAggregatedListCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *InstanceGroupsAggregatedListCall) Do() (*InstanceGroupAggregatedList, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["filter"]; ok {
+		params.Set("filter", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["maxResults"]; ok {
+		params.Set("maxResults", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["pageToken"]; ok {
+		params.Set("pageToken", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/aggregated/instanceGroups")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *InstanceGroupAggregatedList
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Retrieves the list of instance groups and sorts them by zone.",
+	//   "httpMethod": "GET",
+	//   "id": "compute.instanceGroups.aggregatedList",
+	//   "parameterOrder": [
+	//     "project"
+	//   ],
+	//   "parameters": {
+	//     "filter": {
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "maxResults": {
+	//       "default": "500",
+	//       "description": "Maximum count of results to be returned.",
+	//       "format": "uint32",
+	//       "location": "query",
+	//       "maximum": "500",
+	//       "minimum": "0",
+	//       "type": "integer"
+	//     },
+	//     "pageToken": {
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/aggregated/instanceGroups",
+	//   "response": {
+	//     "$ref": "InstanceGroupAggregatedList"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute",
+	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.instanceGroups.delete":
+
+type InstanceGroupsDeleteCall struct {
+	s             *Service
+	project       string
+	zone          string
+	instanceGroup string
+	opt_          map[string]interface{}
+}
+
+// Delete: Deletes the specified instance group. The instances in the
+// group are not deleted.
+func (r *InstanceGroupsService) Delete(project string, zone string, instanceGroup string) *InstanceGroupsDeleteCall {
+	c := &InstanceGroupsDeleteCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	c.instanceGroup = instanceGroup
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *InstanceGroupsDeleteCall) Fields(s ...googleapi.Field) *InstanceGroupsDeleteCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *InstanceGroupsDeleteCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/instanceGroups/{instanceGroup}")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("DELETE", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":       c.project,
+		"zone":          c.zone,
+		"instanceGroup": c.instanceGroup,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Deletes the specified instance group. The instances in the group are not deleted.",
+	//   "httpMethod": "DELETE",
+	//   "id": "compute.instanceGroups.delete",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "instanceGroup"
+	//   ],
+	//   "parameters": {
+	//     "instanceGroup": {
+	//       "description": "The name of the instance group to delete.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone where the instance group is located.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/instanceGroups/{instanceGroup}",
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.instanceGroups.get":
+
+type InstanceGroupsGetCall struct {
+	s             *Service
+	project       string
+	zone          string
+	instanceGroup string
+	opt_          map[string]interface{}
+}
+
+// Get: Returns the specified instance group resource.
+func (r *InstanceGroupsService) Get(project string, zone string, instanceGroup string) *InstanceGroupsGetCall {
+	c := &InstanceGroupsGetCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	c.instanceGroup = instanceGroup
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *InstanceGroupsGetCall) Fields(s ...googleapi.Field) *InstanceGroupsGetCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *InstanceGroupsGetCall) Do() (*InstanceGroup, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/instanceGroups/{instanceGroup}")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":       c.project,
+		"zone":          c.zone,
+		"instanceGroup": c.instanceGroup,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *InstanceGroup
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Returns the specified instance group resource.",
+	//   "httpMethod": "GET",
+	//   "id": "compute.instanceGroups.get",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "instanceGroup"
+	//   ],
+	//   "parameters": {
+	//     "instanceGroup": {
+	//       "description": "The name of the instance group.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone where the instance group is located.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/instanceGroups/{instanceGroup}",
+	//   "response": {
+	//     "$ref": "InstanceGroup"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute",
+	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.instanceGroups.insert":
+
+type InstanceGroupsInsertCall struct {
+	s             *Service
+	project       string
+	zone          string
+	instancegroup *InstanceGroup
+	opt_          map[string]interface{}
+}
+
+// Insert: Creates an instance group in the specified project using the
+// parameters that are included in the request.
+func (r *InstanceGroupsService) Insert(project string, zone string, instancegroup *InstanceGroup) *InstanceGroupsInsertCall {
+	c := &InstanceGroupsInsertCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	c.instancegroup = instancegroup
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *InstanceGroupsInsertCall) Fields(s ...googleapi.Field) *InstanceGroupsInsertCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *InstanceGroupsInsertCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.instancegroup)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/instanceGroups")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+		"zone":    c.zone,
+	})
+	req.Header.Set("Content-Type", ctype)
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Creates an instance group in the specified project using the parameters that are included in the request.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.instanceGroups.insert",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone where you want to create the instance group.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/instanceGroups",
+	//   "request": {
+	//     "$ref": "InstanceGroup"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.instanceGroups.list":
+
+type InstanceGroupsListCall struct {
+	s       *Service
+	project string
+	zone    string
+	opt_    map[string]interface{}
+}
+
+// List: Retrieves the list of instance groups that are located in the
+// specified project and zone.
+func (r *InstanceGroupsService) List(project string, zone string) *InstanceGroupsListCall {
+	c := &InstanceGroupsListCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	return c
+}
+
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
+func (c *InstanceGroupsListCall) Filter(filter string) *InstanceGroupsListCall {
+	c.opt_["filter"] = filter
+	return c
+}
+
+// MaxResults sets the optional parameter "maxResults": Maximum count of
+// results to be returned.
+func (c *InstanceGroupsListCall) MaxResults(maxResults int64) *InstanceGroupsListCall {
+	c.opt_["maxResults"] = maxResults
+	return c
+}
+
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
+func (c *InstanceGroupsListCall) PageToken(pageToken string) *InstanceGroupsListCall {
+	c.opt_["pageToken"] = pageToken
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *InstanceGroupsListCall) Fields(s ...googleapi.Field) *InstanceGroupsListCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *InstanceGroupsListCall) Do() (*InstanceGroupList, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["filter"]; ok {
+		params.Set("filter", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["maxResults"]; ok {
+		params.Set("maxResults", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["pageToken"]; ok {
+		params.Set("pageToken", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/instanceGroups")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+		"zone":    c.zone,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *InstanceGroupList
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Retrieves the list of instance groups that are located in the specified project and zone.",
+	//   "httpMethod": "GET",
+	//   "id": "compute.instanceGroups.list",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone"
+	//   ],
+	//   "parameters": {
+	//     "filter": {
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "maxResults": {
+	//       "default": "500",
+	//       "description": "Maximum count of results to be returned.",
+	//       "format": "uint32",
+	//       "location": "query",
+	//       "maximum": "500",
+	//       "minimum": "0",
+	//       "type": "integer"
+	//     },
+	//     "pageToken": {
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone where the instance group is located.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/instanceGroups",
+	//   "response": {
+	//     "$ref": "InstanceGroupList"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute",
+	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.instanceGroups.listInstances":
+
+type InstanceGroupsListInstancesCall struct {
+	s                                  *Service
+	project                            string
+	zone                               string
+	instanceGroup                      string
+	instancegroupslistinstancesrequest *InstanceGroupsListInstancesRequest
+	opt_                               map[string]interface{}
+}
+
+// ListInstances: Lists the instances in the specified instance group.
+func (r *InstanceGroupsService) ListInstances(project string, zone string, instanceGroup string, instancegroupslistinstancesrequest *InstanceGroupsListInstancesRequest) *InstanceGroupsListInstancesCall {
+	c := &InstanceGroupsListInstancesCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	c.instanceGroup = instanceGroup
+	c.instancegroupslistinstancesrequest = instancegroupslistinstancesrequest
+	return c
+}
+
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
+func (c *InstanceGroupsListInstancesCall) Filter(filter string) *InstanceGroupsListInstancesCall {
+	c.opt_["filter"] = filter
+	return c
+}
+
+// MaxResults sets the optional parameter "maxResults": Maximum count of
+// results to be returned.
+func (c *InstanceGroupsListInstancesCall) MaxResults(maxResults int64) *InstanceGroupsListInstancesCall {
+	c.opt_["maxResults"] = maxResults
+	return c
+}
+
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
+func (c *InstanceGroupsListInstancesCall) PageToken(pageToken string) *InstanceGroupsListInstancesCall {
+	c.opt_["pageToken"] = pageToken
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *InstanceGroupsListInstancesCall) Fields(s ...googleapi.Field) *InstanceGroupsListInstancesCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *InstanceGroupsListInstancesCall) Do() (*InstanceGroupsListInstances, error) {
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.instancegroupslistinstancesrequest)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["filter"]; ok {
+		params.Set("filter", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["maxResults"]; ok {
+		params.Set("maxResults", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["pageToken"]; ok {
+		params.Set("pageToken", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/instanceGroups/{instanceGroup}/listInstances")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":       c.project,
+		"zone":          c.zone,
+		"instanceGroup": c.instanceGroup,
+	})
+	req.Header.Set("Content-Type", ctype)
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *InstanceGroupsListInstances
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Lists the instances in the specified instance group.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.instanceGroups.listInstances",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "instanceGroup"
+	//   ],
+	//   "parameters": {
+	//     "filter": {
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "instanceGroup": {
+	//       "description": "The name of the instance group from which you want to generate a list of included instances.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "maxResults": {
+	//       "default": "500",
+	//       "description": "Maximum count of results to be returned.",
+	//       "format": "uint32",
+	//       "location": "query",
+	//       "maximum": "500",
+	//       "minimum": "0",
+	//       "type": "integer"
+	//     },
+	//     "pageToken": {
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone where the instance group is located.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/instanceGroups/{instanceGroup}/listInstances",
+	//   "request": {
+	//     "$ref": "InstanceGroupsListInstancesRequest"
+	//   },
+	//   "response": {
+	//     "$ref": "InstanceGroupsListInstances"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute",
+	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.instanceGroups.removeInstances":
+
+type InstanceGroupsRemoveInstancesCall struct {
+	s                                    *Service
+	project                              string
+	zone                                 string
+	instanceGroup                        string
+	instancegroupsremoveinstancesrequest *InstanceGroupsRemoveInstancesRequest
+	opt_                                 map[string]interface{}
+}
+
+// RemoveInstances: Removes one or more instances from the specified
+// instance group, but does not delete those instances.
+func (r *InstanceGroupsService) RemoveInstances(project string, zone string, instanceGroup string, instancegroupsremoveinstancesrequest *InstanceGroupsRemoveInstancesRequest) *InstanceGroupsRemoveInstancesCall {
+	c := &InstanceGroupsRemoveInstancesCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	c.instanceGroup = instanceGroup
+	c.instancegroupsremoveinstancesrequest = instancegroupsremoveinstancesrequest
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *InstanceGroupsRemoveInstancesCall) Fields(s ...googleapi.Field) *InstanceGroupsRemoveInstancesCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *InstanceGroupsRemoveInstancesCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.instancegroupsremoveinstancesrequest)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/instanceGroups/{instanceGroup}/removeInstances")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":       c.project,
+		"zone":          c.zone,
+		"instanceGroup": c.instanceGroup,
+	})
+	req.Header.Set("Content-Type", ctype)
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Removes one or more instances from the specified instance group, but does not delete those instances.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.instanceGroups.removeInstances",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "instanceGroup"
+	//   ],
+	//   "parameters": {
+	//     "instanceGroup": {
+	//       "description": "The name of the instance group where the specified instances will be removed.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone where the instance group is located.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/instanceGroups/{instanceGroup}/removeInstances",
+	//   "request": {
+	//     "$ref": "InstanceGroupsRemoveInstancesRequest"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.instanceGroups.setNamedPorts":
+
+type InstanceGroupsSetNamedPortsCall struct {
+	s                                  *Service
+	project                            string
+	zone                               string
+	instanceGroup                      string
+	instancegroupssetnamedportsrequest *InstanceGroupsSetNamedPortsRequest
+	opt_                               map[string]interface{}
+}
+
+// SetNamedPorts: Sets the named ports for the specified instance group.
+func (r *InstanceGroupsService) SetNamedPorts(project string, zone string, instanceGroup string, instancegroupssetnamedportsrequest *InstanceGroupsSetNamedPortsRequest) *InstanceGroupsSetNamedPortsCall {
+	c := &InstanceGroupsSetNamedPortsCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	c.instanceGroup = instanceGroup
+	c.instancegroupssetnamedportsrequest = instancegroupssetnamedportsrequest
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *InstanceGroupsSetNamedPortsCall) Fields(s ...googleapi.Field) *InstanceGroupsSetNamedPortsCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *InstanceGroupsSetNamedPortsCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.instancegroupssetnamedportsrequest)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/instanceGroups/{instanceGroup}/setNamedPorts")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":       c.project,
+		"zone":          c.zone,
+		"instanceGroup": c.instanceGroup,
+	})
+	req.Header.Set("Content-Type", ctype)
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Sets the named ports for the specified instance group.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.instanceGroups.setNamedPorts",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "instanceGroup"
+	//   ],
+	//   "parameters": {
+	//     "instanceGroup": {
+	//       "description": "The name of the instance group where the named ports are updated.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone where the instance group is located.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/instanceGroups/{instanceGroup}/setNamedPorts",
+	//   "request": {
+	//     "$ref": "InstanceGroupsSetNamedPortsRequest"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
 
@@ -8958,7 +15126,7 @@ type InstanceTemplatesDeleteCall struct {
 	opt_             map[string]interface{}
 }
 
-// Delete: Deletes the specified instance template resource.
+// Delete: Deletes the specified instance template.
 func (r *InstanceTemplatesService) Delete(project string, instanceTemplate string) *InstanceTemplatesDeleteCall {
 	c := &InstanceTemplatesDeleteCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
@@ -9003,7 +15171,7 @@ func (c *InstanceTemplatesDeleteCall) Do() (*Operation, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Deletes the specified instance template resource.",
+	//   "description": "Deletes the specified instance template.",
 	//   "httpMethod": "DELETE",
 	//   "id": "compute.instanceTemplates.delete",
 	//   "parameterOrder": [
@@ -9012,14 +15180,14 @@ func (c *InstanceTemplatesDeleteCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "instanceTemplate": {
-	//       "description": "Name of the instance template resource to delete.",
+	//       "description": "The name of the instance template to delete.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -9031,6 +15199,7 @@ func (c *InstanceTemplatesDeleteCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -9100,14 +15269,14 @@ func (c *InstanceTemplatesGetCall) Do() (*InstanceTemplate, error) {
 	//   ],
 	//   "parameters": {
 	//     "instanceTemplate": {
-	//       "description": "Name of the instance template resource to return.",
+	//       "description": "The name of the instance template.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -9119,6 +15288,7 @@ func (c *InstanceTemplatesGetCall) Do() (*InstanceTemplate, error) {
 	//     "$ref": "InstanceTemplate"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -9135,8 +15305,8 @@ type InstanceTemplatesInsertCall struct {
 	opt_             map[string]interface{}
 }
 
-// Insert: Creates an instance template resource in the specified
-// project using the data included in the request.
+// Insert: Creates an instance template in the specified project using
+// the data that is included in the request.
 func (r *InstanceTemplatesService) Insert(project string, instancetemplate *InstanceTemplate) *InstanceTemplatesInsertCall {
 	c := &InstanceTemplatesInsertCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
@@ -9186,7 +15356,7 @@ func (c *InstanceTemplatesInsertCall) Do() (*Operation, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Creates an instance template resource in the specified project using the data included in the request.",
+	//   "description": "Creates an instance template in the specified project using the data that is included in the request.",
 	//   "httpMethod": "POST",
 	//   "id": "compute.instanceTemplates.insert",
 	//   "parameterOrder": [
@@ -9194,7 +15364,7 @@ func (c *InstanceTemplatesInsertCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -9209,6 +15379,7 @@ func (c *InstanceTemplatesInsertCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -9223,32 +15394,59 @@ type InstanceTemplatesListCall struct {
 	opt_    map[string]interface{}
 }
 
-// List: Retrieves the list of instance template resources contained
-// within the specified project.
+// List: Retrieves a list of instance templates that are contained
+// within the specified project and zone.
 func (r *InstanceTemplatesService) List(project string) *InstanceTemplatesListCall {
 	c := &InstanceTemplatesListCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *InstanceTemplatesListCall) Filter(filter string) *InstanceTemplatesListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *InstanceTemplatesListCall) MaxResults(maxResults int64) *InstanceTemplatesListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *InstanceTemplatesListCall) PageToken(pageToken string) *InstanceTemplatesListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -9299,7 +15497,7 @@ func (c *InstanceTemplatesListCall) Do() (*InstanceTemplateList, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Retrieves the list of instance template resources contained within the specified project.",
+	//   "description": "Retrieves a list of instance templates that are contained within the specified project and zone.",
 	//   "httpMethod": "GET",
 	//   "id": "compute.instanceTemplates.list",
 	//   "parameterOrder": [
@@ -9307,13 +15505,13 @@ func (c *InstanceTemplatesListCall) Do() (*InstanceTemplateList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -9321,12 +15519,12 @@ func (c *InstanceTemplatesListCall) Do() (*InstanceTemplateList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -9338,6 +15536,7 @@ func (c *InstanceTemplatesListCall) Do() (*InstanceTemplateList, error) {
 	//     "$ref": "InstanceTemplateList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -9425,27 +15624,27 @@ func (c *InstancesAddAccessConfigCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "instance": {
-	//       "description": "Instance name.",
+	//       "description": "The instance name for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "networkInterface": {
-	//       "description": "Network interface name.",
+	//       "description": "The name of the network interface to add to this instance.",
 	//       "location": "query",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Project name.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "zone": {
-	//       "description": "Name of the zone scoping this request.",
+	//       "description": "The name of the zone for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -9460,6 +15659,7 @@ func (c *InstancesAddAccessConfigCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -9474,31 +15674,58 @@ type InstancesAggregatedListCall struct {
 	opt_    map[string]interface{}
 }
 
-// AggregatedList:
+// AggregatedList: Retrieves aggregated list of instance resources.
 func (r *InstancesService) AggregatedList(project string) *InstancesAggregatedListCall {
 	c := &InstancesAggregatedListCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *InstancesAggregatedListCall) Filter(filter string) *InstancesAggregatedListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *InstancesAggregatedListCall) MaxResults(maxResults int64) *InstancesAggregatedListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *InstancesAggregatedListCall) PageToken(pageToken string) *InstancesAggregatedListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -9549,6 +15776,7 @@ func (c *InstancesAggregatedListCall) Do() (*InstanceAggregatedList, error) {
 	}
 	return ret, nil
 	// {
+	//   "description": "Retrieves aggregated list of instance resources.",
 	//   "httpMethod": "GET",
 	//   "id": "compute.instances.aggregatedList",
 	//   "parameterOrder": [
@@ -9556,13 +15784,13 @@ func (c *InstancesAggregatedListCall) Do() (*InstanceAggregatedList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -9570,12 +15798,12 @@ func (c *InstancesAggregatedListCall) Do() (*InstanceAggregatedList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -9587,6 +15815,7 @@ func (c *InstancesAggregatedListCall) Do() (*InstanceAggregatedList, error) {
 	//     "$ref": "InstanceAggregatedList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -9605,7 +15834,7 @@ type InstancesAttachDiskCall struct {
 	opt_         map[string]interface{}
 }
 
-// AttachDisk: Attaches a disk resource to an instance.
+// AttachDisk: Attaches a Disk resource to an instance.
 func (r *InstancesService) AttachDisk(project string, zone string, instance string, attacheddisk *AttachedDisk) *InstancesAttachDiskCall {
 	c := &InstancesAttachDiskCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
@@ -9659,7 +15888,7 @@ func (c *InstancesAttachDiskCall) Do() (*Operation, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Attaches a disk resource to an instance.",
+	//   "description": "Attaches a Disk resource to an instance.",
 	//   "httpMethod": "POST",
 	//   "id": "compute.instances.attachDisk",
 	//   "parameterOrder": [
@@ -9676,14 +15905,14 @@ func (c *InstancesAttachDiskCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Project name.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "zone": {
-	//       "description": "Name of the zone scoping this request.",
+	//       "description": "The name of the zone for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -9698,6 +15927,7 @@ func (c *InstancesAttachDiskCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -9714,7 +15944,8 @@ type InstancesDeleteCall struct {
 	opt_     map[string]interface{}
 }
 
-// Delete: Deletes the specified instance resource.
+// Delete: Deletes the specified Instance resource. For more
+// information, see Stopping or Deleting an Instance.
 func (r *InstancesService) Delete(project string, zone string, instance string) *InstancesDeleteCall {
 	c := &InstancesDeleteCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
@@ -9761,7 +15992,7 @@ func (c *InstancesDeleteCall) Do() (*Operation, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Deletes the specified instance resource.",
+	//   "description": "Deletes the specified Instance resource. For more information, see Stopping or Deleting an Instance.",
 	//   "httpMethod": "DELETE",
 	//   "id": "compute.instances.delete",
 	//   "parameterOrder": [
@@ -9778,14 +16009,14 @@ func (c *InstancesDeleteCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "zone": {
-	//       "description": "Name of the zone scoping this request.",
+	//       "description": "The name of the zone for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -9797,6 +16028,7 @@ func (c *InstancesDeleteCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -9879,33 +16111,33 @@ func (c *InstancesDeleteAccessConfigCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "accessConfig": {
-	//       "description": "Access config name.",
+	//       "description": "The name of the access config to delete.",
 	//       "location": "query",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "instance": {
-	//       "description": "Instance name.",
+	//       "description": "The instance name for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "networkInterface": {
-	//       "description": "Network interface name.",
+	//       "description": "The name of the network interface.",
 	//       "location": "query",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Project name.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "zone": {
-	//       "description": "Name of the zone scoping this request.",
+	//       "description": "The name of the zone for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -9917,6 +16149,7 @@ func (c *InstancesDeleteAccessConfigCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -10008,14 +16241,14 @@ func (c *InstancesDetachDiskCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Project name.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "zone": {
-	//       "description": "Name of the zone scoping this request.",
+	//       "description": "The name of the zone for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -10027,6 +16260,7 @@ func (c *InstancesDetachDiskCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -10107,14 +16341,14 @@ func (c *InstancesGetCall) Do() (*Instance, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "zone": {
-	//       "description": "Name of the zone scoping this request.",
+	//       "description": "The name of the zone for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -10126,6 +16360,7 @@ func (c *InstancesGetCall) Do() (*Instance, error) {
 	//     "$ref": "Instance"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -10153,6 +16388,13 @@ func (r *InstancesService) GetSerialPortOutput(project string, zone string, inst
 	return c
 }
 
+// Port sets the optional parameter "port": Specifies which COM or
+// serial port to retrieve data from.
+func (c *InstancesGetSerialPortOutputCall) Port(port int64) *InstancesGetSerialPortOutputCall {
+	c.opt_["port"] = port
+	return c
+}
+
 // Fields allows partial responses to be retrieved.
 // See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
@@ -10165,6 +16407,9 @@ func (c *InstancesGetSerialPortOutputCall) Do() (*SerialPortOutput, error) {
 	var body io.Reader = nil
 	params := make(url.Values)
 	params.Set("alt", "json")
+	if v, ok := c.opt_["port"]; ok {
+		params.Set("port", fmt.Sprintf("%v", v))
+	}
 	if v, ok := c.opt_["fields"]; ok {
 		params.Set("fields", fmt.Sprintf("%v", v))
 	}
@@ -10207,15 +16452,24 @@ func (c *InstancesGetSerialPortOutputCall) Do() (*SerialPortOutput, error) {
 	//       "required": true,
 	//       "type": "string"
 	//     },
+	//     "port": {
+	//       "default": "1",
+	//       "description": "Specifies which COM or serial port to retrieve data from.",
+	//       "format": "int32",
+	//       "location": "query",
+	//       "maximum": "4",
+	//       "minimum": "1",
+	//       "type": "integer"
+	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "zone": {
-	//       "description": "Name of the zone scoping this request.",
+	//       "description": "The name of the zone for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -10227,6 +16481,7 @@ func (c *InstancesGetSerialPortOutputCall) Do() (*SerialPortOutput, error) {
 	//     "$ref": "SerialPortOutput"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -10306,14 +16561,14 @@ func (c *InstancesInsertCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "zone": {
-	//       "description": "Name of the zone scoping this request.",
+	//       "description": "The name of the zone for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -10328,6 +16583,7 @@ func (c *InstancesInsertCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -10352,24 +16608,51 @@ func (r *InstancesService) List(project string, zone string) *InstancesListCall 
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *InstancesListCall) Filter(filter string) *InstancesListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *InstancesListCall) MaxResults(maxResults int64) *InstancesListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *InstancesListCall) PageToken(pageToken string) *InstancesListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -10430,13 +16713,13 @@ func (c *InstancesListCall) Do() (*InstanceList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -10444,19 +16727,19 @@ func (c *InstancesListCall) Do() (*InstanceList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "zone": {
-	//       "description": "Name of the zone scoping this request.",
+	//       "description": "The name of the zone for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -10468,6 +16751,7 @@ func (c *InstancesListCall) Do() (*InstanceList, error) {
 	//     "$ref": "InstanceList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -10549,14 +16833,14 @@ func (c *InstancesResetCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "zone": {
-	//       "description": "Name of the zone scoping this request.",
+	//       "description": "The name of the zone for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -10568,6 +16852,7 @@ func (c *InstancesResetCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -10587,7 +16872,7 @@ type InstancesSetDiskAutoDeleteCall struct {
 }
 
 // SetDiskAutoDelete: Sets the auto-delete flag for a disk attached to
-// an instance
+// an instance.
 func (r *InstancesService) SetDiskAutoDelete(project string, zone string, instance string, autoDelete bool, deviceName string) *InstancesSetDiskAutoDeleteCall {
 	c := &InstancesSetDiskAutoDeleteCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
@@ -10638,7 +16923,7 @@ func (c *InstancesSetDiskAutoDeleteCall) Do() (*Operation, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Sets the auto-delete flag for a disk attached to an instance",
+	//   "description": "Sets the auto-delete flag for a disk attached to an instance.",
 	//   "httpMethod": "POST",
 	//   "id": "compute.instances.setDiskAutoDelete",
 	//   "parameterOrder": [
@@ -10656,28 +16941,28 @@ func (c *InstancesSetDiskAutoDeleteCall) Do() (*Operation, error) {
 	//       "type": "boolean"
 	//     },
 	//     "deviceName": {
-	//       "description": "Disk device name to modify.",
+	//       "description": "The device name of the disk to modify.",
 	//       "location": "query",
 	//       "pattern": "\\w[\\w.-]{0,254}",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "instance": {
-	//       "description": "Instance name.",
+	//       "description": "The instance name.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Project name.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "zone": {
-	//       "description": "Name of the zone scoping this request.",
+	//       "description": "The name of the zone for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -10689,6 +16974,7 @@ func (c *InstancesSetDiskAutoDeleteCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -10778,14 +17064,14 @@ func (c *InstancesSetMetadataCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "zone": {
-	//       "description": "Name of the zone scoping this request.",
+	//       "description": "The name of the zone for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -10800,6 +17086,7 @@ func (c *InstancesSetMetadataCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -10888,14 +17175,14 @@ func (c *InstancesSetSchedulingCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Project name.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "zone": {
-	//       "description": "Name of the zone scoping this request.",
+	//       "description": "The name of the zone for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -10910,6 +17197,7 @@ func (c *InstancesSetSchedulingCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -10999,14 +17287,14 @@ func (c *InstancesSetTagsCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "zone": {
-	//       "description": "Name of the zone scoping this request.",
+	//       "description": "The name of the zone for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -11021,6 +17309,215 @@ func (c *InstancesSetTagsCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.instances.start":
+
+type InstancesStartCall struct {
+	s        *Service
+	project  string
+	zone     string
+	instance string
+	opt_     map[string]interface{}
+}
+
+// Start: This method starts an instance that was stopped using the
+// using the instances().stop method. For more information, see Restart
+// an instance.
+func (r *InstancesService) Start(project string, zone string, instance string) *InstancesStartCall {
+	c := &InstancesStartCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	c.instance = instance
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *InstancesStartCall) Fields(s ...googleapi.Field) *InstancesStartCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *InstancesStartCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/instances/{instance}/start")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":  c.project,
+		"zone":     c.zone,
+		"instance": c.instance,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "This method starts an instance that was stopped using the using the instances().stop method. For more information, see Restart an instance.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.instances.start",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "instance"
+	//   ],
+	//   "parameters": {
+	//     "instance": {
+	//       "description": "Name of the instance resource to start.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone for this request.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/instances/{instance}/start",
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.instances.stop":
+
+type InstancesStopCall struct {
+	s        *Service
+	project  string
+	zone     string
+	instance string
+	opt_     map[string]interface{}
+}
+
+// Stop: This method stops a running instance, shutting it down cleanly,
+// and allows you to restart the instance at a later time. Stopped
+// instances do not incur per-minute, virtual machine usage charges
+// while they are stopped, but any resources that the virtual machine is
+// using, such as persistent disks and static IP addresses,will continue
+// to be charged until they are deleted. For more information, see
+// Stopping an instance.
+func (r *InstancesService) Stop(project string, zone string, instance string) *InstancesStopCall {
+	c := &InstancesStopCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.zone = zone
+	c.instance = instance
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *InstancesStopCall) Fields(s ...googleapi.Field) *InstancesStopCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *InstancesStopCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/instances/{instance}/stop")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":  c.project,
+		"zone":     c.zone,
+		"instance": c.instance,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "This method stops a running instance, shutting it down cleanly, and allows you to restart the instance at a later time. Stopped instances do not incur per-minute, virtual machine usage charges while they are stopped, but any resources that the virtual machine is using, such as persistent disks and static IP addresses,will continue to be charged until they are deleted. For more information, see Stopping an instance.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.instances.stop",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "instance"
+	//   ],
+	//   "parameters": {
+	//     "instance": {
+	//       "description": "Name of the instance resource to stop.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone for this request.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/instances/{instance}/stop",
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -11097,7 +17594,7 @@ func (c *LicensesGetCall) Do() (*License, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -11109,6 +17606,7 @@ func (c *LicensesGetCall) Do() (*License, error) {
 	//     "$ref": "License"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -11132,24 +17630,51 @@ func (r *MachineTypesService) AggregatedList(project string) *MachineTypesAggreg
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *MachineTypesAggregatedListCall) Filter(filter string) *MachineTypesAggregatedListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *MachineTypesAggregatedListCall) MaxResults(maxResults int64) *MachineTypesAggregatedListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *MachineTypesAggregatedListCall) PageToken(pageToken string) *MachineTypesAggregatedListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -11208,13 +17733,13 @@ func (c *MachineTypesAggregatedListCall) Do() (*MachineTypeAggregatedList, error
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -11222,12 +17747,12 @@ func (c *MachineTypesAggregatedListCall) Do() (*MachineTypeAggregatedList, error
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -11239,6 +17764,7 @@ func (c *MachineTypesAggregatedListCall) Do() (*MachineTypeAggregatedList, error
 	//     "$ref": "MachineTypeAggregatedList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -11320,14 +17846,14 @@ func (c *MachineTypesGetCall) Do() (*MachineType, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "zone": {
-	//       "description": "Name of the zone scoping this request.",
+	//       "description": "The name of the zone for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -11339,6 +17865,7 @@ func (c *MachineTypesGetCall) Do() (*MachineType, error) {
 	//     "$ref": "MachineType"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -11364,24 +17891,51 @@ func (r *MachineTypesService) List(project string, zone string) *MachineTypesLis
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *MachineTypesListCall) Filter(filter string) *MachineTypesListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *MachineTypesListCall) MaxResults(maxResults int64) *MachineTypesListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *MachineTypesListCall) PageToken(pageToken string) *MachineTypesListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -11442,13 +17996,13 @@ func (c *MachineTypesListCall) Do() (*MachineTypeList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -11456,19 +18010,19 @@ func (c *MachineTypesListCall) Do() (*MachineTypeList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "zone": {
-	//       "description": "Name of the zone scoping this request.",
+	//       "description": "The name of the zone for this request.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -11480,6 +18034,7 @@ func (c *MachineTypesListCall) Do() (*MachineTypeList, error) {
 	//     "$ref": "MachineTypeList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -11557,7 +18112,7 @@ func (c *NetworksDeleteCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -11569,6 +18124,7 @@ func (c *NetworksDeleteCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -11645,7 +18201,7 @@ func (c *NetworksGetCall) Do() (*Network, error) {
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -11657,6 +18213,7 @@ func (c *NetworksGetCall) Do() (*Network, error) {
 	//     "$ref": "Network"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -11732,7 +18289,7 @@ func (c *NetworksInsertCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -11747,6 +18304,7 @@ func (c *NetworksInsertCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -11769,24 +18327,51 @@ func (r *NetworksService) List(project string) *NetworksListCall {
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *NetworksListCall) Filter(filter string) *NetworksListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *NetworksListCall) MaxResults(maxResults int64) *NetworksListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *NetworksListCall) PageToken(pageToken string) *NetworksListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -11845,13 +18430,13 @@ func (c *NetworksListCall) Do() (*NetworkList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -11859,12 +18444,12 @@ func (c *NetworksListCall) Do() (*NetworkList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -11876,6 +18461,7 @@ func (c *NetworksListCall) Do() (*NetworkList, error) {
 	//     "$ref": "NetworkList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -11942,7 +18528,7 @@ func (c *ProjectsGetCall) Do() (*Project, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project resource to retrieve.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -11954,8 +18540,188 @@ func (c *ProjectsGetCall) Do() (*Project, error) {
 	//     "$ref": "Project"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.projects.moveDisk":
+
+type ProjectsMoveDiskCall struct {
+	s               *Service
+	project         string
+	diskmoverequest *DiskMoveRequest
+	opt_            map[string]interface{}
+}
+
+// MoveDisk: Moves a persistent disk from one zone to another.
+func (r *ProjectsService) MoveDisk(project string, diskmoverequest *DiskMoveRequest) *ProjectsMoveDiskCall {
+	c := &ProjectsMoveDiskCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.diskmoverequest = diskmoverequest
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *ProjectsMoveDiskCall) Fields(s ...googleapi.Field) *ProjectsMoveDiskCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *ProjectsMoveDiskCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.diskmoverequest)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/moveDisk")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+	})
+	req.Header.Set("Content-Type", ctype)
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Moves a persistent disk from one zone to another.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.projects.moveDisk",
+	//   "parameterOrder": [
+	//     "project"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/moveDisk",
+	//   "request": {
+	//     "$ref": "DiskMoveRequest"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.projects.moveInstance":
+
+type ProjectsMoveInstanceCall struct {
+	s                   *Service
+	project             string
+	instancemoverequest *InstanceMoveRequest
+	opt_                map[string]interface{}
+}
+
+// MoveInstance: Moves an instance and its attached persistent disks
+// from one zone to another.
+func (r *ProjectsService) MoveInstance(project string, instancemoverequest *InstanceMoveRequest) *ProjectsMoveInstanceCall {
+	c := &ProjectsMoveInstanceCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.instancemoverequest = instancemoverequest
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *ProjectsMoveInstanceCall) Fields(s ...googleapi.Field) *ProjectsMoveInstanceCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *ProjectsMoveInstanceCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.instancemoverequest)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/moveInstance")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+	})
+	req.Header.Set("Content-Type", ctype)
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Moves an instance and its attached persistent disks from one zone to another.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.projects.moveInstance",
+	//   "parameterOrder": [
+	//     "project"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/moveInstance",
+	//   "request": {
+	//     "$ref": "InstanceMoveRequest"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
 
@@ -12029,7 +18795,7 @@ func (c *ProjectsSetCommonInstanceMetadataCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -12044,6 +18810,7 @@ func (c *ProjectsSetCommonInstanceMetadataCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -12059,7 +18826,10 @@ type ProjectsSetUsageExportBucketCall struct {
 	opt_                map[string]interface{}
 }
 
-// SetUsageExportBucket: Sets usage export location
+// SetUsageExportBucket: Enables the usage export feature and sets the
+// usage export bucket where reports are stored. If you provide an empty
+// request body using this method, the usage export feature will be
+// disabled.
 func (r *ProjectsService) SetUsageExportBucket(project string, usageexportlocation *UsageExportLocation) *ProjectsSetUsageExportBucketCall {
 	c := &ProjectsSetUsageExportBucketCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
@@ -12109,7 +18879,7 @@ func (c *ProjectsSetUsageExportBucketCall) Do() (*Operation, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Sets usage export location",
+	//   "description": "Enables the usage export feature and sets the usage export bucket where reports are stored. If you provide an empty request body using this method, the usage export feature will be disabled.",
 	//   "httpMethod": "POST",
 	//   "id": "compute.projects.setUsageExportBucket",
 	//   "parameterOrder": [
@@ -12117,7 +18887,7 @@ func (c *ProjectsSetUsageExportBucketCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -12132,6 +18902,7 @@ func (c *ProjectsSetUsageExportBucketCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/devstorage.full_control",
 	//     "https://www.googleapis.com/auth/devstorage.read_only",
@@ -12151,7 +18922,7 @@ type RegionOperationsDeleteCall struct {
 	opt_      map[string]interface{}
 }
 
-// Delete: Deletes the specified region-specific operation resource.
+// Delete: Deletes the specified region-specific Operations resource.
 func (r *RegionOperationsService) Delete(project string, region string, operation string) *RegionOperationsDeleteCall {
 	c := &RegionOperationsDeleteCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
@@ -12194,7 +18965,7 @@ func (c *RegionOperationsDeleteCall) Do() error {
 	}
 	return nil
 	// {
-	//   "description": "Deletes the specified region-specific operation resource.",
+	//   "description": "Deletes the specified region-specific Operations resource.",
 	//   "httpMethod": "DELETE",
 	//   "id": "compute.regionOperations.delete",
 	//   "parameterOrder": [
@@ -12204,14 +18975,14 @@ func (c *RegionOperationsDeleteCall) Do() error {
 	//   ],
 	//   "parameters": {
 	//     "operation": {
-	//       "description": "Name of the operation resource to delete.",
+	//       "description": "Name of the Operations resource to delete.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -12227,6 +18998,7 @@ func (c *RegionOperationsDeleteCall) Do() error {
 	//   },
 	//   "path": "{project}/regions/{region}/operations/{operation}",
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -12243,7 +19015,7 @@ type RegionOperationsGetCall struct {
 	opt_      map[string]interface{}
 }
 
-// Get: Retrieves the specified region-specific operation resource.
+// Get: Retrieves the specified region-specific Operations resource.
 func (r *RegionOperationsService) Get(project string, region string, operation string) *RegionOperationsGetCall {
 	c := &RegionOperationsGetCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
@@ -12290,7 +19062,7 @@ func (c *RegionOperationsGetCall) Do() (*Operation, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Retrieves the specified region-specific operation resource.",
+	//   "description": "Retrieves the specified region-specific Operations resource.",
 	//   "httpMethod": "GET",
 	//   "id": "compute.regionOperations.get",
 	//   "parameterOrder": [
@@ -12300,14 +19072,14 @@ func (c *RegionOperationsGetCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "operation": {
-	//       "description": "Name of the operation resource to return.",
+	//       "description": "Name of the Operations resource to return.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -12326,6 +19098,7 @@ func (c *RegionOperationsGetCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -12342,7 +19115,7 @@ type RegionOperationsListCall struct {
 	opt_    map[string]interface{}
 }
 
-// List: Retrieves the list of operation resources contained within the
+// List: Retrieves the list of Operation resources contained within the
 // specified region.
 func (r *RegionOperationsService) List(project string, region string) *RegionOperationsListCall {
 	c := &RegionOperationsListCall{s: r.s, opt_: make(map[string]interface{})}
@@ -12351,24 +19124,51 @@ func (r *RegionOperationsService) List(project string, region string) *RegionOpe
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *RegionOperationsListCall) Filter(filter string) *RegionOperationsListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *RegionOperationsListCall) MaxResults(maxResults int64) *RegionOperationsListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *RegionOperationsListCall) PageToken(pageToken string) *RegionOperationsListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -12420,7 +19220,7 @@ func (c *RegionOperationsListCall) Do() (*OperationList, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Retrieves the list of operation resources contained within the specified region.",
+	//   "description": "Retrieves the list of Operation resources contained within the specified region.",
 	//   "httpMethod": "GET",
 	//   "id": "compute.regionOperations.list",
 	//   "parameterOrder": [
@@ -12429,13 +19229,13 @@ func (c *RegionOperationsListCall) Do() (*OperationList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -12443,12 +19243,12 @@ func (c *RegionOperationsListCall) Do() (*OperationList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -12467,6 +19267,7 @@ func (c *RegionOperationsListCall) Do() (*OperationList, error) {
 	//     "$ref": "OperationList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -12537,7 +19338,7 @@ func (c *RegionsGetCall) Do() (*Region, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -12556,6 +19357,7 @@ func (c *RegionsGetCall) Do() (*Region, error) {
 	//     "$ref": "Region"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -12579,24 +19381,51 @@ func (r *RegionsService) List(project string) *RegionsListCall {
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *RegionsListCall) Filter(filter string) *RegionsListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *RegionsListCall) MaxResults(maxResults int64) *RegionsListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *RegionsListCall) PageToken(pageToken string) *RegionsListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -12655,13 +19484,13 @@ func (c *RegionsListCall) Do() (*RegionList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -12669,12 +19498,12 @@ func (c *RegionsListCall) Do() (*RegionList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -12686,6 +19515,7 @@ func (c *RegionsListCall) Do() (*RegionList, error) {
 	//     "$ref": "RegionList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -12756,7 +19586,7 @@ func (c *RoutesDeleteCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -12775,6 +19605,7 @@ func (c *RoutesDeleteCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -12844,7 +19675,7 @@ func (c *RoutesGetCall) Do() (*Route, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -12863,6 +19694,7 @@ func (c *RoutesGetCall) Do() (*Route, error) {
 	//     "$ref": "Route"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -12938,7 +19770,7 @@ func (c *RoutesInsertCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -12953,6 +19785,7 @@ func (c *RoutesInsertCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -12975,24 +19808,51 @@ func (r *RoutesService) List(project string) *RoutesListCall {
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *RoutesListCall) Filter(filter string) *RoutesListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *RoutesListCall) MaxResults(maxResults int64) *RoutesListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *RoutesListCall) PageToken(pageToken string) *RoutesListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -13051,13 +19911,13 @@ func (c *RoutesListCall) Do() (*RouteList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -13065,12 +19925,12 @@ func (c *RoutesListCall) Do() (*RouteList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -13082,6 +19942,7 @@ func (c *RoutesListCall) Do() (*RouteList, error) {
 	//     "$ref": "RouteList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -13098,7 +19959,14 @@ type SnapshotsDeleteCall struct {
 	opt_     map[string]interface{}
 }
 
-// Delete: Deletes the specified persistent disk snapshot resource.
+// Delete: Deletes the specified Snapshot resource. Keep in mind that
+// deleting a single snapshot might not necessarily delete all the data
+// on that snapshot. If any data on the snapshot that is marked for
+// deletion is needed for subsequent snapshots, the data will be moved
+// to the next corresponding snapshot.
+//
+// For more information, see
+// Deleting snaphots.
 func (r *SnapshotsService) Delete(project string, snapshot string) *SnapshotsDeleteCall {
 	c := &SnapshotsDeleteCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
@@ -13143,7 +20011,7 @@ func (c *SnapshotsDeleteCall) Do() (*Operation, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Deletes the specified persistent disk snapshot resource.",
+	//   "description": "Deletes the specified Snapshot resource. Keep in mind that deleting a single snapshot might not necessarily delete all the data on that snapshot. If any data on the snapshot that is marked for deletion is needed for subsequent snapshots, the data will be moved to the next corresponding snapshot.\n\nFor more information, see Deleting snaphots.",
 	//   "httpMethod": "DELETE",
 	//   "id": "compute.snapshots.delete",
 	//   "parameterOrder": [
@@ -13152,14 +20020,14 @@ func (c *SnapshotsDeleteCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "snapshot": {
-	//       "description": "Name of the persistent disk snapshot resource to delete.",
+	//       "description": "Name of the Snapshot resource to delete.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -13171,6 +20039,7 @@ func (c *SnapshotsDeleteCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -13186,7 +20055,7 @@ type SnapshotsGetCall struct {
 	opt_     map[string]interface{}
 }
 
-// Get: Returns the specified persistent disk snapshot resource.
+// Get: Returns the specified Snapshot resource.
 func (r *SnapshotsService) Get(project string, snapshot string) *SnapshotsGetCall {
 	c := &SnapshotsGetCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
@@ -13231,7 +20100,7 @@ func (c *SnapshotsGetCall) Do() (*Snapshot, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Returns the specified persistent disk snapshot resource.",
+	//   "description": "Returns the specified Snapshot resource.",
 	//   "httpMethod": "GET",
 	//   "id": "compute.snapshots.get",
 	//   "parameterOrder": [
@@ -13240,14 +20109,14 @@ func (c *SnapshotsGetCall) Do() (*Snapshot, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "snapshot": {
-	//       "description": "Name of the persistent disk snapshot resource to return.",
+	//       "description": "Name of the Snapshot resource to return.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
@@ -13259,6 +20128,7 @@ func (c *SnapshotsGetCall) Do() (*Snapshot, error) {
 	//     "$ref": "Snapshot"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -13274,32 +20144,59 @@ type SnapshotsListCall struct {
 	opt_    map[string]interface{}
 }
 
-// List: Retrieves the list of persistent disk snapshot resources
-// contained within the specified project.
+// List: Retrieves the list of Snapshot resources contained within the
+// specified project.
 func (r *SnapshotsService) List(project string) *SnapshotsListCall {
 	c := &SnapshotsListCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *SnapshotsListCall) Filter(filter string) *SnapshotsListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *SnapshotsListCall) MaxResults(maxResults int64) *SnapshotsListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *SnapshotsListCall) PageToken(pageToken string) *SnapshotsListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -13350,7 +20247,7 @@ func (c *SnapshotsListCall) Do() (*SnapshotList, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Retrieves the list of persistent disk snapshot resources contained within the specified project.",
+	//   "description": "Retrieves the list of Snapshot resources contained within the specified project.",
 	//   "httpMethod": "GET",
 	//   "id": "compute.snapshots.list",
 	//   "parameterOrder": [
@@ -13358,13 +20255,13 @@ func (c *SnapshotsListCall) Do() (*SnapshotList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -13372,12 +20269,12 @@ func (c *SnapshotsListCall) Do() (*SnapshotList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -13389,6 +20286,434 @@ func (c *SnapshotsListCall) Do() (*SnapshotList, error) {
 	//     "$ref": "SnapshotList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute",
+	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.sslCertificates.delete":
+
+type SslCertificatesDeleteCall struct {
+	s              *Service
+	project        string
+	sslCertificate string
+	opt_           map[string]interface{}
+}
+
+// Delete: Deletes the specified SslCertificate resource.
+func (r *SslCertificatesService) Delete(project string, sslCertificate string) *SslCertificatesDeleteCall {
+	c := &SslCertificatesDeleteCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.sslCertificate = sslCertificate
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *SslCertificatesDeleteCall) Fields(s ...googleapi.Field) *SslCertificatesDeleteCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *SslCertificatesDeleteCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/global/sslCertificates/{sslCertificate}")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("DELETE", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":        c.project,
+		"sslCertificate": c.sslCertificate,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Deletes the specified SslCertificate resource.",
+	//   "httpMethod": "DELETE",
+	//   "id": "compute.sslCertificates.delete",
+	//   "parameterOrder": [
+	//     "project",
+	//     "sslCertificate"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "sslCertificate": {
+	//       "description": "Name of the SslCertificate resource to delete.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/global/sslCertificates/{sslCertificate}",
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.sslCertificates.get":
+
+type SslCertificatesGetCall struct {
+	s              *Service
+	project        string
+	sslCertificate string
+	opt_           map[string]interface{}
+}
+
+// Get: Returns the specified SslCertificate resource.
+func (r *SslCertificatesService) Get(project string, sslCertificate string) *SslCertificatesGetCall {
+	c := &SslCertificatesGetCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.sslCertificate = sslCertificate
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *SslCertificatesGetCall) Fields(s ...googleapi.Field) *SslCertificatesGetCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *SslCertificatesGetCall) Do() (*SslCertificate, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/global/sslCertificates/{sslCertificate}")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":        c.project,
+		"sslCertificate": c.sslCertificate,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *SslCertificate
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Returns the specified SslCertificate resource.",
+	//   "httpMethod": "GET",
+	//   "id": "compute.sslCertificates.get",
+	//   "parameterOrder": [
+	//     "project",
+	//     "sslCertificate"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "sslCertificate": {
+	//       "description": "Name of the SslCertificate resource to return.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/global/sslCertificates/{sslCertificate}",
+	//   "response": {
+	//     "$ref": "SslCertificate"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute",
+	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.sslCertificates.insert":
+
+type SslCertificatesInsertCall struct {
+	s              *Service
+	project        string
+	sslcertificate *SslCertificate
+	opt_           map[string]interface{}
+}
+
+// Insert: Creates a SslCertificate resource in the specified project
+// using the data included in the request.
+func (r *SslCertificatesService) Insert(project string, sslcertificate *SslCertificate) *SslCertificatesInsertCall {
+	c := &SslCertificatesInsertCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.sslcertificate = sslcertificate
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *SslCertificatesInsertCall) Fields(s ...googleapi.Field) *SslCertificatesInsertCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *SslCertificatesInsertCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.sslcertificate)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/global/sslCertificates")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+	})
+	req.Header.Set("Content-Type", ctype)
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Creates a SslCertificate resource in the specified project using the data included in the request.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.sslCertificates.insert",
+	//   "parameterOrder": [
+	//     "project"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/global/sslCertificates",
+	//   "request": {
+	//     "$ref": "SslCertificate"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.sslCertificates.list":
+
+type SslCertificatesListCall struct {
+	s       *Service
+	project string
+	opt_    map[string]interface{}
+}
+
+// List: Retrieves the list of SslCertificate resources available to the
+// specified project.
+func (r *SslCertificatesService) List(project string) *SslCertificatesListCall {
+	c := &SslCertificatesListCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	return c
+}
+
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
+func (c *SslCertificatesListCall) Filter(filter string) *SslCertificatesListCall {
+	c.opt_["filter"] = filter
+	return c
+}
+
+// MaxResults sets the optional parameter "maxResults": Maximum count of
+// results to be returned.
+func (c *SslCertificatesListCall) MaxResults(maxResults int64) *SslCertificatesListCall {
+	c.opt_["maxResults"] = maxResults
+	return c
+}
+
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
+func (c *SslCertificatesListCall) PageToken(pageToken string) *SslCertificatesListCall {
+	c.opt_["pageToken"] = pageToken
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *SslCertificatesListCall) Fields(s ...googleapi.Field) *SslCertificatesListCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *SslCertificatesListCall) Do() (*SslCertificateList, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["filter"]; ok {
+		params.Set("filter", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["maxResults"]; ok {
+		params.Set("maxResults", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["pageToken"]; ok {
+		params.Set("pageToken", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/global/sslCertificates")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *SslCertificateList
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Retrieves the list of SslCertificate resources available to the specified project.",
+	//   "httpMethod": "GET",
+	//   "id": "compute.sslCertificates.list",
+	//   "parameterOrder": [
+	//     "project"
+	//   ],
+	//   "parameters": {
+	//     "filter": {
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "maxResults": {
+	//       "default": "500",
+	//       "description": "Maximum count of results to be returned.",
+	//       "format": "uint32",
+	//       "location": "query",
+	//       "maximum": "500",
+	//       "minimum": "0",
+	//       "type": "integer"
+	//     },
+	//     "pageToken": {
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/global/sslCertificates",
+	//   "response": {
+	//     "$ref": "SslCertificateList"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -13459,7 +20784,7 @@ func (c *TargetHttpProxiesDeleteCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -13478,6 +20803,7 @@ func (c *TargetHttpProxiesDeleteCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -13547,7 +20873,7 @@ func (c *TargetHttpProxiesGetCall) Do() (*TargetHttpProxy, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -13566,6 +20892,7 @@ func (c *TargetHttpProxiesGetCall) Do() (*TargetHttpProxy, error) {
 	//     "$ref": "TargetHttpProxy"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -13641,7 +20968,7 @@ func (c *TargetHttpProxiesInsertCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -13656,6 +20983,7 @@ func (c *TargetHttpProxiesInsertCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -13678,24 +21006,51 @@ func (r *TargetHttpProxiesService) List(project string) *TargetHttpProxiesListCa
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *TargetHttpProxiesListCall) Filter(filter string) *TargetHttpProxiesListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *TargetHttpProxiesListCall) MaxResults(maxResults int64) *TargetHttpProxiesListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *TargetHttpProxiesListCall) PageToken(pageToken string) *TargetHttpProxiesListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -13754,13 +21109,13 @@ func (c *TargetHttpProxiesListCall) Do() (*TargetHttpProxyList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -13768,12 +21123,12 @@ func (c *TargetHttpProxiesListCall) Do() (*TargetHttpProxyList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -13785,6 +21140,7 @@ func (c *TargetHttpProxiesListCall) Do() (*TargetHttpProxyList, error) {
 	//     "$ref": "TargetHttpProxyList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -13863,7 +21219,7 @@ func (c *TargetHttpProxiesSetUrlMapCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -13885,6 +21241,634 @@ func (c *TargetHttpProxiesSetUrlMapCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.targetHttpsProxies.delete":
+
+type TargetHttpsProxiesDeleteCall struct {
+	s                *Service
+	project          string
+	targetHttpsProxy string
+	opt_             map[string]interface{}
+}
+
+// Delete: Deletes the specified TargetHttpsProxy resource.
+func (r *TargetHttpsProxiesService) Delete(project string, targetHttpsProxy string) *TargetHttpsProxiesDeleteCall {
+	c := &TargetHttpsProxiesDeleteCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.targetHttpsProxy = targetHttpsProxy
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *TargetHttpsProxiesDeleteCall) Fields(s ...googleapi.Field) *TargetHttpsProxiesDeleteCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *TargetHttpsProxiesDeleteCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/global/targetHttpsProxies/{targetHttpsProxy}")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("DELETE", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":          c.project,
+		"targetHttpsProxy": c.targetHttpsProxy,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Deletes the specified TargetHttpsProxy resource.",
+	//   "httpMethod": "DELETE",
+	//   "id": "compute.targetHttpsProxies.delete",
+	//   "parameterOrder": [
+	//     "project",
+	//     "targetHttpsProxy"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "targetHttpsProxy": {
+	//       "description": "Name of the TargetHttpsProxy resource to delete.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/global/targetHttpsProxies/{targetHttpsProxy}",
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.targetHttpsProxies.get":
+
+type TargetHttpsProxiesGetCall struct {
+	s                *Service
+	project          string
+	targetHttpsProxy string
+	opt_             map[string]interface{}
+}
+
+// Get: Returns the specified TargetHttpsProxy resource.
+func (r *TargetHttpsProxiesService) Get(project string, targetHttpsProxy string) *TargetHttpsProxiesGetCall {
+	c := &TargetHttpsProxiesGetCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.targetHttpsProxy = targetHttpsProxy
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *TargetHttpsProxiesGetCall) Fields(s ...googleapi.Field) *TargetHttpsProxiesGetCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *TargetHttpsProxiesGetCall) Do() (*TargetHttpsProxy, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/global/targetHttpsProxies/{targetHttpsProxy}")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":          c.project,
+		"targetHttpsProxy": c.targetHttpsProxy,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *TargetHttpsProxy
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Returns the specified TargetHttpsProxy resource.",
+	//   "httpMethod": "GET",
+	//   "id": "compute.targetHttpsProxies.get",
+	//   "parameterOrder": [
+	//     "project",
+	//     "targetHttpsProxy"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "targetHttpsProxy": {
+	//       "description": "Name of the TargetHttpsProxy resource to return.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/global/targetHttpsProxies/{targetHttpsProxy}",
+	//   "response": {
+	//     "$ref": "TargetHttpsProxy"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute",
+	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.targetHttpsProxies.insert":
+
+type TargetHttpsProxiesInsertCall struct {
+	s                *Service
+	project          string
+	targethttpsproxy *TargetHttpsProxy
+	opt_             map[string]interface{}
+}
+
+// Insert: Creates a TargetHttpsProxy resource in the specified project
+// using the data included in the request.
+func (r *TargetHttpsProxiesService) Insert(project string, targethttpsproxy *TargetHttpsProxy) *TargetHttpsProxiesInsertCall {
+	c := &TargetHttpsProxiesInsertCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.targethttpsproxy = targethttpsproxy
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *TargetHttpsProxiesInsertCall) Fields(s ...googleapi.Field) *TargetHttpsProxiesInsertCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *TargetHttpsProxiesInsertCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.targethttpsproxy)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/global/targetHttpsProxies")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+	})
+	req.Header.Set("Content-Type", ctype)
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Creates a TargetHttpsProxy resource in the specified project using the data included in the request.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.targetHttpsProxies.insert",
+	//   "parameterOrder": [
+	//     "project"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/global/targetHttpsProxies",
+	//   "request": {
+	//     "$ref": "TargetHttpsProxy"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.targetHttpsProxies.list":
+
+type TargetHttpsProxiesListCall struct {
+	s       *Service
+	project string
+	opt_    map[string]interface{}
+}
+
+// List: Retrieves the list of TargetHttpsProxy resources available to
+// the specified project.
+func (r *TargetHttpsProxiesService) List(project string) *TargetHttpsProxiesListCall {
+	c := &TargetHttpsProxiesListCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	return c
+}
+
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
+func (c *TargetHttpsProxiesListCall) Filter(filter string) *TargetHttpsProxiesListCall {
+	c.opt_["filter"] = filter
+	return c
+}
+
+// MaxResults sets the optional parameter "maxResults": Maximum count of
+// results to be returned.
+func (c *TargetHttpsProxiesListCall) MaxResults(maxResults int64) *TargetHttpsProxiesListCall {
+	c.opt_["maxResults"] = maxResults
+	return c
+}
+
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
+func (c *TargetHttpsProxiesListCall) PageToken(pageToken string) *TargetHttpsProxiesListCall {
+	c.opt_["pageToken"] = pageToken
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *TargetHttpsProxiesListCall) Fields(s ...googleapi.Field) *TargetHttpsProxiesListCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *TargetHttpsProxiesListCall) Do() (*TargetHttpsProxyList, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["filter"]; ok {
+		params.Set("filter", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["maxResults"]; ok {
+		params.Set("maxResults", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["pageToken"]; ok {
+		params.Set("pageToken", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/global/targetHttpsProxies")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *TargetHttpsProxyList
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Retrieves the list of TargetHttpsProxy resources available to the specified project.",
+	//   "httpMethod": "GET",
+	//   "id": "compute.targetHttpsProxies.list",
+	//   "parameterOrder": [
+	//     "project"
+	//   ],
+	//   "parameters": {
+	//     "filter": {
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "maxResults": {
+	//       "default": "500",
+	//       "description": "Maximum count of results to be returned.",
+	//       "format": "uint32",
+	//       "location": "query",
+	//       "maximum": "500",
+	//       "minimum": "0",
+	//       "type": "integer"
+	//     },
+	//     "pageToken": {
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/global/targetHttpsProxies",
+	//   "response": {
+	//     "$ref": "TargetHttpsProxyList"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute",
+	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.targetHttpsProxies.setSslCertificates":
+
+type TargetHttpsProxiesSetSslCertificatesCall struct {
+	s                                           *Service
+	project                                     string
+	targetHttpsProxy                            string
+	targethttpsproxiessetsslcertificatesrequest *TargetHttpsProxiesSetSslCertificatesRequest
+	opt_                                        map[string]interface{}
+}
+
+// SetSslCertificates: Replaces SslCertificates for TargetHttpsProxy.
+func (r *TargetHttpsProxiesService) SetSslCertificates(project string, targetHttpsProxy string, targethttpsproxiessetsslcertificatesrequest *TargetHttpsProxiesSetSslCertificatesRequest) *TargetHttpsProxiesSetSslCertificatesCall {
+	c := &TargetHttpsProxiesSetSslCertificatesCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.targetHttpsProxy = targetHttpsProxy
+	c.targethttpsproxiessetsslcertificatesrequest = targethttpsproxiessetsslcertificatesrequest
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *TargetHttpsProxiesSetSslCertificatesCall) Fields(s ...googleapi.Field) *TargetHttpsProxiesSetSslCertificatesCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *TargetHttpsProxiesSetSslCertificatesCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.targethttpsproxiessetsslcertificatesrequest)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/targetHttpsProxies/{targetHttpsProxy}/setSslCertificates")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":          c.project,
+		"targetHttpsProxy": c.targetHttpsProxy,
+	})
+	req.Header.Set("Content-Type", ctype)
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Replaces SslCertificates for TargetHttpsProxy.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.targetHttpsProxies.setSslCertificates",
+	//   "parameterOrder": [
+	//     "project",
+	//     "targetHttpsProxy"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "targetHttpsProxy": {
+	//       "description": "Name of the TargetHttpsProxy resource whose SSLCertificate is to be set.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/targetHttpsProxies/{targetHttpsProxy}/setSslCertificates",
+	//   "request": {
+	//     "$ref": "TargetHttpsProxiesSetSslCertificatesRequest"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.targetHttpsProxies.setUrlMap":
+
+type TargetHttpsProxiesSetUrlMapCall struct {
+	s                *Service
+	project          string
+	targetHttpsProxy string
+	urlmapreference  *UrlMapReference
+	opt_             map[string]interface{}
+}
+
+// SetUrlMap: Changes the URL map for TargetHttpsProxy.
+func (r *TargetHttpsProxiesService) SetUrlMap(project string, targetHttpsProxy string, urlmapreference *UrlMapReference) *TargetHttpsProxiesSetUrlMapCall {
+	c := &TargetHttpsProxiesSetUrlMapCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.targetHttpsProxy = targetHttpsProxy
+	c.urlmapreference = urlmapreference
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *TargetHttpsProxiesSetUrlMapCall) Fields(s ...googleapi.Field) *TargetHttpsProxiesSetUrlMapCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *TargetHttpsProxiesSetUrlMapCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.urlmapreference)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/targetHttpsProxies/{targetHttpsProxy}/setUrlMap")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":          c.project,
+		"targetHttpsProxy": c.targetHttpsProxy,
+	})
+	req.Header.Set("Content-Type", ctype)
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Changes the URL map for TargetHttpsProxy.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.targetHttpsProxies.setUrlMap",
+	//   "parameterOrder": [
+	//     "project",
+	//     "targetHttpsProxy"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "targetHttpsProxy": {
+	//       "description": "Name of the TargetHttpsProxy resource whose URL map is to be set.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/targetHttpsProxies/{targetHttpsProxy}/setUrlMap",
+	//   "request": {
+	//     "$ref": "UrlMapReference"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -13907,24 +21891,51 @@ func (r *TargetInstancesService) AggregatedList(project string) *TargetInstances
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *TargetInstancesAggregatedListCall) Filter(filter string) *TargetInstancesAggregatedListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *TargetInstancesAggregatedListCall) MaxResults(maxResults int64) *TargetInstancesAggregatedListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *TargetInstancesAggregatedListCall) PageToken(pageToken string) *TargetInstancesAggregatedListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -13983,13 +21994,13 @@ func (c *TargetInstancesAggregatedListCall) Do() (*TargetInstanceAggregatedList,
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -13997,12 +22008,12 @@ func (c *TargetInstancesAggregatedListCall) Do() (*TargetInstanceAggregatedList,
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -14014,6 +22025,7 @@ func (c *TargetInstancesAggregatedListCall) Do() (*TargetInstanceAggregatedList,
 	//     "$ref": "TargetInstanceAggregatedList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -14088,7 +22100,7 @@ func (c *TargetInstancesDeleteCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -14114,6 +22126,7 @@ func (c *TargetInstancesDeleteCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -14187,7 +22200,7 @@ func (c *TargetInstancesGetCall) Do() (*TargetInstance, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -14213,6 +22226,7 @@ func (c *TargetInstancesGetCall) Do() (*TargetInstance, error) {
 	//     "$ref": "TargetInstance"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -14292,7 +22306,7 @@ func (c *TargetInstancesInsertCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -14314,6 +22328,7 @@ func (c *TargetInstancesInsertCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -14338,24 +22353,51 @@ func (r *TargetInstancesService) List(project string, zone string) *TargetInstan
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *TargetInstancesListCall) Filter(filter string) *TargetInstancesListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *TargetInstancesListCall) MaxResults(maxResults int64) *TargetInstancesListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *TargetInstancesListCall) PageToken(pageToken string) *TargetInstancesListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -14416,13 +22458,13 @@ func (c *TargetInstancesListCall) Do() (*TargetInstanceList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -14430,12 +22472,12 @@ func (c *TargetInstancesListCall) Do() (*TargetInstanceList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -14454,6 +22496,7 @@ func (c *TargetInstancesListCall) Do() (*TargetInstanceList, error) {
 	//     "$ref": "TargetInstanceList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -14564,6 +22607,7 @@ func (c *TargetPoolsAddHealthCheckCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -14581,7 +22625,7 @@ type TargetPoolsAddInstanceCall struct {
 	opt_                          map[string]interface{}
 }
 
-// AddInstance: Adds instance url to targetPool.
+// AddInstance: Adds instance URL to targetPool.
 func (r *TargetPoolsService) AddInstance(project string, region string, targetPool string, targetpoolsaddinstancerequest *TargetPoolsAddInstanceRequest) *TargetPoolsAddInstanceCall {
 	c := &TargetPoolsAddInstanceCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
@@ -14635,7 +22679,7 @@ func (c *TargetPoolsAddInstanceCall) Do() (*Operation, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Adds instance url to targetPool.",
+	//   "description": "Adds instance URL to targetPool.",
 	//   "httpMethod": "POST",
 	//   "id": "compute.targetPools.addInstance",
 	//   "parameterOrder": [
@@ -14673,6 +22717,7 @@ func (c *TargetPoolsAddInstanceCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -14694,24 +22739,51 @@ func (r *TargetPoolsService) AggregatedList(project string) *TargetPoolsAggregat
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *TargetPoolsAggregatedListCall) Filter(filter string) *TargetPoolsAggregatedListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *TargetPoolsAggregatedListCall) MaxResults(maxResults int64) *TargetPoolsAggregatedListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *TargetPoolsAggregatedListCall) PageToken(pageToken string) *TargetPoolsAggregatedListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -14770,13 +22842,13 @@ func (c *TargetPoolsAggregatedListCall) Do() (*TargetPoolAggregatedList, error) 
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -14784,12 +22856,12 @@ func (c *TargetPoolsAggregatedListCall) Do() (*TargetPoolAggregatedList, error) 
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -14801,6 +22873,7 @@ func (c *TargetPoolsAggregatedListCall) Do() (*TargetPoolAggregatedList, error) 
 	//     "$ref": "TargetPoolAggregatedList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -14875,7 +22948,7 @@ func (c *TargetPoolsDeleteCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -14901,6 +22974,7 @@ func (c *TargetPoolsDeleteCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -14974,7 +23048,7 @@ func (c *TargetPoolsGetCall) Do() (*TargetPool, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -15000,6 +23074,7 @@ func (c *TargetPoolsGetCall) Do() (*TargetPool, error) {
 	//     "$ref": "TargetPool"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -15111,6 +23186,7 @@ func (c *TargetPoolsGetHealthCall) Do() (*TargetPoolInstanceHealth, error) {
 	//     "$ref": "TargetPoolInstanceHealth"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -15190,7 +23266,7 @@ func (c *TargetPoolsInsertCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -15212,6 +23288,7 @@ func (c *TargetPoolsInsertCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -15236,24 +23313,51 @@ func (r *TargetPoolsService) List(project string, region string) *TargetPoolsLis
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *TargetPoolsListCall) Filter(filter string) *TargetPoolsListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *TargetPoolsListCall) MaxResults(maxResults int64) *TargetPoolsListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *TargetPoolsListCall) PageToken(pageToken string) *TargetPoolsListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -15314,13 +23418,13 @@ func (c *TargetPoolsListCall) Do() (*TargetPoolList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -15328,12 +23432,12 @@ func (c *TargetPoolsListCall) Do() (*TargetPoolList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -15352,6 +23456,7 @@ func (c *TargetPoolsListCall) Do() (*TargetPoolList, error) {
 	//     "$ref": "TargetPoolList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -15462,6 +23567,7 @@ func (c *TargetPoolsRemoveHealthCheckCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -15571,6 +23677,7 @@ func (c *TargetPoolsRemoveInstanceCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -15668,7 +23775,7 @@ func (c *TargetPoolsSetBackupCall) Do() (*Operation, error) {
 	//       "type": "number"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -15697,7 +23804,637 @@ func (c *TargetPoolsSetBackupCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.targetVpnGateways.aggregatedList":
+
+type TargetVpnGatewaysAggregatedListCall struct {
+	s       *Service
+	project string
+	opt_    map[string]interface{}
+}
+
+// AggregatedList: Retrieves the list of target VPN gateways grouped by
+// scope.
+func (r *TargetVpnGatewaysService) AggregatedList(project string) *TargetVpnGatewaysAggregatedListCall {
+	c := &TargetVpnGatewaysAggregatedListCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	return c
+}
+
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
+func (c *TargetVpnGatewaysAggregatedListCall) Filter(filter string) *TargetVpnGatewaysAggregatedListCall {
+	c.opt_["filter"] = filter
+	return c
+}
+
+// MaxResults sets the optional parameter "maxResults": Maximum count of
+// results to be returned.
+func (c *TargetVpnGatewaysAggregatedListCall) MaxResults(maxResults int64) *TargetVpnGatewaysAggregatedListCall {
+	c.opt_["maxResults"] = maxResults
+	return c
+}
+
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
+func (c *TargetVpnGatewaysAggregatedListCall) PageToken(pageToken string) *TargetVpnGatewaysAggregatedListCall {
+	c.opt_["pageToken"] = pageToken
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *TargetVpnGatewaysAggregatedListCall) Fields(s ...googleapi.Field) *TargetVpnGatewaysAggregatedListCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *TargetVpnGatewaysAggregatedListCall) Do() (*TargetVpnGatewayAggregatedList, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["filter"]; ok {
+		params.Set("filter", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["maxResults"]; ok {
+		params.Set("maxResults", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["pageToken"]; ok {
+		params.Set("pageToken", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/aggregated/targetVpnGateways")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *TargetVpnGatewayAggregatedList
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Retrieves the list of target VPN gateways grouped by scope.",
+	//   "httpMethod": "GET",
+	//   "id": "compute.targetVpnGateways.aggregatedList",
+	//   "parameterOrder": [
+	//     "project"
+	//   ],
+	//   "parameters": {
+	//     "filter": {
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "maxResults": {
+	//       "default": "500",
+	//       "description": "Maximum count of results to be returned.",
+	//       "format": "uint32",
+	//       "location": "query",
+	//       "maximum": "500",
+	//       "minimum": "0",
+	//       "type": "integer"
+	//     },
+	//     "pageToken": {
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/aggregated/targetVpnGateways",
+	//   "response": {
+	//     "$ref": "TargetVpnGatewayAggregatedList"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute",
+	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.targetVpnGateways.delete":
+
+type TargetVpnGatewaysDeleteCall struct {
+	s                *Service
+	project          string
+	region           string
+	targetVpnGateway string
+	opt_             map[string]interface{}
+}
+
+// Delete: Deletes the specified TargetVpnGateway resource.
+func (r *TargetVpnGatewaysService) Delete(project string, region string, targetVpnGateway string) *TargetVpnGatewaysDeleteCall {
+	c := &TargetVpnGatewaysDeleteCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.region = region
+	c.targetVpnGateway = targetVpnGateway
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *TargetVpnGatewaysDeleteCall) Fields(s ...googleapi.Field) *TargetVpnGatewaysDeleteCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *TargetVpnGatewaysDeleteCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/regions/{region}/targetVpnGateways/{targetVpnGateway}")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("DELETE", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":          c.project,
+		"region":           c.region,
+		"targetVpnGateway": c.targetVpnGateway,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Deletes the specified TargetVpnGateway resource.",
+	//   "httpMethod": "DELETE",
+	//   "id": "compute.targetVpnGateways.delete",
+	//   "parameterOrder": [
+	//     "project",
+	//     "region",
+	//     "targetVpnGateway"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "region": {
+	//       "description": "The name of the region for this request.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "targetVpnGateway": {
+	//       "description": "Name of the TargetVpnGateway resource to delete.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/regions/{region}/targetVpnGateways/{targetVpnGateway}",
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.targetVpnGateways.get":
+
+type TargetVpnGatewaysGetCall struct {
+	s                *Service
+	project          string
+	region           string
+	targetVpnGateway string
+	opt_             map[string]interface{}
+}
+
+// Get: Returns the specified TargetVpnGateway resource.
+func (r *TargetVpnGatewaysService) Get(project string, region string, targetVpnGateway string) *TargetVpnGatewaysGetCall {
+	c := &TargetVpnGatewaysGetCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.region = region
+	c.targetVpnGateway = targetVpnGateway
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *TargetVpnGatewaysGetCall) Fields(s ...googleapi.Field) *TargetVpnGatewaysGetCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *TargetVpnGatewaysGetCall) Do() (*TargetVpnGateway, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/regions/{region}/targetVpnGateways/{targetVpnGateway}")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":          c.project,
+		"region":           c.region,
+		"targetVpnGateway": c.targetVpnGateway,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *TargetVpnGateway
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Returns the specified TargetVpnGateway resource.",
+	//   "httpMethod": "GET",
+	//   "id": "compute.targetVpnGateways.get",
+	//   "parameterOrder": [
+	//     "project",
+	//     "region",
+	//     "targetVpnGateway"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "region": {
+	//       "description": "The name of the region for this request.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "targetVpnGateway": {
+	//       "description": "Name of the TargetVpnGateway resource to return.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/regions/{region}/targetVpnGateways/{targetVpnGateway}",
+	//   "response": {
+	//     "$ref": "TargetVpnGateway"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute",
+	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.targetVpnGateways.insert":
+
+type TargetVpnGatewaysInsertCall struct {
+	s                *Service
+	project          string
+	region           string
+	targetvpngateway *TargetVpnGateway
+	opt_             map[string]interface{}
+}
+
+// Insert: Creates a TargetVpnGateway resource in the specified project
+// and region using the data included in the request.
+func (r *TargetVpnGatewaysService) Insert(project string, region string, targetvpngateway *TargetVpnGateway) *TargetVpnGatewaysInsertCall {
+	c := &TargetVpnGatewaysInsertCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.region = region
+	c.targetvpngateway = targetvpngateway
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *TargetVpnGatewaysInsertCall) Fields(s ...googleapi.Field) *TargetVpnGatewaysInsertCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *TargetVpnGatewaysInsertCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.targetvpngateway)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/regions/{region}/targetVpnGateways")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+		"region":  c.region,
+	})
+	req.Header.Set("Content-Type", ctype)
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Creates a TargetVpnGateway resource in the specified project and region using the data included in the request.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.targetVpnGateways.insert",
+	//   "parameterOrder": [
+	//     "project",
+	//     "region"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "region": {
+	//       "description": "The name of the region for this request.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/regions/{region}/targetVpnGateways",
+	//   "request": {
+	//     "$ref": "TargetVpnGateway"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.targetVpnGateways.list":
+
+type TargetVpnGatewaysListCall struct {
+	s       *Service
+	project string
+	region  string
+	opt_    map[string]interface{}
+}
+
+// List: Retrieves the list of TargetVpnGateway resources available to
+// the specified project and region.
+func (r *TargetVpnGatewaysService) List(project string, region string) *TargetVpnGatewaysListCall {
+	c := &TargetVpnGatewaysListCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.region = region
+	return c
+}
+
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
+func (c *TargetVpnGatewaysListCall) Filter(filter string) *TargetVpnGatewaysListCall {
+	c.opt_["filter"] = filter
+	return c
+}
+
+// MaxResults sets the optional parameter "maxResults": Maximum count of
+// results to be returned.
+func (c *TargetVpnGatewaysListCall) MaxResults(maxResults int64) *TargetVpnGatewaysListCall {
+	c.opt_["maxResults"] = maxResults
+	return c
+}
+
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
+func (c *TargetVpnGatewaysListCall) PageToken(pageToken string) *TargetVpnGatewaysListCall {
+	c.opt_["pageToken"] = pageToken
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *TargetVpnGatewaysListCall) Fields(s ...googleapi.Field) *TargetVpnGatewaysListCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *TargetVpnGatewaysListCall) Do() (*TargetVpnGatewayList, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["filter"]; ok {
+		params.Set("filter", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["maxResults"]; ok {
+		params.Set("maxResults", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["pageToken"]; ok {
+		params.Set("pageToken", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/regions/{region}/targetVpnGateways")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+		"region":  c.region,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *TargetVpnGatewayList
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Retrieves the list of TargetVpnGateway resources available to the specified project and region.",
+	//   "httpMethod": "GET",
+	//   "id": "compute.targetVpnGateways.list",
+	//   "parameterOrder": [
+	//     "project",
+	//     "region"
+	//   ],
+	//   "parameters": {
+	//     "filter": {
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "maxResults": {
+	//       "default": "500",
+	//       "description": "Maximum count of results to be returned.",
+	//       "format": "uint32",
+	//       "location": "query",
+	//       "maximum": "500",
+	//       "minimum": "0",
+	//       "type": "integer"
+	//     },
+	//     "pageToken": {
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "region": {
+	//       "description": "The name of the region for this request.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/regions/{region}/targetVpnGateways",
+	//   "response": {
+	//     "$ref": "TargetVpnGatewayList"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute",
+	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
 	// }
 
@@ -15766,7 +24503,7 @@ func (c *UrlMapsDeleteCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -15785,6 +24522,7 @@ func (c *UrlMapsDeleteCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -15854,7 +24592,7 @@ func (c *UrlMapsGetCall) Do() (*UrlMap, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -15873,6 +24611,7 @@ func (c *UrlMapsGetCall) Do() (*UrlMap, error) {
 	//     "$ref": "UrlMap"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -15948,7 +24687,7 @@ func (c *UrlMapsInsertCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -15963,6 +24702,7 @@ func (c *UrlMapsInsertCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -15985,24 +24725,51 @@ func (r *UrlMapsService) List(project string) *UrlMapsListCall {
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *UrlMapsListCall) Filter(filter string) *UrlMapsListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *UrlMapsListCall) MaxResults(maxResults int64) *UrlMapsListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *UrlMapsListCall) PageToken(pageToken string) *UrlMapsListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -16061,13 +24828,13 @@ func (c *UrlMapsListCall) Do() (*UrlMapList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -16075,12 +24842,12 @@ func (c *UrlMapsListCall) Do() (*UrlMapList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -16092,6 +24859,7 @@ func (c *UrlMapsListCall) Do() (*UrlMapList, error) {
 	//     "$ref": "UrlMapList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -16171,7 +24939,7 @@ func (c *UrlMapsPatchCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -16193,6 +24961,7 @@ func (c *UrlMapsPatchCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -16270,7 +25039,7 @@ func (c *UrlMapsUpdateCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -16292,6 +25061,7 @@ func (c *UrlMapsUpdateCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -16371,7 +25141,7 @@ func (c *UrlMapsValidateCall) Do() (*UrlMapsValidateResponse, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -16393,7 +25163,636 @@ func (c *UrlMapsValidateCall) Do() (*UrlMapsValidateResponse, error) {
 	//     "$ref": "UrlMapsValidateResponse"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.vpnTunnels.aggregatedList":
+
+type VpnTunnelsAggregatedListCall struct {
+	s       *Service
+	project string
+	opt_    map[string]interface{}
+}
+
+// AggregatedList: Retrieves the list of VPN tunnels grouped by scope.
+func (r *VpnTunnelsService) AggregatedList(project string) *VpnTunnelsAggregatedListCall {
+	c := &VpnTunnelsAggregatedListCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	return c
+}
+
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
+func (c *VpnTunnelsAggregatedListCall) Filter(filter string) *VpnTunnelsAggregatedListCall {
+	c.opt_["filter"] = filter
+	return c
+}
+
+// MaxResults sets the optional parameter "maxResults": Maximum count of
+// results to be returned.
+func (c *VpnTunnelsAggregatedListCall) MaxResults(maxResults int64) *VpnTunnelsAggregatedListCall {
+	c.opt_["maxResults"] = maxResults
+	return c
+}
+
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
+func (c *VpnTunnelsAggregatedListCall) PageToken(pageToken string) *VpnTunnelsAggregatedListCall {
+	c.opt_["pageToken"] = pageToken
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *VpnTunnelsAggregatedListCall) Fields(s ...googleapi.Field) *VpnTunnelsAggregatedListCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *VpnTunnelsAggregatedListCall) Do() (*VpnTunnelAggregatedList, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["filter"]; ok {
+		params.Set("filter", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["maxResults"]; ok {
+		params.Set("maxResults", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["pageToken"]; ok {
+		params.Set("pageToken", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/aggregated/vpnTunnels")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *VpnTunnelAggregatedList
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Retrieves the list of VPN tunnels grouped by scope.",
+	//   "httpMethod": "GET",
+	//   "id": "compute.vpnTunnels.aggregatedList",
+	//   "parameterOrder": [
+	//     "project"
+	//   ],
+	//   "parameters": {
+	//     "filter": {
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "maxResults": {
+	//       "default": "500",
+	//       "description": "Maximum count of results to be returned.",
+	//       "format": "uint32",
+	//       "location": "query",
+	//       "maximum": "500",
+	//       "minimum": "0",
+	//       "type": "integer"
+	//     },
+	//     "pageToken": {
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/aggregated/vpnTunnels",
+	//   "response": {
+	//     "$ref": "VpnTunnelAggregatedList"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute",
+	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.vpnTunnels.delete":
+
+type VpnTunnelsDeleteCall struct {
+	s         *Service
+	project   string
+	region    string
+	vpnTunnel string
+	opt_      map[string]interface{}
+}
+
+// Delete: Deletes the specified VpnTunnel resource.
+func (r *VpnTunnelsService) Delete(project string, region string, vpnTunnel string) *VpnTunnelsDeleteCall {
+	c := &VpnTunnelsDeleteCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.region = region
+	c.vpnTunnel = vpnTunnel
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *VpnTunnelsDeleteCall) Fields(s ...googleapi.Field) *VpnTunnelsDeleteCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *VpnTunnelsDeleteCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/regions/{region}/vpnTunnels/{vpnTunnel}")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("DELETE", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":   c.project,
+		"region":    c.region,
+		"vpnTunnel": c.vpnTunnel,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Deletes the specified VpnTunnel resource.",
+	//   "httpMethod": "DELETE",
+	//   "id": "compute.vpnTunnels.delete",
+	//   "parameterOrder": [
+	//     "project",
+	//     "region",
+	//     "vpnTunnel"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "region": {
+	//       "description": "The name of the region for this request.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "vpnTunnel": {
+	//       "description": "Name of the VpnTunnel resource to delete.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/regions/{region}/vpnTunnels/{vpnTunnel}",
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.vpnTunnels.get":
+
+type VpnTunnelsGetCall struct {
+	s         *Service
+	project   string
+	region    string
+	vpnTunnel string
+	opt_      map[string]interface{}
+}
+
+// Get: Returns the specified VpnTunnel resource.
+func (r *VpnTunnelsService) Get(project string, region string, vpnTunnel string) *VpnTunnelsGetCall {
+	c := &VpnTunnelsGetCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.region = region
+	c.vpnTunnel = vpnTunnel
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *VpnTunnelsGetCall) Fields(s ...googleapi.Field) *VpnTunnelsGetCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *VpnTunnelsGetCall) Do() (*VpnTunnel, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/regions/{region}/vpnTunnels/{vpnTunnel}")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project":   c.project,
+		"region":    c.region,
+		"vpnTunnel": c.vpnTunnel,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *VpnTunnel
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Returns the specified VpnTunnel resource.",
+	//   "httpMethod": "GET",
+	//   "id": "compute.vpnTunnels.get",
+	//   "parameterOrder": [
+	//     "project",
+	//     "region",
+	//     "vpnTunnel"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "region": {
+	//       "description": "The name of the region for this request.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "vpnTunnel": {
+	//       "description": "Name of the VpnTunnel resource to return.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/regions/{region}/vpnTunnels/{vpnTunnel}",
+	//   "response": {
+	//     "$ref": "VpnTunnel"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute",
+	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.vpnTunnels.insert":
+
+type VpnTunnelsInsertCall struct {
+	s         *Service
+	project   string
+	region    string
+	vpntunnel *VpnTunnel
+	opt_      map[string]interface{}
+}
+
+// Insert: Creates a VpnTunnel resource in the specified project and
+// region using the data included in the request.
+func (r *VpnTunnelsService) Insert(project string, region string, vpntunnel *VpnTunnel) *VpnTunnelsInsertCall {
+	c := &VpnTunnelsInsertCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.region = region
+	c.vpntunnel = vpntunnel
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *VpnTunnelsInsertCall) Fields(s ...googleapi.Field) *VpnTunnelsInsertCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *VpnTunnelsInsertCall) Do() (*Operation, error) {
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.vpntunnel)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/regions/{region}/vpnTunnels")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+		"region":  c.region,
+	})
+	req.Header.Set("Content-Type", ctype)
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *Operation
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Creates a VpnTunnel resource in the specified project and region using the data included in the request.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.vpnTunnels.insert",
+	//   "parameterOrder": [
+	//     "project",
+	//     "region"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "region": {
+	//       "description": "The name of the region for this request.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/regions/{region}/vpnTunnels",
+	//   "request": {
+	//     "$ref": "VpnTunnel"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.vpnTunnels.list":
+
+type VpnTunnelsListCall struct {
+	s       *Service
+	project string
+	region  string
+	opt_    map[string]interface{}
+}
+
+// List: Retrieves the list of VpnTunnel resources contained in the
+// specified project and region.
+func (r *VpnTunnelsService) List(project string, region string) *VpnTunnelsListCall {
+	c := &VpnTunnelsListCall{s: r.s, opt_: make(map[string]interface{})}
+	c.project = project
+	c.region = region
+	return c
+}
+
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
+func (c *VpnTunnelsListCall) Filter(filter string) *VpnTunnelsListCall {
+	c.opt_["filter"] = filter
+	return c
+}
+
+// MaxResults sets the optional parameter "maxResults": Maximum count of
+// results to be returned.
+func (c *VpnTunnelsListCall) MaxResults(maxResults int64) *VpnTunnelsListCall {
+	c.opt_["maxResults"] = maxResults
+	return c
+}
+
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
+func (c *VpnTunnelsListCall) PageToken(pageToken string) *VpnTunnelsListCall {
+	c.opt_["pageToken"] = pageToken
+	return c
+}
+
+// Fields allows partial responses to be retrieved.
+// See https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *VpnTunnelsListCall) Fields(s ...googleapi.Field) *VpnTunnelsListCall {
+	c.opt_["fields"] = googleapi.CombineFields(s)
+	return c
+}
+
+func (c *VpnTunnelsListCall) Do() (*VpnTunnelList, error) {
+	var body io.Reader = nil
+	params := make(url.Values)
+	params.Set("alt", "json")
+	if v, ok := c.opt_["filter"]; ok {
+		params.Set("filter", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["maxResults"]; ok {
+		params.Set("maxResults", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["pageToken"]; ok {
+		params.Set("pageToken", fmt.Sprintf("%v", v))
+	}
+	if v, ok := c.opt_["fields"]; ok {
+		params.Set("fields", fmt.Sprintf("%v", v))
+	}
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/regions/{region}/vpnTunnels")
+	urls += "?" + params.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+		"region":  c.region,
+	})
+	req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	res, err := c.s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	var ret *VpnTunnelList
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Retrieves the list of VpnTunnel resources contained in the specified project and region.",
+	//   "httpMethod": "GET",
+	//   "id": "compute.vpnTunnels.list",
+	//   "parameterOrder": [
+	//     "project",
+	//     "region"
+	//   ],
+	//   "parameters": {
+	//     "filter": {
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "maxResults": {
+	//       "default": "500",
+	//       "description": "Maximum count of results to be returned.",
+	//       "format": "uint32",
+	//       "location": "query",
+	//       "maximum": "500",
+	//       "minimum": "0",
+	//       "type": "integer"
+	//     },
+	//     "pageToken": {
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "region": {
+	//       "description": "The name of the region for this request.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/regions/{region}/vpnTunnels",
+	//   "response": {
+	//     "$ref": "VpnTunnelList"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute",
+	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
 	// }
 
@@ -16409,7 +25808,7 @@ type ZoneOperationsDeleteCall struct {
 	opt_      map[string]interface{}
 }
 
-// Delete: Deletes the specified zone-specific operation resource.
+// Delete: Deletes the specified zone-specific Operations resource.
 func (r *ZoneOperationsService) Delete(project string, zone string, operation string) *ZoneOperationsDeleteCall {
 	c := &ZoneOperationsDeleteCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
@@ -16452,7 +25851,7 @@ func (c *ZoneOperationsDeleteCall) Do() error {
 	}
 	return nil
 	// {
-	//   "description": "Deletes the specified zone-specific operation resource.",
+	//   "description": "Deletes the specified zone-specific Operations resource.",
 	//   "httpMethod": "DELETE",
 	//   "id": "compute.zoneOperations.delete",
 	//   "parameterOrder": [
@@ -16462,14 +25861,14 @@ func (c *ZoneOperationsDeleteCall) Do() error {
 	//   ],
 	//   "parameters": {
 	//     "operation": {
-	//       "description": "Name of the operation resource to delete.",
+	//       "description": "Name of the Operations resource to delete.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -16485,6 +25884,7 @@ func (c *ZoneOperationsDeleteCall) Do() error {
 	//   },
 	//   "path": "{project}/zones/{zone}/operations/{operation}",
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
@@ -16501,7 +25901,7 @@ type ZoneOperationsGetCall struct {
 	opt_      map[string]interface{}
 }
 
-// Get: Retrieves the specified zone-specific operation resource.
+// Get: Retrieves the specified zone-specific Operations resource.
 func (r *ZoneOperationsService) Get(project string, zone string, operation string) *ZoneOperationsGetCall {
 	c := &ZoneOperationsGetCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
@@ -16548,7 +25948,7 @@ func (c *ZoneOperationsGetCall) Do() (*Operation, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Retrieves the specified zone-specific operation resource.",
+	//   "description": "Retrieves the specified zone-specific Operations resource.",
 	//   "httpMethod": "GET",
 	//   "id": "compute.zoneOperations.get",
 	//   "parameterOrder": [
@@ -16558,14 +25958,14 @@ func (c *ZoneOperationsGetCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "operation": {
-	//       "description": "Name of the operation resource to return.",
+	//       "description": "Name of the Operations resource to return.",
 	//       "location": "path",
 	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -16584,6 +25984,7 @@ func (c *ZoneOperationsGetCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -16600,7 +26001,7 @@ type ZoneOperationsListCall struct {
 	opt_    map[string]interface{}
 }
 
-// List: Retrieves the list of operation resources contained within the
+// List: Retrieves the list of Operation resources contained within the
 // specified zone.
 func (r *ZoneOperationsService) List(project string, zone string) *ZoneOperationsListCall {
 	c := &ZoneOperationsListCall{s: r.s, opt_: make(map[string]interface{})}
@@ -16609,24 +26010,51 @@ func (r *ZoneOperationsService) List(project string, zone string) *ZoneOperation
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *ZoneOperationsListCall) Filter(filter string) *ZoneOperationsListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *ZoneOperationsListCall) MaxResults(maxResults int64) *ZoneOperationsListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *ZoneOperationsListCall) PageToken(pageToken string) *ZoneOperationsListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -16678,7 +26106,7 @@ func (c *ZoneOperationsListCall) Do() (*OperationList, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Retrieves the list of operation resources contained within the specified zone.",
+	//   "description": "Retrieves the list of Operation resources contained within the specified zone.",
 	//   "httpMethod": "GET",
 	//   "id": "compute.zoneOperations.list",
 	//   "parameterOrder": [
@@ -16687,13 +26115,13 @@ func (c *ZoneOperationsListCall) Do() (*OperationList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -16701,12 +26129,12 @@ func (c *ZoneOperationsListCall) Do() (*OperationList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -16725,6 +26153,7 @@ func (c *ZoneOperationsListCall) Do() (*OperationList, error) {
 	//     "$ref": "OperationList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -16795,7 +26224,7 @@ func (c *ZonesGetCall) Do() (*Zone, error) {
 	//   ],
 	//   "parameters": {
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -16814,6 +26243,7 @@ func (c *ZonesGetCall) Do() (*Zone, error) {
 	//     "$ref": "Zone"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]
@@ -16837,24 +26267,51 @@ func (r *ZonesService) List(project string) *ZonesListCall {
 	return c
 }
 
-// Filter sets the optional parameter "filter": Filter expression for
-// filtering listed resources.
+// Filter sets the optional parameter "filter": Sets a filter expression
+// for filtering listed resources, in the form filter={expression}. Your
+// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
+// LITERAL_STRING.
+//
+// The FIELD_NAME is the name of the field you want to
+// compare. Only atomic field types are supported (string, number,
+// boolean). The COMPARISON_STRING must be either eq (equals) or ne (not
+// equals). The LITERAL_STRING is the string value to filter to. The
+// literal value must be valid for the type of field (string, number,
+// boolean). For string fields, the literal value is interpreted as a
+// regular expression using RE2 syntax. The literal value must match the
+// entire field.
+//
+// For example, filter=name ne example-instance.
+//
+// Compute
+// Engine Beta API Only: If you use filtering in the Beta API, you can
+// also filter on nested fields. For example, you could filter on
+// instances whose scheduling.automaticRestart eq true. In particular,
+// use filtering on nested fields to take advantage of instance labels
+// to organize and filter results based on label values.
+//
+// The Beta API
+// also supports filtering on multiple expressions by providing each
+// separate expression within parentheses. For example,
+// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
+// Multiple expressions are treated as AND expressions meaning that
+// resources must match all expressions to pass the filters.
 func (c *ZonesListCall) Filter(filter string) *ZonesListCall {
 	c.opt_["filter"] = filter
 	return c
 }
 
 // MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned. Maximum value is 500 and default value is
-// 500.
+// results to be returned.
 func (c *ZonesListCall) MaxResults(maxResults int64) *ZonesListCall {
 	c.opt_["maxResults"] = maxResults
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": Tag returned by a
-// previous list request truncated by maxResults. Used to continue a
-// previous list request.
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Use this parameter if you want to list the next page of
+// results. Set pageToken to the nextPageToken returned by a previous
+// list request.
 func (c *ZonesListCall) PageToken(pageToken string) *ZonesListCall {
 	c.opt_["pageToken"] = pageToken
 	return c
@@ -16913,13 +26370,13 @@ func (c *ZonesListCall) Do() (*ZoneList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "description": "Maximum count of results to be returned.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -16927,12 +26384,12 @@ func (c *ZonesListCall) Do() (*ZoneList, error) {
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "project": {
-	//       "description": "Name of the project scoping this request.",
+	//       "description": "Project ID for this request.",
 	//       "location": "path",
 	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
@@ -16944,6 +26401,7 @@ func (c *ZonesListCall) Do() (*ZoneList, error) {
 	//     "$ref": "ZoneList"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
 	//   ]

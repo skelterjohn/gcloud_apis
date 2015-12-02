@@ -31,6 +31,7 @@ import (
 var _ = fmt.Println
 var _ = io.Copy
 var _ = os.Stdin
+var _ = strings.Split
 
 func Dns_v1beta1_ChangesCreate(context Context, args ...string) error {
 
@@ -78,13 +79,19 @@ func Dns_v1beta1_ChangesCreate(context Context, args ...string) error {
 		"project",
 		"managedZone",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_managedZone := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_managedZone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Create(param_project, param_managedZone,
 		request,
@@ -129,14 +136,23 @@ func Dns_v1beta1_ChangesGet(context Context, args ...string) error {
 		"managedZone",
 		"changeId",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_managedZone := paramValues[1]
-	param_changeId := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_managedZone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_changeId, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_managedZone, param_changeId)
 
@@ -204,13 +220,19 @@ func Dns_v1beta1_ChangesList(context Context, args ...string) error {
 		"project",
 		"managedZone",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_managedZone := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_managedZone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project, param_managedZone)
 
@@ -303,12 +325,15 @@ func Dns_v1beta1_ManagedZonesCreate(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.Create(param_project,
 		request,
@@ -352,13 +377,19 @@ func Dns_v1beta1_ManagedZonesDelete(context Context, args ...string) error {
 		"project",
 		"managedZone",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_managedZone := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_managedZone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_project, param_managedZone)
 
@@ -394,13 +425,19 @@ func Dns_v1beta1_ManagedZonesGet(context Context, args ...string) error {
 		"project",
 		"managedZone",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_managedZone := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_managedZone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_managedZone)
 
@@ -423,6 +460,8 @@ func Dns_v1beta1_ManagedZonesList(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
+		usageBits += " [--dnsName=VALUE]"
+
 		usageBits += " [--maxResults=VALUE]"
 
 		usageBits += " [--pageToken=VALUE]"
@@ -438,6 +477,7 @@ func Dns_v1beta1_ManagedZonesList(context Context, args ...string) error {
 	service := api_client.NewManagedZonesService(api_service)
 
 	queryParamNames := map[string]bool{
+		"dnsName":    false,
 		"maxResults": false,
 		"pageToken":  false,
 	}
@@ -461,16 +501,26 @@ func Dns_v1beta1_ManagedZonesList(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project)
 
 	// Set query parameters.
+	if value, ok := flagValues["dnsName"]; ok {
+		query_dnsName, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.DnsName(query_dnsName)
+	}
 	if value, ok := flagValues["maxResults"]; ok {
 		query_maxResults, err := commands_util.ConvertValue_int64(value)
 		if err != nil {
@@ -523,12 +573,15 @@ func Dns_v1beta1_ProjectsGet(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project)
 
@@ -596,13 +649,19 @@ func Dns_v1beta1_ResourceRecordSetsList(context Context, args ...string) error {
 		"project",
 		"managedZone",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_managedZone := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_managedZone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project, param_managedZone)
 

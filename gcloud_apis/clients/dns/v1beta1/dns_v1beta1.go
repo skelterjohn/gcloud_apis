@@ -44,6 +44,9 @@ const (
 	// View and manage your data across Google Cloud Platform services
 	CloudPlatformScope = "https://www.googleapis.com/auth/cloud-platform"
 
+	// View your data across Google Cloud Platform services
+	CloudPlatformReadOnlyScope = "https://www.googleapis.com/auth/cloud-platform.read-only"
+
 	// View your DNS records hosted by Google Cloud DNS
 	NdevClouddnsReadonlyScope = "https://www.googleapis.com/auth/ndev.clouddns.readonly"
 
@@ -132,8 +135,7 @@ type Change struct {
 	// This is in RFC3339 text format.
 	StartTime string `json:"startTime,omitempty"`
 
-	// Status: Status of the operation. Can be one of the following:
-	// "PENDING" or "DONE" (output only).
+	// Status: Status of the operation (output only).
 	Status string `json:"status,omitempty"`
 }
 
@@ -163,8 +165,9 @@ type ManagedZone struct {
 	// This is in RFC3339 text format. Output only.
 	CreationTime string `json:"creationTime,omitempty"`
 
-	// Description: A string to associate with this resource for the user's
-	// convenience. Has no effect on the managed zone's function.
+	// Description: A mutable string of at most 1024 characters associated
+	// with this resource for the user's convenience. Has no effect on the
+	// managed zone's function.
 	Description string `json:"description,omitempty"`
 
 	// DnsName: The DNS name of this managed zone, for instance
@@ -180,8 +183,15 @@ type ManagedZone struct {
 	Kind string `json:"kind,omitempty"`
 
 	// Name: User assigned name for this resource. Must be unique within the
-	// project.
+	// project. The name must be 1-32 characters long, must begin with a
+	// letter, end with a letter or digit, and only contain lowercase
+	// letters, digits or dashes.
 	Name string `json:"name,omitempty"`
+
+	// NameServerSet: Optionally specifies the NameServerSet for this
+	// ManagedZone. A NameServerSet is a set of DNS name servers that all
+	// host the same ManagedZones. Most users will leave this field unset.
+	NameServerSet string `json:"nameServerSet,omitempty"`
 
 	// NameServers: Delegate your managed_zone to these virtual name
 	// servers; defined by the server (output only)
@@ -264,14 +274,15 @@ type ResourceRecordSet struct {
 	Name string `json:"name,omitempty"`
 
 	// Rrdatas: As defined in RFC 1035 (section 5) and RFC 1034 (section
-	// 3.6.1)
+	// 3.6.1).
 	Rrdatas []string `json:"rrdatas,omitempty"`
 
 	// Ttl: Number of seconds that this ResourceRecordSet can be cached by
 	// resolvers.
 	Ttl int64 `json:"ttl,omitempty"`
 
-	// Type: One of A, AAAA, SOA, MX, NS, TXT
+	// Type: The identifier of a supported record type, for example, A,
+	// AAAA, MX, TXT, and so on.
 	Type string `json:"type,omitempty"`
 }
 
@@ -486,6 +497,7 @@ func (c *ChangesGetCall) Do() (*Change, error) {
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only",
 	//     "https://www.googleapis.com/auth/ndev.clouddns.readonly",
 	//     "https://www.googleapis.com/auth/ndev.clouddns.readwrite"
 	//   ]
@@ -644,6 +656,7 @@ func (c *ChangesListCall) Do() (*ChangesListResponse, error) {
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only",
 	//     "https://www.googleapis.com/auth/ndev.clouddns.readonly",
 	//     "https://www.googleapis.com/auth/ndev.clouddns.readwrite"
 	//   ]
@@ -900,6 +913,7 @@ func (c *ManagedZonesGetCall) Do() (*ManagedZone, error) {
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only",
 	//     "https://www.googleapis.com/auth/ndev.clouddns.readonly",
 	//     "https://www.googleapis.com/auth/ndev.clouddns.readwrite"
 	//   ]
@@ -920,6 +934,13 @@ type ManagedZonesListCall struct {
 func (r *ManagedZonesService) List(project string) *ManagedZonesListCall {
 	c := &ManagedZonesListCall{s: r.s, opt_: make(map[string]interface{})}
 	c.project = project
+	return c
+}
+
+// DnsName sets the optional parameter "dnsName": Restricts the list to
+// return only zones with this domain name.
+func (c *ManagedZonesListCall) DnsName(dnsName string) *ManagedZonesListCall {
+	c.opt_["dnsName"] = dnsName
 	return c
 }
 
@@ -951,6 +972,9 @@ func (c *ManagedZonesListCall) Do() (*ManagedZonesListResponse, error) {
 	var body io.Reader = nil
 	params := make(url.Values)
 	params.Set("alt", "json")
+	if v, ok := c.opt_["dnsName"]; ok {
+		params.Set("dnsName", fmt.Sprintf("%v", v))
+	}
 	if v, ok := c.opt_["maxResults"]; ok {
 		params.Set("maxResults", fmt.Sprintf("%v", v))
 	}
@@ -988,6 +1012,11 @@ func (c *ManagedZonesListCall) Do() (*ManagedZonesListResponse, error) {
 	//     "project"
 	//   ],
 	//   "parameters": {
+	//     "dnsName": {
+	//       "description": "Restricts the list to return only zones with this domain name.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
 	//     "maxResults": {
 	//       "description": "Optional. Maximum number of results to be returned. If unspecified, the server will decide how many results to return.",
 	//       "format": "int32",
@@ -1012,6 +1041,7 @@ func (c *ManagedZonesListCall) Do() (*ManagedZonesListResponse, error) {
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only",
 	//     "https://www.googleapis.com/auth/ndev.clouddns.readonly",
 	//     "https://www.googleapis.com/auth/ndev.clouddns.readwrite"
 	//   ]
@@ -1090,6 +1120,7 @@ func (c *ProjectsGetCall) Do() (*Project, error) {
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only",
 	//     "https://www.googleapis.com/auth/ndev.clouddns.readonly",
 	//     "https://www.googleapis.com/auth/ndev.clouddns.readwrite"
 	//   ]
@@ -1243,6 +1274,7 @@ func (c *ResourceRecordSetsListCall) Do() (*ResourceRecordSetsListResponse, erro
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only",
 	//     "https://www.googleapis.com/auth/ndev.clouddns.readonly",
 	//     "https://www.googleapis.com/auth/ndev.clouddns.readwrite"
 	//   ]

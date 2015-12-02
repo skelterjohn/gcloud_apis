@@ -31,6 +31,7 @@ import (
 var _ = fmt.Println
 var _ = io.Copy
 var _ = os.Stdin
+var _ = strings.Split
 
 func Manager_v1beta2_DeploymentsDelete(context Context, args ...string) error {
 
@@ -57,14 +58,23 @@ func Manager_v1beta2_DeploymentsDelete(context Context, args ...string) error {
 		"region",
 		"deploymentName",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
-	param_region := paramValues[1]
-	param_deploymentName := paramValues[2]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_deploymentName, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_projectId, param_region, param_deploymentName)
 
@@ -101,14 +111,23 @@ func Manager_v1beta2_DeploymentsGet(context Context, args ...string) error {
 		"region",
 		"deploymentName",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
-	param_region := paramValues[1]
-	param_deploymentName := paramValues[2]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_deploymentName, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_projectId, param_region, param_deploymentName)
 
@@ -172,13 +191,19 @@ func Manager_v1beta2_DeploymentsInsert(context Context, args ...string) error {
 		"projectId",
 		"region",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
-	param_region := paramValues[1]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_projectId, param_region,
 		request,
@@ -242,13 +267,19 @@ func Manager_v1beta2_DeploymentsList(context Context, args ...string) error {
 		"projectId",
 		"region",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
-	param_region := paramValues[1]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_projectId, param_region)
 
@@ -306,13 +337,19 @@ func Manager_v1beta2_TemplatesDelete(context Context, args ...string) error {
 		"projectId",
 		"templateName",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
-	param_templateName := paramValues[1]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_templateName, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_projectId, param_templateName)
 
@@ -348,13 +385,19 @@ func Manager_v1beta2_TemplatesGet(context Context, args ...string) error {
 		"projectId",
 		"templateName",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
-	param_templateName := paramValues[1]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_templateName, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_projectId, param_templateName)
 
@@ -417,12 +460,15 @@ func Manager_v1beta2_TemplatesInsert(context Context, args ...string) error {
 	expectedParams := []string{
 		"projectId",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_projectId,
 		request,
@@ -485,12 +531,15 @@ func Manager_v1beta2_TemplatesList(context Context, args ...string) error {
 	expectedParams := []string{
 		"projectId",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_projectId)
 

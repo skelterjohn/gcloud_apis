@@ -31,6 +31,7 @@ import (
 var _ = fmt.Println
 var _ = io.Copy
 var _ = os.Stdin
+var _ = strings.Split
 
 func Replicapool_v1beta1_PoolsDelete(context Context, args ...string) error {
 
@@ -79,14 +80,23 @@ func Replicapool_v1beta1_PoolsDelete(context Context, args ...string) error {
 		"zone",
 		"poolName",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectName := paramValues[0]
-	param_zone := paramValues[1]
-	param_poolName := paramValues[2]
+	param_projectName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_poolName, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_projectName, param_zone, param_poolName,
 		request,
@@ -125,14 +135,23 @@ func Replicapool_v1beta1_PoolsGet(context Context, args ...string) error {
 		"zone",
 		"poolName",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectName := paramValues[0]
-	param_zone := paramValues[1]
-	param_poolName := paramValues[2]
+	param_projectName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_poolName, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_projectName, param_zone, param_poolName)
 
@@ -196,13 +215,19 @@ func Replicapool_v1beta1_PoolsInsert(context Context, args ...string) error {
 		"projectName",
 		"zone",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectName := paramValues[0]
-	param_zone := paramValues[1]
+	param_projectName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_projectName, param_zone,
 		request,
@@ -266,13 +291,19 @@ func Replicapool_v1beta1_PoolsList(context Context, args ...string) error {
 		"projectName",
 		"zone",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectName := paramValues[0]
-	param_zone := paramValues[1]
+	param_projectName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_projectName, param_zone)
 
@@ -348,14 +379,23 @@ func Replicapool_v1beta1_PoolsResize(context Context, args ...string) error {
 		"zone",
 		"poolName",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectName := paramValues[0]
-	param_zone := paramValues[1]
-	param_poolName := paramValues[2]
+	param_projectName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_poolName, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Resize(param_projectName, param_zone, param_poolName)
 
@@ -429,14 +469,23 @@ func Replicapool_v1beta1_PoolsUpdatetemplate(context Context, args ...string) er
 		"zone",
 		"poolName",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectName := paramValues[0]
-	param_zone := paramValues[1]
-	param_poolName := paramValues[2]
+	param_projectName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_poolName, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Updatetemplate(param_projectName, param_zone, param_poolName,
 		request,
@@ -498,15 +547,27 @@ func Replicapool_v1beta1_ReplicasDelete(context Context, args ...string) error {
 		"poolName",
 		"replicaName",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectName := paramValues[0]
-	param_zone := paramValues[1]
-	param_poolName := paramValues[2]
-	param_replicaName := paramValues[3]
+	param_projectName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_poolName, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+	param_replicaName, err := commands_util.ConvertValue_string(paramValues[3])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_projectName, param_zone, param_poolName, param_replicaName,
 		request,
@@ -552,15 +613,27 @@ func Replicapool_v1beta1_ReplicasGet(context Context, args ...string) error {
 		"poolName",
 		"replicaName",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectName := paramValues[0]
-	param_zone := paramValues[1]
-	param_poolName := paramValues[2]
-	param_replicaName := paramValues[3]
+	param_projectName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_poolName, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+	param_replicaName, err := commands_util.ConvertValue_string(paramValues[3])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_projectName, param_zone, param_poolName, param_replicaName)
 
@@ -623,14 +696,23 @@ func Replicapool_v1beta1_ReplicasList(context Context, args ...string) error {
 		"zone",
 		"poolName",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectName := paramValues[0]
-	param_zone := paramValues[1]
-	param_poolName := paramValues[2]
+	param_projectName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_poolName, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_projectName, param_zone, param_poolName)
 
@@ -690,15 +772,27 @@ func Replicapool_v1beta1_ReplicasRestart(context Context, args ...string) error 
 		"poolName",
 		"replicaName",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectName := paramValues[0]
-	param_zone := paramValues[1]
-	param_poolName := paramValues[2]
-	param_replicaName := paramValues[3]
+	param_projectName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_poolName, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+	param_replicaName, err := commands_util.ConvertValue_string(paramValues[3])
+	if err != nil {
+		return err
+	}
 
 	call := service.Restart(param_projectName, param_zone, param_poolName, param_replicaName)
 

@@ -1,6 +1,6 @@
 // Package sqladmin provides access to the Cloud SQL Administration API.
 //
-// See https://developers.google.com/cloud-sql/docs/admin-api/
+// See https://cloud.google.com/sql/docs/reference/latest
 //
 // Usage example:
 //
@@ -234,24 +234,13 @@ type DatabaseFlags struct {
 	// Name: The name of the flag. These flags are passed at instance
 	// startup, so include both MySQL server options and MySQL system
 	// variables. Flags should be specified with underscores, not hyphens.
-	// Refer to the official MySQL documentation on server options and
-	// system variables for descriptions of what these flags do. Acceptable
-	// values are:  character_set_server utf8 or utf8mb4 event_scheduler on
-	// or off (Note: The event scheduler will only work reliably if the
-	// instance activationPolicy is set to ALWAYS) general_log on or off
-	// group_concat_max_len 4..17179869184 innodb_flush_log_at_trx_commit
-	// 0..2 innodb_lock_wait_timeout 1..1073741824
-	// log_bin_trust_function_creators on or off log_output Can be either
-	// TABLE or NONE, FILE is not supported log_queries_not_using_indexes on
-	// or off long_query_time 0..30000000 lower_case_table_names 0..2
-	// max_allowed_packet 16384..1073741824 read_only on or off
-	// skip_show_database on or off slow_query_log on or off. If set to on,
-	// you must also set the log_output flag to TABLE to receive logs.
-	// wait_timeout 1..31536000
+	// For more information, see Configuring MySQL Flags in the Google Cloud
+	// SQL documentation, as well as the official MySQL documentation for
+	// server options and system variables.
 	Name string `json:"name,omitempty"`
 
-	// Value: The value of the flag. Booleans should be set using 1 for
-	// true, and 0 for false. This field must be omitted if the flag doesn't
+	// Value: The value of the flag. Booleans should be set to on for true
+	// and off for false. This field must be omitted if the flag doesn't
 	// take a value.
 	Value string `json:"value,omitempty"`
 }
@@ -300,9 +289,9 @@ type DatabaseInstance struct {
 	// instance. The Google apps domain is prefixed if applicable.
 	Project string `json:"project,omitempty"`
 
-	// Region: The geographical region. Can be us-east1, us-central,
-	// asia-east1 or europe-west1. Defaults to us-central. The region can
-	// not be changed after instance creation.
+	// Region: The geographical region. Can be us-central, asia-east1 or
+	// europe-west1. Defaults to us-central. The region can not be changed
+	// after instance creation.
 	Region string `json:"region,omitempty"`
 
 	// ReplicaNames: The replicas of the instance.
@@ -310,6 +299,10 @@ type DatabaseInstance struct {
 
 	// ServerCaCert: SSL configuration.
 	ServerCaCert *SslCert `json:"serverCaCert,omitempty"`
+
+	// ServiceAccountEmailAddress: The service account email address
+	// assigned to the instance.
+	ServiceAccountEmailAddress string `json:"serviceAccountEmailAddress,omitempty"`
 
 	// Settings: The user settings.
 	Settings *Settings `json:"settings,omitempty"`
@@ -921,6 +914,7 @@ func (c *BackupRunsGetCall) Do() (*BackupRun, error) {
 	//     "$ref": "BackupRun"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/sqlservice.admin"
 	//   ]
 	// }
@@ -1049,6 +1043,7 @@ func (c *BackupRunsListCall) Do() (*BackupRunsListResponse, error) {
 	//     "$ref": "BackupRunsListResponse"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/sqlservice.admin"
 	//   ]
 	// }
@@ -1111,6 +1106,7 @@ func (c *FlagsListCall) Do() (*FlagsListResponse, error) {
 	//     "$ref": "FlagsListResponse"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/sqlservice.admin"
 	//   ]
 	// }
@@ -1198,6 +1194,7 @@ func (c *InstancesCloneCall) Do() (*InstancesCloneResponse, error) {
 	//     "$ref": "InstancesCloneResponse"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/sqlservice.admin"
 	//   ]
 	// }
@@ -1284,6 +1281,7 @@ func (c *InstancesDeleteCall) Do() (*InstancesDeleteResponse, error) {
 	//     "$ref": "InstancesDeleteResponse"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/sqlservice.admin"
 	//   ]
 	// }
@@ -1468,6 +1466,7 @@ func (c *InstancesGetCall) Do() (*DatabaseInstance, error) {
 	//     "$ref": "DatabaseInstance"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/sqlservice.admin"
 	//   ]
 	// }
@@ -1653,6 +1652,7 @@ func (c *InstancesInsertCall) Do() (*InstancesInsertResponse, error) {
 	//     "$ref": "InstancesInsertResponse"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/sqlservice.admin"
 	//   ]
 	// }
@@ -1762,6 +1762,7 @@ func (c *InstancesListCall) Do() (*InstancesListResponse, error) {
 	//     "$ref": "InstancesListResponse"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/sqlservice.admin"
 	//   ]
 	// }
@@ -1860,6 +1861,7 @@ func (c *InstancesPatchCall) Do() (*InstancesUpdateResponse, error) {
 	//     "$ref": "InstancesUpdateResponse"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/sqlservice.admin"
 	//   ]
 	// }
@@ -1947,6 +1949,7 @@ func (c *InstancesPromoteReplicaCall) Do() (*InstancesPromoteReplicaResponse, er
 	//     "$ref": "InstancesPromoteReplicaResponse"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/sqlservice.admin"
 	//   ]
 	// }
@@ -2034,6 +2037,7 @@ func (c *InstancesResetSslConfigCall) Do() (*InstancesResetSslConfigResponse, er
 	//     "$ref": "InstancesResetSslConfigResponse"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/sqlservice.admin"
 	//   ]
 	// }
@@ -2120,6 +2124,7 @@ func (c *InstancesRestartCall) Do() (*InstancesRestartResponse, error) {
 	//     "$ref": "InstancesRestartResponse"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/sqlservice.admin"
 	//   ]
 	// }
@@ -2226,6 +2231,7 @@ func (c *InstancesRestoreBackupCall) Do() (*InstancesRestoreBackupResponse, erro
 	//     "$ref": "InstancesRestoreBackupResponse"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/sqlservice.admin"
 	//   ]
 	// }
@@ -2324,6 +2330,7 @@ func (c *InstancesSetRootPasswordCall) Do() (*InstancesSetRootPasswordResponse, 
 	//     "$ref": "InstancesSetRootPasswordResponse"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/sqlservice.admin"
 	//   ]
 	// }
@@ -2422,6 +2429,7 @@ func (c *InstancesUpdateCall) Do() (*InstancesUpdateResponse, error) {
 	//     "$ref": "InstancesUpdateResponse"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/sqlservice.admin"
 	//   ]
 	// }
@@ -2519,6 +2527,7 @@ func (c *OperationsGetCall) Do() (*InstanceOperation, error) {
 	//     "$ref": "InstanceOperation"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/sqlservice.admin"
 	//   ]
 	// }
@@ -2638,6 +2647,7 @@ func (c *OperationsListCall) Do() (*OperationsListResponse, error) {
 	//     "$ref": "OperationsListResponse"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/sqlservice.admin"
 	//   ]
 	// }
@@ -2734,6 +2744,7 @@ func (c *SslCertsDeleteCall) Do() (*SslCertsDeleteResponse, error) {
 	//     "$ref": "SslCertsDeleteResponse"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/sqlservice.admin"
 	//   ]
 	// }
@@ -2831,6 +2842,7 @@ func (c *SslCertsGetCall) Do() (*SslCert, error) {
 	//     "$ref": "SslCert"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/sqlservice.admin"
 	//   ]
 	// }
@@ -2929,6 +2941,7 @@ func (c *SslCertsInsertCall) Do() (*SslCertsInsertResponse, error) {
 	//     "$ref": "SslCertsInsertResponse"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/sqlservice.admin"
 	//   ]
 	// }
@@ -3016,6 +3029,7 @@ func (c *SslCertsListCall) Do() (*SslCertsListResponse, error) {
 	//     "$ref": "SslCertsListResponse"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/sqlservice.admin"
 	//   ]
 	// }
@@ -3093,6 +3107,7 @@ func (c *TiersListCall) Do() (*TiersListResponse, error) {
 	//     "$ref": "TiersListResponse"
 	//   },
 	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/sqlservice.admin"
 	//   ]
 	// }

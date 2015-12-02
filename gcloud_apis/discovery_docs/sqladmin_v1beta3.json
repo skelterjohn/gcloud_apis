@@ -5,7 +5,7 @@
  "name": "sqladmin",
  "canonicalName": "SQL Admin",
  "version": "v1beta3",
- "revision": "20141030",
+ "revision": "20151130",
  "title": "Cloud SQL Administration API",
  "description": "API for Cloud SQL database instance management.",
  "ownerDomain": "google.com",
@@ -14,7 +14,7 @@
   "x16": "http://www.google.com/images/icons/product/search-16.gif",
   "x32": "http://www.google.com/images/icons/product/search-32.gif"
  },
- "documentationLink": "https://developers.google.com/cloud-sql/docs/admin-api/",
+ "documentationLink": "https://cloud.google.com/sql/docs/reference/latest",
  "protocol": "rest",
  "baseUrl": "https://www.googleapis.com/sql/v1beta3/",
  "basePath": "/sql/v1beta3/",
@@ -230,11 +230,11 @@
    "properties": {
     "name": {
      "type": "string",
-     "description": "The name of the flag. These flags are passed at instance startup, so include both MySQL server options and MySQL system variables. Flags should be specified with underscores, not hyphens. Refer to the official MySQL documentation on server options and system variables for descriptions of what these flags do. Acceptable values are:  character_set_server utf8 or utf8mb4 event_scheduler on or off (Note: The event scheduler will only work reliably if the instance activationPolicy is set to ALWAYS) general_log on or off group_concat_max_len 4..17179869184 innodb_flush_log_at_trx_commit 0..2 innodb_lock_wait_timeout 1..1073741824 log_bin_trust_function_creators on or off log_output Can be either TABLE or NONE, FILE is not supported log_queries_not_using_indexes on or off long_query_time 0..30000000 lower_case_table_names 0..2 max_allowed_packet 16384..1073741824 read_only on or off skip_show_database on or off slow_query_log on or off. If set to on, you must also set the log_output flag to TABLE to receive logs. wait_timeout 1..31536000"
+     "description": "The name of the flag. These flags are passed at instance startup, so include both MySQL server options and MySQL system variables. Flags should be specified with underscores, not hyphens. For more information, see Configuring MySQL Flags in the Google Cloud SQL documentation, as well as the official MySQL documentation for server options and system variables."
     },
     "value": {
      "type": "string",
-     "description": "The value of the flag. Booleans should be set using 1 for true, and 0 for false. This field must be omitted if the flag doesn't take a value."
+     "description": "The value of the flag. Booleans should be set to on for true and off for false. This field must be omitted if the flag doesn't take a value."
     }
    }
   },
@@ -307,7 +307,7 @@
     },
     "region": {
      "type": "string",
-     "description": "The geographical region. Can be us-east1, us-central, asia-east1 or europe-west1. Defaults to us-central. The region can not be changed after instance creation."
+     "description": "The geographical region. Can be us-central, asia-east1 or europe-west1. Defaults to us-central. The region can not be changed after instance creation."
     },
     "replicaNames": {
      "type": "array",
@@ -319,6 +319,10 @@
     "serverCaCert": {
      "$ref": "SslCert",
      "description": "SSL configuration."
+    },
+    "serviceAccountEmailAddress": {
+     "type": "string",
+     "description": "The service account email address assigned to the instance."
     },
     "settings": {
      "$ref": "Settings",
@@ -1166,6 +1170,7 @@
       "$ref": "BackupRun"
      },
      "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/sqlservice.admin"
      ]
     },
@@ -1214,6 +1219,7 @@
       "$ref": "BackupRunsListResponse"
      },
      "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/sqlservice.admin"
      ]
     }
@@ -1230,6 +1236,7 @@
       "$ref": "FlagsListResponse"
      },
      "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/sqlservice.admin"
      ]
     }
@@ -1260,6 +1267,7 @@
       "$ref": "InstancesCloneResponse"
      },
      "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/sqlservice.admin"
      ]
     },
@@ -1290,6 +1298,7 @@
       "$ref": "InstancesDeleteResponse"
      },
      "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/sqlservice.admin"
      ]
     },
@@ -1353,6 +1362,7 @@
       "$ref": "DatabaseInstance"
      },
      "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/sqlservice.admin"
      ]
     },
@@ -1412,6 +1422,7 @@
       "$ref": "InstancesInsertResponse"
      },
      "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/sqlservice.admin"
      ]
     },
@@ -1446,6 +1457,7 @@
       "$ref": "InstancesListResponse"
      },
      "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/sqlservice.admin"
      ]
     },
@@ -1479,6 +1491,7 @@
       "$ref": "InstancesUpdateResponse"
      },
      "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/sqlservice.admin"
      ]
     },
@@ -1509,6 +1522,7 @@
       "$ref": "InstancesPromoteReplicaResponse"
      },
      "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/sqlservice.admin"
      ]
     },
@@ -1539,6 +1553,7 @@
       "$ref": "InstancesResetSslConfigResponse"
      },
      "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/sqlservice.admin"
      ]
     },
@@ -1569,6 +1584,7 @@
       "$ref": "InstancesRestartResponse"
      },
      "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/sqlservice.admin"
      ]
     },
@@ -1613,6 +1629,7 @@
       "$ref": "InstancesRestoreBackupResponse"
      },
      "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/sqlservice.admin"
      ]
     },
@@ -1646,6 +1663,7 @@
       "$ref": "InstancesSetRootPasswordResponse"
      },
      "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/sqlservice.admin"
      ]
     },
@@ -1680,6 +1698,7 @@
       "$ref": "InstancesUpdateResponse"
      },
      "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/sqlservice.admin"
      ]
     }
@@ -1721,6 +1740,7 @@
       "$ref": "InstanceOperation"
      },
      "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/sqlservice.admin"
      ]
     },
@@ -1762,6 +1782,7 @@
       "$ref": "OperationsListResponse"
      },
      "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/sqlservice.admin"
      ]
     }
@@ -1803,6 +1824,7 @@
       "$ref": "SslCertsDeleteResponse"
      },
      "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/sqlservice.admin"
      ]
     },
@@ -1840,6 +1862,7 @@
       "$ref": "SslCert"
      },
      "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/sqlservice.admin"
      ]
     },
@@ -1873,6 +1896,7 @@
       "$ref": "SslCertsInsertResponse"
      },
      "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/sqlservice.admin"
      ]
     },
@@ -1903,6 +1927,7 @@
       "$ref": "SslCertsListResponse"
      },
      "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/sqlservice.admin"
      ]
     }
@@ -1930,6 +1955,7 @@
       "$ref": "TiersListResponse"
      },
      "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/sqlservice.admin"
      ]
     }

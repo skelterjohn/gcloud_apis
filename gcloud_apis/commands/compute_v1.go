@@ -31,6 +31,7 @@ import (
 var _ = fmt.Println
 var _ = io.Copy
 var _ = os.Stdin
+var _ = strings.Split
 
 func Compute_v1_AddressesAggregatedList(context Context, args ...string) error {
 
@@ -78,12 +79,15 @@ func Compute_v1_AddressesAggregatedList(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.AggregatedList(param_project)
 
@@ -149,14 +153,23 @@ func Compute_v1_AddressesDelete(context Context, args ...string) error {
 		"region",
 		"address",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_region := paramValues[1]
-	param_address := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_address, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_project, param_region, param_address)
 
@@ -199,14 +212,23 @@ func Compute_v1_AddressesGet(context Context, args ...string) error {
 		"region",
 		"address",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_region := paramValues[1]
-	param_address := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_address, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_region, param_address)
 
@@ -270,13 +292,19 @@ func Compute_v1_AddressesInsert(context Context, args ...string) error {
 		"project",
 		"region",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_region := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_project, param_region,
 		request,
@@ -343,13 +371,19 @@ func Compute_v1_AddressesList(context Context, args ...string) error {
 		"project",
 		"region",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_region := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project, param_region)
 
@@ -390,6 +424,602 @@ func Compute_v1_AddressesList(context Context, args ...string) error {
 	return nil
 }
 
+func Compute_v1_AutoscalersAggregatedList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewAutoscalersService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.AggregatedList(param_project)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	var response *api_client.AutoscalerAggregatedList
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_AutoscalersDelete(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewAutoscalersService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+		"autoscaler",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_autoscaler, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.Delete(param_project, param_zone, param_autoscaler)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_AutoscalersGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewAutoscalersService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+		"autoscaler",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_autoscaler, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_project, param_zone, param_autoscaler)
+
+	var response *api_client.Autoscaler
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_AutoscalersInsert(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewAutoscalersService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.Autoscaler{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.Insert(param_project, param_zone,
+		request,
+	)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_AutoscalersList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewAutoscalersService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_project, param_zone)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	var response *api_client.AutoscalerList
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_AutoscalersPatch(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		usageBits += " --autoscaler=VALUE"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewAutoscalersService(api_service)
+
+	queryParamNames := map[string]bool{
+		"autoscaler": true,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.Autoscaler{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_autoscaler, err := commands_util.ConvertValue_string(flagValues["autoscaler"])
+	if err != nil {
+		return err
+	}
+
+	call := service.Patch(param_project, param_zone, param_autoscaler,
+		request,
+	)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_AutoscalersUpdate(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		usageBits += " [--autoscaler=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewAutoscalersService(api_service)
+
+	queryParamNames := map[string]bool{
+		"autoscaler": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.Autoscaler{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.Update(param_project, param_zone,
+		request,
+	)
+
+	// Set query parameters.
+	if value, ok := flagValues["autoscaler"]; ok {
+		query_autoscaler, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Autoscaler(query_autoscaler)
+	}
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func Compute_v1_BackendServicesDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
@@ -414,13 +1044,19 @@ func Compute_v1_BackendServicesDelete(context Context, args ...string) error {
 		"project",
 		"backendService",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_backendService := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_backendService, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_project, param_backendService)
 
@@ -462,13 +1098,19 @@ func Compute_v1_BackendServicesGet(context Context, args ...string) error {
 		"project",
 		"backendService",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_backendService := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_backendService, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_backendService)
 
@@ -532,13 +1174,19 @@ func Compute_v1_BackendServicesGetHealth(context Context, args ...string) error 
 		"project",
 		"backendService",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_backendService := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_backendService, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.GetHealth(param_project, param_backendService,
 		request,
@@ -603,12 +1251,15 @@ func Compute_v1_BackendServicesInsert(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_project,
 		request,
@@ -674,12 +1325,15 @@ func Compute_v1_BackendServicesList(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project)
 
@@ -766,13 +1420,19 @@ func Compute_v1_BackendServicesPatch(context Context, args ...string) error {
 		"project",
 		"backendService",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_backendService := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_backendService, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Patch(param_project, param_backendService,
 		request,
@@ -838,13 +1498,19 @@ func Compute_v1_BackendServicesUpdate(context Context, args ...string) error {
 		"project",
 		"backendService",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_backendService := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_backendService, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Update(param_project, param_backendService,
 		request,
@@ -910,12 +1576,15 @@ func Compute_v1_DiskTypesAggregatedList(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.AggregatedList(param_project)
 
@@ -981,14 +1650,23 @@ func Compute_v1_DiskTypesGet(context Context, args ...string) error {
 		"zone",
 		"diskType",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_diskType := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_diskType, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_zone, param_diskType)
 
@@ -1053,13 +1731,19 @@ func Compute_v1_DiskTypesList(context Context, args ...string) error {
 		"project",
 		"zone",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project, param_zone)
 
@@ -1146,12 +1830,15 @@ func Compute_v1_DisksAggregatedList(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.AggregatedList(param_project)
 
@@ -1239,14 +1926,23 @@ func Compute_v1_DisksCreateSnapshot(context Context, args ...string) error {
 		"zone",
 		"disk",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_disk := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_disk, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.CreateSnapshot(param_project, param_zone, param_disk,
 		request,
@@ -1291,14 +1987,23 @@ func Compute_v1_DisksDelete(context Context, args ...string) error {
 		"zone",
 		"disk",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_disk := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_disk, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_project, param_zone, param_disk)
 
@@ -1341,14 +2046,23 @@ func Compute_v1_DisksGet(context Context, args ...string) error {
 		"zone",
 		"disk",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_disk := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_disk, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_zone, param_disk)
 
@@ -1430,13 +2144,19 @@ func Compute_v1_DisksInsert(context Context, args ...string) error {
 		"project",
 		"zone",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_project, param_zone,
 		request,
@@ -1512,13 +2232,19 @@ func Compute_v1_DisksList(context Context, args ...string) error {
 		"project",
 		"zone",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project, param_zone)
 
@@ -1583,13 +2309,19 @@ func Compute_v1_FirewallsDelete(context Context, args ...string) error {
 		"project",
 		"firewall",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_firewall := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_firewall, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_project, param_firewall)
 
@@ -1631,13 +2363,19 @@ func Compute_v1_FirewallsGet(context Context, args ...string) error {
 		"project",
 		"firewall",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_firewall := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_firewall, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_firewall)
 
@@ -1700,12 +2438,15 @@ func Compute_v1_FirewallsInsert(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_project,
 		request,
@@ -1771,12 +2512,15 @@ func Compute_v1_FirewallsList(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project)
 
@@ -1863,13 +2607,19 @@ func Compute_v1_FirewallsPatch(context Context, args ...string) error {
 		"project",
 		"firewall",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_firewall := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_firewall, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Patch(param_project, param_firewall,
 		request,
@@ -1935,13 +2685,19 @@ func Compute_v1_FirewallsUpdate(context Context, args ...string) error {
 		"project",
 		"firewall",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_firewall := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_firewall, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Update(param_project, param_firewall,
 		request,
@@ -2007,12 +2763,15 @@ func Compute_v1_ForwardingRulesAggregatedList(context Context, args ...string) e
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.AggregatedList(param_project)
 
@@ -2078,14 +2837,23 @@ func Compute_v1_ForwardingRulesDelete(context Context, args ...string) error {
 		"region",
 		"forwardingRule",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_region := paramValues[1]
-	param_forwardingRule := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_forwardingRule, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_project, param_region, param_forwardingRule)
 
@@ -2128,14 +2896,23 @@ func Compute_v1_ForwardingRulesGet(context Context, args ...string) error {
 		"region",
 		"forwardingRule",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_region := paramValues[1]
-	param_forwardingRule := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_forwardingRule, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_region, param_forwardingRule)
 
@@ -2199,13 +2976,19 @@ func Compute_v1_ForwardingRulesInsert(context Context, args ...string) error {
 		"project",
 		"region",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_region := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_project, param_region,
 		request,
@@ -2272,13 +3055,19 @@ func Compute_v1_ForwardingRulesList(context Context, args ...string) error {
 		"project",
 		"region",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_region := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project, param_region)
 
@@ -2366,14 +3155,23 @@ func Compute_v1_ForwardingRulesSetTarget(context Context, args ...string) error 
 		"region",
 		"forwardingRule",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_region := paramValues[1]
-	param_forwardingRule := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_forwardingRule, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.SetTarget(param_project, param_region, param_forwardingRule,
 		request,
@@ -2417,13 +3215,19 @@ func Compute_v1_GlobalAddressesDelete(context Context, args ...string) error {
 		"project",
 		"address",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_address := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_address, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_project, param_address)
 
@@ -2465,13 +3269,19 @@ func Compute_v1_GlobalAddressesGet(context Context, args ...string) error {
 		"project",
 		"address",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_address := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_address, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_address)
 
@@ -2534,12 +3344,15 @@ func Compute_v1_GlobalAddressesInsert(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_project,
 		request,
@@ -2605,12 +3418,15 @@ func Compute_v1_GlobalAddressesList(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project)
 
@@ -2675,13 +3491,19 @@ func Compute_v1_GlobalForwardingRulesDelete(context Context, args ...string) err
 		"project",
 		"forwardingRule",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_forwardingRule := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_forwardingRule, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_project, param_forwardingRule)
 
@@ -2723,13 +3545,19 @@ func Compute_v1_GlobalForwardingRulesGet(context Context, args ...string) error 
 		"project",
 		"forwardingRule",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_forwardingRule := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_forwardingRule, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_forwardingRule)
 
@@ -2792,12 +3620,15 @@ func Compute_v1_GlobalForwardingRulesInsert(context Context, args ...string) err
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_project,
 		request,
@@ -2863,12 +3694,15 @@ func Compute_v1_GlobalForwardingRulesList(context Context, args ...string) error
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project)
 
@@ -2955,13 +3789,19 @@ func Compute_v1_GlobalForwardingRulesSetTarget(context Context, args ...string) 
 		"project",
 		"forwardingRule",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_forwardingRule := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_forwardingRule, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.SetTarget(param_project, param_forwardingRule,
 		request,
@@ -3027,12 +3867,15 @@ func Compute_v1_GlobalOperationsAggregatedList(context Context, args ...string) 
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.AggregatedList(param_project)
 
@@ -3097,13 +3940,19 @@ func Compute_v1_GlobalOperationsDelete(context Context, args ...string) error {
 		"project",
 		"operation",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_operation := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_operation, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_project, param_operation)
 
@@ -3139,13 +3988,19 @@ func Compute_v1_GlobalOperationsGet(context Context, args ...string) error {
 		"project",
 		"operation",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_operation := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_operation, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_operation)
 
@@ -3209,12 +4064,15 @@ func Compute_v1_GlobalOperationsList(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project)
 
@@ -3279,13 +4137,19 @@ func Compute_v1_HttpHealthChecksDelete(context Context, args ...string) error {
 		"project",
 		"httpHealthCheck",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_httpHealthCheck := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_httpHealthCheck, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_project, param_httpHealthCheck)
 
@@ -3327,13 +4191,19 @@ func Compute_v1_HttpHealthChecksGet(context Context, args ...string) error {
 		"project",
 		"httpHealthCheck",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_httpHealthCheck := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_httpHealthCheck, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_httpHealthCheck)
 
@@ -3396,12 +4266,15 @@ func Compute_v1_HttpHealthChecksInsert(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_project,
 		request,
@@ -3467,12 +4340,15 @@ func Compute_v1_HttpHealthChecksList(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project)
 
@@ -3559,13 +4435,19 @@ func Compute_v1_HttpHealthChecksPatch(context Context, args ...string) error {
 		"project",
 		"httpHealthCheck",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_httpHealthCheck := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_httpHealthCheck, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Patch(param_project, param_httpHealthCheck,
 		request,
@@ -3631,15 +4513,453 @@ func Compute_v1_HttpHealthChecksUpdate(context Context, args ...string) error {
 		"project",
 		"httpHealthCheck",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_httpHealthCheck := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_httpHealthCheck, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Update(param_project, param_httpHealthCheck,
+		request,
+	)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_HttpsHealthChecksDelete(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewHttpsHealthChecksService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"httpsHealthCheck",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_httpsHealthCheck, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.Delete(param_project, param_httpsHealthCheck)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_HttpsHealthChecksGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewHttpsHealthChecksService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"httpsHealthCheck",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_httpsHealthCheck, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_project, param_httpsHealthCheck)
+
+	var response *api_client.HttpsHealthCheck
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_HttpsHealthChecksInsert(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewHttpsHealthChecksService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.HttpsHealthCheck{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Insert(param_project,
+		request,
+	)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_HttpsHealthChecksList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewHttpsHealthChecksService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_project)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	var response *api_client.HttpsHealthCheckList
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_HttpsHealthChecksPatch(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewHttpsHealthChecksService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.HttpsHealthCheck{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"httpsHealthCheck",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_httpsHealthCheck, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.Patch(param_project, param_httpsHealthCheck,
+		request,
+	)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_HttpsHealthChecksUpdate(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewHttpsHealthChecksService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.HttpsHealthCheck{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"httpsHealthCheck",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_httpsHealthCheck, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.Update(param_project, param_httpsHealthCheck,
 		request,
 	)
 
@@ -3681,13 +5001,19 @@ func Compute_v1_ImagesDelete(context Context, args ...string) error {
 		"project",
 		"image",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_image := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_image, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_project, param_image)
 
@@ -3751,13 +5077,19 @@ func Compute_v1_ImagesDeprecate(context Context, args ...string) error {
 		"project",
 		"image",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_image := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_image, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Deprecate(param_project, param_image,
 		request,
@@ -3801,13 +5133,19 @@ func Compute_v1_ImagesGet(context Context, args ...string) error {
 		"project",
 		"image",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_image := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_image, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_image)
 
@@ -3870,12 +5208,15 @@ func Compute_v1_ImagesInsert(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_project,
 		request,
@@ -3941,12 +5282,15 @@ func Compute_v1_ImagesList(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project)
 
@@ -3987,6 +5331,1721 @@ func Compute_v1_ImagesList(context Context, args ...string) error {
 	return nil
 }
 
+func Compute_v1_InstanceGroupManagersAbandonInstances(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstanceGroupManagersService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.InstanceGroupManagersAbandonInstancesRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+		"instanceGroupManager",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroupManager, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.AbandonInstances(param_project, param_zone, param_instanceGroupManager,
+		request,
+	)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_InstanceGroupManagersAggregatedList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstanceGroupManagersService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.AggregatedList(param_project)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	var response *api_client.InstanceGroupManagerAggregatedList
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_InstanceGroupManagersDelete(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstanceGroupManagersService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+		"instanceGroupManager",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroupManager, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.Delete(param_project, param_zone, param_instanceGroupManager)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_InstanceGroupManagersDeleteInstances(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstanceGroupManagersService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.InstanceGroupManagersDeleteInstancesRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+		"instanceGroupManager",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroupManager, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.DeleteInstances(param_project, param_zone, param_instanceGroupManager,
+		request,
+	)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_InstanceGroupManagersGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstanceGroupManagersService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+		"instanceGroupManager",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroupManager, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_project, param_zone, param_instanceGroupManager)
+
+	var response *api_client.InstanceGroupManager
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_InstanceGroupManagersInsert(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstanceGroupManagersService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.InstanceGroupManager{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.Insert(param_project, param_zone,
+		request,
+	)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_InstanceGroupManagersList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstanceGroupManagersService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_project, param_zone)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	var response *api_client.InstanceGroupManagerList
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_InstanceGroupManagersListManagedInstances(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstanceGroupManagersService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+		"instanceGroupManager",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroupManager, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.ListManagedInstances(param_project, param_zone, param_instanceGroupManager)
+
+	var response *api_client.InstanceGroupManagersListManagedInstancesResponse
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_InstanceGroupManagersRecreateInstances(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstanceGroupManagersService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.InstanceGroupManagersRecreateInstancesRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+		"instanceGroupManager",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroupManager, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.RecreateInstances(param_project, param_zone, param_instanceGroupManager,
+		request,
+	)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_InstanceGroupManagersResize(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " --size=VALUE"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstanceGroupManagersService(api_service)
+
+	queryParamNames := map[string]bool{
+		"size": true,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+		"instanceGroupManager",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroupManager, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+	param_size, err := commands_util.ConvertValue_int64(flagValues["size"])
+	if err != nil {
+		return err
+	}
+
+	call := service.Resize(param_project, param_zone, param_instanceGroupManager, param_size)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_InstanceGroupManagersSetInstanceTemplate(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstanceGroupManagersService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.InstanceGroupManagersSetInstanceTemplateRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+		"instanceGroupManager",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroupManager, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.SetInstanceTemplate(param_project, param_zone, param_instanceGroupManager,
+		request,
+	)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_InstanceGroupManagersSetTargetPools(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstanceGroupManagersService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.InstanceGroupManagersSetTargetPoolsRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+		"instanceGroupManager",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroupManager, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.SetTargetPools(param_project, param_zone, param_instanceGroupManager,
+		request,
+	)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_InstanceGroupsAddInstances(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstanceGroupsService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.InstanceGroupsAddInstancesRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+		"instanceGroup",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroup, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.AddInstances(param_project, param_zone, param_instanceGroup,
+		request,
+	)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_InstanceGroupsAggregatedList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstanceGroupsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.AggregatedList(param_project)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	var response *api_client.InstanceGroupAggregatedList
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_InstanceGroupsDelete(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstanceGroupsService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+		"instanceGroup",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroup, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.Delete(param_project, param_zone, param_instanceGroup)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_InstanceGroupsGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstanceGroupsService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+		"instanceGroup",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroup, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_project, param_zone, param_instanceGroup)
+
+	var response *api_client.InstanceGroup
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_InstanceGroupsInsert(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstanceGroupsService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.InstanceGroup{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.Insert(param_project, param_zone,
+		request,
+	)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_InstanceGroupsList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstanceGroupsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_project, param_zone)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	var response *api_client.InstanceGroupList
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_InstanceGroupsListInstances(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstanceGroupsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.InstanceGroupsListInstancesRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+		"instanceGroup",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroup, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.ListInstances(param_project, param_zone, param_instanceGroup,
+		request,
+	)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	var response *api_client.InstanceGroupsListInstances
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_InstanceGroupsRemoveInstances(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstanceGroupsService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.InstanceGroupsRemoveInstancesRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+		"instanceGroup",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroup, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.RemoveInstances(param_project, param_zone, param_instanceGroup,
+		request,
+	)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_InstanceGroupsSetNamedPorts(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstanceGroupsService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.InstanceGroupsSetNamedPortsRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+		"instanceGroup",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroup, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.SetNamedPorts(param_project, param_zone, param_instanceGroup,
+		request,
+	)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func Compute_v1_InstanceTemplatesDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
@@ -4011,13 +7070,19 @@ func Compute_v1_InstanceTemplatesDelete(context Context, args ...string) error {
 		"project",
 		"instanceTemplate",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_instanceTemplate := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_instanceTemplate, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_project, param_instanceTemplate)
 
@@ -4059,13 +7124,19 @@ func Compute_v1_InstanceTemplatesGet(context Context, args ...string) error {
 		"project",
 		"instanceTemplate",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_instanceTemplate := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_instanceTemplate, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_instanceTemplate)
 
@@ -4128,12 +7199,15 @@ func Compute_v1_InstanceTemplatesInsert(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_project,
 		request,
@@ -4199,12 +7273,15 @@ func Compute_v1_InstanceTemplatesList(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project)
 
@@ -4310,14 +7387,23 @@ func Compute_v1_InstancesAddAccessConfig(context Context, args ...string) error 
 		"zone",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_instance := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 	param_networkInterface, err := commands_util.ConvertValue_string(flagValues["networkInterface"])
 	if err != nil {
 		return err
@@ -4387,12 +7473,15 @@ func Compute_v1_InstancesAggregatedList(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.AggregatedList(param_project)
 
@@ -4480,14 +7569,23 @@ func Compute_v1_InstancesAttachDisk(context Context, args ...string) error {
 		"zone",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_instance := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.AttachDisk(param_project, param_zone, param_instance,
 		request,
@@ -4532,14 +7630,23 @@ func Compute_v1_InstancesDelete(context Context, args ...string) error {
 		"zone",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_instance := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_project, param_zone, param_instance)
 
@@ -4602,14 +7709,23 @@ func Compute_v1_InstancesDeleteAccessConfig(context Context, args ...string) err
 		"zone",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_instance := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 	param_accessConfig, err := commands_util.ConvertValue_string(flagValues["accessConfig"])
 	if err != nil {
 		return err
@@ -4677,14 +7793,23 @@ func Compute_v1_InstancesDetachDisk(context Context, args ...string) error {
 		"zone",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_instance := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 	param_deviceName, err := commands_util.ConvertValue_string(flagValues["deviceName"])
 	if err != nil {
 		return err
@@ -4731,14 +7856,23 @@ func Compute_v1_InstancesGet(context Context, args ...string) error {
 		"zone",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_instance := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_zone, param_instance)
 
@@ -4761,6 +7895,8 @@ func Compute_v1_InstancesGetSerialPortOutput(context Context, args ...string) er
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 
+		usageBits += " [--port=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
 	}
@@ -4770,6 +7906,21 @@ func Compute_v1_InstancesGetSerialPortOutput(context Context, args ...string) er
 		return err
 	}
 	service := api_client.NewInstancesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"port": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -4781,16 +7932,34 @@ func Compute_v1_InstancesGetSerialPortOutput(context Context, args ...string) er
 		"zone",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_instance := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.GetSerialPortOutput(param_project, param_zone, param_instance)
+
+	// Set query parameters.
+	if value, ok := flagValues["port"]; ok {
+		query_port, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.Port(query_port)
+	}
 
 	var response *api_client.SerialPortOutput
 	response, err = call.Do()
@@ -4852,13 +8021,19 @@ func Compute_v1_InstancesInsert(context Context, args ...string) error {
 		"project",
 		"zone",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_project, param_zone,
 		request,
@@ -4925,13 +8100,19 @@ func Compute_v1_InstancesList(context Context, args ...string) error {
 		"project",
 		"zone",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project, param_zone)
 
@@ -4997,14 +8178,23 @@ func Compute_v1_InstancesReset(context Context, args ...string) error {
 		"zone",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_instance := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Reset(param_project, param_zone, param_instance)
 
@@ -5067,14 +8257,23 @@ func Compute_v1_InstancesSetDiskAutoDelete(context Context, args ...string) erro
 		"zone",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_instance := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 	param_autoDelete, err := commands_util.ConvertValue_bool(flagValues["autoDelete"])
 	if err != nil {
 		return err
@@ -5147,14 +8346,23 @@ func Compute_v1_InstancesSetMetadata(context Context, args ...string) error {
 		"zone",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_instance := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.SetMetadata(param_project, param_zone, param_instance,
 		request,
@@ -5221,14 +8429,23 @@ func Compute_v1_InstancesSetScheduling(context Context, args ...string) error {
 		"zone",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_instance := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.SetScheduling(param_project, param_zone, param_instance,
 		request,
@@ -5295,18 +8512,145 @@ func Compute_v1_InstancesSetTags(context Context, args ...string) error {
 		"zone",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_instance := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.SetTags(param_project, param_zone, param_instance,
 		request,
 	)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_InstancesStart(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstancesService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+		"instance",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.Start(param_project, param_zone, param_instance)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_InstancesStop(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstancesService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+		"instance",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.Stop(param_project, param_zone, param_instance)
 
 	var response *api_client.Operation
 	response, err = call.Do()
@@ -5346,13 +8690,19 @@ func Compute_v1_LicensesGet(context Context, args ...string) error {
 		"project",
 		"license",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_license := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_license, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_license)
 
@@ -5416,12 +8766,15 @@ func Compute_v1_MachineTypesAggregatedList(context Context, args ...string) erro
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.AggregatedList(param_project)
 
@@ -5487,14 +8840,23 @@ func Compute_v1_MachineTypesGet(context Context, args ...string) error {
 		"zone",
 		"machineType",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_machineType := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_machineType, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_zone, param_machineType)
 
@@ -5559,13 +8921,19 @@ func Compute_v1_MachineTypesList(context Context, args ...string) error {
 		"project",
 		"zone",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project, param_zone)
 
@@ -5630,13 +8998,19 @@ func Compute_v1_NetworksDelete(context Context, args ...string) error {
 		"project",
 		"network",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_network := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_network, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_project, param_network)
 
@@ -5678,13 +9052,19 @@ func Compute_v1_NetworksGet(context Context, args ...string) error {
 		"project",
 		"network",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_network := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_network, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_network)
 
@@ -5747,12 +9127,15 @@ func Compute_v1_NetworksInsert(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_project,
 		request,
@@ -5818,12 +9201,15 @@ func Compute_v1_NetworksList(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project)
 
@@ -5887,16 +9273,165 @@ func Compute_v1_ProjectsGet(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project)
 
 	var response *api_client.Project
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_ProjectsMoveDisk(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewProjectsService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.DiskMoveRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.MoveDisk(param_project,
+		request,
+	)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_ProjectsMoveInstance(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewProjectsService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.InstanceMoveRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.MoveInstance(param_project,
+		request,
+	)
+
+	var response *api_client.Operation
 	response, err = call.Do()
 	if err != nil {
 		return err
@@ -5955,12 +9490,15 @@ func Compute_v1_ProjectsSetCommonInstanceMetadata(context Context, args ...strin
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.SetCommonInstanceMetadata(param_project,
 		request,
@@ -6025,12 +9563,15 @@ func Compute_v1_ProjectsSetUsageExportBucket(context Context, args ...string) er
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.SetUsageExportBucket(param_project,
 		request,
@@ -6075,14 +9616,23 @@ func Compute_v1_RegionOperationsDelete(context Context, args ...string) error {
 		"region",
 		"operation",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_region := paramValues[1]
-	param_operation := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_operation, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_project, param_region, param_operation)
 
@@ -6119,14 +9669,23 @@ func Compute_v1_RegionOperationsGet(context Context, args ...string) error {
 		"region",
 		"operation",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_region := paramValues[1]
-	param_operation := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_operation, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_region, param_operation)
 
@@ -6191,13 +9750,19 @@ func Compute_v1_RegionOperationsList(context Context, args ...string) error {
 		"project",
 		"region",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_region := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project, param_region)
 
@@ -6262,13 +9827,19 @@ func Compute_v1_RegionsGet(context Context, args ...string) error {
 		"project",
 		"region",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_region := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_region)
 
@@ -6332,12 +9903,15 @@ func Compute_v1_RegionsList(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project)
 
@@ -6402,13 +9976,19 @@ func Compute_v1_RoutesDelete(context Context, args ...string) error {
 		"project",
 		"route",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_route := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_route, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_project, param_route)
 
@@ -6450,13 +10030,19 @@ func Compute_v1_RoutesGet(context Context, args ...string) error {
 		"project",
 		"route",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_route := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_route, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_route)
 
@@ -6519,12 +10105,15 @@ func Compute_v1_RoutesInsert(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_project,
 		request,
@@ -6590,12 +10179,15 @@ func Compute_v1_RoutesList(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project)
 
@@ -6660,13 +10252,19 @@ func Compute_v1_SnapshotsDelete(context Context, args ...string) error {
 		"project",
 		"snapshot",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_snapshot := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_snapshot, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_project, param_snapshot)
 
@@ -6708,13 +10306,19 @@ func Compute_v1_SnapshotsGet(context Context, args ...string) error {
 		"project",
 		"snapshot",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_snapshot := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_snapshot, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_snapshot)
 
@@ -6778,12 +10382,15 @@ func Compute_v1_SnapshotsList(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project)
 
@@ -6824,6 +10431,282 @@ func Compute_v1_SnapshotsList(context Context, args ...string) error {
 	return nil
 }
 
+func Compute_v1_SslCertificatesDelete(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewSslCertificatesService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"sslCertificate",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_sslCertificate, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.Delete(param_project, param_sslCertificate)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_SslCertificatesGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewSslCertificatesService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"sslCertificate",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_sslCertificate, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_project, param_sslCertificate)
+
+	var response *api_client.SslCertificate
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_SslCertificatesInsert(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewSslCertificatesService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.SslCertificate{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Insert(param_project,
+		request,
+	)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_SslCertificatesList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewSslCertificatesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_project)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	var response *api_client.SslCertificateList
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func Compute_v1_TargetHttpProxiesDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
@@ -6848,13 +10731,19 @@ func Compute_v1_TargetHttpProxiesDelete(context Context, args ...string) error {
 		"project",
 		"targetHttpProxy",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_targetHttpProxy := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_targetHttpProxy, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_project, param_targetHttpProxy)
 
@@ -6896,13 +10785,19 @@ func Compute_v1_TargetHttpProxiesGet(context Context, args ...string) error {
 		"project",
 		"targetHttpProxy",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_targetHttpProxy := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_targetHttpProxy, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_targetHttpProxy)
 
@@ -6965,12 +10860,15 @@ func Compute_v1_TargetHttpProxiesInsert(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_project,
 		request,
@@ -7036,12 +10934,15 @@ func Compute_v1_TargetHttpProxiesList(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project)
 
@@ -7128,15 +11029,453 @@ func Compute_v1_TargetHttpProxiesSetUrlMap(context Context, args ...string) erro
 		"project",
 		"targetHttpProxy",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_targetHttpProxy := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_targetHttpProxy, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.SetUrlMap(param_project, param_targetHttpProxy,
+		request,
+	)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_TargetHttpsProxiesDelete(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewTargetHttpsProxiesService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"targetHttpsProxy",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_targetHttpsProxy, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.Delete(param_project, param_targetHttpsProxy)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_TargetHttpsProxiesGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewTargetHttpsProxiesService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"targetHttpsProxy",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_targetHttpsProxy, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_project, param_targetHttpsProxy)
+
+	var response *api_client.TargetHttpsProxy
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_TargetHttpsProxiesInsert(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewTargetHttpsProxiesService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.TargetHttpsProxy{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Insert(param_project,
+		request,
+	)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_TargetHttpsProxiesList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewTargetHttpsProxiesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_project)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	var response *api_client.TargetHttpsProxyList
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_TargetHttpsProxiesSetSslCertificates(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewTargetHttpsProxiesService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.TargetHttpsProxiesSetSslCertificatesRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"targetHttpsProxy",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_targetHttpsProxy, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.SetSslCertificates(param_project, param_targetHttpsProxy,
+		request,
+	)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_TargetHttpsProxiesSetUrlMap(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewTargetHttpsProxiesService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.UrlMapReference{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"targetHttpsProxy",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_targetHttpsProxy, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.SetUrlMap(param_project, param_targetHttpsProxy,
 		request,
 	)
 
@@ -7200,12 +11539,15 @@ func Compute_v1_TargetInstancesAggregatedList(context Context, args ...string) e
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.AggregatedList(param_project)
 
@@ -7271,14 +11613,23 @@ func Compute_v1_TargetInstancesDelete(context Context, args ...string) error {
 		"zone",
 		"targetInstance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_targetInstance := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_targetInstance, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_project, param_zone, param_targetInstance)
 
@@ -7321,14 +11672,23 @@ func Compute_v1_TargetInstancesGet(context Context, args ...string) error {
 		"zone",
 		"targetInstance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_targetInstance := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_targetInstance, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_zone, param_targetInstance)
 
@@ -7392,13 +11752,19 @@ func Compute_v1_TargetInstancesInsert(context Context, args ...string) error {
 		"project",
 		"zone",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_project, param_zone,
 		request,
@@ -7465,13 +11831,19 @@ func Compute_v1_TargetInstancesList(context Context, args ...string) error {
 		"project",
 		"zone",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project, param_zone)
 
@@ -7559,14 +11931,23 @@ func Compute_v1_TargetPoolsAddHealthCheck(context Context, args ...string) error
 		"region",
 		"targetPool",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_region := paramValues[1]
-	param_targetPool := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_targetPool, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.AddHealthCheck(param_project, param_region, param_targetPool,
 		request,
@@ -7633,14 +12014,23 @@ func Compute_v1_TargetPoolsAddInstance(context Context, args ...string) error {
 		"region",
 		"targetPool",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_region := paramValues[1]
-	param_targetPool := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_targetPool, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.AddInstance(param_project, param_region, param_targetPool,
 		request,
@@ -7706,12 +12096,15 @@ func Compute_v1_TargetPoolsAggregatedList(context Context, args ...string) error
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.AggregatedList(param_project)
 
@@ -7777,14 +12170,23 @@ func Compute_v1_TargetPoolsDelete(context Context, args ...string) error {
 		"region",
 		"targetPool",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_region := paramValues[1]
-	param_targetPool := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_targetPool, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_project, param_region, param_targetPool)
 
@@ -7827,14 +12229,23 @@ func Compute_v1_TargetPoolsGet(context Context, args ...string) error {
 		"region",
 		"targetPool",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_region := paramValues[1]
-	param_targetPool := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_targetPool, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_region, param_targetPool)
 
@@ -7899,14 +12310,23 @@ func Compute_v1_TargetPoolsGetHealth(context Context, args ...string) error {
 		"region",
 		"targetPool",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_region := paramValues[1]
-	param_targetPool := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_targetPool, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.GetHealth(param_project, param_region, param_targetPool,
 		request,
@@ -7972,13 +12392,19 @@ func Compute_v1_TargetPoolsInsert(context Context, args ...string) error {
 		"project",
 		"region",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_region := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_project, param_region,
 		request,
@@ -8045,13 +12471,19 @@ func Compute_v1_TargetPoolsList(context Context, args ...string) error {
 		"project",
 		"region",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_region := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project, param_region)
 
@@ -8139,14 +12571,23 @@ func Compute_v1_TargetPoolsRemoveHealthCheck(context Context, args ...string) er
 		"region",
 		"targetPool",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_region := paramValues[1]
-	param_targetPool := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_targetPool, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.RemoveHealthCheck(param_project, param_region, param_targetPool,
 		request,
@@ -8213,14 +12654,23 @@ func Compute_v1_TargetPoolsRemoveInstance(context Context, args ...string) error
 		"region",
 		"targetPool",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_region := paramValues[1]
-	param_targetPool := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_targetPool, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.RemoveInstance(param_project, param_region, param_targetPool,
 		request,
@@ -8305,14 +12755,23 @@ func Compute_v1_TargetPoolsSetBackup(context Context, args ...string) error {
 		"region",
 		"targetPool",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_region := paramValues[1]
-	param_targetPool := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_targetPool, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.SetBackup(param_project, param_region, param_targetPool,
 		request,
@@ -8328,6 +12787,397 @@ func Compute_v1_TargetPoolsSetBackup(context Context, args ...string) error {
 	}
 
 	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_TargetVpnGatewaysAggregatedList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewTargetVpnGatewaysService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.AggregatedList(param_project)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	var response *api_client.TargetVpnGatewayAggregatedList
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_TargetVpnGatewaysDelete(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewTargetVpnGatewaysService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+		"targetVpnGateway",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_targetVpnGateway, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.Delete(param_project, param_region, param_targetVpnGateway)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_TargetVpnGatewaysGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewTargetVpnGatewaysService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+		"targetVpnGateway",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_targetVpnGateway, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_project, param_region, param_targetVpnGateway)
+
+	var response *api_client.TargetVpnGateway
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_TargetVpnGatewaysInsert(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewTargetVpnGatewaysService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.TargetVpnGateway{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.Insert(param_project, param_region,
+		request,
+	)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_TargetVpnGatewaysList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewTargetVpnGatewaysService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_project, param_region)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	var response *api_client.TargetVpnGatewayList
 	response, err = call.Do()
 	if err != nil {
 		return err
@@ -8365,13 +13215,19 @@ func Compute_v1_UrlMapsDelete(context Context, args ...string) error {
 		"project",
 		"urlMap",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_urlMap := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_urlMap, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_project, param_urlMap)
 
@@ -8413,13 +13269,19 @@ func Compute_v1_UrlMapsGet(context Context, args ...string) error {
 		"project",
 		"urlMap",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_urlMap := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_urlMap, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_urlMap)
 
@@ -8482,12 +13344,15 @@ func Compute_v1_UrlMapsInsert(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_project,
 		request,
@@ -8553,12 +13418,15 @@ func Compute_v1_UrlMapsList(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project)
 
@@ -8645,13 +13513,19 @@ func Compute_v1_UrlMapsPatch(context Context, args ...string) error {
 		"project",
 		"urlMap",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_urlMap := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_urlMap, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Patch(param_project, param_urlMap,
 		request,
@@ -8717,13 +13591,19 @@ func Compute_v1_UrlMapsUpdate(context Context, args ...string) error {
 		"project",
 		"urlMap",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_urlMap := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_urlMap, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Update(param_project, param_urlMap,
 		request,
@@ -8789,19 +13669,416 @@ func Compute_v1_UrlMapsValidate(context Context, args ...string) error {
 		"project",
 		"urlMap",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_urlMap := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_urlMap, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Validate(param_project, param_urlMap,
 		request,
 	)
 
 	var response *api_client.UrlMapsValidateResponse
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_VpnTunnelsAggregatedList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewVpnTunnelsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.AggregatedList(param_project)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	var response *api_client.VpnTunnelAggregatedList
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_VpnTunnelsDelete(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewVpnTunnelsService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+		"vpnTunnel",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_vpnTunnel, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.Delete(param_project, param_region, param_vpnTunnel)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_VpnTunnelsGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewVpnTunnelsService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+		"vpnTunnel",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_vpnTunnel, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_project, param_region, param_vpnTunnel)
+
+	var response *api_client.VpnTunnel
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_VpnTunnelsInsert(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewVpnTunnelsService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.VpnTunnel{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.Insert(param_project, param_region,
+		request,
+	)
+
+	var response *api_client.Operation
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_VpnTunnelsList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewVpnTunnelsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_project, param_region)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	var response *api_client.VpnTunnelList
 	response, err = call.Do()
 	if err != nil {
 		return err
@@ -8840,14 +14117,23 @@ func Compute_v1_ZoneOperationsDelete(context Context, args ...string) error {
 		"zone",
 		"operation",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_operation := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_operation, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_project, param_zone, param_operation)
 
@@ -8884,14 +14170,23 @@ func Compute_v1_ZoneOperationsGet(context Context, args ...string) error {
 		"zone",
 		"operation",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
-	param_operation := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_operation, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_zone, param_operation)
 
@@ -8956,13 +14251,19 @@ func Compute_v1_ZoneOperationsList(context Context, args ...string) error {
 		"project",
 		"zone",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project, param_zone)
 
@@ -9027,13 +14328,19 @@ func Compute_v1_ZonesGet(context Context, args ...string) error {
 		"project",
 		"zone",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_zone := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_zone)
 
@@ -9097,12 +14404,15 @@ func Compute_v1_ZonesList(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project)
 

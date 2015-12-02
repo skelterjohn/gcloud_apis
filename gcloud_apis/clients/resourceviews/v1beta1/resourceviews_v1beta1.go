@@ -44,6 +44,9 @@ const (
 	// View and manage your data across Google Cloud Platform services
 	CloudPlatformScope = "https://www.googleapis.com/auth/cloud-platform"
 
+	// View your data across Google Cloud Platform services
+	CloudPlatformReadOnlyScope = "https://www.googleapis.com/auth/cloud-platform.read-only"
+
 	// View and manage your Google Compute Engine resources
 	ComputeScope = "https://www.googleapis.com/auth/compute"
 
@@ -483,6 +486,7 @@ func (c *RegionViewsGetCall) Do() (*ResourceView, error) {
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly",
 	//     "https://www.googleapis.com/auth/ndev.cloudman",
@@ -709,6 +713,7 @@ func (c *RegionViewsListCall) Do() (*RegionViewsListResponse, error) {
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly",
 	//     "https://www.googleapis.com/auth/ndev.cloudman",
@@ -846,6 +851,7 @@ func (c *RegionViewsListresourcesCall) Do() (*RegionViewsListResourcesResponse, 
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly",
 	//     "https://www.googleapis.com/auth/ndev.cloudman",
@@ -1241,6 +1247,7 @@ func (c *ZoneViewsGetCall) Do() (*ResourceView, error) {
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly",
 	//     "https://www.googleapis.com/auth/ndev.cloudman",
@@ -1467,6 +1474,7 @@ func (c *ZoneViewsListCall) Do() (*ZoneViewsListResponse, error) {
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly",
 	//     "https://www.googleapis.com/auth/ndev.cloudman",
@@ -1604,6 +1612,7 @@ func (c *ZoneViewsListresourcesCall) Do() (*ZoneViewsListResourcesResponse, erro
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly",
 	//     "https://www.googleapis.com/auth/ndev.cloudman",

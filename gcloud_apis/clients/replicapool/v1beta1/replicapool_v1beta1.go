@@ -44,6 +44,9 @@ const (
 	// View and manage your data across Google Cloud Platform services
 	CloudPlatformScope = "https://www.googleapis.com/auth/cloud-platform"
 
+	// View your data across Google Cloud Platform services
+	CloudPlatformReadOnlyScope = "https://www.googleapis.com/auth/cloud-platform.read-only"
+
 	// View and manage your Google Cloud Platform management resources and
 	// deployment status information
 	NdevCloudmanScope = "https://www.googleapis.com/auth/ndev.cloudman"
@@ -680,6 +683,7 @@ func (c *PoolsGetCall) Do() (*Pool, error) {
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only",
 	//     "https://www.googleapis.com/auth/ndev.cloudman",
 	//     "https://www.googleapis.com/auth/ndev.cloudman.readonly",
 	//     "https://www.googleapis.com/auth/replicapool",
@@ -905,6 +909,7 @@ func (c *PoolsListCall) Do() (*PoolsListResponse, error) {
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only",
 	//     "https://www.googleapis.com/auth/ndev.cloudman",
 	//     "https://www.googleapis.com/auth/ndev.cloudman.readonly",
 	//     "https://www.googleapis.com/auth/replicapool",
@@ -1354,6 +1359,7 @@ func (c *ReplicasGetCall) Do() (*Replica, error) {
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only",
 	//     "https://www.googleapis.com/auth/ndev.cloudman",
 	//     "https://www.googleapis.com/auth/ndev.cloudman.readonly",
 	//     "https://www.googleapis.com/auth/replicapool",
@@ -1490,6 +1496,7 @@ func (c *ReplicasListCall) Do() (*ReplicasListResponse, error) {
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only",
 	//     "https://www.googleapis.com/auth/ndev.cloudman",
 	//     "https://www.googleapis.com/auth/ndev.cloudman.readonly",
 	//     "https://www.googleapis.com/auth/replicapool",

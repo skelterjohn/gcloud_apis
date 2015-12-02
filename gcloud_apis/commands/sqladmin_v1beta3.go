@@ -31,6 +31,7 @@ import (
 var _ = fmt.Println
 var _ = io.Copy
 var _ = os.Stdin
+var _ = strings.Split
 
 func Sql_v1beta3_BackupRunsGet(context Context, args ...string) error {
 
@@ -74,14 +75,23 @@ func Sql_v1beta3_BackupRunsGet(context Context, args ...string) error {
 		"instance",
 		"backupConfiguration",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_instance := paramValues[1]
-	param_backupConfiguration := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_backupConfiguration, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 	param_dueTime, err := commands_util.ConvertValue_string(flagValues["dueTime"])
 	if err != nil {
 		return err
@@ -150,13 +160,19 @@ func Sql_v1beta3_BackupRunsList(context Context, args ...string) error {
 		"project",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_instance := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 	param_backupConfiguration, err := commands_util.ConvertValue_string(flagValues["backupConfiguration"])
 	if err != nil {
 		return err
@@ -215,7 +231,7 @@ func Sql_v1beta3_FlagsList(context Context, args ...string) error {
 	}
 
 	expectedParams := []string{}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
@@ -281,12 +297,15 @@ func Sql_v1beta3_InstancesClone(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.Clone(param_project,
 		request,
@@ -330,13 +349,19 @@ func Sql_v1beta3_InstancesDelete(context Context, args ...string) error {
 		"project",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_instance := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_project, param_instance)
 
@@ -400,13 +425,19 @@ func Sql_v1beta3_InstancesExport(context Context, args ...string) error {
 		"project",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_instance := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Export(param_project, param_instance,
 		request,
@@ -450,13 +481,19 @@ func Sql_v1beta3_InstancesGet(context Context, args ...string) error {
 		"project",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_instance := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_instance)
 
@@ -520,13 +557,19 @@ func Sql_v1beta3_InstancesImport(context Context, args ...string) error {
 		"project",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_instance := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Import(param_project, param_instance,
 		request,
@@ -591,12 +634,15 @@ func Sql_v1beta3_InstancesInsert(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_project,
 		request,
@@ -659,12 +705,15 @@ func Sql_v1beta3_InstancesList(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project)
 
@@ -744,13 +793,19 @@ func Sql_v1beta3_InstancesPatch(context Context, args ...string) error {
 		"project",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_instance := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Patch(param_project, param_instance,
 		request,
@@ -794,13 +849,19 @@ func Sql_v1beta3_InstancesPromoteReplica(context Context, args ...string) error 
 		"project",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_instance := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.PromoteReplica(param_project, param_instance)
 
@@ -842,13 +903,19 @@ func Sql_v1beta3_InstancesResetSslConfig(context Context, args ...string) error 
 		"project",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_instance := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.ResetSslConfig(param_project, param_instance)
 
@@ -890,13 +957,19 @@ func Sql_v1beta3_InstancesRestart(context Context, args ...string) error {
 		"project",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_instance := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Restart(param_project, param_instance)
 
@@ -958,13 +1031,19 @@ func Sql_v1beta3_InstancesRestoreBackup(context Context, args ...string) error {
 		"project",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_instance := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 	param_backupConfiguration, err := commands_util.ConvertValue_string(flagValues["backupConfiguration"])
 	if err != nil {
 		return err
@@ -1036,13 +1115,19 @@ func Sql_v1beta3_InstancesSetRootPassword(context Context, args ...string) error
 		"project",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_instance := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.SetRootPassword(param_project, param_instance,
 		request,
@@ -1108,13 +1193,19 @@ func Sql_v1beta3_InstancesUpdate(context Context, args ...string) error {
 		"project",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_instance := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Update(param_project, param_instance,
 		request,
@@ -1159,14 +1250,23 @@ func Sql_v1beta3_OperationsGet(context Context, args ...string) error {
 		"instance",
 		"operation",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_instance := paramValues[1]
-	param_operation := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_operation, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_instance, param_operation)
 
@@ -1228,13 +1328,19 @@ func Sql_v1beta3_OperationsList(context Context, args ...string) error {
 		"project",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_instance := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project, param_instance)
 
@@ -1293,14 +1399,23 @@ func Sql_v1beta3_SslCertsDelete(context Context, args ...string) error {
 		"instance",
 		"sha1Fingerprint",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_instance := paramValues[1]
-	param_sha1Fingerprint := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_sha1Fingerprint, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_project, param_instance, param_sha1Fingerprint)
 
@@ -1343,14 +1458,23 @@ func Sql_v1beta3_SslCertsGet(context Context, args ...string) error {
 		"instance",
 		"sha1Fingerprint",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_instance := paramValues[1]
-	param_sha1Fingerprint := paramValues[2]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_sha1Fingerprint, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_project, param_instance, param_sha1Fingerprint)
 
@@ -1414,13 +1538,19 @@ func Sql_v1beta3_SslCertsInsert(context Context, args ...string) error {
 		"project",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_instance := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_project, param_instance,
 		request,
@@ -1464,13 +1594,19 @@ func Sql_v1beta3_SslCertsList(context Context, args ...string) error {
 		"project",
 		"instance",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
-	param_instance := paramValues[1]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project, param_instance)
 
@@ -1511,12 +1647,15 @@ func Sql_v1beta3_TiersList(context Context, args ...string) error {
 	expectedParams := []string{
 		"project",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_project := paramValues[0]
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_project)
 

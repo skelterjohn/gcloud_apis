@@ -31,6 +31,7 @@ import (
 var _ = fmt.Println
 var _ = io.Copy
 var _ = os.Stdin
+var _ = strings.Split
 
 func Bigquery_v2_DatasetsDelete(context Context, args ...string) error {
 
@@ -73,13 +74,19 @@ func Bigquery_v2_DatasetsDelete(context Context, args ...string) error {
 		"projectId",
 		"datasetId",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
-	param_datasetId := paramValues[1]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_datasetId, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_projectId, param_datasetId)
 
@@ -124,13 +131,19 @@ func Bigquery_v2_DatasetsGet(context Context, args ...string) error {
 		"projectId",
 		"datasetId",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
-	param_datasetId := paramValues[1]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_datasetId, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_projectId, param_datasetId)
 
@@ -193,12 +206,15 @@ func Bigquery_v2_DatasetsInsert(context Context, args ...string) error {
 	expectedParams := []string{
 		"projectId",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_projectId,
 		request,
@@ -264,12 +280,15 @@ func Bigquery_v2_DatasetsList(context Context, args ...string) error {
 	expectedParams := []string{
 		"projectId",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_projectId)
 
@@ -356,13 +375,19 @@ func Bigquery_v2_DatasetsPatch(context Context, args ...string) error {
 		"projectId",
 		"datasetId",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
-	param_datasetId := paramValues[1]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_datasetId, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Patch(param_projectId, param_datasetId,
 		request,
@@ -428,19 +453,79 @@ func Bigquery_v2_DatasetsUpdate(context Context, args ...string) error {
 		"projectId",
 		"datasetId",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
-	param_datasetId := paramValues[1]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_datasetId, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Update(param_projectId, param_datasetId,
 		request,
 	)
 
 	var response *api_client.Dataset
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Bigquery_v2_JobsCancel(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewJobsService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"projectId",
+		"jobId",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_jobId, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.Cancel(param_projectId, param_jobId)
+
+	var response *api_client.JobCancelResponse
 	response, err = call.Do()
 	if err != nil {
 		return err
@@ -478,13 +563,19 @@ func Bigquery_v2_JobsGet(context Context, args ...string) error {
 		"projectId",
 		"jobId",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
-	param_jobId := paramValues[1]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_jobId, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_projectId, param_jobId)
 
@@ -552,13 +643,19 @@ func Bigquery_v2_JobsGetQueryResults(context Context, args ...string) error {
 		"projectId",
 		"jobId",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
-	param_jobId := paramValues[1]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_jobId, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.GetQueryResults(param_projectId, param_jobId)
 
@@ -663,12 +760,15 @@ func Bigquery_v2_JobsInsert(context Context, args ...string) error {
 	expectedParams := []string{
 		"projectId",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_projectId,
 		request,
@@ -744,12 +844,15 @@ func Bigquery_v2_JobsList(context Context, args ...string) error {
 	expectedParams := []string{
 		"projectId",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_projectId)
 
@@ -849,12 +952,15 @@ func Bigquery_v2_JobsQuery(context Context, args ...string) error {
 	expectedParams := []string{
 		"projectId",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
 
 	call := service.Query(param_projectId,
 		request,
@@ -915,7 +1021,7 @@ func Bigquery_v2_ProjectsList(context Context, args ...string) error {
 	}
 
 	expectedParams := []string{}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
@@ -999,14 +1105,23 @@ func Bigquery_v2_TabledataInsertAll(context Context, args ...string) error {
 		"datasetId",
 		"tableId",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
-	param_datasetId := paramValues[1]
-	param_tableId := paramValues[2]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_datasetId, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_tableId, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.InsertAll(param_projectId, param_datasetId, param_tableId,
 		request,
@@ -1074,14 +1189,23 @@ func Bigquery_v2_TabledataList(context Context, args ...string) error {
 		"datasetId",
 		"tableId",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
-	param_datasetId := paramValues[1]
-	param_tableId := paramValues[2]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_datasetId, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_tableId, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_projectId, param_datasetId, param_tableId)
 
@@ -1147,14 +1271,23 @@ func Bigquery_v2_TablesDelete(context Context, args ...string) error {
 		"datasetId",
 		"tableId",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
-	param_datasetId := paramValues[1]
-	param_tableId := paramValues[2]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_datasetId, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_tableId, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_projectId, param_datasetId, param_tableId)
 
@@ -1191,14 +1324,23 @@ func Bigquery_v2_TablesGet(context Context, args ...string) error {
 		"datasetId",
 		"tableId",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
-	param_datasetId := paramValues[1]
-	param_tableId := paramValues[2]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_datasetId, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_tableId, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_projectId, param_datasetId, param_tableId)
 
@@ -1262,13 +1404,19 @@ func Bigquery_v2_TablesInsert(context Context, args ...string) error {
 		"projectId",
 		"datasetId",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
-	param_datasetId := paramValues[1]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_datasetId, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_projectId, param_datasetId,
 		request,
@@ -1332,13 +1480,19 @@ func Bigquery_v2_TablesList(context Context, args ...string) error {
 		"projectId",
 		"datasetId",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
-	param_datasetId := paramValues[1]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_datasetId, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_projectId, param_datasetId)
 
@@ -1419,14 +1573,23 @@ func Bigquery_v2_TablesPatch(context Context, args ...string) error {
 		"datasetId",
 		"tableId",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
-	param_datasetId := paramValues[1]
-	param_tableId := paramValues[2]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_datasetId, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_tableId, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Patch(param_projectId, param_datasetId, param_tableId,
 		request,
@@ -1493,14 +1656,23 @@ func Bigquery_v2_TablesUpdate(context Context, args ...string) error {
 		"datasetId",
 		"tableId",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId := paramValues[0]
-	param_datasetId := paramValues[1]
-	param_tableId := paramValues[2]
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_datasetId, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_tableId, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Update(param_projectId, param_datasetId, param_tableId,
 		request,

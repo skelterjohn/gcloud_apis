@@ -1,4 +1,4 @@
-// Package manager provides access to the Deployment Manager API.
+// Package manager provides access to the Google Cloud Deployment Manager API.
 //
 // See https://developers.google.com/deployment-manager/
 //
@@ -46,6 +46,9 @@ const (
 
 	// View and manage your data across Google Cloud Platform services
 	CloudPlatformScope = "https://www.googleapis.com/auth/cloud-platform"
+
+	// View your data across Google Cloud Platform services
+	CloudPlatformReadOnlyScope = "https://www.googleapis.com/auth/cloud-platform.read-only"
 
 	// View and manage your Google Compute Engine resources
 	ComputeScope = "https://www.googleapis.com/auth/compute"
@@ -761,6 +764,7 @@ func (c *DeploymentsGetCall) Do() (*Deployment, error) {
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only",
 	//     "https://www.googleapis.com/auth/ndev.cloudman",
 	//     "https://www.googleapis.com/auth/ndev.cloudman.readonly"
 	//   ]
@@ -983,6 +987,7 @@ func (c *DeploymentsListCall) Do() (*DeploymentsListResponse, error) {
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only",
 	//     "https://www.googleapis.com/auth/ndev.cloudman",
 	//     "https://www.googleapis.com/auth/ndev.cloudman.readonly"
 	//   ]
@@ -1147,6 +1152,7 @@ func (c *TemplatesGetCall) Do() (*Template, error) {
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only",
 	//     "https://www.googleapis.com/auth/ndev.cloudman",
 	//     "https://www.googleapis.com/auth/ndev.cloudman.readonly"
 	//   ]
@@ -1348,6 +1354,7 @@ func (c *TemplatesListCall) Do() (*TemplatesListResponse, error) {
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only",
 	//     "https://www.googleapis.com/auth/ndev.cloudman",
 	//     "https://www.googleapis.com/auth/ndev.cloudman.readonly"
 	//   ]

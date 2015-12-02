@@ -4,8 +4,8 @@
  "id": "manager:v1beta2",
  "name": "manager",
  "version": "v1beta2",
- "revision": "20141030",
- "title": "Deployment Manager API",
+ "revision": "20151130",
+ "title": "Google Cloud Deployment Manager API",
  "description": "The Deployment Manager API allows users to declaratively configure, deploy and run complex solutions on the Google Cloud Platform.",
  "ownerDomain": "google.com",
  "ownerName": "Google",
@@ -76,6 +76,9 @@
     },
     "https://www.googleapis.com/auth/cloud-platform": {
      "description": "View and manage your data across Google Cloud Platform services"
+    },
+    "https://www.googleapis.com/auth/cloud-platform.read-only": {
+     "description": "View your data across Google Cloud Platform services"
     },
     "https://www.googleapis.com/auth/compute": {
      "description": "View and manage your Google Compute Engine resources"
@@ -950,6 +953,7 @@
      },
      "scopes": [
       "https://www.googleapis.com/auth/cloud-platform",
+      "https://www.googleapis.com/auth/cloud-platform.read-only",
       "https://www.googleapis.com/auth/ndev.cloudman",
       "https://www.googleapis.com/auth/ndev.cloudman.readonly"
      ]
@@ -1029,6 +1033,7 @@
      },
      "scopes": [
       "https://www.googleapis.com/auth/cloud-platform",
+      "https://www.googleapis.com/auth/cloud-platform.read-only",
       "https://www.googleapis.com/auth/ndev.cloudman",
       "https://www.googleapis.com/auth/ndev.cloudman.readonly"
      ]
@@ -1089,6 +1094,7 @@
      },
      "scopes": [
       "https://www.googleapis.com/auth/cloud-platform",
+      "https://www.googleapis.com/auth/cloud-platform.read-only",
       "https://www.googleapis.com/auth/ndev.cloudman",
       "https://www.googleapis.com/auth/ndev.cloudman.readonly"
      ]
@@ -1153,6 +1159,7 @@
      },
      "scopes": [
       "https://www.googleapis.com/auth/cloud-platform",
+      "https://www.googleapis.com/auth/cloud-platform.read-only",
       "https://www.googleapis.com/auth/ndev.cloudman",
       "https://www.googleapis.com/auth/ndev.cloudman.readonly"
      ]

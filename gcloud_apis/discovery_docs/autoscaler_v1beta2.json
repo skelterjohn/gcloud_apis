@@ -4,7 +4,7 @@
  "id": "autoscaler:v1beta2",
  "name": "autoscaler",
  "version": "v1beta2",
- "revision": "20141030",
+ "revision": "20151130",
  "title": "Google Compute Engine Autoscaler API",
  "description": "The Google Compute Engine Autoscaler API provides autoscaling for groups of Cloud VMs.",
  "ownerDomain": "google.com",
@@ -156,7 +156,7 @@
     },
     "cpuUtilization": {
      "$ref": "AutoscalingPolicyCpuUtilization",
-     "description": "Exactly one utilization policy should be provided. Configuration parameters of CPU based autoscaling policy."
+     "description": "Configuration parameters of CPU based autoscaling policy."
     },
     "customMetricUtilizations": {
      "type": "array",
@@ -256,6 +256,9 @@
     "creationTimestamp": {
      "type": "string"
     },
+    "description": {
+     "type": "string"
+    },
     "endTime": {
      "type": "string"
     },
@@ -297,7 +300,7 @@
     },
     "kind": {
      "type": "string",
-     "description": "Type of the resource.",
+     "description": "[Output Only] Type of the resource. Always compute#operation for Operation resources.",
      "default": "autoscaler#operation"
     },
     "name": {
@@ -383,7 +386,7 @@
     },
     "kind": {
      "type": "string",
-     "description": "Type of resource.",
+     "description": "[Output Only] Type of resource. Always compute#operations for Operations resource.",
      "default": "autoscaler#operationList"
     },
     "nextPageToken": {
@@ -413,7 +416,7 @@
     },
     "kind": {
      "type": "string",
-     "description": "Type of the resource.",
+     "description": "[Output Only] Type of the resource. Always kind#zone for zones.",
      "default": "autoscaler#zone"
     },
     "maintenanceWindows": {
@@ -444,7 +447,7 @@
     },
     "selfLink": {
      "type": "string",
-     "description": "Server defined URL for the resource (output only)."
+     "description": "[Output Only] Server-defined URL for the resource."
     },
     "status": {
      "type": "string"
@@ -474,7 +477,7 @@
     },
     "selfLink": {
      "type": "string",
-     "description": "Server defined URL for this resource (output only)."
+     "description": "[Output Only] Server-defined URL for this resource."
     }
    }
   }

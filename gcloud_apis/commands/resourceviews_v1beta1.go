@@ -31,6 +31,7 @@ import (
 var _ = fmt.Println
 var _ = io.Copy
 var _ = os.Stdin
+var _ = strings.Split
 
 func Resourceviews_v1beta1_RegionViewsAddresources(context Context, args ...string) error {
 
@@ -79,14 +80,23 @@ func Resourceviews_v1beta1_RegionViewsAddresources(context Context, args ...stri
 		"region",
 		"resourceViewName",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectName := paramValues[0]
-	param_region := paramValues[1]
-	param_resourceViewName := paramValues[2]
+	param_projectName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_resourceViewName, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Addresources(param_projectName, param_region, param_resourceViewName,
 		request,
@@ -125,14 +135,23 @@ func Resourceviews_v1beta1_RegionViewsDelete(context Context, args ...string) er
 		"region",
 		"resourceViewName",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectName := paramValues[0]
-	param_region := paramValues[1]
-	param_resourceViewName := paramValues[2]
+	param_projectName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_resourceViewName, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_projectName, param_region, param_resourceViewName)
 
@@ -169,14 +188,23 @@ func Resourceviews_v1beta1_RegionViewsGet(context Context, args ...string) error
 		"region",
 		"resourceViewName",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectName := paramValues[0]
-	param_region := paramValues[1]
-	param_resourceViewName := paramValues[2]
+	param_projectName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_resourceViewName, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_projectName, param_region, param_resourceViewName)
 
@@ -240,13 +268,19 @@ func Resourceviews_v1beta1_RegionViewsInsert(context Context, args ...string) er
 		"projectName",
 		"region",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectName := paramValues[0]
-	param_region := paramValues[1]
+	param_projectName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_projectName, param_region,
 		request,
@@ -310,13 +344,19 @@ func Resourceviews_v1beta1_RegionViewsList(context Context, args ...string) erro
 		"projectName",
 		"region",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectName := paramValues[0]
-	param_region := paramValues[1]
+	param_projectName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_projectName, param_region)
 
@@ -395,14 +435,23 @@ func Resourceviews_v1beta1_RegionViewsListresources(context Context, args ...str
 		"region",
 		"resourceViewName",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectName := paramValues[0]
-	param_region := paramValues[1]
-	param_resourceViewName := paramValues[2]
+	param_projectName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_resourceViewName, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Listresources(param_projectName, param_region, param_resourceViewName)
 
@@ -483,14 +532,23 @@ func Resourceviews_v1beta1_RegionViewsRemoveresources(context Context, args ...s
 		"region",
 		"resourceViewName",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectName := paramValues[0]
-	param_region := paramValues[1]
-	param_resourceViewName := paramValues[2]
+	param_projectName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_resourceViewName, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Removeresources(param_projectName, param_region, param_resourceViewName,
 		request,
@@ -551,14 +609,23 @@ func Resourceviews_v1beta1_ZoneViewsAddresources(context Context, args ...string
 		"zone",
 		"resourceViewName",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectName := paramValues[0]
-	param_zone := paramValues[1]
-	param_resourceViewName := paramValues[2]
+	param_projectName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_resourceViewName, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Addresources(param_projectName, param_zone, param_resourceViewName,
 		request,
@@ -597,14 +664,23 @@ func Resourceviews_v1beta1_ZoneViewsDelete(context Context, args ...string) erro
 		"zone",
 		"resourceViewName",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectName := paramValues[0]
-	param_zone := paramValues[1]
-	param_resourceViewName := paramValues[2]
+	param_projectName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_resourceViewName, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Delete(param_projectName, param_zone, param_resourceViewName)
 
@@ -641,14 +717,23 @@ func Resourceviews_v1beta1_ZoneViewsGet(context Context, args ...string) error {
 		"zone",
 		"resourceViewName",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectName := paramValues[0]
-	param_zone := paramValues[1]
-	param_resourceViewName := paramValues[2]
+	param_projectName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_resourceViewName, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Get(param_projectName, param_zone, param_resourceViewName)
 
@@ -712,13 +797,19 @@ func Resourceviews_v1beta1_ZoneViewsInsert(context Context, args ...string) erro
 		"projectName",
 		"zone",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectName := paramValues[0]
-	param_zone := paramValues[1]
+	param_projectName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.Insert(param_projectName, param_zone,
 		request,
@@ -782,13 +873,19 @@ func Resourceviews_v1beta1_ZoneViewsList(context Context, args ...string) error 
 		"projectName",
 		"zone",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectName := paramValues[0]
-	param_zone := paramValues[1]
+	param_projectName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
 
 	call := service.List(param_projectName, param_zone)
 
@@ -867,14 +964,23 @@ func Resourceviews_v1beta1_ZoneViewsListresources(context Context, args ...strin
 		"zone",
 		"resourceViewName",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectName := paramValues[0]
-	param_zone := paramValues[1]
-	param_resourceViewName := paramValues[2]
+	param_projectName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_resourceViewName, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Listresources(param_projectName, param_zone, param_resourceViewName)
 
@@ -955,14 +1061,23 @@ func Resourceviews_v1beta1_ZoneViewsRemoveresources(context Context, args ...str
 		"zone",
 		"resourceViewName",
 	}
-	paramValues := strings.Split(args[0], "/")
+	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectName := paramValues[0]
-	param_zone := paramValues[1]
-	param_resourceViewName := paramValues[2]
+	param_projectName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_resourceViewName, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
 
 	call := service.Removeresources(param_projectName, param_zone, param_resourceViewName,
 		request,

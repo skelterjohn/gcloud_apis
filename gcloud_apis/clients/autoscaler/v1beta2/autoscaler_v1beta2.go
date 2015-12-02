@@ -152,8 +152,8 @@ type AutoscalingPolicy struct {
 	// seconds.
 	CoolDownPeriodSec int64 `json:"coolDownPeriodSec,omitempty"`
 
-	// CpuUtilization: Exactly one utilization policy should be provided.
-	// Configuration parameters of CPU based autoscaling policy.
+	// CpuUtilization: Configuration parameters of CPU based autoscaling
+	// policy.
 	CpuUtilization *AutoscalingPolicyCpuUtilization `json:"cpuUtilization,omitempty"`
 
 	// CustomMetricUtilizations: Configuration parameters of autoscaling
@@ -227,6 +227,8 @@ type Operation struct {
 
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
 
+	Description string `json:"description,omitempty"`
+
 	EndTime string `json:"endTime,omitempty"`
 
 	Error *OperationError `json:"error,omitempty"`
@@ -239,7 +241,8 @@ type Operation struct {
 
 	InsertTime string `json:"insertTime,omitempty"`
 
-	// Kind: Type of the resource.
+	// Kind: [Output Only] Type of the resource. Always compute#operation
+	// for Operation resources.
 	Kind string `json:"kind,omitempty"`
 
 	Name string `json:"name,omitempty"`
@@ -300,7 +303,8 @@ type OperationList struct {
 
 	Items []*Operation `json:"items,omitempty"`
 
-	// Kind: Type of resource.
+	// Kind: [Output Only] Type of resource. Always compute#operations for
+	// Operations resource.
 	Kind string `json:"kind,omitempty"`
 
 	NextPageToken string `json:"nextPageToken,omitempty"`
@@ -317,7 +321,7 @@ type Zone struct {
 
 	Id uint64 `json:"id,omitempty,string"`
 
-	// Kind: Type of the resource.
+	// Kind: [Output Only] Type of the resource. Always kind#zone for zones.
 	Kind string `json:"kind,omitempty"`
 
 	MaintenanceWindows []*ZoneMaintenanceWindows `json:"maintenanceWindows,omitempty"`
@@ -326,7 +330,7 @@ type Zone struct {
 
 	Region string `json:"region,omitempty"`
 
-	// SelfLink: Server defined URL for the resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for the resource.
 	SelfLink string `json:"selfLink,omitempty"`
 
 	Status string `json:"status,omitempty"`
@@ -352,7 +356,7 @@ type ZoneList struct {
 
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// SelfLink: Server defined URL for this resource (output only).
+	// SelfLink: [Output Only] Server-defined URL for this resource.
 	SelfLink string `json:"selfLink,omitempty"`
 }
 
