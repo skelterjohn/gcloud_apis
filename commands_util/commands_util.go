@@ -25,6 +25,8 @@ import (
 	"strconv"
 	"strings"
 	"unicode"
+
+	"github.com/skelterjohn/overwrite"
 )
 
 func PopulateRequestFromFilename(requestObject interface{}, filename string) error {
@@ -43,7 +45,7 @@ func PopulateRequestFromFilename(requestObject interface{}, filename string) err
 
 func OverwriteRequestWithValues(requestObject interface{}, keyValues map[string]string) error {
 	for key, val := range keyValues {
-		err := Overwrite(requestObject, key, val)
+		err := overwrite.Overwrite(requestObject, key, val)
 		if err != nil {
 			return fmt.Errorf("for key \"--%s\": while evaluating %s", key, err)
 		}
