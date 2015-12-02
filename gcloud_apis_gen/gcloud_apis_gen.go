@@ -26,7 +26,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/GoogleCloudPlatform/gcloud/gcloud_apis/gcloud_apis_gen/discovery"
+	"github.com/skelterjohn/gcloud_apis/gcloud_apis_gen/discovery"
 )
 
 func capitalize(s string) string {

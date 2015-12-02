@@ -22,7 +22,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/GoogleCloudPlatform/gcloud/gcloud_apis/commands"
+	"github.com/skelterjohn/gcloud_apis/commands"
 )
 
 func Usage() {

@@ -1,24 +1,102 @@
-# gcloud
+# gcloud_apis
 
-[![Build Status](https://travis-ci.org/GoogleCloudPlatform/gcloud.svg?branch=master)](https://travis-ci.org/GoogleCloudPlatform/gcloud)
+`gcloud_apis` is an auto-generated command-line interface (CLI) to interact with any Google Cloud Platform REST API.
 
-`gcloud` is the command-line interface (CLI) for the Google Cloud Platform.
+## Dependencies
 
-To install `gcloud`, download the [Cloud SDK](https://cloud.google.com/sdk/#Quick_Start).  For more information about the Cloud SDK, visit [https://cloud.google.com/sdk/](https://cloud.google.com/sdk/).
+* [Go](https://golang.org/doc/install): To set up your environment correctly, read [How to Write Go Code](https://golang.org/doc/code.html).  Make sure your `GOPATH` environment variable is set.
 
-This repository hosts `gcloud` components that are written in Go.
+* [Cloud SDK](https://cloud.google.com/sdk/)
 
-## Go Components
+## Installation & Setup
 
-* [gcloud_apis](https://github.com/GoogleCloudPlatform/gcloud/tree/master/gcloud_apis): An auto-generated CLI to interact with any Google Cloud Platform REST API
-
-	Install via:
+1. Download and install `gcloud_apis` with the Go tool:
 	```sh
 	$ go get github.com/GoogleCloudPlatform/gcloud/gcloud_apis
 	```
 
-	See [gcloud_apis/README](https://github.com/GoogleCloudPlatform/gcloud/blob/master/gcloud_apis/README.md) for details.
+2. Make sure you have an authenticated user account with `gcloud`:
+	```sh
+	$ gcloud auth login
+	```
 
-## Contributing
+3. To set up auth for `gcloud_apis`, export the refresh token:
 
-Want to contribute? Great! First, read [this page](https://github.com/GoogleCloudPlatform/gcloud/blob/master/CONTRIBUTING.md) (including the small print at the end).
+	```sh
+	$ export GCLOUD_APIS_REFRESH_TOKEN=$(gcloud auth print-refresh-token)
+	```
+
+## Usage
+
+### List methods
+
+```sh
+$ gcloud_apis list
+autoscaler
+autoscaler:v1beta2
+bigquery
+bigquery:v2
+compute
+compute:v1
+```
+
+```sh
+$ gcloud_apis list autoscaler
+autoscaler.autoscalers
+autoscaler.zoneOperations
+autoscaler.zones
+```
+
+```sh
+$ gcloud_apis list autoscaler.autoscalers
+autoscaler.autoscalers.delete
+autoscaler.autoscalers.get
+autoscaler.autoscalers.insert
+autoscaler.autoscalers.list
+autoscaler.autoscalers.patch
+autoscaler.autoscalers.update
+```
+
+### Make requests
+
+```sh
+$ gcloud_apis compute.instances.list <YOUR PROJECT>/us-central1-a
+{
+ "id": "projects/<YOUR PROJECT>/zones/us-central1-a/instances",
+ "kind": "compute#instanceList",
+ "selfLink": "https://www.googleapis.com/compute/v1/projects/<YOUR PROJECT>/zones/us-central1-a/instances"
+}
+```
+
+```sh
+$ gcloud_apis compute.projects.setCommonInstanceMetadata <YOUR PROJECT> --items[0].key=foo --items[0].value=bar
+{
+  "id": "4687621082493875678",
+  "insertTime": "2014-11-02T14:03:25.131-08:00",
+  "kind": "compute#operation",
+  "name": "operation-1418418066582-29739ad979c21-7e7dac48-b6146833",
+  "operationType": "setMetadata",
+  "selfLink": "https://www.googleapis.com/compute/v1/projects/<YOUR PROJECT>/global/operations/operation-1418418066582-29739ad979c21-7e7dac48-b6146833",
+  "startTime": "2014-11-02T14:03:25.131-08:00",
+  "status": "PENDING",
+  "targetId": "14043977863849352249",
+  "targetLink": "https://www.googleapis.com/compute/v1/projects/<YOUR PROJECT>",
+  "user": "set
+}
+```
+
+```sh
+$ gcloud_apis compute.projects.get <YOUR PROJECT>
+{
+  "commonInstanceMetadata": {
+    "fingerprint": "Vm9SEZQeWH0=",
+    "kind": "compute#metadata"
+  },
+  "creationTimestamp": "2014-11-02T14:03:25.131-08:00",
+  "id": "14043977863193752249",
+  "kind": "compute#project",
+  "name": "<YOUR PROJECT>",
+  "quotas": [],
+  "selfLink": "https://www.googleapis.com/compute/v1/projects/<YOUR PROJECT>"
+}
+```
