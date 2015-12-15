@@ -131,3 +131,14 @@ func SplitParamValues(arg string) (params []string) {
 	}
 	return strings.Split(arg, sep)
 }
+
+func AngrySnakes(param string) string {
+	var res string
+	for _, c := range param {
+		if unicode.IsUpper(c) {
+			res += "_"
+		}
+		res += string(unicode.ToUpper(c))
+	}
+	return res
+}

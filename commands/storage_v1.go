@@ -37,6 +37,17 @@ func Storage_v1_BucketAccessControlsDelete(context Context, args ...string) erro
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("entity"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/acl/{entity}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -85,6 +96,17 @@ func Storage_v1_BucketAccessControlsGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("entity"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/acl/{entity}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -139,6 +161,16 @@ func Storage_v1_BucketAccessControlsInsert(context Context, args ...string) erro
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/acl", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -212,6 +244,16 @@ func Storage_v1_BucketAccessControlsList(context Context, args ...string) error 
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/acl", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -261,6 +303,17 @@ func Storage_v1_BucketAccessControlsPatch(context Context, args ...string) error
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("entity"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/acl/{entity}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -339,6 +392,17 @@ func Storage_v1_BucketAccessControlsUpdate(context Context, args ...string) erro
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("entity"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/acl/{entity}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -417,6 +481,16 @@ func Storage_v1_BucketsDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--ifMetagenerationMatch=VALUE]"
 
@@ -496,6 +570,16 @@ func Storage_v1_BucketsGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--ifMetagenerationMatch=VALUE]"
 
@@ -591,6 +675,16 @@ func Storage_v1_BucketsInsert(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -712,6 +806,16 @@ func Storage_v1_BucketsList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--maxResults=VALUE]"
 
@@ -818,6 +922,16 @@ func Storage_v1_BucketsPatch(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -958,6 +1072,16 @@ func Storage_v1_BucketsUpdate(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -1098,6 +1222,15 @@ func Storage_v1_ChannelsStop(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+
+		if len(pathParams) != 0 {
+			if strings.Contains("channels/stop", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -1158,6 +1291,17 @@ func Storage_v1_DefaultObjectAccessControlsDelete(context Context, args ...strin
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("entity"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/defaultObjectAcl/{entity}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1206,6 +1350,17 @@ func Storage_v1_DefaultObjectAccessControlsGet(context Context, args ...string) 
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("entity"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/defaultObjectAcl/{entity}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1260,6 +1415,16 @@ func Storage_v1_DefaultObjectAccessControlsInsert(context Context, args ...strin
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/defaultObjectAcl", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -1333,6 +1498,16 @@ func Storage_v1_DefaultObjectAccessControlsList(context Context, args ...string)
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/defaultObjectAcl", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--ifMetagenerationMatch=VALUE]"
 
@@ -1418,6 +1593,17 @@ func Storage_v1_DefaultObjectAccessControlsPatch(context Context, args ...string
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("entity"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/defaultObjectAcl/{entity}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -1496,6 +1682,17 @@ func Storage_v1_DefaultObjectAccessControlsUpdate(context Context, args ...strin
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("entity"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/defaultObjectAcl/{entity}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -1574,6 +1771,18 @@ func Storage_v1_ObjectAccessControlsDelete(context Context, args ...string) erro
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("object"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("entity"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/o/{object}/acl/{entity}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--generation=VALUE]"
 
@@ -1653,6 +1862,18 @@ func Storage_v1_ObjectAccessControlsGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("object"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("entity"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/o/{object}/acl/{entity}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--generation=VALUE]"
 
@@ -1738,6 +1959,17 @@ func Storage_v1_ObjectAccessControlsInsert(context Context, args ...string) erro
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("object"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/o/{object}/acl", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -1843,6 +2075,17 @@ func Storage_v1_ObjectAccessControlsList(context Context, args ...string) error 
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("object"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/o/{object}/acl", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--generation=VALUE]"
 
@@ -1923,6 +2166,18 @@ func Storage_v1_ObjectAccessControlsPatch(context Context, args ...string) error
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("object"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("entity"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/o/{object}/acl/{entity}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -2033,6 +2288,18 @@ func Storage_v1_ObjectAccessControlsUpdate(context Context, args ...string) erro
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("object"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("entity"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/o/{object}/acl/{entity}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -2143,6 +2410,17 @@ func Storage_v1_ObjectsCompose(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("destinationBucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("destinationObject"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{destinationBucket}/o/{destinationObject}/compose", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -2268,6 +2546,19 @@ func Storage_v1_ObjectsCopy(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("sourceBucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("sourceObject"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("destinationBucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("destinationObject"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{sourceBucket}/o/{sourceObject}/copyTo/b/{destinationBucket}/o/{destinationObject}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -2483,6 +2774,17 @@ func Storage_v1_ObjectsDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("object"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/o/{object}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--generation=VALUE]"
 
@@ -2597,6 +2899,17 @@ func Storage_v1_ObjectsGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("object"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/o/{object}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--generation=VALUE]"
 
@@ -2727,6 +3040,16 @@ func Storage_v1_ObjectsInsert(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/o", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -2913,6 +3236,16 @@ func Storage_v1_ObjectsList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/o", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--delimiter=VALUE]"
 
@@ -3038,6 +3371,17 @@ func Storage_v1_ObjectsPatch(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("object"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/o/{object}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -3203,6 +3547,19 @@ func Storage_v1_ObjectsRewrite(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("sourceBucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("sourceObject"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("destinationBucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("destinationObject"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{sourceBucket}/o/{sourceObject}/rewriteTo/b/{destinationBucket}/o/{destinationObject}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -3438,6 +3795,17 @@ func Storage_v1_ObjectsUpdate(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("object"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/o/{object}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -3603,6 +3971,16 @@ func Storage_v1_ObjectsWatchAll(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/o/watch", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 

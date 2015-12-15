@@ -37,6 +37,16 @@ func Dataflow_v1b3_ProjectsJobsCreate(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1b3/projects/{projectId}/jobs", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -147,6 +157,17 @@ func Dataflow_v1b3_ProjectsJobsGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("jobId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1b3/projects/{projectId}/jobs/{jobId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--view=VALUE]"
 
@@ -227,6 +248,17 @@ func Dataflow_v1b3_ProjectsJobsGetMetrics(context Context, args ...string) error
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("jobId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1b3/projects/{projectId}/jobs/{jobId}/metrics", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--startTime=VALUE]"
 
@@ -307,6 +339,16 @@ func Dataflow_v1b3_ProjectsJobsList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1b3/projects/{projectId}/jobs", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--pageSize=VALUE]"
 
@@ -402,6 +444,17 @@ func Dataflow_v1b3_ProjectsJobsMessagesList(context Context, args ...string) err
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("jobId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1b3/projects/{projectId}/jobs/{jobId}/messages", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--endTime=VALUE]"
 
@@ -522,6 +575,17 @@ func Dataflow_v1b3_ProjectsJobsUpdate(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("jobId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1b3/projects/{projectId}/jobs/{jobId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -600,6 +664,17 @@ func Dataflow_v1b3_ProjectsJobsWorkItemsLease(context Context, args ...string) e
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("jobId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1b3/projects/{projectId}/jobs/{jobId}/workItems:lease", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -678,6 +753,17 @@ func Dataflow_v1b3_ProjectsJobsWorkItemsReportStatus(context Context, args ...st
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("jobId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1b3/projects/{projectId}/jobs/{jobId}/workItems:reportStatus", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -756,6 +842,16 @@ func Dataflow_v1b3_ProjectsWorkerMessages(context Context, args ...string) error
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1b3/projects/{projectId}/WorkerMessages", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 

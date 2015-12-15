@@ -37,6 +37,18 @@ func Sql_v1beta4_BackupRunsDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("id"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/backupRuns/{id}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -96,6 +108,18 @@ func Sql_v1beta4_BackupRunsGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("id"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/backupRuns/{id}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -155,6 +179,17 @@ func Sql_v1beta4_BackupRunsList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/backupRuns", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--maxResults=VALUE]"
 
@@ -245,6 +280,18 @@ func Sql_v1beta4_DatabasesDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("database"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/databases/{database}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -304,6 +351,18 @@ func Sql_v1beta4_DatabasesGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("database"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/databases/{database}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -363,6 +422,17 @@ func Sql_v1beta4_DatabasesInsert(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/databases", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -441,6 +511,17 @@ func Sql_v1beta4_DatabasesList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/databases", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -495,6 +576,18 @@ func Sql_v1beta4_DatabasesPatch(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("database"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/databases/{database}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -578,6 +671,18 @@ func Sql_v1beta4_DatabasesUpdate(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("database"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/databases/{database}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -661,6 +766,15 @@ func Sql_v1beta4_FlagsList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+
+		if len(pathParams) != 0 {
+			if strings.Contains("flags", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -703,6 +817,17 @@ func Sql_v1beta4_InstancesClone(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/clone", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -781,6 +906,17 @@ func Sql_v1beta4_InstancesDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -835,6 +971,17 @@ func Sql_v1beta4_InstancesExport(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/export", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -913,6 +1060,17 @@ func Sql_v1beta4_InstancesFailover(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/failover", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -991,6 +1149,17 @@ func Sql_v1beta4_InstancesGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1045,6 +1214,17 @@ func Sql_v1beta4_InstancesImport(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/import", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -1123,6 +1303,16 @@ func Sql_v1beta4_InstancesInsert(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -1196,6 +1386,16 @@ func Sql_v1beta4_InstancesList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--maxResults=VALUE]"
 
@@ -1281,6 +1481,17 @@ func Sql_v1beta4_InstancesPatch(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -1359,6 +1570,17 @@ func Sql_v1beta4_InstancesPromoteReplica(context Context, args ...string) error 
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/promoteReplica", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1413,6 +1635,17 @@ func Sql_v1beta4_InstancesResetSslConfig(context Context, args ...string) error 
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/resetSslConfig", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1467,6 +1700,17 @@ func Sql_v1beta4_InstancesRestart(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/restart", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1521,6 +1765,17 @@ func Sql_v1beta4_InstancesRestoreBackup(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/restoreBackup", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -1599,6 +1854,17 @@ func Sql_v1beta4_InstancesStartReplica(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/startReplica", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1653,6 +1919,17 @@ func Sql_v1beta4_InstancesStopReplica(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/stopReplica", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1707,6 +1984,17 @@ func Sql_v1beta4_InstancesUpdate(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -1785,6 +2073,17 @@ func Sql_v1beta4_OperationsGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("operation"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/operations/{operation}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1839,6 +2138,17 @@ func Sql_v1beta4_OperationsList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/operations", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " --instance=VALUE"
 
@@ -1931,6 +2241,17 @@ func Sql_v1beta4_SslCertsCreateEphemeral(context Context, args ...string) error 
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/createEphemeral", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -2009,6 +2330,18 @@ func Sql_v1beta4_SslCertsDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("sha1Fingerprint"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/sslCerts/{sha1Fingerprint}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -2068,6 +2401,18 @@ func Sql_v1beta4_SslCertsGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("sha1Fingerprint"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/sslCerts/{sha1Fingerprint}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -2127,6 +2472,17 @@ func Sql_v1beta4_SslCertsInsert(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/sslCerts", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -2205,6 +2561,17 @@ func Sql_v1beta4_SslCertsList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/sslCerts", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -2259,6 +2626,16 @@ func Sql_v1beta4_TiersList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/tiers", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -2308,6 +2685,19 @@ func Sql_v1beta4_UsersDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("host"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/users", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " --host=VALUE"
 
@@ -2390,6 +2780,17 @@ func Sql_v1beta4_UsersInsert(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/users", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -2468,6 +2869,17 @@ func Sql_v1beta4_UsersList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/users", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -2522,6 +2934,19 @@ func Sql_v1beta4_UsersUpdate(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("host"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/users", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 

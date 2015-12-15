@@ -37,6 +37,16 @@ func Cloudfunctions_v1beta1_OperationsGet(context Context, args ...string) error
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta1/{+name}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -86,6 +96,16 @@ func Cloudfunctions_v1beta1_ProjectsRegionsFunctionsCall(context Context, args .
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta1/{+name}:call", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--data=VALUE]"
 
@@ -161,6 +181,16 @@ func Cloudfunctions_v1beta1_ProjectsRegionsFunctionsCreate(context Context, args
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("location"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta1/{+location}/functions", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -234,6 +264,16 @@ func Cloudfunctions_v1beta1_ProjectsRegionsFunctionsDelete(context Context, args
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta1/{+name}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -283,6 +323,16 @@ func Cloudfunctions_v1beta1_ProjectsRegionsFunctionsGet(context Context, args ..
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta1/{+name}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -332,6 +382,16 @@ func Cloudfunctions_v1beta1_ProjectsRegionsFunctionsList(context Context, args .
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("location"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta1/{+location}/functions", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--pageSize=VALUE]"
 
@@ -417,6 +477,16 @@ func Cloudfunctions_v1beta1_ProjectsRegionsFunctionsUpdate(context Context, args
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta1/{+name}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 

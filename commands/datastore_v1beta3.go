@@ -37,6 +37,16 @@ func Datastore_v1beta3_ProjectsAllocateIds(context Context, args ...string) erro
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectId}:allocateIds", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -110,6 +120,16 @@ func Datastore_v1beta3_ProjectsBeginTransaction(context Context, args ...string)
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectId}:beginTransaction", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -183,6 +203,16 @@ func Datastore_v1beta3_ProjectsCommit(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectId}:commit", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -256,6 +286,16 @@ func Datastore_v1beta3_ProjectsExport(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectId}:export", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -329,6 +369,16 @@ func Datastore_v1beta3_ProjectsImport(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectId}:import", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -402,6 +452,17 @@ func Datastore_v1beta3_ProjectsIndexesGet(context Context, args ...string) error
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("indexId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectId}/indexes/{+indexId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--databaseId=VALUE]"
 
@@ -482,6 +543,16 @@ func Datastore_v1beta3_ProjectsIndexesList(context Context, args ...string) erro
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectId}/indexes", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--databaseId=VALUE]"
 
@@ -587,6 +658,16 @@ func Datastore_v1beta3_ProjectsIndexesLookup(context Context, args ...string) er
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectId}/indexes:lookup", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -660,6 +741,17 @@ func Datastore_v1beta3_ProjectsIndexesUpdate(context Context, args ...string) er
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("indexId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectId}/indexes/{+indexId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -738,6 +830,16 @@ func Datastore_v1beta3_ProjectsLookup(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectId}:lookup", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -811,6 +913,16 @@ func Datastore_v1beta3_ProjectsMultiWatch(context Context, args ...string) error
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectId}:multiWatch", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -884,6 +996,16 @@ func Datastore_v1beta3_ProjectsOperationsCancel(context Context, args ...string)
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/{+name}:cancel", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -933,6 +1055,16 @@ func Datastore_v1beta3_ProjectsOperationsDelete(context Context, args ...string)
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/{+name}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -982,6 +1114,16 @@ func Datastore_v1beta3_ProjectsOperationsGet(context Context, args ...string) er
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/{+name}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1031,6 +1173,16 @@ func Datastore_v1beta3_ProjectsOperationsList(context Context, args ...string) e
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/{+name}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--filter=VALUE]"
 
@@ -1126,6 +1278,16 @@ func Datastore_v1beta3_ProjectsRollback(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectId}:rollback", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -1199,6 +1361,16 @@ func Datastore_v1beta3_ProjectsRunQuery(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectId}:runQuery", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -1272,6 +1444,16 @@ func Datastore_v1beta3_ProjectsWatch(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectId}:watch", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 

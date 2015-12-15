@@ -37,6 +37,16 @@ func Clouddebugger_v2_ControllerDebuggeesBreakpointsList(context Context, args .
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("debuggeeId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v2/controller/debuggees/{debuggeeId}/breakpoints", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--successOnTimeout=VALUE]"
 
@@ -122,6 +132,17 @@ func Clouddebugger_v2_ControllerDebuggeesBreakpointsUpdate(context Context, args
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("debuggeeId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("id"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v2/controller/debuggees/{debuggeeId}/breakpoints/{id}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -200,6 +221,15 @@ func Clouddebugger_v2_ControllerDebuggeesRegister(context Context, args ...strin
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v2/controller/debuggees/register", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -266,6 +296,17 @@ func Clouddebugger_v2_DebuggerDebuggeesBreakpointsDelete(context Context, args .
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("debuggeeId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("breakpointId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v2/debugger/debuggees/{debuggeeId}/breakpoints/{breakpointId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -320,6 +361,17 @@ func Clouddebugger_v2_DebuggerDebuggeesBreakpointsGet(context Context, args ...s
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("debuggeeId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("breakpointId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v2/debugger/debuggees/{debuggeeId}/breakpoints/{breakpointId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -374,6 +426,16 @@ func Clouddebugger_v2_DebuggerDebuggeesBreakpointsList(context Context, args ...
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("debuggeeId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v2/debugger/debuggees/{debuggeeId}/breakpoints", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--action.value=VALUE]"
 
@@ -489,6 +551,16 @@ func Clouddebugger_v2_DebuggerDebuggeesBreakpointsSet(context Context, args ...s
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("debuggeeId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v2/debugger/debuggees/{debuggeeId}/breakpoints/set", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -562,6 +634,15 @@ func Clouddebugger_v2_DebuggerDebuggeesList(context Context, args ...string) err
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v2/debugger/debuggees", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--includeInactive=VALUE]"
 

@@ -37,6 +37,18 @@ func Replicapool_v1beta1_PoolsDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("poolName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectName}/zones/{zone}/pools/{poolName}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -114,6 +126,18 @@ func Replicapool_v1beta1_PoolsGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("poolName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectName}/zones/{zone}/pools/{poolName}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -173,6 +197,17 @@ func Replicapool_v1beta1_PoolsInsert(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectName}/zones/{zone}/pools", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -251,6 +286,17 @@ func Replicapool_v1beta1_PoolsList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectName}/zones/{zone}/pools", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--maxResults=VALUE]"
 
@@ -341,6 +387,18 @@ func Replicapool_v1beta1_PoolsResize(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("poolName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectName}/zones/{zone}/pools/{poolName}/resize", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--numReplicas=VALUE]"
 
@@ -426,6 +484,18 @@ func Replicapool_v1beta1_PoolsUpdatetemplate(context Context, args ...string) er
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("poolName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectName}/zones/{zone}/pools/{poolName}/updateTemplate", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -503,6 +573,19 @@ func Replicapool_v1beta1_ReplicasDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("poolName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("replicaName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectName}/zones/{zone}/pools/{poolName}/replicas/{replicaName}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -591,6 +674,19 @@ func Replicapool_v1beta1_ReplicasGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("poolName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("replicaName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectName}/zones/{zone}/pools/{poolName}/replicas/{replicaName}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -655,6 +751,18 @@ func Replicapool_v1beta1_ReplicasList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("poolName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectName}/zones/{zone}/pools/{poolName}/replicas", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--maxResults=VALUE]"
 
@@ -750,6 +858,19 @@ func Replicapool_v1beta1_ReplicasRestart(context Context, args ...string) error 
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("poolName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("replicaName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectName}/zones/{zone}/pools/{poolName}/replicas/{replicaName}/restart", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)

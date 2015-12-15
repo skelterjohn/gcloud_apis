@@ -37,6 +37,16 @@ func Logging_v1beta3_ProjectsLogEntriesList(context Context, args ...string) err
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectsId}/logEntries", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--filter=VALUE]"
 
@@ -142,6 +152,17 @@ func Logging_v1beta3_ProjectsLogServicesIndexesList(context Context, args ...str
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("logServicesId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectsId}/logServices/{logServicesId}/indexes", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--depth=VALUE]"
 
@@ -252,6 +273,16 @@ func Logging_v1beta3_ProjectsLogServicesList(context Context, args ...string) er
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectsId}/logServices", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--pageSize=VALUE]"
 
@@ -337,6 +368,17 @@ func Logging_v1beta3_ProjectsLogServicesSinksCreate(context Context, args ...str
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("logServicesId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectsId}/logServices/{logServicesId}/sinks", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -415,6 +457,18 @@ func Logging_v1beta3_ProjectsLogServicesSinksDelete(context Context, args ...str
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("logServicesId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("sinksId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectsId}/logServices/{logServicesId}/sinks/{sinksId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -474,6 +528,18 @@ func Logging_v1beta3_ProjectsLogServicesSinksGet(context Context, args ...string
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("logServicesId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("sinksId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectsId}/logServices/{logServicesId}/sinks/{sinksId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -533,6 +599,17 @@ func Logging_v1beta3_ProjectsLogServicesSinksList(context Context, args ...strin
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("logServicesId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectsId}/logServices/{logServicesId}/sinks", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -587,6 +664,18 @@ func Logging_v1beta3_ProjectsLogServicesSinksUpdate(context Context, args ...str
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("logServicesId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("sinksId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectsId}/logServices/{logServicesId}/sinks/{sinksId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -670,6 +759,17 @@ func Logging_v1beta3_ProjectsLogsDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("logsId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectsId}/logs/{logsId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -724,6 +824,17 @@ func Logging_v1beta3_ProjectsLogsEntriesWrite(context Context, args ...string) e
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("logsId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectsId}/logs/{logsId}/entries:write", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -802,6 +913,16 @@ func Logging_v1beta3_ProjectsLogsList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectsId}/logs", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--pageSize=VALUE]"
 
@@ -907,6 +1028,17 @@ func Logging_v1beta3_ProjectsLogsSinksCreate(context Context, args ...string) er
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("logsId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectsId}/logs/{logsId}/sinks", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -985,6 +1117,18 @@ func Logging_v1beta3_ProjectsLogsSinksDelete(context Context, args ...string) er
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("logsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("sinksId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectsId}/logs/{logsId}/sinks/{sinksId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1044,6 +1188,18 @@ func Logging_v1beta3_ProjectsLogsSinksGet(context Context, args ...string) error
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("logsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("sinksId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectsId}/logs/{logsId}/sinks/{sinksId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1103,6 +1259,17 @@ func Logging_v1beta3_ProjectsLogsSinksList(context Context, args ...string) erro
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("logsId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectsId}/logs/{logsId}/sinks", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1157,6 +1324,18 @@ func Logging_v1beta3_ProjectsLogsSinksUpdate(context Context, args ...string) er
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("logsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("sinksId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectsId}/logs/{logsId}/sinks/{sinksId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -1240,6 +1419,16 @@ func Logging_v1beta3_ProjectsMetricsCreate(context Context, args ...string) erro
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectsId}/metrics", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -1313,6 +1502,17 @@ func Logging_v1beta3_ProjectsMetricsDelete(context Context, args ...string) erro
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("metricsId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectsId}/metrics/{metricsId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1367,6 +1567,17 @@ func Logging_v1beta3_ProjectsMetricsGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("metricsId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectsId}/metrics/{metricsId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1421,6 +1632,16 @@ func Logging_v1beta3_ProjectsMetricsList(context Context, args ...string) error 
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectsId}/metrics", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--pageSize=VALUE]"
 
@@ -1506,6 +1727,17 @@ func Logging_v1beta3_ProjectsMetricsUpdate(context Context, args ...string) erro
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("metricsId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectsId}/metrics/{metricsId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -1584,6 +1816,16 @@ func Logging_v1beta3_ProjectsSinksCreate(context Context, args ...string) error 
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectsId}/sinks", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -1657,6 +1899,17 @@ func Logging_v1beta3_ProjectsSinksDelete(context Context, args ...string) error 
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("sinksId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectsId}/sinks/{sinksId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1711,6 +1964,17 @@ func Logging_v1beta3_ProjectsSinksGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("sinksId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectsId}/sinks/{sinksId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1765,6 +2029,16 @@ func Logging_v1beta3_ProjectsSinksList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectsId}/sinks", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1814,6 +2088,17 @@ func Logging_v1beta3_ProjectsSinksUpdate(context Context, args ...string) error 
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("sinksId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta3/projects/{projectsId}/sinks/{sinksId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 

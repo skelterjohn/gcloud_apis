@@ -37,6 +37,18 @@ func Resourceviews_v1beta1_RegionViewsAddresources(context Context, args ...stri
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("resourceViewName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectName}/regions/{region}/resourceViews/{resourceViewName}/addResources", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -114,6 +126,18 @@ func Resourceviews_v1beta1_RegionViewsDelete(context Context, args ...string) er
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("resourceViewName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectName}/regions/{region}/resourceViews/{resourceViewName}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -167,6 +191,18 @@ func Resourceviews_v1beta1_RegionViewsGet(context Context, args ...string) error
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("resourceViewName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectName}/regions/{region}/resourceViews/{resourceViewName}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -226,6 +262,17 @@ func Resourceviews_v1beta1_RegionViewsInsert(context Context, args ...string) er
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectName}/regions/{region}/resourceViews", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -304,6 +351,17 @@ func Resourceviews_v1beta1_RegionViewsList(context Context, args ...string) erro
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectName}/regions/{region}/resourceViews", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--maxResults=VALUE]"
 
@@ -394,6 +452,18 @@ func Resourceviews_v1beta1_RegionViewsListresources(context Context, args ...str
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("resourceViewName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectName}/regions/{region}/resourceViews/{resourceViewName}/resources", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--maxResults=VALUE]"
 
@@ -489,6 +559,18 @@ func Resourceviews_v1beta1_RegionViewsRemoveresources(context Context, args ...s
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("resourceViewName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectName}/regions/{region}/resourceViews/{resourceViewName}/removeResources", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -566,6 +648,18 @@ func Resourceviews_v1beta1_ZoneViewsAddresources(context Context, args ...string
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("resourceViewName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectName}/zones/{zone}/resourceViews/{resourceViewName}/addResources", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -643,6 +737,18 @@ func Resourceviews_v1beta1_ZoneViewsDelete(context Context, args ...string) erro
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("resourceViewName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectName}/zones/{zone}/resourceViews/{resourceViewName}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -696,6 +802,18 @@ func Resourceviews_v1beta1_ZoneViewsGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("resourceViewName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectName}/zones/{zone}/resourceViews/{resourceViewName}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -755,6 +873,17 @@ func Resourceviews_v1beta1_ZoneViewsInsert(context Context, args ...string) erro
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectName}/zones/{zone}/resourceViews", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -833,6 +962,17 @@ func Resourceviews_v1beta1_ZoneViewsList(context Context, args ...string) error 
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectName}/zones/{zone}/resourceViews", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--maxResults=VALUE]"
 
@@ -923,6 +1063,18 @@ func Resourceviews_v1beta1_ZoneViewsListresources(context Context, args ...strin
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("resourceViewName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectName}/zones/{zone}/resourceViews/{resourceViewName}/resources", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--maxResults=VALUE]"
 
@@ -1018,6 +1170,18 @@ func Resourceviews_v1beta1_ZoneViewsRemoveresources(context Context, args ...str
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("resourceViewName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectName}/zones/{zone}/resourceViews/{resourceViewName}/removeResources", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 

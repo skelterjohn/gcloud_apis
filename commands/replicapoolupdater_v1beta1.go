@@ -37,6 +37,18 @@ func Replicapoolupdater_v1beta1_RollingUpdatesCancel(context Context, args ...st
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("rollingUpdate"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/zones/{zone}/rollingUpdates/{rollingUpdate}/cancel", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -96,6 +108,18 @@ func Replicapoolupdater_v1beta1_RollingUpdatesGet(context Context, args ...strin
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("rollingUpdate"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/zones/{zone}/rollingUpdates/{rollingUpdate}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -155,6 +179,17 @@ func Replicapoolupdater_v1beta1_RollingUpdatesInsert(context Context, args ...st
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/zones/{zone}/rollingUpdates", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -233,6 +268,17 @@ func Replicapoolupdater_v1beta1_RollingUpdatesList(context Context, args ...stri
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/zones/{zone}/rollingUpdates", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--filter=VALUE]"
 
@@ -333,6 +379,18 @@ func Replicapoolupdater_v1beta1_RollingUpdatesListInstanceUpdates(context Contex
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("rollingUpdate"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/zones/{zone}/rollingUpdates/{rollingUpdate}/instanceUpdates", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--filter=VALUE]"
 
@@ -438,6 +496,18 @@ func Replicapoolupdater_v1beta1_RollingUpdatesPause(context Context, args ...str
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("rollingUpdate"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/zones/{zone}/rollingUpdates/{rollingUpdate}/pause", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -497,6 +567,18 @@ func Replicapoolupdater_v1beta1_RollingUpdatesResume(context Context, args ...st
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("rollingUpdate"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/zones/{zone}/rollingUpdates/{rollingUpdate}/resume", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -556,6 +638,18 @@ func Replicapoolupdater_v1beta1_RollingUpdatesRollback(context Context, args ...
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("rollingUpdate"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/zones/{zone}/rollingUpdates/{rollingUpdate}/rollback", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -615,6 +709,18 @@ func Replicapoolupdater_v1beta1_ZoneOperationsGet(context Context, args ...strin
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("operation"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/zones/{zone}/operations/{operation}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -674,6 +780,17 @@ func Replicapoolupdater_v1beta1_ZoneOperationsList(context Context, args ...stri
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/zones/{zone}/operations", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--filter=VALUE]"
 

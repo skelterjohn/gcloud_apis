@@ -37,6 +37,16 @@ func Toolresults_v1beta3_ProjectsGetSettings(context Context, args ...string) er
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/settings", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -86,6 +96,16 @@ func Toolresults_v1beta3_ProjectsHistoriesCreate(context Context, args ...string
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/histories", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -159,6 +179,17 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsCreate(context Context, args
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("historyId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/histories/{historyId}/executions", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -237,6 +268,18 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsGet(context Context, args ..
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("historyId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("executionId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/histories/{historyId}/executions/{executionId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -296,6 +339,17 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsList(context Context, args .
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("historyId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/histories/{historyId}/executions", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--pageSize=VALUE]"
 
@@ -386,6 +440,18 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsPatch(context Context, args 
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("historyId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("executionId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/histories/{historyId}/executions/{executionId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -469,6 +535,18 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsCreate(context Context,
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("historyId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("executionId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/histories/{historyId}/executions/{executionId}/steps", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -552,6 +630,19 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsGet(context Context, ar
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("historyId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("executionId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("stepId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/histories/{historyId}/executions/{executionId}/steps/{stepId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -616,6 +707,18 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsList(context Context, a
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("historyId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("executionId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/histories/{historyId}/executions/{executionId}/steps", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--pageSize=VALUE]"
 
@@ -711,6 +814,19 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsPatch(context Context, 
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("historyId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("executionId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("stepId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/histories/{historyId}/executions/{executionId}/steps/{stepId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -799,6 +915,19 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsPublishXunitXmlFiles(co
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("historyId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("executionId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("stepId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/histories/{historyId}/executions/{executionId}/steps/{stepId}:publishXunitXmlFiles", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -887,6 +1016,19 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsThumbnailsList(context 
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("historyId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("executionId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("stepId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/histories/{historyId}/executions/{executionId}/steps/{stepId}/thumbnails", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--pageSize=VALUE]"
 
@@ -987,6 +1129,17 @@ func Toolresults_v1beta3_ProjectsHistoriesGet(context Context, args ...string) e
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("historyId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/histories/{historyId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1041,6 +1194,16 @@ func Toolresults_v1beta3_ProjectsHistoriesList(context Context, args ...string) 
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/histories", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--filterByName=VALUE]"
 
@@ -1136,6 +1299,16 @@ func Toolresults_v1beta3_ProjectsInitializeSettings(context Context, args ...str
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}:initializeSettings", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)

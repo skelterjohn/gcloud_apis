@@ -37,6 +37,16 @@ func Testing_v1_ProjectsDevicesCreate(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/devices", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -137,6 +147,17 @@ func Testing_v1_ProjectsDevicesDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("deviceId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/devices/{deviceId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -191,6 +212,17 @@ func Testing_v1_ProjectsDevicesGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("deviceId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/devices/{deviceId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -245,6 +277,17 @@ func Testing_v1_ProjectsDevicesKeepalive(context Context, args ...string) error 
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("deviceId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/devices/{deviceId}/keepalive", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -299,6 +342,16 @@ func Testing_v1_ProjectsDevicesList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/devices", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--pageSize=VALUE]"
 
@@ -384,6 +437,17 @@ func Testing_v1_ProjectsTestMatricesCancel(context Context, args ...string) erro
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("testMatrixId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/testMatrices/{testMatrixId}:cancel", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -438,6 +502,16 @@ func Testing_v1_ProjectsTestMatricesCreate(context Context, args ...string) erro
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/testMatrices", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -511,6 +585,17 @@ func Testing_v1_ProjectsTestMatricesDelete(context Context, args ...string) erro
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("testMatrixId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/testMatrices/{testMatrixId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -565,6 +650,17 @@ func Testing_v1_ProjectsTestMatricesGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("testMatrixId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/testMatrices/{testMatrixId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -619,6 +715,16 @@ func Testing_v1_ProjectsTestMatricesList(context Context, args ...string) error 
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/testMatrices", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -668,6 +774,16 @@ func Testing_v1_ProjectsWebdriverCreate(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/webdriver", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -741,6 +857,17 @@ func Testing_v1_ProjectsWebdriverDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("webdriverId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/webdriver/{webdriverId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -795,6 +922,17 @@ func Testing_v1_ProjectsWebdriverGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("webdriverId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/webdriver/{webdriverId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -849,6 +987,17 @@ func Testing_v1_ProjectsWebdriverKeepalive(context Context, args ...string) erro
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("webdriverId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/webdriver/{webdriverId}:keepalive", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -927,6 +1076,16 @@ func Testing_v1_ProjectsWebdriverList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/webdriver", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--pageSize=VALUE]"
 
@@ -1012,6 +1171,16 @@ func Testing_v1_TestEnvironmentCatalogGet(context Context, args ...string) error
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("environmentType"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/testEnvironmentCatalog/{environmentType}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)

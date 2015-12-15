@@ -37,6 +37,17 @@ func Dns_v1beta1_ChangesCreate(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("managedZone"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/managedZones/{managedZone}/changes", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -115,6 +126,18 @@ func Dns_v1beta1_ChangesGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("managedZone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("changeId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/managedZones/{managedZone}/changes/{changeId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -174,6 +197,17 @@ func Dns_v1beta1_ChangesList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("managedZone"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/managedZones/{managedZone}/changes", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--maxResults=VALUE]"
 
@@ -284,6 +318,16 @@ func Dns_v1beta1_ManagedZonesCreate(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/managedZones", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -357,6 +401,17 @@ func Dns_v1beta1_ManagedZonesDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("managedZone"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/managedZones/{managedZone}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -405,6 +460,17 @@ func Dns_v1beta1_ManagedZonesGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("managedZone"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/managedZones/{managedZone}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -459,6 +525,16 @@ func Dns_v1beta1_ManagedZonesList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/managedZones", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--dnsName=VALUE]"
 
@@ -554,6 +630,16 @@ func Dns_v1beta1_ProjectsGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -603,6 +689,17 @@ func Dns_v1beta1_ResourceRecordSetsList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("managedZone"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/managedZones/{managedZone}/rrsets", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--maxResults=VALUE]"
 

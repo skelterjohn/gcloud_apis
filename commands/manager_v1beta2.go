@@ -37,6 +37,18 @@ func Manager_v1beta2_DeploymentsDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("deploymentName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/regions/{region}/deployments/{deploymentName}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -90,6 +102,18 @@ func Manager_v1beta2_DeploymentsGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("deploymentName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/regions/{region}/deployments/{deploymentName}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -149,6 +173,17 @@ func Manager_v1beta2_DeploymentsInsert(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/regions/{region}/deployments", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -227,6 +262,17 @@ func Manager_v1beta2_DeploymentsList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/regions/{region}/deployments", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--maxResults=VALUE]"
 
@@ -317,6 +363,17 @@ func Manager_v1beta2_TemplatesDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("templateName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/templates/{templateName}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -365,6 +422,17 @@ func Manager_v1beta2_TemplatesGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("templateName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/templates/{templateName}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -419,6 +487,16 @@ func Manager_v1beta2_TemplatesInsert(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/templates", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -492,6 +570,16 @@ func Manager_v1beta2_TemplatesList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/templates", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--maxResults=VALUE]"
 

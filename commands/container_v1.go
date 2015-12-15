@@ -37,6 +37,17 @@ func Container_v1_MasterProjectsZonesSignedUrlsCreate(context Context, args ...s
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("masterProjectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/masterProjects/{masterProjectId}/zones/{zone}/signedUrls", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -115,6 +126,17 @@ func Container_v1_MasterProjectsZonesTokensCreate(context Context, args ...strin
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("masterProjectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/masterProjects/{masterProjectId}/zones/{zone}/tokens", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -193,6 +215,17 @@ func Container_v1_ProjectsZonesClustersCreate(context Context, args ...string) e
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/zones/{zone}/clusters", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -271,6 +304,18 @@ func Container_v1_ProjectsZonesClustersDelete(context Context, args ...string) e
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("clusterId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -330,6 +375,18 @@ func Container_v1_ProjectsZonesClustersGet(context Context, args ...string) erro
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("clusterId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -389,6 +446,17 @@ func Container_v1_ProjectsZonesClustersList(context Context, args ...string) err
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/zones/{zone}/clusters", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -443,6 +511,18 @@ func Container_v1_ProjectsZonesClustersUpdate(context Context, args ...string) e
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("clusterId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -526,6 +606,17 @@ func Container_v1_ProjectsZonesGetServerconfig(context Context, args ...string) 
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/zones/{zone}/serverconfig", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -580,6 +671,18 @@ func Container_v1_ProjectsZonesOperationsGet(context Context, args ...string) er
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("operationId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/zones/{zone}/operations/{operationId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -639,6 +742,17 @@ func Container_v1_ProjectsZonesOperationsList(context Context, args ...string) e
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/zones/{zone}/operations", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)

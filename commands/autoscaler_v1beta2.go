@@ -37,6 +37,18 @@ func Autoscaler_v1beta2_AutoscalersDelete(context Context, args ...string) error
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("autoscaler"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/zones/{zone}/autoscalers/{autoscaler}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -96,6 +108,18 @@ func Autoscaler_v1beta2_AutoscalersGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("autoscaler"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/zones/{zone}/autoscalers/{autoscaler}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -155,6 +179,17 @@ func Autoscaler_v1beta2_AutoscalersInsert(context Context, args ...string) error
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/zones/{zone}/autoscalers", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -233,6 +268,17 @@ func Autoscaler_v1beta2_AutoscalersList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/zones/{zone}/autoscalers", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--filter=VALUE]"
 
@@ -333,6 +379,18 @@ func Autoscaler_v1beta2_AutoscalersPatch(context Context, args ...string) error 
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("autoscaler"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/zones/{zone}/autoscalers/{autoscaler}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -416,6 +474,18 @@ func Autoscaler_v1beta2_AutoscalersUpdate(context Context, args ...string) error
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("autoscaler"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/zones/{zone}/autoscalers/{autoscaler}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -499,6 +569,18 @@ func Autoscaler_v1beta2_ZoneOperationsDelete(context Context, args ...string) er
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("operation"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/zones/{zone}/operations/{operation}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -552,6 +634,18 @@ func Autoscaler_v1beta2_ZoneOperationsGet(context Context, args ...string) error
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("operation"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/zones/{zone}/operations/{operation}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -611,6 +705,17 @@ func Autoscaler_v1beta2_ZoneOperationsList(context Context, args ...string) erro
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/zones/{zone}/operations", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--filter=VALUE]"
 
@@ -711,6 +816,16 @@ func Autoscaler_v1beta2_ZonesList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/zones", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--filter=VALUE]"
 

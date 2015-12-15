@@ -37,6 +37,15 @@ func Source_v1_ListChangedFiles(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1:listChangedFiles", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -103,6 +112,17 @@ func Source_v1_ProjectsReposAliasesCreate(context Context, args ...string) error
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/aliases", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -208,6 +228,19 @@ func Source_v1_ProjectsReposAliasesDelete(context Context, args ...string) error
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("kind"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/aliases/{kind}/{name}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--revisionId=VALUE]"
 
@@ -308,6 +341,20 @@ func Source_v1_ProjectsReposAliasesFilesGet(context Context, args ...string) err
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("kind"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("path"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/aliases/{kind}/{name}/files/{+path}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--aliasName=VALUE]"
 
@@ -583,6 +630,19 @@ func Source_v1_ProjectsReposAliasesGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("kind"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/aliases/{kind}/{name}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--uid=VALUE]"
 
@@ -673,6 +733,17 @@ func Source_v1_ProjectsReposAliasesList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/aliases", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--kind=VALUE]"
 
@@ -783,6 +854,19 @@ func Source_v1_ProjectsReposAliasesListFiles(context Context, args ...string) er
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("kind"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/aliases/{kind}/{name}:listFiles", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--aliasName=VALUE]"
 
@@ -1043,6 +1127,18 @@ func Source_v1_ProjectsReposAliasesUpdate(context Context, args ...string) error
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("aliasesId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/aliases/{aliasesId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -1163,6 +1259,16 @@ func Source_v1_ProjectsReposCreate(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -1236,6 +1342,17 @@ func Source_v1_ProjectsReposDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--uid=VALUE]"
 
@@ -1316,6 +1433,18 @@ func Source_v1_ProjectsReposFilesReadFromWorkspaceOrAlias(context Context, args 
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("path"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/files/{+path}:readFromWorkspaceOrAlias", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--alias=VALUE]"
 
@@ -1451,6 +1580,17 @@ func Source_v1_ProjectsReposGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--uid=VALUE]"
 
@@ -1531,6 +1671,16 @@ func Source_v1_ProjectsReposList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1580,6 +1730,17 @@ func Source_v1_ProjectsReposMerge(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}:merge", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -1658,6 +1819,19 @@ func Source_v1_ProjectsReposRevisionsFilesGet(context Context, args ...string) e
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("revisionId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("path"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/revisions/{revisionId}/files/{+path}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--aliasContext.kind=VALUE]"
 
@@ -1938,6 +2112,18 @@ func Source_v1_ProjectsReposRevisionsGet(context Context, args ...string) error 
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("revisionId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/revisions/{revisionId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--uid=VALUE]"
 
@@ -2023,6 +2209,17 @@ func Source_v1_ProjectsReposRevisionsGetBatchGet(context Context, args ...string
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/revisions:batchGet", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--revisionIds=VALUE]"
 
@@ -2113,6 +2310,17 @@ func Source_v1_ProjectsReposRevisionsList(context Context, args ...string) error
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/revisions", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--ends=VALUE]"
 
@@ -2253,6 +2461,18 @@ func Source_v1_ProjectsReposRevisionsListFiles(context Context, args ...string) 
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("revisionId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/revisions/{revisionId}:listFiles", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--aliasContext.kind=VALUE]"
 
@@ -2518,6 +2738,18 @@ func Source_v1_ProjectsReposWorkspacesCommitWorkspace(context Context, args ...s
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/workspaces/{name}:commitWorkspace", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -2601,6 +2833,17 @@ func Source_v1_ProjectsReposWorkspacesCreate(context Context, args ...string) er
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/workspaces", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -2679,6 +2922,18 @@ func Source_v1_ProjectsReposWorkspacesDelete(context Context, args ...string) er
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/workspaces/{name}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--currentSnapshotId=VALUE]"
 
@@ -2774,6 +3029,19 @@ func Source_v1_ProjectsReposWorkspacesFilesGet(context Context, args ...string) 
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("path"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/workspaces/{name}/files/{+path}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--cloudRepo.aliasContext.kind=VALUE]"
 
@@ -3054,6 +3322,18 @@ func Source_v1_ProjectsReposWorkspacesGet(context Context, args ...string) error
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/workspaces/{name}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--uid=VALUE]"
 
@@ -3139,6 +3419,17 @@ func Source_v1_ProjectsReposWorkspacesList(context Context, args ...string) erro
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/workspaces", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--uid=VALUE]"
 
@@ -3229,6 +3520,18 @@ func Source_v1_ProjectsReposWorkspacesListFiles(context Context, args ...string)
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/workspaces/{name}:listFiles", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--cloudRepo.aliasContext.kind=VALUE]"
 
@@ -3494,6 +3797,18 @@ func Source_v1_ProjectsReposWorkspacesModifyWorkspace(context Context, args ...s
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/workspaces/{name}:modifyWorkspace", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -3577,6 +3892,18 @@ func Source_v1_ProjectsReposWorkspacesRefreshWorkspace(context Context, args ...
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/workspaces/{name}:refreshWorkspace", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -3660,6 +3987,18 @@ func Source_v1_ProjectsReposWorkspacesResolveFiles(context Context, args ...stri
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/workspaces/{name}:resolveFiles", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -3743,6 +4082,18 @@ func Source_v1_ProjectsReposWorkspacesRevertRefresh(context Context, args ...str
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/workspaces/{name}:revertRefresh", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
@@ -3826,6 +4177,20 @@ func Source_v1_ProjectsReposWorkspacesSnapshotsFilesGet(context Context, args ..
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("snapshotId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("path"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/workspaces/{name}/snapshots/{snapshotId}/files/{+path}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--cloudRepo.aliasContext.kind=VALUE]"
 
@@ -4101,6 +4466,19 @@ func Source_v1_ProjectsReposWorkspacesSnapshotsGet(context Context, args ...stri
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("snapshotId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/workspaces/{name}/snapshots/{snapshotId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--uid=VALUE]"
 
@@ -4191,6 +4569,18 @@ func Source_v1_ProjectsReposWorkspacesSnapshotsList(context Context, args ...str
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/workspaces/{name}/snapshots", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--pageSize=VALUE]"
 
@@ -4296,6 +4686,19 @@ func Source_v1_ProjectsReposWorkspacesSnapshotsListFiles(context Context, args .
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("repoName"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("snapshotId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/repos/{repoName}/workspaces/{name}/snapshots/{snapshotId}:listFiles", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--cloudRepo.aliasContext.kind=VALUE]"
 

@@ -112,6 +112,16 @@ func {{.FuncName}}(context Context, args ...string) error {
 
   usageFunc := func() {
     usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+    var pathParams []string
+    {{range .Method.ParameterOrder}}pathParams = append(pathParams, commands_util.AngrySnakes("{{.}}"))
+    {{end}}
+    if len(pathParams) != 0 {
+      if strings.Contains("{{.Method.Path}}", "+") {
+        usageBits += " @"+strings.Join(pathParams, "@")
+      } else {
+        usageBits += " "+strings.Join(pathParams, "/")
+      }
+    }
     {{if .Method.Request.Ref}}
     usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
     {{end}}
