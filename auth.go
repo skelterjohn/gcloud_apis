@@ -18,9 +18,11 @@ package main
 
 import (
 	"fmt"
-	"golang.org/x/oauth2"
 	"net/http"
 	"os"
+	"os/exec"
+
+	"golang.org/x/oauth2"
 )
 
 type gcloudTransport struct {
@@ -32,6 +34,19 @@ func (gt gcloudTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 	req.Header.Add("User-Agent", "gcloud")
 	req.Header.Add("User-Agent", "gcloud_apis")
 	return gt.transport.RoundTrip(req)
+}
+
+type cliTokenSource struct {
+}
+
+func (cts cliTokenSource) Token() (*oauth2.Token, error) {
+	output, err := exec.Command("gcloud", "auth", "print-access-token").Output()
+	if err != nil {
+		return nil, fmt.Errorf("problem getting gcloud token: %v", err)
+	}
+	return &oauth2.Token{
+		AccessToken: string(output),
+	}, nil
 }
 
 /*
@@ -55,20 +70,20 @@ func getAuthenticatedClient() (*http.Client, error) {
 		Scopes: []string{"https://www.googleapis.com/auth/cloud-platform"},
 	}
 
+	var ts oauth2.TokenSource
+
 	refreshToken := os.Getenv("GCLOUD_APIS_REFRESH_TOKEN")
 	if refreshToken == "" {
-		err := fmt.Errorf("no refresh token found in GCLOUD_APIS_REFRESH_TOKEN")
-		return nil, err
+		ts = cliTokenSource{}
+	} else {
+		token := &oauth2.Token{
+			RefreshToken: refreshToken,
+		}
+		ts = conf.TokenSource(oauth2.NoContext, token)
 	}
-
-	token := &oauth2.Token{
-		RefreshToken: refreshToken,
-	}
-
-	tokenSource := conf.TokenSource(oauth2.NoContext, token)
 
 	oauth2Transport := &oauth2.Transport{
-		Source: tokenSource,
+		Source: ts,
 	}
 
 	client := &http.Client{
