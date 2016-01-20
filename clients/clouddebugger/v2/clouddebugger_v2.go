@@ -244,6 +244,11 @@ type Breakpoint struct {
 	// breakpoint state will not change from here on.
 	IsFinalState bool `json:"isFinalState,omitempty"`
 
+	// Labels: A set of custom breakpoint properties, populated by the
+	// agent, to be
+	// displayed to the user.
+	Labels map[string]string `json:"labels,omitempty"`
+
 	// Location: Breakpoint source location.
 	Location *SourceLocation `json:"location,omitempty"`
 

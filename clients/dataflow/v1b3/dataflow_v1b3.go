@@ -153,6 +153,17 @@ func (s *ApproximateProgress) MarshalJSON() ([]byte, error) {
 // ApproximateReportedProgress: A progress measurement of a WorkItem by
 // a worker.
 type ApproximateReportedProgress struct {
+	// ConsumedParallelism: Total amount of parallelism in the portion of
+	// input of this work item
+	// that has already been consumed. In the first two examples above
+	// (see remaining_parallelism), the value should be 30 or 3
+	// respectively.
+	// The sum of remaining_parallelism and consumed_parallelism should
+	// equal
+	// the total amount of parallelism in this work item.
+	// If specified, must be finite.
+	ConsumedParallelism *ReportedParallelism `json:"consumedParallelism,omitempty"`
+
 	// FractionConsumed: Completion as fraction of the input consumed, from
 	// 0.0 (beginning, nothing
 	// consumed), to 1.0 (end of the input, entire input consumed).
@@ -161,8 +172,40 @@ type ApproximateReportedProgress struct {
 	// Position: A Position within the work to represent a progress.
 	Position *Position `json:"position,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "FractionConsumed") to
-	// unconditionally include in API requests. By default, fields with
+	// RemainingParallelism: Total amount of parallelism in the input of
+	// this WorkItem that has not
+	// been consumed yet (i.e. can be delegated to a new WorkItem via
+	// dynamic
+	// splitting).
+	//
+	// "Amount of parallelism" refers to how many non-empty parts of the
+	// input
+	// can be read in parallel. This does not necessarily equal number
+	// of records. An input that can be read in parallel down to
+	// the
+	// individual records is called "perfectly splittable".
+	// An example of non-perfectly parallelizable input is a
+	// block-compressed
+	// file format where a block of records has to be read as a whole,
+	// but different blocks can be read in parallel.
+	//
+	// Examples:
+	// * If we have read 30 records out of 50 in a perfectly splittable
+	//   50-record input, this value should be 20.
+	// * If we are reading through block 3 in a block-compressed file
+	// consisting
+	//   of 5 blocks, this value should be 2 (since blocks 4 and 5 can be
+	//   processed in parallel by new work items via dynamic splitting).
+	// * If we are reading through the last block in a block-compressed
+	// file,
+	//   or reading or processing the last record in a perfectly splittable
+	//   input, this value should be 0, because the remainder of the work
+	// item
+	//   cannot be further split.
+	RemainingParallelism *ReportedParallelism `json:"remainingParallelism,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "ConsumedParallelism")
+	// to unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
 	// server regardless of whether the field is empty or not. This may be
@@ -180,8 +223,8 @@ func (s *ApproximateReportedProgress) MarshalJSON() ([]byte, error) {
 // dynamically split the WorkItem.
 type ApproximateSplitRequest struct {
 	// FractionConsumed: A fraction at which to split the work item, from
-	// 0.0 (beginning of
-	// the input) to 1.0 (end of the input).
+	// 0.0 (beginning of the
+	// input) to 1.0 (end of the input).
 	FractionConsumed float64 `json:"fractionConsumed,omitempty"`
 
 	// Position: A Position at which to split the work item.
@@ -705,6 +748,26 @@ type Job struct {
 	// set by the Dataflow service, and only as a transition
 	// from
 	// JOB_STATE_RUNNING.
+	//   "JOB_STATE_DRAINING" - JOB_STATE_DRAINING indicates that the job is
+	// in the process of draining.
+	// A draining job has stopped pulling from its input sources and is
+	// processing
+	// any data that remains in-flight. This state may be set via a
+	// Dataflow
+	// UpdateJob call, but only as a transition from JOB_STATE_RUNNING. Jobs
+	// that
+	// are draining may only transition to
+	// JOB_STATE_DRAINED,
+	// JOB_STATE_CANCELLED, or JOB_STATE_FAILED.
+	//   "JOB_STATE_DRAINED" - JOB_STATE_DRAINED indicates that the job has
+	// been drained.
+	// A drained job terminated by stopping pulling from its input sources
+	// and
+	// processing any data that remained in-flight when draining was
+	// requested.
+	// This state is a terminal state, may only be set by the Dataflow
+	// service,
+	// and only as a transition from JOB_STATE_DRAINING.
 	CurrentState string `json:"currentState,omitempty"`
 
 	// CurrentStateTime: The timestamp associated with the current state.
@@ -799,6 +862,26 @@ type Job struct {
 	// set by the Dataflow service, and only as a transition
 	// from
 	// JOB_STATE_RUNNING.
+	//   "JOB_STATE_DRAINING" - JOB_STATE_DRAINING indicates that the job is
+	// in the process of draining.
+	// A draining job has stopped pulling from its input sources and is
+	// processing
+	// any data that remains in-flight. This state may be set via a
+	// Dataflow
+	// UpdateJob call, but only as a transition from JOB_STATE_RUNNING. Jobs
+	// that
+	// are draining may only transition to
+	// JOB_STATE_DRAINED,
+	// JOB_STATE_CANCELLED, or JOB_STATE_FAILED.
+	//   "JOB_STATE_DRAINED" - JOB_STATE_DRAINED indicates that the job has
+	// been drained.
+	// A drained job terminated by stopping pulling from its input sources
+	// and
+	// processing any data that remained in-flight when draining was
+	// requested.
+	// This state is a terminal state, may only be set by the Dataflow
+	// service,
+	// and only as a transition from JOB_STATE_DRAINING.
 	RequestedState string `json:"requestedState,omitempty"`
 
 	// Steps: The top-level steps that constitute the entire job.
@@ -1543,6 +1626,9 @@ type PartialGroupByKeyInstruction struct {
 	// the input PTable.
 	InputElementCodec PartialGroupByKeyInstructionInputElementCodec `json:"inputElementCodec,omitempty"`
 
+	// SideInputs: Zero or more side inputs.
+	SideInputs []*SideInputInfo `json:"sideInputs,omitempty"`
+
 	// ValueCombiningFn: The value combining function to invoke.
 	ValueCombiningFn PartialGroupByKeyInstructionValueCombiningFn `json:"valueCombiningFn,omitempty"`
 
@@ -1742,6 +1828,40 @@ type ReportWorkItemStatusResponse struct {
 
 func (s *ReportWorkItemStatusResponse) MarshalJSON() ([]byte, error) {
 	type noMethod ReportWorkItemStatusResponse
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// ReportedParallelism: Represents the level of parallelism in a
+// WorkItem's input,
+// reported by the worker.
+type ReportedParallelism struct {
+	// IsInfinite: Specifies whether the parallelism is infinite. If true,
+	// "value" is
+	// ignored.
+	// Infinite parallelism means the service will assume that the work
+	// item
+	// can always be split into more non-empty work items by dynamic
+	// splitting.
+	// This is a work-around for lack of support for infinity by the
+	// current
+	// JSON-based Java RPC stack.
+	IsInfinite bool `json:"isInfinite,omitempty"`
+
+	// Value: Specifies the level of parallelism in case it is finite.
+	Value float64 `json:"value,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "IsInfinite") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *ReportedParallelism) MarshalJSON() ([]byte, error) {
+	type noMethod ReportedParallelism
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
@@ -2830,6 +2950,10 @@ type TopologyConfig struct {
 	// DataDiskAssignments: The disks assigned to a streaming Dataflow job.
 	DataDiskAssignments []*DataDiskAssignment `json:"dataDiskAssignments,omitempty"`
 
+	// ForwardingKeyBits: The size (in bits) of keys that will be assigned
+	// to source messages.
+	ForwardingKeyBits int64 `json:"forwardingKeyBits,omitempty"`
+
 	// UserStageToComputationNameMap: Maps user stage names to stable
 	// computation names.
 	UserStageToComputationNameMap map[string]string `json:"userStageToComputationNameMap,omitempty"`
@@ -3091,6 +3215,16 @@ func (s *WorkItemStatus) MarshalJSON() ([]byte, error) {
 // WorkerMessage that
 // this health ping belongs to.
 type WorkerHealthReport struct {
+	// Pods: The pods running on the worker.
+	// See:
+	// http://kubernetes.io/v1.1/docs/api-reference/v1/definitions.html#
+	// _v1_pod
+	//
+	// This field is used by the worker to send the status of the
+	// indvidual
+	// containers running on each worker.
+	Pods []WorkerHealthReportPods `json:"pods,omitempty"`
+
 	// ReportInterval: The interval at which the worker is sending health
 	// reports.
 	// The default value of 0 should be interpreted as the field is not
@@ -3104,7 +3238,7 @@ type WorkerHealthReport struct {
 	// VmStartupTime: The time the VM was booted.
 	VmStartupTime string `json:"vmStartupTime,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "ReportInterval") to
+	// ForceSendFields is a list of field names (e.g. "Pods") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -3118,6 +3252,8 @@ func (s *WorkerHealthReport) MarshalJSON() ([]byte, error) {
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
+
+type WorkerHealthReportPods interface{}
 
 // WorkerHealthReportResponse: WorkerHealthReportResponse contains
 // information returned to the worker
@@ -3170,6 +3306,9 @@ type WorkerMessage struct {
 	// WorkerHealthReport: The health of a worker.
 	WorkerHealthReport *WorkerHealthReport `json:"workerHealthReport,omitempty"`
 
+	// WorkerMessageCode: A worker message code.
+	WorkerMessageCode *WorkerMessageCode `json:"workerMessageCode,omitempty"`
+
 	// ForceSendFields is a list of field names (e.g. "Labels") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
@@ -3184,6 +3323,85 @@ func (s *WorkerMessage) MarshalJSON() ([]byte, error) {
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
+
+// WorkerMessageCode: A message code is used to report status and error
+// messages to the service.
+// The message codes are intended to be machine readable. The service
+// will
+// take care of translating these into user understandable messages
+// if
+// necessary.
+//
+// Example use cases:
+//   1. Worker processes reporting successful startup.
+//   2. Worker processes reporting specific errors (e.g. package
+// staging
+//      failure).
+type WorkerMessageCode struct {
+	// Code: The code is a string intended for consumption by a machine that
+	// identifies
+	// the type of message being sent.
+	// Examples:
+	//  1. "HARNESS_STARTED" might be used to indicate the worker harness
+	// has
+	//      started.
+	//  2. "GCS_DOWNLOAD_ERROR" might be used to indicate an error
+	// downloading
+	//     a GCS file as part of the boot process of one of the worker
+	// containers.
+	//
+	// This is a string and not an enum to make it easy to add new codes
+	// without
+	// waiting for an API change.
+	Code string `json:"code,omitempty"`
+
+	// Parameters: Parameters contains specific information about the
+	// code.
+	//
+	// This is a struct to allow parameters of different types.
+	//
+	// Examples:
+	//  1. For a "HARNESS_STARTED" message parameters might provide the
+	// name
+	//     of the worker and additional data like timing information.
+	//  2. For a "GCS_DOWNLOAD_ERROR" parameters might contain fields
+	// listing
+	//     the GCS objects being downloaded and fields containing
+	// errors.
+	//
+	// In general complex data structures should be avoided. If a
+	// worker
+	// needs to send a specific and complicated data structure then
+	// please
+	// consider defining a new proto and adding it to the data oneof
+	// in
+	// WorkerMessageResponse.
+	//
+	// Conventions:
+	//  Parameters should only be used for information that isn't typically
+	// passed
+	//  as a label.
+	//  hostname and other worker identifiers should almost always be
+	// passed
+	//  as labels since they will be included on most messages.
+	Parameters WorkerMessageCodeParameters `json:"parameters,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Code") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *WorkerMessageCode) MarshalJSON() ([]byte, error) {
+	type noMethod WorkerMessageCode
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+type WorkerMessageCodeParameters interface{}
 
 // WorkerMessageResponse: A worker_message response allows the server to
 // pass information to the sender.
@@ -3331,11 +3549,9 @@ type WorkerPool struct {
 	// development.
 	TeardownPolicy string `json:"teardownPolicy,omitempty"`
 
-	// Zone: Zone to run the worker pools in (e.g. "us-central1-a").
-	// If
-	// empty or unspecified, the service will attempt to choose a
-	// reasonable
-	// default.
+	// Zone: Zone to run the worker pools in.  If empty or unspecified, the
+	// service
+	// will attempt to choose a reasonable default.
 	Zone string `json:"zone,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "AutoscalingSettings")

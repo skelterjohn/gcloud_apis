@@ -13,7 +13,7 @@
     "x16": "http://www.google.com/images/icons/product/search-16.gif",
     "x32": "http://www.google.com/images/icons/product/search-32.gif"
    },
-  "documentationLink": "",
+  "documentationLink": "https://cloud.google.com/container-builder/docs/",
   "protocol": "rest",
   "rootUrl": "https://cloudbuild.googleapis.com/",
   "servicePath": "",
@@ -120,28 +120,28 @@
   "schemas": {
     "Build": {
       "id": "Build",
-      "description": "A build resource in the CloudBuild API.\n\nAt a high level, a Build describes where to find source, how to build the\nsource (i.e., the builder image to run on the source), and what tag to apply\nto the built image when it is pushed to Google Container Registry.",
+      "description": "A build resource in the Container Builder API.\n\nAt a high level, a Build describes where to find source code, how to build\nit (for example, the builder image to run on the source), and what tag to\napply to the built image when it is pushed to Google Container Registry.",
       "type": "object",
       "properties": {
         "id": {
-          "description": "The unique identifier of the build.\n@OutputOnly",
+          "description": "Unique identifier of the build.\n@OutputOnly",
           "type": "string"
         },
         "projectId": {
-          "description": "The ID of the project.\n@OutputOnly.",
+          "description": "ID of the project.\n@OutputOnly.",
           "type": "string"
         },
         "status": {
-          "description": "The status of the build.\n@OutputOnly",
+          "description": "Status of the build.\n@OutputOnly",
           "enumDescriptions": [
-            "The status of the build is unknown.",
-            "The build is queued, work has not yet begun.",
-            "The build is being executed.",
-            "The build finished successfully.",
-            "The build failed to complete successfully.",
-            "The build failed due to an internal cause.",
-            "The build took longer than was allowed.",
-            "The build was cancelled by a user."
+            "Status of the build is unknown.",
+            "Build is queued, work has not yet begun.",
+            "Build is being executed.",
+            "Build finished successfully.",
+            "Build failed to complete successfully.",
+            "Build failed due to an internal cause.",
+            "Build took longer than was allowed.",
+            "Build was canceled by a user."
           ],
           "type": "string",
           "enum": [
@@ -156,7 +156,7 @@
           ]
         },
         "source": {
-          "description": "Describes where to find source files to build.",
+          "description": "Describes where to find the source files to build.",
           "$ref": "Source"
         },
         "steps": {
@@ -166,236 +166,65 @@
             "$ref": "BuildStep"
           }
         },
+        "results": {
+          "description": "Results of the build.\n@OutputOnly",
+          "$ref": "Results"
+        },
         "createTime": {
-          "description": "The time that the build was created.\n@OutputOnly",
+          "description": "Time at which the build was created.\n@OutputOnly",
           "type": "string",
           "format": "google-datetime"
         },
         "startTime": {
-          "description": "The time that execution of the build was started.\n@OutputOnly",
+          "description": "Time at which execution of the build was started.\n@OutputOnly",
           "type": "string",
           "format": "google-datetime"
         },
         "finishTime": {
-          "description": "The time that execution of the build was finished.\n@OutputOnly",
+          "description": "Time at whihc execution of the build was finished.\n@OutputOnly",
           "type": "string",
           "format": "google-datetime"
         },
         "timeout": {
-          "description": "The amount of time that this build should be allowed to run, to second\ngranularity. If this amount of time elapses, work on the build will cease\nand the build status will be TIMEOUT.\n\nBy default, this will be ten minutes.",
+          "description": "Amount of time that this build should be allowed to run, to second\ngranularity. If this amount of time elapses, work on the build will cease\nand the build status will be TIMEOUT.\n\nDefault time is ten minutes.",
           "type": "string",
           "format": "google-duration"
         },
         "images": {
-          "description": "The list of images expected to be built and pushed to GCR. If an image\nis listed here, and if the image is not produced by one of the build\nsteps, the build will fail. If all the images are present when the build\nsteps are complete, they will all be pushed.",
+          "description": "List of images expected to be built and pushed to Google Container\nRegistry. If an image is listed here and the image is not produced by\none of the build steps, the build will fail. Any images present when\nthe build steps are complete will be pushed to Container Registry.",
           "type": "array",
           "items": {
             "type": "string"
           }
+        },
+        "logsBucket": {
+          "description": "Google Cloud Storage bucket where logs should be written (see\n[Bucket Name\nRequirements](https:\/\/cloud.google.com\/storage\/docs\/bucket-naming#requirements)).\nLogs file names will be of the format `${logs_bucket}\/log-${build_id}.txt`.",
+          "type": "string"
         }
       }
     },
     "Source": {
       "id": "Source",
-      "description": "Source describes the location of source either in a source repository, or in\nan object in Google Cloud Storage.",
+      "description": "Source describes the location of the source in a supported storage\nservice.",
       "type": "object",
       "properties": {
-        "repoSource": {
-          "description": "If provided, get source from this location in source control.",
-          "$ref": "SourceContext"
-        },
         "storageSource": {
-          "description": "If provided, get source from this location in in Google Cloud Storage.",
+          "description": "If provided, get the source from this location in in Google Cloud Storage.",
           "$ref": "StorageSource"
-        }
-      }
-    },
-    "SourceContext": {
-      "id": "SourceContext",
-      "description": "A SourceContext is a reference to a tree of files. A SourceContext together\nwith a path point to a unique revision of a single file or directory.",
-      "type": "object",
-      "properties": {
-        "cloudRepo": {
-          "description": "A SourceContext referring to a revision in a cloud repo.",
-          "$ref": "CloudRepoSourceContext"
-        },
-        "cloudWorkspace": {
-          "description": "A SourceContext referring to a snapshot in a cloud workspace.",
-          "$ref": "CloudWorkspaceSourceContext"
-        },
-        "gerrit": {
-          "description": "A SourceContext referring to a Gerrit project.",
-          "$ref": "GerritSourceContext"
-        },
-        "git": {
-          "description": "A SourceContext referring to any third party Git repo (e.g. GitHub).",
-          "$ref": "GitSourceContext"
-        }
-      }
-    },
-    "CloudRepoSourceContext": {
-      "id": "CloudRepoSourceContext",
-      "description": "A CloudRepoSourceContext denotes a particular revision in a cloud\nrepo (a repo hosted by the Google Cloud Platform).",
-      "type": "object",
-      "properties": {
-        "repoId": {
-          "description": "The ID of the repo.",
-          "$ref": "RepoId"
-        },
-        "revisionId": {
-          "description": "A revision ID.",
-          "type": "string"
-        },
-        "aliasName": {
-          "description": "The name of an alias (branch, tag, etc.).",
-          "type": "string"
-        },
-        "aliasContext": {
-          "description": "An alias, which may be a branch or tag.",
-          "$ref": "AliasContext"
-        }
-      }
-    },
-    "RepoId": {
-      "id": "RepoId",
-      "description": "A unique identifier for a cloud repo.",
-      "type": "object",
-      "properties": {
-        "projectRepoId": {
-          "description": "A combination of a project ID and a repo name.",
-          "$ref": "ProjectRepoId"
-        },
-        "uid": {
-          "description": "A server-assigned, globally unique identifier.",
-          "type": "string"
-        }
-      }
-    },
-    "ProjectRepoId": {
-      "id": "ProjectRepoId",
-      "description": "Selects a repo using a Google Cloud Platform project ID\n(e.g. winged-cargo-31) and a repo name within that project.",
-      "type": "object",
-      "properties": {
-        "projectId": {
-          "description": "The ID of the project.",
-          "type": "string"
-        },
-        "repoName": {
-          "description": "The name of the repo. Leave empty for the default repo.",
-          "type": "string"
-        }
-      }
-    },
-    "AliasContext": {
-      "id": "AliasContext",
-      "description": "An alias to a repo revision.",
-      "type": "object",
-      "properties": {
-        "kind": {
-          "description": "The alias kind.",
-          "enumDescriptions": [
-            "Do not use.",
-            "Git tag",
-            "Git branch",
-            "OTHER is used to specify non-standard aliases, those not of the kinds\nabove. For example, if a Git repo has a ref named \"refs\/foo\/bar\", it\nis considered to be of kind OTHER."
-          ],
-          "type": "string",
-          "enum": [
-            "ANY",
-            "FIXED",
-            "MOVABLE",
-            "OTHER"
-          ]
-        },
-        "name": {
-          "description": "The alias name.",
-          "type": "string"
-        }
-      }
-    },
-    "CloudWorkspaceSourceContext": {
-      "id": "CloudWorkspaceSourceContext",
-      "description": "A CloudWorkspaceSourceContext denotes a workspace at a particular snapshot.",
-      "type": "object",
-      "properties": {
-        "workspaceId": {
-          "description": "The ID of the workspace.",
-          "$ref": "CloudWorkspaceId"
-        },
-        "snapshotId": {
-          "description": "The ID of the snapshot.\nAn empty snapshot_id refers to the most recent snapshot.",
-          "type": "string"
-        }
-      }
-    },
-    "CloudWorkspaceId": {
-      "id": "CloudWorkspaceId",
-      "description": "A CloudWorkspaceId is a unique identifier for a cloud workspace.\nA cloud workspace is a place associated with a repo where modified files\ncan be stored before they are committed.",
-      "type": "object",
-      "properties": {
-        "repoId": {
-          "description": "The ID of the repo containing the workspace.",
-          "$ref": "RepoId"
-        },
-        "name": {
-          "description": "The unique name of the workspace within the repo.  This is the name\nchosen by the client in the Source API's CreateWorkspace method.",
-          "type": "string"
-        }
-      }
-    },
-    "GerritSourceContext": {
-      "id": "GerritSourceContext",
-      "description": "A SourceContext referring to a Gerrit project.",
-      "type": "object",
-      "properties": {
-        "hostUri": {
-          "description": "The URI of a running Gerrit instance.",
-          "type": "string"
-        },
-        "gerritProject": {
-          "description": "The full project name within the host. Projects may be nested, so\n\"project\/subproject\" is a valid project name.\nThe \"repo name\" is hostURI\/project.",
-          "type": "string"
-        },
-        "revisionId": {
-          "description": "A revision (commit) ID.",
-          "type": "string"
-        },
-        "aliasName": {
-          "description": "The name of an alias (branch, tag, etc.).",
-          "type": "string"
-        },
-        "aliasContext": {
-          "description": "An alias, which may be a branch or tag.",
-          "$ref": "AliasContext"
-        }
-      }
-    },
-    "GitSourceContext": {
-      "id": "GitSourceContext",
-      "description": "A GitSourceContext denotes a particular revision in a third party Git\nrepository (e.g. GitHub).",
-      "type": "object",
-      "properties": {
-        "url": {
-          "description": "Git repository URL.",
-          "type": "string"
-        },
-        "revisionId": {
-          "description": "Git commit hash.\nrequired.",
-          "type": "string"
         }
       }
     },
     "StorageSource": {
       "id": "StorageSource",
-      "description": "StorageSource describes the location of source in an archive file in Google\nCloud Storage.",
+      "description": "StorageSource describes the location of the source in an archive file in\nGoogle Cloud Storage.",
       "type": "object",
       "properties": {
         "bucket": {
-          "description": "Google Cloud Storage bucket containing source (see\n[Bucket Name Requirements](https:\/\/cloud.google.com\/storage\/docs\/bucket-naming#requirements)).",
+          "description": "Google Cloud Storage bucket containing source (see\n[Bucket Name\nRequirements](https:\/\/cloud.google.com\/storage\/docs\/bucket-naming#requirements)).",
           "type": "string"
         },
         "object": {
-          "description": "Google Cloud Storage object containing source.\n\nThis object must be an archive file (zip, tar, tar.gz) containing source to\nbuild.",
+          "description": "Google Cloud Storage object containing source.\n\nThis object must be a gzipped archive file (.tgz) containing source to\nbuild.",
           "type": "string"
         }
       }
@@ -406,7 +235,7 @@
       "type": "object",
       "properties": {
         "name": {
-          "description": "The name of the container image to use for creating this stage in the\npipeline, as presented to 'docker pull'.",
+          "description": "Name of the container image to use for creating this stage in the\npipeline, as presented to `docker pull`.",
           "type": "string"
         },
         "env": {
@@ -425,6 +254,39 @@
         },
         "dir": {
           "description": "Working directory (relative to project source root) to use when running\nthis operation's container.",
+          "type": "string"
+        }
+      }
+    },
+    "Results": {
+      "id": "Results",
+      "description": "Results describes the artifacts created by the build pipeline.",
+      "type": "object",
+      "properties": {
+        "revision": {
+          "description": "Revision ID of the source that was built.",
+          "type": "string"
+        },
+        "images": {
+          "description": "Images that were built as a part of the build.",
+          "type": "array",
+          "items": {
+            "$ref": "BuiltImage"
+          }
+        }
+      }
+    },
+    "BuiltImage": {
+      "id": "BuiltImage",
+      "description": "BuiltImage describes an image built by the pipeline.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Name used to push the container image to Google Container Registry, as\npresented to `docker push`.",
+          "type": "string"
+        },
+        "digest": {
+          "description": "Docker Registry 2.0 digest.",
           "type": "string"
         }
       }
@@ -509,6 +371,13 @@
         }
       }
     },
+    "CancelBuildRequest": {
+      "id": "CancelBuildRequest",
+      "description": "Request to cancel an ongoing build.",
+      "type": "object",
+      "properties": {
+      }
+    },
     "ListOperationsResponse": {
       "id": "ListOperationsResponse",
       "description": "The response message for Operations.ListOperations.",
@@ -527,18 +396,15 @@
         }
       }
     },
-    "CancelOperationRequest": {
-      "id": "CancelOperationRequest",
-      "description": "The request message for Operations.CancelOperation.",
+    "BuildOperationMetadata": {
+      "id": "BuildOperationMetadata",
+      "description": "Metadata for build operations.",
       "type": "object",
       "properties": {
-      }
-    },
-    "Empty": {
-      "id": "Empty",
-      "description": "A generic empty message that you can re-use to avoid defining duplicated\nempty messages in your APIs. A typical example is to use it as the request\nor the response type of an API method. For instance:\n\n    service Foo {\n      rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);\n    }\n\nThe JSON representation for `Empty` is empty JSON object `{}`.",
-      "type": "object",
-      "properties": {
+        "build": {
+          "description": "The build that the operation is tracking.",
+          "$ref": "Build"
+        }
       }
     }
   },
@@ -555,7 +421,7 @@
               "description": "Starts a build with the specified configuration.\n\nThe long-running Operation returned by this method will include the ID of\nthe build, which can be passed to GetBuild to determine its status (e.g.,\nsuccess or failure).",
               "parameters": {
                 "projectId": {
-                  "description": "The ID of the project.",
+                  "description": "ID of the project.",
                   "location": "path",
                   "required": true,
                   "type": "string"
@@ -582,13 +448,13 @@
               "description": "Returns information about a previously requested build.\n\nThe Build that is returned includes its status (e.g., success or failure,\nor in-progress), and timing information.",
               "parameters": {
                 "projectId": {
-                  "description": "The ID of the project.",
+                  "description": "ID of the project.",
                   "location": "path",
                   "required": true,
                   "type": "string"
                 },
                 "id": {
-                  "description": "The ID of the build.",
+                  "description": "ID of the build.",
                   "location": "path",
                   "required": true,
                   "type": "string"
@@ -613,7 +479,7 @@
               "description": "Lists previously requested builds.\n\nPreviously requested builds may still be in-progress, or may have finished\nsuccessfully or unsuccessfully.",
               "parameters": {
                 "projectId": {
-                  "description": "The ID of the project.",
+                  "description": "ID of the project.",
                   "location": "path",
                   "required": true,
                   "type": "string"
@@ -626,16 +492,6 @@
                 },
                 "pageToken": {
                   "description": "Token to provide to skip to a particular spot in the list.",
-                  "location": "query",
-                  "type": "string"
-                },
-                "repoName": {
-                  "description": "If present, only builds from source repos with the given name will be\nreturned.",
-                  "location": "query",
-                  "type": "string"
-                },
-                "revisionId": {
-                  "description": "If present, only builds from source repos, from the given revision ID will\nbe returned. A revision ID may be either a branch\/tag name\n(e.g., \"master\") or a Git commit SHA.\n\nIf a revision ID is specified, a repo_name must also be specified.",
                   "location": "query",
                   "type": "string"
                 }
@@ -658,13 +514,13 @@
               "description": "Cancels a requested build in progress.",
               "parameters": {
                 "projectId": {
-                  "description": "The ID of the project.",
+                  "description": "ID of the project.",
                   "location": "path",
                   "required": true,
                   "type": "string"
                 },
                 "id": {
-                  "description": "The ID of the build.",
+                  "description": "ID of the build.",
                   "location": "path",
                   "required": true,
                   "type": "string"
@@ -674,6 +530,9 @@
                 "projectId",
                 "id"
               ],
+              "request": {
+                "$ref": "CancelBuildRequest"
+              },
               "response": {
                 "$ref": "Build"
               },
@@ -748,59 +607,6 @@
           ],
           "response": {
             "$ref": "ListOperationsResponse"
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/cloud-platform"
-          ]
-        },
-        "cancel": {
-          "id": "cloudbuild.operations.cancel",
-          "path": "v1/{+name}:cancel",
-          "flatPath": "v1/operations/{operationsId}:cancel",
-          "httpMethod": "POST",
-          "description": "Starts asynchronous cancellation on a long-running operation.  The server\nmakes a best effort to cancel the operation, but success is not\nguaranteed.  If the server doesn't support this method, it returns\n`google.rpc.Code.UNIMPLEMENTED`.  Clients can use\nOperations.GetOperation or\nother methods to check whether the cancellation succeeded or whether the\noperation completed despite cancellation.",
-          "parameters": {
-            "name": {
-              "description": "The name of the operation resource to be cancelled.",
-              "location": "path",
-              "required": true,
-              "pattern": "^operations\/.*$",
-              "type": "string"
-            }
-          },
-          "parameterOrder": [
-            "name"
-          ],
-          "request": {
-            "$ref": "CancelOperationRequest"
-          },
-          "response": {
-            "$ref": "Empty"
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/cloud-platform"
-          ]
-        },
-        "delete": {
-          "id": "cloudbuild.operations.delete",
-          "path": "v1/{+name}",
-          "flatPath": "v1/operations/{operationsId}",
-          "httpMethod": "DELETE",
-          "description": "Deletes a long-running operation. This method indicates that the client is\nno longer interested in the operation result. It does not cancel the\noperation. If the server doesn't support this method, it returns\n`google.rpc.Code.UNIMPLEMENTED`.",
-          "parameters": {
-            "name": {
-              "description": "The name of the operation resource to be deleted.",
-              "location": "path",
-              "required": true,
-              "pattern": "^operations\/.*$",
-              "type": "string"
-            }
-          },
-          "parameterOrder": [
-            "name"
-          ],
-          "response": {
-            "$ref": "Empty"
           },
           "scopes": [
             "https://www.googleapis.com/auth/cloud-platform"

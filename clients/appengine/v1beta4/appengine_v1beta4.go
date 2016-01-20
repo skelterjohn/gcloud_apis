@@ -241,6 +241,13 @@ type Application struct {
 	// @OutputOnly
 	CodeBucket string `json:"codeBucket,omitempty"`
 
+	// DefaultBucket: A Google Cloud Storage bucket which can be used by the
+	// application to store
+	// content.
+	//
+	// @OutputOnly
+	DefaultBucket string `json:"defaultBucket,omitempty"`
+
 	// DispatchRules: HTTP path dispatch rules for requests to the app that
 	// do not
 	// explicitly target a module or version. The rules are
@@ -1822,9 +1829,11 @@ func (r *AppsService) Get(name string) *AppsGetCall {
 // application are created on-demand.
 // Controls whether these resources should be created when performing
 // the
-// `GET` operation. If specified and any resources cloud not be created,
+// `GET` operation. If specified and any resources could not be created,
 // the
-// request will fail with an error code.
+// request will fail with an error code. Additionally, this parameter
+// can
+// cause the request to take longer to complete.
 func (c *AppsGetCall) EnsureResourcesExist(ensureResourcesExist bool) *AppsGetCall {
 	c.urlParams_.Set("ensureResourcesExist", fmt.Sprint(ensureResourcesExist))
 	return c
@@ -1920,7 +1929,7 @@ func (c *AppsGetCall) Do() (*Application, error) {
 	//   ],
 	//   "parameters": {
 	//     "ensureResourcesExist": {
-	//       "description": "Certain resources associated with an application are created on-demand.\nControls whether these resources should be created when performing the\n`GET` operation. If specified and any resources cloud not be created, the\nrequest will fail with an error code.",
+	//       "description": "Certain resources associated with an application are created on-demand.\nControls whether these resources should be created when performing the\n`GET` operation. If specified and any resources could not be created, the\nrequest will fail with an error code. Additionally, this parameter can\ncause the request to take longer to complete.",
 	//       "location": "query",
 	//       "type": "boolean"
 	//     },

@@ -4,7 +4,7 @@
  "id": "replicapoolupdater:v1beta1",
  "name": "replicapoolupdater",
  "version": "v1beta1",
- "revision": "20151130",
+ "revision": "20160119",
  "title": "Google Compute Engine Instance Group Updater API",
  "description": "The Google Compute Engine Instance Group Updater API provides services for updating groups of Compute Engine Instances.",
  "ownerDomain": "google.com",
@@ -236,7 +236,7 @@
     },
     "selfLink": {
      "type": "string",
-     "description": "[Output Only] Server defined URL for the resource."
+     "description": "[Output Only] The fully qualified URL for the resource."
     },
     "startTime": {
      "type": "string",
@@ -319,7 +319,7 @@
     },
     "kind": {
      "type": "string",
-     "description": "[Output Only] Type of resource. Always replicapoolupdater#operations for Operations resource.",
+     "description": "[Output Only] Type of resource. Always replicapoolupdater#operationList for OperationList resources.",
      "default": "replicapoolupdater#operationList"
     },
     "nextPageToken": {
@@ -328,7 +328,7 @@
     },
     "selfLink": {
      "type": "string",
-     "description": "[Output Only] Server-defined URL for this resource."
+     "description": "[Output Only] The fully qualified URL for the resource."
     }
    }
   },

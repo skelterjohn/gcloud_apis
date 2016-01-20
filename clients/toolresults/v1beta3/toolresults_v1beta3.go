@@ -135,6 +135,26 @@ type ProjectsHistoriesExecutionsStepsThumbnailsService struct {
 // Any: `Any` contains an arbitrary serialized message along with a URL
 // that describes the type of the serialized message.
 //
+// Protobuf library provides support to pack/unpack Any values in the
+// form of utility functions or additional generated methods of the Any
+// type.
+//
+// Example 1: Pack and unpack a message in C++.
+//
+// Foo foo = ...; Any any; any.PackFrom(foo); ... if
+// (any.UnpackTo(&foo)) { ... }
+//
+// Example 2: Pack and unpack a message in Java.
+//
+// Foo foo = ...; Any any = Any.pack(foo); ... if (any.is(Foo.class)) {
+// foo = any.unpack(Foo.class); }
+//
+// The pack methods provided by protobuf library will by default use
+// 'type.googleapis.com/full.type.name' as the type URL and the unpack
+// methods only use the fully qualified type name after the last '/' in
+// the type URL, for example "foo.bar.com/x/y.z" will yield type name
+// "y.z".
+//
 //
 //
 // JSON ==== The JSON representation of an `Any` value uses the regular
@@ -958,6 +978,20 @@ type Step struct {
 	// - In response: present if set by create/update request - In
 	// create/update request: optional
 	Description string `json:"description,omitempty"`
+
+	// DeviceUsageDuration: How much the device resource is used to perform
+	// the test.
+	//
+	// This is the device usage used for billing purpose, which is different
+	// from the run_duration, for example, infrastructure failure won't be
+	// charged for device usage.
+	//
+	// PRECONDITION_FAILED will be returned if one attempts to set a
+	// device_usage on a step which already has this field set.
+	//
+	// - In response: present if previously set. - In create request:
+	// optional - In update request: optional
+	DeviceUsageDuration *Duration `json:"deviceUsageDuration,omitempty"`
 
 	// DimensionValue: If the execution containing this step has any
 	// dimension_definition set, then this field allows the child to specify

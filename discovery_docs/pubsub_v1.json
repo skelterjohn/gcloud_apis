@@ -137,7 +137,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "description": "Version of the `Policy`. The default version is 0.\n0 = resourcemanager_projects only support legacy roles.\n1 = supports non-legacy roles\n2 = supports AuditConfig",
+          "description": "Version of the `Policy`. The default version is 0.",
           "type": "integer",
           "format": "int32"
         },
@@ -163,7 +163,7 @@
           }
         },
         "etag": {
-          "description": "The etag is used for optimistic concurrency control as a way to help\nprevent simultaneous updates of a policy from overwriting each other.\nIt is strongly suggested that systems make use of the etag in the\nread-modify-write cycle to perform policy updates in order to avoid race\nconditions: Etags are returned in the response to GetIamPolicy, and\nsystems are expected to put that etag in the request to SetIamPolicy to\nensure that their change will be applied to the same version of the policy.\n\nIf no etag is provided in the call to SetIamPolicy, then the existing policy\nis overwritten blindly.",
+          "description": "`etag` is used for optimistic concurrency control as a way to help\nprevent simultaneous updates of a policy from overwriting each other.\nIt is strongly suggested that systems make use of the `etag` in the\nread-modify-write cycle to perform policy updates in order to avoid race\nconditions: An `etag` is returned in the response to `getIamPolicy`, and\nsystems are expected to put that etag in the request to `setIamPolicy` to\nensure that their change will be applied to the same version of the policy.\n\nIf no `etag` is provided in the call to `setIamPolicy`, then the existing\npolicy is overwritten blindly.",
           "type": "string",
           "format": "byte"
         },
@@ -183,7 +183,7 @@
           "type": "string"
         },
         "members": {
-          "description": "Specifies the identities requesting access for a Cloud Platform resource.\n`members` can have the following formats:\n\n* `allUsers`: A special identifier that represents anyone who is\n   on the internet; with or without a Google account.\n\n* `allAuthenticatedUsers`: A special identifier that represents anyone\n   who is authenticated with a Google account or a service account.\n\n* `user:{emailid}`: An email address that represents a specific Google\n   account. For example, `alice@gmail.com` or `joe@example.com`.\n\n* `serviceAccount:{emailid}`: An email address that represents a service\n   account. For example, `my-other-app@appspot.gserviceaccount.com`.\n\n* `group:{emailid}`: An email address that represents a Google group.\n   For example, `admins@example.com`.\n\n* `domain:{domain}`: A Google Apps domain name that represents all the\n   users of that domain. For example, `google.com` or `example.com`.\n",
+          "description": "Specifies the identities requesting access for a Cloud Platform resource.\n`members` can have the following values:\n\n* `allUsers`: A special identifier that represents anyone who is\n   on the internet; with or without a Google account.\n\n* `allAuthenticatedUsers`: A special identifier that represents anyone\n   who is authenticated with a Google account or a service account.\n\n* `user:{emailid}`: An email address that represents a specific Google\n   account. For example, `alice@gmail.com` or `joe@example.com`.\n\n* `serviceAccount:{emailid}`: An email address that represents a service\n   account. For example, `my-other-app@appspot.gserviceaccount.com`.\n\n* `group:{emailid}`: An email address that represents a Google group.\n   For example, `admins@example.com`.\n\n* `domain:{domain}`: A Google Apps domain name that represents all the\n   users of that domain. For example, `google.com` or `example.com`.\n",
           "type": "array",
           "items": {
             "type": "string"
@@ -403,7 +403,7 @@
       "type": "object",
       "properties": {
         "permissions": {
-          "description": "The set of permissions to check for the `resource`. Permissions with\nwildcards (such as '*' or 'storage.*') are not allowed.",
+          "description": "The set of permissions to check for the `resource`. Permissions with\nwildcards (such as '*' or 'storage.*') are not allowed. For more\ninformation see\nIAM Overview.",
           "type": "array",
           "items": {
             "type": "string"
@@ -698,7 +698,7 @@
               "description": "Sets the access control policy on the specified resource. Replaces any\nexisting policy.",
               "parameters": {
                 "resource": {
-                  "description": "REQUIRED: The resource for which policy is being specified.\n`resource` is usually specified as a path, such as,\n`projects\/{project}\/zones\/{zone}\/disks\/{disk}`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the documentation for the respective SetIamPolicy rpc.",
+                  "description": "REQUIRED: The resource for which the policy is being specified.\n`resource` is usually specified as a path, such as\n`projects\/*project*\/zones\/*zone*\/disks\/*disk*`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the `setIamPolicy` documentation.",
                   "location": "path",
                   "required": true,
                   "pattern": "^projects\/[^\/]*\/topics\/[^\/]*$",
@@ -727,7 +727,7 @@
               "description": "Gets the access control policy for a `resource`. Is empty if the\npolicy or the resource does not exist.",
               "parameters": {
                 "resource": {
-                  "description": "REQUIRED: The resource for which policy is being requested.\n`resource` is usually specified as a path, such as,\n`projects\/{project}\/zones\/{zone}\/disks\/{disk}`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the documentation for the respective GetIamPolicy rpc.",
+                  "description": "REQUIRED: The resource for which the policy is being requested.\n`resource` is usually specified as a path, such as\n`projects\/*project*\/zones\/*zone*\/disks\/*disk*`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the `getIamPolicy` documentation.",
                   "location": "path",
                   "required": true,
                   "pattern": "^projects\/[^\/]*\/topics\/[^\/]*$",
@@ -753,7 +753,7 @@
               "description": "Returns permissions that a caller has on the specified resource.",
               "parameters": {
                 "resource": {
-                  "description": "REQUIRED: The resource for which policy detail is being requested.\n`resource` is usually specified as a path, such as,\n`projects\/{project}\/zones\/{zone}\/disks\/{disk}`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the documentation for the respective TestIamPermissions\nrpc.",
+                  "description": "REQUIRED: The resource for which the policy detail is being requested.\n`resource` is usually specified as a path, such as\n`projects\/*project*\/zones\/*zone*\/disks\/*disk*`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the `testIamPermissions` documentation.",
                   "location": "path",
                   "required": true,
                   "pattern": "^projects\/[^\/]*\/topics\/[^\/]*$",
@@ -977,7 +977,7 @@
               "description": "Sets the access control policy on the specified resource. Replaces any\nexisting policy.",
               "parameters": {
                 "resource": {
-                  "description": "REQUIRED: The resource for which policy is being specified.\n`resource` is usually specified as a path, such as,\n`projects\/{project}\/zones\/{zone}\/disks\/{disk}`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the documentation for the respective SetIamPolicy rpc.",
+                  "description": "REQUIRED: The resource for which the policy is being specified.\n`resource` is usually specified as a path, such as\n`projects\/*project*\/zones\/*zone*\/disks\/*disk*`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the `setIamPolicy` documentation.",
                   "location": "path",
                   "required": true,
                   "pattern": "^projects\/[^\/]*\/subscriptions\/[^\/]*$",
@@ -1006,7 +1006,7 @@
               "description": "Gets the access control policy for a `resource`. Is empty if the\npolicy or the resource does not exist.",
               "parameters": {
                 "resource": {
-                  "description": "REQUIRED: The resource for which policy is being requested.\n`resource` is usually specified as a path, such as,\n`projects\/{project}\/zones\/{zone}\/disks\/{disk}`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the documentation for the respective GetIamPolicy rpc.",
+                  "description": "REQUIRED: The resource for which the policy is being requested.\n`resource` is usually specified as a path, such as\n`projects\/*project*\/zones\/*zone*\/disks\/*disk*`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the `getIamPolicy` documentation.",
                   "location": "path",
                   "required": true,
                   "pattern": "^projects\/[^\/]*\/subscriptions\/[^\/]*$",
@@ -1032,7 +1032,7 @@
               "description": "Returns permissions that a caller has on the specified resource.",
               "parameters": {
                 "resource": {
-                  "description": "REQUIRED: The resource for which policy detail is being requested.\n`resource` is usually specified as a path, such as,\n`projects\/{project}\/zones\/{zone}\/disks\/{disk}`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the documentation for the respective TestIamPermissions\nrpc.",
+                  "description": "REQUIRED: The resource for which the policy detail is being requested.\n`resource` is usually specified as a path, such as\n`projects\/*project*\/zones\/*zone*\/disks\/*disk*`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the `testIamPermissions` documentation.",
                   "location": "path",
                   "required": true,
                   "pattern": "^projects\/[^\/]*\/subscriptions\/[^\/]*$",
@@ -1058,7 +1058,7 @@
               "path": "v1/{+name}",
               "flatPath": "v1/projects/{projectsId}/subscriptions/{subscriptionsId}",
               "httpMethod": "PUT",
-              "description": "Creates a subscription to a given topic for a given subscriber.\nIf the subscription already exists, returns `ALREADY_EXISTS`.\nIf the corresponding topic doesn't exist, returns `NOT_FOUND`.\n\nIf the name is not provided in the request, the server will assign a random\nname for this subscription on the same project as the topic.",
+              "description": "Creates a subscription to a given topic.\nIf the subscription already exists, returns `ALREADY_EXISTS`.\nIf the corresponding topic doesn't exist, returns `NOT_FOUND`.\n\nIf the name is not provided in the request, the server will assign a random\nname for this subscription on the same project as the topic.",
               "parameters": {
                 "name": {
                   "description": "The name of the subscription. It must have the format\n`\"projects\/{project}\/subscriptions\/{subscription}\"`. `{subscription}` must\nstart with a letter, and contain only letters (`[A-Za-z]`), numbers\n(`[0-9]`), dashes (`-`), underscores (`_`), periods (`.`), tildes (`~`),\nplus (`+`) or percent signs (`%`). It must be between 3 and 255 characters\nin length, and it must not start with `\"goog\"`.",

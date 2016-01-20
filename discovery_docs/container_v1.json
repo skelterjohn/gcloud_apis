@@ -6,7 +6,7 @@
   "version": "v1",
   "revision": "0",
   "title": "Google Container Engine API",
-  "description": "The Google Container Engine API is used for building and managing container-based applications, powered by the open source Kubernetes technology.",
+  "description": "The Google Container Engine API is used for building and managing clusters that run container-based applications, powered by open source Kubernetes technology.",
   "ownerDomain": "google.com",
   "ownerName": "Google",
   "icons": {
@@ -153,19 +153,19 @@
           "format": "int32"
         },
         "nodeConfig": {
-          "description": "Parameters used in creating the cluster's nodes.\nSee the descriptions of the child properties of `nodeConfig`.\n\nIf unspecified, the defaults for all child properties are used.",
+          "description": "Parameters used in creating the cluster's nodes.\nSee `nodeConfig` for the description of its properties.\n\nIf unspecified, the defaults are used.",
           "$ref": "NodeConfig"
         },
         "masterAuth": {
-          "description": "The authentication information for accessing the master.",
+          "description": "The authentication information for accessing the master endpoint.",
           "$ref": "MasterAuth"
         },
         "loggingService": {
-          "description": "The logging service that the cluster should write logs to.\nCurrently available options:\n\n* `logging.googleapis.com` - the Google Cloud Logging service.\n* `none` - no logs will be exported from the cluster.\n* \"\" - default value: the default is `logging.googleapis.com`.",
+          "description": "The logging service the cluster should use to write logs.\nCurrently available options:\n\n* `logging.googleapis.com` - the Google Cloud Logging service.\n* `none` - no logs will be exported from the cluster.\n* if left as an empty string,`logging.googleapis.com` will be used.",
           "type": "string"
         },
         "monitoringService": {
-          "description": "The monitoring service that the cluster should write metrics to.\nCurrently available options:\n\n* `monitoring.googleapis.com` - the Google Cloud Monitoring service.\n* `none` - no metrics will be exported from the cluster.\n* \"\" - default value: the default is `monitoring.googleapis.com`.",
+          "description": "The monitoring service the cluster should use to write metrics.\nCurrently available options:\n\n* `monitoring.googleapis.com` - the Google Cloud Monitoring service.\n* `none` - no metrics will be exported from the cluster.\n* if left as an empty string, `monitoring.googleapis.com` will be used.",
           "type": "string"
         },
         "network": {
@@ -181,7 +181,7 @@
           "$ref": "AddonsConfig"
         },
         "subnetwork": {
-          "description": "The name of the Google Compute Engine\n[subnetwork](\/compute\/docs\/subnetworks) to which the\ncluster is connected. If specified, the cluster's network must be a\n\"custom subnet\" network. Specification of subnetworks is an alpha feature,\nand require that the Google Compute Engine alpha API be enabled.",
+          "description": "The name of the Google Compute Engine\n[subnetwork](\/compute\/docs\/subnetworks) to which the\ncluster is connected.  Specification of subnetworks is an alpha feature,\nand require that the Google Compute Engine alpha API be enabled.",
           "type": "string"
         },
         "selfLink": {
@@ -197,7 +197,7 @@
           "type": "string"
         },
         "initialClusterVersion": {
-          "description": "[Output only] The software version of the master and kubelets used\nin the cluster when it was first created. The version can be upgraded over\ntime.\n",
+          "description": "[Output only] The software version of the master endpoint and kubelets used\nin the cluster when it was first created. The version can be upgraded over\ntime.\n",
           "type": "string"
         },
         "currentMasterVersion": {
@@ -205,7 +205,7 @@
           "type": "string"
         },
         "currentNodeVersion": {
-          "description": "[Output only] The current version of the node software components.\nIf they are currently at different versions because they're in the process\nof being upgraded, this reflects the minimum version of any of them.",
+          "description": "[Output only] The current version of the node software components.\nIf they are currently at multiple versions because they're in the process\nof being upgraded, this reflects the minimum version of all nodes.",
           "type": "string"
         },
         "createTime": {
@@ -253,7 +253,7 @@
           }
         },
         "currentNodeCount": {
-          "description": "[Output only] The number of nodes currently recognized by the cluster.",
+          "description": "[Output only] The number of nodes currently in the cluster.",
           "type": "integer",
           "format": "int32"
         }
@@ -261,7 +261,7 @@
     },
     "NodeConfig": {
       "id": "NodeConfig",
-      "description": "Per-node parameters.",
+      "description": "Parameters that describe the nodes in a cluster.",
       "type": "object",
       "properties": {
         "machineType": {
@@ -274,14 +274,14 @@
           "format": "int32"
         },
         "oauthScopes": {
-          "description": "The set of Google API scopes to be made available on all of the\nnode VMs under the \"default\" service account.\n\nThe following scopes are recommended, but not required, and by default are\nnot included:\n\n* `https:\/\/www.googleapis.com\/auth\/compute` is required for mounting\npersistent storage on your nodes.\n* `https:\/\/www.googleapis.com\/auth\/devstorage.read_only` is required for\ncommunicating with **gcr.io**\n(the [Google Container Registry](\/container-registry\/).\n\nIf unspecified, no scopes are added.",
+          "description": "The set of Google API scopes to be made available on all of the\nnode VMs under the \"default\" service account.\n\nThe following scopes are recommended, but not required, and by default are\nnot included:\n\n* `https:\/\/www.googleapis.com\/auth\/compute` is required for mounting\npersistent storage on your nodes.\n* `https:\/\/www.googleapis.com\/auth\/devstorage.read_only` is required for\ncommunicating with **gcr.io**\n(the [Google Container Registry](\/container-registry\/)).\n\nIf unspecified, no scopes are added, unless Cloud Logging or Cloud\nMonitoring are enabled, in which case their required scopes will be added.",
           "type": "array",
           "items": {
             "type": "string"
           }
         },
         "metadata": {
-          "description": "The metadata key\/value pairs assigned to instances in the cluster.\n\nKeys must conform to the regexp [a-zA-Z0-9-_]+ and be less than 128 bytes\nin length. These are reflected as part of a URL in the metadata server.\nAdditionally, to avoid ambiguity, keys must not conflict with any other\nmetadata keys for the project or be one of the four reserved keys:\n\"instance-template\", \"kube-env\", \"startup-script\", and \"user-data\"\n\nValues can be free-form strings, and only have meaning as interpreted by\nthe image running in the instance. The only restriction placed on them is\nthat each value's size must be less than or equal to 32768 bytes.\n\nThe total size of all keys and values must be less than 512 KB.",
+          "description": "The metadata key\/value pairs assigned to instances in the cluster.\n\nKeys must conform to the regexp [a-zA-Z0-9-_]+ and be less than 128 bytes\nin length. These are reflected as part of a URL in the metadata server.\nAdditionally, to avoid ambiguity, keys must not conflict with any other\nmetadata keys for the project or be one of the four reserved keys:\n\"instance-template\", \"kube-env\", \"startup-script\", and \"user-data\"\n\nValues are free-form strings, and only have meaning as interpreted by\nthe image running in the instance. The only restriction placed on them is\nthat each value's size must be less than or equal to 32 KB.\n\nThe total size of all keys and values must be less than 512 KB.",
           "type": "object",
           "additionalProperties": {
             "type": "string"
@@ -295,11 +295,11 @@
       "type": "object",
       "properties": {
         "username": {
-          "description": "The username to use for HTTP basic authentication when accessing the\nKubernetes master endpoint.",
+          "description": "The username to use for HTTP basic authentication to the master endpoint.",
           "type": "string"
         },
         "password": {
-          "description": "The password to use for HTTP basic authentication when accessing the\nKubernetes master endpoint. Because the master endpoint is open to\nthe internet, you should create a strong password.",
+          "description": "The password to use for HTTP basic authentication to the master endpoint.\nBecause the master endpoint is open to the Internet, you should create a\nstrong password.",
           "type": "string"
         },
         "clusterCaCertificate": {
@@ -326,7 +326,7 @@
           "$ref": "HttpLoadBalancing"
         },
         "horizontalPodAutoscaling": {
-          "description": "Configuration for the horizontal pod autoscaling feature, which increases\nor decreases the number of replicas a replication controller has based on\nthe resource usage of the existing replicas.",
+          "description": "Configuration for the horizontal pod autoscaling feature, which\nincreases or decreases the number of replica pods a replication controller\nhas based on the resource usage of the existing pods.",
           "$ref": "HorizontalPodAutoscaling"
         }
       }
@@ -344,7 +344,7 @@
     },
     "HorizontalPodAutoscaling": {
       "id": "HorizontalPodAutoscaling",
-      "description": "Configuration options for the horizontal pod autoscaling feature, which\nincreases or decreases the number of replicas a replication controller has\nbased on the resource usage of the existing replicas.",
+      "description": "Configuration options for the horizontal pod autoscaling feature, which\nincreases or decreases the number of replica pods a replication controller\nhas based on the resource usage of the existing pods.",
       "type": "object",
       "properties": {
         "disabled": {
@@ -366,7 +366,7 @@
     },
     "Operation": {
       "id": "Operation",
-      "description": "Defines the operation resource. All fields are output only.",
+      "description": "This operation resource represents operations that may have happened or are\nhappening on the cluster. All fields are output only.",
       "type": "object",
       "properties": {
         "name": {
@@ -435,7 +435,7 @@
     },
     "UpdateClusterRequest": {
       "id": "UpdateClusterRequest",
-      "description": "UpdateClusterRequest updates a cluster.",
+      "description": "UpdateClusterRequest updates the settings of a cluster.",
       "type": "object",
       "properties": {
         "update": {
@@ -454,7 +454,7 @@
           "type": "string"
         },
         "desiredMonitoringService": {
-          "description": "The monitoring service that the cluster should write metrics to.\nCurrently available options:\n\n* \"monitoring.googleapis.com\" - the Google Cloud Monitoring service\n* \"none\" - no metrics will be exported from the cluster",
+          "description": "The monitoring service the cluster should use to write metrics.\nCurrently available options:\n\n* \"monitoring.googleapis.com\" - the Google Cloud Monitoring service\n* \"none\" - no metrics will be exported from the cluster",
           "type": "string"
         },
         "desiredAddonsConfig": {
@@ -487,11 +487,11 @@
     },
     "ServerConfig": {
       "id": "ServerConfig",
-      "description": "Container Engine Server configuration.",
+      "description": "Container Engine service configuration.",
       "type": "object",
       "properties": {
         "defaultClusterVersion": {
-          "description": "What version this server deploys by default.",
+          "description": "Version of Kubernetes the service deploys by default.",
           "type": "string"
         },
         "buildClientInfo": {
@@ -590,13 +590,13 @@
               "description": "Returns configuration info about the Container Engine service.",
               "parameters": {
                 "projectId": {
-                  "description": "The Google Developers Console [project ID or project\nnumber](https:\/\/developers.google.com\/console\/help\/new\/#projectnumber).",
+                  "description": "The Google Developers Console [project ID or project\nnumber](https:\/\/support.google.com\/cloud\/answer\/6158840).",
                   "location": "path",
                   "required": true,
                   "type": "string"
                 },
                 "zone": {
-                  "description": "The name of the Google Compute Engine [zone](\/compute\/docs\/zones#available)\nto return operations for, or `-` for all zones.",
+                  "description": "The name of the Google Compute Engine [zone](\/compute\/docs\/zones#available)\nto return operations for.",
                   "location": "path",
                   "required": true,
                   "type": "string"
@@ -626,7 +626,7 @@
                   "description": "Lists all clusters owned by a project in either the specified zone or all zones.",
                   "parameters": {
                     "projectId": {
-                      "description": "The Google Developers Console [project ID or project\nnumber](https:\/\/developers.google.com\/console\/help\/new\/#projectnumber).",
+                      "description": "The Google Developers Console [project ID or project\nnumber](https:\/\/support.google.com\/cloud\/answer\/6158840).",
                       "location": "path",
                       "required": true,
                       "type": "string"
@@ -654,10 +654,10 @@
                   "path": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}",
                   "flatPath": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}",
                   "httpMethod": "GET",
-                  "description": "Gets a specific cluster.",
+                  "description": "Gets the details of a specific cluster.",
                   "parameters": {
                     "projectId": {
-                      "description": "The Google Developers Console [project ID or project\nnumber](https:\/\/developers.google.com\/console\/help\/new\/#projectnumber).",
+                      "description": "The Google Developers Console [project ID or project\nnumber](https:\/\/support.google.com\/cloud\/answer\/6158840).",
                       "location": "path",
                       "required": true,
                       "type": "string"
@@ -695,7 +695,7 @@
                   "description": "Creates a cluster, consisting of the specified number and type of Google\nCompute Engine instances.\n\nBy default, the cluster is created in the project's\n[default network](\/compute\/docs\/networks-and-firewalls#networks).\n\nOne firewall is added for the cluster. After cluster creation,\nthe cluster creates routes for each node to allow the containers\non that node to communicate with all other instances in the\ncluster.\n\nFinally, an entry is added to the project's global metadata indicating\nwhich CIDR range is being used by the cluster.",
                   "parameters": {
                     "projectId": {
-                      "description": "The Google Developers Console [project ID or project\nnumber](https:\/\/developers.google.com\/console\/help\/new\/#projectnumber).",
+                      "description": "The Google Developers Console [project ID or project\nnumber](https:\/\/support.google.com\/cloud\/answer\/6158840).",
                       "location": "path",
                       "required": true,
                       "type": "string"
@@ -726,10 +726,10 @@
                   "path": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}",
                   "flatPath": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}",
                   "httpMethod": "PUT",
-                  "description": "Updates settings of a specific cluster.",
+                  "description": "Updates the settings of a specific cluster.",
                   "parameters": {
                     "projectId": {
-                      "description": "The Google Developers Console [project ID or project\nnumber](https:\/\/developers.google.com\/console\/help\/new\/#projectnumber).",
+                      "description": "The Google Developers Console [project ID or project\nnumber](https:\/\/support.google.com\/cloud\/answer\/6158840).",
                       "location": "path",
                       "required": true,
                       "type": "string"
@@ -767,10 +767,10 @@
                   "path": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}",
                   "flatPath": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}",
                   "httpMethod": "DELETE",
-                  "description": "Deletes the cluster, including the Kubernetes endpoint and all worker\nnodes.\n\nFirewalls and routes that were configured during cluster creation\nare also deleted.",
+                  "description": "Deletes the cluster, including the Kubernetes endpoint and all worker\nnodes.\n\nFirewalls and routes that were configured during cluster creation\nare also deleted.\n\nOther Google Compute Engine resources that might be in use by the cluster\n(e.g. load balancer resources) will not be deleted if they weren't present\nat the initial create time.",
                   "parameters": {
                     "projectId": {
-                      "description": "The Google Developers Console [project ID or project\nnumber](https:\/\/developers.google.com\/console\/help\/new\/#projectnumber).",
+                      "description": "The Google Developers Console [project ID or project\nnumber](https:\/\/support.google.com\/cloud\/answer\/6158840).",
                       "location": "path",
                       "required": true,
                       "type": "string"
@@ -812,7 +812,7 @@
                   "description": "Lists all operations in a project in a specific zone or all zones.",
                   "parameters": {
                     "projectId": {
-                      "description": "The Google Developers Console [project ID or project\nnumber](https:\/\/developers.google.com\/console\/help\/new\/#projectnumber).",
+                      "description": "The Google Developers Console [project ID or project\nnumber](https:\/\/support.google.com\/cloud\/answer\/6158840).",
                       "location": "path",
                       "required": true,
                       "type": "string"
@@ -843,7 +843,7 @@
                   "description": "Gets the specified operation.",
                   "parameters": {
                     "projectId": {
-                      "description": "The Google Developers Console [project ID or project\nnumber](https:\/\/developers.google.com\/console\/help\/new\/#projectnumber).",
+                      "description": "The Google Developers Console [project ID or project\nnumber](https:\/\/support.google.com\/cloud\/answer\/6158840).",
                       "location": "path",
                       "required": true,
                       "type": "string"
@@ -893,7 +893,7 @@
                   "description": "Creates a compute-read-write (https:\/\/www.googleapis.com\/auth\/compute)\nscoped OAuth2 access token for <project_number>, to allow a hosted master\nto make modifications to its user's project.",
                   "parameters": {
                     "masterProjectId": {
-                      "description": "The hosted master project in which this master resides.  This can be\neither a [project ID or project\nnumber](https:\/\/developers.google.com\/console\/help\/new\/#projectnumber).",
+                      "description": "The hosted master project in which this master resides.  This can be\neither a [project ID or project\nnumber](https:\/\/support.google.com\/cloud\/answer\/6158840).",
                       "location": "path",
                       "required": true,
                       "type": "string"
@@ -931,7 +931,7 @@
                   "description": "Creates signed URLs that allow for writing a file to a private GCS bucket\nfor storing backups of hosted master data. Signed URLs are explained here:\nhttps:\/\/cloud.google.com\/storage\/docs\/access-control#Signed-URLs",
                   "parameters": {
                     "masterProjectId": {
-                      "description": "The hosted master project in which this master resides.  This can be\neither a [project ID or project\nnumber](https:\/\/developers.google.com\/console\/help\/new\/#projectnumber).",
+                      "description": "The hosted master project in which this master resides.  This can be\neither a [project ID or project\nnumber](https:\/\/support.google.com\/cloud\/answer\/6158840).",
                       "location": "path",
                       "required": true,
                       "type": "string"

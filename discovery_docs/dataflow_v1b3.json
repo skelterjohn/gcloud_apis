@@ -171,7 +171,9 @@
             "JOB_STATE_DONE indicates that the job has successfully completed.\nThis is a terminal job state.  This state may be set by the Dataflow\nservice, as a transition from JOB_STATE_RUNNING. It may also be set via a\nDataflow UpdateJob call, if the job has not yet reached a terminal state.",
             "JOB_STATE_FAILED indicates that the job has failed.  This is a\nterminal job state.  This state may only be set by the Dataflow\nservice, and only as a transition from JOB_STATE_RUNNING.",
             "JOB_STATE_CANCELLED indicates that the job has been explicitly\ncancelled.  This is a terminal job state.  This state may only be\nset via a Dataflow UpdateJob call, and only if the job has not\nyet reached another terminal state.",
-            "JOB_STATE_UPDATED indicates that the job was successfully updated,\nmeaning that this job was stopped and another job was started, inheriting\nstate from this one. This is a terminal job state. This state may only be\nset by the Dataflow service, and only as a transition from\nJOB_STATE_RUNNING."
+            "JOB_STATE_UPDATED indicates that the job was successfully updated,\nmeaning that this job was stopped and another job was started, inheriting\nstate from this one. This is a terminal job state. This state may only be\nset by the Dataflow service, and only as a transition from\nJOB_STATE_RUNNING.",
+            "JOB_STATE_DRAINING indicates that the job is in the process of draining.\nA draining job has stopped pulling from its input sources and is processing\nany data that remains in-flight. This state may be set via a Dataflow\nUpdateJob call, but only as a transition from JOB_STATE_RUNNING. Jobs that\nare draining may only transition to JOB_STATE_DRAINED,\nJOB_STATE_CANCELLED, or JOB_STATE_FAILED.",
+            "JOB_STATE_DRAINED indicates that the job has been drained.\nA drained job terminated by stopping pulling from its input sources and\nprocessing any data that remained in-flight when draining was requested.\nThis state is a terminal state, may only be set by the Dataflow service,\nand only as a transition from JOB_STATE_DRAINING."
           ],
           "type": "string",
           "enum": [
@@ -181,7 +183,9 @@
             "JOB_STATE_DONE",
             "JOB_STATE_FAILED",
             "JOB_STATE_CANCELLED",
-            "JOB_STATE_UPDATED"
+            "JOB_STATE_UPDATED",
+            "JOB_STATE_DRAINING",
+            "JOB_STATE_DRAINED"
           ]
         },
         "currentStateTime": {
@@ -198,7 +202,9 @@
             "JOB_STATE_DONE indicates that the job has successfully completed.\nThis is a terminal job state.  This state may be set by the Dataflow\nservice, as a transition from JOB_STATE_RUNNING. It may also be set via a\nDataflow UpdateJob call, if the job has not yet reached a terminal state.",
             "JOB_STATE_FAILED indicates that the job has failed.  This is a\nterminal job state.  This state may only be set by the Dataflow\nservice, and only as a transition from JOB_STATE_RUNNING.",
             "JOB_STATE_CANCELLED indicates that the job has been explicitly\ncancelled.  This is a terminal job state.  This state may only be\nset via a Dataflow UpdateJob call, and only if the job has not\nyet reached another terminal state.",
-            "JOB_STATE_UPDATED indicates that the job was successfully updated,\nmeaning that this job was stopped and another job was started, inheriting\nstate from this one. This is a terminal job state. This state may only be\nset by the Dataflow service, and only as a transition from\nJOB_STATE_RUNNING."
+            "JOB_STATE_UPDATED indicates that the job was successfully updated,\nmeaning that this job was stopped and another job was started, inheriting\nstate from this one. This is a terminal job state. This state may only be\nset by the Dataflow service, and only as a transition from\nJOB_STATE_RUNNING.",
+            "JOB_STATE_DRAINING indicates that the job is in the process of draining.\nA draining job has stopped pulling from its input sources and is processing\nany data that remains in-flight. This state may be set via a Dataflow\nUpdateJob call, but only as a transition from JOB_STATE_RUNNING. Jobs that\nare draining may only transition to JOB_STATE_DRAINED,\nJOB_STATE_CANCELLED, or JOB_STATE_FAILED.",
+            "JOB_STATE_DRAINED indicates that the job has been drained.\nA drained job terminated by stopping pulling from its input sources and\nprocessing any data that remained in-flight when draining was requested.\nThis state is a terminal state, may only be set by the Dataflow service,\nand only as a transition from JOB_STATE_DRAINING."
           ],
           "type": "string",
           "enum": [
@@ -208,7 +214,9 @@
             "JOB_STATE_DONE",
             "JOB_STATE_FAILED",
             "JOB_STATE_CANCELLED",
-            "JOB_STATE_UPDATED"
+            "JOB_STATE_UPDATED",
+            "JOB_STATE_DRAINING",
+            "JOB_STATE_DRAINED"
           ]
         },
         "executionInfo": {
@@ -384,7 +392,7 @@
           "type": "string"
         },
         "zone": {
-          "description": "Zone to run the worker pools in (e.g. \"us-central1-a\").  If\nempty or unspecified, the service will attempt to choose a reasonable\ndefault.",
+          "description": "Zone to run the worker pools in.  If empty or unspecified, the service\nwill attempt to choose a reasonable default.",
           "type": "string"
         },
         "taskrunnerSettings": {
@@ -943,6 +951,14 @@
           "description": "Completion as fraction of the input consumed, from 0.0 (beginning, nothing\nconsumed), to 1.0 (end of the input, entire input consumed).",
           "type": "number",
           "format": "double"
+        },
+        "remainingParallelism": {
+          "description": "Total amount of parallelism in the input of this WorkItem that has not\nbeen consumed yet (i.e. can be delegated to a new WorkItem via dynamic\nsplitting).\n\n\"Amount of parallelism\" refers to how many non-empty parts of the input\ncan be read in parallel. This does not necessarily equal number\nof records. An input that can be read in parallel down to the\nindividual records is called \"perfectly splittable\".\nAn example of non-perfectly parallelizable input is a block-compressed\nfile format where a block of records has to be read as a whole,\nbut different blocks can be read in parallel.\n\nExamples:\n* If we have read 30 records out of 50 in a perfectly splittable\n  50-record input, this value should be 20.\n* If we are reading through block 3 in a block-compressed file consisting\n  of 5 blocks, this value should be 2 (since blocks 4 and 5 can be\n  processed in parallel by new work items via dynamic splitting).\n* If we are reading through the last block in a block-compressed file,\n  or reading or processing the last record in a perfectly splittable\n  input, this value should be 0, because the remainder of the work item\n  cannot be further split.",
+          "$ref": "ReportedParallelism"
+        },
+        "consumedParallelism": {
+          "description": "Total amount of parallelism in the portion of input of this work item\nthat has already been consumed. In the first two examples above\n(see remaining_parallelism), the value should be 30 or 3 respectively.\nThe sum of remaining_parallelism and consumed_parallelism should equal\nthe total amount of parallelism in this work item.\nIf specified, must be finite.",
+          "$ref": "ReportedParallelism"
         }
       }
     },
@@ -992,6 +1008,22 @@
         "position": {
           "description": "Position within the inner source.",
           "$ref": "Position"
+        }
+      }
+    },
+    "ReportedParallelism": {
+      "id": "ReportedParallelism",
+      "description": "Represents the level of parallelism in a WorkItem's input,\nreported by the worker.",
+      "type": "object",
+      "properties": {
+        "isInfinite": {
+          "description": "Specifies whether the parallelism is infinite. If true, \"value\" is\nignored.\nInfinite parallelism means the service will assume that the work item\ncan always be split into more non-empty work items by dynamic splitting.\nThis is a work-around for lack of support for infinity by the current\nJSON-based Java RPC stack.",
+          "type": "boolean"
+        },
+        "value": {
+          "description": "Specifies the level of parallelism in case it is finite.",
+          "type": "number",
+          "format": "double"
         }
       }
     },
@@ -1297,7 +1329,7 @@
           "$ref": "Position"
         },
         "fractionConsumed": {
-          "description": "A fraction at which to split the work item, from 0.0 (beginning of\nthe input) to 1.0 (end of the input).",
+          "description": "A fraction at which to split the work item, from 0.0 (beginning of the\ninput) to 1.0 (end of the input).",
           "type": "number",
           "format": "double"
         }
@@ -1651,6 +1683,13 @@
             "type": "any",
             "description": "Properties of the object."
           }
+        },
+        "sideInputs": {
+          "description": "Zero or more side inputs.",
+          "type": "array",
+          "items": {
+            "$ref": "SideInputInfo"
+          }
         }
       }
     },
@@ -1809,6 +1848,11 @@
           "additionalProperties": {
             "type": "string"
           }
+        },
+        "forwardingKeyBits": {
+          "description": "The size (in bits) of keys that will be assigned to source messages.",
+          "type": "integer",
+          "format": "int32"
         }
       }
     },
@@ -2185,6 +2229,10 @@
         "workerHealthReport": {
           "description": "The health of a worker.",
           "$ref": "WorkerHealthReport"
+        },
+        "workerMessageCode": {
+          "description": "A worker message code.",
+          "$ref": "WorkerMessageCode"
         }
       }
     },
@@ -2206,6 +2254,36 @@
           "description": "The interval at which the worker is sending health reports.\nThe default value of 0 should be interpreted as the field is not being\nexplicitly set by the worker.",
           "type": "string",
           "format": "google-duration"
+        },
+        "pods": {
+          "description": "The pods running on the worker. See:\nhttp:\/\/kubernetes.io\/v1.1\/docs\/api-reference\/v1\/definitions.html#_v1_pod\n\nThis field is used by the worker to send the status of the indvidual\ncontainers running on each worker.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "any",
+              "description": "Properties of the object."
+            }
+          }
+        }
+      }
+    },
+    "WorkerMessageCode": {
+      "id": "WorkerMessageCode",
+      "description": "A message code is used to report status and error messages to the service.\nThe message codes are intended to be machine readable. The service will\ntake care of translating these into user understandable messages if\nnecessary.\n\nExample use cases:\n  1. Worker processes reporting successful startup.\n  2. Worker processes reporting specific errors (e.g. package staging\n     failure).",
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "The code is a string intended for consumption by a machine that identifies\nthe type of message being sent.\nExamples:\n 1. \"HARNESS_STARTED\" might be used to indicate the worker harness has\n     started.\n 2. \"GCS_DOWNLOAD_ERROR\" might be used to indicate an error downloading\n    a GCS file as part of the boot process of one of the worker containers.\n\nThis is a string and not an enum to make it easy to add new codes without\nwaiting for an API change.",
+          "type": "string"
+        },
+        "parameters": {
+          "description": "Parameters contains specific information about the code.\n\nThis is a struct to allow parameters of different types.\n\nExamples:\n 1. For a \"HARNESS_STARTED\" message parameters might provide the name\n    of the worker and additional data like timing information.\n 2. For a \"GCS_DOWNLOAD_ERROR\" parameters might contain fields listing\n    the GCS objects being downloaded and fields containing errors.\n\nIn general complex data structures should be avoided. If a worker\nneeds to send a specific and complicated data structure then please\nconsider defining a new proto and adding it to the data oneof in\nWorkerMessageResponse.\n\nConventions:\n Parameters should only be used for information that isn't typically passed\n as a label.\n hostname and other worker identifiers should almost always be passed\n as labels since they will be included on most messages.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "any",
+            "description": "Properties of the object."
+          }
         }
       }
     },

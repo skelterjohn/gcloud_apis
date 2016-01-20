@@ -185,7 +185,7 @@ func (s *AuthorizedKeysView) MarshalJSON() ([]byte, error) {
 // Binding: Associates `members` with a `role`.
 type Binding struct {
 	// Members: Specifies the identities requesting access for a Cloud
-	// Platform resource. `members` can have the following formats:
+	// Platform resource. `members` can have the following values:
 	//
 	// * `allUsers`: A special identifier that represents anyone who is on
 	// the internet; with or without a Google account.
@@ -597,17 +597,15 @@ func (s *LogConfigCounterOptions) MarshalJSON() ([]byte, error) {
 // Operation: An Operation resource, used to manage asynchronous API
 // requests.
 type Operation struct {
-	// ClientOperationId: [Output Only] An optional identifier specified by
-	// the client when the mutation was initiated. Must be unique for all
-	// Operation resources in the project.
+	// ClientOperationId: [Output Only] Reserved for future use.
 	ClientOperationId string `json:"clientOperationId,omitempty"`
 
 	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
 	// format.
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
 
-	// Description: [Output Only] An optional textual description of the
-	// operation; set when the operation is created.
+	// Description: [Output Only] A textual description of the operation,
+	// which is set when the operation is created.
 	Description string `json:"description,omitempty"`
 
 	// EndTime: [Output Only] The time that this operation was completed.
@@ -623,7 +621,8 @@ type Operation struct {
 	HttpErrorMessage string `json:"httpErrorMessage,omitempty"`
 
 	// HttpErrorStatusCode: [Output Only] If the operation fails, this field
-	// contains the HTTP error message that was returned, such as 404.
+	// contains the HTTP error status code that was returned. For example, a
+	// 404 means the resource was not found.
 	HttpErrorStatusCode int64 `json:"httpErrorStatusCode,omitempty"`
 
 	// Id: [Output Only] The unique identifier for the resource. This
@@ -641,19 +640,19 @@ type Operation struct {
 	// Name: [Output Only] Name of the resource.
 	Name string `json:"name,omitempty"`
 
-	// OperationType: [Output Only] Type of the operation, which can be
-	// insert, update, or delete.
+	// OperationType: [Output Only] The type of operation, such as insert,
+	// update, or delete, and so on.
 	OperationType string `json:"operationType,omitempty"`
 
 	// Progress: [Output Only] An optional progress indicator that ranges
 	// from 0 to 100. There is no requirement that this be linear or support
-	// any granularity of operations. This should not be used to guess at
-	// when the operation will be complete. This number should monotonically
+	// any granularity of operations. This should not be used to guess when
+	// the operation will be complete. This number should monotonically
 	// increase as the operation progresses.
 	Progress int64 `json:"progress,omitempty"`
 
 	// Region: [Output Only] URL of the region where the operation resides.
-	// Only applicable for regional resources.
+	// Only available when performing regional operations.
 	Region string `json:"region,omitempty"`
 
 	// SelfLink: [Output Only] Server-defined URL for the resource.
@@ -692,7 +691,8 @@ type Operation struct {
 	// processing of the operation, this field will be populated.
 	Warnings []*OperationWarnings `json:"warnings,omitempty"`
 
-	// Zone: [Output Only] URL of the zone where the operation resides.
+	// Zone: [Output Only] URL of the zone where the operation resides. Only
+	// available when performing per-zone operations.
 	Zone string `json:"zone,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
@@ -763,7 +763,9 @@ func (s *OperationErrorErrors) MarshalJSON() ([]byte, error) {
 }
 
 type OperationWarnings struct {
-	// Code: [Output Only] The warning type identifier for this warning.
+	// Code: [Output Only] A warning code, if applicable. For example,
+	// Compute Engine returns NO_RESULTS_ON_PAGE if there are no results in
+	// the response.
 	//
 	// Possible values:
 	//   "DEPRECATED_RESOURCE_USED"
@@ -782,11 +784,13 @@ type OperationWarnings struct {
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
-	// Data: [Output Only] Metadata for this warning in key: value format.
+	// Data: [Output Only] Metadata about this warning in key: value format.
+	// For example:
+	// "data": [ { "key": "scope", "value": "zones/us-east1-d" }
 	Data []*OperationWarningsData `json:"data,omitempty"`
 
-	// Message: [Output Only] Optional human-readable details for this
-	// warning.
+	// Message: [Output Only] A human-readable description of the warning
+	// code.
 	Message string `json:"message,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Code") to
@@ -805,7 +809,14 @@ func (s *OperationWarnings) MarshalJSON() ([]byte, error) {
 }
 
 type OperationWarningsData struct {
-	// Key: [Output Only] A key for the warning data.
+	// Key: [Output Only] A key that provides more detail on the warning
+	// being returned. For example, for warnings where there are no results
+	// in a list request for a particular zone, this key might be scope and
+	// the key value might be the zone name. Other examples might be a key
+	// indicating a deprecated resource, and a suggested replacement, or a
+	// warning about invalid network settings (for example, if an instance
+	// attempts to perform IP forwarding but is not enabled for IP
+	// forwarding).
 	Key string `json:"key,omitempty"`
 
 	// Value: [Output Only] A warning data value corresponding to the key.
@@ -839,7 +850,12 @@ type OperationList struct {
 	// Operations resource.
 	Kind string `json:"kind,omitempty"`
 
-	// NextPageToken: [Output Only] A token used to continue a truncate.
+	// NextPageToken: [Output Only] This token allows you to get the next
+	// page of results for list requests. If the number of results is larger
+	// than maxResults, use the nextPageToken as a value for the query
+	// parameter pageToken in the next list request. Subsequent list
+	// requests will have their own nextPageToken to continue paging through
+	// the results.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
 	// SelfLink: [Output Only] Server-defined URL for this resource.
@@ -900,26 +916,24 @@ type Policy struct {
 	// no members will result in an error.
 	Bindings []*Binding `json:"bindings,omitempty"`
 
-	// Etag: The etag is used for optimistic concurrency control as a way to
+	// Etag: `etag` is used for optimistic concurrency control as a way to
 	// help prevent simultaneous updates of a policy from overwriting each
-	// other. It is strongly suggested that systems make use of the etag in
-	// the read-modify-write cycle to perform policy updates in order to
-	// avoid race conditions: Etags are returned in the response to
-	// GetIamPolicy, and systems are expected to put that etag in the
-	// request to SetIamPolicy to ensure that their change will be applied
+	// other. It is strongly suggested that systems make use of the `etag`
+	// in the read-modify-write cycle to perform policy updates in order to
+	// avoid race conditions: An `etag` is returned in the response to
+	// `getIamPolicy`, and systems are expected to put that etag in the
+	// request to `setIamPolicy` to ensure that their change will be applied
 	// to the same version of the policy.
 	//
-	// If no etag is provided in the call to SetIamPolicy, then the existing
-	// policy is overwritten blindly.
+	// If no `etag` is provided in the call to `setIamPolicy`, then the
+	// existing policy is overwritten blindly.
 	Etag string `json:"etag,omitempty"`
 
 	IamOwned bool `json:"iamOwned,omitempty"`
 
 	Rules []*Rule `json:"rules,omitempty"`
 
-	// Version: Version of the `Policy`. The default version is 0. 0 =
-	// resourcemanager_projects only support legacy roles. 1 = supports
-	// non-legacy roles 2 = supports AuditConfig
+	// Version: Version of the `Policy`. The default version is 0.
 	Version int64 `json:"version,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
@@ -1422,25 +1436,25 @@ func (r *GlobalAccountsOperationsService) List(project string) *GlobalAccountsOp
 
 // Filter sets the optional parameter "filter": Sets a filter expression
 // for filtering listed resources, in the form filter={expression}. Your
-// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
-// LITERAL_STRING.
+// {expression} must be in the format: field_name comparison_string
+// literal_string.
 //
-// The FIELD_NAME is the name of the field you want to compare. Only
+// The field_name is the name of the field you want to compare. Only
 // atomic field types are supported (string, number, boolean). The
-// COMPARISON_STRING must be either eq (equals) or ne (not equals). The
-// LITERAL_STRING is the string value to filter to. The literal value
-// must be valid for the type of field (string, number, boolean). For
-// string fields, the literal value is interpreted as a regular
-// expression using RE2 syntax. The literal value must match the entire
-// field.
+// comparison_string must be either eq (equals) or ne (not equals). The
+// literal_string is the string value to filter to. The literal value
+// must be valid for the type of field you are filtering by (string,
+// number, boolean). For string fields, the literal value is interpreted
+// as a regular expression using RE2 syntax. The literal value must
+// match the entire field.
 //
 // For example, filter=name ne example-instance.
 //
 // Compute Engine Beta API Only: If you use filtering in the Beta API,
 // you can also filter on nested fields. For example, you could filter
-// on instances whose scheduling.automaticRestart eq true. In
-// particular, use filtering on nested fields to take advantage of
-// instance labels to organize and filter results based on label
+// on instances that have set the scheduling.automaticRestart field to
+// true. In particular, use filtering on nested fields to take advantage
+// of instance labels to organize and filter results based on label
 // values.
 //
 // The Beta API also supports filtering on multiple expressions by
@@ -1453,8 +1467,11 @@ func (c *GlobalAccountsOperationsListCall) Filter(filter string) *GlobalAccounts
 	return c
 }
 
-// MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned.
+// MaxResults sets the optional parameter "maxResults": The maximum
+// number of results per page that should be returned. If the number of
+// available results is larger than maxResults, Compute Engine returns a
+// nextPageToken that can be used to get the next page of results in
+// subsequent list requests.
 func (c *GlobalAccountsOperationsListCall) MaxResults(maxResults int64) *GlobalAccountsOperationsListCall {
 	c.urlParams_.Set("maxResults", fmt.Sprint(maxResults))
 	return c
@@ -1478,9 +1495,8 @@ func (c *GlobalAccountsOperationsListCall) OrderBy(orderBy string) *GlobalAccoun
 }
 
 // PageToken sets the optional parameter "pageToken": Specifies a page
-// token to use. Use this parameter if you want to list the next page of
-// results. Set pageToken to the nextPageToken returned by a previous
-// list request.
+// token to use. Set pageToken to the nextPageToken returned by a
+// previous list request to get the next page of results.
 func (c *GlobalAccountsOperationsListCall) PageToken(pageToken string) *GlobalAccountsOperationsListCall {
 	c.urlParams_.Set("pageToken", pageToken)
 	return c
@@ -1575,13 +1591,13 @@ func (c *GlobalAccountsOperationsListCall) Do() (*OperationList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: field_name comparison_string literal_string.\n\nThe field_name is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The comparison_string must be either eq (equals) or ne (not equals). The literal_string is the string value to filter to. The literal value must be valid for the type of field you are filtering by (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances that have set the scheduling.automaticRestart field to true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Maximum count of results to be returned.",
+	//       "description": "The maximum number of results per page that should be returned. If the number of available results is larger than maxResults, Compute Engine returns a nextPageToken that can be used to get the next page of results in subsequent list requests.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -1594,7 +1610,7 @@ func (c *GlobalAccountsOperationsListCall) Do() (*OperationList, error) {
 	//       "type": "string"
 	//     },
 	//     "pageToken": {
-	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
+	//       "description": "Specifies a page token to use. Set pageToken to the nextPageToken returned by a previous list request to get the next page of results.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
@@ -2295,25 +2311,25 @@ func (r *GroupsService) List(project string) *GroupsListCall {
 
 // Filter sets the optional parameter "filter": Sets a filter expression
 // for filtering listed resources, in the form filter={expression}. Your
-// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
-// LITERAL_STRING.
+// {expression} must be in the format: field_name comparison_string
+// literal_string.
 //
-// The FIELD_NAME is the name of the field you want to compare. Only
+// The field_name is the name of the field you want to compare. Only
 // atomic field types are supported (string, number, boolean). The
-// COMPARISON_STRING must be either eq (equals) or ne (not equals). The
-// LITERAL_STRING is the string value to filter to. The literal value
-// must be valid for the type of field (string, number, boolean). For
-// string fields, the literal value is interpreted as a regular
-// expression using RE2 syntax. The literal value must match the entire
-// field.
+// comparison_string must be either eq (equals) or ne (not equals). The
+// literal_string is the string value to filter to. The literal value
+// must be valid for the type of field you are filtering by (string,
+// number, boolean). For string fields, the literal value is interpreted
+// as a regular expression using RE2 syntax. The literal value must
+// match the entire field.
 //
 // For example, filter=name ne example-instance.
 //
 // Compute Engine Beta API Only: If you use filtering in the Beta API,
 // you can also filter on nested fields. For example, you could filter
-// on instances whose scheduling.automaticRestart eq true. In
-// particular, use filtering on nested fields to take advantage of
-// instance labels to organize and filter results based on label
+// on instances that have set the scheduling.automaticRestart field to
+// true. In particular, use filtering on nested fields to take advantage
+// of instance labels to organize and filter results based on label
 // values.
 //
 // The Beta API also supports filtering on multiple expressions by
@@ -2326,8 +2342,11 @@ func (c *GroupsListCall) Filter(filter string) *GroupsListCall {
 	return c
 }
 
-// MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned.
+// MaxResults sets the optional parameter "maxResults": The maximum
+// number of results per page that should be returned. If the number of
+// available results is larger than maxResults, Compute Engine returns a
+// nextPageToken that can be used to get the next page of results in
+// subsequent list requests.
 func (c *GroupsListCall) MaxResults(maxResults int64) *GroupsListCall {
 	c.urlParams_.Set("maxResults", fmt.Sprint(maxResults))
 	return c
@@ -2351,9 +2370,8 @@ func (c *GroupsListCall) OrderBy(orderBy string) *GroupsListCall {
 }
 
 // PageToken sets the optional parameter "pageToken": Specifies a page
-// token to use. Use this parameter if you want to list the next page of
-// results. Set pageToken to the nextPageToken returned by a previous
-// list request.
+// token to use. Set pageToken to the nextPageToken returned by a
+// previous list request to get the next page of results.
 func (c *GroupsListCall) PageToken(pageToken string) *GroupsListCall {
 	c.urlParams_.Set("pageToken", pageToken)
 	return c
@@ -2448,13 +2466,13 @@ func (c *GroupsListCall) Do() (*GroupList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: field_name comparison_string literal_string.\n\nThe field_name is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The comparison_string must be either eq (equals) or ne (not equals). The literal_string is the string value to filter to. The literal value must be valid for the type of field you are filtering by (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances that have set the scheduling.automaticRestart field to true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Maximum count of results to be returned.",
+	//       "description": "The maximum number of results per page that should be returned. If the number of available results is larger than maxResults, Compute Engine returns a nextPageToken that can be used to get the next page of results in subsequent list requests.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -2467,7 +2485,7 @@ func (c *GroupsListCall) Do() (*GroupList, error) {
 	//       "type": "string"
 	//     },
 	//     "pageToken": {
-	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
+	//       "description": "Specifies a page token to use. Set pageToken to the nextPageToken returned by a previous list request to get the next page of results.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
@@ -3077,25 +3095,25 @@ func (r *LinuxService) GetLinuxAccountViews(project string, zone string, instanc
 
 // Filter sets the optional parameter "filter": Sets a filter expression
 // for filtering listed resources, in the form filter={expression}. Your
-// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
-// LITERAL_STRING.
+// {expression} must be in the format: field_name comparison_string
+// literal_string.
 //
-// The FIELD_NAME is the name of the field you want to compare. Only
+// The field_name is the name of the field you want to compare. Only
 // atomic field types are supported (string, number, boolean). The
-// COMPARISON_STRING must be either eq (equals) or ne (not equals). The
-// LITERAL_STRING is the string value to filter to. The literal value
-// must be valid for the type of field (string, number, boolean). For
-// string fields, the literal value is interpreted as a regular
-// expression using RE2 syntax. The literal value must match the entire
-// field.
+// comparison_string must be either eq (equals) or ne (not equals). The
+// literal_string is the string value to filter to. The literal value
+// must be valid for the type of field you are filtering by (string,
+// number, boolean). For string fields, the literal value is interpreted
+// as a regular expression using RE2 syntax. The literal value must
+// match the entire field.
 //
 // For example, filter=name ne example-instance.
 //
 // Compute Engine Beta API Only: If you use filtering in the Beta API,
 // you can also filter on nested fields. For example, you could filter
-// on instances whose scheduling.automaticRestart eq true. In
-// particular, use filtering on nested fields to take advantage of
-// instance labels to organize and filter results based on label
+// on instances that have set the scheduling.automaticRestart field to
+// true. In particular, use filtering on nested fields to take advantage
+// of instance labels to organize and filter results based on label
 // values.
 //
 // The Beta API also supports filtering on multiple expressions by
@@ -3108,8 +3126,11 @@ func (c *LinuxGetLinuxAccountViewsCall) Filter(filter string) *LinuxGetLinuxAcco
 	return c
 }
 
-// MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned.
+// MaxResults sets the optional parameter "maxResults": The maximum
+// number of results per page that should be returned. If the number of
+// available results is larger than maxResults, Compute Engine returns a
+// nextPageToken that can be used to get the next page of results in
+// subsequent list requests.
 func (c *LinuxGetLinuxAccountViewsCall) MaxResults(maxResults int64) *LinuxGetLinuxAccountViewsCall {
 	c.urlParams_.Set("maxResults", fmt.Sprint(maxResults))
 	return c
@@ -3133,9 +3154,8 @@ func (c *LinuxGetLinuxAccountViewsCall) OrderBy(orderBy string) *LinuxGetLinuxAc
 }
 
 // PageToken sets the optional parameter "pageToken": Specifies a page
-// token to use. Use this parameter if you want to list the next page of
-// results. Set pageToken to the nextPageToken returned by a previous
-// list request.
+// token to use. Set pageToken to the nextPageToken returned by a
+// previous list request to get the next page of results.
 func (c *LinuxGetLinuxAccountViewsCall) PageToken(pageToken string) *LinuxGetLinuxAccountViewsCall {
 	c.urlParams_.Set("pageToken", pageToken)
 	return c
@@ -3221,7 +3241,7 @@ func (c *LinuxGetLinuxAccountViewsCall) Do() (*LinuxGetLinuxAccountViewsResponse
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: field_name comparison_string literal_string.\n\nThe field_name is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The comparison_string must be either eq (equals) or ne (not equals). The literal_string is the string value to filter to. The literal value must be valid for the type of field you are filtering by (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances that have set the scheduling.automaticRestart field to true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
@@ -3233,7 +3253,7 @@ func (c *LinuxGetLinuxAccountViewsCall) Do() (*LinuxGetLinuxAccountViewsResponse
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Maximum count of results to be returned.",
+	//       "description": "The maximum number of results per page that should be returned. If the number of available results is larger than maxResults, Compute Engine returns a nextPageToken that can be used to get the next page of results in subsequent list requests.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -3246,7 +3266,7 @@ func (c *LinuxGetLinuxAccountViewsCall) Do() (*LinuxGetLinuxAccountViewsResponse
 	//       "type": "string"
 	//     },
 	//     "pageToken": {
-	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
+	//       "description": "Specifies a page token to use. Set pageToken to the nextPageToken returned by a previous list request to get the next page of results.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
@@ -3955,25 +3975,25 @@ func (r *UsersService) List(project string) *UsersListCall {
 
 // Filter sets the optional parameter "filter": Sets a filter expression
 // for filtering listed resources, in the form filter={expression}. Your
-// {expression} must be in the format: FIELD_NAME COMPARISON_STRING
-// LITERAL_STRING.
+// {expression} must be in the format: field_name comparison_string
+// literal_string.
 //
-// The FIELD_NAME is the name of the field you want to compare. Only
+// The field_name is the name of the field you want to compare. Only
 // atomic field types are supported (string, number, boolean). The
-// COMPARISON_STRING must be either eq (equals) or ne (not equals). The
-// LITERAL_STRING is the string value to filter to. The literal value
-// must be valid for the type of field (string, number, boolean). For
-// string fields, the literal value is interpreted as a regular
-// expression using RE2 syntax. The literal value must match the entire
-// field.
+// comparison_string must be either eq (equals) or ne (not equals). The
+// literal_string is the string value to filter to. The literal value
+// must be valid for the type of field you are filtering by (string,
+// number, boolean). For string fields, the literal value is interpreted
+// as a regular expression using RE2 syntax. The literal value must
+// match the entire field.
 //
 // For example, filter=name ne example-instance.
 //
 // Compute Engine Beta API Only: If you use filtering in the Beta API,
 // you can also filter on nested fields. For example, you could filter
-// on instances whose scheduling.automaticRestart eq true. In
-// particular, use filtering on nested fields to take advantage of
-// instance labels to organize and filter results based on label
+// on instances that have set the scheduling.automaticRestart field to
+// true. In particular, use filtering on nested fields to take advantage
+// of instance labels to organize and filter results based on label
 // values.
 //
 // The Beta API also supports filtering on multiple expressions by
@@ -3986,8 +4006,11 @@ func (c *UsersListCall) Filter(filter string) *UsersListCall {
 	return c
 }
 
-// MaxResults sets the optional parameter "maxResults": Maximum count of
-// results to be returned.
+// MaxResults sets the optional parameter "maxResults": The maximum
+// number of results per page that should be returned. If the number of
+// available results is larger than maxResults, Compute Engine returns a
+// nextPageToken that can be used to get the next page of results in
+// subsequent list requests.
 func (c *UsersListCall) MaxResults(maxResults int64) *UsersListCall {
 	c.urlParams_.Set("maxResults", fmt.Sprint(maxResults))
 	return c
@@ -4011,9 +4034,8 @@ func (c *UsersListCall) OrderBy(orderBy string) *UsersListCall {
 }
 
 // PageToken sets the optional parameter "pageToken": Specifies a page
-// token to use. Use this parameter if you want to list the next page of
-// results. Set pageToken to the nextPageToken returned by a previous
-// list request.
+// token to use. Set pageToken to the nextPageToken returned by a
+// previous list request to get the next page of results.
 func (c *UsersListCall) PageToken(pageToken string) *UsersListCall {
 	c.urlParams_.Set("pageToken", pageToken)
 	return c
@@ -4108,13 +4130,13 @@ func (c *UsersListCall) Do() (*UserList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: FIELD_NAME COMPARISON_STRING LITERAL_STRING.\n\nThe FIELD_NAME is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The COMPARISON_STRING must be either eq (equals) or ne (not equals). The LITERAL_STRING is the string value to filter to. The literal value must be valid for the type of field (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances whose scheduling.automaticRestart eq true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: field_name comparison_string literal_string.\n\nThe field_name is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The comparison_string must be either eq (equals) or ne (not equals). The literal_string is the string value to filter to. The literal value must be valid for the type of field you are filtering by (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances that have set the scheduling.automaticRestart field to true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
 	//       "default": "500",
-	//       "description": "Maximum count of results to be returned.",
+	//       "description": "The maximum number of results per page that should be returned. If the number of available results is larger than maxResults, Compute Engine returns a nextPageToken that can be used to get the next page of results in subsequent list requests.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "maximum": "500",
@@ -4127,7 +4149,7 @@ func (c *UsersListCall) Do() (*UserList, error) {
 	//       "type": "string"
 	//     },
 	//     "pageToken": {
-	//       "description": "Specifies a page token to use. Use this parameter if you want to list the next page of results. Set pageToken to the nextPageToken returned by a previous list request.",
+	//       "description": "Specifies a page token to use. Set pageToken to the nextPageToken returned by a previous list request to get the next page of results.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },

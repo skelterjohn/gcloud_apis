@@ -89,6 +89,7 @@ func (s *Service) userAgent() string {
 
 func NewProjectsService(s *Service) *ProjectsService {
 	rs := &ProjectsService{s: s}
+	rs.Entries = NewProjectsEntriesService(s)
 	rs.LogEntries = NewProjectsLogEntriesService(s)
 	rs.LogServices = NewProjectsLogServicesService(s)
 	rs.Logs = NewProjectsLogsService(s)
@@ -100,6 +101,8 @@ func NewProjectsService(s *Service) *ProjectsService {
 type ProjectsService struct {
 	s *Service
 
+	Entries *ProjectsEntriesService
+
 	LogEntries *ProjectsLogEntriesService
 
 	LogServices *ProjectsLogServicesService
@@ -109,6 +112,15 @@ type ProjectsService struct {
 	Metrics *ProjectsMetricsService
 
 	Sinks *ProjectsSinksService
+}
+
+func NewProjectsEntriesService(s *Service) *ProjectsEntriesService {
+	rs := &ProjectsEntriesService{s: s}
+	return rs
+}
+
+type ProjectsEntriesService struct {
+	s *Service
 }
 
 func NewProjectsLogEntriesService(s *Service) *ProjectsLogEntriesService {
@@ -229,46 +241,49 @@ type HttpRequest struct {
 	// (with or without validation).
 	CacheHit bool `json:"cacheHit,omitempty"`
 
-	// Referer: Referer (a.k.a. referrer) URL of request, as defined
-	// in
-	// http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html.
+	// Referer: The referer URL of the request, as defined in
+	// [HTTP/1.1 Header Field
+	// Definitions](http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html).
 	Referer string `json:"referer,omitempty"`
 
-	// RemoteIp: IP address of the client who issues the HTTP request. Could
-	// be either IPv4
-	// or IPv6.
+	// RemoteIp: The IP address (IPv4 or IPv6) of the client that issued the
+	// HTTP
+	// request. Examples: "192.168.1.1", "FE80::0202:B3FF:FE1E:8329".
 	RemoteIp string `json:"remoteIp,omitempty"`
 
-	// RequestMethod: Request method, such as `GET`, `HEAD`, `PUT` or
-	// `POST`.
+	// RequestMethod: The request method. Examples: "GET", "HEAD",
+	// "PUT", "POST".
 	RequestMethod string `json:"requestMethod,omitempty"`
 
-	// RequestSize: Size of the HTTP request message in bytes, including
-	// request headers and
-	// the request body.
+	// RequestSize: The size of the HTTP request message in bytes, including
+	// the request
+	// headers and the request body.
 	RequestSize int64 `json:"requestSize,omitempty,string"`
 
-	// RequestUrl: Contains the scheme (http|https), the host name, the path
-	// and the query
+	// RequestUrl: The scheme (http, https), the host name, the path and the
+	// query
 	// portion of the URL that was requested.
+	// Example: "http://example.com/some/info?color=red".
 	RequestUrl string `json:"requestUrl,omitempty"`
 
-	// ResponseSize: Size of the HTTP response message in bytes sent back to
-	// the client,
-	// including response headers and response body.
+	// ResponseSize: The size of the HTTP response message sent back to the
+	// client, in bytes,
+	// including the response headers and the response body.
 	ResponseSize int64 `json:"responseSize,omitempty,string"`
 
-	// Status: A response code indicates the status of response, e.g., 200.
+	// Status: The response code indicating the status of
+	// response.
+	// Examples: 200, 404.
 	Status int64 `json:"status,omitempty"`
 
-	// UserAgent: User agent sent by the client, e.g., "Mozilla/4.0
-	// (compatible; MSIE 6.0;
-	// Windows 98; Q312461; .NET CLR 1.0.3705)".
+	// UserAgent: The user agent sent by the client. Example:
+	// "Mozilla/4.0 (compatible; MSIE 6.0; Windows 98; Q312461; .NET CLR
+	// 1.0.3705)".
 	UserAgent string `json:"userAgent,omitempty"`
 
 	// ValidatedWithOriginServer: Whether or not the response was validated
 	// with the origin server before
-	// being served from cache. This field is only meaningful if cache_hit
+	// being served from cache. This field is only meaningful if `cache_hit`
 	// is
 	// True.
 	ValidatedWithOriginServer bool `json:"validatedWithOriginServer,omitempty"`
@@ -284,6 +299,53 @@ type HttpRequest struct {
 
 func (s *HttpRequest) MarshalJSON() ([]byte, error) {
 	type noMethod HttpRequest
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// ListLogEntriesRequest: The parameters to `ListLogEntries`.
+type ListLogEntriesRequest struct {
+	// Filter: An [advanced logs
+	// filter](/logging/docs/view/advanced_filters).
+	// The response includes only entries that match the filter.
+	// If `filter` is empty, then all entries in all logs are retrieved.
+	Filter string `json:"filter,omitempty"`
+
+	// OrderBy: Sort order of the results, consisting of a `LogEntry` field
+	// optionally
+	// followed by a space and `desc`.  Examples:
+	// "metadata.timestamp",
+	// "metadata.timestamp desc".  The only `LogEntry` field supported
+	// for
+	// sorting is `metadata.timestamp`. The default sort order is ascending
+	// (from
+	// older to newer entries) unless `desc` is appended.
+	OrderBy string `json:"orderBy,omitempty"`
+
+	// PageSize: The maximum number of entries to return per request.  Fewer
+	// entries may be
+	// returned, but that is not an indication that there are no more
+	// entries.
+	PageSize int64 `json:"pageSize,omitempty"`
+
+	// PageToken: An opaque token, returned as `nextPageToken` by a prior
+	// `ListLogEntries`
+	// operation. If a page token is specified, other request parameters
+	// must
+	// match the parameters from the request that generated the page token.
+	PageToken string `json:"pageToken,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Filter") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *ListLogEntriesRequest) MarshalJSON() ([]byte, error) {
+	type noMethod ListLogEntriesRequest
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
@@ -604,6 +666,9 @@ type LogEntry struct {
 	// Metadata: Information about the log entry.
 	Metadata *LogEntryMetadata `json:"metadata,omitempty"`
 
+	// Operation: Optional. Information about an operation associated with
+	// the log entry, if
+	// applicable.
 	Operation *LogEntryOperation `json:"operation,omitempty"`
 
 	// ProtoPayload: The log entry payload, represented as a protocol buffer
@@ -813,10 +878,10 @@ func (s *LogError) MarshalJSON() ([]byte, error) {
 
 // LogLine: Application log line emitted while processing a request.
 type LogLine struct {
-	// LogMessage: App provided log message.
+	// LogMessage: App-provided log message.
 	LogMessage string `json:"logMessage,omitempty"`
 
-	// Severity: Severity of log.
+	// Severity: Severity of this log entry.
 	//
 	// Possible values:
 	//   "DEFAULT" - The log entry has no assigned severity level.
@@ -834,10 +899,11 @@ type LogLine struct {
 	//   "EMERGENCY" - One or more systems are unusable.
 	Severity string `json:"severity,omitempty"`
 
-	// SourceLocation: Line of code that generated this log message.
+	// SourceLocation: Where in the source code this log message was
+	// written.
 	SourceLocation *SourceLocation `json:"sourceLocation,omitempty"`
 
-	// Time: Time when log entry was made.  May be inaccurate.
+	// Time: Approximate time when this log entry was made.
 	Time string `json:"time,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "LogMessage") to
@@ -982,42 +1048,40 @@ func (s *LogSink) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// RequestLog: Complete log information about a single request to an
+// RequestLog: Complete log information about a single HTTP request to
+// an App Engine
 // application.
 //
 type RequestLog struct {
-	// AppEngineRelease: App Engine release version string.
+	// AppEngineRelease: App Engine release version.
 	AppEngineRelease string `json:"appEngineRelease,omitempty"`
 
-	// AppId: Identifies the application that handled this request.
+	// AppId: Application that handled this request.
 	AppId string `json:"appId,omitempty"`
 
 	// Cost: An indication of the relative cost of serving this request.
 	Cost float64 `json:"cost,omitempty"`
 
-	// EndTime: Time at which request was known to end processing.
+	// EndTime: Time when the request finished.
 	EndTime string `json:"endTime,omitempty"`
 
-	// Finished: If true, represents a finished request.  Otherwise, the
-	// request is active.
+	// Finished: Whether this request is finished or active.
 	Finished bool `json:"finished,omitempty"`
 
-	// Host: The Internet host and port number of the resource being
-	// requested.
+	// Host: Internet host and port number of the resource being requested.
 	Host string `json:"host,omitempty"`
 
-	// HttpVersion: HTTP version of request.
+	// HttpVersion: HTTP version of request. Example: "HTTP/1.1".
 	HttpVersion string `json:"httpVersion,omitempty"`
 
-	// InstanceId: An opaque identifier for the instance that handled the
-	// request.
+	// InstanceId: An identifier for the instance that handled the request.
 	InstanceId string `json:"instanceId,omitempty"`
 
-	// InstanceIndex: If the instance that processed this request was
-	// individually addressable
-	// (i.e. belongs to a manually scaled module), this is the index of
-	// the
-	// instance.
+	// InstanceIndex: If the instance processing this request belongs to a
+	// manually scaled
+	// module, then this is the 0-based index of the instance. Otherwise,
+	// this
+	// value is -1.
 	InstanceIndex int64 `json:"instanceIndex,omitempty"`
 
 	// Ip: Origin IP address.
@@ -1026,60 +1090,54 @@ type RequestLog struct {
 	// Latency: Latency of the request.
 	Latency string `json:"latency,omitempty"`
 
-	// Line: List of log lines emitted by the application while serving this
-	// request,
-	// if requested.
+	// Line: A list of log lines emitted by the application while serving
+	// this request.
 	Line []*LogLine `json:"line,omitempty"`
 
 	// MegaCycles: Number of CPU megacycles used to process request.
 	MegaCycles int64 `json:"megaCycles,omitempty,string"`
 
-	// Method: Request method, such as `GET`, `HEAD`, `PUT`, `POST`, or
-	// `DELETE`.
+	// Method: Request method. Example: "GET", "HEAD", "PUT",
+	// "POST", "DELETE".
 	Method string `json:"method,omitempty"`
 
-	// ModuleId: Identifies the module of the application that handled this
-	// request.
+	// ModuleId: Module of the application that handled this request.
 	ModuleId string `json:"moduleId,omitempty"`
 
-	// Nickname: A string that identifies a logged-in user who made this
-	// request, or empty
-	// if the user is not logged in.
+	// Nickname: The logged-in user who made the request.
 	//
-	// Most likely, this is the part of the user's email before the '@'
+	// Most likely, this is the part of the user's email before the `@`
 	// sign.  The
 	// field value is the same for different requests from the same user,
 	// but
-	// different users may have a similar name.  This information is
+	// different users can have similar names.  This information is
 	// also
-	// available to the application via Users API.
+	// available to the application via the App Engine Users API.
 	//
 	// This field will be populated starting with App Engine 1.9.21.
 	//
 	Nickname string `json:"nickname,omitempty"`
 
-	// PendingTime: Time this request spent in the pending request queue, if
-	// it was pending at
-	// all.
+	// PendingTime: Time this request spent in the pending request queue.
 	PendingTime string `json:"pendingTime,omitempty"`
 
 	// Referrer: Referrer URL of request.
 	Referrer string `json:"referrer,omitempty"`
 
-	// RequestId: Globally unique identifier for a request, based on request
-	// start time.
-	// Request IDs for requests which started later will compare greater
-	// as
-	// strings than those for requests which started earlier.
+	// RequestId: Globally unique identifier for a request, which is based
+	// on the request
+	// start time.  Request IDs for requests which started later will
+	// compare
+	// greater as strings than those for requests which started earlier.
 	RequestId string `json:"requestId,omitempty"`
 
 	// Resource: Contains the path and query portion of the URL that was
 	// requested. For
 	// example, if the URL was "http://example.com/app?name=val", the
 	// resource
-	// would be "/app?name=val". Any trailing fragment (separated by a
-	// '#'
-	// character) will not be included.
+	// would be "/app?name=val".  The fragment identifier, which is
+	// identified by
+	// the `#` character, is not included.
 	Resource string `json:"resource,omitempty"`
 
 	// ResponseSize: Size in bytes sent back to client by request.
@@ -1092,36 +1150,34 @@ type RequestLog struct {
 	// distributed among multiple repositories.
 	SourceReference []*SourceReference `json:"sourceReference,omitempty"`
 
-	// StartTime: Time at which request was known to have begun processing.
+	// StartTime: Time when the request started.
 	StartTime string `json:"startTime,omitempty"`
 
-	// Status: Response status of request.
+	// Status: HTTP response status code. Example: 200, 404.
 	Status int64 `json:"status,omitempty"`
 
-	// TaskName: Task name of the request (for an offline request).
+	// TaskName: Task name of the request, in the case of an offline
+	// request.
 	TaskName string `json:"taskName,omitempty"`
 
-	// TaskQueueName: Queue name of the request (for an offline request).
+	// TaskQueueName: Queue name of the request, in the case of an offline
+	// request.
 	TaskQueueName string `json:"taskQueueName,omitempty"`
 
-	// TraceId: Cloud Trace identifier of the trace for this request.
+	// TraceId: Cloud Trace identifier for this request.
 	TraceId string `json:"traceId,omitempty"`
 
-	// UrlMapEntry: File or class within URL mapping used for request.
-	// Useful for tracking
-	// down the source code which was responsible for managing
-	// request.
-	// Especially for multiply mapped handlers.
+	// UrlMapEntry: File or class that handled the request.
 	UrlMapEntry string `json:"urlMapEntry,omitempty"`
 
-	// UserAgent: User agent used for making request.
+	// UserAgent: User agent that made the request.
 	UserAgent string `json:"userAgent,omitempty"`
 
 	// VersionId: Version of the application that handled this request.
 	VersionId string `json:"versionId,omitempty"`
 
-	// WasLoadingRequest: Was this request a loading request for this
-	// instance?
+	// WasLoadingRequest: Whether this was a loading request for the
+	// instance.
 	WasLoadingRequest bool `json:"wasLoadingRequest,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "AppEngineRelease") to
@@ -1139,24 +1195,24 @@ func (s *RequestLog) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// SourceLocation: Specifies a location in a source file.
+// SourceLocation: Specifies a location in a source code file.
 type SourceLocation struct {
-	// File: Source file name. May or may not be a fully qualified name,
-	// depending on
-	// the runtime environment.
+	// File: Source file name. Depending on the runtime environment, this
+	// might be a
+	// simple name or a fully-qualified name.
 	File string `json:"file,omitempty"`
 
 	// FunctionName: Human-readable name of the function or method being
 	// invoked, with optional
-	// context such as the class or package name, for use in contexts such
-	// as the
-	// logs viewer where file:line number is less meaningful. This may vary
-	// by
-	// language, for example:
-	//   in Java: qual.if.ied.Class.method
-	//   in Go: dir/package.func
-	//   in Python: function
-	// ...
+	// context such as the class or package name. This information is used
+	// in
+	// contexts such as the logs viewer, where a file and line number are
+	// less
+	// meaningful. The format can vary by language. For
+	// example:
+	// `qual.if.ied.Class.method` (Java), `dir/package.func` (Go),
+	// `function`
+	// (Python).
 	FunctionName string `json:"functionName,omitempty"`
 
 	// Line: Line within the source file.
@@ -1186,7 +1242,7 @@ type SourceReference struct {
 	// Example: "https://github.com/GoogleCloudPlatform/kubernetes.git"
 	Repository string `json:"repository,omitempty"`
 
-	// RevisionId: The canonical (and persistent) identifier of the deployed
+	// RevisionId: The canonical and persistent identifier of the deployed
 	// revision.
 	// Example (git): "0035781c50ec7aa23385dc841529ce8a4b70db1b"
 	RevisionId string `json:"revisionId,omitempty"`
@@ -1335,6 +1391,17 @@ type WriteLogEntriesRequest struct {
 	// Entries: Log entries to insert.
 	Entries []*LogEntry `json:"entries,omitempty"`
 
+	// PartialSuccess: Optional. Whether valid entries should be written
+	// even if some other
+	// entries fail due to INVALID_ARGUMENT or PERMISSION_DENIED errors. If
+	// any
+	// entry is not written, the response status will be the error
+	// associated
+	// with one of the failed entries and include error details in the form
+	// of
+	// WriteLogEntriesPartialErrors.
+	PartialSuccess bool `json:"partialSuccess,omitempty"`
+
 	// ForceSendFields is a list of field names (e.g. "CommonLabels") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
@@ -1356,6 +1423,131 @@ type WriteLogEntriesResponse struct {
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
 	googleapi.ServerResponse `json:"-"`
+}
+
+// method id "logging.projects.entries.list":
+
+type ProjectsEntriesListCall struct {
+	s                     *Service
+	projectsId            string
+	listlogentriesrequest *ListLogEntriesRequest
+	urlParams_            gensupport.URLParams
+	ctx_                  context.Context
+}
+
+// List: Lists log entries in the specified project.
+//
+func (r *ProjectsEntriesService) List(projectsId string, listlogentriesrequest *ListLogEntriesRequest) *ProjectsEntriesListCall {
+	c := &ProjectsEntriesListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.projectsId = projectsId
+	c.listlogentriesrequest = listlogentriesrequest
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *ProjectsEntriesListCall) Fields(s ...googleapi.Field) *ProjectsEntriesListCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsEntriesListCall) Context(ctx context.Context) *ProjectsEntriesListCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsEntriesListCall) doRequest(alt string) (*http.Response, error) {
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.listlogentriesrequest)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta3/projects/{projectsId}/entries:list")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	googleapi.Expand(req.URL, map[string]string{
+		"projectsId": c.projectsId,
+	})
+	req.Header.Set("Content-Type", ctype)
+	req.Header.Set("User-Agent", c.s.userAgent())
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "logging.projects.entries.list" call.
+// Exactly one of *ListLogEntriesResponse or error will be non-nil. Any
+// non-2xx status code is an error. Response headers are in either
+// *ListLogEntriesResponse.ServerResponse.Header or (if a response was
+// returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *ProjectsEntriesListCall) Do() (*ListLogEntriesResponse, error) {
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &ListLogEntriesResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Lists log entries in the specified project.\n",
+	//   "flatPath": "v1beta3/projects/{projectsId}/entries:list",
+	//   "httpMethod": "POST",
+	//   "id": "logging.projects.entries.list",
+	//   "parameterOrder": [
+	//     "projectsId"
+	//   ],
+	//   "parameters": {
+	//     "projectsId": {
+	//       "description": "Part of `projectName`. The resource name of the project from which to retrieve log entries.  The\nlog service or log containing the entries is specified in the `filter`\nparameter.  Example: `projects/my_project_id`.\n",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "v1beta3/projects/{projectsId}/entries:list",
+	//   "request": {
+	//     "$ref": "ListLogEntriesRequest"
+	//   },
+	//   "response": {
+	//     "$ref": "ListLogEntriesResponse"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only",
+	//     "https://www.googleapis.com/auth/logging.admin",
+	//     "https://www.googleapis.com/auth/logging.read"
+	//   ]
+	// }
+
 }
 
 // method id "logging.projects.logEntries.list":

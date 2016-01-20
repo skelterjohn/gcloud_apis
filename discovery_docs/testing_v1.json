@@ -449,6 +449,10 @@
         "obbFile": {
 
           "$ref": "ObbFile"
+        },
+        "regularFile": {
+
+          "$ref": "RegularFile"
         }
       }
     },
@@ -493,6 +497,21 @@
         },
         "md5Hash": {
           "description": "The MD5 hash of the referenced blob. (This is necessary to create a\nBigstore object directly from the Blobstore reference.)",
+          "type": "string"
+        }
+      }
+    },
+    "RegularFile": {
+      "id": "RegularFile",
+      "description": "A file or directory to install on the device before the test starts",
+      "type": "object",
+      "properties": {
+        "content": {
+
+          "$ref": "FileReference"
+        },
+        "devicePath": {
+          "description": "Where to put the content on the device, must be a full, whitelisted path.\nIf it exists, it will be completely replaced.\nTODO(fsteen): Make the following path substitutions available:\n<p> ${EXTERNAL_STORAGE} - the external storage mount point (\/sdcard)\n<p> ${ANDROID_DATA} - the userdata partition mount point (\/data)\nNote: \/data\/local\/tmp is whitelisted, but \/data is not.\n\n<p> The corresponding paths (in parentheses) will be made available and\ntreated as implicit path substitutions, so the user may use them\ninterchangeably. E.g. if \/sdcard on a particular device does not map to\nexternal storage, the system will replace it with the external storage path\nprefix for that device and copy the file there.\n\n<p> It is strongly advised to use the <a href=\n\"http:\/\/developer.android.com\/reference\/android\/os\/Environment.html\">\nEnvironment API<\/a> in app and test code to access files on the device in a\nportable way.",
           "type": "string"
         }
       }
@@ -546,18 +565,6 @@
         },
         "appInitialActivity": {
           "description": "The initial activity that should be used to start the app.\nOptional",
-          "type": "string"
-        },
-        "bootstrapApk": {
-          "description": "The APK used for bootstrapping (e.g., passing the login screen).\nOptional",
-          "$ref": "FileReference"
-        },
-        "bootstrapPackageId": {
-          "description": "The java package for the bootstrap.\nOptional",
-          "type": "string"
-        },
-        "bootstrapRunnerClass": {
-          "description": "The runner class for the bootstrap.\nOptional",
           "type": "string"
         },
         "maxDepth": {
@@ -1093,7 +1100,7 @@
           "format": "int32"
         },
         "supportedVersionIds": {
-          "description": "The set of Android versions this device supports.\nNote that not all of these are necessarily supported in physical devices.\n@OutputOnly",
+          "description": "The set of Android versions this device supports.\n@OutputOnly",
           "type": "array",
           "items": {
             "type": "string"
@@ -1591,6 +1598,11 @@
                   "description": "The GCE project under which this job will run.",
                   "location": "path",
                   "required": true,
+                  "type": "string"
+                },
+                "requestId": {
+                  "description": "A string id used to detect duplicated requests.\nIds are automatically scoped to a project, so\nusers should ensure the ID is unique per-project.\nA UUID is recommended.\n\nOptional, but strongly recommended.",
+                  "location": "query",
                   "type": "string"
                 }
               },

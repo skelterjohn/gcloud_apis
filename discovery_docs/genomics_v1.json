@@ -6,7 +6,7 @@
   "version": "v1",
   "revision": "0",
   "title": "Genomics API",
-  "description": "An API to store, process, explore, and share DNA sequence reads, reference-based alignments, and variant calls.",
+  "description": "An API to store, process, explore, and share genomic data. It supports reference-based alignements, genetic variants, and reference genomes. This API provides an implementation of the Global Alliance for Genomics and Health (GA4GH) v0.5.1 API as well as several extensions.",
   "ownerDomain": "google.com",
   "ownerName": "Google",
   "icons": {
@@ -202,7 +202,7 @@
       "type": "object",
       "properties": {
         "version": {
-          "description": "Version of the `Policy`. The default version is 0.\n0 = resourcemanager_projects only support legacy roles.\n1 = supports non-legacy roles\n2 = supports AuditConfig",
+          "description": "Version of the `Policy`. The default version is 0.",
           "type": "integer",
           "format": "int32"
         },
@@ -214,7 +214,7 @@
           }
         },
         "etag": {
-          "description": "The etag is used for optimistic concurrency control as a way to help\nprevent simultaneous updates of a policy from overwriting each other.\nIt is strongly suggested that systems make use of the etag in the\nread-modify-write cycle to perform policy updates in order to avoid race\nconditions: Etags are returned in the response to GetIamPolicy, and\nsystems are expected to put that etag in the request to SetIamPolicy to\nensure that their change will be applied to the same version of the policy.\n\nIf no etag is provided in the call to SetIamPolicy, then the existing policy\nis overwritten blindly.",
+          "description": "`etag` is used for optimistic concurrency control as a way to help\nprevent simultaneous updates of a policy from overwriting each other.\nIt is strongly suggested that systems make use of the `etag` in the\nread-modify-write cycle to perform policy updates in order to avoid race\nconditions: An `etag` is returned in the response to `getIamPolicy`, and\nsystems are expected to put that etag in the request to `setIamPolicy` to\nensure that their change will be applied to the same version of the policy.\n\nIf no `etag` is provided in the call to `setIamPolicy`, then the existing\npolicy is overwritten blindly.",
           "type": "string",
           "format": "byte"
         }
@@ -230,7 +230,7 @@
           "type": "string"
         },
         "members": {
-          "description": "Specifies the identities requesting access for a Cloud Platform resource.\n`members` can have the following formats:\n\n* `allUsers`: A special identifier that represents anyone who is\n   on the internet; with or without a Google account.\n\n* `allAuthenticatedUsers`: A special identifier that represents anyone\n   who is authenticated with a Google account or a service account.\n\n* `user:{emailid}`: An email address that represents a specific Google\n   account. For example, `alice@gmail.com` or `joe@example.com`.\n\n* `serviceAccount:{emailid}`: An email address that represents a service\n   account. For example, `my-other-app@appspot.gserviceaccount.com`.\n\n* `group:{emailid}`: An email address that represents a Google group.\n   For example, `admins@example.com`.\n\n* `domain:{domain}`: A Google Apps domain name that represents all the\n   users of that domain. For example, `google.com` or `example.com`.\n",
+          "description": "Specifies the identities requesting access for a Cloud Platform resource.\n`members` can have the following values:\n\n* `allUsers`: A special identifier that represents anyone who is\n   on the internet; with or without a Google account.\n\n* `allAuthenticatedUsers`: A special identifier that represents anyone\n   who is authenticated with a Google account or a service account.\n\n* `user:{emailid}`: An email address that represents a specific Google\n   account. For example, `alice@gmail.com` or `joe@example.com`.\n\n* `serviceAccount:{emailid}`: An email address that represents a service\n   account. For example, `my-other-app@appspot.gserviceaccount.com`.\n\n* `group:{emailid}`: An email address that represents a Google group.\n   For example, `admins@example.com`.\n\n* `domain:{domain}`: A Google Apps domain name that represents all the\n   users of that domain. For example, `google.com` or `example.com`.\n",
           "type": "array",
           "items": {
             "type": "string"
@@ -402,7 +402,7 @@
       "type": "object",
       "properties": {
         "projectId": {
-          "description": "Required. The Google Developers Console project ID that owns this\nexport.",
+          "description": "Required. The Google Developers Console project ID that owns this\nexport. The caller must have WRITE access to this project.",
           "type": "string"
         },
         "exportUri": {
@@ -439,7 +439,7 @@
           "type": "string"
         },
         "pageSize": {
-          "description": "Specifies number of results to return in a single page. If unspecified,\nit will default to 256. The maximum value is 1024.",
+          "description": "The maximum number of results to return in a single page. If unspecified,\ndefaults to 256. The maximum value is 1024.",
           "type": "integer",
           "format": "int32"
         }
@@ -473,11 +473,11 @@
           "type": "string"
         },
         "datasetId": {
-          "description": "The dataset ID.",
+          "description": "The dataset to which this read group set belongs.",
           "type": "string"
         },
         "referenceSetId": {
-          "description": "The reference set the reads in this read group set are aligned to.",
+          "description": "The reference set to which the reads in this read group set are aligned.",
           "type": "string"
         },
         "name": {
@@ -513,11 +513,11 @@
       "type": "object",
       "properties": {
         "id": {
-          "description": "The server-generated read group ID, unique for all read groups.\nNote: This is different than the `@RG ID` field in the SAM spec. For that\nvalue, see the `name` field.",
+          "description": "The server-generated read group ID, unique for all read groups.\nNote: This is different than the @RG ID field in the SAM spec. For that\nvalue, see name.",
           "type": "string"
         },
         "datasetId": {
-          "description": "The ID of the dataset this read group belongs to.",
+          "description": "The dataset to which this read group belongs.",
           "type": "string"
         },
         "name": {
@@ -529,7 +529,7 @@
           "type": "string"
         },
         "sampleId": {
-          "description": "The sample this read group's data was generated from.\nNote: This is not an actual ID within this repository, but rather an\nidentifier for a sample which may be meaningful to some external system.",
+          "description": "A client-supplied sample identifier for the reads in this read group.",
           "type": "string"
         },
         "experiment": {
@@ -549,7 +549,7 @@
           }
         },
         "referenceSetId": {
-          "description": "The reference set the reads in this read group are aligned to. Required if\nthere are any read alignments.",
+          "description": "The reference set the reads in this read group are aligned to.",
           "type": "string"
         },
         "info": {
@@ -570,11 +570,11 @@
       "type": "object",
       "properties": {
         "libraryId": {
-          "description": "The library used as part of this experiment.\nNote: This is not an actual ID within this repository, but rather an\nidentifier for a library which may be meaningful to some external system.",
+          "description": "A client-supplied library identifier; a library is a collection of DNA\nfragments which have been prepared for sequencing from a sample. This\nfield is important for quality control as error or bias can be introduced\nduring sample preparation.",
           "type": "string"
         },
         "platformUnit": {
-          "description": "The platform unit used as part of this experiment e.g.\nflowcell-barcode.lane for Illumina or slide for SOLiD. Corresponds to the\n@RG PU field in the SAM spec.",
+          "description": "The platform unit used as part of this experiment, for example\nflowcell-barcode.lane for Illumina or slide for SOLiD. Corresponds to the\n@RG PU field in the SAM spec.",
           "type": "string"
         },
         "sequencingCenter": {
@@ -582,7 +582,7 @@
           "type": "string"
         },
         "instrumentModel": {
-          "description": "The instrument model used as part of this experiment. This maps to\nsequencing technology in BAM.",
+          "description": "The instrument model used as part of this experiment. This maps to\nsequencing technology in the SAM spec.",
           "type": "string"
         }
       }
@@ -601,7 +601,7 @@
           "type": "string"
         },
         "name": {
-          "description": "The name of the program.",
+          "description": "The display name of the program. This is typically the colloquial name of\nthe tool used, for example 'bwa' or 'picard'.",
           "type": "string"
         },
         "prevProgramId": {
@@ -694,7 +694,7 @@
           }
         },
         "referenceName": {
-          "description": "The reference sequence name, for example `chr1`,\n`1`, or `chrX`. If set to *, only unmapped reads are\nreturned.",
+          "description": "The reference sequence name, for example `chr1`, `1`, or `chrX`. If set to\n`*`, only unmapped reads are returned. If unspecified, all reads (mapped\nand unmapped) are returned.",
           "type": "string"
         },
         "start": {
@@ -712,7 +712,7 @@
           "type": "string"
         },
         "pageSize": {
-          "description": "Specifies number of results to return in a single page. If unspecified,\nit will default to 256. The maximum value is 2048.",
+          "description": "The maximum number of results to return in a single page. If unspecified,\ndefaults to 256. The maximum value is 2048.",
           "type": "integer",
           "format": "int32"
         }
@@ -738,7 +738,7 @@
     },
     "Read": {
       "id": "Read",
-      "description": "A read alignment describes a linear alignment of a string of DNA to a\nreference sequence, in addition to metadata\nabout the fragment (the molecule of DNA sequenced) and the read (the bases\nwhich were read by the sequencer). A read is equivalent to a line in a SAM\nfile. A read belongs to exactly one read group and exactly one\nread group set.\n\nFor more genomics resource definitions, see [Fundamentals of Google Genomics](https:\/\/cloud.google.com\/genomics\/fundamentals-of-google-genomics)\n\n### Generating a reference-aligned sequence string\n\nWhen interacting with mapped reads, it's often useful to produce a string\nrepresenting the local alignment of the read to reference. The following\npseudocode demonstrates one way of doing this:\n\n    out = \"\"\n    offset = 0\n    for c in read.alignment.cigar {\n      switch c.operation {\n      case \"ALIGNMENT_MATCH\", \"SEQUENCE_MATCH\", \"SEQUENCE_MISMATCH\":\n        out += read.alignedSequence[offset:offset+c.operationLength]\n        offset += c.operationLength\n        break\n      case \"CLIP_SOFT\", \"INSERT\":\n        offset += c.operationLength\n        break\n      case \"PAD\":\n        out += repeat(\"*\", c.operationLength)\n        break\n      case \"DELETE\":\n        out += repeat(\"-\", c.operationLength)\n        break\n      case \"SKIP\":\n        out += repeat(\" \", c.operationLength)\n        break\n      case \"CLIP_HARD\":\n        break\n      }\n    }\n    return out\n\n### Converting to SAM's CIGAR string\n\nThe following pseudocode generates a SAM CIGAR string from the\n`cigar` field. Note that this is a lossy conversion\n(`cigar.referenceSequence` is lost).\n\n    cigarMap = {\n      \"ALIGNMENT_MATCH\": \"M\",\n      \"INSERT\": \"I\",\n      \"DELETE\": \"D\",\n      \"SKIP\": \"N\",\n      \"CLIP_SOFT\": \"S\",\n      \"CLIP_HARD\": \"H\",\n      \"PAD\": \"P\",\n      \"SEQUENCE_MATCH\": \"=\",\n      \"SEQUENCE_MISMATCH\": \"X\",\n    }\n    cigarStr = \"\"\n    for c in read.alignment.cigar {\n      cigarStr += c.operationLength + cigarMap[c.operation]\n    }\n    return cigarStr",
+      "description": "A read alignment describes a linear alignment of a string of DNA to a\nreference sequence, in addition to metadata\nabout the fragment (the molecule of DNA sequenced) and the read (the bases\nwhich were read by the sequencer). A read is equivalent to a line in a SAM\nfile. A read belongs to exactly one read group and exactly one\nread group set.\n\nFor more genomics resource definitions, see [Fundamentals of Google Genomics](https:\/\/cloud.google.com\/genomics\/fundamentals-of-google-genomics)\n\n### Reverse-stranded reads\n\nMapped reads (reads having a non-null `alignment`) can be aligned to either\nthe forward or the reverse strand of their associated reference. Strandedness\nof a mapped read is encoded by `alignment.position.reverseStrand`.\n\nIf we consider the reference to be a forward-stranded coordinate space of\n`[0, reference.length)` with `0` as the left-most position and\n`reference.length` as the right-most position, reads are always aligned left\nto right. That is, `alignment.position.position` always refers to the\nleft-most reference coordinate and `alignment.cigar` describes the alignment\nof this read to the reference from left to right. All per-base fields such as\n`alignedSequence` and `alignedQuality` share this same left-to-right\norientation; this is true of reads which are aligned to either strand. For\nreverse-stranded reads, this means that `alignedSequence` is the reverse\ncomplement of the bases that were originally reported by the sequencing\nmachine.\n\n### Generating a reference-aligned sequence string\n\nWhen interacting with mapped reads, it's often useful to produce a string\nrepresenting the local alignment of the read to reference. The following\npseudocode demonstrates one way of doing this:\n\n    out = \"\"\n    offset = 0\n    for c in read.alignment.cigar {\n      switch c.operation {\n      case \"ALIGNMENT_MATCH\", \"SEQUENCE_MATCH\", \"SEQUENCE_MISMATCH\":\n        out += read.alignedSequence[offset:offset+c.operationLength]\n        offset += c.operationLength\n        break\n      case \"CLIP_SOFT\", \"INSERT\":\n        offset += c.operationLength\n        break\n      case \"PAD\":\n        out += repeat(\"*\", c.operationLength)\n        break\n      case \"DELETE\":\n        out += repeat(\"-\", c.operationLength)\n        break\n      case \"SKIP\":\n        out += repeat(\" \", c.operationLength)\n        break\n      case \"CLIP_HARD\":\n        break\n      }\n    }\n    return out\n\n### Converting to SAM's CIGAR string\n\nThe following pseudocode generates a SAM CIGAR string from the\n`cigar` field. Note that this is a lossy conversion\n(`cigar.referenceSequence` is lost).\n\n    cigarMap = {\n      \"ALIGNMENT_MATCH\": \"M\",\n      \"INSERT\": \"I\",\n      \"DELETE\": \"D\",\n      \"SKIP\": \"N\",\n      \"CLIP_SOFT\": \"S\",\n      \"CLIP_HARD\": \"H\",\n      \"PAD\": \"P\",\n      \"SEQUENCE_MATCH\": \"=\",\n      \"SEQUENCE_MISMATCH\": \"X\",\n    }\n    cigarStr = \"\"\n    for c in read.alignment.cigar {\n      cigarStr += c.operationLength + cigarMap[c.operation]\n    }\n    return cigarStr",
       "type": "object",
       "properties": {
         "id": {
@@ -746,11 +746,11 @@
           "type": "string"
         },
         "readGroupId": {
-          "description": "The ID of the read group this read belongs to.\n(Every read must belong to exactly one read group.)",
+          "description": "The ID of the read group this read belongs to. A read belongs to exactly\none read group. This is a server-generated ID which is distinct from SAM's\nRG tag (for that value, see\nReadGroup.name).",
           "type": "string"
         },
         "readGroupSetId": {
-          "description": "The ID of the read group set this read belongs to.\n(Every read must belong to exactly one read group set.)",
+          "description": "The ID of the read group set this read belongs to. A read belongs to\nexactly one read group set.",
           "type": "string"
         },
         "fragmentName": {
@@ -758,11 +758,11 @@
           "type": "string"
         },
         "properPlacement": {
-          "description": "The orientation and the distance between reads from the fragment are\nconsistent with the sequencing protocol (SAM flag 0x2)",
+          "description": "The orientation and the distance between reads from the fragment are\nconsistent with the sequencing protocol (SAM flag 0x2).",
           "type": "boolean"
         },
         "duplicateFragment": {
-          "description": "The fragment is a PCR or optical duplicate (SAM flag 0x400)",
+          "description": "The fragment is a PCR or optical duplicate (SAM flag 0x400).",
           "type": "boolean"
         },
         "fragmentLength": {
@@ -781,11 +781,11 @@
           "format": "int32"
         },
         "failedVendorQualityChecks": {
-          "description": "SAM flag 0x200",
+          "description": "Whether this read did not pass filters, such as platform or vendor quality\ncontrols (SAM flag 0x200).",
           "type": "boolean"
         },
         "alignment": {
-          "description": "The linear alignment for this alignment record. This field will be\nnull if the read is unmapped.",
+          "description": "The linear alignment for this alignment record. This field is null for\nunmapped reads.",
           "$ref": "LinearAlignment"
         },
         "secondaryAlignment": {
@@ -797,11 +797,11 @@
           "type": "boolean"
         },
         "alignedSequence": {
-          "description": "The bases of the read sequence contained in this alignment record,\n*without CIGAR operations applied*.\n`alignedSequence` and `alignedQuality` may be\nshorter than the full read sequence and quality. This will occur if the\nalignment is part of a chimeric alignment, or if the read was trimmed. When\nthis occurs, the CIGAR for this read will begin\/end with a hard clip\noperator that will indicate the length of the excised sequence.",
+          "description": "The bases of the read sequence contained in this alignment record,\n**without CIGAR operations applied** (equivalent to SEQ in SAM).\n`alignedSequence` and `alignedQuality` may be\nshorter than the full read sequence and quality. This will occur if the\nalignment is part of a chimeric alignment, or if the read was trimmed. When\nthis occurs, the CIGAR for this read will begin\/end with a hard clip\noperator that will indicate the length of the excised sequence.",
           "type": "string"
         },
         "alignedQuality": {
-          "description": "The quality of the read sequence contained in this alignment record.\n`alignedSequence` and `alignedQuality` may be shorter\nthan the full read sequence and quality. This will occur if the alignment\nis part of a chimeric alignment, or if the read was trimmed. When this\noccurs, the CIGAR for this read will begin\/end with a hard clip operator\nthat will indicate the length of the excised sequence.",
+          "description": "The quality of the read sequence contained in this alignment record\n(equivalent to QUAL in SAM).\n`alignedSequence` and `alignedQuality` may be shorter than the full read\nsequence and quality. This will occur if the alignment is part of a\nchimeric alignment, or if the read was trimmed. When this occurs, the CIGAR\nfor this read will begin\/end with a hard clip operator that will indicate\nthe length of the excised sequence.",
           "type": "array",
           "items": {
             "type": "integer",
@@ -834,7 +834,7 @@
           "$ref": "Position"
         },
         "mappingQuality": {
-          "description": "The mapping quality of this alignment. Represents how likely\nthe read maps to this position as opposed to other locations.",
+          "description": "The mapping quality of this alignment. Represents how likely\nthe read maps to this position as opposed to other locations.\n\nSpecifically, this is -10 log10 Pr(mapping position is wrong), rounded to\nthe nearest integer.",
           "type": "integer",
           "format": "int32"
         },
@@ -911,20 +911,63 @@
         }
       }
     },
+    "StreamReadsRequest": {
+      "id": "StreamReadsRequest",
+      "description": "The stream reads request.",
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "description": "The Google Developers Console project ID or number which will be billed\nfor this access. The caller must have WRITE access to this project.\nRequired.",
+          "type": "string"
+        },
+        "readGroupSetId": {
+          "description": "The ID of the read group set from which to stream reads.",
+          "type": "string"
+        },
+        "referenceName": {
+          "description": "The reference sequence name, for example `chr1`,\n`1`, or `chrX`. If set to *, only unmapped reads are\nreturned.",
+          "type": "string"
+        },
+        "start": {
+          "description": "The start position of the range on the reference, 0-based inclusive. If\nspecified, `referenceName` must also be specified.",
+          "type": "string",
+          "format": "int64"
+        },
+        "end": {
+          "description": "The end position of the range on the reference, 0-based exclusive. If\nspecified, `referenceName` must also be specified.",
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "StreamReadsResponse": {
+      "id": "StreamReadsResponse",
+
+      "type": "object",
+      "properties": {
+        "alignments": {
+
+          "type": "array",
+          "items": {
+            "$ref": "Read"
+          }
+        }
+      }
+    },
     "SearchReferenceSetsRequest": {
       "id": "SearchReferenceSetsRequest",
 
       "type": "object",
       "properties": {
         "md5checksums": {
-          "description": "If present, return references for which the `md5checksum`\nmatches. See `ReferenceSet.md5checksum` for details.",
+          "description": "If present, return reference sets for which the\nmd5checksum matches exactly.",
           "type": "array",
           "items": {
             "type": "string"
           }
         },
         "accessions": {
-          "description": "If present, return references for which the accession matches any of these\nstrings. Best to give a version number, for example\n`GCF_000001405.26`. If only the main accession number is given\nthen all records with that main accession will be returned, whichever\nversion. Note that different versions will have different sequences.",
+          "description": "If present, return reference sets for which a prefix of any of\nsourceAccessions\nmatch any of these strings. Accession numbers typically have a main number\nand a version, for example `NC_000001.11`.",
           "type": "array",
           "items": {
             "type": "string"
@@ -939,7 +982,7 @@
           "type": "string"
         },
         "pageSize": {
-          "description": "Specifies the maximum number of results to return in a single page.",
+          "description": "The maximum number of results to return in a single page. If unspecified,\ndefaults to 1024. The maximum value is 4096.",
           "type": "integer",
           "format": "int32"
         }
@@ -984,7 +1027,7 @@
           "type": "string"
         },
         "ncbiTaxonId": {
-          "description": "ID from http:\/\/www.ncbi.nlm.nih.gov\/taxonomy (e.g. 9606->human) indicating\nthe species which this assembly is intended to model. Note that contained\nreferences may specify a different `ncbiTaxonId`, as assemblies\nmay contain reference sequences which do not belong to the modeled species,\ne.g. EBV in a human reference genome.",
+          "description": "ID from http:\/\/www.ncbi.nlm.nih.gov\/taxonomy (for example, 9606 for human)\nindicating the species which this reference set is intended to model. Note\nthat contained references may specify a different `ncbiTaxonId`, as\nassemblies may contain reference sequences which do not belong to the\nmodeled species, for example EBV in a human reference genome.",
           "type": "integer",
           "format": "int32"
         },
@@ -1015,14 +1058,14 @@
       "type": "object",
       "properties": {
         "md5checksums": {
-          "description": "If present, return references for which the `md5checksum`\nmatches. See `Reference.md5checksum` for construction details.",
+          "description": "If present, return references for which the\nmd5checksum matches exactly.",
           "type": "array",
           "items": {
             "type": "string"
           }
         },
         "accessions": {
-          "description": "If present, return references for which the accession\nmatches this string. Best to give a version number, for example\n`GCF_000001405.26`. If only the main accession number is given\nthen all records with that main accession will be returned, whichever\nversion. Note that different versions will have different sequences.",
+          "description": "If present, return references for which a prefix of any of\nsourceAccessions match\nany of these strings. Accession numbers typically have a main number and a\nversion, for example `GCF_000001405.26`.",
           "type": "array",
           "items": {
             "type": "string"
@@ -1037,7 +1080,7 @@
           "type": "string"
         },
         "pageSize": {
-          "description": "Specifies the maximum number of results to return in a single page.",
+          "description": "The maximum number of results to return in a single page. If unspecified,\ndefaults to 1024. The maximum value is 4096.",
           "type": "integer",
           "format": "int32"
         }
@@ -1084,7 +1127,7 @@
           "type": "string"
         },
         "sourceUri": {
-          "description": "The URI from which the sequence was obtained. Specifies a FASTA format\nfile\/string with one name, sequence pair.",
+          "description": "The URI from which the sequence was obtained. Typically specifies a FASTA\nformat file.",
           "type": "string"
         },
         "sourceAccessions": {
@@ -1095,7 +1138,7 @@
           }
         },
         "ncbiTaxonId": {
-          "description": "ID from http:\/\/www.ncbi.nlm.nih.gov\/taxonomy (e.g. 9606->human) if not\nspecified by the containing reference set.",
+          "description": "ID from http:\/\/www.ncbi.nlm.nih.gov\/taxonomy. For example, 9606 for human.",
           "type": "integer",
           "format": "int32"
         }
@@ -1196,7 +1239,7 @@
       "type": "object",
       "properties": {
         "referenceName": {
-          "description": "The reference the bound is associate with.",
+          "description": "The name of the reference associated with this ReferenceBound.",
           "type": "string"
         },
         "upperBound": {
@@ -1318,7 +1361,7 @@
           "type": "string"
         },
         "pageSize": {
-          "description": "The maximum number of variant sets to return in a request.",
+          "description": "The maximum number of results to return in a single page. If unspecified,\ndefaults to 1024.",
           "type": "integer",
           "format": "int32"
         }
@@ -1384,12 +1427,12 @@
           "type": "string"
         },
         "pageSize": {
-          "description": "The maximum number of variants to return. If unspecified, defaults to 5000.",
+          "description": "The maximum number of variants to return in a single page. If unspecified,\ndefaults to 5000. The maximum value is 10000.",
           "type": "integer",
           "format": "int32"
         },
         "maxCalls": {
-          "description": "The maximum number of calls to return. However, at least one variant will\nalways be returned, even if it has more calls than this limit. If\nunspecified, defaults to 5000.",
+          "description": "The maximum number of calls to return in a single page. Note that this\nlimit may be exceeded; at least one variant is always returned per page,\neven if it has more calls than this limit. If unspecified, defaults to\n5000. The maximum value is 10000.",
           "type": "integer",
           "format": "int32"
         }
@@ -1560,7 +1603,7 @@
           "type": "string"
         },
         "pageSize": {
-          "description": "The maximum number of call sets to return. If unspecified, defaults to\n1000.",
+          "description": "The maximum number of results to return in a single page. If unspecified,\ndefaults to 1024.",
           "type": "integer",
           "format": "int32"
         }
@@ -1625,6 +1668,56 @@
         }
       }
     },
+    "StreamVariantsRequest": {
+      "id": "StreamVariantsRequest",
+      "description": "The stream variants request.",
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "description": "The Google Developers Console project ID or number which will be billed\nfor this access. The caller must have WRITE access to this project.\nRequired.",
+          "type": "string"
+        },
+        "variantSetId": {
+          "description": "The variant set ID from which to stream variants.",
+          "type": "string"
+        },
+        "callSetIds": {
+          "description": "Only return variant calls which belong to call sets with these IDs.\nLeaving this blank returns all variant calls.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "referenceName": {
+          "description": "Required. Only return variants in this reference sequence.",
+          "type": "string"
+        },
+        "start": {
+          "description": "The beginning of the window (0-based, inclusive) for which\noverlapping variants should be returned.",
+          "type": "string",
+          "format": "int64"
+        },
+        "end": {
+          "description": "The end of the window (0-based, exclusive) for which overlapping\nvariants should be returned.",
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "StreamVariantsResponse": {
+      "id": "StreamVariantsResponse",
+
+      "type": "object",
+      "properties": {
+        "variants": {
+
+          "type": "array",
+          "items": {
+            "$ref": "Variant"
+          }
+        }
+      }
+    },
     "ImportReadGroupSetsResponse": {
       "id": "ImportReadGroupSetsResponse",
       "description": "The read group set import response.",
@@ -1645,7 +1738,7 @@
       "type": "object",
       "properties": {
         "callSetIds": {
-          "description": "IDs of the call sets that were created.",
+          "description": "IDs of the call sets created during the import.",
           "type": "array",
           "items": {
             "type": "string"
@@ -1712,7 +1805,7 @@
               "type": "string"
             },
             "pageSize": {
-              "description": "The maximum number of results returned by this request. If unspecified,\ndefaults to 50. The maximum value is 1024.",
+              "description": "The maximum number of results to return in a single page. If unspecified,\ndefaults to 50. The maximum value is 1024.",
               "location": "query",
               "type": "integer",
               "format": "int32"
@@ -2055,32 +2148,6 @@
             "https://www.googleapis.com/auth/cloud-platform",
             "https://www.googleapis.com/auth/genomics"
           ]
-        },
-        "delete": {
-          "id": "genomics.operations.delete",
-          "path": "v1/{+name}",
-          "flatPath": "v1/operations/{operationsId}",
-          "httpMethod": "DELETE",
-          "description": "This method is not implemented. To cancel an operation, please use Operations.CancelOperation.",
-          "parameters": {
-            "name": {
-              "description": "The name of the operation resource to be deleted.",
-              "location": "path",
-              "required": true,
-              "pattern": "^operations\/.*$",
-              "type": "string"
-            }
-          },
-          "parameterOrder": [
-            "name"
-          ],
-          "response": {
-            "$ref": "Empty"
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/cloud-platform",
-            "https://www.googleapis.com/auth/genomics"
-          ]
         }
       }
     },
@@ -2091,7 +2158,7 @@
           "path": "v1/readgroupsets:import",
           "flatPath": "v1/readgroupsets:import",
           "httpMethod": "POST",
-          "description": "Creates read group sets by asynchronously importing the provided\ninformation.\n\nFor the definitions of read group sets and other genomics resources, see [Fundamentals of Google Genomics](https:\/\/cloud.google.com\/genomics\/fundamentals-of-google-genomics)\n\nThe caller must have WRITE permissions to the dataset.\n\n## Notes on [BAM](https:\/\/samtools.github.io\/hts-specs\/SAMv1.pdf) import\n\n- Tags will be converted to strings - tag types are not preserved\n- Comments (`@CO`) in the input file header will not be preserved\n- Original header order of references (`@SQ`) will not be preserved\n- Any reverse stranded unmapped reads will be reverse complemented, and\ntheir qualities (and \"BQ\" tag, if any) will be reversed\n- Unmapped reads will be stripped of positional information (reference name\nand position)",
+          "description": "Creates read group sets by asynchronously importing the provided\ninformation.\n\nFor the definitions of read group sets and other genomics resources, see [Fundamentals of Google Genomics](https:\/\/cloud.google.com\/genomics\/fundamentals-of-google-genomics)\n\nThe caller must have WRITE permissions to the dataset.\n\n## Notes on [BAM](https:\/\/samtools.github.io\/hts-specs\/SAMv1.pdf) import\n\n- Tags will be converted to strings - tag types are not preserved\n- Comments (`@CO`) in the input file header will not be preserved\n- Original header order of references (`@SQ`) will not be preserved\n- Any reverse stranded unmapped reads will be reverse complemented, and\ntheir qualities (also the \"BQ\" and \"OQ\" tags, if any) will be reversed\n- Unmapped reads will be stripped of positional information (reference name\nand position)",
           "parameters": {
           },
           "parameterOrder": [
@@ -2116,7 +2183,7 @@
           "description": "Exports a read group set to a BAM file in Google Cloud Storage.\n\nFor the definitions of read group sets and other genomics resources, see [Fundamentals of Google Genomics](https:\/\/cloud.google.com\/genomics\/fundamentals-of-google-genomics)\n\nNote that currently there may be some differences between exported BAM\nfiles and the original BAM file at the time of import. See\n[ImportReadGroupSets](google.genomics.v1.ReadServiceV1.ImportReadGroupSets)\nfor caveats.",
           "parameters": {
             "readGroupSetId": {
-              "description": "Required. The ID of the read group set to export.",
+              "description": "Required. The ID of the read group set to export. The caller must have\nREAD access to this read group set.",
               "location": "path",
               "required": true,
               "type": "string"
@@ -2173,7 +2240,7 @@
               "type": "string"
             },
             "updateMask": {
-              "description": "An optional mask specifying which fields to update. At this time, mutable\nfields are referenceSetId\nand name. Acceptable values are\n\"referenceSetId\" and \"name\". If unspecified, all mutable fields will be\nupdated.",
+              "description": "An optional mask specifying which fields to update. Supported fields:\n\n* name.\n* referenceSetId.\n\nLeaving `updateMask` unset is equivalent to specifying all mutable\nfields.",
               "location": "query",
               "type": "string",
               "format": "google-fieldmask"
@@ -2320,7 +2387,7 @@
           "path": "v1/reads/search",
           "flatPath": "v1/reads/search",
           "httpMethod": "POST",
-          "description": "Gets a list of reads for one or more read group sets.\n\nFor the definitions of read group sets and other genomics resources, see [Fundamentals of Google Genomics](https:\/\/cloud.google.com\/genomics\/fundamentals-of-google-genomics)\n\nReads search operates over a genomic coordinate space of reference sequence\n& position defined over the reference sequences to which the requested\nread group sets are aligned.\n\nIf a target positional range is specified, search returns all reads whose\nalignment to the reference genome overlap the range. A query which\nspecifies only read group set IDs yields all reads in those read group\nsets, including unmapped reads.\n\nAll reads returned (including reads on subsequent pages) are ordered by\ngenomic coordinate (reference sequence & position). Reads with equivalent\ngenomic coordinates are returned in a deterministic order.\n\nImplements [GlobalAllianceApi.searchReads](https:\/\/github.com\/ga4gh\/schemas\/blob\/v0.5.1\/src\/main\/resources\/avro\/readmethods.avdl#L85).",
+          "description": "Gets a list of reads for one or more read group sets.\n\nFor the definitions of read group sets and other genomics resources, see [Fundamentals of Google Genomics](https:\/\/cloud.google.com\/genomics\/fundamentals-of-google-genomics)\n\nReads search operates over a genomic coordinate space of reference sequence\n& position defined over the reference sequences to which the requested\nread group sets are aligned.\n\nIf a target positional range is specified, search returns all reads whose\nalignment to the reference genome overlap the range. A query which\nspecifies only read group set IDs yields all reads in those read group\nsets, including unmapped reads.\n\nAll reads returned (including reads on subsequent pages) are ordered by\ngenomic coordinate (by reference sequence, then position). Reads with\nequivalent genomic coordinates are returned in an unspecified order. This\norder is consistent, such that two queries for the same content (regardless\nof page size) yield reads in the same order across their respective streams\nof paginated responses.\n\nImplements [GlobalAllianceApi.searchReads](https:\/\/github.com\/ga4gh\/schemas\/blob\/v0.5.1\/src\/main\/resources\/avro\/readmethods.avdl#L85).",
           "parameters": {
           },
           "parameterOrder": [
@@ -2336,6 +2403,27 @@
             "https://www.googleapis.com/auth/genomics",
             "https://www.googleapis.com/auth/genomics.readonly"
           ]
+        },
+        "stream": {
+          "id": "genomics.reads.stream",
+          "path": "v1/reads:stream",
+          "flatPath": "v1/reads:stream",
+          "httpMethod": "POST",
+          "description": "Returns a stream of all the reads matching the search request, ordered\nby reference name, position, and ID.",
+          "parameters": {
+          },
+          "parameterOrder": [
+          ],
+          "request": {
+            "$ref": "StreamReadsRequest"
+          },
+          "response": {
+            "$ref": "StreamReadsResponse"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/cloud-platform",
+            "https://www.googleapis.com/auth/genomics"
+          ]
         }
       }
     },
@@ -2346,7 +2434,7 @@
           "path": "v1/referencesets/search",
           "flatPath": "v1/referencesets/search",
           "httpMethod": "POST",
-          "description": "Searches for reference sets which match the given criteria.\n\nFor the definitions of references and other genomics resources, see [Fundamentals of Google Genomics](https:\/\/cloud.google.com\/genomics\/fundamentals-of-google-genomics)\n\nImplements [GlobalAllianceApi.searchReferenceSets](http:\/\/ga4gh.org\/documentation\/api\/v0.5.1\/ga4gh_api.html#\/schema\/org.ga4gh.searchReferenceSets).",
+          "description": "Searches for reference sets which match the given criteria.\n\nFor the definitions of references and other genomics resources, see [Fundamentals of Google Genomics](https:\/\/cloud.google.com\/genomics\/fundamentals-of-google-genomics)\n\nImplements [GlobalAllianceApi.searchReferenceSets](https:\/\/github.com\/ga4gh\/schemas\/blob\/v0.5.1\/src\/main\/resources\/avro\/referencemethods.avdl#L71)",
           "parameters": {
           },
           "parameterOrder": [
@@ -2477,7 +2565,7 @@
                   "type": "string"
                 },
                 "pageSize": {
-                  "description": "Specifies the maximum number of bases to return in a single page.",
+                  "description": "The maximum number of bases to return in a single page. If unspecified,\ndefaults to 200Kbp (kilo base pairs). The maximum value is 10Mbp (mega base\npairs).",
                   "location": "query",
                   "type": "integer",
                   "format": "int32"
@@ -2649,6 +2737,27 @@
             "https://www.googleapis.com/auth/cloud-platform",
             "https://www.googleapis.com/auth/genomics",
             "https://www.googleapis.com/auth/genomics.readonly"
+          ]
+        },
+        "stream": {
+          "id": "genomics.variants.stream",
+          "path": "v1/variants:stream",
+          "flatPath": "v1/variants:stream",
+          "httpMethod": "POST",
+          "description": "Returns a stream of all the variants matching the search request, ordered\nby reference name, position, and ID.",
+          "parameters": {
+          },
+          "parameterOrder": [
+          ],
+          "request": {
+            "$ref": "StreamVariantsRequest"
+          },
+          "response": {
+            "$ref": "StreamVariantsResponse"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/cloud-platform",
+            "https://www.googleapis.com/auth/genomics"
           ]
         }
       }

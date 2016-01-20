@@ -33,148 +33,6 @@ var _ = io.Copy
 var _ = os.Stdin
 var _ = strings.Split
 
-func Cloudbuild_v1_OperationsCancel(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1/{+name}:cancel", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewOperationsService(api_service)
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
-
-	// Only positional arguments should remain in args.
-	if len(args) == 0 || len(args) > 2 {
-		usageFunc()
-	}
-
-	request := &api_client.CancelOperationRequest{}
-	if len(args) == 2 {
-		err = commands_util.PopulateRequestFromFilename(&request, args[1])
-		if err != nil {
-			return err
-		}
-	}
-
-	keyValues := flagValues
-
-	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
-	if err != nil {
-		return err
-	}
-
-	expectedParams := []string{
-		"name",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_name, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-
-	call := service.Cancel(param_name,
-		request,
-	)
-
-	var response *api_client.Empty
-	response, err = call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Cloudbuild_v1_OperationsDelete(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1/{+name}", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewOperationsService(api_service)
-
-	// Only positional arguments should remain in args.
-	if len(args) != 1 {
-		usageFunc()
-	}
-
-	expectedParams := []string{
-		"name",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_name, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-
-	call := service.Delete(param_name)
-
-	var response *api_client.Empty
-	response, err = call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func Cloudbuild_v1_OperationsGet(context Context, args ...string) error {
 
 	usageFunc := func() {
@@ -355,6 +213,8 @@ func Cloudbuild_v1_ProjectsBuildsCancel(context Context, args ...string) error {
 			}
 		}
 
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
 	}
@@ -365,9 +225,29 @@ func Cloudbuild_v1_ProjectsBuildsCancel(context Context, args ...string) error {
 	}
 	service := api_client.NewProjectsBuildsService(api_service)
 
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
 	// Only positional arguments should remain in args.
-	if len(args) != 1 {
+	if len(args) == 0 || len(args) > 2 {
 		usageFunc()
+	}
+
+	request := &api_client.CancelBuildRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
 	}
 
 	expectedParams := []string{
@@ -388,7 +268,9 @@ func Cloudbuild_v1_ProjectsBuildsCancel(context Context, args ...string) error {
 		return err
 	}
 
-	call := service.Cancel(param_projectId, param_id)
+	call := service.Cancel(param_projectId, param_id,
+		request,
+	)
 
 	var response *api_client.Build
 	response, err = call.Do()
@@ -571,10 +453,6 @@ func Cloudbuild_v1_ProjectsBuildsList(context Context, args ...string) error {
 
 		usageBits += " [--pageToken=VALUE]"
 
-		usageBits += " [--repoName=VALUE]"
-
-		usageBits += " [--revisionId=VALUE]"
-
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
 	}
@@ -586,10 +464,8 @@ func Cloudbuild_v1_ProjectsBuildsList(context Context, args ...string) error {
 	service := api_client.NewProjectsBuildsService(api_service)
 
 	queryParamNames := map[string]bool{
-		"pageSize":   false,
-		"pageToken":  false,
-		"repoName":   false,
-		"revisionId": false,
+		"pageSize":  false,
+		"pageToken": false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -637,20 +513,6 @@ func Cloudbuild_v1_ProjectsBuildsList(context Context, args ...string) error {
 			return err
 		}
 		call.PageToken(query_pageToken)
-	}
-	if value, ok := flagValues["repoName"]; ok {
-		query_repoName, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.RepoName(query_repoName)
-	}
-	if value, ok := flagValues["revisionId"]; ok {
-		query_revisionId, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.RevisionId(query_revisionId)
 	}
 
 	var response *api_client.ListBuildsResponse

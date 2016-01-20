@@ -238,98 +238,6 @@ func (s *BeginTransactionResponse) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// Change: A change to a set of entities being watched.
-// Usually a change to an individual entity,
-// but sometimes a change to the set of entities being watched.
-type Change struct {
-	// Cause: The error that resulted in this change, if applicable.
-	Cause *Status `json:"cause,omitempty"`
-
-	// Continued: If true, more changes are needed to construct a consistent
-	// snapshot.
-	Continued bool `json:"continued,omitempty"`
-
-	// ExistenceFilter: A filter representing delete mutations. Applies to
-	// the *set*
-	// of entities previously returned for the given `target_ids`.
-	ExistenceFilter *ExistenceFilter `json:"existenceFilter,omitempty"`
-
-	// Mutation: A mutation to a watched entity.
-	Mutation *Mutation `json:"mutation,omitempty"`
-
-	// NoChange: No change has occurred. Usually returned to provide an
-	// updated
-	// `resume_token`.
-	//
-	// Possible values:
-	//   "NULL_VALUE" - Null value.
-	NoChange string `json:"noChange,omitempty"`
-
-	// ResumeToken: A token that provides a compact representation of all
-	// the changes that
-	// have been received by the caller up to this point (including this
-	// one)
-	// that can be used to resume the stream. May not be set on every
-	// change.
-	// Only valid for the targets specified in `target_ids`.
-	ResumeToken string `json:"resumeToken,omitempty"`
-
-	// TargetChange: The targets associate with this stream have been
-	// modified.
-	// The affected targets are listed in `target_ids`.
-	//
-	// Possible values:
-	//   "TARGET_CHANGE_UNSPECIFIED"
-	//   "TARGET_ADDED"
-	//   "TARGET_REMOVED"
-	//   "TARGET_REJECTED"
-	TargetChange string `json:"targetChange,omitempty"`
-
-	// TargetIds: The set of targets to which this change applies. When
-	// empty, the change
-	// applies to all targets.
-	TargetIds []int64 `json:"targetIds,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "Cause") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *Change) MarshalJSON() ([]byte, error) {
-	type noMethod Change
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// ChangeBatch: The streamed response for
-// google.datastore.v1beta3.DatastoreWatcher.Watch
-// and google.datastore.v1beta3.DatastoreWatcher.MultiWatch.
-type ChangeBatch struct {
-	Changes []*Change `json:"changes,omitempty"`
-
-	// ServerResponse contains the HTTP response code and headers from the
-	// server.
-	googleapi.ServerResponse `json:"-"`
-
-	// ForceSendFields is a list of field names (e.g. "Changes") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *ChangeBatch) MarshalJSON() ([]byte, error) {
-	type noMethod ChangeBatch
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
 // Circle: A "circle" on the surface of the Earth, defined as the area
 // within a
 // certain geographical distance of a point.
@@ -1196,9 +1104,8 @@ func (s *IndexedPropertyDefinition) MarshalJSON() ([]byte, error) {
 // A reserved/read-only key is forbidden in certain documented contexts.
 type Key struct {
 	// PartitionId: Entities are partitioned into subsets, currently
-	// identified by a dataset
-	// (usually implicitly specified by the project) and namespace
-	// ID.
+	// identified by a project
+	// ID and namespace ID.
 	// Queries are scoped to a single partition.
 	PartitionId *PartitionId `json:"partitionId,omitempty"`
 
@@ -1222,7 +1129,9 @@ type Key struct {
 	// in the
 	// last path element (for the entity) itself may be omitted. For
 	// example,
-	// an entity in `Value.entity_value` may have no key.
+	// the last path element of the key of `Mutation.insert` may have
+	// no
+	// identifier.
 	//
 	// A path can never be empty, and a path can have at most 100 elements.
 	Path []*PathElement `json:"path,omitempty"`
@@ -1514,9 +1423,11 @@ func (s *LookupResponse) MarshalJSON() ([]byte, error) {
 // MultiWatchRequest: A request for
 // google.datastore.v1beta3.DatastoreWatcher.MultiWatch
 type MultiWatchRequest struct {
-	// AddTargets: The set of watch targets to add to this stream.
-	// changes will be returned with server
-	// assigned `target_ids` in the same order as targets are specified
+	// AddTargets: TODO(arfuller): Switch to a non-batching API.
+	// The set of watch targets to add to this stream.
+	// changes will be returned with
+	// server assigned `target_ids` in the same order as targets are
+	// specified
 	// here.
 	AddTargets []*WatchTarget `json:"addTargets,omitempty"`
 
@@ -1911,6 +1822,7 @@ func (s *PropertyOrder) MarshalJSON() ([]byte, error) {
 // expressions.
 type PropertyReference struct {
 	// Name: The name of the property.
+	// If name includes "."s, it may be interpreted as a property name path.
 	Name string `json:"name,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Name") to
@@ -2530,6 +2442,91 @@ func (s *Value) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
+// WatchChange: A change to a set of targets being watched.
+// Usually a change to an individual entity,
+// but sometimes a change to the set of entities being watched.
+//
+// If a change was requested (for example removing a target) but
+// rejected,
+// a change will be returned with
+// `change_type=NO_CHANGE`, `target_ids=<relevant ids>`, and
+// `cause=<error>`.
+// .
+type WatchChange struct {
+	// Cause: The error that resulted in this change, if applicable.
+	Cause *Status `json:"cause,omitempty"`
+
+	// Continued: If true, more changes are needed to construct a consistent
+	// snapshot.
+	Continued bool `json:"continued,omitempty"`
+
+	// Entity: The most recent state of an entity that matches the given
+	// `target_ids`.
+	Entity *EntityResult `json:"entity,omitempty"`
+
+	// EntityRemoved: An entity no longer matches the given `target_ids`.
+	// Only `entity.key` and
+	// `version` are populated.
+	EntityRemoved *EntityResult `json:"entityRemoved,omitempty"`
+
+	// Filter: A filter to apply to the *set* of entities previously
+	// returned for the
+	// given `target_ids`. Returned when entities may no longer match the
+	// given
+	// `target_ids` but the exact keys are unknown.
+	Filter *ExistenceFilter `json:"filter,omitempty"`
+
+	// NoChange: No change has occurred. Supports providing an
+	// updated
+	// `resume_token` or returning an error.
+	//
+	// Possible values:
+	//   "NULL_VALUE" - Null value.
+	NoChange string `json:"noChange,omitempty"`
+
+	// ResumeToken: A token that provides a compact representation of all
+	// the changes that
+	// have been received by the caller up to this point (including this
+	// one)
+	// that can be used to resume the stream. May not be set on every
+	// change.
+	// Only valid for the targets specified in `target_ids`.
+	ResumeToken string `json:"resumeToken,omitempty"`
+
+	// TargetChange: The targets associate with this stream have
+	// changed.
+	// The affected targets are listed in `target_ids`.
+	//
+	// Possible values:
+	//   "TARGET_CHANGE_UNSPECIFIED"
+	//   "TARGET_ADDED"
+	//   "TARGET_REMOVED"
+	TargetChange string `json:"targetChange,omitempty"`
+
+	// TargetIds: The set of targets to which this change applies. When
+	// empty, the change
+	// applies to all targets.
+	TargetIds []int64 `json:"targetIds,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "Cause") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *WatchChange) MarshalJSON() ([]byte, error) {
+	type noMethod WatchChange
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
 // WatchRequest: The request for
 // google.datastore.v1beta3.DatastoreWatcher.Watch
 type WatchRequest struct {
@@ -2537,8 +2534,9 @@ type WatchRequest struct {
 	DatabaseId string `json:"databaseId,omitempty"`
 
 	// Targets: The set of watcher targets to include in the stream.
-	// changes will be returned with server
-	// assigned `target_ids` in the same order as the targets are specified
+	// changes will be returned with
+	// server assigned `target_ids` in the same order as the targets are
+	// specified
 	// here.
 	Targets []*WatchTarget `json:"targets,omitempty"`
 
@@ -2571,6 +2569,13 @@ type WatchTarget struct {
 	// ResumeToken: A resume token from a stream containing an identical
 	// watch target.
 	ResumeToken string `json:"resumeToken,omitempty"`
+
+	// TargetId: A previously assigned target id. Used to preserve target
+	// ids
+	// when restarting a stream. All targets with previously assigned target
+	// ids
+	// must be added before any new targets.
+	TargetId int64 `json:"targetId,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "GqlQuery") to
 	// unconditionally include in API requests. By default, fields with
@@ -3403,13 +3408,13 @@ func (c *ProjectsMultiWatchCall) doRequest(alt string) (*http.Response, error) {
 }
 
 // Do executes the "datastore.projects.multiWatch" call.
-// Exactly one of *ChangeBatch or error will be non-nil. Any non-2xx
+// Exactly one of *WatchChange or error will be non-nil. Any non-2xx
 // status code is an error. Response headers are in either
-// *ChangeBatch.ServerResponse.Header or (if a response was returned at
+// *WatchChange.ServerResponse.Header or (if a response was returned at
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *ProjectsMultiWatchCall) Do() (*ChangeBatch, error) {
+func (c *ProjectsMultiWatchCall) Do() (*WatchChange, error) {
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -3427,7 +3432,7 @@ func (c *ProjectsMultiWatchCall) Do() (*ChangeBatch, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	ret := &ChangeBatch{
+	ret := &WatchChange{
 		ServerResponse: googleapi.ServerResponse{
 			Header:         res.Header,
 			HTTPStatusCode: res.StatusCode,
@@ -3458,7 +3463,7 @@ func (c *ProjectsMultiWatchCall) Do() (*ChangeBatch, error) {
 	//     "$ref": "MultiWatchRequest"
 	//   },
 	//   "response": {
-	//     "$ref": "ChangeBatch"
+	//     "$ref": "WatchChange"
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",
@@ -3769,13 +3774,13 @@ func (c *ProjectsWatchCall) doRequest(alt string) (*http.Response, error) {
 }
 
 // Do executes the "datastore.projects.watch" call.
-// Exactly one of *ChangeBatch or error will be non-nil. Any non-2xx
+// Exactly one of *WatchChange or error will be non-nil. Any non-2xx
 // status code is an error. Response headers are in either
-// *ChangeBatch.ServerResponse.Header or (if a response was returned at
+// *WatchChange.ServerResponse.Header or (if a response was returned at
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *ProjectsWatchCall) Do() (*ChangeBatch, error) {
+func (c *ProjectsWatchCall) Do() (*WatchChange, error) {
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -3793,7 +3798,7 @@ func (c *ProjectsWatchCall) Do() (*ChangeBatch, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	ret := &ChangeBatch{
+	ret := &WatchChange{
 		ServerResponse: googleapi.ServerResponse{
 			Header:         res.Header,
 			HTTPStatusCode: res.StatusCode,
@@ -3824,7 +3829,7 @@ func (c *ProjectsWatchCall) Do() (*ChangeBatch, error) {
 	//     "$ref": "WatchRequest"
 	//   },
 	//   "response": {
-	//     "$ref": "ChangeBatch"
+	//     "$ref": "WatchChange"
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",

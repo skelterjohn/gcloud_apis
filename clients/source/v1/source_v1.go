@@ -216,15 +216,15 @@ type V1Service struct {
 	s *Service
 }
 
-// Action: An action to perform on a file in a workspace.
+// Action: An action to perform on a path in a workspace.
 type Action struct {
-	// CopyAction: A CopyAction.
+	// CopyAction: Copy the contents of one path to another.
 	CopyAction *CopyAction `json:"copyAction,omitempty"`
 
-	// DeleteAction: A DeleteAction.
+	// DeleteAction: Delete a file or directory.
 	DeleteAction *DeleteAction `json:"deleteAction,omitempty"`
 
-	// WriteAction: A WriteAction.
+	// WriteAction: Create or modify a file.
 	WriteAction *WriteAction `json:"writeAction,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "CopyAction") to
@@ -470,7 +470,9 @@ func (s *CloudWorkspaceSourceContext) MarshalJSON() ([]byte, error) {
 
 // CommitWorkspaceRequest: Request for CommitWorkspace.
 type CommitWorkspaceRequest struct {
-	// Author: required
+	// Author: Author of the commit in the format: "Author Name
+	// <author@example.com>"
+	// required
 	Author string `json:"author,omitempty"`
 
 	// CurrentSnapshotId: If non-empty, current_snapshot_id must refer to
@@ -504,9 +506,9 @@ func (s *CommitWorkspaceRequest) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// CopyAction: Copy the contents of the file at from_path in the
-// specified revision or
-// snapshot to to_path.
+// CopyAction: Copy the contents of a file or directory at from_path in
+// the specified
+// revision or snapshot to to_path.
 //
 // To rename a file, copy it to the new path and delete the old.
 type CopyAction struct {
@@ -596,7 +598,7 @@ func (s *CreateWorkspaceRequest) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// DeleteAction: Delete a file or directory. I
+// DeleteAction: Delete a file or directory.
 type DeleteAction struct {
 	// Path: The path of the file or directory. If path refers to
 	// a
@@ -866,17 +868,17 @@ func (s *ListAliasesResponse) MarshalJSON() ([]byte, error) {
 
 // ListChangedFilesRequest: Request for ListChangedFiles.
 type ListChangedFilesRequest struct {
-	// PageSize: The maximum number of values to return.
+	// PageSize: The maximum number of ChangedFileInfo values to return.
 	PageSize int64 `json:"pageSize,omitempty"`
 
 	// PageToken: The value of next_page_token from the previous call.
 	// Omit for the first page.
 	PageToken string `json:"pageToken,omitempty"`
 
-	// SourceContext1: The first source context to compare.
+	// SourceContext1: The starting source context to compare.
 	SourceContext1 *SourceContext `json:"sourceContext1,omitempty"`
 
-	// SourceContext2: The second source context to compare.
+	// SourceContext2: The ending source context to compare.
 	SourceContext2 *SourceContext `json:"sourceContext2,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "PageSize") to

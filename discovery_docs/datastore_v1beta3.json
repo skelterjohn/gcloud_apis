@@ -499,11 +499,11 @@
       "type": "object",
       "properties": {
         "partitionId": {
-          "description": "Entities are partitioned into subsets, currently identified by a dataset\n(usually implicitly specified by the project) and namespace ID.\nQueries are scoped to a single partition.",
+          "description": "Entities are partitioned into subsets, currently identified by a project\nID and namespace ID.\nQueries are scoped to a single partition.",
           "$ref": "PartitionId"
         },
         "path": {
-          "description": "The entity path.\nAn entity path consists of one or more elements composed of a kind and a\nstring or numerical identifier, which identify entities. The first\nelement identifies a _root entity_, the second element identifies\na _child_ of the root entity, the third element identifies a child of the\nsecond entity, and so forth. The entities identified by all prefixes of\nthe path are called the element's _ancestors_.\n\nAn entity path is always fully complete: *all* of the entity's ancestors\nare required to be in the path along with the entity identifier itself.\nThe only exception is that in some documented cases, the identifier in the\nlast path element (for the entity) itself may be omitted. For example,\nan entity in `Value.entity_value` may have no key.\n\nA path can never be empty, and a path can have at most 100 elements.",
+          "description": "The entity path.\nAn entity path consists of one or more elements composed of a kind and a\nstring or numerical identifier, which identify entities. The first\nelement identifies a _root entity_, the second element identifies\na _child_ of the root entity, the third element identifies a child of the\nsecond entity, and so forth. The entities identified by all prefixes of\nthe path are called the element's _ancestors_.\n\nAn entity path is always fully complete: *all* of the entity's ancestors\nare required to be in the path along with the entity identifier itself.\nThe only exception is that in some documented cases, the identifier in the\nlast path element (for the entity) itself may be omitted. For example,\nthe last path element of the key of `Mutation.insert` may have no\nidentifier.\n\nA path can never be empty, and a path can have at most 100 elements.",
           "type": "array",
           "items": {
             "$ref": "PathElement"
@@ -831,7 +831,7 @@
       "type": "object",
       "properties": {
         "name": {
-          "description": "The name of the property.",
+          "description": "The name of the property.\nIf name includes \".\"s, it may be interpreted as a property name path.",
           "type": "string"
         }
       }
@@ -1357,7 +1357,7 @@
           "type": "string"
         },
         "targets": {
-          "description": "The set of watcher targets to include in the stream.\nchanges will be returned with server\nassigned `target_ids` in the same order as the targets are specified here.",
+          "description": "The set of watcher targets to include in the stream.\nchanges will be returned with\nserver assigned `target_ids` in the same order as the targets are specified\nhere.",
           "type": "array",
           "items": {
             "$ref": "WatchTarget"
@@ -1374,6 +1374,11 @@
           "description": "The partition id to watch.",
           "$ref": "PartitionId"
         },
+        "targetId": {
+          "description": "A previously assigned target id. Used to preserve target ids\nwhen restarting a stream. All targets with previously assigned target ids\nmust be added before any new targets.",
+          "type": "integer",
+          "format": "int32"
+        },
         "query": {
           "description": "The query to watch.",
           "$ref": "Query"
@@ -1389,27 +1394,13 @@
         }
       }
     },
-    "ChangeBatch": {
-      "id": "ChangeBatch",
-      "description": "The streamed response for google.datastore.v1beta3.DatastoreWatcher.Watch\nand google.datastore.v1beta3.DatastoreWatcher.MultiWatch.",
-      "type": "object",
-      "properties": {
-        "changes": {
-
-          "type": "array",
-          "items": {
-            "$ref": "Change"
-          }
-        }
-      }
-    },
-    "Change": {
-      "id": "Change",
-      "description": "A change to a set of entities being watched.\nUsually a change to an individual entity,\nbut sometimes a change to the set of entities being watched.",
+    "WatchChange": {
+      "id": "WatchChange",
+      "description": "A change to a set of targets being watched.\nUsually a change to an individual entity,\nbut sometimes a change to the set of entities being watched.\n\nIf a change was requested (for example removing a target) but rejected,\na change will be returned with\n`change_type=NO_CHANGE`, `target_ids=<relevant ids>`, and `cause=<error>`.\n.",
       "type": "object",
       "properties": {
         "noChange": {
-          "description": "No change has occurred. Usually returned to provide an updated\n`resume_token`.",
+          "description": "No change has occurred. Supports providing an updated\n`resume_token` or returning an error.",
           "enumDescriptions": [
             "Null value."
           ],
@@ -1418,18 +1409,21 @@
             "NULL_VALUE"
           ]
         },
-        "mutation": {
-          "description": "A mutation to a watched entity.",
-          "$ref": "Mutation"
+        "entity": {
+          "description": "The most recent state of an entity that matches the given `target_ids`.",
+          "$ref": "EntityResult"
         },
-        "existenceFilter": {
-          "description": "A filter representing delete mutations. Applies to the *set*\nof entities previously returned for the given `target_ids`.",
+        "entityRemoved": {
+          "description": "An entity no longer matches the given `target_ids`. Only `entity.key` and\n`version` are populated.",
+          "$ref": "EntityResult"
+        },
+        "filter": {
+          "description": "A filter to apply to the *set* of entities previously returned for the\ngiven `target_ids`. Returned when entities may no longer match the given\n`target_ids` but the exact keys are unknown.",
           "$ref": "ExistenceFilter"
         },
         "targetChange": {
-          "description": "The targets associate with this stream have been modified.\nThe affected targets are listed in `target_ids`.",
+          "description": "The targets associate with this stream have changed.\nThe affected targets are listed in `target_ids`.",
           "enumDescriptions": [
-            "",
             "",
             "",
             ""
@@ -1438,8 +1432,7 @@
           "enum": [
             "TARGET_CHANGE_UNSPECIFIED",
             "TARGET_ADDED",
-            "TARGET_REMOVED",
-            "TARGET_REJECTED"
+            "TARGET_REMOVED"
           ]
         },
         "continued": {
@@ -1509,7 +1502,7 @@
           "type": "string"
         },
         "addTargets": {
-          "description": "The set of watch targets to add to this stream.\nchanges will be returned with server\nassigned `target_ids` in the same order as targets are specified here.",
+          "description": "TODO(arfuller): Switch to a non-batching API.\nThe set of watch targets to add to this stream.\nchanges will be returned with\nserver assigned `target_ids` in the same order as targets are specified\nhere.",
           "type": "array",
           "items": {
             "$ref": "WatchTarget"
@@ -1921,7 +1914,7 @@
             "$ref": "WatchRequest"
           },
           "response": {
-            "$ref": "ChangeBatch"
+            "$ref": "WatchChange"
           },
           "scopes": [
             "https://www.googleapis.com/auth/cloud-platform",
@@ -1949,7 +1942,7 @@
             "$ref": "MultiWatchRequest"
           },
           "response": {
-            "$ref": "ChangeBatch"
+            "$ref": "WatchChange"
           },
           "scopes": [
             "https://www.googleapis.com/auth/cloud-platform",

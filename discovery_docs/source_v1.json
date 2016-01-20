@@ -725,11 +725,11 @@
       "type": "object",
       "properties": {
         "sourceContext1": {
-          "description": "The first source context to compare.",
+          "description": "The starting source context to compare.",
           "$ref": "SourceContext"
         },
         "sourceContext2": {
-          "description": "The second source context to compare.",
+          "description": "The ending source context to compare.",
           "$ref": "SourceContext"
         },
         "pageToken": {
@@ -737,7 +737,7 @@
           "type": "string"
         },
         "pageSize": {
-          "description": "The maximum number of values to return.",
+          "description": "The maximum number of ChangedFileInfo values to return.",
           "type": "integer",
           "format": "int32"
         }
@@ -846,19 +846,19 @@
     },
     "Action": {
       "id": "Action",
-      "description": "An action to perform on a file in a workspace.",
+      "description": "An action to perform on a path in a workspace.",
       "type": "object",
       "properties": {
         "writeAction": {
-          "description": "A WriteAction.",
+          "description": "Create or modify a file.",
           "$ref": "WriteAction"
         },
         "deleteAction": {
-          "description": "A DeleteAction.",
+          "description": "Delete a file or directory.",
           "$ref": "DeleteAction"
         },
         "copyAction": {
-          "description": "A CopyAction.",
+          "description": "Copy the contents of one path to another.",
           "$ref": "CopyAction"
         }
       }
@@ -897,7 +897,7 @@
     },
     "DeleteAction": {
       "id": "DeleteAction",
-      "description": "Delete a file or directory. I",
+      "description": "Delete a file or directory.",
       "type": "object",
       "properties": {
         "path": {
@@ -908,7 +908,7 @@
     },
     "CopyAction": {
       "id": "CopyAction",
-      "description": "Copy the contents of the file at from_path in the specified revision or\nsnapshot to to_path.\n\nTo rename a file, copy it to the new path and delete the old.",
+      "description": "Copy the contents of a file or directory at from_path in the specified\nrevision or snapshot to to_path.\n\nTo rename a file, copy it to the new path and delete the old.",
       "type": "object",
       "properties": {
         "fromSnapshotId": {
@@ -975,7 +975,7 @@
           "$ref": "CloudWorkspaceId"
         },
         "author": {
-          "description": "required",
+          "description": "Author of the commit in the format: \"Author Name <author@example.com>\"\nrequired",
           "type": "string"
         },
         "message": {

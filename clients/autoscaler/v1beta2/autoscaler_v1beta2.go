@@ -540,7 +540,8 @@ type Zone struct {
 
 	Id uint64 `json:"id,omitempty,string"`
 
-	// Kind: [Output Only] Type of the resource. Always kind#zone for zones.
+	// Kind: [Output Only] Type of the resource. Always compute#zone for
+	// zones.
 	Kind string `json:"kind,omitempty"`
 
 	MaintenanceWindows []*ZoneMaintenanceWindows `json:"maintenanceWindows,omitempty"`

@@ -377,8 +377,6 @@ type AndroidModel struct {
 
 	// SupportedVersionIds: The set of Android versions this device
 	// supports.
-	// Note that not all of these are necessarily supported in physical
-	// devices.
 	// @OutputOnly
 	SupportedVersionIds []string `json:"supportedVersionIds,omitempty"`
 
@@ -470,19 +468,6 @@ type AndroidRoboTest struct {
 	// Optional, default is determined by examining the application's
 	// manifest.
 	AppPackageId string `json:"appPackageId,omitempty"`
-
-	// BootstrapApk: The APK used for bootstrapping (e.g., passing the login
-	// screen).
-	// Optional
-	BootstrapApk *FileReference `json:"bootstrapApk,omitempty"`
-
-	// BootstrapPackageId: The java package for the bootstrap.
-	// Optional
-	BootstrapPackageId string `json:"bootstrapPackageId,omitempty"`
-
-	// BootstrapRunnerClass: The runner class for the bootstrap.
-	// Optional
-	BootstrapRunnerClass string `json:"bootstrapRunnerClass,omitempty"`
 
 	// MaxDepth: The max depth of the traversal stack Robo can explore.
 	// Needs to be at least
@@ -949,6 +934,8 @@ func (s *DeviceDetails) MarshalJSON() ([]byte, error) {
 // DeviceFile: A single device file description.
 type DeviceFile struct {
 	ObbFile *ObbFile `json:"obbFile,omitempty"`
+
+	RegularFile *RegularFile `json:"regularFile,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "ObbFile") to
 	// unconditionally include in API requests. By default, fields with
@@ -1419,6 +1406,55 @@ type Orientation struct {
 
 func (s *Orientation) MarshalJSON() ([]byte, error) {
 	type noMethod Orientation
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// RegularFile: A file or directory to install on the device before the
+// test starts
+type RegularFile struct {
+	Content *FileReference `json:"content,omitempty"`
+
+	// DevicePath: Where to put the content on the device, must be a full,
+	// whitelisted path.
+	// If it exists, it will be completely replaced.
+	// TODO(fsteen): Make the following path substitutions available:
+	// <p> ${EXTERNAL_STORAGE} - the external storage mount point
+	// (/sdcard)
+	// <p> ${ANDROID_DATA} - the userdata partition mount point
+	// (/data)
+	// Note: /data/local/tmp is whitelisted, but /data is not.
+	//
+	// <p> The corresponding paths (in parentheses) will be made available
+	// and
+	// treated as implicit path substitutions, so the user may use
+	// them
+	// interchangeably. E.g. if /sdcard on a particular device does not map
+	// to
+	// external storage, the system will replace it with the external
+	// storage path
+	// prefix for that device and copy the file there.
+	//
+	// <p> It is strongly advised to use the <a
+	// href=
+	// "http://developer.android.com/reference/android/os/Environment.h
+	// tml">
+	// Environment API</a> in app and test code to access files on the
+	// device in a
+	// portable way.
+	DevicePath string `json:"devicePath,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Content") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *RegularFile) MarshalJSON() ([]byte, error) {
+	type noMethod RegularFile
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
@@ -2942,6 +2978,18 @@ func (r *ProjectsTestMatricesService) Create(projectId string, testmatrix *TestM
 	return c
 }
 
+// RequestId sets the optional parameter "requestId": A string id used
+// to detect duplicated requests.
+// Ids are automatically scoped to a project, so
+// users should ensure the ID is unique per-project.
+// A UUID is recommended.
+//
+// Optional, but strongly recommended.
+func (c *ProjectsTestMatricesCreateCall) RequestId(requestId string) *ProjectsTestMatricesCreateCall {
+	c.urlParams_.Set("requestId", requestId)
+	return c
+}
+
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
@@ -3028,6 +3076,11 @@ func (c *ProjectsTestMatricesCreateCall) Do() (*TestMatrix, error) {
 	//       "description": "The GCE project under which this job will run.",
 	//       "location": "path",
 	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "requestId": {
+	//       "description": "A string id used to detect duplicated requests.\nIds are automatically scoped to a project, so\nusers should ensure the ID is unique per-project.\nA UUID is recommended.\n\nOptional, but strongly recommended.",
+	//       "location": "query",
 	//       "type": "string"
 	//     }
 	//   },

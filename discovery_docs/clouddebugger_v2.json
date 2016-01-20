@@ -570,6 +570,13 @@
           "items": {
             "$ref": "Variable"
           }
+        },
+        "labels": {
+          "description": "A set of custom breakpoint properties, populated by the agent, to be\ndisplayed to the user.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
         }
       }
     },

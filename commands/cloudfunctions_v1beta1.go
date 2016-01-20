@@ -107,7 +107,7 @@ func Cloudfunctions_v1beta1_ProjectsRegionsFunctionsCall(context Context, args .
 			}
 		}
 
-		usageBits += " [--data=VALUE]"
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -119,24 +119,29 @@ func Cloudfunctions_v1beta1_ProjectsRegionsFunctionsCall(context Context, args .
 	}
 	service := api_client.NewProjectsRegionsFunctionsService(api_service)
 
-	queryParamNames := map[string]bool{
-		"data": false,
-	}
-
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
 	}
 
-	for k, r := range queryParamNames {
-		if _, ok := flagValues[k]; r && !ok {
-			return fmt.Errorf("missing required flag %q", "--"+k)
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.CallFunctionRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
 		}
 	}
 
-	// Only positional arguments should remain in args.
-	if len(args) != 1 {
-		usageFunc()
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
 	}
 
 	expectedParams := []string{
@@ -152,16 +157,9 @@ func Cloudfunctions_v1beta1_ProjectsRegionsFunctionsCall(context Context, args .
 		return err
 	}
 
-	call := service.Call(param_name)
-
-	// Set query parameters.
-	if value, ok := flagValues["data"]; ok {
-		query_data, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.Data(query_data)
-	}
+	call := service.Call(param_name,
+		request,
+	)
 
 	var response *api_client.CallFunctionResponse
 	response, err = call.Do()

@@ -191,6 +191,10 @@
           "items": {
             "$ref": "LogEntry"
           }
+        },
+        "partialSuccess": {
+          "description": "Optional. Whether valid entries should be written even if some other\nentries fail due to INVALID_ARGUMENT or PERMISSION_DENIED errors. If any\nentry is not written, the response status will be the error associated\nwith one of the failed entries and include error details in the form of\nWriteLogEntriesPartialErrors.",
+          "type": "boolean"
         }
       }
     },
@@ -236,7 +240,7 @@
           "$ref": "HttpRequest"
         },
         "operation": {
-
+          "description": "Optional. Information about an operation associated with the log entry, if\napplicable.",
           "$ref": "LogEntryOperation"
         },
         "writerEmailAddress": {
@@ -321,38 +325,38 @@
       "type": "object",
       "properties": {
         "requestMethod": {
-          "description": "Request method, such as `GET`, `HEAD`, `PUT` or `POST`.",
+          "description": "The request method. Examples: `\"GET\"`, `\"HEAD\"`, `\"PUT\"`, `\"POST\"`.",
           "type": "string"
         },
         "requestUrl": {
-          "description": "Contains the scheme (http|https), the host name, the path and the query\nportion of the URL that was requested.",
+          "description": "The scheme (http, https), the host name, the path and the query\nportion of the URL that was requested.\nExample: `\"http:\/\/example.com\/some\/info?color=red\"`.",
           "type": "string"
         },
         "requestSize": {
-          "description": "Size of the HTTP request message in bytes, including request headers and\nthe request body.",
+          "description": "The size of the HTTP request message in bytes, including the request\nheaders and the request body.",
           "type": "string",
           "format": "int64"
         },
         "status": {
-          "description": "A response code indicates the status of response, e.g., 200.",
+          "description": "The response code indicating the status of response.\nExamples: 200, 404.",
           "type": "integer",
           "format": "int32"
         },
         "responseSize": {
-          "description": "Size of the HTTP response message in bytes sent back to the client,\nincluding response headers and response body.",
+          "description": "The size of the HTTP response message sent back to the client, in bytes,\nincluding the response headers and the response body.",
           "type": "string",
           "format": "int64"
         },
         "userAgent": {
-          "description": "User agent sent by the client, e.g., \"Mozilla\/4.0 (compatible; MSIE 6.0;\nWindows 98; Q312461; .NET CLR 1.0.3705)\".",
+          "description": "The user agent sent by the client. Example:\n`\"Mozilla\/4.0 (compatible; MSIE 6.0; Windows 98; Q312461; .NET CLR 1.0.3705)\"`.",
           "type": "string"
         },
         "remoteIp": {
-          "description": "IP address of the client who issues the HTTP request. Could be either IPv4\nor IPv6.",
+          "description": "The IP address (IPv4 or IPv6) of the client that issued the HTTP\nrequest. Examples: `\"192.168.1.1\"`, `\"FE80::0202:B3FF:FE1E:8329\"`.",
           "type": "string"
         },
         "referer": {
-          "description": "Referer (a.k.a. referrer) URL of request, as defined in\nhttp:\/\/www.w3.org\/Protocols\/rfc2616\/rfc2616-sec14.html.",
+          "description": "The referer URL of the request, as defined in\n[HTTP\/1.1 Header Field Definitions](http:\/\/www.w3.org\/Protocols\/rfc2616\/rfc2616-sec14.html).",
           "type": "string"
         },
         "cacheHit": {
@@ -360,7 +364,7 @@
           "type": "boolean"
         },
         "validatedWithOriginServer": {
-          "description": "Whether or not the response was validated with the origin server before\nbeing served from cache. This field is only meaningful if cache_hit is\nTrue.",
+          "description": "Whether or not the response was validated with the origin server before\nbeing served from cache. This field is only meaningful if `cache_hit` is\nTrue.",
           "type": "boolean"
         }
       }
@@ -409,6 +413,31 @@
         },
         "nextPageToken": {
           "description": "If there are more results, then `nextPageToken` is returned in the\nresponse.  To get the next batch of entries, use the value of\n`nextPageToken` as `pageToken` in the next call of `ListLogEntries`.\nIf `nextPageToken` is empty, then there are no more results.",
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "ListLogEntriesRequest": {
+      "id": "ListLogEntriesRequest",
+      "description": "The parameters to `ListLogEntries`.",
+      "type": "object",
+      "properties": {
+        "filter": {
+          "description": "An [advanced logs filter](\/logging\/docs\/view\/advanced_filters).\nThe response includes only entries that match the filter.\nIf `filter` is empty, then all entries in all logs are retrieved.",
+          "type": "string"
+        },
+        "orderBy": {
+          "description": "Sort order of the results, consisting of a `LogEntry` field optionally\nfollowed by a space and `desc`.  Examples: `\"metadata.timestamp\"`,\n`\"metadata.timestamp desc\"`.  The only `LogEntry` field supported for\nsorting is `metadata.timestamp`. The default sort order is ascending (from\nolder to newer entries) unless `desc` is appended.",
+          "type": "string"
+        },
+        "pageSize": {
+          "description": "The maximum number of entries to return per request.  Fewer entries may be\nreturned, but that is not an indication that there are no more entries.",
+          "type": "integer",
+          "format": "int32"
+        },
+        "pageToken": {
+          "description": "An opaque token, returned as `nextPageToken` by a prior `ListLogEntries`\noperation. If a page token is specified, other request parameters must\nmatch the parameters from the request that generated the page token.",
           "type": "string",
           "format": "byte"
         }
@@ -622,15 +651,15 @@
     },
     "RequestLog": {
       "id": "RequestLog",
-      "description": "Complete log information about a single request to an application.\n",
+      "description": "Complete log information about a single HTTP request to an App Engine\napplication.\n",
       "type": "object",
       "properties": {
         "appId": {
-          "description": "Identifies the application that handled this request.",
+          "description": "Application that handled this request.",
           "type": "string"
         },
         "moduleId": {
-          "description": "Identifies the module of the application that handled this request.",
+          "description": "Module of the application that handled this request.",
           "type": "string"
         },
         "versionId": {
@@ -638,7 +667,7 @@
           "type": "string"
         },
         "requestId": {
-          "description": "Globally unique identifier for a request, based on request start time.\nRequest IDs for requests which started later will compare greater as\nstrings than those for requests which started earlier.",
+          "description": "Globally unique identifier for a request, which is based on the request\nstart time.  Request IDs for requests which started later will compare\ngreater as strings than those for requests which started earlier.",
           "type": "string"
         },
         "ip": {
@@ -646,12 +675,12 @@
           "type": "string"
         },
         "startTime": {
-          "description": "Time at which request was known to have begun processing.",
+          "description": "Time when the request started.",
           "type": "string",
           "format": "google-datetime"
         },
         "endTime": {
-          "description": "Time at which request was known to end processing.",
+          "description": "Time when the request finished.",
           "type": "string",
           "format": "google-datetime"
         },
@@ -666,19 +695,19 @@
           "format": "int64"
         },
         "method": {
-          "description": "Request method, such as `GET`, `HEAD`, `PUT`, `POST`, or `DELETE`.",
+          "description": "Request method. Example: `\"GET\"`, `\"HEAD\"`, `\"PUT\"`, `\"POST\"`, `\"DELETE\"`.",
           "type": "string"
         },
         "resource": {
-          "description": "Contains the path and query portion of the URL that was requested. For\nexample, if the URL was \"http:\/\/example.com\/app?name=val\", the resource\nwould be \"\/app?name=val\". Any trailing fragment (separated by a '#'\ncharacter) will not be included.",
+          "description": "Contains the path and query portion of the URL that was requested. For\nexample, if the URL was \"http:\/\/example.com\/app?name=val\", the resource\nwould be \"\/app?name=val\".  The fragment identifier, which is identified by\nthe `#` character, is not included.",
           "type": "string"
         },
         "httpVersion": {
-          "description": "HTTP version of request.",
+          "description": "HTTP version of request. Example: `\"HTTP\/1.1\"`.",
           "type": "string"
         },
         "status": {
-          "description": "Response status of request.",
+          "description": "HTTP response status code. Example: 200, 404.",
           "type": "integer",
           "format": "int32"
         },
@@ -692,19 +721,19 @@
           "type": "string"
         },
         "userAgent": {
-          "description": "User agent used for making request.",
+          "description": "User agent that made the request.",
           "type": "string"
         },
         "nickname": {
-          "description": "A string that identifies a logged-in user who made this request, or empty\nif the user is not logged in.\n\nMost likely, this is the part of the user's email before the '@' sign.  The\nfield value is the same for different requests from the same user, but\ndifferent users may have a similar name.  This information is also\navailable to the application via Users API.\n\nThis field will be populated starting with App Engine 1.9.21.\n",
+          "description": "The logged-in user who made the request.\n\nMost likely, this is the part of the user's email before the `@` sign.  The\nfield value is the same for different requests from the same user, but\ndifferent users can have similar names.  This information is also\navailable to the application via the App Engine Users API.\n\nThis field will be populated starting with App Engine 1.9.21.\n",
           "type": "string"
         },
         "urlMapEntry": {
-          "description": "File or class within URL mapping used for request.  Useful for tracking\ndown the source code which was responsible for managing request.\nEspecially for multiply mapped handlers.",
+          "description": "File or class that handled the request.",
           "type": "string"
         },
         "host": {
-          "description": "The Internet host and port number of the resource being requested.",
+          "description": "Internet host and port number of the resource being requested.",
           "type": "string"
         },
         "cost": {
@@ -713,48 +742,48 @@
           "format": "double"
         },
         "taskQueueName": {
-          "description": "Queue name of the request (for an offline request).",
+          "description": "Queue name of the request, in the case of an offline request.",
           "type": "string"
         },
         "taskName": {
-          "description": "Task name of the request (for an offline request).",
+          "description": "Task name of the request, in the case of an offline request.",
           "type": "string"
         },
         "wasLoadingRequest": {
-          "description": "Was this request a loading request for this instance?",
+          "description": "Whether this was a loading request for the instance.",
           "type": "boolean"
         },
         "pendingTime": {
-          "description": "Time this request spent in the pending request queue, if it was pending at\nall.",
+          "description": "Time this request spent in the pending request queue.",
           "type": "string",
           "format": "google-duration"
         },
         "instanceIndex": {
-          "description": "If the instance that processed this request was individually addressable\n(i.e. belongs to a manually scaled module), this is the index of the\ninstance.",
+          "description": "If the instance processing this request belongs to a manually scaled\nmodule, then this is the 0-based index of the instance. Otherwise, this\nvalue is -1.",
           "type": "integer",
           "format": "int32"
         },
         "finished": {
-          "description": "If true, represents a finished request.  Otherwise, the request is active.",
+          "description": "Whether this request is finished or active.",
           "type": "boolean"
         },
         "instanceId": {
-          "description": "An opaque identifier for the instance that handled the request.",
+          "description": "An identifier for the instance that handled the request.",
           "type": "string"
         },
         "line": {
-          "description": "List of log lines emitted by the application while serving this request,\nif requested.",
+          "description": "A list of log lines emitted by the application while serving this request.",
           "type": "array",
           "items": {
             "$ref": "LogLine"
           }
         },
         "appEngineRelease": {
-          "description": "App Engine release version string.",
+          "description": "App Engine release version.",
           "type": "string"
         },
         "traceId": {
-          "description": "Cloud Trace identifier of the trace for this request.",
+          "description": "Cloud Trace identifier for this request.",
           "type": "string"
         },
         "sourceReference": {
@@ -772,12 +801,12 @@
       "type": "object",
       "properties": {
         "time": {
-          "description": "Time when log entry was made.  May be inaccurate.",
+          "description": "Approximate time when this log entry was made.",
           "type": "string",
           "format": "google-datetime"
         },
         "severity": {
-          "description": "Severity of log.",
+          "description": "Severity of this log entry.",
           "enumDescriptions": [
             "The log entry has no assigned severity level.",
             "Debug or trace information.",
@@ -803,22 +832,22 @@
           ]
         },
         "logMessage": {
-          "description": "App provided log message.",
+          "description": "App-provided log message.",
           "type": "string"
         },
         "sourceLocation": {
-          "description": "Line of code that generated this log message.",
+          "description": "Where in the source code this log message was written.",
           "$ref": "SourceLocation"
         }
       }
     },
     "SourceLocation": {
       "id": "SourceLocation",
-      "description": "Specifies a location in a source file.",
+      "description": "Specifies a location in a source code file.",
       "type": "object",
       "properties": {
         "file": {
-          "description": "Source file name. May or may not be a fully qualified name, depending on\nthe runtime environment.",
+          "description": "Source file name. Depending on the runtime environment, this might be a\nsimple name or a fully-qualified name.",
           "type": "string"
         },
         "line": {
@@ -827,7 +856,7 @@
           "format": "int64"
         },
         "functionName": {
-          "description": "Human-readable name of the function or method being invoked, with optional\ncontext such as the class or package name, for use in contexts such as the\nlogs viewer where file:line number is less meaningful. This may vary by\nlanguage, for example:\n  in Java: qual.if.ied.Class.method\n  in Go: dir\/package.func\n  in Python: function\n...",
+          "description": "Human-readable name of the function or method being invoked, with optional\ncontext such as the class or package name. This information is used in\ncontexts such as the logs viewer, where a file and line number are less\nmeaningful. The format can vary by language. For example:\n`qual.if.ied.Class.method` (Java), `dir\/package.func` (Go), `function`\n(Python).",
           "type": "string"
         }
       }
@@ -842,7 +871,7 @@
           "type": "string"
         },
         "revisionId": {
-          "description": "The canonical (and persistent) identifier of the deployed revision.\nExample (git): \"0035781c50ec7aa23385dc841529ce8a4b70db1b\"",
+          "description": "The canonical and persistent identifier of the deployed revision.\nExample (git): \"0035781c50ec7aa23385dc841529ce8a4b70db1b\"",
           "type": "string"
         }
       }
@@ -1214,6 +1243,40 @@
               "parameterOrder": [
                 "projectsId"
               ],
+              "response": {
+                "$ref": "ListLogEntriesResponse"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/cloud-platform",
+                "https://www.googleapis.com/auth/cloud-platform.read-only",
+                "https://www.googleapis.com/auth/logging.admin",
+                "https://www.googleapis.com/auth/logging.read"
+              ]
+            }
+          }
+        },
+        "entries": {
+          "methods": {
+            "list": {
+              "id": "logging.projects.entries.list",
+              "path": "v1beta3/projects/{projectsId}/entries:list",
+              "flatPath": "v1beta3/projects/{projectsId}/entries:list",
+              "httpMethod": "POST",
+              "description": "Lists log entries in the specified project.\n",
+              "parameters": {
+                "projectsId": {
+                  "description": "Part of `projectName`. The resource name of the project from which to retrieve log entries.  The\nlog service or log containing the entries is specified in the `filter`\nparameter.  Example: `projects\/my_project_id`.\n",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "parameterOrder": [
+                "projectsId"
+              ],
+              "request": {
+                "$ref": "ListLogEntriesRequest"
+              },
               "response": {
                 "$ref": "ListLogEntriesResponse"
               },

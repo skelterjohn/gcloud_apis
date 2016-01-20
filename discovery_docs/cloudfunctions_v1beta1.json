@@ -112,6 +112,15 @@
       "scopes": {
         "https://www.googleapis.com/auth/cloud-platform": {
           "description": "View and manage your data across Google Cloud Platform services"
+        },
+        "https://www.googleapis.com/auth/devstorage.read_write": {
+          "description": "Manage your data in Google Cloud Storage"
+        },
+        "https://www.googleapis.com/auth/logging.write": {
+          "description": "Submit log data for your projects"
+        },
+        "https://www.googleapis.com/auth/pubsub": {
+          "description": "View and manage Pub/Sub topics and subscriptions"
         }
       }
     }
@@ -185,6 +194,11 @@
           "description": "The name of the function (as defined in source code) that will be\nexecuted. Defaults to the resource name suffix, if not specified. For\nbackward compatibility, if function with given name is not found, then the\nsystem will try to use function named 'function'.\nFor Node.js this is name of a function exported by the module specified\nin source_location.",
           "type": "string"
         },
+        "timeout": {
+          "description": "The cloud function execution timeout. Execution is considered failed and\ncan be terminated if the function is not completed at the end of the\ntimeout period. Defaults to 60 seconds.",
+          "type": "string",
+          "format": "google-duration"
+        },
         "oauthScopes": {
           "description": "The set of Google API scopes to be made available to the function while\nit is being executed. Values should be in the format of scope\ndeveloper codes, for example: \"https:\/\/www.googleapis.com\/auth\/compute\".",
           "type": "array",
@@ -201,10 +215,6 @@
       "properties": {
         "repositoryUrl": {
           "description": "URL to the hosted repository where the function is defined. Only paths in\nhttps:\/\/source.developers.google.com domain are supported. The path should\ncontain the name of the repository.",
-          "type": "string"
-        },
-        "sourceUrl": {
-
           "type": "string"
         },
         "sourcePath": {
@@ -328,6 +338,17 @@
               "description": "Properties of the object. Contains field @ype with type URL."
             }
           }
+        }
+      }
+    },
+    "CallFunctionRequest": {
+      "id": "CallFunctionRequest",
+      "description": "Request for the CallFunction method.",
+      "type": "object",
+      "properties": {
+        "data": {
+          "description": "Input to be passed to the function.",
+          "type": "string"
         }
       }
     },
@@ -479,7 +500,10 @@
                     "$ref": "Operation"
                   },
                   "scopes": [
-                    "https://www.googleapis.com/auth/cloud-platform"
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/devstorage.read_write",
+                    "https://www.googleapis.com/auth/logging.write",
+                    "https://www.googleapis.com/auth/pubsub"
                   ]
                 },
                 "update": {
@@ -507,7 +531,10 @@
                     "$ref": "Operation"
                   },
                   "scopes": [
-                    "https://www.googleapis.com/auth/cloud-platform"
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/devstorage.read_write",
+                    "https://www.googleapis.com/auth/logging.write",
+                    "https://www.googleapis.com/auth/pubsub"
                   ]
                 },
                 "delete": {
@@ -532,7 +559,10 @@
                     "$ref": "Operation"
                   },
                   "scopes": [
-                    "https://www.googleapis.com/auth/cloud-platform"
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/devstorage.read_write",
+                    "https://www.googleapis.com/auth/logging.write",
+                    "https://www.googleapis.com/auth/pubsub"
                   ]
                 },
                 "call": {
@@ -548,21 +578,22 @@
                       "required": true,
                       "pattern": "^projects\/[^\/]*\/regions\/[^\/]*\/functions\/[^\/]*$",
                       "type": "string"
-                    },
-                    "data": {
-                      "description": "Input to be passed to the function.",
-                      "location": "query",
-                      "type": "string"
                     }
                   },
                   "parameterOrder": [
                     "name"
                   ],
+                  "request": {
+                    "$ref": "CallFunctionRequest"
+                  },
                   "response": {
                     "$ref": "CallFunctionResponse"
                   },
                   "scopes": [
-                    "https://www.googleapis.com/auth/cloud-platform"
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/devstorage.read_write",
+                    "https://www.googleapis.com/auth/logging.write",
+                    "https://www.googleapis.com/auth/pubsub"
                   ]
                 }
               }

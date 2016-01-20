@@ -1,5 +1,7 @@
 // Package cloudbuild provides access to the Google Cloud Container Builder API.
 //
+// See https://cloud.google.com/container-builder/docs/
+//
 // Usage example:
 //
 //   import "github.com/skelterjohn/gcloud_apis/clients/cloudbuild/v1"
@@ -106,105 +108,87 @@ type ProjectsBuildsService struct {
 	s *Service
 }
 
-// AliasContext: An alias to a repo revision.
-type AliasContext struct {
-	// Kind: The alias kind.
-	//
-	// Possible values:
-	//   "ANY" - Do not use.
-	//   "FIXED" - Git tag
-	//   "MOVABLE" - Git branch
-	//   "OTHER" - OTHER is used to specify non-standard aliases, those not
-	// of the kinds
-	// above. For example, if a Git repo has a ref named "refs/foo/bar",
-	// it
-	// is considered to be of kind OTHER.
-	Kind string `json:"kind,omitempty"`
-
-	// Name: The alias name.
-	Name string `json:"name,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "Kind") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *AliasContext) MarshalJSON() ([]byte, error) {
-	type noMethod AliasContext
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// Build: A build resource in the CloudBuild API.
+// Build: A build resource in the Container Builder API.
 //
-// At a high level, a Build describes where to find source, how to build
-// the
-// source (i.e., the builder image to run on the source), and what tag
-// to apply
-// to the built image when it is pushed to Google Container Registry.
+// At a high level, a Build describes where to find source code, how to
+// build
+// it (for example, the builder image to run on the source), and what
+// tag to
+// apply to the built image when it is pushed to Google Container
+// Registry.
 type Build struct {
-	// CreateTime: The time that the build was created.
+	// CreateTime: Time at which the build was created.
 	// @OutputOnly
 	CreateTime string `json:"createTime,omitempty"`
 
-	// FinishTime: The time that execution of the build was
+	// FinishTime: Time at whihc execution of the build was
 	// finished.
 	// @OutputOnly
 	FinishTime string `json:"finishTime,omitempty"`
 
-	// Id: The unique identifier of the build.
+	// Id: Unique identifier of the build.
 	// @OutputOnly
 	Id string `json:"id,omitempty"`
 
-	// Images: The list of images expected to be built and pushed to GCR. If
-	// an image
-	// is listed here, and if the image is not produced by one of the
-	// build
-	// steps, the build will fail. If all the images are present when the
-	// build
-	// steps are complete, they will all be pushed.
+	// Images: List of images expected to be built and pushed to Google
+	// Container
+	// Registry. If an image is listed here and the image is not produced
+	// by
+	// one of the build steps, the build will fail. Any images present
+	// when
+	// the build steps are complete will be pushed to Container Registry.
 	Images []string `json:"images,omitempty"`
 
-	// ProjectId: The ID of the project.
+	// LogsBucket: Google Cloud Storage bucket where logs should be written
+	// (see
+	// [Bucket
+	// Name
+	// Requirements](https://cloud.google.com/storage/docs/bucket-naming
+	// #requirements)).
+	// Logs file names will be of the format
+	// `${logs_bucket}/log-${build_id}.txt`.
+	LogsBucket string `json:"logsBucket,omitempty"`
+
+	// ProjectId: ID of the project.
 	// @OutputOnly.
 	ProjectId string `json:"projectId,omitempty"`
 
-	// Source: Describes where to find source files to build.
+	// Results: Results of the build.
+	// @OutputOnly
+	Results *Results `json:"results,omitempty"`
+
+	// Source: Describes where to find the source files to build.
 	Source *Source `json:"source,omitempty"`
 
-	// StartTime: The time that execution of the build was
+	// StartTime: Time at which execution of the build was
 	// started.
 	// @OutputOnly
 	StartTime string `json:"startTime,omitempty"`
 
-	// Status: The status of the build.
+	// Status: Status of the build.
 	// @OutputOnly
 	//
 	// Possible values:
-	//   "STATUS_UNKNOWN" - The status of the build is unknown.
-	//   "QUEUED" - The build is queued, work has not yet begun.
-	//   "WORKING" - The build is being executed.
-	//   "SUCCESS" - The build finished successfully.
-	//   "FAILURE" - The build failed to complete successfully.
-	//   "INTERNAL_ERROR" - The build failed due to an internal cause.
-	//   "TIMEOUT" - The build took longer than was allowed.
-	//   "CANCELLED" - The build was cancelled by a user.
+	//   "STATUS_UNKNOWN" - Status of the build is unknown.
+	//   "QUEUED" - Build is queued, work has not yet begun.
+	//   "WORKING" - Build is being executed.
+	//   "SUCCESS" - Build finished successfully.
+	//   "FAILURE" - Build failed to complete successfully.
+	//   "INTERNAL_ERROR" - Build failed due to an internal cause.
+	//   "TIMEOUT" - Build took longer than was allowed.
+	//   "CANCELLED" - Build was canceled by a user.
 	Status string `json:"status,omitempty"`
 
 	// Steps: Describes the operations to be performed on the workspace.
 	Steps []*BuildStep `json:"steps,omitempty"`
 
-	// Timeout: The amount of time that this build should be allowed to run,
-	// to second
+	// Timeout: Amount of time that this build should be allowed to run, to
+	// second
 	// granularity. If this amount of time elapses, work on the build will
 	// cease
 	// and the build status will be TIMEOUT.
 	//
-	// By default, this will be ten minutes.
+	// Default time is ten minutes.
 	Timeout string `json:"timeout,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
@@ -226,6 +210,26 @@ func (s *Build) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
+// BuildOperationMetadata: Metadata for build operations.
+type BuildOperationMetadata struct {
+	// Build: The build that the operation is tracking.
+	Build *Build `json:"build,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Build") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *BuildOperationMetadata) MarshalJSON() ([]byte, error) {
+	type noMethod BuildOperationMetadata
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
 // BuildStep: BuildStep describes a step to perform in the build
 // pipeline.
 type BuildStep struct {
@@ -242,9 +246,9 @@ type BuildStep struct {
 	// container.
 	Env []string `json:"env,omitempty"`
 
-	// Name: The name of the container image to use for creating this stage
-	// in the
-	// pipeline, as presented to 'docker pull'.
+	// Name: Name of the container image to use for creating this stage in
+	// the
+	// pipeline, as presented to `docker pull`.
 	Name string `json:"name,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Args") to
@@ -262,57 +266,17 @@ func (s *BuildStep) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// CancelOperationRequest: The request message for
-// Operations.CancelOperation.
-type CancelOperationRequest struct {
-}
+// BuiltImage: BuiltImage describes an image built by the pipeline.
+type BuiltImage struct {
+	// Digest: Docker Registry 2.0 digest.
+	Digest string `json:"digest,omitempty"`
 
-// CloudRepoSourceContext: A CloudRepoSourceContext denotes a particular
-// revision in a cloud
-// repo (a repo hosted by the Google Cloud Platform).
-type CloudRepoSourceContext struct {
-	// AliasContext: An alias, which may be a branch or tag.
-	AliasContext *AliasContext `json:"aliasContext,omitempty"`
-
-	// AliasName: The name of an alias (branch, tag, etc.).
-	AliasName string `json:"aliasName,omitempty"`
-
-	// RepoId: The ID of the repo.
-	RepoId *RepoId `json:"repoId,omitempty"`
-
-	// RevisionId: A revision ID.
-	RevisionId string `json:"revisionId,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "AliasContext") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *CloudRepoSourceContext) MarshalJSON() ([]byte, error) {
-	type noMethod CloudRepoSourceContext
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// CloudWorkspaceId: A CloudWorkspaceId is a unique identifier for a
-// cloud workspace.
-// A cloud workspace is a place associated with a repo where modified
-// files
-// can be stored before they are committed.
-type CloudWorkspaceId struct {
-	// Name: The unique name of the workspace within the repo.  This is the
-	// name
-	// chosen by the client in the Source API's CreateWorkspace method.
+	// Name: Name used to push the container image to Google Container
+	// Registry, as
+	// presented to `docker push`.
 	Name string `json:"name,omitempty"`
 
-	// RepoId: The ID of the repo containing the workspace.
-	RepoId *RepoId `json:"repoId,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "Name") to
+	// ForceSendFields is a list of field names (e.g. "Digest") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -321,114 +285,14 @@ type CloudWorkspaceId struct {
 	ForceSendFields []string `json:"-"`
 }
 
-func (s *CloudWorkspaceId) MarshalJSON() ([]byte, error) {
-	type noMethod CloudWorkspaceId
+func (s *BuiltImage) MarshalJSON() ([]byte, error) {
+	type noMethod BuiltImage
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// CloudWorkspaceSourceContext: A CloudWorkspaceSourceContext denotes a
-// workspace at a particular snapshot.
-type CloudWorkspaceSourceContext struct {
-	// SnapshotId: The ID of the snapshot.
-	// An empty snapshot_id refers to the most recent snapshot.
-	SnapshotId string `json:"snapshotId,omitempty"`
-
-	// WorkspaceId: The ID of the workspace.
-	WorkspaceId *CloudWorkspaceId `json:"workspaceId,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "SnapshotId") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *CloudWorkspaceSourceContext) MarshalJSON() ([]byte, error) {
-	type noMethod CloudWorkspaceSourceContext
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// Empty: A generic empty message that you can re-use to avoid defining
-// duplicated
-// empty messages in your APIs. A typical example is to use it as the
-// request
-// or the response type of an API method. For instance:
-//
-//     service Foo {
-//       rpc Bar(google.protobuf.Empty) returns
-// (google.protobuf.Empty);
-//     }
-//
-// The JSON representation for `Empty` is empty JSON object `{}`.
-type Empty struct {
-	// ServerResponse contains the HTTP response code and headers from the
-	// server.
-	googleapi.ServerResponse `json:"-"`
-}
-
-// GerritSourceContext: A SourceContext referring to a Gerrit project.
-type GerritSourceContext struct {
-	// AliasContext: An alias, which may be a branch or tag.
-	AliasContext *AliasContext `json:"aliasContext,omitempty"`
-
-	// AliasName: The name of an alias (branch, tag, etc.).
-	AliasName string `json:"aliasName,omitempty"`
-
-	// GerritProject: The full project name within the host. Projects may be
-	// nested, so
-	// "project/subproject" is a valid project name.
-	// The "repo name" is hostURI/project.
-	GerritProject string `json:"gerritProject,omitempty"`
-
-	// HostUri: The URI of a running Gerrit instance.
-	HostUri string `json:"hostUri,omitempty"`
-
-	// RevisionId: A revision (commit) ID.
-	RevisionId string `json:"revisionId,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "AliasContext") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *GerritSourceContext) MarshalJSON() ([]byte, error) {
-	type noMethod GerritSourceContext
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// GitSourceContext: A GitSourceContext denotes a particular revision in
-// a third party Git
-// repository (e.g. GitHub).
-type GitSourceContext struct {
-	// RevisionId: Git commit hash.
-	// required.
-	RevisionId string `json:"revisionId,omitempty"`
-
-	// Url: Git repository URL.
-	Url string `json:"url,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "RevisionId") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *GitSourceContext) MarshalJSON() ([]byte, error) {
-	type noMethod GitSourceContext
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+// CancelBuildRequest: Request to cancel an ongoing build.
+type CancelBuildRequest struct {
 }
 
 // ListBuildsResponse: Response including listed builds.
@@ -557,17 +421,16 @@ type OperationMetadata interface{}
 
 type OperationResponse interface{}
 
-// ProjectRepoId: Selects a repo using a Google Cloud Platform project
-// ID
-// (e.g. winged-cargo-31) and a repo name within that project.
-type ProjectRepoId struct {
-	// ProjectId: The ID of the project.
-	ProjectId string `json:"projectId,omitempty"`
+// Results: Results describes the artifacts created by the build
+// pipeline.
+type Results struct {
+	// Images: Images that were built as a part of the build.
+	Images []*BuiltImage `json:"images,omitempty"`
 
-	// RepoName: The name of the repo. Leave empty for the default repo.
-	RepoName string `json:"repoName,omitempty"`
+	// Revision: Revision ID of the source that was built.
+	Revision string `json:"revision,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "ProjectId") to
+	// ForceSendFields is a list of field names (e.g. "Images") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -576,48 +439,21 @@ type ProjectRepoId struct {
 	ForceSendFields []string `json:"-"`
 }
 
-func (s *ProjectRepoId) MarshalJSON() ([]byte, error) {
-	type noMethod ProjectRepoId
+func (s *Results) MarshalJSON() ([]byte, error) {
+	type noMethod Results
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// RepoId: A unique identifier for a cloud repo.
-type RepoId struct {
-	// ProjectRepoId: A combination of a project ID and a repo name.
-	ProjectRepoId *ProjectRepoId `json:"projectRepoId,omitempty"`
-
-	// Uid: A server-assigned, globally unique identifier.
-	Uid string `json:"uid,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "ProjectRepoId") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *RepoId) MarshalJSON() ([]byte, error) {
-	type noMethod RepoId
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// Source: Source describes the location of source either in a source
-// repository, or in
-// an object in Google Cloud Storage.
+// Source: Source describes the location of the source in a supported
+// storage
+// service.
 type Source struct {
-	// RepoSource: If provided, get source from this location in source
-	// control.
-	RepoSource *SourceContext `json:"repoSource,omitempty"`
-
-	// StorageSource: If provided, get source from this location in in
+	// StorageSource: If provided, get the source from this location in in
 	// Google Cloud Storage.
 	StorageSource *StorageSource `json:"storageSource,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "RepoSource") to
+	// ForceSendFields is a list of field names (e.g. "StorageSource") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -628,39 +464,6 @@ type Source struct {
 
 func (s *Source) MarshalJSON() ([]byte, error) {
 	type noMethod Source
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// SourceContext: A SourceContext is a reference to a tree of files. A
-// SourceContext together
-// with a path point to a unique revision of a single file or directory.
-type SourceContext struct {
-	// CloudRepo: A SourceContext referring to a revision in a cloud repo.
-	CloudRepo *CloudRepoSourceContext `json:"cloudRepo,omitempty"`
-
-	// CloudWorkspace: A SourceContext referring to a snapshot in a cloud
-	// workspace.
-	CloudWorkspace *CloudWorkspaceSourceContext `json:"cloudWorkspace,omitempty"`
-
-	// Gerrit: A SourceContext referring to a Gerrit project.
-	Gerrit *GerritSourceContext `json:"gerrit,omitempty"`
-
-	// Git: A SourceContext referring to any third party Git repo (e.g.
-	// GitHub).
-	Git *GitSourceContext `json:"git,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "CloudRepo") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *SourceContext) MarshalJSON() ([]byte, error) {
-	type noMethod SourceContext
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
@@ -778,20 +581,21 @@ func (s *Status) MarshalJSON() ([]byte, error) {
 
 type StatusDetails interface{}
 
-// StorageSource: StorageSource describes the location of source in an
-// archive file in Google
-// Cloud Storage.
+// StorageSource: StorageSource describes the location of the source in
+// an archive file in
+// Google Cloud Storage.
 type StorageSource struct {
 	// Bucket: Google Cloud Storage bucket containing source (see
-	// [Bucket Name
-	// Requirements](https://cloud.google.com/storage/docs/bucket-naming#requ
-	// irements)).
+	// [Bucket
+	// Name
+	// Requirements](https://cloud.google.com/storage/docs/bucket-naming
+	// #requirements)).
 	Bucket string `json:"bucket,omitempty"`
 
 	// Object: Google Cloud Storage object containing source.
 	//
-	// This object must be an archive file (zip, tar, tar.gz) containing
-	// source to
+	// This object must be a gzipped archive file (.tgz) containing source
+	// to
 	// build.
 	Object string `json:"object,omitempty"`
 
@@ -808,256 +612,6 @@ func (s *StorageSource) MarshalJSON() ([]byte, error) {
 	type noMethod StorageSource
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// method id "cloudbuild.operations.cancel":
-
-type OperationsCancelCall struct {
-	s                      *Service
-	name                   string
-	canceloperationrequest *CancelOperationRequest
-	urlParams_             gensupport.URLParams
-	ctx_                   context.Context
-}
-
-// Cancel: Starts asynchronous cancellation on a long-running operation.
-//  The server
-// makes a best effort to cancel the operation, but success is
-// not
-// guaranteed.  If the server doesn't support this method, it
-// returns
-// `google.rpc.Code.UNIMPLEMENTED`.  Clients can
-// use
-// Operations.GetOperation or
-// other methods to check whether the cancellation succeeded or whether
-// the
-// operation completed despite cancellation.
-func (r *OperationsService) Cancel(name string, canceloperationrequest *CancelOperationRequest) *OperationsCancelCall {
-	c := &OperationsCancelCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.name = name
-	c.canceloperationrequest = canceloperationrequest
-	return c
-}
-
-// Fields allows partial responses to be retrieved. See
-// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
-// for more information.
-func (c *OperationsCancelCall) Fields(s ...googleapi.Field) *OperationsCancelCall {
-	c.urlParams_.Set("fields", googleapi.CombineFields(s))
-	return c
-}
-
-// Context sets the context to be used in this call's Do method. Any
-// pending HTTP request will be aborted if the provided context is
-// canceled.
-func (c *OperationsCancelCall) Context(ctx context.Context) *OperationsCancelCall {
-	c.ctx_ = ctx
-	return c
-}
-
-func (c *OperationsCancelCall) doRequest(alt string) (*http.Response, error) {
-	var body io.Reader = nil
-	body, err := googleapi.WithoutDataWrapper.JSONReader(c.canceloperationrequest)
-	if err != nil {
-		return nil, err
-	}
-	ctype := "application/json"
-	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}:cancel")
-	urls += "?" + c.urlParams_.Encode()
-	req, _ := http.NewRequest("POST", urls, body)
-	googleapi.Expand(req.URL, map[string]string{
-		"name": c.name,
-	})
-	req.Header.Set("Content-Type", ctype)
-	req.Header.Set("User-Agent", c.s.userAgent())
-	if c.ctx_ != nil {
-		return ctxhttp.Do(c.ctx_, c.s.client, req)
-	}
-	return c.s.client.Do(req)
-}
-
-// Do executes the "cloudbuild.operations.cancel" call.
-// Exactly one of *Empty or error will be non-nil. Any non-2xx status
-// code is an error. Response headers are in either
-// *Empty.ServerResponse.Header or (if a response was returned at all)
-// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
-// check whether the returned error was because http.StatusNotModified
-// was returned.
-func (c *OperationsCancelCall) Do() (*Empty, error) {
-	res, err := c.doRequest("json")
-	if res != nil && res.StatusCode == http.StatusNotModified {
-		if res.Body != nil {
-			res.Body.Close()
-		}
-		return nil, &googleapi.Error{
-			Code:   res.StatusCode,
-			Header: res.Header,
-		}
-	}
-	if err != nil {
-		return nil, err
-	}
-	defer googleapi.CloseBody(res)
-	if err := googleapi.CheckResponse(res); err != nil {
-		return nil, err
-	}
-	ret := &Empty{
-		ServerResponse: googleapi.ServerResponse{
-			Header:         res.Header,
-			HTTPStatusCode: res.StatusCode,
-		},
-	}
-	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
-		return nil, err
-	}
-	return ret, nil
-	// {
-	//   "description": "Starts asynchronous cancellation on a long-running operation.  The server\nmakes a best effort to cancel the operation, but success is not\nguaranteed.  If the server doesn't support this method, it returns\n`google.rpc.Code.UNIMPLEMENTED`.  Clients can use\nOperations.GetOperation or\nother methods to check whether the cancellation succeeded or whether the\noperation completed despite cancellation.",
-	//   "flatPath": "v1/operations/{operationsId}:cancel",
-	//   "httpMethod": "POST",
-	//   "id": "cloudbuild.operations.cancel",
-	//   "parameterOrder": [
-	//     "name"
-	//   ],
-	//   "parameters": {
-	//     "name": {
-	//       "description": "The name of the operation resource to be cancelled.",
-	//       "location": "path",
-	//       "pattern": "^operations/.*$",
-	//       "required": true,
-	//       "type": "string"
-	//     }
-	//   },
-	//   "path": "v1/{+name}:cancel",
-	//   "request": {
-	//     "$ref": "CancelOperationRequest"
-	//   },
-	//   "response": {
-	//     "$ref": "Empty"
-	//   },
-	//   "scopes": [
-	//     "https://www.googleapis.com/auth/cloud-platform"
-	//   ]
-	// }
-
-}
-
-// method id "cloudbuild.operations.delete":
-
-type OperationsDeleteCall struct {
-	s          *Service
-	name       string
-	urlParams_ gensupport.URLParams
-	ctx_       context.Context
-}
-
-// Delete: Deletes a long-running operation. This method indicates that
-// the client is
-// no longer interested in the operation result. It does not cancel
-// the
-// operation. If the server doesn't support this method, it
-// returns
-// `google.rpc.Code.UNIMPLEMENTED`.
-func (r *OperationsService) Delete(name string) *OperationsDeleteCall {
-	c := &OperationsDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.name = name
-	return c
-}
-
-// Fields allows partial responses to be retrieved. See
-// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
-// for more information.
-func (c *OperationsDeleteCall) Fields(s ...googleapi.Field) *OperationsDeleteCall {
-	c.urlParams_.Set("fields", googleapi.CombineFields(s))
-	return c
-}
-
-// Context sets the context to be used in this call's Do method. Any
-// pending HTTP request will be aborted if the provided context is
-// canceled.
-func (c *OperationsDeleteCall) Context(ctx context.Context) *OperationsDeleteCall {
-	c.ctx_ = ctx
-	return c
-}
-
-func (c *OperationsDeleteCall) doRequest(alt string) (*http.Response, error) {
-	var body io.Reader = nil
-	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
-	urls += "?" + c.urlParams_.Encode()
-	req, _ := http.NewRequest("DELETE", urls, body)
-	googleapi.Expand(req.URL, map[string]string{
-		"name": c.name,
-	})
-	req.Header.Set("User-Agent", c.s.userAgent())
-	if c.ctx_ != nil {
-		return ctxhttp.Do(c.ctx_, c.s.client, req)
-	}
-	return c.s.client.Do(req)
-}
-
-// Do executes the "cloudbuild.operations.delete" call.
-// Exactly one of *Empty or error will be non-nil. Any non-2xx status
-// code is an error. Response headers are in either
-// *Empty.ServerResponse.Header or (if a response was returned at all)
-// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
-// check whether the returned error was because http.StatusNotModified
-// was returned.
-func (c *OperationsDeleteCall) Do() (*Empty, error) {
-	res, err := c.doRequest("json")
-	if res != nil && res.StatusCode == http.StatusNotModified {
-		if res.Body != nil {
-			res.Body.Close()
-		}
-		return nil, &googleapi.Error{
-			Code:   res.StatusCode,
-			Header: res.Header,
-		}
-	}
-	if err != nil {
-		return nil, err
-	}
-	defer googleapi.CloseBody(res)
-	if err := googleapi.CheckResponse(res); err != nil {
-		return nil, err
-	}
-	ret := &Empty{
-		ServerResponse: googleapi.ServerResponse{
-			Header:         res.Header,
-			HTTPStatusCode: res.StatusCode,
-		},
-	}
-	if err := json.NewDecoder(res.Body).Decode(&ret); err != nil {
-		return nil, err
-	}
-	return ret, nil
-	// {
-	//   "description": "Deletes a long-running operation. This method indicates that the client is\nno longer interested in the operation result. It does not cancel the\noperation. If the server doesn't support this method, it returns\n`google.rpc.Code.UNIMPLEMENTED`.",
-	//   "flatPath": "v1/operations/{operationsId}",
-	//   "httpMethod": "DELETE",
-	//   "id": "cloudbuild.operations.delete",
-	//   "parameterOrder": [
-	//     "name"
-	//   ],
-	//   "parameters": {
-	//     "name": {
-	//       "description": "The name of the operation resource to be deleted.",
-	//       "location": "path",
-	//       "pattern": "^operations/.*$",
-	//       "required": true,
-	//       "type": "string"
-	//     }
-	//   },
-	//   "path": "v1/{+name}",
-	//   "response": {
-	//     "$ref": "Empty"
-	//   },
-	//   "scopes": [
-	//     "https://www.googleapis.com/auth/cloud-platform"
-	//   ]
-	// }
-
 }
 
 // method id "cloudbuild.operations.get":
@@ -1361,18 +915,20 @@ func (c *OperationsListCall) Do() (*ListOperationsResponse, error) {
 // method id "cloudbuild.projects.builds.cancel":
 
 type ProjectsBuildsCancelCall struct {
-	s          *Service
-	projectId  string
-	id         string
-	urlParams_ gensupport.URLParams
-	ctx_       context.Context
+	s                  *Service
+	projectId          string
+	id                 string
+	cancelbuildrequest *CancelBuildRequest
+	urlParams_         gensupport.URLParams
+	ctx_               context.Context
 }
 
 // Cancel: Cancels a requested build in progress.
-func (r *ProjectsBuildsService) Cancel(projectId string, id string) *ProjectsBuildsCancelCall {
+func (r *ProjectsBuildsService) Cancel(projectId string, id string, cancelbuildrequest *CancelBuildRequest) *ProjectsBuildsCancelCall {
 	c := &ProjectsBuildsCancelCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.id = id
+	c.cancelbuildrequest = cancelbuildrequest
 	return c
 }
 
@@ -1394,6 +950,11 @@ func (c *ProjectsBuildsCancelCall) Context(ctx context.Context) *ProjectsBuildsC
 
 func (c *ProjectsBuildsCancelCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.cancelbuildrequest)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
 	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/builds/{id}:cancel")
 	urls += "?" + c.urlParams_.Encode()
@@ -1402,6 +963,7 @@ func (c *ProjectsBuildsCancelCall) doRequest(alt string) (*http.Response, error)
 		"projectId": c.projectId,
 		"id":        c.id,
 	})
+	req.Header.Set("Content-Type", ctype)
 	req.Header.Set("User-Agent", c.s.userAgent())
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -1455,19 +1017,22 @@ func (c *ProjectsBuildsCancelCall) Do() (*Build, error) {
 	//   ],
 	//   "parameters": {
 	//     "id": {
-	//       "description": "The ID of the build.",
+	//       "description": "ID of the build.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "projectId": {
-	//       "description": "The ID of the project.",
+	//       "description": "ID of the project.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
 	//   "path": "v1/projects/{projectId}/builds/{id}:cancel",
+	//   "request": {
+	//     "$ref": "CancelBuildRequest"
+	//   },
 	//   "response": {
 	//     "$ref": "Build"
 	//   },
@@ -1585,7 +1150,7 @@ func (c *ProjectsBuildsCreateCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "projectId": {
-	//       "description": "The ID of the project.",
+	//       "description": "ID of the project.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -1720,13 +1285,13 @@ func (c *ProjectsBuildsGetCall) Do() (*Build, error) {
 	//   ],
 	//   "parameters": {
 	//     "id": {
-	//       "description": "The ID of the build.",
+	//       "description": "ID of the build.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "projectId": {
-	//       "description": "The ID of the project.",
+	//       "description": "ID of the project.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -1775,25 +1340,6 @@ func (c *ProjectsBuildsListCall) PageSize(pageSize int64) *ProjectsBuildsListCal
 // to skip to a particular spot in the list.
 func (c *ProjectsBuildsListCall) PageToken(pageToken string) *ProjectsBuildsListCall {
 	c.urlParams_.Set("pageToken", pageToken)
-	return c
-}
-
-// RepoName sets the optional parameter "repoName": If present, only
-// builds from source repos with the given name will be
-// returned.
-func (c *ProjectsBuildsListCall) RepoName(repoName string) *ProjectsBuildsListCall {
-	c.urlParams_.Set("repoName", repoName)
-	return c
-}
-
-// RevisionId sets the optional parameter "revisionId": If present, only
-// builds from source repos, from the given revision ID will
-// be returned. A revision ID may be either a branch/tag name
-// (e.g., "master") or a Git commit SHA.
-//
-// If a revision ID is specified, a repo_name must also be specified.
-func (c *ProjectsBuildsListCall) RevisionId(revisionId string) *ProjectsBuildsListCall {
-	c.urlParams_.Set("revisionId", revisionId)
 	return c
 }
 
@@ -1898,19 +1444,9 @@ func (c *ProjectsBuildsListCall) Do() (*ListBuildsResponse, error) {
 	//       "type": "string"
 	//     },
 	//     "projectId": {
-	//       "description": "The ID of the project.",
+	//       "description": "ID of the project.",
 	//       "location": "path",
 	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "repoName": {
-	//       "description": "If present, only builds from source repos with the given name will be\nreturned.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "revisionId": {
-	//       "description": "If present, only builds from source repos, from the given revision ID will\nbe returned. A revision ID may be either a branch/tag name\n(e.g., \"master\") or a Git commit SHA.\n\nIf a revision ID is specified, a repo_name must also be specified.",
-	//       "location": "query",
 	//       "type": "string"
 	//     }
 	//   },

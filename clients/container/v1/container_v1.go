@@ -176,10 +176,10 @@ type ProjectsZonesOperationsService struct {
 // cluster, enabling additional functionality.
 type AddonsConfig struct {
 	// HorizontalPodAutoscaling: Configuration for the horizontal pod
-	// autoscaling feature, which increases
-	// or decreases the number of replicas a replication controller has
-	// based on
-	// the resource usage of the existing replicas.
+	// autoscaling feature, which
+	// increases or decreases the number of replica pods a replication
+	// controller
+	// has based on the resource usage of the existing pods.
 	HorizontalPodAutoscaling *HorizontalPodAutoscaling `json:"horizontalPodAutoscaling,omitempty"`
 
 	// HttpLoadBalancing: Configuration for the HTTP (L7) load balancing
@@ -228,15 +228,15 @@ type Cluster struct {
 	// the master endpoint.
 	CurrentMasterVersion string `json:"currentMasterVersion,omitempty"`
 
-	// CurrentNodeCount: [Output only] The number of nodes currently
-	// recognized by the cluster.
+	// CurrentNodeCount: [Output only] The number of nodes currently in the
+	// cluster.
 	CurrentNodeCount int64 `json:"currentNodeCount,omitempty"`
 
 	// CurrentNodeVersion: [Output only] The current version of the node
 	// software components.
-	// If they are currently at different versions because they're in the
+	// If they are currently at multiple versions because they're in the
 	// process
-	// of being upgraded, this reflects the minimum version of any of them.
+	// of being upgraded, this reflects the minimum version of all nodes.
 	CurrentNodeVersion string `json:"currentNodeVersion,omitempty"`
 
 	// Description: An optional description of this cluster.
@@ -254,7 +254,7 @@ type Cluster struct {
 	Endpoint string `json:"endpoint,omitempty"`
 
 	// InitialClusterVersion: [Output only] The software version of the
-	// master and kubelets used
+	// master endpoint and kubelets used
 	// in the cluster when it was first created. The version can be upgraded
 	// over
 	// time.
@@ -276,26 +276,28 @@ type Cluster struct {
 	// cluster.
 	InstanceGroupUrls []string `json:"instanceGroupUrls,omitempty"`
 
-	// LoggingService: The logging service that the cluster should write
-	// logs to.
+	// LoggingService: The logging service the cluster should use to write
+	// logs.
 	// Currently available options:
 	//
 	// * `logging.googleapis.com` - the Google Cloud Logging service.
 	// * `none` - no logs will be exported from the cluster.
-	// * "" - default value: the default is `logging.googleapis.com`.
+	// * if left as an empty string,`logging.googleapis.com` will be used.
 	LoggingService string `json:"loggingService,omitempty"`
 
-	// MasterAuth: The authentication information for accessing the master.
+	// MasterAuth: The authentication information for accessing the master
+	// endpoint.
 	MasterAuth *MasterAuth `json:"masterAuth,omitempty"`
 
-	// MonitoringService: The monitoring service that the cluster should
-	// write metrics to.
+	// MonitoringService: The monitoring service the cluster should use to
+	// write metrics.
 	// Currently available options:
 	//
 	// * `monitoring.googleapis.com` - the Google Cloud Monitoring
 	// service.
 	// * `none` - no metrics will be exported from the cluster.
-	// * "" - default value: the default is `monitoring.googleapis.com`.
+	// * if left as an empty string, `monitoring.googleapis.com` will be
+	// used.
 	MonitoringService string `json:"monitoringService,omitempty"`
 
 	// Name: The name of this cluster. The name must be unique within this
@@ -317,9 +319,9 @@ type Cluster struct {
 	Network string `json:"network,omitempty"`
 
 	// NodeConfig: Parameters used in creating the cluster's nodes.
-	// See the descriptions of the child properties of `nodeConfig`.
+	// See `nodeConfig` for the description of its properties.
 	//
-	// If unspecified, the defaults for all child properties are used.
+	// If unspecified, the defaults are used.
 	NodeConfig *NodeConfig `json:"nodeConfig,omitempty"`
 
 	// NodeIpv4CidrSize: [Output only] The size of the address space on each
@@ -369,9 +371,7 @@ type Cluster struct {
 	// Subnetwork: The name of the Google Compute
 	// Engine
 	// [subnetwork](/compute/docs/subnetworks) to which the
-	// cluster is connected. If specified, the cluster's network must be
-	// a
-	// "custom subnet" network. Specification of subnetworks is an alpha
+	// cluster is connected.  Specification of subnetworks is an alpha
 	// feature,
 	// and require that the Google Compute Engine alpha API be enabled.
 	Subnetwork string `json:"subnetwork,omitempty"`
@@ -422,8 +422,8 @@ type ClusterUpdate struct {
 	// the server.
 	DesiredMasterVersion string `json:"desiredMasterVersion,omitempty"`
 
-	// DesiredMonitoringService: The monitoring service that the cluster
-	// should write metrics to.
+	// DesiredMonitoringService: The monitoring service the cluster should
+	// use to write metrics.
 	// Currently available options:
 	//
 	// * "monitoring.googleapis.com" - the Google Cloud Monitoring service
@@ -538,9 +538,9 @@ func (s *CreateTokenRequest) MarshalJSON() ([]byte, error) {
 
 // HorizontalPodAutoscaling: Configuration options for the horizontal
 // pod autoscaling feature, which
-// increases or decreases the number of replicas a replication
-// controller has
-// based on the resource usage of the existing replicas.
+// increases or decreases the number of replica pods a replication
+// controller
+// has based on the resource usage of the existing pods.
 type HorizontalPodAutoscaling struct {
 	// Disabled: Whether the Horizontal Pod Autoscaling feature is enabled
 	// in the cluster.
@@ -665,16 +665,15 @@ type MasterAuth struct {
 	// trust for the cluster.
 	ClusterCaCertificate string `json:"clusterCaCertificate,omitempty"`
 
-	// Password: The password to use for HTTP basic authentication when
-	// accessing the
-	// Kubernetes master endpoint. Because the master endpoint is open
-	// to
-	// the internet, you should create a strong password.
+	// Password: The password to use for HTTP basic authentication to the
+	// master endpoint.
+	// Because the master endpoint is open to the Internet, you should
+	// create a
+	// strong password.
 	Password string `json:"password,omitempty"`
 
-	// Username: The username to use for HTTP basic authentication when
-	// accessing the
-	// Kubernetes master endpoint.
+	// Username: The username to use for HTTP basic authentication to the
+	// master endpoint.
 	Username string `json:"username,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "ClientCertificate")
@@ -692,7 +691,7 @@ func (s *MasterAuth) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// NodeConfig: Per-node parameters.
+// NodeConfig: Parameters that describe the nodes in a cluster.
 type NodeConfig struct {
 	// DiskSizeGb: Size of the disk attached to each node, specified in
 	// GB.
@@ -723,12 +722,11 @@ type NodeConfig struct {
 	// "instance-template", "kube-env", "startup-script", and
 	// "user-data"
 	//
-	// Values can be free-form strings, and only have meaning as interpreted
+	// Values are free-form strings, and only have meaning as interpreted
 	// by
 	// the image running in the instance. The only restriction placed on
 	// them is
-	// that each value's size must be less than or equal to 32768
-	// bytes.
+	// that each value's size must be less than or equal to 32 KB.
 	//
 	// The total size of all keys and values must be less than 512 KB.
 	Metadata map[string]string `json:"metadata,omitempty"`
@@ -747,9 +745,12 @@ type NodeConfig struct {
 	// * `https://www.googleapis.com/auth/devstorage.read_only` is required
 	// for
 	// communicating with **gcr.io**
-	// (the [Google Container Registry](/container-registry/).
+	// (the [Google Container Registry](/container-registry/)).
 	//
-	// If unspecified, no scopes are added.
+	// If unspecified, no scopes are added, unless Cloud Logging or
+	// Cloud
+	// Monitoring are enabled, in which case their required scopes will be
+	// added.
 	OauthScopes []string `json:"oauthScopes,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "DiskSizeGb") to
@@ -767,8 +768,9 @@ func (s *NodeConfig) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// Operation: Defines the operation resource. All fields are output
-// only.
+// Operation: This operation resource represents operations that may
+// have happened or are
+// happening on the cluster. All fields are output only.
 type Operation struct {
 	// Detail: Detailed operation progress, if available.
 	Detail string `json:"detail,omitempty"`
@@ -832,12 +834,13 @@ func (s *Operation) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// ServerConfig: Container Engine Server configuration.
+// ServerConfig: Container Engine service configuration.
 type ServerConfig struct {
 	// BuildClientInfo: apiserver build BuildData::ClientInfo()
 	BuildClientInfo string `json:"buildClientInfo,omitempty"`
 
-	// DefaultClusterVersion: What version this server deploys by default.
+	// DefaultClusterVersion: Version of Kubernetes the service deploys by
+	// default.
 	DefaultClusterVersion string `json:"defaultClusterVersion,omitempty"`
 
 	// ValidNodeVersions: List of valid node upgrade target versions.
@@ -921,7 +924,8 @@ func (s *Token) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// UpdateClusterRequest: UpdateClusterRequest updates a cluster.
+// UpdateClusterRequest: UpdateClusterRequest updates the settings of a
+// cluster.
 type UpdateClusterRequest struct {
 	// Update: A description of the update.
 	Update *ClusterUpdate `json:"update,omitempty"`
@@ -1050,7 +1054,7 @@ func (c *MasterProjectsZonesSignedUrlsCreateCall) Do() (*SignedUrls, error) {
 	//   ],
 	//   "parameters": {
 	//     "masterProjectId": {
-	//       "description": "The hosted master project in which this master resides.  This can be\neither a [project ID or project\nnumber](https://developers.google.com/console/help/new/#projectnumber).",
+	//       "description": "The hosted master project in which this master resides.  This can be\neither a [project ID or project\nnumber](https://support.google.com/cloud/answer/6158840).",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -1185,7 +1189,7 @@ func (c *MasterProjectsZonesTokensCreateCall) Do() (*Token, error) {
 	//   ],
 	//   "parameters": {
 	//     "masterProjectId": {
-	//       "description": "The hosted master project in which this master resides.  This can be\neither a [project ID or project\nnumber](https://developers.google.com/console/help/new/#projectnumber).",
+	//       "description": "The hosted master project in which this master resides.  This can be\neither a [project ID or project\nnumber](https://support.google.com/cloud/answer/6158840).",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -1323,13 +1327,13 @@ func (c *ProjectsZonesGetServerconfigCall) Do() (*ServerConfig, error) {
 	//   ],
 	//   "parameters": {
 	//     "projectId": {
-	//       "description": "The Google Developers Console [project ID or project\nnumber](https://developers.google.com/console/help/new/#projectnumber).",
+	//       "description": "The Google Developers Console [project ID or project\nnumber](https://support.google.com/cloud/answer/6158840).",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "zone": {
-	//       "description": "The name of the Google Compute Engine [zone](/compute/docs/zones#available)\nto return operations for, or `-` for all zones.",
+	//       "description": "The name of the Google Compute Engine [zone](/compute/docs/zones#available)\nto return operations for.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -1467,7 +1471,7 @@ func (c *ProjectsZonesClustersCreateCall) Do() (*Operation, error) {
 	//   ],
 	//   "parameters": {
 	//     "projectId": {
-	//       "description": "The Google Developers Console [project ID or project\nnumber](https://developers.google.com/console/help/new/#projectnumber).",
+	//       "description": "The Google Developers Console [project ID or project\nnumber](https://support.google.com/cloud/answer/6158840).",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -1510,6 +1514,12 @@ type ProjectsZonesClustersDeleteCall struct {
 //
 // Firewalls and routes that were configured during cluster creation
 // are also deleted.
+//
+// Other Google Compute Engine resources that might be in use by the
+// cluster
+// (e.g. load balancer resources) will not be deleted if they weren't
+// present
+// at the initial create time.
 func (r *ProjectsZonesClustersService) Delete(projectId string, zone string, clusterId string) *ProjectsZonesClustersDeleteCall {
 	c := &ProjectsZonesClustersDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
@@ -1588,7 +1598,7 @@ func (c *ProjectsZonesClustersDeleteCall) Do() (*Operation, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Deletes the cluster, including the Kubernetes endpoint and all worker\nnodes.\n\nFirewalls and routes that were configured during cluster creation\nare also deleted.",
+	//   "description": "Deletes the cluster, including the Kubernetes endpoint and all worker\nnodes.\n\nFirewalls and routes that were configured during cluster creation\nare also deleted.\n\nOther Google Compute Engine resources that might be in use by the cluster\n(e.g. load balancer resources) will not be deleted if they weren't present\nat the initial create time.",
 	//   "flatPath": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}",
 	//   "httpMethod": "DELETE",
 	//   "id": "container.projects.zones.clusters.delete",
@@ -1605,7 +1615,7 @@ func (c *ProjectsZonesClustersDeleteCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "projectId": {
-	//       "description": "The Google Developers Console [project ID or project\nnumber](https://developers.google.com/console/help/new/#projectnumber).",
+	//       "description": "The Google Developers Console [project ID or project\nnumber](https://support.google.com/cloud/answer/6158840).",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -1640,7 +1650,7 @@ type ProjectsZonesClustersGetCall struct {
 	ctx_         context.Context
 }
 
-// Get: Gets a specific cluster.
+// Get: Gets the details of a specific cluster.
 func (r *ProjectsZonesClustersService) Get(projectId string, zone string, clusterId string) *ProjectsZonesClustersGetCall {
 	c := &ProjectsZonesClustersGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
@@ -1732,7 +1742,7 @@ func (c *ProjectsZonesClustersGetCall) Do() (*Cluster, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Gets a specific cluster.",
+	//   "description": "Gets the details of a specific cluster.",
 	//   "flatPath": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}",
 	//   "httpMethod": "GET",
 	//   "id": "container.projects.zones.clusters.get",
@@ -1749,7 +1759,7 @@ func (c *ProjectsZonesClustersGetCall) Do() (*Cluster, error) {
 	//       "type": "string"
 	//     },
 	//     "projectId": {
-	//       "description": "The Google Developers Console [project ID or project\nnumber](https://developers.google.com/console/help/new/#projectnumber).",
+	//       "description": "The Google Developers Console [project ID or project\nnumber](https://support.google.com/cloud/answer/6158840).",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -1884,7 +1894,7 @@ func (c *ProjectsZonesClustersListCall) Do() (*ListClustersResponse, error) {
 	//   ],
 	//   "parameters": {
 	//     "projectId": {
-	//       "description": "The Google Developers Console [project ID or project\nnumber](https://developers.google.com/console/help/new/#projectnumber).",
+	//       "description": "The Google Developers Console [project ID or project\nnumber](https://support.google.com/cloud/answer/6158840).",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -1919,7 +1929,7 @@ type ProjectsZonesClustersUpdateCall struct {
 	ctx_                 context.Context
 }
 
-// Update: Updates settings of a specific cluster.
+// Update: Updates the settings of a specific cluster.
 func (r *ProjectsZonesClustersService) Update(projectId string, zone string, clusterId string, updateclusterrequest *UpdateClusterRequest) *ProjectsZonesClustersUpdateCall {
 	c := &ProjectsZonesClustersUpdateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
@@ -2005,7 +2015,7 @@ func (c *ProjectsZonesClustersUpdateCall) Do() (*Operation, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Updates settings of a specific cluster.",
+	//   "description": "Updates the settings of a specific cluster.",
 	//   "flatPath": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}",
 	//   "httpMethod": "PUT",
 	//   "id": "container.projects.zones.clusters.update",
@@ -2022,7 +2032,7 @@ func (c *ProjectsZonesClustersUpdateCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "projectId": {
-	//       "description": "The Google Developers Console [project ID or project\nnumber](https://developers.google.com/console/help/new/#projectnumber).",
+	//       "description": "The Google Developers Console [project ID or project\nnumber](https://support.google.com/cloud/answer/6158840).",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -2169,7 +2179,7 @@ func (c *ProjectsZonesOperationsGetCall) Do() (*Operation, error) {
 	//       "type": "string"
 	//     },
 	//     "projectId": {
-	//       "description": "The Google Developers Console [project ID or project\nnumber](https://developers.google.com/console/help/new/#projectnumber).",
+	//       "description": "The Google Developers Console [project ID or project\nnumber](https://support.google.com/cloud/answer/6158840).",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -2304,7 +2314,7 @@ func (c *ProjectsZonesOperationsListCall) Do() (*ListOperationsResponse, error) 
 	//   ],
 	//   "parameters": {
 	//     "projectId": {
-	//       "description": "The Google Developers Console [project ID or project\nnumber](https://developers.google.com/console/help/new/#projectnumber).",
+	//       "description": "The Google Developers Console [project ID or project\nnumber](https://support.google.com/cloud/answer/6158840).",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"

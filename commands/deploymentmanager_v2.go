@@ -23,7 +23,7 @@ import (
 	"os"
 	"strings"
 
-	api_client "github.com/skelterjohn/gcloud_apis/clients/datastore/v1beta3"
+	api_client "github.com/skelterjohn/gcloud_apis/clients/deploymentmanager/v2"
 	"github.com/skelterjohn/gcloud_apis/commands_util"
 )
 
@@ -33,15 +33,16 @@ var _ = io.Copy
 var _ = os.Stdin
 var _ = strings.Split
 
-func Datastore_v1beta3_ProjectsAllocateIds(context Context, args ...string) error {
+func Deploymentmanager_v2_DeploymentsCancelPreview(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("deployment"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v1beta3/projects/{projectId}:allocateIds", "+") {
+			if strings.Contains("{project}/global/deployments/{deployment}/cancelPreview", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -58,7 +59,7 @@ func Datastore_v1beta3_ProjectsAllocateIds(context Context, args ...string) erro
 	if err != nil {
 		return err
 	}
-	service := api_client.NewProjectsService(api_service)
+	service := api_client.NewDeploymentsService(api_service)
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
@@ -70,7 +71,7 @@ func Datastore_v1beta3_ProjectsAllocateIds(context Context, args ...string) erro
 		usageFunc()
 	}
 
-	request := &api_client.AllocateIdsRequest{}
+	request := &api_client.DeploymentsCancelPreviewRequest{}
 	if len(args) == 2 {
 		err = commands_util.PopulateRequestFromFilename(&request, args[1])
 		if err != nil {
@@ -86,268 +87,24 @@ func Datastore_v1beta3_ProjectsAllocateIds(context Context, args ...string) erro
 	}
 
 	expectedParams := []string{
-		"projectId",
+		"project",
+		"deployment",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_deployment, err := commands_util.ConvertValue_string(paramValues[1])
 	if err != nil {
 		return err
 	}
 
-	call := service.AllocateIds(param_projectId,
-		request,
-	)
-
-	var response *api_client.AllocateIdsResponse
-	response, err = call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Datastore_v1beta3_ProjectsBeginTransaction(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1beta3/projects/{projectId}:beginTransaction", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewProjectsService(api_service)
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
-
-	// Only positional arguments should remain in args.
-	if len(args) == 0 || len(args) > 2 {
-		usageFunc()
-	}
-
-	request := &api_client.BeginTransactionRequest{}
-	if len(args) == 2 {
-		err = commands_util.PopulateRequestFromFilename(&request, args[1])
-		if err != nil {
-			return err
-		}
-	}
-
-	keyValues := flagValues
-
-	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
-	if err != nil {
-		return err
-	}
-
-	expectedParams := []string{
-		"projectId",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-
-	call := service.BeginTransaction(param_projectId,
-		request,
-	)
-
-	var response *api_client.BeginTransactionResponse
-	response, err = call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Datastore_v1beta3_ProjectsCommit(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1beta3/projects/{projectId}:commit", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewProjectsService(api_service)
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
-
-	// Only positional arguments should remain in args.
-	if len(args) == 0 || len(args) > 2 {
-		usageFunc()
-	}
-
-	request := &api_client.CommitRequest{}
-	if len(args) == 2 {
-		err = commands_util.PopulateRequestFromFilename(&request, args[1])
-		if err != nil {
-			return err
-		}
-	}
-
-	keyValues := flagValues
-
-	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
-	if err != nil {
-		return err
-	}
-
-	expectedParams := []string{
-		"projectId",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-
-	call := service.Commit(param_projectId,
-		request,
-	)
-
-	var response *api_client.CommitResponse
-	response, err = call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Datastore_v1beta3_ProjectsExport(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1beta3/projects/{projectId}:export", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewProjectsService(api_service)
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
-
-	// Only positional arguments should remain in args.
-	if len(args) == 0 || len(args) > 2 {
-		usageFunc()
-	}
-
-	request := &api_client.ExportRequest{}
-	if len(args) == 2 {
-		err = commands_util.PopulateRequestFromFilename(&request, args[1])
-		if err != nil {
-			return err
-		}
-	}
-
-	keyValues := flagValues
-
-	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
-	if err != nil {
-		return err
-	}
-
-	expectedParams := []string{
-		"projectId",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-
-	call := service.Export(param_projectId,
+	call := service.CancelPreview(param_project, param_deployment,
 		request,
 	)
 
@@ -365,22 +122,21 @@ func Datastore_v1beta3_ProjectsExport(context Context, args ...string) error {
 	return nil
 }
 
-func Datastore_v1beta3_ProjectsImport(context Context, args ...string) error {
+func Deploymentmanager_v2_DeploymentsDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("deployment"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v1beta3/projects/{projectId}:import", "+") {
+			if strings.Contains("{project}/global/deployments/{deployment}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
 			}
 		}
-
-		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -390,49 +146,32 @@ func Datastore_v1beta3_ProjectsImport(context Context, args ...string) error {
 	if err != nil {
 		return err
 	}
-	service := api_client.NewProjectsService(api_service)
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
+	service := api_client.NewDeploymentsService(api_service)
 
 	// Only positional arguments should remain in args.
-	if len(args) == 0 || len(args) > 2 {
+	if len(args) != 1 {
 		usageFunc()
 	}
 
-	request := &api_client.ImportRequest{}
-	if len(args) == 2 {
-		err = commands_util.PopulateRequestFromFilename(&request, args[1])
-		if err != nil {
-			return err
-		}
-	}
-
-	keyValues := flagValues
-
-	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
-	if err != nil {
-		return err
-	}
-
 	expectedParams := []string{
-		"projectId",
+		"project",
+		"deployment",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_deployment, err := commands_util.ConvertValue_string(paramValues[1])
 	if err != nil {
 		return err
 	}
 
-	call := service.Import(param_projectId,
-		request,
-	)
+	call := service.Delete(param_project, param_deployment)
 
 	var response *api_client.Operation
 	response, err = call.Do()
@@ -448,23 +187,21 @@ func Datastore_v1beta3_ProjectsImport(context Context, args ...string) error {
 	return nil
 }
 
-func Datastore_v1beta3_ProjectsIndexesGet(context Context, args ...string) error {
+func Deploymentmanager_v2_DeploymentsGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("indexId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("deployment"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v1beta3/projects/{projectId}/indexes/{+indexId}", "+") {
+			if strings.Contains("{project}/global/deployments/{deployment}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
 			}
 		}
-
-		usageBits += " [--databaseId=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -474,10 +211,78 @@ func Datastore_v1beta3_ProjectsIndexesGet(context Context, args ...string) error
 	if err != nil {
 		return err
 	}
-	service := api_client.NewProjectsIndexesService(api_service)
+	service := api_client.NewDeploymentsService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"deployment",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_deployment, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_project, param_deployment)
+
+	var response *api_client.Deployment
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Deploymentmanager_v2_DeploymentsInsert(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/global/deployments", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		usageBits += " [--preview=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewDeploymentsService(api_service)
 
 	queryParamNames := map[string]bool{
-		"databaseId": false,
+		"preview": false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -492,40 +297,58 @@ func Datastore_v1beta3_ProjectsIndexesGet(context Context, args ...string) error
 	}
 
 	// Only positional arguments should remain in args.
-	if len(args) != 1 {
+	if len(args) == 0 || len(args) > 2 {
 		usageFunc()
 	}
 
+	request := &api_client.Deployment{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
 	expectedParams := []string{
-		"projectId",
-		"indexId",
+		"project",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_indexId, err := commands_util.ConvertValue_string(paramValues[1])
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Get(param_projectId, param_indexId)
+	call := service.Insert(param_project,
+		request,
+	)
 
 	// Set query parameters.
-	if value, ok := flagValues["databaseId"]; ok {
-		query_databaseId, err := commands_util.ConvertValue_string(value)
+	if value, ok := flagValues["preview"]; ok {
+		query_preview, err := commands_util.ConvertValue_bool(value)
 		if err != nil {
 			return err
 		}
-		call.DatabaseId(query_databaseId)
+		call.Preview(query_preview)
 	}
 
-	var response *api_client.Index
+	var response *api_client.Operation
 	response, err = call.Do()
 	if err != nil {
 		return err
@@ -539,26 +362,24 @@ func Datastore_v1beta3_ProjectsIndexesGet(context Context, args ...string) error
 	return nil
 }
 
-func Datastore_v1beta3_ProjectsIndexesList(context Context, args ...string) error {
+func Deploymentmanager_v2_DeploymentsList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v1beta3/projects/{projectId}/indexes", "+") {
+			if strings.Contains("{project}/global/deployments", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
 			}
 		}
 
-		usageBits += " [--databaseId=VALUE]"
-
 		usageBits += " [--filter=VALUE]"
 
-		usageBits += " [--pageSize=VALUE]"
+		usageBits += " [--maxResults=VALUE]"
 
 		usageBits += " [--pageToken=VALUE]"
 
@@ -570,12 +391,11 @@ func Datastore_v1beta3_ProjectsIndexesList(context Context, args ...string) erro
 	if err != nil {
 		return err
 	}
-	service := api_client.NewProjectsIndexesService(api_service)
+	service := api_client.NewDeploymentsService(api_service)
 
 	queryParamNames := map[string]bool{
-		"databaseId": false,
 		"filter":     false,
-		"pageSize":   false,
+		"maxResults": false,
 		"pageToken":  false,
 	}
 
@@ -596,28 +416,21 @@ func Datastore_v1beta3_ProjectsIndexesList(context Context, args ...string) erro
 	}
 
 	expectedParams := []string{
-		"projectId",
+		"project",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.List(param_projectId)
+	call := service.List(param_project)
 
 	// Set query parameters.
-	if value, ok := flagValues["databaseId"]; ok {
-		query_databaseId, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.DatabaseId(query_databaseId)
-	}
 	if value, ok := flagValues["filter"]; ok {
 		query_filter, err := commands_util.ConvertValue_string(value)
 		if err != nil {
@@ -625,12 +438,12 @@ func Datastore_v1beta3_ProjectsIndexesList(context Context, args ...string) erro
 		}
 		call.Filter(query_filter)
 	}
-	if value, ok := flagValues["pageSize"]; ok {
-		query_pageSize, err := commands_util.ConvertValue_int64(value)
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
 		if err != nil {
 			return err
 		}
-		call.PageSize(query_pageSize)
+		call.MaxResults(query_maxResults)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -640,7 +453,7 @@ func Datastore_v1beta3_ProjectsIndexesList(context Context, args ...string) erro
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.ListIndexesResponse
+	var response *api_client.DeploymentsListResponse
 	response, err = call.Do()
 	if err != nil {
 		return err
@@ -654,15 +467,16 @@ func Datastore_v1beta3_ProjectsIndexesList(context Context, args ...string) erro
 	return nil
 }
 
-func Datastore_v1beta3_ProjectsIndexesLookup(context Context, args ...string) error {
+func Deploymentmanager_v2_DeploymentsPatch(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("deployment"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v1beta3/projects/{projectId}/indexes:lookup", "+") {
+			if strings.Contains("{project}/global/deployments/{deployment}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -670,6 +484,12 @@ func Datastore_v1beta3_ProjectsIndexesLookup(context Context, args ...string) er
 		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		usageBits += " [--createPolicy=VALUE]"
+
+		usageBits += " [--deletePolicy=VALUE]"
+
+		usageBits += " [--preview=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -679,11 +499,23 @@ func Datastore_v1beta3_ProjectsIndexesLookup(context Context, args ...string) er
 	if err != nil {
 		return err
 	}
-	service := api_client.NewProjectsIndexesService(api_service)
+	service := api_client.NewDeploymentsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"createPolicy": false,
+		"deletePolicy": false,
+		"preview":      false,
+	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -691,7 +523,7 @@ func Datastore_v1beta3_ProjectsIndexesLookup(context Context, args ...string) er
 		usageFunc()
 	}
 
-	request := &api_client.LookupIndexRequest{}
+	request := &api_client.Deployment{}
 	if len(args) == 2 {
 		err = commands_util.PopulateRequestFromFilename(&request, args[1])
 		if err != nil {
@@ -699,7 +531,13 @@ func Datastore_v1beta3_ProjectsIndexesLookup(context Context, args ...string) er
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -707,23 +545,51 @@ func Datastore_v1beta3_ProjectsIndexesLookup(context Context, args ...string) er
 	}
 
 	expectedParams := []string{
-		"projectId",
+		"project",
+		"deployment",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_deployment, err := commands_util.ConvertValue_string(paramValues[1])
 	if err != nil {
 		return err
 	}
 
-	call := service.Lookup(param_projectId,
+	call := service.Patch(param_project, param_deployment,
 		request,
 	)
 
-	var response *api_client.Index
+	// Set query parameters.
+	if value, ok := flagValues["createPolicy"]; ok {
+		query_createPolicy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.CreatePolicy(query_createPolicy)
+	}
+	if value, ok := flagValues["deletePolicy"]; ok {
+		query_deletePolicy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.DeletePolicy(query_deletePolicy)
+	}
+	if value, ok := flagValues["preview"]; ok {
+		query_preview, err := commands_util.ConvertValue_bool(value)
+		if err != nil {
+			return err
+		}
+		call.Preview(query_preview)
+	}
+
+	var response *api_client.Operation
 	response, err = call.Do()
 	if err != nil {
 		return err
@@ -737,16 +603,16 @@ func Datastore_v1beta3_ProjectsIndexesLookup(context Context, args ...string) er
 	return nil
 }
 
-func Datastore_v1beta3_ProjectsIndexesUpdate(context Context, args ...string) error {
+func Deploymentmanager_v2_DeploymentsStop(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("indexId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("deployment"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v1beta3/projects/{projectId}/indexes/{+indexId}", "+") {
+			if strings.Contains("{project}/global/deployments/{deployment}/stop", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -763,7 +629,7 @@ func Datastore_v1beta3_ProjectsIndexesUpdate(context Context, args ...string) er
 	if err != nil {
 		return err
 	}
-	service := api_client.NewProjectsIndexesService(api_service)
+	service := api_client.NewDeploymentsService(api_service)
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
@@ -775,7 +641,7 @@ func Datastore_v1beta3_ProjectsIndexesUpdate(context Context, args ...string) er
 		usageFunc()
 	}
 
-	request := &api_client.Index{}
+	request := &api_client.DeploymentsStopRequest{}
 	if len(args) == 2 {
 		err = commands_util.PopulateRequestFromFilename(&request, args[1])
 		if err != nil {
@@ -791,24 +657,24 @@ func Datastore_v1beta3_ProjectsIndexesUpdate(context Context, args ...string) er
 	}
 
 	expectedParams := []string{
-		"projectId",
-		"indexId",
+		"project",
+		"deployment",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
-	param_indexId, err := commands_util.ConvertValue_string(paramValues[1])
+	param_deployment, err := commands_util.ConvertValue_string(paramValues[1])
 	if err != nil {
 		return err
 	}
 
-	call := service.Update(param_projectId, param_indexId,
+	call := service.Stop(param_project, param_deployment,
 		request,
 	)
 
@@ -826,15 +692,16 @@ func Datastore_v1beta3_ProjectsIndexesUpdate(context Context, args ...string) er
 	return nil
 }
 
-func Datastore_v1beta3_ProjectsLookup(context Context, args ...string) error {
+func Deploymentmanager_v2_DeploymentsUpdate(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("deployment"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v1beta3/projects/{projectId}:lookup", "+") {
+			if strings.Contains("{project}/global/deployments/{deployment}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -843,6 +710,12 @@ func Datastore_v1beta3_ProjectsLookup(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--createPolicy=VALUE]"
+
+		usageBits += " [--deletePolicy=VALUE]"
+
+		usageBits += " [--preview=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
 	}
@@ -851,11 +724,23 @@ func Datastore_v1beta3_ProjectsLookup(context Context, args ...string) error {
 	if err != nil {
 		return err
 	}
-	service := api_client.NewProjectsService(api_service)
+	service := api_client.NewDeploymentsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"createPolicy": false,
+		"deletePolicy": false,
+		"preview":      false,
+	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -863,7 +748,7 @@ func Datastore_v1beta3_ProjectsLookup(context Context, args ...string) error {
 		usageFunc()
 	}
 
-	request := &api_client.LookupRequest{}
+	request := &api_client.Deployment{}
 	if len(args) == 2 {
 		err = commands_util.PopulateRequestFromFilename(&request, args[1])
 		if err != nil {
@@ -871,7 +756,13 @@ func Datastore_v1beta3_ProjectsLookup(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -879,281 +770,49 @@ func Datastore_v1beta3_ProjectsLookup(context Context, args ...string) error {
 	}
 
 	expectedParams := []string{
-		"projectId",
+		"project",
+		"deployment",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_deployment, err := commands_util.ConvertValue_string(paramValues[1])
 	if err != nil {
 		return err
 	}
 
-	call := service.Lookup(param_projectId,
+	call := service.Update(param_project, param_deployment,
 		request,
 	)
 
-	var response *api_client.LookupResponse
-	response, err = call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Datastore_v1beta3_ProjectsMultiWatch(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1beta3/projects/{projectId}:multiWatch", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewProjectsService(api_service)
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
-
-	// Only positional arguments should remain in args.
-	if len(args) == 0 || len(args) > 2 {
-		usageFunc()
-	}
-
-	request := &api_client.MultiWatchRequest{}
-	if len(args) == 2 {
-		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+	// Set query parameters.
+	if value, ok := flagValues["createPolicy"]; ok {
+		query_createPolicy, err := commands_util.ConvertValue_string(value)
 		if err != nil {
 			return err
 		}
+		call.CreatePolicy(query_createPolicy)
 	}
-
-	keyValues := flagValues
-
-	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
-	if err != nil {
-		return err
-	}
-
-	expectedParams := []string{
-		"projectId",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-
-	call := service.MultiWatch(param_projectId,
-		request,
-	)
-
-	var response *api_client.WatchChange
-	response, err = call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Datastore_v1beta3_ProjectsOperationsCancel(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1beta3/{+name}:cancel", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
+	if value, ok := flagValues["deletePolicy"]; ok {
+		query_deletePolicy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
 		}
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		os.Exit(1)
+		call.DeletePolicy(query_deletePolicy)
 	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewProjectsOperationsService(api_service)
-
-	// Only positional arguments should remain in args.
-	if len(args) != 1 {
-		usageFunc()
-	}
-
-	expectedParams := []string{
-		"name",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_name, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-
-	call := service.Cancel(param_name)
-
-	var response *api_client.Empty
-	response, err = call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Datastore_v1beta3_ProjectsOperationsDelete(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1beta3/{+name}", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
+	if value, ok := flagValues["preview"]; ok {
+		query_preview, err := commands_util.ConvertValue_bool(value)
+		if err != nil {
+			return err
 		}
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		os.Exit(1)
+		call.Preview(query_preview)
 	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewProjectsOperationsService(api_service)
-
-	// Only positional arguments should remain in args.
-	if len(args) != 1 {
-		usageFunc()
-	}
-
-	expectedParams := []string{
-		"name",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_name, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-
-	call := service.Delete(param_name)
-
-	var response *api_client.Empty
-	response, err = call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Datastore_v1beta3_ProjectsOperationsGet(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1beta3/{+name}", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewProjectsOperationsService(api_service)
-
-	// Only positional arguments should remain in args.
-	if len(args) != 1 {
-		usageFunc()
-	}
-
-	expectedParams := []string{
-		"name",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_name, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-
-	call := service.Get(param_name)
 
 	var response *api_client.Operation
 	response, err = call.Do()
@@ -1169,15 +828,87 @@ func Datastore_v1beta3_ProjectsOperationsGet(context Context, args ...string) er
 	return nil
 }
 
-func Datastore_v1beta3_ProjectsOperationsList(context Context, args ...string) error {
+func Deploymentmanager_v2_ManifestsGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("deployment"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("manifest"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v1beta3/{+name}", "+") {
+			if strings.Contains("{project}/global/deployments/{deployment}/manifests/{manifest}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewManifestsService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"deployment",
+		"manifest",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_deployment, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_manifest, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_project, param_deployment, param_manifest)
+
+	var response *api_client.Manifest
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Deploymentmanager_v2_ManifestsList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("deployment"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/global/deployments/{deployment}/manifests", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -1186,7 +917,7 @@ func Datastore_v1beta3_ProjectsOperationsList(context Context, args ...string) e
 
 		usageBits += " [--filter=VALUE]"
 
-		usageBits += " [--pageSize=VALUE]"
+		usageBits += " [--maxResults=VALUE]"
 
 		usageBits += " [--pageToken=VALUE]"
 
@@ -1198,12 +929,12 @@ func Datastore_v1beta3_ProjectsOperationsList(context Context, args ...string) e
 	if err != nil {
 		return err
 	}
-	service := api_client.NewProjectsOperationsService(api_service)
+	service := api_client.NewManifestsService(api_service)
 
 	queryParamNames := map[string]bool{
-		"filter":    false,
-		"pageSize":  false,
-		"pageToken": false,
+		"filter":     false,
+		"maxResults": false,
+		"pageToken":  false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -1223,19 +954,24 @@ func Datastore_v1beta3_ProjectsOperationsList(context Context, args ...string) e
 	}
 
 	expectedParams := []string{
-		"name",
+		"project",
+		"deployment",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_name, err := commands_util.ConvertValue_string(paramValues[0])
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_deployment, err := commands_util.ConvertValue_string(paramValues[1])
 	if err != nil {
 		return err
 	}
 
-	call := service.List(param_name)
+	call := service.List(param_project, param_deployment)
 
 	// Set query parameters.
 	if value, ok := flagValues["filter"]; ok {
@@ -1245,12 +981,12 @@ func Datastore_v1beta3_ProjectsOperationsList(context Context, args ...string) e
 		}
 		call.Filter(query_filter)
 	}
-	if value, ok := flagValues["pageSize"]; ok {
-		query_pageSize, err := commands_util.ConvertValue_int64(value)
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
 		if err != nil {
 			return err
 		}
-		call.PageSize(query_pageSize)
+		call.MaxResults(query_maxResults)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -1260,7 +996,7 @@ func Datastore_v1beta3_ProjectsOperationsList(context Context, args ...string) e
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.ListOperationsResponse
+	var response *api_client.ManifestsListResponse
 	response, err = call.Do()
 	if err != nil {
 		return err
@@ -1274,22 +1010,21 @@ func Datastore_v1beta3_ProjectsOperationsList(context Context, args ...string) e
 	return nil
 }
 
-func Datastore_v1beta3_ProjectsRollback(context Context, args ...string) error {
+func Deploymentmanager_v2_OperationsGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("operation"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v1beta3/projects/{projectId}:rollback", "+") {
+			if strings.Contains("{project}/global/operations/{operation}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
 			}
 		}
-
-		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1299,51 +1034,34 @@ func Datastore_v1beta3_ProjectsRollback(context Context, args ...string) error {
 	if err != nil {
 		return err
 	}
-	service := api_client.NewProjectsService(api_service)
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
+	service := api_client.NewOperationsService(api_service)
 
 	// Only positional arguments should remain in args.
-	if len(args) == 0 || len(args) > 2 {
+	if len(args) != 1 {
 		usageFunc()
 	}
 
-	request := &api_client.RollbackRequest{}
-	if len(args) == 2 {
-		err = commands_util.PopulateRequestFromFilename(&request, args[1])
-		if err != nil {
-			return err
-		}
-	}
-
-	keyValues := flagValues
-
-	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
-	if err != nil {
-		return err
-	}
-
 	expectedParams := []string{
-		"projectId",
+		"project",
+		"operation",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_operation, err := commands_util.ConvertValue_string(paramValues[1])
 	if err != nil {
 		return err
 	}
 
-	call := service.Rollback(param_projectId,
-		request,
-	)
+	call := service.Get(param_project, param_operation)
 
-	var response *api_client.RollbackResponse
+	var response *api_client.Operation
 	response, err = call.Do()
 	if err != nil {
 		return err
@@ -1357,22 +1075,26 @@ func Datastore_v1beta3_ProjectsRollback(context Context, args ...string) error {
 	return nil
 }
 
-func Datastore_v1beta3_ProjectsRunQuery(context Context, args ...string) error {
+func Deploymentmanager_v2_OperationsList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v1beta3/projects/{projectId}:runQuery", "+") {
+			if strings.Contains("{project}/global/operations", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
 			}
 		}
 
-		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1382,51 +1104,69 @@ func Datastore_v1beta3_ProjectsRunQuery(context Context, args ...string) error {
 	if err != nil {
 		return err
 	}
-	service := api_client.NewProjectsService(api_service)
+	service := api_client.NewOperationsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"pageToken":  false,
+	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
 	}
 
-	// Only positional arguments should remain in args.
-	if len(args) == 0 || len(args) > 2 {
-		usageFunc()
-	}
-
-	request := &api_client.RunQueryRequest{}
-	if len(args) == 2 {
-		err = commands_util.PopulateRequestFromFilename(&request, args[1])
-		if err != nil {
-			return err
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
 		}
 	}
 
-	keyValues := flagValues
-
-	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
-	if err != nil {
-		return err
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
 	}
 
 	expectedParams := []string{
-		"projectId",
+		"project",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.RunQuery(param_projectId,
-		request,
-	)
+	call := service.List(param_project)
 
-	var response *api_client.RunQueryResponse
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	var response *api_client.OperationsListResponse
 	response, err = call.Do()
 	if err != nil {
 		return err
@@ -1440,22 +1180,22 @@ func Datastore_v1beta3_ProjectsRunQuery(context Context, args ...string) error {
 	return nil
 }
 
-func Datastore_v1beta3_ProjectsWatch(context Context, args ...string) error {
+func Deploymentmanager_v2_ResourcesGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("deployment"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("resource"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v1beta3/projects/{projectId}:watch", "+") {
+			if strings.Contains("{project}/global/deployments/{deployment}/resources/{resource}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
 			}
 		}
-
-		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		os.Exit(1)
@@ -1465,51 +1205,255 @@ func Datastore_v1beta3_ProjectsWatch(context Context, args ...string) error {
 	if err != nil {
 		return err
 	}
-	service := api_client.NewProjectsService(api_service)
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
+	service := api_client.NewResourcesService(api_service)
 
 	// Only positional arguments should remain in args.
-	if len(args) == 0 || len(args) > 2 {
+	if len(args) != 1 {
 		usageFunc()
 	}
 
-	request := &api_client.WatchRequest{}
-	if len(args) == 2 {
-		err = commands_util.PopulateRequestFromFilename(&request, args[1])
-		if err != nil {
-			return err
-		}
-	}
-
-	keyValues := flagValues
-
-	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
-	if err != nil {
-		return err
-	}
-
 	expectedParams := []string{
-		"projectId",
+		"project",
+		"deployment",
+		"resource",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_deployment, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_resource, err := commands_util.ConvertValue_string(paramValues[2])
 	if err != nil {
 		return err
 	}
 
-	call := service.Watch(param_projectId,
-		request,
-	)
+	call := service.Get(param_project, param_deployment, param_resource)
 
-	var response *api_client.WatchChange
+	var response *api_client.Resource
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Deploymentmanager_v2_ResourcesList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("deployment"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/global/deployments/{deployment}/resources", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewResourcesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"deployment",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_deployment, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_project, param_deployment)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	var response *api_client.ResourcesListResponse
+	response, err = call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Deploymentmanager_v2_TypesList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/global/types", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewTypesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_project)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	var response *api_client.TypesListResponse
 	response, err = call.Do()
 	if err != nil {
 		return err

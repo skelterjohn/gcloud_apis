@@ -49,6 +49,15 @@ const basePath = "https://cloudfunctions.googleapis.com/"
 const (
 	// View and manage your data across Google Cloud Platform services
 	CloudPlatformScope = "https://www.googleapis.com/auth/cloud-platform"
+
+	// Manage your data in Google Cloud Storage
+	DevstorageReadWriteScope = "https://www.googleapis.com/auth/devstorage.read_write"
+
+	// Submit log data for your projects
+	LoggingWriteScope = "https://www.googleapis.com/auth/logging.write"
+
+	// View and manage Pub/Sub topics and subscriptions
+	PubsubScope = "https://www.googleapis.com/auth/pubsub"
 )
 
 func New(client *http.Client) (*Service, error) {
@@ -118,6 +127,26 @@ func NewProjectsRegionsFunctionsService(s *Service) *ProjectsRegionsFunctionsSer
 
 type ProjectsRegionsFunctionsService struct {
 	s *Service
+}
+
+// CallFunctionRequest: Request for the CallFunction method.
+type CallFunctionRequest struct {
+	// Data: Input to be passed to the function.
+	Data string `json:"data,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Data") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *CallFunctionRequest) MarshalJSON() ([]byte, error) {
+	type noMethod CallFunctionRequest
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
 // CallFunctionResponse: Response of CallFunction method.
@@ -243,6 +272,13 @@ type HostedFunction struct {
 	//   "DEPLOYING" - Creation or update in progress.
 	//   "DELETING" - Deletion in progress.
 	Status string `json:"status,omitempty"`
+
+	// Timeout: The cloud function execution timeout. Execution is
+	// considered failed and
+	// can be terminated if the function is not completed at the end of
+	// the
+	// timeout period. Defaults to 60 seconds.
+	Timeout string `json:"timeout,omitempty"`
 
 	// Triggers: List of triggers.
 	Triggers []*FunctionTrigger `json:"triggers,omitempty"`
@@ -441,8 +477,6 @@ type SourceRepository struct {
 	// a
 	// repository.
 	SourcePath string `json:"sourcePath,omitempty"`
-
-	SourceUrl string `json:"sourceUrl,omitempty"`
 
 	// Tag: The name of the tag that captures the state of the repository
 	// from
@@ -736,25 +770,20 @@ func (c *OperationsGetCall) Do() (*Operation, error) {
 // method id "cloudfunctions.projects.regions.functions.call":
 
 type ProjectsRegionsFunctionsCallCall struct {
-	s          *Service
-	name       string
-	urlParams_ gensupport.URLParams
-	ctx_       context.Context
+	s                   *Service
+	name                string
+	callfunctionrequest *CallFunctionRequest
+	urlParams_          gensupport.URLParams
+	ctx_                context.Context
 }
 
 // Call: Invokes synchronously deployed function. To be used for
 // testing, very
 // limited traffic allowed.
-func (r *ProjectsRegionsFunctionsService) Call(name string) *ProjectsRegionsFunctionsCallCall {
+func (r *ProjectsRegionsFunctionsService) Call(name string, callfunctionrequest *CallFunctionRequest) *ProjectsRegionsFunctionsCallCall {
 	c := &ProjectsRegionsFunctionsCallCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
-	return c
-}
-
-// Data sets the optional parameter "data": Input to be passed to the
-// function.
-func (c *ProjectsRegionsFunctionsCallCall) Data(data string) *ProjectsRegionsFunctionsCallCall {
-	c.urlParams_.Set("data", data)
+	c.callfunctionrequest = callfunctionrequest
 	return c
 }
 
@@ -776,6 +805,11 @@ func (c *ProjectsRegionsFunctionsCallCall) Context(ctx context.Context) *Project
 
 func (c *ProjectsRegionsFunctionsCallCall) doRequest(alt string) (*http.Response, error) {
 	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.callfunctionrequest)
+	if err != nil {
+		return nil, err
+	}
+	ctype := "application/json"
 	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+name}:call")
 	urls += "?" + c.urlParams_.Encode()
@@ -783,6 +817,7 @@ func (c *ProjectsRegionsFunctionsCallCall) doRequest(alt string) (*http.Response
 	googleapi.Expand(req.URL, map[string]string{
 		"name": c.name,
 	})
+	req.Header.Set("Content-Type", ctype)
 	req.Header.Set("User-Agent", c.s.userAgent())
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -834,11 +869,6 @@ func (c *ProjectsRegionsFunctionsCallCall) Do() (*CallFunctionResponse, error) {
 	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "data": {
-	//       "description": "Input to be passed to the function.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
 	//     "name": {
 	//       "description": "The name of the function to be called.",
 	//       "location": "path",
@@ -848,11 +878,17 @@ func (c *ProjectsRegionsFunctionsCallCall) Do() (*CallFunctionResponse, error) {
 	//     }
 	//   },
 	//   "path": "v1beta1/{+name}:call",
+	//   "request": {
+	//     "$ref": "CallFunctionRequest"
+	//   },
 	//   "response": {
 	//     "$ref": "CallFunctionResponse"
 	//   },
 	//   "scopes": [
-	//     "https://www.googleapis.com/auth/cloud-platform"
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/devstorage.read_write",
+	//     "https://www.googleapis.com/auth/logging.write",
+	//     "https://www.googleapis.com/auth/pubsub"
 	//   ]
 	// }
 
@@ -977,7 +1013,10 @@ func (c *ProjectsRegionsFunctionsCreateCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
-	//     "https://www.googleapis.com/auth/cloud-platform"
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/devstorage.read_write",
+	//     "https://www.googleapis.com/auth/logging.write",
+	//     "https://www.googleapis.com/auth/pubsub"
 	//   ]
 	// }
 
@@ -1093,7 +1132,10 @@ func (c *ProjectsRegionsFunctionsDeleteCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
-	//     "https://www.googleapis.com/auth/cloud-platform"
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/devstorage.read_write",
+	//     "https://www.googleapis.com/auth/logging.write",
+	//     "https://www.googleapis.com/auth/pubsub"
 	//   ]
 	// }
 
@@ -1496,7 +1538,10 @@ func (c *ProjectsRegionsFunctionsUpdateCall) Do() (*Operation, error) {
 	//     "$ref": "Operation"
 	//   },
 	//   "scopes": [
-	//     "https://www.googleapis.com/auth/cloud-platform"
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/devstorage.read_write",
+	//     "https://www.googleapis.com/auth/logging.write",
+	//     "https://www.googleapis.com/auth/pubsub"
 	//   ]
 	// }
 
