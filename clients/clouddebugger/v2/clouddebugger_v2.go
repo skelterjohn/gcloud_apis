@@ -1332,7 +1332,8 @@ func (c *ControllerDebuggeesRegisterCall) doRequest(alt string) (*http.Response,
 // returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *ControllerDebuggeesRegisterCall) Do() (*RegisterDebuggeeResponse, error) {
+func (c *ControllerDebuggeesRegisterCall) Do(opts ...googleapi.CallOption) (*RegisterDebuggeeResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -1496,7 +1497,8 @@ func (c *ControllerDebuggeesBreakpointsListCall) doRequest(alt string) (*http.Re
 // response was returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *ControllerDebuggeesBreakpointsListCall) Do() (*ListActiveBreakpointsResponse, error) {
+func (c *ControllerDebuggeesBreakpointsListCall) Do(opts ...googleapi.CallOption) (*ListActiveBreakpointsResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -1641,7 +1643,8 @@ func (c *ControllerDebuggeesBreakpointsUpdateCall) doRequest(alt string) (*http.
 // response was returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *ControllerDebuggeesBreakpointsUpdateCall) Do() (*UpdateActiveBreakpointResponse, error) {
+func (c *ControllerDebuggeesBreakpointsUpdateCall) Do(opts ...googleapi.CallOption) (*UpdateActiveBreakpointResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -1788,7 +1791,8 @@ func (c *DebuggerDebuggeesListCall) doRequest(alt string) (*http.Response, error
 // returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *DebuggerDebuggeesListCall) Do() (*ListDebuggeesResponse, error) {
+func (c *DebuggerDebuggeesListCall) Do(opts ...googleapi.CallOption) (*ListDebuggeesResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -1904,7 +1908,8 @@ func (c *DebuggerDebuggeesBreakpointsDeleteCall) doRequest(alt string) (*http.Re
 // in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
 // check whether the returned error was because http.StatusNotModified
 // was returned.
-func (c *DebuggerDebuggeesBreakpointsDeleteCall) Do() (*Empty, error) {
+func (c *DebuggerDebuggeesBreakpointsDeleteCall) Do(opts ...googleapi.CallOption) (*Empty, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -2039,7 +2044,8 @@ func (c *DebuggerDebuggeesBreakpointsGetCall) doRequest(alt string) (*http.Respo
 // returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *DebuggerDebuggeesBreakpointsGetCall) Do() (*GetBreakpointResponse, error) {
+func (c *DebuggerDebuggeesBreakpointsGetCall) Do(opts ...googleapi.CallOption) (*GetBreakpointResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -2223,7 +2229,8 @@ func (c *DebuggerDebuggeesBreakpointsListCall) doRequest(alt string) (*http.Resp
 // returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *DebuggerDebuggeesBreakpointsListCall) Do() (*ListBreakpointsResponse, error) {
+func (c *DebuggerDebuggeesBreakpointsListCall) Do(opts ...googleapi.CallOption) (*ListBreakpointsResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -2371,7 +2378,8 @@ func (c *DebuggerDebuggeesBreakpointsSetCall) doRequest(alt string) (*http.Respo
 // returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *DebuggerDebuggeesBreakpointsSetCall) Do() (*SetBreakpointResponse, error) {
+func (c *DebuggerDebuggeesBreakpointsSetCall) Do(opts ...googleapi.CallOption) (*SetBreakpointResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {

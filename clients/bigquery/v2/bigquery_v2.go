@@ -2172,7 +2172,8 @@ func (c *DatasetsDeleteCall) doRequest(alt string) (*http.Response, error) {
 }
 
 // Do executes the "bigquery.datasets.delete" call.
-func (c *DatasetsDeleteCall) Do() error {
+func (c *DatasetsDeleteCall) Do(opts ...googleapi.CallOption) error {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if err != nil {
 		return err
@@ -2290,7 +2291,8 @@ func (c *DatasetsGetCall) doRequest(alt string) (*http.Response, error) {
 // in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
 // check whether the returned error was because http.StatusNotModified
 // was returned.
-func (c *DatasetsGetCall) Do() (*Dataset, error) {
+func (c *DatasetsGetCall) Do(opts ...googleapi.CallOption) (*Dataset, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -2416,7 +2418,8 @@ func (c *DatasetsInsertCall) doRequest(alt string) (*http.Response, error) {
 // in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
 // check whether the returned error was because http.StatusNotModified
 // was returned.
-func (c *DatasetsInsertCall) Do() (*Dataset, error) {
+func (c *DatasetsInsertCall) Do(opts ...googleapi.CallOption) (*Dataset, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -2565,7 +2568,8 @@ func (c *DatasetsListCall) doRequest(alt string) (*http.Response, error) {
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *DatasetsListCall) Do() (*DatasetList, error) {
+func (c *DatasetsListCall) Do(opts ...googleapi.CallOption) (*DatasetList, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -2637,6 +2641,27 @@ func (c *DatasetsListCall) Do() (*DatasetList, error) {
 
 }
 
+// Pages invokes f for each page of results.
+// A non-nil error returned from f will halt the iteration.
+// The provided context supersedes any context provided to the Context method.
+func (c *DatasetsListCall) Pages(ctx context.Context, f func(*DatasetList) error) error {
+	c.ctx_ = ctx
+	defer c.PageToken(c.urlParams_.Get("pageToken")) // reset paging to original point
+	for {
+		x, err := c.Do()
+		if err != nil {
+			return err
+		}
+		if err := f(x); err != nil {
+			return err
+		}
+		if x.NextPageToken == "" {
+			return nil
+		}
+		c.PageToken(x.NextPageToken)
+	}
+}
+
 // method id "bigquery.datasets.patch":
 
 type DatasetsPatchCall struct {
@@ -2706,7 +2731,8 @@ func (c *DatasetsPatchCall) doRequest(alt string) (*http.Response, error) {
 // in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
 // check whether the returned error was because http.StatusNotModified
 // was returned.
-func (c *DatasetsPatchCall) Do() (*Dataset, error) {
+func (c *DatasetsPatchCall) Do(opts ...googleapi.CallOption) (*Dataset, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -2839,7 +2865,8 @@ func (c *DatasetsUpdateCall) doRequest(alt string) (*http.Response, error) {
 // in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
 // check whether the returned error was because http.StatusNotModified
 // was returned.
-func (c *DatasetsUpdateCall) Do() (*Dataset, error) {
+func (c *DatasetsUpdateCall) Do(opts ...googleapi.CallOption) (*Dataset, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -2965,7 +2992,8 @@ func (c *JobsCancelCall) doRequest(alt string) (*http.Response, error) {
 // returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *JobsCancelCall) Do() (*JobCancelResponse, error) {
+func (c *JobsCancelCall) Do(opts ...googleapi.CallOption) (*JobCancelResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -3101,7 +3129,8 @@ func (c *JobsGetCall) doRequest(alt string) (*http.Response, error) {
 // error.(*googleapi.Error).Header. Use googleapi.IsNotModified to check
 // whether the returned error was because http.StatusNotModified was
 // returned.
-func (c *JobsGetCall) Do() (*Job, error) {
+func (c *JobsGetCall) Do(opts ...googleapi.CallOption) (*Job, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -3266,7 +3295,8 @@ func (c *JobsGetQueryResultsCall) doRequest(alt string) (*http.Response, error) 
 // returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *JobsGetQueryResultsCall) Do() (*GetQueryResultsResponse, error) {
+func (c *JobsGetQueryResultsCall) Do(opts ...googleapi.CallOption) (*GetQueryResultsResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -3352,6 +3382,27 @@ func (c *JobsGetQueryResultsCall) Do() (*GetQueryResultsResponse, error) {
 
 }
 
+// Pages invokes f for each page of results.
+// A non-nil error returned from f will halt the iteration.
+// The provided context supersedes any context provided to the Context method.
+func (c *JobsGetQueryResultsCall) Pages(ctx context.Context, f func(*GetQueryResultsResponse) error) error {
+	c.ctx_ = ctx
+	defer c.PageToken(c.urlParams_.Get("pageToken")) // reset paging to original point
+	for {
+		x, err := c.Do()
+		if err != nil {
+			return err
+		}
+		if err := f(x); err != nil {
+			return err
+		}
+		if x.PageToken == "" {
+			return nil
+		}
+		c.PageToken(x.PageToken)
+	}
+}
+
 // method id "bigquery.jobs.insert":
 
 type JobsInsertCall struct {
@@ -3360,9 +3411,9 @@ type JobsInsertCall struct {
 	job              *Job
 	urlParams_       gensupport.URLParams
 	media_           io.Reader
-	resumable_       googleapi.SizeReaderAt
+	resumableBuffer_ *gensupport.ResumableBuffer
 	mediaType_       string
-	protocol_        string
+	mediaSize_       int64 // mediaSize, if known.  Used only for calls to progressUpdater_.
 	progressUpdater_ googleapi.ProgressUpdater
 	ctx_             context.Context
 }
@@ -3376,25 +3427,35 @@ func (r *JobsService) Insert(projectId string, job *Job) *JobsInsertCall {
 	return c
 }
 
-// Media specifies the media to upload in a single chunk. At most one of
-// Media and ResumableMedia may be set.
-func (c *JobsInsertCall) Media(r io.Reader) *JobsInsertCall {
-	c.media_ = r
-	c.protocol_ = "multipart"
+// Media specifies the media to upload in one or more chunks. The chunk
+// size may be controlled by supplying a MediaOption generated by
+// googleapi.ChunkSize. The chunk size defaults to
+// googleapi.DefaultUploadChunkSize.
+// At most one of Media and ResumableMedia may be set.
+func (c *JobsInsertCall) Media(r io.Reader, options ...googleapi.MediaOption) *JobsInsertCall {
+	opts := googleapi.ProcessMediaOptions(options)
+	chunkSize := opts.ChunkSize
+	r, c.mediaType_ = gensupport.DetermineContentType(r, opts.ContentType)
+	c.media_, c.resumableBuffer_ = gensupport.PrepareUpload(r, chunkSize)
 	return c
 }
 
 // ResumableMedia specifies the media to upload in chunks and can be
-// canceled with ctx. At most one of Media and ResumableMedia may be
-// set. mediaType identifies the MIME media type of the upload, such as
-// "image/png". If mediaType is "", it will be auto-detected. The
-// provided ctx will supersede any context previously provided to the
-// Context method.
+// canceled with ctx.
+//
+// Deprecated: use Media instead.
+//
+// At most one of Media and ResumableMedia may be set. mediaType
+// identifies the MIME media type of the upload, such as "image/png". If
+// mediaType is "", it will be auto-detected. The provided ctx will
+// supersede any context previously provided to the Context method.
 func (c *JobsInsertCall) ResumableMedia(ctx context.Context, r io.ReaderAt, size int64, mediaType string) *JobsInsertCall {
 	c.ctx_ = ctx
-	c.resumable_ = io.NewSectionReader(r, 0, size)
-	c.mediaType_ = mediaType
-	c.protocol_ = "resumable"
+	rdr := gensupport.ReaderAtToReader(r, size)
+	rdr, c.mediaType_ = gensupport.DetermineContentType(rdr, mediaType)
+	c.resumableBuffer_ = gensupport.NewResumableBuffer(rdr, googleapi.DefaultUploadChunkSize)
+	c.media_ = nil
+	c.mediaSize_ = size
 	return c
 }
 
@@ -3434,31 +3495,29 @@ func (c *JobsInsertCall) doRequest(alt string) (*http.Response, error) {
 	ctype := "application/json"
 	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "projects/{projectId}/jobs")
-	if c.media_ != nil || c.resumable_ != nil {
+	if c.media_ != nil || c.resumableBuffer_ != nil {
 		urls = strings.Replace(urls, "https://www.googleapis.com/", "https://www.googleapis.com/upload/", 1)
-		c.urlParams_.Set("uploadType", c.protocol_)
+		protocol := "multipart"
+		if c.resumableBuffer_ != nil {
+			protocol = "resumable"
+		}
+		c.urlParams_.Set("uploadType", protocol)
 	}
 	urls += "?" + c.urlParams_.Encode()
-	if c.protocol_ != "resumable" {
-		var cancel func()
-		cancel, _ = googleapi.ConditionallyIncludeMedia(c.media_, &body, &ctype)
-		if cancel != nil {
-			defer cancel()
-		}
+	if c.media_ != nil {
+		var combined io.ReadCloser
+		combined, ctype = gensupport.CombineBodyMedia(body, ctype, c.media_, c.mediaType_)
+		defer combined.Close()
+		body = combined
 	}
 	req, _ := http.NewRequest("POST", urls, body)
 	googleapi.Expand(req.URL, map[string]string{
 		"projectId": c.projectId,
 	})
-	if c.protocol_ == "resumable" {
-		if c.mediaType_ == "" {
-			c.mediaType_ = googleapi.DetectMediaType(c.resumable_)
-		}
+	if c.resumableBuffer_ != nil {
 		req.Header.Set("X-Upload-Content-Type", c.mediaType_)
-		req.Header.Set("Content-Type", "application/json; charset=utf-8")
-	} else {
-		req.Header.Set("Content-Type", ctype)
 	}
+	req.Header.Set("Content-Type", ctype)
 	req.Header.Set("User-Agent", c.s.userAgent())
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -3473,7 +3532,8 @@ func (c *JobsInsertCall) doRequest(alt string) (*http.Response, error) {
 // error.(*googleapi.Error).Header. Use googleapi.IsNotModified to check
 // whether the returned error was because http.StatusNotModified was
 // returned.
-func (c *JobsInsertCall) Do() (*Job, error) {
+func (c *JobsInsertCall) Do(opts ...googleapi.CallOption) (*Job, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -3491,22 +3551,32 @@ func (c *JobsInsertCall) Do() (*Job, error) {
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	if c.protocol_ == "resumable" {
+	if c.resumableBuffer_ != nil {
 		loc := res.Header.Get("Location")
-		rx := &googleapi.ResumableUpload{
-			Client:        c.s.client,
-			UserAgent:     c.s.userAgent(),
-			URI:           loc,
-			Media:         c.resumable_,
-			MediaType:     c.mediaType_,
-			ContentLength: c.resumable_.Size(),
-			Callback:      c.progressUpdater_,
+		rx := &gensupport.ResumableUpload{
+			Client:    c.s.client,
+			UserAgent: c.s.userAgent(),
+			URI:       loc,
+			Media:     c.resumableBuffer_,
+			MediaType: c.mediaType_,
+			Callback: func(curr int64) {
+				if c.progressUpdater_ != nil {
+					c.progressUpdater_(curr, c.mediaSize_)
+				}
+			},
 		}
-		res, err = rx.Upload(c.ctx_)
+		ctx := c.ctx_
+		if ctx == nil {
+			ctx = context.TODO()
+		}
+		res, err = rx.Upload(ctx)
 		if err != nil {
 			return nil, err
 		}
 		defer res.Body.Close()
+		if err := googleapi.CheckResponse(res); err != nil {
+			return nil, err
+		}
 	}
 	ret := &Job{
 		ServerResponse: googleapi.ServerResponse{
@@ -3684,7 +3754,8 @@ func (c *JobsListCall) doRequest(alt string) (*http.Response, error) {
 // in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
 // check whether the returned error was because http.StatusNotModified
 // was returned.
-func (c *JobsListCall) Do() (*JobList, error) {
+func (c *JobsListCall) Do(opts ...googleapi.CallOption) (*JobList, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -3785,6 +3856,27 @@ func (c *JobsListCall) Do() (*JobList, error) {
 
 }
 
+// Pages invokes f for each page of results.
+// A non-nil error returned from f will halt the iteration.
+// The provided context supersedes any context provided to the Context method.
+func (c *JobsListCall) Pages(ctx context.Context, f func(*JobList) error) error {
+	c.ctx_ = ctx
+	defer c.PageToken(c.urlParams_.Get("pageToken")) // reset paging to original point
+	for {
+		x, err := c.Do()
+		if err != nil {
+			return err
+		}
+		if err := f(x); err != nil {
+			return err
+		}
+		if x.NextPageToken == "" {
+			return nil
+		}
+		c.PageToken(x.NextPageToken)
+	}
+}
+
 // method id "bigquery.jobs.query":
 
 type JobsQueryCall struct {
@@ -3849,7 +3941,8 @@ func (c *JobsQueryCall) doRequest(alt string) (*http.Response, error) {
 // at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *JobsQueryCall) Do() (*QueryResponse, error) {
+func (c *JobsQueryCall) Do(opts ...googleapi.CallOption) (*QueryResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -3988,7 +4081,8 @@ func (c *ProjectsListCall) doRequest(alt string) (*http.Response, error) {
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *ProjectsListCall) Do() (*ProjectList, error) {
+func (c *ProjectsListCall) Do(opts ...googleapi.CallOption) (*ProjectList, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -4044,6 +4138,27 @@ func (c *ProjectsListCall) Do() (*ProjectList, error) {
 	//   ]
 	// }
 
+}
+
+// Pages invokes f for each page of results.
+// A non-nil error returned from f will halt the iteration.
+// The provided context supersedes any context provided to the Context method.
+func (c *ProjectsListCall) Pages(ctx context.Context, f func(*ProjectList) error) error {
+	c.ctx_ = ctx
+	defer c.PageToken(c.urlParams_.Get("pageToken")) // reset paging to original point
+	for {
+		x, err := c.Do()
+		if err != nil {
+			return err
+		}
+		if err := f(x); err != nil {
+			return err
+		}
+		if x.NextPageToken == "" {
+			return nil
+		}
+		c.PageToken(x.NextPageToken)
+	}
 }
 
 // method id "bigquery.tabledata.insertAll":
@@ -4116,7 +4231,8 @@ func (c *TabledataInsertAllCall) doRequest(alt string) (*http.Response, error) {
 // was returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *TabledataInsertAllCall) Do() (*TableDataInsertAllResponse, error) {
+func (c *TabledataInsertAllCall) Do(opts ...googleapi.CallOption) (*TableDataInsertAllResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -4286,7 +4402,8 @@ func (c *TabledataListCall) doRequest(alt string) (*http.Response, error) {
 // at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *TabledataListCall) Do() (*TableDataList, error) {
+func (c *TabledataListCall) Do(opts ...googleapi.CallOption) (*TableDataList, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -4373,6 +4490,27 @@ func (c *TabledataListCall) Do() (*TableDataList, error) {
 
 }
 
+// Pages invokes f for each page of results.
+// A non-nil error returned from f will halt the iteration.
+// The provided context supersedes any context provided to the Context method.
+func (c *TabledataListCall) Pages(ctx context.Context, f func(*TableDataList) error) error {
+	c.ctx_ = ctx
+	defer c.PageToken(c.urlParams_.Get("pageToken")) // reset paging to original point
+	for {
+		x, err := c.Do()
+		if err != nil {
+			return err
+		}
+		if err := f(x); err != nil {
+			return err
+		}
+		if x.PageToken == "" {
+			return nil
+		}
+		c.PageToken(x.PageToken)
+	}
+}
+
 // method id "bigquery.tables.delete":
 
 type TablesDeleteCall struct {
@@ -4429,7 +4567,8 @@ func (c *TablesDeleteCall) doRequest(alt string) (*http.Response, error) {
 }
 
 // Do executes the "bigquery.tables.delete" call.
-func (c *TablesDeleteCall) Do() error {
+func (c *TablesDeleteCall) Do(opts ...googleapi.CallOption) error {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if err != nil {
 		return err
@@ -4554,7 +4693,8 @@ func (c *TablesGetCall) doRequest(alt string) (*http.Response, error) {
 // in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
 // check whether the returned error was because http.StatusNotModified
 // was returned.
-func (c *TablesGetCall) Do() (*Table, error) {
+func (c *TablesGetCall) Do(opts ...googleapi.CallOption) (*Table, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -4690,7 +4830,8 @@ func (c *TablesInsertCall) doRequest(alt string) (*http.Response, error) {
 // in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
 // check whether the returned error was because http.StatusNotModified
 // was returned.
-func (c *TablesInsertCall) Do() (*Table, error) {
+func (c *TablesInsertCall) Do(opts ...googleapi.CallOption) (*Table, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -4842,7 +4983,8 @@ func (c *TablesListCall) doRequest(alt string) (*http.Response, error) {
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *TablesListCall) Do() (*TableList, error) {
+func (c *TablesListCall) Do(opts ...googleapi.CallOption) (*TableList, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -4914,6 +5056,27 @@ func (c *TablesListCall) Do() (*TableList, error) {
 	//   ]
 	// }
 
+}
+
+// Pages invokes f for each page of results.
+// A non-nil error returned from f will halt the iteration.
+// The provided context supersedes any context provided to the Context method.
+func (c *TablesListCall) Pages(ctx context.Context, f func(*TableList) error) error {
+	c.ctx_ = ctx
+	defer c.PageToken(c.urlParams_.Get("pageToken")) // reset paging to original point
+	for {
+		x, err := c.Do()
+		if err != nil {
+			return err
+		}
+		if err := f(x); err != nil {
+			return err
+		}
+		if x.NextPageToken == "" {
+			return nil
+		}
+		c.PageToken(x.NextPageToken)
+	}
 }
 
 // method id "bigquery.tables.patch":
@@ -4988,7 +5151,8 @@ func (c *TablesPatchCall) doRequest(alt string) (*http.Response, error) {
 // in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
 // check whether the returned error was because http.StatusNotModified
 // was returned.
-func (c *TablesPatchCall) Do() (*Table, error) {
+func (c *TablesPatchCall) Do(opts ...googleapi.CallOption) (*Table, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -5131,7 +5295,8 @@ func (c *TablesUpdateCall) doRequest(alt string) (*http.Response, error) {
 // in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
 // check whether the returned error was because http.StatusNotModified
 // was returned.
-func (c *TablesUpdateCall) Do() (*Table, error) {
+func (c *TablesUpdateCall) Do(opts ...googleapi.CallOption) (*Table, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {

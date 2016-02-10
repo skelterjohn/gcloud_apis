@@ -1706,7 +1706,8 @@ func (c *ProjectsGetSettingsCall) doRequest(alt string) (*http.Response, error) 
 // at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *ProjectsGetSettingsCall) Do() (*ProjectSettings, error) {
+func (c *ProjectsGetSettingsCall) Do(opts ...googleapi.CallOption) (*ProjectSettings, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -1839,7 +1840,8 @@ func (c *ProjectsInitializeSettingsCall) doRequest(alt string) (*http.Response, 
 // at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *ProjectsInitializeSettingsCall) Do() (*ProjectSettings, error) {
+func (c *ProjectsInitializeSettingsCall) Do(opts ...googleapi.CallOption) (*ProjectSettings, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -1964,7 +1966,8 @@ func (c *ProjectsHistoriesCreateCall) doRequest(alt string) (*http.Response, err
 // in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
 // check whether the returned error was because http.StatusNotModified
 // was returned.
-func (c *ProjectsHistoriesCreateCall) Do() (*History, error) {
+func (c *ProjectsHistoriesCreateCall) Do(opts ...googleapi.CallOption) (*History, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -2099,7 +2102,8 @@ func (c *ProjectsHistoriesGetCall) doRequest(alt string) (*http.Response, error)
 // in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
 // check whether the returned error was because http.StatusNotModified
 // was returned.
-func (c *ProjectsHistoriesGetCall) Do() (*History, error) {
+func (c *ProjectsHistoriesGetCall) Do(opts ...googleapi.CallOption) (*History, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -2264,7 +2268,8 @@ func (c *ProjectsHistoriesListCall) doRequest(alt string) (*http.Response, error
 // returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *ProjectsHistoriesListCall) Do() (*ListHistoriesResponse, error) {
+func (c *ProjectsHistoriesListCall) Do(opts ...googleapi.CallOption) (*ListHistoriesResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -2332,6 +2337,27 @@ func (c *ProjectsHistoriesListCall) Do() (*ListHistoriesResponse, error) {
 	//   ]
 	// }
 
+}
+
+// Pages invokes f for each page of results.
+// A non-nil error returned from f will halt the iteration.
+// The provided context supersedes any context provided to the Context method.
+func (c *ProjectsHistoriesListCall) Pages(ctx context.Context, f func(*ListHistoriesResponse) error) error {
+	c.ctx_ = ctx
+	defer c.PageToken(c.urlParams_.Get("pageToken")) // reset paging to original point
+	for {
+		x, err := c.Do()
+		if err != nil {
+			return err
+		}
+		if err := f(x); err != nil {
+			return err
+		}
+		if x.NextPageToken == "" {
+			return nil
+		}
+		c.PageToken(x.NextPageToken)
+	}
 }
 
 // method id "toolresults.projects.histories.executions.create":
@@ -2408,7 +2434,8 @@ func (c *ProjectsHistoriesExecutionsCreateCall) doRequest(alt string) (*http.Res
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *ProjectsHistoriesExecutionsCreateCall) Do() (*Execution, error) {
+func (c *ProjectsHistoriesExecutionsCreateCall) Do(opts ...googleapi.CallOption) (*Execution, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -2553,7 +2580,8 @@ func (c *ProjectsHistoriesExecutionsGetCall) doRequest(alt string) (*http.Respon
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *ProjectsHistoriesExecutionsGetCall) Do() (*Execution, error) {
+func (c *ProjectsHistoriesExecutionsGetCall) Do(opts ...googleapi.CallOption) (*Execution, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -2720,7 +2748,8 @@ func (c *ProjectsHistoriesExecutionsListCall) doRequest(alt string) (*http.Respo
 // returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *ProjectsHistoriesExecutionsListCall) Do() (*ListExecutionsResponse, error) {
+func (c *ProjectsHistoriesExecutionsListCall) Do(opts ...googleapi.CallOption) (*ListExecutionsResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -2790,6 +2819,27 @@ func (c *ProjectsHistoriesExecutionsListCall) Do() (*ListExecutionsResponse, err
 	//   ]
 	// }
 
+}
+
+// Pages invokes f for each page of results.
+// A non-nil error returned from f will halt the iteration.
+// The provided context supersedes any context provided to the Context method.
+func (c *ProjectsHistoriesExecutionsListCall) Pages(ctx context.Context, f func(*ListExecutionsResponse) error) error {
+	c.ctx_ = ctx
+	defer c.PageToken(c.urlParams_.Get("pageToken")) // reset paging to original point
+	for {
+		x, err := c.Do()
+		if err != nil {
+			return err
+		}
+		if err := f(x); err != nil {
+			return err
+		}
+		if x.NextPageToken == "" {
+			return nil
+		}
+		c.PageToken(x.NextPageToken)
+	}
 }
 
 // method id "toolresults.projects.histories.executions.patch":
@@ -2869,7 +2919,8 @@ func (c *ProjectsHistoriesExecutionsPatchCall) doRequest(alt string) (*http.Resp
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *ProjectsHistoriesExecutionsPatchCall) Do() (*Execution, error) {
+func (c *ProjectsHistoriesExecutionsPatchCall) Do(opts ...googleapi.CallOption) (*Execution, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -3018,7 +3069,8 @@ func (c *ProjectsHistoriesExecutionsStepsCreateCall) doRequest(alt string) (*htt
 // error.(*googleapi.Error).Header. Use googleapi.IsNotModified to check
 // whether the returned error was because http.StatusNotModified was
 // returned.
-func (c *ProjectsHistoriesExecutionsStepsCreateCall) Do() (*Step, error) {
+func (c *ProjectsHistoriesExecutionsStepsCreateCall) Do(opts ...googleapi.CallOption) (*Step, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -3173,7 +3225,8 @@ func (c *ProjectsHistoriesExecutionsStepsGetCall) doRequest(alt string) (*http.R
 // error.(*googleapi.Error).Header. Use googleapi.IsNotModified to check
 // whether the returned error was because http.StatusNotModified was
 // returned.
-func (c *ProjectsHistoriesExecutionsStepsGetCall) Do() (*Step, error) {
+func (c *ProjectsHistoriesExecutionsStepsGetCall) Do(opts ...googleapi.CallOption) (*Step, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -3352,7 +3405,8 @@ func (c *ProjectsHistoriesExecutionsStepsListCall) doRequest(alt string) (*http.
 // returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *ProjectsHistoriesExecutionsStepsListCall) Do() (*ListStepsResponse, error) {
+func (c *ProjectsHistoriesExecutionsStepsListCall) Do(opts ...googleapi.CallOption) (*ListStepsResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -3429,6 +3483,27 @@ func (c *ProjectsHistoriesExecutionsStepsListCall) Do() (*ListStepsResponse, err
 	//   ]
 	// }
 
+}
+
+// Pages invokes f for each page of results.
+// A non-nil error returned from f will halt the iteration.
+// The provided context supersedes any context provided to the Context method.
+func (c *ProjectsHistoriesExecutionsStepsListCall) Pages(ctx context.Context, f func(*ListStepsResponse) error) error {
+	c.ctx_ = ctx
+	defer c.PageToken(c.urlParams_.Get("pageToken")) // reset paging to original point
+	for {
+		x, err := c.Do()
+		if err != nil {
+			return err
+		}
+		if err := f(x); err != nil {
+			return err
+		}
+		if x.NextPageToken == "" {
+			return nil
+		}
+		c.PageToken(x.NextPageToken)
+	}
 }
 
 // method id "toolresults.projects.histories.executions.steps.patch":
@@ -3513,7 +3588,8 @@ func (c *ProjectsHistoriesExecutionsStepsPatchCall) doRequest(alt string) (*http
 // error.(*googleapi.Error).Header. Use googleapi.IsNotModified to check
 // whether the returned error was because http.StatusNotModified was
 // returned.
-func (c *ProjectsHistoriesExecutionsStepsPatchCall) Do() (*Step, error) {
+func (c *ProjectsHistoriesExecutionsStepsPatchCall) Do(opts ...googleapi.CallOption) (*Step, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -3671,7 +3747,8 @@ func (c *ProjectsHistoriesExecutionsStepsPublishXunitXmlFilesCall) doRequest(alt
 // error.(*googleapi.Error).Header. Use googleapi.IsNotModified to check
 // whether the returned error was because http.StatusNotModified was
 // returned.
-func (c *ProjectsHistoriesExecutionsStepsPublishXunitXmlFilesCall) Do() (*Step, error) {
+func (c *ProjectsHistoriesExecutionsStepsPublishXunitXmlFilesCall) Do(opts ...googleapi.CallOption) (*Step, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -3850,7 +3927,8 @@ func (c *ProjectsHistoriesExecutionsStepsThumbnailsListCall) doRequest(alt strin
 // was returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *ProjectsHistoriesExecutionsStepsThumbnailsListCall) Do() (*ListStepThumbnailsResponse, error) {
+func (c *ProjectsHistoriesExecutionsStepsThumbnailsListCall) Do(opts ...googleapi.CallOption) (*ListStepThumbnailsResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -3934,4 +4012,25 @@ func (c *ProjectsHistoriesExecutionsStepsThumbnailsListCall) Do() (*ListStepThum
 	//   ]
 	// }
 
+}
+
+// Pages invokes f for each page of results.
+// A non-nil error returned from f will halt the iteration.
+// The provided context supersedes any context provided to the Context method.
+func (c *ProjectsHistoriesExecutionsStepsThumbnailsListCall) Pages(ctx context.Context, f func(*ListStepThumbnailsResponse) error) error {
+	c.ctx_ = ctx
+	defer c.PageToken(c.urlParams_.Get("pageToken")) // reset paging to original point
+	for {
+		x, err := c.Do()
+		if err != nil {
+			return err
+		}
+		if err := f(x); err != nil {
+			return err
+		}
+		if x.NextPageToken == "" {
+			return nil
+		}
+		c.PageToken(x.NextPageToken)
+	}
 }

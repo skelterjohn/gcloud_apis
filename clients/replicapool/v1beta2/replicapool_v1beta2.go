@@ -724,7 +724,8 @@ func (c *InstanceGroupManagersAbandonInstancesCall) doRequest(alt string) (*http
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *InstanceGroupManagersAbandonInstancesCall) Do() (*Operation, error) {
+func (c *InstanceGroupManagersAbandonInstancesCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -863,7 +864,8 @@ func (c *InstanceGroupManagersDeleteCall) doRequest(alt string) (*http.Response,
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *InstanceGroupManagersDeleteCall) Do() (*Operation, error) {
+func (c *InstanceGroupManagersDeleteCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -1007,7 +1009,8 @@ func (c *InstanceGroupManagersDeleteInstancesCall) doRequest(alt string) (*http.
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *InstanceGroupManagersDeleteInstancesCall) Do() (*Operation, error) {
+func (c *InstanceGroupManagersDeleteInstancesCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -1157,7 +1160,8 @@ func (c *InstanceGroupManagersGetCall) doRequest(alt string) (*http.Response, er
 // returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *InstanceGroupManagersGetCall) Do() (*InstanceGroupManager, error) {
+func (c *InstanceGroupManagersGetCall) Do(opts ...googleapi.CallOption) (*InstanceGroupManager, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -1299,7 +1303,8 @@ func (c *InstanceGroupManagersInsertCall) doRequest(alt string) (*http.Response,
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *InstanceGroupManagersInsertCall) Do() (*Operation, error) {
+func (c *InstanceGroupManagersInsertCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -1471,7 +1476,8 @@ func (c *InstanceGroupManagersListCall) doRequest(alt string) (*http.Response, e
 // returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *InstanceGroupManagersListCall) Do() (*InstanceGroupManagerList, error) {
+func (c *InstanceGroupManagersListCall) Do(opts ...googleapi.CallOption) (*InstanceGroupManagerList, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -1556,6 +1562,27 @@ func (c *InstanceGroupManagersListCall) Do() (*InstanceGroupManagerList, error) 
 
 }
 
+// Pages invokes f for each page of results.
+// A non-nil error returned from f will halt the iteration.
+// The provided context supersedes any context provided to the Context method.
+func (c *InstanceGroupManagersListCall) Pages(ctx context.Context, f func(*InstanceGroupManagerList) error) error {
+	c.ctx_ = ctx
+	defer c.PageToken(c.urlParams_.Get("pageToken")) // reset paging to original point
+	for {
+		x, err := c.Do()
+		if err != nil {
+			return err
+		}
+		if err := f(x); err != nil {
+			return err
+		}
+		if x.NextPageToken == "" {
+			return nil
+		}
+		c.PageToken(x.NextPageToken)
+	}
+}
+
 // method id "replicapool.instanceGroupManagers.recreateInstances":
 
 type InstanceGroupManagersRecreateInstancesCall struct {
@@ -1627,7 +1654,8 @@ func (c *InstanceGroupManagersRecreateInstancesCall) doRequest(alt string) (*htt
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *InstanceGroupManagersRecreateInstancesCall) Do() (*Operation, error) {
+func (c *InstanceGroupManagersRecreateInstancesCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -1767,7 +1795,8 @@ func (c *InstanceGroupManagersResizeCall) doRequest(alt string) (*http.Response,
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *InstanceGroupManagersResizeCall) Do() (*Operation, error) {
+func (c *InstanceGroupManagersResizeCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -1917,7 +1946,8 @@ func (c *InstanceGroupManagersSetAutoHealingPolicyCall) doRequest(alt string) (*
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *InstanceGroupManagersSetAutoHealingPolicyCall) Do() (*Operation, error) {
+func (c *InstanceGroupManagersSetAutoHealingPolicyCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -2062,7 +2092,8 @@ func (c *InstanceGroupManagersSetInstanceTemplateCall) doRequest(alt string) (*h
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *InstanceGroupManagersSetInstanceTemplateCall) Do() (*Operation, error) {
+func (c *InstanceGroupManagersSetInstanceTemplateCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -2208,7 +2239,8 @@ func (c *InstanceGroupManagersSetTargetPoolsCall) doRequest(alt string) (*http.R
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *InstanceGroupManagersSetTargetPoolsCall) Do() (*Operation, error) {
+func (c *InstanceGroupManagersSetTargetPoolsCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -2358,7 +2390,8 @@ func (c *ZoneOperationsGetCall) doRequest(alt string) (*http.Response, error) {
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *ZoneOperationsGetCall) Do() (*Operation, error) {
+func (c *ZoneOperationsGetCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -2526,7 +2559,8 @@ func (c *ZoneOperationsListCall) doRequest(alt string) (*http.Response, error) {
 // at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *ZoneOperationsListCall) Do() (*OperationList, error) {
+func (c *ZoneOperationsListCall) Do(opts ...googleapi.CallOption) (*OperationList, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -2607,4 +2641,25 @@ func (c *ZoneOperationsListCall) Do() (*OperationList, error) {
 	//   ]
 	// }
 
+}
+
+// Pages invokes f for each page of results.
+// A non-nil error returned from f will halt the iteration.
+// The provided context supersedes any context provided to the Context method.
+func (c *ZoneOperationsListCall) Pages(ctx context.Context, f func(*OperationList) error) error {
+	c.ctx_ = ctx
+	defer c.PageToken(c.urlParams_.Get("pageToken")) // reset paging to original point
+	for {
+		x, err := c.Do()
+		if err != nil {
+			return err
+		}
+		if err := f(x); err != nil {
+			return err
+		}
+		if x.NextPageToken == "" {
+			return nil
+		}
+		c.PageToken(x.NextPageToken)
+	}
 }

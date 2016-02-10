@@ -495,7 +495,8 @@ func (c *RegionViewsAddresourcesCall) doRequest(alt string) (*http.Response, err
 }
 
 // Do executes the "resourceviews.regionViews.addresources" call.
-func (c *RegionViewsAddresourcesCall) Do() error {
+func (c *RegionViewsAddresourcesCall) Do(opts ...googleapi.CallOption) error {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if err != nil {
 		return err
@@ -602,7 +603,8 @@ func (c *RegionViewsDeleteCall) doRequest(alt string) (*http.Response, error) {
 }
 
 // Do executes the "resourceviews.regionViews.delete" call.
-func (c *RegionViewsDeleteCall) Do() error {
+func (c *RegionViewsDeleteCall) Do(opts ...googleapi.CallOption) error {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if err != nil {
 		return err
@@ -726,7 +728,8 @@ func (c *RegionViewsGetCall) doRequest(alt string) (*http.Response, error) {
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *RegionViewsGetCall) Do() (*ResourceView, error) {
+func (c *RegionViewsGetCall) Do(opts ...googleapi.CallOption) (*ResourceView, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -865,7 +868,8 @@ func (c *RegionViewsInsertCall) doRequest(alt string) (*http.Response, error) {
 // was returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *RegionViewsInsertCall) Do() (*RegionViewsInsertResponse, error) {
+func (c *RegionViewsInsertCall) Do(opts ...googleapi.CallOption) (*RegionViewsInsertResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -1020,7 +1024,8 @@ func (c *RegionViewsListCall) doRequest(alt string) (*http.Response, error) {
 // returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *RegionViewsListCall) Do() (*RegionViewsListResponse, error) {
+func (c *RegionViewsListCall) Do(opts ...googleapi.CallOption) (*RegionViewsListResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -1098,6 +1103,27 @@ func (c *RegionViewsListCall) Do() (*RegionViewsListResponse, error) {
 	//   ]
 	// }
 
+}
+
+// Pages invokes f for each page of results.
+// A non-nil error returned from f will halt the iteration.
+// The provided context supersedes any context provided to the Context method.
+func (c *RegionViewsListCall) Pages(ctx context.Context, f func(*RegionViewsListResponse) error) error {
+	c.ctx_ = ctx
+	defer c.PageToken(c.urlParams_.Get("pageToken")) // reset paging to original point
+	for {
+		x, err := c.Do()
+		if err != nil {
+			return err
+		}
+		if err := f(x); err != nil {
+			return err
+		}
+		if x.NextPageToken == "" {
+			return nil
+		}
+		c.PageToken(x.NextPageToken)
+	}
 }
 
 // method id "resourceviews.regionViews.listresources":
@@ -1178,7 +1204,8 @@ func (c *RegionViewsListresourcesCall) doRequest(alt string) (*http.Response, er
 // a response was returned at all) in error.(*googleapi.Error).Header.
 // Use googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *RegionViewsListresourcesCall) Do() (*RegionViewsListResourcesResponse, error) {
+func (c *RegionViewsListresourcesCall) Do(opts ...googleapi.CallOption) (*RegionViewsListResourcesResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -1328,7 +1355,8 @@ func (c *RegionViewsRemoveresourcesCall) doRequest(alt string) (*http.Response, 
 }
 
 // Do executes the "resourceviews.regionViews.removeresources" call.
-func (c *RegionViewsRemoveresourcesCall) Do() error {
+func (c *RegionViewsRemoveresourcesCall) Do(opts ...googleapi.CallOption) error {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if err != nil {
 		return err
@@ -1443,7 +1471,8 @@ func (c *ZoneViewsAddresourcesCall) doRequest(alt string) (*http.Response, error
 }
 
 // Do executes the "resourceviews.zoneViews.addresources" call.
-func (c *ZoneViewsAddresourcesCall) Do() error {
+func (c *ZoneViewsAddresourcesCall) Do(opts ...googleapi.CallOption) error {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if err != nil {
 		return err
@@ -1550,7 +1579,8 @@ func (c *ZoneViewsDeleteCall) doRequest(alt string) (*http.Response, error) {
 }
 
 // Do executes the "resourceviews.zoneViews.delete" call.
-func (c *ZoneViewsDeleteCall) Do() error {
+func (c *ZoneViewsDeleteCall) Do(opts ...googleapi.CallOption) error {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if err != nil {
 		return err
@@ -1674,7 +1704,8 @@ func (c *ZoneViewsGetCall) doRequest(alt string) (*http.Response, error) {
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *ZoneViewsGetCall) Do() (*ResourceView, error) {
+func (c *ZoneViewsGetCall) Do(opts ...googleapi.CallOption) (*ResourceView, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -1813,7 +1844,8 @@ func (c *ZoneViewsInsertCall) doRequest(alt string) (*http.Response, error) {
 // returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *ZoneViewsInsertCall) Do() (*ZoneViewsInsertResponse, error) {
+func (c *ZoneViewsInsertCall) Do(opts ...googleapi.CallOption) (*ZoneViewsInsertResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -1968,7 +2000,8 @@ func (c *ZoneViewsListCall) doRequest(alt string) (*http.Response, error) {
 // returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *ZoneViewsListCall) Do() (*ZoneViewsListResponse, error) {
+func (c *ZoneViewsListCall) Do(opts ...googleapi.CallOption) (*ZoneViewsListResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -2046,6 +2079,27 @@ func (c *ZoneViewsListCall) Do() (*ZoneViewsListResponse, error) {
 	//   ]
 	// }
 
+}
+
+// Pages invokes f for each page of results.
+// A non-nil error returned from f will halt the iteration.
+// The provided context supersedes any context provided to the Context method.
+func (c *ZoneViewsListCall) Pages(ctx context.Context, f func(*ZoneViewsListResponse) error) error {
+	c.ctx_ = ctx
+	defer c.PageToken(c.urlParams_.Get("pageToken")) // reset paging to original point
+	for {
+		x, err := c.Do()
+		if err != nil {
+			return err
+		}
+		if err := f(x); err != nil {
+			return err
+		}
+		if x.NextPageToken == "" {
+			return nil
+		}
+		c.PageToken(x.NextPageToken)
+	}
 }
 
 // method id "resourceviews.zoneViews.listresources":
@@ -2126,7 +2180,8 @@ func (c *ZoneViewsListresourcesCall) doRequest(alt string) (*http.Response, erro
 // response was returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *ZoneViewsListresourcesCall) Do() (*ZoneViewsListResourcesResponse, error) {
+func (c *ZoneViewsListresourcesCall) Do(opts ...googleapi.CallOption) (*ZoneViewsListResourcesResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -2276,7 +2331,8 @@ func (c *ZoneViewsRemoveresourcesCall) doRequest(alt string) (*http.Response, er
 }
 
 // Do executes the "resourceviews.zoneViews.removeresources" call.
-func (c *ZoneViewsRemoveresourcesCall) Do() error {
+func (c *ZoneViewsRemoveresourcesCall) Do(opts ...googleapi.CallOption) error {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if err != nil {
 		return err

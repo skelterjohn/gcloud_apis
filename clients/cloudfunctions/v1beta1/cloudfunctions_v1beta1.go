@@ -711,7 +711,8 @@ func (c *OperationsGetCall) doRequest(alt string) (*http.Response, error) {
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *OperationsGetCall) Do() (*Operation, error) {
+func (c *OperationsGetCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -832,7 +833,8 @@ func (c *ProjectsRegionsFunctionsCallCall) doRequest(alt string) (*http.Response
 // returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *ProjectsRegionsFunctionsCallCall) Do() (*CallFunctionResponse, error) {
+func (c *ProjectsRegionsFunctionsCallCall) Do(opts ...googleapi.CallOption) (*CallFunctionResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -960,7 +962,8 @@ func (c *ProjectsRegionsFunctionsCreateCall) doRequest(alt string) (*http.Respon
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *ProjectsRegionsFunctionsCreateCall) Do() (*Operation, error) {
+func (c *ProjectsRegionsFunctionsCreateCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -1082,7 +1085,8 @@ func (c *ProjectsRegionsFunctionsDeleteCall) doRequest(alt string) (*http.Respon
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *ProjectsRegionsFunctionsDeleteCall) Do() (*Operation, error) {
+func (c *ProjectsRegionsFunctionsDeleteCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -1211,7 +1215,8 @@ func (c *ProjectsRegionsFunctionsGetCall) doRequest(alt string) (*http.Response,
 // at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *ProjectsRegionsFunctionsGetCall) Do() (*HostedFunction, error) {
+func (c *ProjectsRegionsFunctionsGetCall) Do(opts ...googleapi.CallOption) (*HostedFunction, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -1354,7 +1359,8 @@ func (c *ProjectsRegionsFunctionsListCall) doRequest(alt string) (*http.Response
 // returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *ProjectsRegionsFunctionsListCall) Do() (*ListFunctionsResponse, error) {
+func (c *ProjectsRegionsFunctionsListCall) Do(opts ...googleapi.CallOption) (*ListFunctionsResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
@@ -1421,6 +1427,27 @@ func (c *ProjectsRegionsFunctionsListCall) Do() (*ListFunctionsResponse, error) 
 
 }
 
+// Pages invokes f for each page of results.
+// A non-nil error returned from f will halt the iteration.
+// The provided context supersedes any context provided to the Context method.
+func (c *ProjectsRegionsFunctionsListCall) Pages(ctx context.Context, f func(*ListFunctionsResponse) error) error {
+	c.ctx_ = ctx
+	defer c.PageToken(c.urlParams_.Get("pageToken")) // reset paging to original point
+	for {
+		x, err := c.Do()
+		if err != nil {
+			return err
+		}
+		if err := f(x); err != nil {
+			return err
+		}
+		if x.NextPageToken == "" {
+			return nil
+		}
+		c.PageToken(x.NextPageToken)
+	}
+}
+
 // method id "cloudfunctions.projects.regions.functions.update":
 
 type ProjectsRegionsFunctionsUpdateCall struct {
@@ -1485,7 +1512,8 @@ func (c *ProjectsRegionsFunctionsUpdateCall) doRequest(alt string) (*http.Respon
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *ProjectsRegionsFunctionsUpdateCall) Do() (*Operation, error) {
+func (c *ProjectsRegionsFunctionsUpdateCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
 		if res.Body != nil {
