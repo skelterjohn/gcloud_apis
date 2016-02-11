@@ -53,6 +53,7 @@ func Clouddebugger_v2_ControllerDebuggeesBreakpointsList(context Context, args .
 		usageBits += " [--waitToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -147,6 +148,8 @@ func Clouddebugger_v2_ControllerDebuggeesBreakpointsUpdate(context Context, args
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.UpdateActiveBreakpointRequest{})
+
 		os.Exit(1)
 	}
 
@@ -234,6 +237,8 @@ func Clouddebugger_v2_ControllerDebuggeesRegister(context Context, args ...strin
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.RegisterDebuggeeRequest{})
+
 		os.Exit(1)
 	}
 
@@ -309,6 +314,7 @@ func Clouddebugger_v2_DebuggerDebuggeesBreakpointsDelete(context Context, args .
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -374,6 +380,7 @@ func Clouddebugger_v2_DebuggerDebuggeesBreakpointsGet(context Context, args ...s
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -448,6 +455,7 @@ func Clouddebugger_v2_DebuggerDebuggeesBreakpointsList(context Context, args ...
 		usageBits += " [--waitToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -565,6 +573,8 @@ func Clouddebugger_v2_DebuggerDebuggeesBreakpointsSet(context Context, args ...s
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Breakpoint{})
+
 		os.Exit(1)
 	}
 
@@ -649,6 +659,7 @@ func Clouddebugger_v2_DebuggerDebuggeesList(context Context, args ...string) err
 		usageBits += " [--project=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 

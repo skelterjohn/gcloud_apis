@@ -51,6 +51,8 @@ func Dataproc_v1beta1_OperationsCancel(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.CancelOperationRequest{})
+
 		os.Exit(1)
 	}
 
@@ -132,6 +134,7 @@ func Dataproc_v1beta1_OperationsDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -191,6 +194,7 @@ func Dataproc_v1beta1_OperationsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -256,6 +260,7 @@ func Dataproc_v1beta1_OperationsList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -357,6 +362,8 @@ func Dataproc_v1beta1_ProjectsClustersCreate(context Context, args ...string) er
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Cluster{})
+
 		os.Exit(1)
 	}
 
@@ -439,6 +446,7 @@ func Dataproc_v1beta1_ProjectsClustersDelete(context Context, args ...string) er
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -506,6 +514,8 @@ func Dataproc_v1beta1_ProjectsClustersDiagnose(context Context, args ...string) 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.DiagnoseClusterRequest{})
+
 		os.Exit(1)
 	}
 
@@ -593,6 +603,7 @@ func Dataproc_v1beta1_ProjectsClustersGet(context Context, args ...string) error
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -661,6 +672,7 @@ func Dataproc_v1beta1_ProjectsClustersList(context Context, args ...string) erro
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -757,6 +769,8 @@ func Dataproc_v1beta1_ProjectsClustersPatch(context Context, args ...string) err
 		usageBits += " [--updateMask=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Cluster{})
+
 		os.Exit(1)
 	}
 
@@ -871,6 +885,8 @@ func Dataproc_v1beta1_ProjectsJobsCancel(context Context, args ...string) error 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.CancelJobRequest{})
+
 		os.Exit(1)
 	}
 
@@ -958,6 +974,7 @@ func Dataproc_v1beta1_ProjectsJobsDelete(context Context, args ...string) error 
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1023,6 +1040,7 @@ func Dataproc_v1beta1_ProjectsJobsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1095,6 +1113,7 @@ func Dataproc_v1beta1_ProjectsJobsList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1204,6 +1223,8 @@ func Dataproc_v1beta1_ProjectsJobsSubmit(context Context, args ...string) error 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.SubmitJobRequest{})
+
 		os.Exit(1)
 	}
 

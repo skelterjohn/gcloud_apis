@@ -53,6 +53,8 @@ func Replicapool_v1beta2_InstanceGroupManagersAbandonInstances(context Context, 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstanceGroupManagersAbandonInstancesRequest{})
+
 		os.Exit(1)
 	}
 
@@ -146,6 +148,7 @@ func Replicapool_v1beta2_InstanceGroupManagersDelete(context Context, args ...st
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -219,6 +222,8 @@ func Replicapool_v1beta2_InstanceGroupManagersDeleteInstances(context Context, a
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstanceGroupManagersDeleteInstancesRequest{})
+
 		os.Exit(1)
 	}
 
@@ -312,6 +317,7 @@ func Replicapool_v1beta2_InstanceGroupManagersGet(context Context, args ...strin
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -387,6 +393,8 @@ func Replicapool_v1beta2_InstanceGroupManagersInsert(context Context, args ...st
 		usageBits += " --size=VALUE"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstanceGroupManager{})
+
 		os.Exit(1)
 	}
 
@@ -500,6 +508,7 @@ func Replicapool_v1beta2_InstanceGroupManagersList(context Context, args ...stri
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -608,6 +617,8 @@ func Replicapool_v1beta2_InstanceGroupManagersRecreateInstances(context Context,
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstanceGroupManagersRecreateInstancesRequest{})
+
 		os.Exit(1)
 	}
 
@@ -704,6 +715,7 @@ func Replicapool_v1beta2_InstanceGroupManagersResize(context Context, args ...st
 		usageBits += " --size=VALUE"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -796,6 +808,8 @@ func Replicapool_v1beta2_InstanceGroupManagersSetAutoHealingPolicy(context Conte
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstanceGroupManagersSetAutoHealingPolicyRequest{})
+
 		os.Exit(1)
 	}
 
@@ -891,6 +905,8 @@ func Replicapool_v1beta2_InstanceGroupManagersSetInstanceTemplate(context Contex
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstanceGroupManagersSetInstanceTemplateRequest{})
+
 		os.Exit(1)
 	}
 
@@ -986,6 +1002,8 @@ func Replicapool_v1beta2_InstanceGroupManagersSetTargetPools(context Context, ar
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstanceGroupManagersSetTargetPoolsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -1079,6 +1097,7 @@ func Replicapool_v1beta2_ZoneOperationsGet(context Context, args ...string) erro
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1155,6 +1174,7 @@ func Replicapool_v1beta2_ZoneOperationsList(context Context, args ...string) err
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 

@@ -52,6 +52,8 @@ func Container_v1_MasterProjectsZonesSignedUrlsCreate(context Context, args ...s
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.CreateSignedUrlsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -141,6 +143,8 @@ func Container_v1_MasterProjectsZonesTokensCreate(context Context, args ...strin
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.CreateTokenRequest{})
+
 		os.Exit(1)
 	}
 
@@ -230,6 +234,8 @@ func Container_v1_ProjectsZonesClustersCreate(context Context, args ...string) e
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.CreateClusterRequest{})
+
 		os.Exit(1)
 	}
 
@@ -318,6 +324,7 @@ func Container_v1_ProjectsZonesClustersDelete(context Context, args ...string) e
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -389,6 +396,7 @@ func Container_v1_ProjectsZonesClustersGet(context Context, args ...string) erro
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -459,6 +467,7 @@ func Container_v1_ProjectsZonesClustersList(context Context, args ...string) err
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -527,6 +536,8 @@ func Container_v1_ProjectsZonesClustersUpdate(context Context, args ...string) e
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.UpdateClusterRequest{})
+
 		os.Exit(1)
 	}
 
@@ -619,6 +630,7 @@ func Container_v1_ProjectsZonesGetServerconfig(context Context, args ...string) 
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -685,6 +697,7 @@ func Container_v1_ProjectsZonesOperationsGet(context Context, args ...string) er
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -755,6 +768,7 @@ func Container_v1_ProjectsZonesOperationsList(context Context, args ...string) e
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 

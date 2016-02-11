@@ -51,6 +51,8 @@ func Logging_v1beta3_ProjectsEntriesList(context Context, args ...string) error 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ListLogEntriesRequest{})
+
 		os.Exit(1)
 	}
 
@@ -140,6 +142,7 @@ func Logging_v1beta3_ProjectsLogEntriesList(context Context, args ...string) err
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -256,6 +259,7 @@ func Logging_v1beta3_ProjectsLogServicesIndexesList(context Context, args ...str
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -372,6 +376,7 @@ func Logging_v1beta3_ProjectsLogServicesList(context Context, args ...string) er
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -466,6 +471,8 @@ func Logging_v1beta3_ProjectsLogServicesSinksCreate(context Context, args ...str
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.LogSink{})
+
 		os.Exit(1)
 	}
 
@@ -554,6 +561,7 @@ func Logging_v1beta3_ProjectsLogServicesSinksDelete(context Context, args ...str
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -625,6 +633,7 @@ func Logging_v1beta3_ProjectsLogServicesSinksGet(context Context, args ...string
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -695,6 +704,7 @@ func Logging_v1beta3_ProjectsLogServicesSinksList(context Context, args ...strin
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -763,6 +773,8 @@ func Logging_v1beta3_ProjectsLogServicesSinksUpdate(context Context, args ...str
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.LogSink{})
+
 		os.Exit(1)
 	}
 
@@ -855,6 +867,7 @@ func Logging_v1beta3_ProjectsLogsDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -922,6 +935,8 @@ func Logging_v1beta3_ProjectsLogsEntriesWrite(context Context, args ...string) e
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.WriteLogEntriesRequest{})
+
 		os.Exit(1)
 	}
 
@@ -1016,6 +1031,7 @@ func Logging_v1beta3_ProjectsLogsList(context Context, args ...string) error {
 		usageBits += " [--serviceName=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1126,6 +1142,8 @@ func Logging_v1beta3_ProjectsLogsSinksCreate(context Context, args ...string) er
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.LogSink{})
+
 		os.Exit(1)
 	}
 
@@ -1214,6 +1232,7 @@ func Logging_v1beta3_ProjectsLogsSinksDelete(context Context, args ...string) er
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1285,6 +1304,7 @@ func Logging_v1beta3_ProjectsLogsSinksGet(context Context, args ...string) error
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1355,6 +1375,7 @@ func Logging_v1beta3_ProjectsLogsSinksList(context Context, args ...string) erro
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1423,6 +1444,8 @@ func Logging_v1beta3_ProjectsLogsSinksUpdate(context Context, args ...string) er
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.LogSink{})
+
 		os.Exit(1)
 	}
 
@@ -1516,6 +1539,8 @@ func Logging_v1beta3_ProjectsMetricsCreate(context Context, args ...string) erro
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.LogMetric{})
+
 		os.Exit(1)
 	}
 
@@ -1598,6 +1623,7 @@ func Logging_v1beta3_ProjectsMetricsDelete(context Context, args ...string) erro
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1663,6 +1689,7 @@ func Logging_v1beta3_ProjectsMetricsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1731,6 +1758,7 @@ func Logging_v1beta3_ProjectsMetricsList(context Context, args ...string) error 
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1825,6 +1853,8 @@ func Logging_v1beta3_ProjectsMetricsUpdate(context Context, args ...string) erro
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.LogMetric{})
+
 		os.Exit(1)
 	}
 
@@ -1913,6 +1943,8 @@ func Logging_v1beta3_ProjectsSinksCreate(context Context, args ...string) error 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.LogSink{})
+
 		os.Exit(1)
 	}
 
@@ -1995,6 +2027,7 @@ func Logging_v1beta3_ProjectsSinksDelete(context Context, args ...string) error 
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -2060,6 +2093,7 @@ func Logging_v1beta3_ProjectsSinksGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -2124,6 +2158,7 @@ func Logging_v1beta3_ProjectsSinksList(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -2186,6 +2221,8 @@ func Logging_v1beta3_ProjectsSinksUpdate(context Context, args ...string) error 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.LogSink{})
+
 		os.Exit(1)
 	}
 

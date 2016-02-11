@@ -52,6 +52,8 @@ func Deploymentmanager_v2_DeploymentsCancelPreview(context Context, args ...stri
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.DeploymentsCancelPreviewRequest{})
+
 		os.Exit(1)
 	}
 
@@ -139,6 +141,7 @@ func Deploymentmanager_v2_DeploymentsDelete(context Context, args ...string) err
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -204,6 +207,7 @@ func Deploymentmanager_v2_DeploymentsGet(context Context, args ...string) error 
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -272,6 +276,8 @@ func Deploymentmanager_v2_DeploymentsInsert(context Context, args ...string) err
 		usageBits += " [--preview=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Deployment{})
+
 		os.Exit(1)
 	}
 
@@ -384,6 +390,7 @@ func Deploymentmanager_v2_DeploymentsList(context Context, args ...string) error
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -492,6 +499,8 @@ func Deploymentmanager_v2_DeploymentsPatch(context Context, args ...string) erro
 		usageBits += " [--preview=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Deployment{})
+
 		os.Exit(1)
 	}
 
@@ -622,6 +631,8 @@ func Deploymentmanager_v2_DeploymentsStop(context Context, args ...string) error
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.DeploymentsStopRequest{})
+
 		os.Exit(1)
 	}
 
@@ -717,6 +728,8 @@ func Deploymentmanager_v2_DeploymentsUpdate(context Context, args ...string) err
 		usageBits += " [--preview=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Deployment{})
+
 		os.Exit(1)
 	}
 
@@ -846,6 +859,7 @@ func Deploymentmanager_v2_ManifestsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -922,6 +936,7 @@ func Deploymentmanager_v2_ManifestsList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1027,6 +1042,7 @@ func Deploymentmanager_v2_OperationsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1097,6 +1113,7 @@ func Deploymentmanager_v2_OperationsList(context Context, args ...string) error 
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1198,6 +1215,7 @@ func Deploymentmanager_v2_ResourcesGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1274,6 +1292,7 @@ func Deploymentmanager_v2_ResourcesList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1384,6 +1403,7 @@ func Deploymentmanager_v2_TypesList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 

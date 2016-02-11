@@ -54,6 +54,7 @@ func Sql_v1beta3_BackupRunsGet(context Context, args ...string) error {
 		usageBits += " --dueTime=VALUE"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -150,6 +151,7 @@ func Sql_v1beta3_BackupRunsList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -250,6 +252,7 @@ func Sql_v1beta3_FlagsList(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -304,6 +307,8 @@ func Sql_v1beta3_InstancesClone(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstancesCloneRequest{})
+
 		os.Exit(1)
 	}
 
@@ -386,6 +391,7 @@ func Sql_v1beta3_InstancesDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -453,6 +459,8 @@ func Sql_v1beta3_InstancesExport(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstancesExportRequest{})
+
 		os.Exit(1)
 	}
 
@@ -540,6 +548,7 @@ func Sql_v1beta3_InstancesGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -607,6 +616,8 @@ func Sql_v1beta3_InstancesImport(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstancesImportRequest{})
+
 		os.Exit(1)
 	}
 
@@ -695,6 +706,8 @@ func Sql_v1beta3_InstancesInsert(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.DatabaseInstance{})
+
 		os.Exit(1)
 	}
 
@@ -780,6 +793,7 @@ func Sql_v1beta3_InstancesList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -874,6 +888,8 @@ func Sql_v1beta3_InstancesPatch(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.DatabaseInstance{})
+
 		os.Exit(1)
 	}
 
@@ -961,6 +977,7 @@ func Sql_v1beta3_InstancesPromoteReplica(context Context, args ...string) error 
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1026,6 +1043,7 @@ func Sql_v1beta3_InstancesResetSslConfig(context Context, args ...string) error 
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1091,6 +1109,7 @@ func Sql_v1beta3_InstancesRestart(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1162,6 +1181,7 @@ func Sql_v1beta3_InstancesRestoreBackup(context Context, args ...string) error {
 		usageBits += " --dueTime=VALUE"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1253,6 +1273,8 @@ func Sql_v1beta3_InstancesSetRootPassword(context Context, args ...string) error
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstanceSetRootPasswordRequest{})
+
 		os.Exit(1)
 	}
 
@@ -1342,6 +1364,8 @@ func Sql_v1beta3_InstancesUpdate(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.DatabaseInstance{})
+
 		os.Exit(1)
 	}
 
@@ -1430,6 +1454,7 @@ func Sql_v1beta3_OperationsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1504,6 +1529,7 @@ func Sql_v1beta3_OperationsList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1602,6 +1628,7 @@ func Sql_v1beta3_SslCertsDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1673,6 +1700,7 @@ func Sql_v1beta3_SslCertsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1745,6 +1773,8 @@ func Sql_v1beta3_SslCertsInsert(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.SslCertsInsertRequest{})
+
 		os.Exit(1)
 	}
 
@@ -1832,6 +1862,7 @@ func Sql_v1beta3_SslCertsList(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1896,6 +1927,7 @@ func Sql_v1beta3_TiersList(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 

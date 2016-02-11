@@ -50,6 +50,8 @@ func Genomics_v1_CallsetsCreate(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.CallSet{})
+
 		os.Exit(1)
 	}
 
@@ -124,6 +126,7 @@ func Genomics_v1_CallsetsDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -183,6 +186,7 @@ func Genomics_v1_CallsetsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -246,6 +250,8 @@ func Genomics_v1_CallsetsPatch(context Context, args ...string) error {
 		usageBits += " [--updateMask=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.CallSet{})
+
 		os.Exit(1)
 	}
 
@@ -353,6 +359,8 @@ func Genomics_v1_CallsetsSearch(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.SearchCallSetsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -428,6 +436,8 @@ func Genomics_v1_DatasetsCreate(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Dataset{})
+
 		os.Exit(1)
 	}
 
@@ -502,6 +512,7 @@ func Genomics_v1_DatasetsDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -561,6 +572,7 @@ func Genomics_v1_DatasetsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -622,6 +634,8 @@ func Genomics_v1_DatasetsGetIamPolicy(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.GetIamPolicyRequest{})
+
 		os.Exit(1)
 	}
 
@@ -708,6 +722,7 @@ func Genomics_v1_DatasetsList(context Context, args ...string) error {
 		usageBits += " [--projectId=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -804,6 +819,8 @@ func Genomics_v1_DatasetsPatch(context Context, args ...string) error {
 		usageBits += " [--updateMask=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Dataset{})
+
 		os.Exit(1)
 	}
 
@@ -912,6 +929,8 @@ func Genomics_v1_DatasetsSetIamPolicy(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.SetIamPolicyRequest{})
+
 		os.Exit(1)
 	}
 
@@ -995,6 +1014,8 @@ func Genomics_v1_DatasetsTestIamPermissions(context Context, args ...string) err
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestIamPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -1078,6 +1099,8 @@ func Genomics_v1_DatasetsUndelete(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.UndeleteDatasetRequest{})
+
 		os.Exit(1)
 	}
 
@@ -1161,6 +1184,8 @@ func Genomics_v1_OperationsCancel(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.CancelOperationRequest{})
+
 		os.Exit(1)
 	}
 
@@ -1242,6 +1267,7 @@ func Genomics_v1_OperationsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1307,6 +1333,7 @@ func Genomics_v1_OperationsList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1418,6 +1445,7 @@ func Genomics_v1_ReadgroupsetsCoveragebucketsList(context Context, args ...strin
 		usageBits += " [--targetBucketWidth=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1541,6 +1569,7 @@ func Genomics_v1_ReadgroupsetsDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1602,6 +1631,8 @@ func Genomics_v1_ReadgroupsetsExport(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ExportReadGroupSetRequest{})
+
 		os.Exit(1)
 	}
 
@@ -1683,6 +1714,7 @@ func Genomics_v1_ReadgroupsetsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1743,6 +1775,8 @@ func Genomics_v1_ReadgroupsetsImport(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ImportReadGroupSetsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -1821,6 +1855,8 @@ func Genomics_v1_ReadgroupsetsPatch(context Context, args ...string) error {
 		usageBits += " [--updateMask=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ReadGroupSet{})
+
 		os.Exit(1)
 	}
 
@@ -1928,6 +1964,8 @@ func Genomics_v1_ReadgroupsetsSearch(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.SearchReadGroupSetsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -2003,6 +2041,8 @@ func Genomics_v1_ReadsSearch(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.SearchReadsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -2078,6 +2118,8 @@ func Genomics_v1_ReadsStream(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.StreamReadsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -2160,6 +2202,7 @@ func Genomics_v1_ReferencesBasesList(context Context, args ...string) error {
 		usageBits += " [--start=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -2267,6 +2310,7 @@ func Genomics_v1_ReferencesGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -2327,6 +2371,8 @@ func Genomics_v1_ReferencesSearch(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.SearchReferencesRequest{})
+
 		os.Exit(1)
 	}
 
@@ -2401,6 +2447,7 @@ func Genomics_v1_ReferencesetsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -2461,6 +2508,8 @@ func Genomics_v1_ReferencesetsSearch(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.SearchReferenceSetsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -2536,6 +2585,8 @@ func Genomics_v1_VariantsCreate(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Variant{})
+
 		os.Exit(1)
 	}
 
@@ -2610,6 +2661,7 @@ func Genomics_v1_VariantsDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -2669,6 +2721,7 @@ func Genomics_v1_VariantsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -2729,6 +2782,8 @@ func Genomics_v1_VariantsImport(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ImportVariantsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -2807,6 +2862,8 @@ func Genomics_v1_VariantsPatch(context Context, args ...string) error {
 		usageBits += " [--updateMask=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Variant{})
+
 		os.Exit(1)
 	}
 
@@ -2914,6 +2971,8 @@ func Genomics_v1_VariantsSearch(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.SearchVariantsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -2989,6 +3048,8 @@ func Genomics_v1_VariantsStream(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.StreamVariantsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -3064,6 +3125,8 @@ func Genomics_v1_VariantsetsCreate(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.VariantSet{})
+
 		os.Exit(1)
 	}
 
@@ -3138,6 +3201,7 @@ func Genomics_v1_VariantsetsDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -3199,6 +3263,8 @@ func Genomics_v1_VariantsetsExport(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ExportVariantSetRequest{})
+
 		os.Exit(1)
 	}
 
@@ -3280,6 +3346,7 @@ func Genomics_v1_VariantsetsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -3343,6 +3410,8 @@ func Genomics_v1_VariantsetsPatch(context Context, args ...string) error {
 		usageBits += " [--updateMask=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.VariantSet{})
+
 		os.Exit(1)
 	}
 
@@ -3450,6 +3519,8 @@ func Genomics_v1_VariantsetsSearch(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.SearchVariantSetsRequest{})
+
 		os.Exit(1)
 	}
 

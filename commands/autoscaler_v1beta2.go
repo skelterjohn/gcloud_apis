@@ -51,6 +51,7 @@ func Autoscaler_v1beta2_AutoscalersDelete(context Context, args ...string) error
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -122,6 +123,7 @@ func Autoscaler_v1beta2_AutoscalersGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -194,6 +196,8 @@ func Autoscaler_v1beta2_AutoscalersInsert(context Context, args ...string) error
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Autoscaler{})
+
 		os.Exit(1)
 	}
 
@@ -287,6 +291,7 @@ func Autoscaler_v1beta2_AutoscalersList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -395,6 +400,8 @@ func Autoscaler_v1beta2_AutoscalersPatch(context Context, args ...string) error 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Autoscaler{})
+
 		os.Exit(1)
 	}
 
@@ -490,6 +497,8 @@ func Autoscaler_v1beta2_AutoscalersUpdate(context Context, args ...string) error
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Autoscaler{})
+
 		os.Exit(1)
 	}
 
@@ -583,6 +592,7 @@ func Autoscaler_v1beta2_ZoneOperationsDelete(context Context, args ...string) er
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -648,6 +658,7 @@ func Autoscaler_v1beta2_ZoneOperationsGet(context Context, args ...string) error
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -724,6 +735,7 @@ func Autoscaler_v1beta2_ZoneOperationsList(context Context, args ...string) erro
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -834,6 +846,7 @@ func Autoscaler_v1beta2_ZonesList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 

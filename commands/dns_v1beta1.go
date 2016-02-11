@@ -52,6 +52,8 @@ func Dns_v1beta1_ChangesCreate(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Change{})
+
 		os.Exit(1)
 	}
 
@@ -140,6 +142,7 @@ func Dns_v1beta1_ChangesGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -218,6 +221,7 @@ func Dns_v1beta1_ChangesList(context Context, args ...string) error {
 		usageBits += " [--sortOrder=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -332,6 +336,8 @@ func Dns_v1beta1_ManagedZonesCreate(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ManagedZone{})
+
 		os.Exit(1)
 	}
 
@@ -414,6 +420,7 @@ func Dns_v1beta1_ManagedZonesDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -473,6 +480,7 @@ func Dns_v1beta1_ManagedZonesGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -543,6 +551,7 @@ func Dns_v1beta1_ManagedZonesList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -642,6 +651,7 @@ func Dns_v1beta1_ProjectsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -710,6 +720,7 @@ func Dns_v1beta1_ResourceRecordSetsList(context Context, args ...string) error {
 		usageBits += " [--type=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 

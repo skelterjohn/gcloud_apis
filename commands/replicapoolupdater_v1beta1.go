@@ -51,6 +51,7 @@ func Replicapoolupdater_v1beta1_RollingUpdatesCancel(context Context, args ...st
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -122,6 +123,7 @@ func Replicapoolupdater_v1beta1_RollingUpdatesGet(context Context, args ...strin
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -194,6 +196,8 @@ func Replicapoolupdater_v1beta1_RollingUpdatesInsert(context Context, args ...st
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.RollingUpdate{})
+
 		os.Exit(1)
 	}
 
@@ -287,6 +291,7 @@ func Replicapoolupdater_v1beta1_RollingUpdatesList(context Context, args ...stri
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -399,6 +404,7 @@ func Replicapoolupdater_v1beta1_RollingUpdatesListInstanceUpdates(context Contex
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -510,6 +516,7 @@ func Replicapoolupdater_v1beta1_RollingUpdatesPause(context Context, args ...str
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -581,6 +588,7 @@ func Replicapoolupdater_v1beta1_RollingUpdatesResume(context Context, args ...st
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -652,6 +660,7 @@ func Replicapoolupdater_v1beta1_RollingUpdatesRollback(context Context, args ...
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -723,6 +732,7 @@ func Replicapoolupdater_v1beta1_ZoneOperationsGet(context Context, args ...strin
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -799,6 +809,7 @@ func Replicapoolupdater_v1beta1_ZoneOperationsList(context Context, args ...stri
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 

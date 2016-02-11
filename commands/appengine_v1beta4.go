@@ -51,6 +51,7 @@ func Appengine_v1beta4_AppsGet(context Context, args ...string) error {
 		usageBits += " [--ensureResourcesExist=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -134,6 +135,7 @@ func Appengine_v1beta4_AppsModulesDelete(context Context, args ...string) error 
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -193,6 +195,7 @@ func Appengine_v1beta4_AppsModulesGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -256,6 +259,7 @@ func Appengine_v1beta4_AppsModulesList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -353,6 +357,8 @@ func Appengine_v1beta4_AppsModulesPatch(context Context, args ...string) error {
 		usageBits += " [--migrateTraffic=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Module{})
+
 		os.Exit(1)
 	}
 
@@ -469,6 +475,8 @@ func Appengine_v1beta4_AppsModulesVersionsCreate(context Context, args ...string
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Version{})
+
 		os.Exit(1)
 	}
 
@@ -550,6 +558,7 @@ func Appengine_v1beta4_AppsModulesVersionsDelete(context Context, args ...string
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -611,6 +620,7 @@ func Appengine_v1beta4_AppsModulesVersionsGet(context Context, args ...string) e
 		usageBits += " [--view=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -700,6 +710,7 @@ func Appengine_v1beta4_AppsModulesVersionsList(context Context, args ...string) 
 		usageBits += " [--view=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -799,6 +810,7 @@ func Appengine_v1beta4_AppsOperationsGet(context Context, args ...string) error 
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -864,6 +876,7 @@ func Appengine_v1beta4_AppsOperationsList(context Context, args ...string) error
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 

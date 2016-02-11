@@ -50,6 +50,8 @@ func Source_v1_ListChangedFiles(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ListChangedFilesRequest{})
+
 		os.Exit(1)
 	}
 
@@ -129,6 +131,8 @@ func Source_v1_ProjectsReposAliasesCreate(context Context, args ...string) error
 		usageBits += " [--uid=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Alias{})
+
 		os.Exit(1)
 	}
 
@@ -247,6 +251,7 @@ func Source_v1_ProjectsReposAliasesDelete(context Context, args ...string) error
 		usageBits += " [--uid=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -395,6 +400,7 @@ func Source_v1_ProjectsReposAliasesFilesGet(context Context, args ...string) err
 		usageBits += " [--uid=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -647,6 +653,7 @@ func Source_v1_ProjectsReposAliasesGet(context Context, args ...string) error {
 		usageBits += " [--uid=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -754,6 +761,7 @@ func Source_v1_ProjectsReposAliasesList(context Context, args ...string) error {
 		usageBits += " [--uid=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -905,6 +913,7 @@ func Source_v1_ProjectsReposAliasesListFiles(context Context, args ...string) er
 		usageBits += " [--uid=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1147,6 +1156,8 @@ func Source_v1_ProjectsReposAliasesUpdate(context Context, args ...string) error
 		usageBits += " [--uid=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Alias{})
+
 		os.Exit(1)
 	}
 
@@ -1273,6 +1284,8 @@ func Source_v1_ProjectsReposCreate(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Repo{})
+
 		os.Exit(1)
 	}
 
@@ -1357,6 +1370,7 @@ func Source_v1_ProjectsReposDelete(context Context, args ...string) error {
 		usageBits += " [--uid=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1459,6 +1473,7 @@ func Source_v1_ProjectsReposFilesReadFromWorkspaceOrAlias(context Context, args 
 		usageBits += " [--workspaceName=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1595,6 +1610,7 @@ func Source_v1_ProjectsReposGet(context Context, args ...string) error {
 		usageBits += " [--uid=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1683,6 +1699,7 @@ func Source_v1_ProjectsReposList(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1745,6 +1762,8 @@ func Source_v1_ProjectsReposMerge(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.MergeRequest{})
+
 		os.Exit(1)
 	}
 
@@ -1874,6 +1893,7 @@ func Source_v1_ProjectsReposRevisionsFilesGet(context Context, args ...string) e
 		usageBits += " [--uid=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -2128,6 +2148,7 @@ func Source_v1_ProjectsReposRevisionsGet(context Context, args ...string) error 
 		usageBits += " [--uid=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -2226,6 +2247,7 @@ func Source_v1_ProjectsReposRevisionsGetBatchGet(context Context, args ...string
 		usageBits += " [--uid=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -2337,6 +2359,7 @@ func Source_v1_ProjectsReposRevisionsList(context Context, args ...string) error
 		usageBits += " [--walkDirection=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -2513,6 +2536,7 @@ func Source_v1_ProjectsReposRevisionsListFiles(context Context, args ...string) 
 		usageBits += " [--uid=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -2754,6 +2778,8 @@ func Source_v1_ProjectsReposWorkspacesCommitWorkspace(context Context, args ...s
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.CommitWorkspaceRequest{})
+
 		os.Exit(1)
 	}
 
@@ -2848,6 +2874,8 @@ func Source_v1_ProjectsReposWorkspacesCreate(context Context, args ...string) er
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.CreateWorkspaceRequest{})
+
 		os.Exit(1)
 	}
 
@@ -2940,6 +2968,7 @@ func Source_v1_ProjectsReposWorkspacesDelete(context Context, args ...string) er
 		usageBits += " [--uid=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -3084,6 +3113,7 @@ func Source_v1_ProjectsReposWorkspacesFilesGet(context Context, args ...string) 
 		usageBits += " [--uid=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -3338,6 +3368,7 @@ func Source_v1_ProjectsReposWorkspacesGet(context Context, args ...string) error
 		usageBits += " [--uid=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -3436,6 +3467,7 @@ func Source_v1_ProjectsReposWorkspacesList(context Context, args ...string) erro
 		usageBits += " [--view=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -3572,6 +3604,7 @@ func Source_v1_ProjectsReposWorkspacesListFiles(context Context, args ...string)
 		usageBits += " [--uid=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -3813,6 +3846,8 @@ func Source_v1_ProjectsReposWorkspacesModifyWorkspace(context Context, args ...s
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ModifyWorkspaceRequest{})
+
 		os.Exit(1)
 	}
 
@@ -3908,6 +3943,8 @@ func Source_v1_ProjectsReposWorkspacesRefreshWorkspace(context Context, args ...
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.RefreshWorkspaceRequest{})
+
 		os.Exit(1)
 	}
 
@@ -4003,6 +4040,8 @@ func Source_v1_ProjectsReposWorkspacesResolveFiles(context Context, args ...stri
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ResolveFilesRequest{})
+
 		os.Exit(1)
 	}
 
@@ -4098,6 +4137,8 @@ func Source_v1_ProjectsReposWorkspacesRevertRefresh(context Context, args ...str
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.RevertRefreshRequest{})
+
 		os.Exit(1)
 	}
 
@@ -4231,6 +4272,7 @@ func Source_v1_ProjectsReposWorkspacesSnapshotsFilesGet(context Context, args ..
 		usageBits += " [--uid=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -4483,6 +4525,7 @@ func Source_v1_ProjectsReposWorkspacesSnapshotsGet(context Context, args ...stri
 		usageBits += " [--uid=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -4589,6 +4632,7 @@ func Source_v1_ProjectsReposWorkspacesSnapshotsList(context Context, args ...str
 		usageBits += " [--uid=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -4737,6 +4781,7 @@ func Source_v1_ProjectsReposWorkspacesSnapshotsListFiles(context Context, args .
 		usageBits += " [--uid=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 

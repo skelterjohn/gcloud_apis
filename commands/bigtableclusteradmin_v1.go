@@ -51,6 +51,8 @@ func Bigtableclusteradmin_v1_OperationsCancel(context Context, args ...string) e
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.CancelOperationRequest{})
+
 		os.Exit(1)
 	}
 
@@ -132,6 +134,7 @@ func Bigtableclusteradmin_v1_OperationsDelete(context Context, args ...string) e
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -191,6 +194,7 @@ func Bigtableclusteradmin_v1_OperationsGet(context Context, args ...string) erro
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -256,6 +260,7 @@ func Bigtableclusteradmin_v1_OperationsList(context Context, args ...string) err
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -355,6 +360,7 @@ func Bigtableclusteradmin_v1_ProjectsAggregatedClustersList(context Context, arg
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -416,6 +422,8 @@ func Bigtableclusteradmin_v1_ProjectsZonesClustersCreate(context Context, args .
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.CreateClusterRequest{})
+
 		os.Exit(1)
 	}
 
@@ -497,6 +505,7 @@ func Bigtableclusteradmin_v1_ProjectsZonesClustersDelete(context Context, args .
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -556,6 +565,7 @@ func Bigtableclusteradmin_v1_ProjectsZonesClustersGet(context Context, args ...s
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -617,6 +627,8 @@ func Bigtableclusteradmin_v1_ProjectsZonesClustersPatch(context Context, args ..
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Cluster{})
+
 		os.Exit(1)
 	}
 
@@ -698,6 +710,7 @@ func Bigtableclusteradmin_v1_ProjectsZonesClustersUndelete(context Context, args
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -759,6 +772,8 @@ func Bigtableclusteradmin_v1_ProjectsZonesClustersUpdate(context Context, args .
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Cluster{})
+
 		os.Exit(1)
 	}
 
@@ -840,6 +855,7 @@ func Bigtableclusteradmin_v1_ProjectsZonesList(context Context, args ...string) 
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 

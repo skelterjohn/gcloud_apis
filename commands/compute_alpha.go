@@ -57,6 +57,7 @@ func Compute_alpha_AddressesAggregatedList(context Context, args ...string) erro
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -166,6 +167,7 @@ func Compute_alpha_AddressesDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -237,6 +239,7 @@ func Compute_alpha_AddressesGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -309,6 +312,8 @@ func Compute_alpha_AddressesInsert(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Address{})
+
 		os.Exit(1)
 	}
 
@@ -404,6 +409,7 @@ func Compute_alpha_AddressesList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -520,6 +526,8 @@ func Compute_alpha_AddressesTestIamPermissions(context Context, args ...string) 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -619,6 +627,7 @@ func Compute_alpha_AutoscalersAggregatedList(context Context, args ...string) er
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -728,6 +737,7 @@ func Compute_alpha_AutoscalersDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -799,6 +809,7 @@ func Compute_alpha_AutoscalersGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -871,6 +882,8 @@ func Compute_alpha_AutoscalersInsert(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Autoscaler{})
+
 		os.Exit(1)
 	}
 
@@ -966,6 +979,7 @@ func Compute_alpha_AutoscalersList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1084,6 +1098,8 @@ func Compute_alpha_AutoscalersPatch(context Context, args ...string) error {
 		usageBits += " --autoscaler=VALUE"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Autoscaler{})
+
 		os.Exit(1)
 	}
 
@@ -1194,6 +1210,8 @@ func Compute_alpha_AutoscalersTestIamPermissions(context Context, args ...string
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -1290,6 +1308,8 @@ func Compute_alpha_AutoscalersUpdate(context Context, args ...string) error {
 		usageBits += " [--autoscaler=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Autoscaler{})
+
 		os.Exit(1)
 	}
 
@@ -1402,6 +1422,7 @@ func Compute_alpha_BackendBucketsDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1467,6 +1488,7 @@ func Compute_alpha_BackendBucketsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1532,6 +1554,7 @@ func Compute_alpha_BackendBucketsGetIamPolicy(context Context, args ...string) e
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1598,6 +1621,8 @@ func Compute_alpha_BackendBucketsInsert(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.BackendBucket{})
+
 		os.Exit(1)
 	}
 
@@ -1687,6 +1712,7 @@ func Compute_alpha_BackendBucketsList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1797,6 +1823,8 @@ func Compute_alpha_BackendBucketsPatch(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.BackendBucket{})
+
 		os.Exit(1)
 	}
 
@@ -1886,6 +1914,8 @@ func Compute_alpha_BackendBucketsSetIamPolicy(context Context, args ...string) e
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Policy{})
+
 		os.Exit(1)
 	}
 
@@ -1975,6 +2005,8 @@ func Compute_alpha_BackendBucketsTestIamPermissions(context Context, args ...str
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -2064,6 +2096,8 @@ func Compute_alpha_BackendBucketsUpdate(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.BackendBucket{})
+
 		os.Exit(1)
 	}
 
@@ -2151,6 +2185,7 @@ func Compute_alpha_BackendServicesDelete(context Context, args ...string) error 
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -2216,6 +2251,7 @@ func Compute_alpha_BackendServicesGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -2283,6 +2319,8 @@ func Compute_alpha_BackendServicesGetHealth(context Context, args ...string) err
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ResourceGroupReference{})
+
 		os.Exit(1)
 	}
 
@@ -2371,6 +2409,8 @@ func Compute_alpha_BackendServicesInsert(context Context, args ...string) error 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.BackendService{})
+
 		os.Exit(1)
 	}
 
@@ -2460,6 +2500,7 @@ func Compute_alpha_BackendServicesList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -2570,6 +2611,8 @@ func Compute_alpha_BackendServicesPatch(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.BackendService{})
+
 		os.Exit(1)
 	}
 
@@ -2659,6 +2702,8 @@ func Compute_alpha_BackendServicesTestIamPermissions(context Context, args ...st
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -2748,6 +2793,8 @@ func Compute_alpha_BackendServicesUpdate(context Context, args ...string) error 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.BackendService{})
+
 		os.Exit(1)
 	}
 
@@ -2842,6 +2889,7 @@ func Compute_alpha_DiskTypesAggregatedList(context Context, args ...string) erro
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -2951,6 +2999,7 @@ func Compute_alpha_DiskTypesGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -3029,6 +3078,7 @@ func Compute_alpha_DiskTypesList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -3149,6 +3199,7 @@ func Compute_alpha_DisksAggregatedList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -3260,6 +3311,8 @@ func Compute_alpha_DisksCreateSnapshot(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Snapshot{})
+
 		os.Exit(1)
 	}
 
@@ -3353,6 +3406,7 @@ func Compute_alpha_DisksDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -3424,6 +3478,7 @@ func Compute_alpha_DisksGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -3498,6 +3553,8 @@ func Compute_alpha_DisksInsert(context Context, args ...string) error {
 		usageBits += " [--sourceImage=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Disk{})
+
 		os.Exit(1)
 	}
 
@@ -3618,6 +3675,7 @@ func Compute_alpha_DisksList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -3734,6 +3792,8 @@ func Compute_alpha_DisksResize(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.DisksResizeRequest{})
+
 		os.Exit(1)
 	}
 
@@ -3829,6 +3889,8 @@ func Compute_alpha_DisksSetLabels(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ZoneSetLabelsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -3924,6 +3986,8 @@ func Compute_alpha_DisksTestIamPermissions(context Context, args ...string) erro
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -4016,6 +4080,7 @@ func Compute_alpha_FirewallsDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -4081,6 +4146,7 @@ func Compute_alpha_FirewallsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -4147,6 +4213,8 @@ func Compute_alpha_FirewallsInsert(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Firewall{})
+
 		os.Exit(1)
 	}
 
@@ -4236,6 +4304,7 @@ func Compute_alpha_FirewallsList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -4346,6 +4415,8 @@ func Compute_alpha_FirewallsPatch(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Firewall{})
+
 		os.Exit(1)
 	}
 
@@ -4435,6 +4506,8 @@ func Compute_alpha_FirewallsTestIamPermissions(context Context, args ...string) 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -4524,6 +4597,8 @@ func Compute_alpha_FirewallsUpdate(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Firewall{})
+
 		os.Exit(1)
 	}
 
@@ -4618,6 +4693,7 @@ func Compute_alpha_ForwardingRulesAggregatedList(context Context, args ...string
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -4727,6 +4803,7 @@ func Compute_alpha_ForwardingRulesDelete(context Context, args ...string) error 
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -4798,6 +4875,7 @@ func Compute_alpha_ForwardingRulesGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -4870,6 +4948,8 @@ func Compute_alpha_ForwardingRulesInsert(context Context, args ...string) error 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ForwardingRule{})
+
 		os.Exit(1)
 	}
 
@@ -4965,6 +5045,7 @@ func Compute_alpha_ForwardingRulesList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -5081,6 +5162,8 @@ func Compute_alpha_ForwardingRulesSetTarget(context Context, args ...string) err
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TargetReference{})
+
 		os.Exit(1)
 	}
 
@@ -5176,6 +5259,8 @@ func Compute_alpha_ForwardingRulesTestIamPermissions(context Context, args ...st
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -5268,6 +5353,7 @@ func Compute_alpha_GlobalAddressesDelete(context Context, args ...string) error 
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -5333,6 +5419,7 @@ func Compute_alpha_GlobalAddressesGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -5399,6 +5486,8 @@ func Compute_alpha_GlobalAddressesInsert(context Context, args ...string) error 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Address{})
+
 		os.Exit(1)
 	}
 
@@ -5488,6 +5577,7 @@ func Compute_alpha_GlobalAddressesList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -5598,6 +5688,8 @@ func Compute_alpha_GlobalAddressesTestIamPermissions(context Context, args ...st
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -5685,6 +5777,7 @@ func Compute_alpha_GlobalForwardingRulesDelete(context Context, args ...string) 
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -5750,6 +5843,7 @@ func Compute_alpha_GlobalForwardingRulesGet(context Context, args ...string) err
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -5816,6 +5910,8 @@ func Compute_alpha_GlobalForwardingRulesInsert(context Context, args ...string) 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ForwardingRule{})
+
 		os.Exit(1)
 	}
 
@@ -5905,6 +6001,7 @@ func Compute_alpha_GlobalForwardingRulesList(context Context, args ...string) er
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -6015,6 +6112,8 @@ func Compute_alpha_GlobalForwardingRulesSetTarget(context Context, args ...strin
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TargetReference{})
+
 		os.Exit(1)
 	}
 
@@ -6104,6 +6203,8 @@ func Compute_alpha_GlobalForwardingRulesTestIamPermissions(context Context, args
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -6198,6 +6299,7 @@ func Compute_alpha_GlobalOperationsAggregatedList(context Context, args ...strin
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -6306,6 +6408,7 @@ func Compute_alpha_GlobalOperationsDelete(context Context, args ...string) error
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -6365,6 +6468,7 @@ func Compute_alpha_GlobalOperationsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -6437,6 +6541,7 @@ func Compute_alpha_GlobalOperationsList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -6545,6 +6650,7 @@ func Compute_alpha_HealthChecksDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -6610,6 +6716,7 @@ func Compute_alpha_HealthChecksGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -6676,6 +6783,8 @@ func Compute_alpha_HealthChecksInsert(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.HealthCheck{})
+
 		os.Exit(1)
 	}
 
@@ -6765,6 +6874,7 @@ func Compute_alpha_HealthChecksList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -6875,6 +6985,8 @@ func Compute_alpha_HealthChecksPatch(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.HealthCheck{})
+
 		os.Exit(1)
 	}
 
@@ -6964,6 +7076,8 @@ func Compute_alpha_HealthChecksTestIamPermissions(context Context, args ...strin
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -7053,6 +7167,8 @@ func Compute_alpha_HealthChecksUpdate(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.HealthCheck{})
+
 		os.Exit(1)
 	}
 
@@ -7140,6 +7256,7 @@ func Compute_alpha_HttpHealthChecksDelete(context Context, args ...string) error
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -7205,6 +7322,7 @@ func Compute_alpha_HttpHealthChecksGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -7271,6 +7389,8 @@ func Compute_alpha_HttpHealthChecksInsert(context Context, args ...string) error
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.HttpHealthCheck{})
+
 		os.Exit(1)
 	}
 
@@ -7360,6 +7480,7 @@ func Compute_alpha_HttpHealthChecksList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -7470,6 +7591,8 @@ func Compute_alpha_HttpHealthChecksPatch(context Context, args ...string) error 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.HttpHealthCheck{})
+
 		os.Exit(1)
 	}
 
@@ -7559,6 +7682,8 @@ func Compute_alpha_HttpHealthChecksTestIamPermissions(context Context, args ...s
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -7648,6 +7773,8 @@ func Compute_alpha_HttpHealthChecksUpdate(context Context, args ...string) error
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.HttpHealthCheck{})
+
 		os.Exit(1)
 	}
 
@@ -7735,6 +7862,7 @@ func Compute_alpha_HttpsHealthChecksDelete(context Context, args ...string) erro
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -7800,6 +7928,7 @@ func Compute_alpha_HttpsHealthChecksGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -7866,6 +7995,8 @@ func Compute_alpha_HttpsHealthChecksInsert(context Context, args ...string) erro
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.HttpsHealthCheck{})
+
 		os.Exit(1)
 	}
 
@@ -7955,6 +8086,7 @@ func Compute_alpha_HttpsHealthChecksList(context Context, args ...string) error 
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -8065,6 +8197,8 @@ func Compute_alpha_HttpsHealthChecksPatch(context Context, args ...string) error
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.HttpsHealthCheck{})
+
 		os.Exit(1)
 	}
 
@@ -8154,6 +8288,8 @@ func Compute_alpha_HttpsHealthChecksTestIamPermissions(context Context, args ...
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -8243,6 +8379,8 @@ func Compute_alpha_HttpsHealthChecksUpdate(context Context, args ...string) erro
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.HttpsHealthCheck{})
+
 		os.Exit(1)
 	}
 
@@ -8330,6 +8468,7 @@ func Compute_alpha_ImagesDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -8397,6 +8536,8 @@ func Compute_alpha_ImagesDeprecate(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.DeprecationStatus{})
+
 		os.Exit(1)
 	}
 
@@ -8484,6 +8625,7 @@ func Compute_alpha_ImagesGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -8549,6 +8691,7 @@ func Compute_alpha_ImagesGetFromFamily(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -8615,6 +8758,8 @@ func Compute_alpha_ImagesInsert(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Image{})
+
 		os.Exit(1)
 	}
 
@@ -8704,6 +8849,7 @@ func Compute_alpha_ImagesList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -8814,6 +8960,8 @@ func Compute_alpha_ImagesSetLabels(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.GlobalSetLabelsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -8903,6 +9051,8 @@ func Compute_alpha_ImagesTestIamPermissions(context Context, args ...string) err
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -8993,6 +9143,8 @@ func Compute_alpha_InstanceGroupManagersAbandonInstances(context Context, args .
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstanceGroupManagersAbandonInstancesRequest{})
+
 		os.Exit(1)
 	}
 
@@ -9092,6 +9244,7 @@ func Compute_alpha_InstanceGroupManagersAggregatedList(context Context, args ...
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -9201,6 +9354,7 @@ func Compute_alpha_InstanceGroupManagersDelete(context Context, args ...string) 
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -9274,6 +9428,8 @@ func Compute_alpha_InstanceGroupManagersDeleteInstances(context Context, args ..
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstanceGroupManagersDeleteInstancesRequest{})
+
 		os.Exit(1)
 	}
 
@@ -9367,6 +9523,7 @@ func Compute_alpha_InstanceGroupManagersGet(context Context, args ...string) err
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -9439,6 +9596,8 @@ func Compute_alpha_InstanceGroupManagersInsert(context Context, args ...string) 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstanceGroupManager{})
+
 		os.Exit(1)
 	}
 
@@ -9534,6 +9693,7 @@ func Compute_alpha_InstanceGroupManagersList(context Context, args ...string) er
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -9648,6 +9808,7 @@ func Compute_alpha_InstanceGroupManagersListManagedInstances(context Context, ar
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -9721,6 +9882,8 @@ func Compute_alpha_InstanceGroupManagersRecreateInstances(context Context, args 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstanceGroupManagersRecreateInstancesRequest{})
+
 		os.Exit(1)
 	}
 
@@ -9817,6 +9980,7 @@ func Compute_alpha_InstanceGroupManagersResize(context Context, args ...string) 
 		usageBits += " --size=VALUE"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -9909,6 +10073,8 @@ func Compute_alpha_InstanceGroupManagersResizeAdvanced(context Context, args ...
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstanceGroupManagersResizeAdvancedRequest{})
+
 		os.Exit(1)
 	}
 
@@ -10004,6 +10170,8 @@ func Compute_alpha_InstanceGroupManagersSetAutoHealingPolicies(context Context, 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstanceGroupManagersSetAutoHealingRequest{})
+
 		os.Exit(1)
 	}
 
@@ -10099,6 +10267,8 @@ func Compute_alpha_InstanceGroupManagersSetInstanceTemplate(context Context, arg
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstanceGroupManagersSetInstanceTemplateRequest{})
+
 		os.Exit(1)
 	}
 
@@ -10194,6 +10364,8 @@ func Compute_alpha_InstanceGroupManagersSetTargetPools(context Context, args ...
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstanceGroupManagersSetTargetPoolsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -10289,6 +10461,8 @@ func Compute_alpha_InstanceGroupManagersTestIamPermissions(context Context, args
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -10384,6 +10558,8 @@ func Compute_alpha_InstanceGroupsAddInstances(context Context, args ...string) e
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstanceGroupsAddInstancesRequest{})
+
 		os.Exit(1)
 	}
 
@@ -10483,6 +10659,7 @@ func Compute_alpha_InstanceGroupsAggregatedList(context Context, args ...string)
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -10592,6 +10769,7 @@ func Compute_alpha_InstanceGroupsDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -10663,6 +10841,7 @@ func Compute_alpha_InstanceGroupsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -10735,6 +10914,8 @@ func Compute_alpha_InstanceGroupsInsert(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstanceGroup{})
+
 		os.Exit(1)
 	}
 
@@ -10830,6 +11011,7 @@ func Compute_alpha_InstanceGroupsList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -10954,6 +11136,8 @@ func Compute_alpha_InstanceGroupsListInstances(context Context, args ...string) 
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstanceGroupsListInstancesRequest{})
+
 		os.Exit(1)
 	}
 
@@ -11098,6 +11282,8 @@ func Compute_alpha_InstanceGroupsRemoveInstances(context Context, args ...string
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstanceGroupsRemoveInstancesRequest{})
+
 		os.Exit(1)
 	}
 
@@ -11193,6 +11379,8 @@ func Compute_alpha_InstanceGroupsSetNamedPorts(context Context, args ...string) 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstanceGroupsSetNamedPortsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -11288,6 +11476,8 @@ func Compute_alpha_InstanceGroupsTestIamPermissions(context Context, args ...str
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -11380,6 +11570,7 @@ func Compute_alpha_InstanceTemplatesDelete(context Context, args ...string) erro
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -11445,6 +11636,7 @@ func Compute_alpha_InstanceTemplatesGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -11511,6 +11703,8 @@ func Compute_alpha_InstanceTemplatesInsert(context Context, args ...string) erro
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstanceTemplate{})
+
 		os.Exit(1)
 	}
 
@@ -11600,6 +11794,7 @@ func Compute_alpha_InstanceTemplatesList(context Context, args ...string) error 
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -11710,6 +11905,8 @@ func Compute_alpha_InstanceTemplatesTestIamPermissions(context Context, args ...
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -11803,6 +12000,8 @@ func Compute_alpha_InstancesAddAccessConfig(context Context, args ...string) err
 		usageBits += " --networkInterface=VALUE"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.AccessConfig{})
+
 		os.Exit(1)
 	}
 
@@ -11922,6 +12121,7 @@ func Compute_alpha_InstancesAggregatedList(context Context, args ...string) erro
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -12033,6 +12233,8 @@ func Compute_alpha_InstancesAttachDisk(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.AttachedDisk{})
+
 		os.Exit(1)
 	}
 
@@ -12126,6 +12328,7 @@ func Compute_alpha_InstancesDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -12203,6 +12406,7 @@ func Compute_alpha_InstancesDeleteAccessConfig(context Context, args ...string) 
 		usageBits += " --networkInterface=VALUE"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -12301,6 +12505,7 @@ func Compute_alpha_InstancesDetachDisk(context Context, args ...string) error {
 		usageBits += " --deviceName=VALUE"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -12391,6 +12596,7 @@ func Compute_alpha_InstancesGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -12462,6 +12668,7 @@ func Compute_alpha_InstancesGetIamPolicy(context Context, args ...string) error 
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -12537,6 +12744,7 @@ func Compute_alpha_InstancesGetSerialPortOutput(context Context, args ...string)
 		usageBits += " [--start=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -12641,6 +12849,8 @@ func Compute_alpha_InstancesInsert(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Instance{})
+
 		os.Exit(1)
 	}
 
@@ -12736,6 +12946,7 @@ func Compute_alpha_InstancesList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -12850,6 +13061,7 @@ func Compute_alpha_InstancesReset(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -12927,6 +13139,7 @@ func Compute_alpha_InstancesSetDiskAutoDelete(context Context, args ...string) e
 		usageBits += " --deviceName=VALUE"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -13024,6 +13237,8 @@ func Compute_alpha_InstancesSetIamPolicy(context Context, args ...string) error 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Policy{})
+
 		os.Exit(1)
 	}
 
@@ -13119,6 +13334,8 @@ func Compute_alpha_InstancesSetLabels(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstancesSetLabelsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -13214,6 +13431,8 @@ func Compute_alpha_InstancesSetMachineType(context Context, args ...string) erro
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstancesSetMachineTypeRequest{})
+
 		os.Exit(1)
 	}
 
@@ -13309,6 +13528,8 @@ func Compute_alpha_InstancesSetMetadata(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Metadata{})
+
 		os.Exit(1)
 	}
 
@@ -13404,6 +13625,8 @@ func Compute_alpha_InstancesSetScheduling(context Context, args ...string) error
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Scheduling{})
+
 		os.Exit(1)
 	}
 
@@ -13499,6 +13722,8 @@ func Compute_alpha_InstancesSetTags(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Tags{})
+
 		os.Exit(1)
 	}
 
@@ -13592,6 +13817,7 @@ func Compute_alpha_InstancesStart(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -13663,6 +13889,7 @@ func Compute_alpha_InstancesStop(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -13734,6 +13961,7 @@ func Compute_alpha_InstancesSuspend(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -13807,6 +14035,8 @@ func Compute_alpha_InstancesTestIamPermissions(context Context, args ...string) 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -13899,6 +14129,7 @@ func Compute_alpha_LicensesGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -13971,6 +14202,7 @@ func Compute_alpha_MachineTypesAggregatedList(context Context, args ...string) e
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -14080,6 +14312,7 @@ func Compute_alpha_MachineTypesGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -14158,6 +14391,7 @@ func Compute_alpha_MachineTypesList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -14271,6 +14505,7 @@ func Compute_alpha_NetworksDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -14336,6 +14571,7 @@ func Compute_alpha_NetworksGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -14402,6 +14638,8 @@ func Compute_alpha_NetworksInsert(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Network{})
+
 		os.Exit(1)
 	}
 
@@ -14491,6 +14729,7 @@ func Compute_alpha_NetworksList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -14601,6 +14840,8 @@ func Compute_alpha_NetworksTestIamPermissions(context Context, args ...string) e
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -14687,6 +14928,7 @@ func Compute_alpha_ProjectsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -14748,6 +14990,8 @@ func Compute_alpha_ProjectsSetCommonInstanceMetadata(context Context, args ...st
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Metadata{})
+
 		os.Exit(1)
 	}
 
@@ -14831,6 +15075,8 @@ func Compute_alpha_ProjectsSetUsageExportBucket(context Context, args ...string)
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.UsageExportLocation{})
+
 		os.Exit(1)
 	}
 
@@ -14914,6 +15160,7 @@ func Compute_alpha_RegionAutoscalersDelete(context Context, args ...string) erro
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -14985,6 +15232,7 @@ func Compute_alpha_RegionAutoscalersGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -15057,6 +15305,8 @@ func Compute_alpha_RegionAutoscalersInsert(context Context, args ...string) erro
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Autoscaler{})
+
 		os.Exit(1)
 	}
 
@@ -15152,6 +15402,7 @@ func Compute_alpha_RegionAutoscalersList(context Context, args ...string) error 
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -15270,6 +15521,8 @@ func Compute_alpha_RegionAutoscalersPatch(context Context, args ...string) error
 		usageBits += " --autoscaler=VALUE"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Autoscaler{})
+
 		os.Exit(1)
 	}
 
@@ -15381,6 +15634,8 @@ func Compute_alpha_RegionAutoscalersUpdate(context Context, args ...string) erro
 		usageBits += " [--autoscaler=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Autoscaler{})
+
 		os.Exit(1)
 	}
 
@@ -15496,6 +15751,8 @@ func Compute_alpha_RegionInstanceGroupManagersAbandonInstances(context Context, 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.RegionInstanceGroupManagersAbandonInstancesRequest{})
+
 		os.Exit(1)
 	}
 
@@ -15589,6 +15846,7 @@ func Compute_alpha_RegionInstanceGroupManagersDelete(context Context, args ...st
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -15662,6 +15920,8 @@ func Compute_alpha_RegionInstanceGroupManagersDeleteInstances(context Context, a
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.RegionInstanceGroupManagersDeleteInstancesRequest{})
+
 		os.Exit(1)
 	}
 
@@ -15755,6 +16015,7 @@ func Compute_alpha_RegionInstanceGroupManagersGet(context Context, args ...strin
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -15827,6 +16088,8 @@ func Compute_alpha_RegionInstanceGroupManagersInsert(context Context, args ...st
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstanceGroupManager{})
+
 		os.Exit(1)
 	}
 
@@ -15922,6 +16185,7 @@ func Compute_alpha_RegionInstanceGroupManagersList(context Context, args ...stri
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -16036,6 +16300,7 @@ func Compute_alpha_RegionInstanceGroupManagersListManagedInstances(context Conte
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -16109,6 +16374,8 @@ func Compute_alpha_RegionInstanceGroupManagersRecreateInstances(context Context,
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.RegionInstanceGroupManagersRecreateRequest{})
+
 		os.Exit(1)
 	}
 
@@ -16205,6 +16472,7 @@ func Compute_alpha_RegionInstanceGroupManagersResize(context Context, args ...st
 		usageBits += " --size=VALUE"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -16297,6 +16565,8 @@ func Compute_alpha_RegionInstanceGroupManagersSetAutoHealingPolicies(context Con
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.RegionInstanceGroupManagersSetAutoHealingRequest{})
+
 		os.Exit(1)
 	}
 
@@ -16392,6 +16662,8 @@ func Compute_alpha_RegionInstanceGroupManagersSetInstanceTemplate(context Contex
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.RegionInstanceGroupManagersSetTemplateRequest{})
+
 		os.Exit(1)
 	}
 
@@ -16487,6 +16759,8 @@ func Compute_alpha_RegionInstanceGroupManagersSetTargetPools(context Context, ar
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.RegionInstanceGroupManagersSetTargetPoolsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -16580,6 +16854,7 @@ func Compute_alpha_RegionInstanceGroupsGet(context Context, args ...string) erro
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -16658,6 +16933,7 @@ func Compute_alpha_RegionInstanceGroupsList(context Context, args ...string) err
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -16782,6 +17058,8 @@ func Compute_alpha_RegionInstanceGroupsListInstances(context Context, args ...st
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.RegionInstanceGroupsListInstancesRequest{})
+
 		os.Exit(1)
 	}
 
@@ -16926,6 +17204,8 @@ func Compute_alpha_RegionInstanceGroupsSetNamedPorts(context Context, args ...st
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.RegionInstanceGroupsSetNamedPortsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -17019,6 +17299,7 @@ func Compute_alpha_RegionOperationsDelete(context Context, args ...string) error
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -17084,6 +17365,7 @@ func Compute_alpha_RegionOperationsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -17162,6 +17444,7 @@ func Compute_alpha_RegionOperationsList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -17275,6 +17558,7 @@ func Compute_alpha_RegionsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -17347,6 +17631,7 @@ func Compute_alpha_RegionsList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -17462,6 +17747,7 @@ func Compute_alpha_RoutersAggregatedList(context Context, args ...string) error 
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -17571,6 +17857,7 @@ func Compute_alpha_RoutersDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -17642,6 +17929,7 @@ func Compute_alpha_RoutersGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -17713,6 +18001,7 @@ func Compute_alpha_RoutersGetRouterStatus(context Context, args ...string) error
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -17785,6 +18074,8 @@ func Compute_alpha_RoutersInsert(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Router{})
+
 		os.Exit(1)
 	}
 
@@ -17880,6 +18171,7 @@ func Compute_alpha_RoutersList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -17996,6 +18288,8 @@ func Compute_alpha_RoutersPatch(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Router{})
+
 		os.Exit(1)
 	}
 
@@ -18091,6 +18385,8 @@ func Compute_alpha_RoutersTestIamPermissions(context Context, args ...string) er
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -18186,6 +18482,8 @@ func Compute_alpha_RoutersUpdate(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Router{})
+
 		os.Exit(1)
 	}
 
@@ -18278,6 +18576,7 @@ func Compute_alpha_RoutesDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -18343,6 +18642,7 @@ func Compute_alpha_RoutesGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -18409,6 +18709,8 @@ func Compute_alpha_RoutesInsert(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Route{})
+
 		os.Exit(1)
 	}
 
@@ -18498,6 +18800,7 @@ func Compute_alpha_RoutesList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -18608,6 +18911,8 @@ func Compute_alpha_RoutesTestIamPermissions(context Context, args ...string) err
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -18695,6 +19000,7 @@ func Compute_alpha_SnapshotsDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -18760,6 +19066,7 @@ func Compute_alpha_SnapshotsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -18832,6 +19139,7 @@ func Compute_alpha_SnapshotsList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -18942,6 +19250,8 @@ func Compute_alpha_SnapshotsSetLabels(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.GlobalSetLabelsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -19031,6 +19341,8 @@ func Compute_alpha_SnapshotsTestIamPermissions(context Context, args ...string) 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -19118,6 +19430,7 @@ func Compute_alpha_SslCertificatesDelete(context Context, args ...string) error 
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -19183,6 +19496,7 @@ func Compute_alpha_SslCertificatesGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -19249,6 +19563,8 @@ func Compute_alpha_SslCertificatesInsert(context Context, args ...string) error 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.SslCertificate{})
+
 		os.Exit(1)
 	}
 
@@ -19338,6 +19654,7 @@ func Compute_alpha_SslCertificatesList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -19448,6 +19765,8 @@ func Compute_alpha_SslCertificatesTestIamPermissions(context Context, args ...st
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -19542,6 +19861,7 @@ func Compute_alpha_SubnetworksAggregatedList(context Context, args ...string) er
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -19651,6 +19971,7 @@ func Compute_alpha_SubnetworksDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -19722,6 +20043,7 @@ func Compute_alpha_SubnetworksGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -19794,6 +20116,8 @@ func Compute_alpha_SubnetworksInsert(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Subnetwork{})
+
 		os.Exit(1)
 	}
 
@@ -19889,6 +20213,7 @@ func Compute_alpha_SubnetworksList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -20005,6 +20330,8 @@ func Compute_alpha_SubnetworksTestIamPermissions(context Context, args ...string
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -20097,6 +20424,7 @@ func Compute_alpha_TargetHttpProxiesDelete(context Context, args ...string) erro
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -20162,6 +20490,7 @@ func Compute_alpha_TargetHttpProxiesGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -20228,6 +20557,8 @@ func Compute_alpha_TargetHttpProxiesInsert(context Context, args ...string) erro
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TargetHttpProxy{})
+
 		os.Exit(1)
 	}
 
@@ -20317,6 +20648,7 @@ func Compute_alpha_TargetHttpProxiesList(context Context, args ...string) error 
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -20427,6 +20759,8 @@ func Compute_alpha_TargetHttpProxiesSetUrlMap(context Context, args ...string) e
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.UrlMapReference{})
+
 		os.Exit(1)
 	}
 
@@ -20516,6 +20850,8 @@ func Compute_alpha_TargetHttpProxiesTestIamPermissions(context Context, args ...
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -20603,6 +20939,7 @@ func Compute_alpha_TargetHttpsProxiesDelete(context Context, args ...string) err
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -20668,6 +21005,7 @@ func Compute_alpha_TargetHttpsProxiesGet(context Context, args ...string) error 
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -20734,6 +21072,8 @@ func Compute_alpha_TargetHttpsProxiesInsert(context Context, args ...string) err
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TargetHttpsProxy{})
+
 		os.Exit(1)
 	}
 
@@ -20823,6 +21163,7 @@ func Compute_alpha_TargetHttpsProxiesList(context Context, args ...string) error
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -20933,6 +21274,8 @@ func Compute_alpha_TargetHttpsProxiesSetSslCertificates(context Context, args ..
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TargetHttpsProxiesSetSslCertificatesRequest{})
+
 		os.Exit(1)
 	}
 
@@ -21022,6 +21365,8 @@ func Compute_alpha_TargetHttpsProxiesSetUrlMap(context Context, args ...string) 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.UrlMapReference{})
+
 		os.Exit(1)
 	}
 
@@ -21111,6 +21456,8 @@ func Compute_alpha_TargetHttpsProxiesTestIamPermissions(context Context, args ..
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -21205,6 +21552,7 @@ func Compute_alpha_TargetInstancesAggregatedList(context Context, args ...string
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -21314,6 +21662,7 @@ func Compute_alpha_TargetInstancesDelete(context Context, args ...string) error 
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -21385,6 +21734,7 @@ func Compute_alpha_TargetInstancesGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -21457,6 +21807,8 @@ func Compute_alpha_TargetInstancesInsert(context Context, args ...string) error 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TargetInstance{})
+
 		os.Exit(1)
 	}
 
@@ -21552,6 +21904,7 @@ func Compute_alpha_TargetInstancesList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -21668,6 +22021,8 @@ func Compute_alpha_TargetInstancesTestIamPermissions(context Context, args ...st
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -21763,6 +22118,8 @@ func Compute_alpha_TargetPoolsAddHealthCheck(context Context, args ...string) er
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TargetPoolsAddHealthCheckRequest{})
+
 		os.Exit(1)
 	}
 
@@ -21858,6 +22215,8 @@ func Compute_alpha_TargetPoolsAddInstance(context Context, args ...string) error
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TargetPoolsAddInstanceRequest{})
+
 		os.Exit(1)
 	}
 
@@ -21957,6 +22316,7 @@ func Compute_alpha_TargetPoolsAggregatedList(context Context, args ...string) er
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -22066,6 +22426,7 @@ func Compute_alpha_TargetPoolsDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -22137,6 +22498,7 @@ func Compute_alpha_TargetPoolsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -22210,6 +22572,8 @@ func Compute_alpha_TargetPoolsGetHealth(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstanceReference{})
+
 		os.Exit(1)
 	}
 
@@ -22304,6 +22668,8 @@ func Compute_alpha_TargetPoolsInsert(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TargetPool{})
+
 		os.Exit(1)
 	}
 
@@ -22399,6 +22765,7 @@ func Compute_alpha_TargetPoolsList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -22515,6 +22882,8 @@ func Compute_alpha_TargetPoolsRemoveHealthCheck(context Context, args ...string)
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TargetPoolsRemoveHealthCheckRequest{})
+
 		os.Exit(1)
 	}
 
@@ -22610,6 +22979,8 @@ func Compute_alpha_TargetPoolsRemoveInstance(context Context, args ...string) er
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TargetPoolsRemoveInstanceRequest{})
+
 		os.Exit(1)
 	}
 
@@ -22707,6 +23078,8 @@ func Compute_alpha_TargetPoolsSetBackup(context Context, args ...string) error {
 		usageBits += " [--failoverRatio=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TargetReference{})
+
 		os.Exit(1)
 	}
 
@@ -22827,6 +23200,8 @@ func Compute_alpha_TargetPoolsTestIamPermissions(context Context, args ...string
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -22921,6 +23296,8 @@ func Compute_alpha_TargetSslProxiesTestIamPermissions(context Context, args ...s
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -23015,6 +23392,7 @@ func Compute_alpha_TargetVpnGatewaysAggregatedList(context Context, args ...stri
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -23124,6 +23502,7 @@ func Compute_alpha_TargetVpnGatewaysDelete(context Context, args ...string) erro
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -23195,6 +23574,7 @@ func Compute_alpha_TargetVpnGatewaysGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -23267,6 +23647,8 @@ func Compute_alpha_TargetVpnGatewaysInsert(context Context, args ...string) erro
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TargetVpnGateway{})
+
 		os.Exit(1)
 	}
 
@@ -23362,6 +23744,7 @@ func Compute_alpha_TargetVpnGatewaysList(context Context, args ...string) error 
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -23478,6 +23861,8 @@ func Compute_alpha_TargetVpnGatewaysTestIamPermissions(context Context, args ...
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -23570,6 +23955,7 @@ func Compute_alpha_UrlMapsDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -23635,6 +24021,7 @@ func Compute_alpha_UrlMapsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -23701,6 +24088,8 @@ func Compute_alpha_UrlMapsInsert(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.UrlMap{})
+
 		os.Exit(1)
 	}
 
@@ -23785,6 +24174,8 @@ func Compute_alpha_UrlMapsInvalidateCache(context Context, args ...string) error
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.CacheInvalidationRule{})
+
 		os.Exit(1)
 	}
 
@@ -23879,6 +24270,7 @@ func Compute_alpha_UrlMapsList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -23989,6 +24381,8 @@ func Compute_alpha_UrlMapsPatch(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.UrlMap{})
+
 		os.Exit(1)
 	}
 
@@ -24078,6 +24472,8 @@ func Compute_alpha_UrlMapsTestIamPermissions(context Context, args ...string) er
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -24167,6 +24563,8 @@ func Compute_alpha_UrlMapsUpdate(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.UrlMap{})
+
 		os.Exit(1)
 	}
 
@@ -24256,6 +24654,8 @@ func Compute_alpha_UrlMapsValidate(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.UrlMapsValidateRequest{})
+
 		os.Exit(1)
 	}
 
@@ -24350,6 +24750,7 @@ func Compute_alpha_VpnTunnelsAggregatedList(context Context, args ...string) err
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -24459,6 +24860,7 @@ func Compute_alpha_VpnTunnelsDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -24530,6 +24932,7 @@ func Compute_alpha_VpnTunnelsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -24602,6 +25005,8 @@ func Compute_alpha_VpnTunnelsInsert(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.VpnTunnel{})
+
 		os.Exit(1)
 	}
 
@@ -24697,6 +25102,7 @@ func Compute_alpha_VpnTunnelsList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -24813,6 +25219,8 @@ func Compute_alpha_VpnTunnelsTestIamPermissions(context Context, args ...string)
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -24906,6 +25314,7 @@ func Compute_alpha_ZoneOperationsDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -24971,6 +25380,7 @@ func Compute_alpha_ZoneOperationsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -25049,6 +25459,7 @@ func Compute_alpha_ZoneOperationsList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -25162,6 +25573,7 @@ func Compute_alpha_ZonesGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -25234,6 +25646,7 @@ func Compute_alpha_ZonesList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 

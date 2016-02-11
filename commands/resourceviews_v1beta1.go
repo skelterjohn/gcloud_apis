@@ -53,6 +53,8 @@ func Resourceviews_v1beta1_RegionViewsAddresources(context Context, args ...stri
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.RegionViewsAddResourcesRequest{})
+
 		os.Exit(1)
 	}
 
@@ -140,6 +142,7 @@ func Resourceviews_v1beta1_RegionViewsDelete(context Context, args ...string) er
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -205,6 +208,7 @@ func Resourceviews_v1beta1_RegionViewsGet(context Context, args ...string) error
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -277,6 +281,8 @@ func Resourceviews_v1beta1_RegionViewsInsert(context Context, args ...string) er
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ResourceView{})
+
 		os.Exit(1)
 	}
 
@@ -368,6 +374,7 @@ func Resourceviews_v1beta1_RegionViewsList(context Context, args ...string) erro
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -470,6 +477,7 @@ func Resourceviews_v1beta1_RegionViewsListresources(context Context, args ...str
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -575,6 +583,8 @@ func Resourceviews_v1beta1_RegionViewsRemoveresources(context Context, args ...s
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.RegionViewsRemoveResourcesRequest{})
+
 		os.Exit(1)
 	}
 
@@ -664,6 +674,8 @@ func Resourceviews_v1beta1_ZoneViewsAddresources(context Context, args ...string
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ZoneViewsAddResourcesRequest{})
+
 		os.Exit(1)
 	}
 
@@ -751,6 +763,7 @@ func Resourceviews_v1beta1_ZoneViewsDelete(context Context, args ...string) erro
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -816,6 +829,7 @@ func Resourceviews_v1beta1_ZoneViewsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -888,6 +902,8 @@ func Resourceviews_v1beta1_ZoneViewsInsert(context Context, args ...string) erro
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ResourceView{})
+
 		os.Exit(1)
 	}
 
@@ -979,6 +995,7 @@ func Resourceviews_v1beta1_ZoneViewsList(context Context, args ...string) error 
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1081,6 +1098,7 @@ func Resourceviews_v1beta1_ZoneViewsListresources(context Context, args ...strin
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1186,6 +1204,8 @@ func Resourceviews_v1beta1_ZoneViewsRemoveresources(context Context, args ...str
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ZoneViewsRemoveResourcesRequest{})
+
 		os.Exit(1)
 	}
 

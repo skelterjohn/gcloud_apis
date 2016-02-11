@@ -51,6 +51,8 @@ func Datastore_v1beta3_ProjectsAllocateIds(context Context, args ...string) erro
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.AllocateIdsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -134,6 +136,8 @@ func Datastore_v1beta3_ProjectsBeginTransaction(context Context, args ...string)
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.BeginTransactionRequest{})
+
 		os.Exit(1)
 	}
 
@@ -217,6 +221,8 @@ func Datastore_v1beta3_ProjectsCommit(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.CommitRequest{})
+
 		os.Exit(1)
 	}
 
@@ -300,6 +306,8 @@ func Datastore_v1beta3_ProjectsExport(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ExportRequest{})
+
 		os.Exit(1)
 	}
 
@@ -383,6 +391,8 @@ func Datastore_v1beta3_ProjectsImport(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ImportRequest{})
+
 		os.Exit(1)
 	}
 
@@ -467,6 +477,7 @@ func Datastore_v1beta3_ProjectsIndexesGet(context Context, args ...string) error
 		usageBits += " [--databaseId=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -563,6 +574,7 @@ func Datastore_v1beta3_ProjectsIndexesList(context Context, args ...string) erro
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -672,6 +684,8 @@ func Datastore_v1beta3_ProjectsIndexesLookup(context Context, args ...string) er
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.LookupIndexRequest{})
+
 		os.Exit(1)
 	}
 
@@ -756,6 +770,8 @@ func Datastore_v1beta3_ProjectsIndexesUpdate(context Context, args ...string) er
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Index{})
+
 		os.Exit(1)
 	}
 
@@ -844,6 +860,8 @@ func Datastore_v1beta3_ProjectsLookup(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.LookupRequest{})
+
 		os.Exit(1)
 	}
 
@@ -927,6 +945,8 @@ func Datastore_v1beta3_ProjectsMultiWatch(context Context, args ...string) error
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.MultiWatchRequest{})
+
 		os.Exit(1)
 	}
 
@@ -1008,6 +1028,7 @@ func Datastore_v1beta3_ProjectsOperationsCancel(context Context, args ...string)
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1067,6 +1088,7 @@ func Datastore_v1beta3_ProjectsOperationsDelete(context Context, args ...string)
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1126,6 +1148,7 @@ func Datastore_v1beta3_ProjectsOperationsGet(context Context, args ...string) er
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1191,6 +1214,7 @@ func Datastore_v1beta3_ProjectsOperationsList(context Context, args ...string) e
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1292,6 +1316,8 @@ func Datastore_v1beta3_ProjectsRollback(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.RollbackRequest{})
+
 		os.Exit(1)
 	}
 
@@ -1375,6 +1401,8 @@ func Datastore_v1beta3_ProjectsRunQuery(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.RunQueryRequest{})
+
 		os.Exit(1)
 	}
 
@@ -1458,6 +1486,8 @@ func Datastore_v1beta3_ProjectsWatch(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.WatchRequest{})
+
 		os.Exit(1)
 	}
 

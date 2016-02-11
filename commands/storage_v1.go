@@ -50,6 +50,7 @@ func Storage_v1_BucketAccessControlsDelete(context Context, args ...string) erro
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -109,6 +110,7 @@ func Storage_v1_BucketAccessControlsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -175,6 +177,8 @@ func Storage_v1_BucketAccessControlsInsert(context Context, args ...string) erro
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.BucketAccessControl{})
+
 		os.Exit(1)
 	}
 
@@ -256,6 +260,7 @@ func Storage_v1_BucketAccessControlsList(context Context, args ...string) error 
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -318,6 +323,8 @@ func Storage_v1_BucketAccessControlsPatch(context Context, args ...string) error
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.BucketAccessControl{})
+
 		os.Exit(1)
 	}
 
@@ -407,6 +414,8 @@ func Storage_v1_BucketAccessControlsUpdate(context Context, args ...string) erro
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.BucketAccessControl{})
+
 		os.Exit(1)
 	}
 
@@ -497,6 +506,7 @@ func Storage_v1_BucketsDelete(context Context, args ...string) error {
 		usageBits += " [--ifMetagenerationNotMatch=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -588,6 +598,7 @@ func Storage_v1_BucketsGet(context Context, args ...string) error {
 		usageBits += " [--projection=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -697,6 +708,8 @@ func Storage_v1_BucketsInsert(context Context, args ...string) error {
 		usageBits += " [--projection=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Bucket{})
+
 		os.Exit(1)
 	}
 
@@ -828,6 +841,7 @@ func Storage_v1_BucketsList(context Context, args ...string) error {
 		usageBits += " [--projection=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -946,6 +960,8 @@ func Storage_v1_BucketsPatch(context Context, args ...string) error {
 		usageBits += " [--projection=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Bucket{})
+
 		os.Exit(1)
 	}
 
@@ -1096,6 +1112,8 @@ func Storage_v1_BucketsUpdate(context Context, args ...string) error {
 		usageBits += " [--projection=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Bucket{})
+
 		os.Exit(1)
 	}
 
@@ -1235,6 +1253,8 @@ func Storage_v1_ChannelsStop(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Channel{})
+
 		os.Exit(1)
 	}
 
@@ -1304,6 +1324,7 @@ func Storage_v1_DefaultObjectAccessControlsDelete(context Context, args ...strin
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1363,6 +1384,7 @@ func Storage_v1_DefaultObjectAccessControlsGet(context Context, args ...string) 
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1429,6 +1451,8 @@ func Storage_v1_DefaultObjectAccessControlsInsert(context Context, args ...strin
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ObjectAccessControl{})
+
 		os.Exit(1)
 	}
 
@@ -1514,6 +1538,7 @@ func Storage_v1_DefaultObjectAccessControlsList(context Context, args ...string)
 		usageBits += " [--ifMetagenerationNotMatch=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1608,6 +1633,8 @@ func Storage_v1_DefaultObjectAccessControlsPatch(context Context, args ...string
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ObjectAccessControl{})
+
 		os.Exit(1)
 	}
 
@@ -1697,6 +1724,8 @@ func Storage_v1_DefaultObjectAccessControlsUpdate(context Context, args ...strin
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ObjectAccessControl{})
+
 		os.Exit(1)
 	}
 
@@ -1787,6 +1816,7 @@ func Storage_v1_ObjectAccessControlsDelete(context Context, args ...string) erro
 		usageBits += " [--generation=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1878,6 +1908,7 @@ func Storage_v1_ObjectAccessControlsGet(context Context, args ...string) error {
 		usageBits += " [--generation=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1976,6 +2007,8 @@ func Storage_v1_ObjectAccessControlsInsert(context Context, args ...string) erro
 		usageBits += " [--generation=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ObjectAccessControl{})
+
 		os.Exit(1)
 	}
 
@@ -2090,6 +2123,7 @@ func Storage_v1_ObjectAccessControlsList(context Context, args ...string) error 
 		usageBits += " [--generation=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -2184,6 +2218,8 @@ func Storage_v1_ObjectAccessControlsPatch(context Context, args ...string) error
 		usageBits += " [--generation=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ObjectAccessControl{})
+
 		os.Exit(1)
 	}
 
@@ -2306,6 +2342,8 @@ func Storage_v1_ObjectAccessControlsUpdate(context Context, args ...string) erro
 		usageBits += " [--generation=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ObjectAccessControl{})
+
 		os.Exit(1)
 	}
 
@@ -2431,6 +2469,8 @@ func Storage_v1_ObjectsCompose(context Context, args ...string) error {
 		usageBits += " [--ifMetagenerationMatch=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ComposeRequest{})
+
 		os.Exit(1)
 	}
 
@@ -2585,6 +2625,8 @@ func Storage_v1_ObjectsCopy(context Context, args ...string) error {
 		usageBits += " [--sourceGeneration=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Object{})
+
 		os.Exit(1)
 	}
 
@@ -2797,6 +2839,7 @@ func Storage_v1_ObjectsDelete(context Context, args ...string) error {
 		usageBits += " [--ifMetagenerationNotMatch=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -2924,6 +2967,7 @@ func Storage_v1_ObjectsGet(context Context, args ...string) error {
 		usageBits += " [--projection=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -3070,6 +3114,8 @@ func Storage_v1_ObjectsInsert(context Context, args ...string) error {
 		usageBits += " [--projection=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Object{})
+
 		os.Exit(1)
 	}
 
@@ -3260,6 +3306,7 @@ func Storage_v1_ObjectsList(context Context, args ...string) error {
 		usageBits += " [--versions=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -3400,6 +3447,8 @@ func Storage_v1_ObjectsPatch(context Context, args ...string) error {
 		usageBits += " [--projection=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Object{})
+
 		os.Exit(1)
 	}
 
@@ -3590,6 +3639,8 @@ func Storage_v1_ObjectsRewrite(context Context, args ...string) error {
 		usageBits += " [--sourceGeneration=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Object{})
+
 		os.Exit(1)
 	}
 
@@ -3824,6 +3875,8 @@ func Storage_v1_ObjectsUpdate(context Context, args ...string) error {
 		usageBits += " [--projection=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Object{})
+
 		os.Exit(1)
 	}
 
@@ -3997,6 +4050,8 @@ func Storage_v1_ObjectsWatchAll(context Context, args ...string) error {
 		usageBits += " [--versions=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Channel{})
+
 		os.Exit(1)
 	}
 

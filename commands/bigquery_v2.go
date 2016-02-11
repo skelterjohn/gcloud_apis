@@ -52,6 +52,7 @@ func Bigquery_v2_DatasetsDelete(context Context, args ...string) error {
 		usageBits += " [--deleteContents=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -135,6 +136,7 @@ func Bigquery_v2_DatasetsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -201,6 +203,8 @@ func Bigquery_v2_DatasetsInsert(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Dataset{})
+
 		os.Exit(1)
 	}
 
@@ -288,6 +292,7 @@ func Bigquery_v2_DatasetsList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -390,6 +395,8 @@ func Bigquery_v2_DatasetsPatch(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Dataset{})
+
 		os.Exit(1)
 	}
 
@@ -479,6 +486,8 @@ func Bigquery_v2_DatasetsUpdate(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Dataset{})
+
 		os.Exit(1)
 	}
 
@@ -566,6 +575,7 @@ func Bigquery_v2_JobsCancel(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -631,6 +641,7 @@ func Bigquery_v2_JobsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -704,6 +715,7 @@ func Bigquery_v2_JobsGetQueryResults(context Context, args ...string) error {
 		usageBits += " [--timeoutMs=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -818,6 +830,8 @@ func Bigquery_v2_JobsInsert(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Job{})
+
 		os.Exit(1)
 	}
 
@@ -925,6 +939,7 @@ func Bigquery_v2_JobsList(context Context, args ...string) error {
 		usageBits += " [--stateFilter=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1042,6 +1057,8 @@ func Bigquery_v2_JobsQuery(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.QueryRequest{})
+
 		os.Exit(1)
 	}
 
@@ -1126,6 +1143,7 @@ func Bigquery_v2_ProjectsList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1214,6 +1232,8 @@ func Bigquery_v2_TabledataInsertAll(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TableDataInsertAllRequest{})
+
 		os.Exit(1)
 	}
 
@@ -1313,6 +1333,7 @@ func Bigquery_v2_TabledataList(context Context, args ...string) error {
 		usageBits += " [--startIndex=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1424,6 +1445,7 @@ func Bigquery_v2_TablesDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1489,6 +1511,7 @@ func Bigquery_v2_TablesGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1561,6 +1584,8 @@ func Bigquery_v2_TablesInsert(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Table{})
+
 		os.Exit(1)
 	}
 
@@ -1652,6 +1677,7 @@ func Bigquery_v2_TablesList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1752,6 +1778,8 @@ func Bigquery_v2_TablesPatch(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Table{})
+
 		os.Exit(1)
 	}
 
@@ -1847,6 +1875,8 @@ func Bigquery_v2_TablesUpdate(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Table{})
+
 		os.Exit(1)
 	}
 

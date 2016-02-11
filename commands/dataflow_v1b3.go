@@ -55,6 +55,8 @@ func Dataflow_v1b3_ProjectsJobsCreate(context Context, args ...string) error {
 		usageBits += " [--view=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Job{})
+
 		os.Exit(1)
 	}
 
@@ -172,6 +174,7 @@ func Dataflow_v1b3_ProjectsJobsGet(context Context, args ...string) error {
 		usageBits += " [--view=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -263,6 +266,7 @@ func Dataflow_v1b3_ProjectsJobsGetMetrics(context Context, args ...string) error
 		usageBits += " [--startTime=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -357,6 +361,7 @@ func Dataflow_v1b3_ProjectsJobsList(context Context, args ...string) error {
 		usageBits += " [--view=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -467,6 +472,7 @@ func Dataflow_v1b3_ProjectsJobsMessagesList(context Context, args ...string) err
 		usageBits += " [--startTime=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -590,6 +596,8 @@ func Dataflow_v1b3_ProjectsJobsUpdate(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Job{})
+
 		os.Exit(1)
 	}
 
@@ -679,6 +687,8 @@ func Dataflow_v1b3_ProjectsJobsWorkItemsLease(context Context, args ...string) e
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.LeaseWorkItemRequest{})
+
 		os.Exit(1)
 	}
 
@@ -768,6 +778,8 @@ func Dataflow_v1b3_ProjectsJobsWorkItemsReportStatus(context Context, args ...st
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ReportWorkItemStatusRequest{})
+
 		os.Exit(1)
 	}
 
@@ -856,6 +868,8 @@ func Dataflow_v1b3_ProjectsWorkerMessages(context Context, args ...string) error
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.SendWorkerMessagesRequest{})
+
 		os.Exit(1)
 	}
 

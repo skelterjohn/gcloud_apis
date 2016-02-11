@@ -53,6 +53,8 @@ func Testing_v1_ProjectsDevicesCreate(context Context, args ...string) error {
 		usageBits += " [--sshPublicKey=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Device{})
+
 		os.Exit(1)
 	}
 
@@ -160,6 +162,7 @@ func Testing_v1_ProjectsDevicesDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -225,6 +228,7 @@ func Testing_v1_ProjectsDevicesGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -290,6 +294,7 @@ func Testing_v1_ProjectsDevicesKeepalive(context Context, args ...string) error 
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -358,6 +363,7 @@ func Testing_v1_ProjectsDevicesList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -450,6 +456,7 @@ func Testing_v1_ProjectsTestMatricesCancel(context Context, args ...string) erro
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -518,6 +525,8 @@ func Testing_v1_ProjectsTestMatricesCreate(context Context, args ...string) erro
 		usageBits += " [--requestId=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestMatrix{})
+
 		os.Exit(1)
 	}
 
@@ -625,6 +634,7 @@ func Testing_v1_ProjectsTestMatricesDelete(context Context, args ...string) erro
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -690,6 +700,7 @@ func Testing_v1_ProjectsTestMatricesGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -754,6 +765,7 @@ func Testing_v1_ProjectsTestMatricesList(context Context, args ...string) error 
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -815,6 +827,8 @@ func Testing_v1_ProjectsWebdriverCreate(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.WebDriver{})
+
 		os.Exit(1)
 	}
 
@@ -897,6 +911,7 @@ func Testing_v1_ProjectsWebdriverDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -962,6 +977,7 @@ func Testing_v1_ProjectsWebdriverGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1029,6 +1045,8 @@ func Testing_v1_ProjectsWebdriverKeepalive(context Context, args ...string) erro
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.WebDriverKeepAliveRequest{})
+
 		os.Exit(1)
 	}
 
@@ -1119,6 +1137,7 @@ func Testing_v1_ProjectsWebdriverList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1210,6 +1229,7 @@ func Testing_v1_TestEnvironmentCatalogGet(context Context, args ...string) error
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 

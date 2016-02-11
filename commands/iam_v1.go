@@ -49,6 +49,7 @@ func Iam_v1_GetIamPolicy(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -109,6 +110,8 @@ func Iam_v1_IamPoliciesGetPolicyDetails(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.GetPolicyDetailsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -185,6 +188,8 @@ func Iam_v1_ProjectsServiceAccountsCreate(context Context, args ...string) error
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.CreateServiceAccountRequest{})
+
 		os.Exit(1)
 	}
 
@@ -266,6 +271,7 @@ func Iam_v1_ProjectsServiceAccountsDelete(context Context, args ...string) error
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -325,6 +331,7 @@ func Iam_v1_ProjectsServiceAccountsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -386,6 +393,7 @@ func Iam_v1_ProjectsServiceAccountsKeysCreate(context Context, args ...string) e
 		usageBits += " [--privateKeyType=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -469,6 +477,7 @@ func Iam_v1_ProjectsServiceAccountsKeysDelete(context Context, args ...string) e
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -528,6 +537,7 @@ func Iam_v1_ProjectsServiceAccountsKeysGet(context Context, args ...string) erro
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -589,6 +599,7 @@ func Iam_v1_ProjectsServiceAccountsKeysList(context Context, args ...string) err
 		usageBits += " [--keyTypes=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -678,6 +689,7 @@ func Iam_v1_ProjectsServiceAccountsList(context Context, args ...string) error {
 		usageBits += " [--removeDeletedServiceAccounts=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -779,6 +791,8 @@ func Iam_v1_ProjectsServiceAccountsSignBlob(context Context, args ...string) err
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.SignBlobRequest{})
+
 		os.Exit(1)
 	}
 
@@ -862,6 +876,8 @@ func Iam_v1_ProjectsServiceAccountsUpdate(context Context, args ...string) error
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ServiceAccount{})
+
 		os.Exit(1)
 	}
 
@@ -944,6 +960,8 @@ func Iam_v1_RolesQueryGrantableRoles(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.QueryGrantableRolesRequest{})
+
 		os.Exit(1)
 	}
 
@@ -1020,6 +1038,8 @@ func Iam_v1_SetIamPolicy(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.SetIamPolicyRequest{})
+
 		os.Exit(1)
 	}
 
@@ -1103,6 +1123,8 @@ func Iam_v1_TestIamPermissions(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestIamPermissionsRequest{})
+
 		os.Exit(1)
 	}
 

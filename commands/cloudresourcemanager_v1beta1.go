@@ -49,6 +49,7 @@ func Cloudresourcemanager_v1beta1_OrganizationsGet(context Context, args ...stri
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -110,6 +111,8 @@ func Cloudresourcemanager_v1beta1_OrganizationsGetIamPolicy(context Context, arg
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.GetIamPolicyRequest{})
+
 		os.Exit(1)
 	}
 
@@ -196,6 +199,7 @@ func Cloudresourcemanager_v1beta1_OrganizationsList(context Context, args ...str
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -290,6 +294,8 @@ func Cloudresourcemanager_v1beta1_OrganizationsSetIamPolicy(context Context, arg
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.SetIamPolicyRequest{})
+
 		os.Exit(1)
 	}
 
@@ -373,6 +379,8 @@ func Cloudresourcemanager_v1beta1_OrganizationsTestIamPermissions(context Contex
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestIamPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -456,6 +464,8 @@ func Cloudresourcemanager_v1beta1_OrganizationsUpdate(context Context, args ...s
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Organization{})
+
 		os.Exit(1)
 	}
 
@@ -538,6 +548,8 @@ func Cloudresourcemanager_v1beta1_ProjectsCreate(context Context, args ...string
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Project{})
+
 		os.Exit(1)
 	}
 
@@ -612,6 +624,7 @@ func Cloudresourcemanager_v1beta1_ProjectsDelete(context Context, args ...string
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -671,6 +684,7 @@ func Cloudresourcemanager_v1beta1_ProjectsGet(context Context, args ...string) e
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -732,6 +746,8 @@ func Cloudresourcemanager_v1beta1_ProjectsGetIamPolicy(context Context, args ...
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.GetIamPolicyRequest{})
+
 		os.Exit(1)
 	}
 
@@ -818,6 +834,7 @@ func Cloudresourcemanager_v1beta1_ProjectsList(context Context, args ...string) 
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -912,6 +929,8 @@ func Cloudresourcemanager_v1beta1_ProjectsSetIamPolicy(context Context, args ...
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.SetIamPolicyRequest{})
+
 		os.Exit(1)
 	}
 
@@ -995,6 +1014,8 @@ func Cloudresourcemanager_v1beta1_ProjectsTestIamPermissions(context Context, ar
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestIamPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -1076,6 +1097,7 @@ func Cloudresourcemanager_v1beta1_ProjectsUndelete(context Context, args ...stri
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1137,6 +1159,8 @@ func Cloudresourcemanager_v1beta1_ProjectsUpdate(context Context, args ...string
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Project{})
+
 		os.Exit(1)
 	}
 

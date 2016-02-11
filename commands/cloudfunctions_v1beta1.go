@@ -49,6 +49,7 @@ func Cloudfunctions_v1beta1_OperationsGet(context Context, args ...string) error
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -110,6 +111,8 @@ func Cloudfunctions_v1beta1_ProjectsRegionsFunctionsCall(context Context, args .
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.CallFunctionRequest{})
+
 		os.Exit(1)
 	}
 
@@ -193,6 +196,8 @@ func Cloudfunctions_v1beta1_ProjectsRegionsFunctionsCreate(context Context, args
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.HostedFunction{})
+
 		os.Exit(1)
 	}
 
@@ -274,6 +279,7 @@ func Cloudfunctions_v1beta1_ProjectsRegionsFunctionsDelete(context Context, args
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -333,6 +339,7 @@ func Cloudfunctions_v1beta1_ProjectsRegionsFunctionsGet(context Context, args ..
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -396,6 +403,7 @@ func Cloudfunctions_v1beta1_ProjectsRegionsFunctionsList(context Context, args .
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -489,6 +497,8 @@ func Cloudfunctions_v1beta1_ProjectsRegionsFunctionsUpdate(context Context, args
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.HostedFunction{})
+
 		os.Exit(1)
 	}
 

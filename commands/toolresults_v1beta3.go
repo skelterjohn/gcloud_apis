@@ -49,6 +49,7 @@ func Toolresults_v1beta3_ProjectsGetSettings(context Context, args ...string) er
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -110,6 +111,8 @@ func Toolresults_v1beta3_ProjectsHistoriesCreate(context Context, args ...string
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.History{})
+
 		os.Exit(1)
 	}
 
@@ -194,6 +197,8 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsCreate(context Context, args
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Execution{})
+
 		os.Exit(1)
 	}
 
@@ -282,6 +287,7 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsGet(context Context, args ..
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -356,6 +362,7 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsList(context Context, args .
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -456,6 +463,8 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsPatch(context Context, args 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Execution{})
+
 		os.Exit(1)
 	}
 
@@ -551,6 +560,8 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsCreate(context Context,
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Step{})
+
 		os.Exit(1)
 	}
 
@@ -645,6 +656,7 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsGet(context Context, ar
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -725,6 +737,7 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsList(context Context, a
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -831,6 +844,8 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsPatch(context Context, 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Step{})
+
 		os.Exit(1)
 	}
 
@@ -932,6 +947,8 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsPublishXunitXmlFiles(co
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.PublishXunitXmlFilesRequest{})
+
 		os.Exit(1)
 	}
 
@@ -1035,6 +1052,7 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsThumbnailsList(context 
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1142,6 +1160,7 @@ func Toolresults_v1beta3_ProjectsHistoriesGet(context Context, args ...string) e
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1212,6 +1231,7 @@ func Toolresults_v1beta3_ProjectsHistoriesList(context Context, args ...string) 
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1311,6 +1331,7 @@ func Toolresults_v1beta3_ProjectsInitializeSettings(context Context, args ...str
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 

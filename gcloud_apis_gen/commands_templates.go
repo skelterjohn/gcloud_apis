@@ -135,6 +135,8 @@ func {{.FuncName}}(context Context, args ...string) error {
     {{  end}}{{ end}}
     {{end}}
     fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+    {{if .Method.Request.Ref}}commands_util.PrintRequestExample(&api_client.{{.Method.Request.Ref}}{})
+    {{end}}
     os.Exit(1)
   }
 

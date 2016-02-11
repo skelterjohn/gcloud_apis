@@ -51,6 +51,8 @@ func Pubsub_v1_ProjectsSubscriptionsAcknowledge(context Context, args ...string)
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.AcknowledgeRequest{})
+
 		os.Exit(1)
 	}
 
@@ -134,6 +136,8 @@ func Pubsub_v1_ProjectsSubscriptionsCreate(context Context, args ...string) erro
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Subscription{})
+
 		os.Exit(1)
 	}
 
@@ -215,6 +219,7 @@ func Pubsub_v1_ProjectsSubscriptionsDelete(context Context, args ...string) erro
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -274,6 +279,7 @@ func Pubsub_v1_ProjectsSubscriptionsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -333,6 +339,7 @@ func Pubsub_v1_ProjectsSubscriptionsGetIamPolicy(context Context, args ...string
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -396,6 +403,7 @@ func Pubsub_v1_ProjectsSubscriptionsList(context Context, args ...string) error 
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -489,6 +497,8 @@ func Pubsub_v1_ProjectsSubscriptionsModifyAckDeadline(context Context, args ...s
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ModifyAckDeadlineRequest{})
+
 		os.Exit(1)
 	}
 
@@ -572,6 +582,8 @@ func Pubsub_v1_ProjectsSubscriptionsModifyPushConfig(context Context, args ...st
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ModifyPushConfigRequest{})
+
 		os.Exit(1)
 	}
 
@@ -655,6 +667,8 @@ func Pubsub_v1_ProjectsSubscriptionsPull(context Context, args ...string) error 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.PullRequest{})
+
 		os.Exit(1)
 	}
 
@@ -738,6 +752,8 @@ func Pubsub_v1_ProjectsSubscriptionsSetIamPolicy(context Context, args ...string
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.SetIamPolicyRequest{})
+
 		os.Exit(1)
 	}
 
@@ -821,6 +837,8 @@ func Pubsub_v1_ProjectsSubscriptionsTestIamPermissions(context Context, args ...
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestIamPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -904,6 +922,8 @@ func Pubsub_v1_ProjectsTopicsCreate(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Topic{})
+
 		os.Exit(1)
 	}
 
@@ -985,6 +1005,7 @@ func Pubsub_v1_ProjectsTopicsDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1044,6 +1065,7 @@ func Pubsub_v1_ProjectsTopicsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1103,6 +1125,7 @@ func Pubsub_v1_ProjectsTopicsGetIamPolicy(context Context, args ...string) error
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1166,6 +1189,7 @@ func Pubsub_v1_ProjectsTopicsList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1259,6 +1283,8 @@ func Pubsub_v1_ProjectsTopicsPublish(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.PublishRequest{})
+
 		os.Exit(1)
 	}
 
@@ -1342,6 +1368,8 @@ func Pubsub_v1_ProjectsTopicsSetIamPolicy(context Context, args ...string) error
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.SetIamPolicyRequest{})
+
 		os.Exit(1)
 	}
 
@@ -1427,6 +1455,7 @@ func Pubsub_v1_ProjectsTopicsSubscriptionsList(context Context, args ...string) 
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1520,6 +1549,8 @@ func Pubsub_v1_ProjectsTopicsTestIamPermissions(context Context, args ...string)
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestIamPermissionsRequest{})
+
 		os.Exit(1)
 	}
 

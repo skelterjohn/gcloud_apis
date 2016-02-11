@@ -50,6 +50,7 @@ func Clouduseraccounts_beta_GlobalAccountsOperationsDelete(context Context, args
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -109,6 +110,7 @@ func Clouduseraccounts_beta_GlobalAccountsOperationsGet(context Context, args ..
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -181,6 +183,7 @@ func Clouduseraccounts_beta_GlobalAccountsOperationsList(context Context, args .
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -291,6 +294,8 @@ func Clouduseraccounts_beta_GroupsAddMember(context Context, args ...string) err
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.GroupsAddMemberRequest{})
+
 		os.Exit(1)
 	}
 
@@ -378,6 +383,7 @@ func Clouduseraccounts_beta_GroupsDelete(context Context, args ...string) error 
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -443,6 +449,7 @@ func Clouduseraccounts_beta_GroupsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -509,6 +516,8 @@ func Clouduseraccounts_beta_GroupsInsert(context Context, args ...string) error 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Group{})
+
 		os.Exit(1)
 	}
 
@@ -598,6 +607,7 @@ func Clouduseraccounts_beta_GroupsList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -708,6 +718,8 @@ func Clouduseraccounts_beta_GroupsRemoveMember(context Context, args ...string) 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.GroupsRemoveMemberRequest{})
+
 		os.Exit(1)
 	}
 
@@ -801,6 +813,7 @@ func Clouduseraccounts_beta_LinuxGetAuthorizedKeysView(context Context, args ...
 		usageBits += " [--login=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -911,6 +924,7 @@ func Clouduseraccounts_beta_LinuxGetLinuxAccountViews(context Context, args ...s
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1031,6 +1045,8 @@ func Clouduseraccounts_beta_UsersAddPublicKey(context Context, args ...string) e
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.PublicKey{})
+
 		os.Exit(1)
 	}
 
@@ -1118,6 +1134,7 @@ func Clouduseraccounts_beta_UsersDelete(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1183,6 +1200,7 @@ func Clouduseraccounts_beta_UsersGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1249,6 +1267,8 @@ func Clouduseraccounts_beta_UsersInsert(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.User{})
+
 		os.Exit(1)
 	}
 
@@ -1338,6 +1358,7 @@ func Clouduseraccounts_beta_UsersList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1449,6 +1470,7 @@ func Clouduseraccounts_beta_UsersRemovePublicKey(context Context, args ...string
 		usageBits += " --fingerprint=VALUE"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 

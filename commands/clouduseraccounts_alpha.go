@@ -50,6 +50,7 @@ func Clouduseraccounts_alpha_GlobalAccountsOperationsDelete(context Context, arg
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -109,6 +110,7 @@ func Clouduseraccounts_alpha_GlobalAccountsOperationsGet(context Context, args .
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -181,6 +183,7 @@ func Clouduseraccounts_alpha_GlobalAccountsOperationsList(context Context, args 
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -291,6 +294,8 @@ func Clouduseraccounts_alpha_GroupsAddMember(context Context, args ...string) er
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.GroupsAddMemberRequest{})
+
 		os.Exit(1)
 	}
 
@@ -378,6 +383,7 @@ func Clouduseraccounts_alpha_GroupsDelete(context Context, args ...string) error
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -443,6 +449,7 @@ func Clouduseraccounts_alpha_GroupsGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -508,6 +515,7 @@ func Clouduseraccounts_alpha_GroupsGetIamPolicy(context Context, args ...string)
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -574,6 +582,8 @@ func Clouduseraccounts_alpha_GroupsInsert(context Context, args ...string) error
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Group{})
+
 		os.Exit(1)
 	}
 
@@ -663,6 +673,7 @@ func Clouduseraccounts_alpha_GroupsList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -773,6 +784,8 @@ func Clouduseraccounts_alpha_GroupsRemoveMember(context Context, args ...string)
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.GroupsRemoveMemberRequest{})
+
 		os.Exit(1)
 	}
 
@@ -862,6 +875,8 @@ func Clouduseraccounts_alpha_GroupsSetIamPolicy(context Context, args ...string)
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Policy{})
+
 		os.Exit(1)
 	}
 
@@ -951,6 +966,8 @@ func Clouduseraccounts_alpha_GroupsTestIamPermissions(context Context, args ...s
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
@@ -1044,6 +1061,7 @@ func Clouduseraccounts_alpha_LinuxGetAuthorizedKeysView(context Context, args ..
 		usageBits += " [--login=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1154,6 +1172,7 @@ func Clouduseraccounts_alpha_LinuxGetLinuxAccountViews(context Context, args ...
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1274,6 +1293,8 @@ func Clouduseraccounts_alpha_UsersAddPublicKey(context Context, args ...string) 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.PublicKey{})
+
 		os.Exit(1)
 	}
 
@@ -1361,6 +1382,7 @@ func Clouduseraccounts_alpha_UsersDelete(context Context, args ...string) error 
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1426,6 +1448,7 @@ func Clouduseraccounts_alpha_UsersGet(context Context, args ...string) error {
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1491,6 +1514,7 @@ func Clouduseraccounts_alpha_UsersGetIamPolicy(context Context, args ...string) 
 		}
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1557,6 +1581,8 @@ func Clouduseraccounts_alpha_UsersInsert(context Context, args ...string) error 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.User{})
+
 		os.Exit(1)
 	}
 
@@ -1646,6 +1672,7 @@ func Clouduseraccounts_alpha_UsersList(context Context, args ...string) error {
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1757,6 +1784,7 @@ func Clouduseraccounts_alpha_UsersRemovePublicKey(context Context, args ...strin
 		usageBits += " --fingerprint=VALUE"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
 		os.Exit(1)
 	}
 
@@ -1843,6 +1871,8 @@ func Clouduseraccounts_alpha_UsersSetIamPolicy(context Context, args ...string) 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Policy{})
+
 		os.Exit(1)
 	}
 
@@ -1932,6 +1962,8 @@ func Clouduseraccounts_alpha_UsersTestIamPermissions(context Context, args ...st
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
 		os.Exit(1)
 	}
 
