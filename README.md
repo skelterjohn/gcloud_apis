@@ -19,12 +19,7 @@
 	```sh
 	$ gcloud auth login
 	```
-
-3. To set up auth for `gcloud_apis`, export the refresh token:
-
-	```sh
-	$ export GCLOUD_APIS_REFRESH_TOKEN=$(gcloud auth print-refresh-token)
-	```
+  `gcloud_apis` automatically uses gcloud to authenticate requests.
 
 ## Usage
 
