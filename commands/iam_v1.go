@@ -33,143 +33,6 @@ var _ = io.Copy
 var _ = os.Stdin
 var _ = strings.Split
 
-func Iam_v1_GetIamPolicy(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("resource"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1/{+resource}:getIamPolicy", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewV1Service(api_service)
-
-	// Only positional arguments should remain in args.
-	if len(args) != 1 {
-		usageFunc()
-	}
-
-	expectedParams := []string{
-		"resource",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_resource, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-
-	call := service.GetIamPolicy(param_resource)
-
-	var response *api_client.Policy
-	response, err = call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Iam_v1_IamPoliciesGetPolicyDetails(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1/iamPolicies:getPolicyDetails", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		commands_util.PrintRequestExample(&api_client.GetPolicyDetailsRequest{})
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewIamPoliciesService(api_service)
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
-
-	// Only positional arguments should remain in args.
-	if len(args) == 0 || len(args) > 2 {
-		usageFunc()
-	}
-
-	request := &api_client.GetPolicyDetailsRequest{}
-	if len(args) == 2 {
-		err = commands_util.PopulateRequestFromFilename(&request, args[1])
-		if err != nil {
-			return err
-		}
-	}
-
-	keyValues := flagValues
-
-	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
-	if err != nil {
-		return err
-	}
-
-	expectedParams := []string{}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	call := service.GetPolicyDetails(
-		request,
-	)
-
-	var response *api_client.GetPolicyDetailsResponse
-	response, err = call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func Iam_v1_ProjectsServiceAccountsCreate(context Context, args ...string) error {
 
 	usageFunc := func() {
@@ -241,8 +104,7 @@ func Iam_v1_ProjectsServiceAccountsCreate(context Context, args ...string) error
 		request,
 	)
 
-	var response *api_client.ServiceAccount
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -301,8 +163,7 @@ func Iam_v1_ProjectsServiceAccountsDelete(context Context, args ...string) error
 
 	call := service.Delete(param_name)
 
-	var response *api_client.Empty
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -361,8 +222,66 @@ func Iam_v1_ProjectsServiceAccountsGet(context Context, args ...string) error {
 
 	call := service.Get(param_name)
 
-	var response *api_client.ServiceAccount
-	response, err = call.Do()
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Iam_v1_ProjectsServiceAccountsGetIamPolicy(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("resource"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/{+resource}:getIamPolicy", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewProjectsServiceAccountsService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"resource",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_resource, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.GetIamPolicy(param_resource)
+
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -390,9 +309,10 @@ func Iam_v1_ProjectsServiceAccountsKeysCreate(context Context, args ...string) e
 			}
 		}
 
-		usageBits += " [--privateKeyType=VALUE]"
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.CreateServiceAccountKeyRequest{})
 
 		os.Exit(1)
 	}
@@ -403,24 +323,29 @@ func Iam_v1_ProjectsServiceAccountsKeysCreate(context Context, args ...string) e
 	}
 	service := api_client.NewProjectsServiceAccountsKeysService(api_service)
 
-	queryParamNames := map[string]bool{
-		"privateKeyType": false,
-	}
-
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
 	}
 
-	for k, r := range queryParamNames {
-		if _, ok := flagValues[k]; r && !ok {
-			return fmt.Errorf("missing required flag %q", "--"+k)
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.CreateServiceAccountKeyRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
 		}
 	}
 
-	// Only positional arguments should remain in args.
-	if len(args) != 1 {
-		usageFunc()
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
 	}
 
 	expectedParams := []string{
@@ -436,19 +361,11 @@ func Iam_v1_ProjectsServiceAccountsKeysCreate(context Context, args ...string) e
 		return err
 	}
 
-	call := service.Create(param_name)
+	call := service.Create(param_name,
+		request,
+	)
 
-	// Set query parameters.
-	if value, ok := flagValues["privateKeyType"]; ok {
-		query_privateKeyType, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.PrivateKeyType(query_privateKeyType)
-	}
-
-	var response *api_client.ServiceAccountKey
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -507,8 +424,7 @@ func Iam_v1_ProjectsServiceAccountsKeysDelete(context Context, args ...string) e
 
 	call := service.Delete(param_name)
 
-	var response *api_client.Empty
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -536,6 +452,8 @@ func Iam_v1_ProjectsServiceAccountsKeysGet(context Context, args ...string) erro
 			}
 		}
 
+		usageBits += " [--publicKeyType=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -546,6 +464,21 @@ func Iam_v1_ProjectsServiceAccountsKeysGet(context Context, args ...string) erro
 		return err
 	}
 	service := api_client.NewProjectsServiceAccountsKeysService(api_service)
+
+	queryParamNames := map[string]bool{
+		"publicKeyType": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -567,8 +500,16 @@ func Iam_v1_ProjectsServiceAccountsKeysGet(context Context, args ...string) erro
 
 	call := service.Get(param_name)
 
-	var response *api_client.ServiceAccountKey
-	response, err = call.Do()
+	// Set query parameters.
+	if value, ok := flagValues["publicKeyType"]; ok {
+		query_publicKeyType, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PublicKeyType(query_publicKeyType)
+	}
+
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -653,8 +594,7 @@ func Iam_v1_ProjectsServiceAccountsKeysList(context Context, args ...string) err
 		call.KeyTypes(query_keyTypes)
 	}
 
-	var response *api_client.ListServiceAccountKeysResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -686,8 +626,6 @@ func Iam_v1_ProjectsServiceAccountsList(context Context, args ...string) error {
 
 		usageBits += " [--pageToken=VALUE]"
 
-		usageBits += " [--removeDeletedServiceAccounts=VALUE]"
-
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -700,9 +638,8 @@ func Iam_v1_ProjectsServiceAccountsList(context Context, args ...string) error {
 	service := api_client.NewProjectsServiceAccountsService(api_service)
 
 	queryParamNames := map[string]bool{
-		"pageSize":                     false,
-		"pageToken":                    false,
-		"removeDeletedServiceAccounts": false,
+		"pageSize":  false,
+		"pageToken": false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -751,16 +688,92 @@ func Iam_v1_ProjectsServiceAccountsList(context Context, args ...string) error {
 		}
 		call.PageToken(query_pageToken)
 	}
-	if value, ok := flagValues["removeDeletedServiceAccounts"]; ok {
-		query_removeDeletedServiceAccounts, err := commands_util.ConvertValue_bool(value)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Iam_v1_ProjectsServiceAccountsSetIamPolicy(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("resource"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/{+resource}:setIamPolicy", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.SetIamPolicyRequest{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewProjectsServiceAccountsService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.SetIamPolicyRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
 		if err != nil {
 			return err
 		}
-		call.RemoveDeletedServiceAccounts(query_removeDeletedServiceAccounts)
 	}
 
-	var response *api_client.ListServiceAccountsResponse
-	response, err = call.Do()
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"resource",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_resource, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.SetIamPolicy(param_resource,
+		request,
+	)
+
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -844,8 +857,91 @@ func Iam_v1_ProjectsServiceAccountsSignBlob(context Context, args ...string) err
 		request,
 	)
 
-	var response *api_client.SignBlobResponse
-	response, err = call.Do()
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Iam_v1_ProjectsServiceAccountsTestIamPermissions(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("resource"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/{+resource}:testIamPermissions", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestIamPermissionsRequest{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewProjectsServiceAccountsService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.TestIamPermissionsRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"resource",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_resource, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.TestIamPermissions(param_resource,
+		request,
+	)
+
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -929,8 +1025,7 @@ func Iam_v1_ProjectsServiceAccountsUpdate(context Context, args ...string) error
 		request,
 	)
 
-	var response *api_client.ServiceAccount
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1006,178 +1101,7 @@ func Iam_v1_RolesQueryGrantableRoles(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.QueryGrantableRolesResponse
-	response, err = call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Iam_v1_SetIamPolicy(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("resource"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1/{+resource}:setIamPolicy", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		commands_util.PrintRequestExample(&api_client.SetIamPolicyRequest{})
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewV1Service(api_service)
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
-
-	// Only positional arguments should remain in args.
-	if len(args) == 0 || len(args) > 2 {
-		usageFunc()
-	}
-
-	request := &api_client.SetIamPolicyRequest{}
-	if len(args) == 2 {
-		err = commands_util.PopulateRequestFromFilename(&request, args[1])
-		if err != nil {
-			return err
-		}
-	}
-
-	keyValues := flagValues
-
-	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
-	if err != nil {
-		return err
-	}
-
-	expectedParams := []string{
-		"resource",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_resource, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-
-	call := service.SetIamPolicy(param_resource,
-		request,
-	)
-
-	var response *api_client.Policy
-	response, err = call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Iam_v1_TestIamPermissions(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("resource"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1/{+resource}:testIamPermissions", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		commands_util.PrintRequestExample(&api_client.TestIamPermissionsRequest{})
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewV1Service(api_service)
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
-
-	// Only positional arguments should remain in args.
-	if len(args) == 0 || len(args) > 2 {
-		usageFunc()
-	}
-
-	request := &api_client.TestIamPermissionsRequest{}
-	if len(args) == 2 {
-		err = commands_util.PopulateRequestFromFilename(&request, args[1])
-		if err != nil {
-			return err
-		}
-	}
-
-	keyValues := flagValues
-
-	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
-	if err != nil {
-		return err
-	}
-
-	expectedParams := []string{
-		"resource",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_resource, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-
-	call := service.TestIamPermissions(param_resource,
-		request,
-	)
-
-	var response *api_client.TestIamPermissionsResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}

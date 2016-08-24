@@ -91,8 +91,7 @@ func Manager_v1beta2_DeploymentsDelete(context Context, args ...string) error {
 
 	call := service.Delete(param_projectId, param_region, param_deploymentName)
 
-	err = call.Do()
-	if err != nil {
+	if err := call.Do(); err != nil {
 		return err
 	}
 
@@ -157,8 +156,7 @@ func Manager_v1beta2_DeploymentsGet(context Context, args ...string) error {
 
 	call := service.Get(param_projectId, param_region, param_deploymentName)
 
-	var response *api_client.Deployment
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -248,8 +246,7 @@ func Manager_v1beta2_DeploymentsInsert(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.Deployment
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -350,8 +347,7 @@ func Manager_v1beta2_DeploymentsList(context Context, args ...string) error {
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.DeploymentsListResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -416,8 +412,7 @@ func Manager_v1beta2_TemplatesDelete(context Context, args ...string) error {
 
 	call := service.Delete(param_projectId, param_templateName)
 
-	err = call.Do()
-	if err != nil {
+	if err := call.Do(); err != nil {
 		return err
 	}
 
@@ -476,8 +471,7 @@ func Manager_v1beta2_TemplatesGet(context Context, args ...string) error {
 
 	call := service.Get(param_projectId, param_templateName)
 
-	var response *api_client.Template
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -561,8 +555,7 @@ func Manager_v1beta2_TemplatesInsert(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.Template
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -657,8 +650,7 @@ func Manager_v1beta2_TemplatesList(context Context, args ...string) error {
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.TemplatesListResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}

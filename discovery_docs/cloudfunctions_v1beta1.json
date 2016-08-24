@@ -13,7 +13,7 @@
     "x16": "http://www.google.com/images/icons/product/search-16.gif",
     "x32": "http://www.google.com/images/icons/product/search-32.gif"
    },
-  "documentationLink": "https://docs.google.com/document/d/16HutoQJLbqIhXYoz9IcyJ36b4tpD8g2E2isIwK1sbFY/view",
+  "documentationLink": "https://cloud.google.com/functions",
   "protocol": "rest",
   "rootUrl": "https://cloudfunctions.googleapis.com/",
   "servicePath": "",
@@ -112,15 +112,6 @@
       "scopes": {
         "https://www.googleapis.com/auth/cloud-platform": {
           "description": "View and manage your data across Google Cloud Platform services"
-        },
-        "https://www.googleapis.com/auth/devstorage.read_write": {
-          "description": "Manage your data in Google Cloud Storage"
-        },
-        "https://www.googleapis.com/auth/logging.write": {
-          "description": "Submit log data for your projects"
-        },
-        "https://www.googleapis.com/auth/pubsub": {
-          "description": "View and manage Pub/Sub topics and subscriptions"
         }
       }
     }
@@ -285,7 +276,7 @@
       "type": "object",
       "properties": {
         "name": {
-          "description": "The server-assigned name, which is only unique within the same service that\noriginally returns it. If you use the default HTTP mapping above, the\n`name` should have the format of `operations\/some\/unique\/name`.",
+          "description": "The server-assigned name, which is only unique within the same service that\noriginally returns it. If you use the default HTTP mapping, the\n`name` should have the format of `operations\/some\/unique\/name`.",
           "type": "string"
         },
         "metadata": {
@@ -293,7 +284,7 @@
           "type": "object",
           "additionalProperties": {
             "type": "any",
-            "description": "Properties of the object. Contains field @ype with type URL."
+            "description": "Properties of the object. Contains field @type with type URL."
           }
         },
         "done": {
@@ -309,7 +300,7 @@
           "type": "object",
           "additionalProperties": {
             "type": "any",
-            "description": "Properties of the object. Contains field @ype with type URL."
+            "description": "Properties of the object. Contains field @type with type URL."
           }
         }
       }
@@ -335,7 +326,7 @@
             "type": "object",
             "additionalProperties": {
               "type": "any",
-              "description": "Properties of the object. Contains field @ype with type URL."
+              "description": "Properties of the object. Contains field @type with type URL."
             }
           }
         }
@@ -371,6 +362,54 @@
         }
       }
     },
+    "ListLocationsResponse": {
+      "id": "ListLocationsResponse",
+      "description": "The response message for LocationService.ListLocations.",
+      "type": "object",
+      "properties": {
+        "locations": {
+          "description": "A list of locations that matches the specified filter in the request.",
+          "type": "array",
+          "items": {
+            "$ref": "Location"
+          }
+        },
+        "nextPageToken": {
+          "description": "The standard List next-page token.",
+          "type": "string"
+        }
+      }
+    },
+    "Location": {
+      "id": "Location",
+      "description": "A resource that represents Google Cloud Platform location.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Resource name for the location, which may vary between implementations.\nFor example: `\"projects\/example-project\/locations\/us-east1\"`",
+          "type": "string"
+        },
+        "locationId": {
+          "description": "The canonical id for this location. For example: `\"us-east1\"`.",
+          "type": "string"
+        },
+        "labels": {
+          "description": "Cross-service attributes for the location. For example\n\n    {\"cloud.googleapis.com\/region\": \"us-east1\"}",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "metadata": {
+          "description": "Service-specific metadata. For example the available capacity at the given\nlocation.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "any",
+            "description": "Properties of the object. Contains field @type with type URL."
+          }
+        }
+      }
+    },
     "OperationMetadata": {
       "id": "OperationMetadata",
       "description": "Metadata describing an Operation",
@@ -401,7 +440,7 @@
           "type": "object",
           "additionalProperties": {
             "type": "any",
-            "description": "Properties of the object. Contains field @ype with type URL."
+            "description": "Properties of the object. Contains field @type with type URL."
           }
         }
       }
@@ -422,7 +461,7 @@
                   "description": "Returns a list of all functions that belong to the requested project.",
                   "parameters": {
                     "location": {
-                      "description": "The project and region in which the function should be created, specified\nin the format: projects\/*\/regions\/*",
+                      "description": "The project and region from which functions should be listed, specified\nin the format: projects\/*\/regions\/*",
                       "location": "path",
                       "required": true,
                       "pattern": "^projects\/[^\/]*\/regions\/[^\/]*$",
@@ -480,7 +519,7 @@
                   "path": "v1beta1/{+location}/functions",
                   "flatPath": "v1beta1/projects/{projectsId}/regions/{regionsId}/functions",
                   "httpMethod": "POST",
-                  "description": "Creates a new function. If a function with the given name already exists in\nthe specified project, it will return ALREADY_EXISTS error.\n",
+                  "description": "Creates a new function. If a function with the given name already exists in\nthe specified project, it will return ALREADY_EXISTS error.",
                   "parameters": {
                     "location": {
                       "description": "The project and region in which the function should be created, specified\nin the format: projects\/*\/regions\/*",
@@ -500,10 +539,7 @@
                     "$ref": "Operation"
                   },
                   "scopes": [
-                    "https://www.googleapis.com/auth/cloud-platform",
-                    "https://www.googleapis.com/auth/devstorage.read_write",
-                    "https://www.googleapis.com/auth/logging.write",
-                    "https://www.googleapis.com/auth/pubsub"
+                    "https://www.googleapis.com/auth/cloud-platform"
                   ]
                 },
                 "update": {
@@ -511,7 +547,7 @@
                   "path": "v1beta1/{+name}",
                   "flatPath": "v1beta1/projects/{projectsId}/regions/{regionsId}/functions/{functionsId}",
                   "httpMethod": "PUT",
-                  "description": "Updates existing function.\n",
+                  "description": "Updates existing function.",
                   "parameters": {
                     "name": {
                       "description": "The name of the function to be updated.",
@@ -531,10 +567,7 @@
                     "$ref": "Operation"
                   },
                   "scopes": [
-                    "https://www.googleapis.com/auth/cloud-platform",
-                    "https://www.googleapis.com/auth/devstorage.read_write",
-                    "https://www.googleapis.com/auth/logging.write",
-                    "https://www.googleapis.com/auth/pubsub"
+                    "https://www.googleapis.com/auth/cloud-platform"
                   ]
                 },
                 "delete": {
@@ -542,7 +575,7 @@
                   "path": "v1beta1/{+name}",
                   "flatPath": "v1beta1/projects/{projectsId}/regions/{regionsId}/functions/{functionsId}",
                   "httpMethod": "DELETE",
-                  "description": "Deletes a function with the given name from the specified project. If the\ngiven function is used by some trigger, the trigger will be updated to\nremove this function.\n",
+                  "description": "Deletes a function with the given name from the specified project. If the\ngiven function is used by some trigger, the trigger will be updated to\nremove this function.",
                   "parameters": {
                     "name": {
                       "description": "The name of the function which should be deleted.",
@@ -559,10 +592,7 @@
                     "$ref": "Operation"
                   },
                   "scopes": [
-                    "https://www.googleapis.com/auth/cloud-platform",
-                    "https://www.googleapis.com/auth/devstorage.read_write",
-                    "https://www.googleapis.com/auth/logging.write",
-                    "https://www.googleapis.com/auth/pubsub"
+                    "https://www.googleapis.com/auth/cloud-platform"
                   ]
                 },
                 "call": {
@@ -590,13 +620,55 @@
                     "$ref": "CallFunctionResponse"
                   },
                   "scopes": [
-                    "https://www.googleapis.com/auth/cloud-platform",
-                    "https://www.googleapis.com/auth/devstorage.read_write",
-                    "https://www.googleapis.com/auth/logging.write",
-                    "https://www.googleapis.com/auth/pubsub"
+                    "https://www.googleapis.com/auth/cloud-platform"
                   ]
                 }
               }
+            }
+          }
+        },
+        "locations": {
+          "methods": {
+            "list": {
+              "id": "cloudfunctions.projects.locations.list",
+              "path": "v1beta1/{+name}/locations",
+              "flatPath": "v1beta1/projects/{projectsId}/locations",
+              "httpMethod": "GET",
+              "description": "Lists information about the supported locations for this service.",
+              "parameters": {
+                "name": {
+                  "description": "The resource that owns the locations collection, if applicable.",
+                  "location": "path",
+                  "required": true,
+                  "pattern": "^projects\/[^\/]*$",
+                  "type": "string"
+                },
+                "filter": {
+                  "description": "The standard list filter.",
+                  "location": "query",
+                  "type": "string"
+                },
+                "pageSize": {
+                  "description": "The standard list page size.",
+                  "location": "query",
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "pageToken": {
+                  "description": "The standard list page token.",
+                  "location": "query",
+                  "type": "string"
+                }
+              },
+              "parameterOrder": [
+                "name"
+              ],
+              "response": {
+                "$ref": "ListLocationsResponse"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/cloud-platform"
+              ]
             }
           }
         }

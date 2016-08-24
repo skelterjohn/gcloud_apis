@@ -234,6 +234,10 @@ func (s *BackupConfiguration) MarshalJSON() ([]byte, error) {
 
 // BackupRun: A database instance backup run resource.
 type BackupRun struct {
+	// Description: The description of this run, only applicable to
+	// on-demand backups.
+	Description string `json:"description,omitempty"`
+
 	// EndTime: The time the backup operation completed in UTC timezone in
 	// RFC 3339 format, for example 2012-11-15T16:19:00.094Z.
 	EndTime string `json:"endTime,omitempty"`
@@ -266,6 +270,9 @@ type BackupRun struct {
 	// Status: The status of this run.
 	Status string `json:"status,omitempty"`
 
+	// Type: The type of this run; can be either "AUTOMATED" or "ON_DEMAND".
+	Type string `json:"type,omitempty"`
+
 	// WindowStartTime: The start time of the backup window during which
 	// this the backup was attempted in RFC 3339 format, for example
 	// 2012-11-15T16:19:00.094Z.
@@ -275,7 +282,7 @@ type BackupRun struct {
 	// server.
 	googleapi.ServerResponse `json:"-"`
 
-	// ForceSendFields is a list of field names (e.g. "EndTime") to
+	// ForceSendFields is a list of field names (e.g. "Description") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -474,9 +481,10 @@ type DatabaseInstance struct {
 	// details.
 	CurrentDiskSize int64 `json:"currentDiskSize,omitempty,string"`
 
-	// DatabaseVersion: The database engine type and version. Can be
-	// MYSQL_5_5 or MYSQL_5_6. Defaults to MYSQL_5_6. The databaseVersion
-	// can not be changed after instance creation.
+	// DatabaseVersion: The database engine type and version. The
+	// databaseVersion can not be changed after instance creation. Can be
+	// MYSQL_5_5, MYSQL_5_6 or MYSQL_5_7. Defaults to MYSQL_5_6. MYSQL_5_7
+	// is applicable only to Second Generation instances.
 	DatabaseVersion string `json:"databaseVersion,omitempty"`
 
 	// Etag: HTTP 1.1 Entity tag for the resource.
@@ -565,6 +573,10 @@ type DatabaseInstance struct {
 	// UNKNOWN_STATE: The state of the instance is unknown.
 	State string `json:"state,omitempty"`
 
+	// SuspensionReason: If the instance state is SUSPENDED, the reason for
+	// the suspension.
+	SuspensionReason []string `json:"suspensionReason,omitempty"`
+
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
 	googleapi.ServerResponse `json:"-"`
@@ -593,7 +605,10 @@ type DatabaseInstanceFailoverReplica struct {
 	// can only failover to the falover replica when the status is true.
 	Available bool `json:"available,omitempty"`
 
-	// Name: The name of the failover replica.
+	// Name: The name of the failover replica. If specified at instance
+	// creation, a failover replica is created for the instance. The name
+	// doesn't include the project ID. This property is applicable only to
+	// Second Generation instances.
 	Name string `json:"name,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Available") to
@@ -760,7 +775,8 @@ type Flag struct {
 	AllowedStringValues []string `json:"allowedStringValues,omitempty"`
 
 	// AppliesTo: The database version this flag applies to. Can be
-	// MYSQL_5_5, MYSQL_5_6, or both.
+	// MYSQL_5_5, MYSQL_5_6, or MYSQL_5_7. MYSQL_5_7 is applicable only to
+	// Second Generation instances.
 	AppliesTo []string `json:"appliesTo,omitempty"`
 
 	// Kind: This is always sql#flag.
@@ -1458,14 +1474,18 @@ func (s *RestoreBackupContext) MarshalJSON() ([]byte, error) {
 
 // Settings: Database instance settings.
 type Settings struct {
-	// ActivationPolicy: The activation policy for this instance. This
-	// specifies when the instance should be activated and is applicable
-	// only when the instance state is RUNNABLE. This can be one of the
-	// following.
-	// ALWAYS: The instance should always be active.
-	// NEVER: The instance should never be activated.
-	// ON_DEMAND: The instance is activated upon receiving requests; only
-	// applicable to First Generation instances.
+	// ActivationPolicy: The activation policy specifies when the instance
+	// is activated; it is applicable only when the instance state is
+	// RUNNABLE. The activation policy cannot be updated together with other
+	// settings for Second Generation instances. Valid values:
+	// ALWAYS: The instance is on; it is not deactivated by
+	// inactivity.
+	// NEVER: The instance is off; it is not activated, even if a connection
+	// request arrives.
+	// ON_DEMAND: The instance responds to incoming requests, and turns
+	// itself off when not in use. Instances with PER_USE pricing turn off
+	// after 15 minutes of inactivity. Instances with PER_PACKAGE pricing
+	// turn off after 12 hours of inactivity.
 	ActivationPolicy string `json:"activationPolicy,omitempty"`
 
 	// AuthorizedGaeApplications: The App Engine app IDs that can access
@@ -1483,13 +1503,12 @@ type Settings struct {
 	CrashSafeReplicationEnabled bool `json:"crashSafeReplicationEnabled,omitempty"`
 
 	// DataDiskSizeGb: The size of data disk, in GB. The data disk size
-	// minimum is 10GB. This property is only applicable to Second
-	// Generation instances.
+	// minimum is 10GB. Applies only to Second Generation instances.
 	DataDiskSizeGb int64 `json:"dataDiskSizeGb,omitempty,string"`
 
 	// DataDiskType: The type of data disk. Only supported for Second
-	// Generation instances. The default type is PD_SSD. This property is
-	// only applicable to Second Generation instances.
+	// Generation instances. The default type is PD_SSD. Applies only to
+	// Second Generation instances.
 	DataDiskType string `json:"dataDiskType,omitempty"`
 
 	// DatabaseFlags: The database flags passed to the instance at startup.
@@ -1516,8 +1535,7 @@ type Settings struct {
 
 	// MaintenanceWindow: The maintenance window for this instance. This
 	// specifies when the instance may be restarted for maintenance
-	// purposes. This property is only applicable to Second Generation
-	// instances.
+	// purposes. Applies only to Second Generation instances.
 	MaintenanceWindow *MaintenanceWindow `json:"maintenanceWindow,omitempty"`
 
 	// PricingPlan: The pricing plan for this instance. This can be either
@@ -1535,6 +1553,11 @@ type Settings struct {
 	// properly. During update, use the most recent settingsVersion value
 	// for this instance and do not try to update this value.
 	SettingsVersion int64 `json:"settingsVersion,omitempty,string"`
+
+	// StorageAutoResize: Configuration to increase storage size
+	// automatically. The default value is false. Applies only to Second
+	// Generation instances.
+	StorageAutoResize bool `json:"storageAutoResize,omitempty"`
 
 	// Tier: The tier of service for this instance, for example D1, D2. For
 	// more information, see pricing.
@@ -1676,11 +1699,15 @@ func (s *SslCertsInsertRequest) MarshalJSON() ([]byte, error) {
 // SslCertsInsertResponse: SslCert insert response.
 type SslCertsInsertResponse struct {
 	// ClientCert: The new client certificate and private key. The new
-	// certificate will not work until the instance is restarted.
+	// certificate will not work until the instance is restarted for First
+	// Generation instances.
 	ClientCert *SslCertDetail `json:"clientCert,omitempty"`
 
 	// Kind: This is always sql#sslCertsInsert.
 	Kind string `json:"kind,omitempty"`
+
+	// Operation: The operation to track the ssl certs insert request.
+	Operation *Operation `json:"operation,omitempty"`
 
 	// ServerCaCert: The server Certificate Authority's certificate. If this
 	// is missing you can force a new one to be generated by calling
@@ -2152,6 +2179,137 @@ func (c *BackupRunsGetCall) Do(opts ...googleapi.CallOption) (*BackupRun, error)
 	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/sqlservice.admin"
 	//   ]
+	// }
+
+}
+
+// method id "sql.backupRuns.insert":
+
+type BackupRunsInsertCall struct {
+	s          *Service
+	project    string
+	instance   string
+	backuprun  *BackupRun
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
+}
+
+// Insert: Creates a new backup run on demand. This method is applicable
+// only to Second Generation instances.
+func (r *BackupRunsService) Insert(project string, instance string, backuprun *BackupRun) *BackupRunsInsertCall {
+	c := &BackupRunsInsertCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.project = project
+	c.instance = instance
+	c.backuprun = backuprun
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *BackupRunsInsertCall) Fields(s ...googleapi.Field) *BackupRunsInsertCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *BackupRunsInsertCall) Context(ctx context.Context) *BackupRunsInsertCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *BackupRunsInsertCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.backuprun)
+	if err != nil {
+		return nil, err
+	}
+	reqHeaders.Set("Content-Type", "application/json")
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "projects/{project}/instances/{instance}/backupRuns")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"project":  c.project,
+		"instance": c.instance,
+	})
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "sql.backupRuns.insert" call.
+// Exactly one of *Operation or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *Operation.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *BackupRunsInsertCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Operation{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Creates a new backup run on demand. This method is applicable only to Second Generation instances.",
+	//   "httpMethod": "POST",
+	//   "id": "sql.backupRuns.insert",
+	//   "parameterOrder": [
+	//     "project",
+	//     "instance"
+	//   ],
+	//   "parameters": {
+	//     "instance": {
+	//       "description": "Cloud SQL instance ID. This does not include the project ID.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID of the project that contains the instance.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "projects/{project}/instances/{instance}/backupRuns",
+	//   "request": {
+	//     "$ref": "BackupRun"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   }
 	// }
 
 }

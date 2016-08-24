@@ -206,7 +206,9 @@ type Binding struct {
 	//
 	// * `domain:{domain}`: A Google Apps domain name that represents all
 	// the
-	//    users of that domain. For example, `google.com` or `example.com`.
+	//    users of that domain. For example, `google.com` or
+	// `example.com`.
+	//
 	//
 	Members []string `json:"members,omitempty"`
 
@@ -250,8 +252,8 @@ type Condition struct {
 	//
 	// Possible values:
 	//   "NO_OP" - Default no-op.
-	//   "EQUALS" - Equality check.
-	//   "NOT_EQUALS" - Non-equality check.
+	//   "EQUALS" - DEPRECATED. Use IN instead.
+	//   "NOT_EQUALS" - DEPRECATED. Use NOT_IN instead.
 	//   "IN" - Set-inclusion check.
 	//   "NOT_IN" - Set-exclusion check.
 	//   "DISCHARGED" - Subject is discharged
@@ -272,7 +274,7 @@ type Condition struct {
 	//   "IP" - IP address of the caller
 	Sys string `json:"sys,omitempty"`
 
-	// Value: The object of the condition. Exactly one of these must be set.
+	// Value: DEPRECATED. Use 'values' instead.
 	Value string `json:"value,omitempty"`
 
 	// Values: The objects of the condition. This is mutually exclusive with
@@ -447,9 +449,10 @@ func (s *ListTopicsResponse) MarshalJSON() ([]byte, error) {
 // are
 // their respective values.
 //
-// At present only "iam_principal", corresponding to
-// IAMContext.principal,
-// is supported.
+// At present the only supported field names are
+//    - "iam_principal", corresponding to IAMContext.principal;
+//    - "" (empty string), resulting in one aggretated counter with no
+// field.
 //
 // Examples:
 //   counter { metric: "/debug_access_count"  field: "iam_principal" }
@@ -558,21 +561,22 @@ func (s *ModifyPushConfigRequest) MarshalJSON() ([]byte, error) {
 // **Example**
 //
 //     {
-//         "bindings": [
-//          {
-//              "role": "roles/owner",
-//              "members": [
-//              "user:mike@example.com",
-//              "group:admins@example.com",
-//              "domain:google.com",
+//       "bindings": [
+//         {
+//           "role": "roles/owner",
+//           "members": [
+//             "user:mike@example.com",
+//             "group:admins@example.com",
+//             "domain:google.com",
 //
-// "serviceAccount:my-other-app@appspot.gserviceaccount.com"]
-//          },
-//          {
-//              "role": "roles/viewer",
-//              "members": ["user:sean@example.com"]
-//          }
-//          ]
+// "serviceAccount:my-other-app@appspot.gserviceaccount.com",
+//           ]
+//         },
+//         {
+//           "role": "roles/viewer",
+//           "members": ["user:sean@example.com"]
+//         }
+//       ]
 //     }
 //
 // For a description of IAM and its features, see the
@@ -617,6 +621,18 @@ type Policy struct {
 
 	IamOwned bool `json:"iamOwned,omitempty"`
 
+	// Rules: If more than one rule is specified, the rules are applied in
+	// the following
+	// manner:
+	// - All matching LOG rules are always applied.
+	// - If any DENY/DENY_WITH_LOG rule matches, permission is denied.
+	//   Logging will be applied if one or more matching rule requires
+	// logging.
+	// - Otherwise, if any ALLOW/ALLOW_WITH_LOG rule matches, permission is
+	//   granted.
+	//   Logging will be applied if one or more matching rule requires
+	// logging.
+	// - Otherwise, if no rule applies, permission is denied.
 	Rules []*Rule `json:"rules,omitempty"`
 
 	// Version: Version of the `Policy`. The default version is 0.
@@ -699,7 +715,7 @@ type PubsubMessage struct {
 
 	// Data: The message payload. For JSON requests, the value of this field
 	// must be
-	// base64-encoded.
+	// [base64-encoded](https://tools.ietf.org/html/rfc4648).
 	Data string `json:"data,omitempty"`
 
 	// MessageId: ID of this message, assigned by the server when the
@@ -900,9 +916,9 @@ type Rule struct {
 	// Description: Human-readable description of the rule.
 	Description string `json:"description,omitempty"`
 
-	// In: The rule matches if the PRINCIPAL/AUTHORITY_SELECTOR is in
-	// this
-	// set of entries.
+	// In: If one or more 'in' clauses are specified, the rule matches
+	// if
+	// the PRINCIPAL/AUTHORITY_SELECTOR is in at least one of these entries.
 	In []string `json:"in,omitempty"`
 
 	// LogConfig: The config returned to callers of tech.iam.IAM.CheckPolicy
@@ -910,9 +926,9 @@ type Rule struct {
 	// that match the LOG action.
 	LogConfig []*LogConfig `json:"logConfig,omitempty"`
 
-	// NotIn: The rule matches if the PRINCIPAL/AUTHORITY_SELECTOR is not in
-	// this
-	// set of entries.
+	// NotIn: If one or more 'not_in' clauses are specified, the rule
+	// matches
+	// if the PRINCIPAL/AUTHORITY_SELECTOR is in none of the entries.
 	// The format for in and not_in entries is the same as for members in
 	// a
 	// Binding (see google/iam/v1/policy.proto).
@@ -984,6 +1000,8 @@ type Subscription struct {
 	// `ModifyAckDeadline` with the corresponding `ack_id` if
 	// using
 	// pull.
+	// The maximum custom deadline you can specify is 600 seconds (10
+	// minutes).
 	//
 	// For push delivery, this value is also used to set the request timeout
 	// for
@@ -992,8 +1010,7 @@ type Subscription struct {
 	// If the subscriber never acknowledges the message, the Pub/Sub
 	// system will eventually redeliver the message.
 	//
-	// If this parameter is not set, the default value of 10 seconds is
-	// used.
+	// If this parameter is 0, a default value of 10 seconds is used.
 	AckDeadlineSeconds int64 `json:"ackDeadlineSeconds,omitempty"`
 
 	// Name: The name of the subscription. It must have the
@@ -1050,7 +1067,8 @@ type TestIamPermissionsRequest struct {
 	// wildcards (such as '*' or 'storage.*') are not allowed. For
 	// more
 	// information see
-	// IAM Overview.
+	// [IAM
+	// Overview](https://cloud.google.com/iam/docs/overview#permissions).
 	Permissions []string `json:"permissions,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Permissions") to
@@ -1661,9 +1679,10 @@ type ProjectsSubscriptionsGetIamPolicyCall struct {
 	ctx_         context.Context
 }
 
-// GetIamPolicy: Gets the access control policy for a `resource`. Is
-// empty if the
-// policy or the resource does not exist.
+// GetIamPolicy: Gets the access control policy for a resource.
+// Returns an empty policy if the resource exists and does not have a
+// policy
+// set.
 func (r *ProjectsSubscriptionsService) GetIamPolicy(resource string) *ProjectsSubscriptionsGetIamPolicyCall {
 	c := &ProjectsSubscriptionsGetIamPolicyCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.resource = resource
@@ -1755,7 +1774,7 @@ func (c *ProjectsSubscriptionsGetIamPolicyCall) Do(opts ...googleapi.CallOption)
 	}
 	return ret, nil
 	// {
-	//   "description": "Gets the access control policy for a `resource`. Is empty if the\npolicy or the resource does not exist.",
+	//   "description": "Gets the access control policy for a resource.\nReturns an empty policy if the resource exists and does not have a policy\nset.",
 	//   "flatPath": "v1/projects/{projectsId}/subscriptions/{subscriptionsId}:getIamPolicy",
 	//   "httpMethod": "GET",
 	//   "id": "pubsub.projects.subscriptions.getIamPolicy",
@@ -1764,7 +1783,7 @@ func (c *ProjectsSubscriptionsGetIamPolicyCall) Do(opts ...googleapi.CallOption)
 	//   ],
 	//   "parameters": {
 	//     "resource": {
-	//       "description": "REQUIRED: The resource for which the policy is being requested.\n`resource` is usually specified as a path, such as\n`projects/*project*/zones/*zone*/disks/*disk*`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the `getIamPolicy` documentation.",
+	//       "description": "REQUIRED: The resource for which the policy is being requested.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]*/subscriptions/[^/]*$",
 	//       "required": true,
@@ -2468,7 +2487,7 @@ func (c *ProjectsSubscriptionsSetIamPolicyCall) Do(opts ...googleapi.CallOption)
 	//   ],
 	//   "parameters": {
 	//     "resource": {
-	//       "description": "REQUIRED: The resource for which the policy is being specified.\n`resource` is usually specified as a path, such as\n`projects/*project*/zones/*zone*/disks/*disk*`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the `setIamPolicy` documentation.",
+	//       "description": "REQUIRED: The resource for which the policy is being specified.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]*/subscriptions/[^/]*$",
 	//       "required": true,
@@ -2595,7 +2614,7 @@ func (c *ProjectsSubscriptionsTestIamPermissionsCall) Do(opts ...googleapi.CallO
 	//   ],
 	//   "parameters": {
 	//     "resource": {
-	//       "description": "REQUIRED: The resource for which the policy detail is being requested.\n`resource` is usually specified as a path, such as\n`projects/*project*/zones/*zone*/disks/*disk*`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the `testIamPermissions` documentation.",
+	//       "description": "REQUIRED: The resource for which the policy detail is being requested.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]*/subscriptions/[^/]*$",
 	//       "required": true,
@@ -3007,9 +3026,10 @@ type ProjectsTopicsGetIamPolicyCall struct {
 	ctx_         context.Context
 }
 
-// GetIamPolicy: Gets the access control policy for a `resource`. Is
-// empty if the
-// policy or the resource does not exist.
+// GetIamPolicy: Gets the access control policy for a resource.
+// Returns an empty policy if the resource exists and does not have a
+// policy
+// set.
 func (r *ProjectsTopicsService) GetIamPolicy(resource string) *ProjectsTopicsGetIamPolicyCall {
 	c := &ProjectsTopicsGetIamPolicyCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.resource = resource
@@ -3101,7 +3121,7 @@ func (c *ProjectsTopicsGetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Poli
 	}
 	return ret, nil
 	// {
-	//   "description": "Gets the access control policy for a `resource`. Is empty if the\npolicy or the resource does not exist.",
+	//   "description": "Gets the access control policy for a resource.\nReturns an empty policy if the resource exists and does not have a policy\nset.",
 	//   "flatPath": "v1/projects/{projectsId}/topics/{topicsId}:getIamPolicy",
 	//   "httpMethod": "GET",
 	//   "id": "pubsub.projects.topics.getIamPolicy",
@@ -3110,7 +3130,7 @@ func (c *ProjectsTopicsGetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Poli
 	//   ],
 	//   "parameters": {
 	//     "resource": {
-	//       "description": "REQUIRED: The resource for which the policy is being requested.\n`resource` is usually specified as a path, such as\n`projects/*project*/zones/*zone*/disks/*disk*`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the `getIamPolicy` documentation.",
+	//       "description": "REQUIRED: The resource for which the policy is being requested.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]*/topics/[^/]*$",
 	//       "required": true,
@@ -3544,7 +3564,7 @@ func (c *ProjectsTopicsSetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Poli
 	//   ],
 	//   "parameters": {
 	//     "resource": {
-	//       "description": "REQUIRED: The resource for which the policy is being specified.\n`resource` is usually specified as a path, such as\n`projects/*project*/zones/*zone*/disks/*disk*`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the `setIamPolicy` documentation.",
+	//       "description": "REQUIRED: The resource for which the policy is being specified.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]*/topics/[^/]*$",
 	//       "required": true,
@@ -3671,7 +3691,7 @@ func (c *ProjectsTopicsTestIamPermissionsCall) Do(opts ...googleapi.CallOption) 
 	//   ],
 	//   "parameters": {
 	//     "resource": {
-	//       "description": "REQUIRED: The resource for which the policy detail is being requested.\n`resource` is usually specified as a path, such as\n`projects/*project*/zones/*zone*/disks/*disk*`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the `testIamPermissions` documentation.",
+	//       "description": "REQUIRED: The resource for which the policy detail is being requested.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]*/topics/[^/]*$",
 	//       "required": true,

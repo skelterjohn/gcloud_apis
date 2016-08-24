@@ -104,8 +104,7 @@ func Logging_v1beta3_ProjectsEntriesList(context Context, args ...string) error 
 		request,
 	)
 
-	var response *api_client.ListLogEntriesResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -220,8 +219,7 @@ func Logging_v1beta3_ProjectsLogEntriesList(context Context, args ...string) err
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.ListLogEntriesResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -342,8 +340,7 @@ func Logging_v1beta3_ProjectsLogServicesIndexesList(context Context, args ...str
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.ListLogServiceIndexesResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -438,8 +435,7 @@ func Logging_v1beta3_ProjectsLogServicesList(context Context, args ...string) er
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.ListLogServicesResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -529,8 +525,7 @@ func Logging_v1beta3_ProjectsLogServicesSinksCreate(context Context, args ...str
 		request,
 	)
 
-	var response *api_client.LogSink
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -601,8 +596,7 @@ func Logging_v1beta3_ProjectsLogServicesSinksDelete(context Context, args ...str
 
 	call := service.Delete(param_projectsId, param_logServicesId, param_sinksId)
 
-	var response *api_client.Empty
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -673,8 +667,7 @@ func Logging_v1beta3_ProjectsLogServicesSinksGet(context Context, args ...string
 
 	call := service.Get(param_projectsId, param_logServicesId, param_sinksId)
 
-	var response *api_client.LogSink
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -739,8 +732,7 @@ func Logging_v1beta3_ProjectsLogServicesSinksList(context Context, args ...strin
 
 	call := service.List(param_projectsId, param_logServicesId)
 
-	var response *api_client.ListLogServiceSinksResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -836,8 +828,7 @@ func Logging_v1beta3_ProjectsLogServicesSinksUpdate(context Context, args ...str
 		request,
 	)
 
-	var response *api_client.LogSink
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -902,8 +893,7 @@ func Logging_v1beta3_ProjectsLogsDelete(context Context, args ...string) error {
 
 	call := service.Delete(param_projectsId, param_logsId)
 
-	var response *api_client.Empty
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -993,8 +983,7 @@ func Logging_v1beta3_ProjectsLogsEntriesWrite(context Context, args ...string) e
 		request,
 	)
 
-	var response *api_client.WriteLogEntriesResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1109,8 +1098,7 @@ func Logging_v1beta3_ProjectsLogsList(context Context, args ...string) error {
 		call.ServiceName(query_serviceName)
 	}
 
-	var response *api_client.ListLogsResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1200,8 +1188,7 @@ func Logging_v1beta3_ProjectsLogsSinksCreate(context Context, args ...string) er
 		request,
 	)
 
-	var response *api_client.LogSink
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1272,8 +1259,7 @@ func Logging_v1beta3_ProjectsLogsSinksDelete(context Context, args ...string) er
 
 	call := service.Delete(param_projectsId, param_logsId, param_sinksId)
 
-	var response *api_client.Empty
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1344,8 +1330,7 @@ func Logging_v1beta3_ProjectsLogsSinksGet(context Context, args ...string) error
 
 	call := service.Get(param_projectsId, param_logsId, param_sinksId)
 
-	var response *api_client.LogSink
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1410,8 +1395,7 @@ func Logging_v1beta3_ProjectsLogsSinksList(context Context, args ...string) erro
 
 	call := service.List(param_projectsId, param_logsId)
 
-	var response *api_client.ListLogSinksResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1507,8 +1491,7 @@ func Logging_v1beta3_ProjectsLogsSinksUpdate(context Context, args ...string) er
 		request,
 	)
 
-	var response *api_client.LogSink
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1592,8 +1575,7 @@ func Logging_v1beta3_ProjectsMetricsCreate(context Context, args ...string) erro
 		request,
 	)
 
-	var response *api_client.LogMetric
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1658,8 +1640,7 @@ func Logging_v1beta3_ProjectsMetricsDelete(context Context, args ...string) erro
 
 	call := service.Delete(param_projectsId, param_metricsId)
 
-	var response *api_client.Empty
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1724,8 +1705,7 @@ func Logging_v1beta3_ProjectsMetricsGet(context Context, args ...string) error {
 
 	call := service.Get(param_projectsId, param_metricsId)
 
-	var response *api_client.LogMetric
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1820,8 +1800,7 @@ func Logging_v1beta3_ProjectsMetricsList(context Context, args ...string) error 
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.ListLogMetricsResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1911,8 +1890,7 @@ func Logging_v1beta3_ProjectsMetricsUpdate(context Context, args ...string) erro
 		request,
 	)
 
-	var response *api_client.LogMetric
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1996,8 +1974,7 @@ func Logging_v1beta3_ProjectsSinksCreate(context Context, args ...string) error 
 		request,
 	)
 
-	var response *api_client.LogSink
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -2062,8 +2039,7 @@ func Logging_v1beta3_ProjectsSinksDelete(context Context, args ...string) error 
 
 	call := service.Delete(param_projectsId, param_sinksId)
 
-	var response *api_client.Empty
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -2128,8 +2104,7 @@ func Logging_v1beta3_ProjectsSinksGet(context Context, args ...string) error {
 
 	call := service.Get(param_projectsId, param_sinksId)
 
-	var response *api_client.LogSink
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -2188,8 +2163,7 @@ func Logging_v1beta3_ProjectsSinksList(context Context, args ...string) error {
 
 	call := service.List(param_projectsId)
 
-	var response *api_client.ListSinksResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -2279,8 +2253,7 @@ func Logging_v1beta3_ProjectsSinksUpdate(context Context, args ...string) error 
 		request,
 	)
 
-	var response *api_client.LogSink
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}

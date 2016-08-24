@@ -85,8 +85,7 @@ func Storage_v1_BucketAccessControlsDelete(context Context, args ...string) erro
 
 	call := service.Delete(param_bucket, param_entity)
 
-	err = call.Do()
-	if err != nil {
+	if err := call.Do(); err != nil {
 		return err
 	}
 
@@ -145,8 +144,7 @@ func Storage_v1_BucketAccessControlsGet(context Context, args ...string) error {
 
 	call := service.Get(param_bucket, param_entity)
 
-	var response *api_client.BucketAccessControl
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -230,8 +228,7 @@ func Storage_v1_BucketAccessControlsInsert(context Context, args ...string) erro
 		request,
 	)
 
-	var response *api_client.BucketAccessControl
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -290,8 +287,7 @@ func Storage_v1_BucketAccessControlsList(context Context, args ...string) error 
 
 	call := service.List(param_bucket)
 
-	var response *api_client.BucketAccessControls
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -381,8 +377,7 @@ func Storage_v1_BucketAccessControlsPatch(context Context, args ...string) error
 		request,
 	)
 
-	var response *api_client.BucketAccessControl
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -472,8 +467,7 @@ func Storage_v1_BucketAccessControlsUpdate(context Context, args ...string) erro
 		request,
 	)
 
-	var response *api_client.BucketAccessControl
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -568,8 +562,7 @@ func Storage_v1_BucketsDelete(context Context, args ...string) error {
 		call.IfMetagenerationNotMatch(query_ifMetagenerationNotMatch)
 	}
 
-	err = call.Do()
-	if err != nil {
+	if err := call.Do(); err != nil {
 		return err
 	}
 
@@ -668,8 +661,66 @@ func Storage_v1_BucketsGet(context Context, args ...string) error {
 		call.Projection(query_projection)
 	}
 
-	var response *api_client.Bucket
-	response, err = call.Do()
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Storage_v1_BucketsGetIamPolicy(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/iam", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewBucketsService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"bucket",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_bucket, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.GetIamPolicy(param_bucket)
+
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -801,8 +852,7 @@ func Storage_v1_BucketsInsert(context Context, args ...string) error {
 		call.Projection(query_projection)
 	}
 
-	var response *api_client.Bucket
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -918,8 +968,7 @@ func Storage_v1_BucketsList(context Context, args ...string) error {
 		call.Projection(query_projection)
 	}
 
-	var response *api_client.Buckets
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1070,8 +1119,172 @@ func Storage_v1_BucketsPatch(context Context, args ...string) error {
 		call.Projection(query_projection)
 	}
 
-	var response *api_client.Bucket
-	response, err = call.Do()
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Storage_v1_BucketsSetIamPolicy(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/iam", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Policy{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewBucketsService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.Policy{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"bucket",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_bucket, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.SetIamPolicy(param_bucket,
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Storage_v1_BucketsTestIamPermissions(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("permissions"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/iam/testPermissions", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " --permissions=VALUE"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewBucketsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"permissions": true,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"bucket",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_bucket, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_permissions, err := commands_util.ConvertValue_strings(flagValues["permissions"])
+	if err != nil {
+		return err
+	}
+
+	call := service.TestIamPermissions(param_bucket, param_permissions)
+
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1222,8 +1435,7 @@ func Storage_v1_BucketsUpdate(context Context, args ...string) error {
 		call.Projection(query_projection)
 	}
 
-	var response *api_client.Bucket
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1299,8 +1511,7 @@ func Storage_v1_ChannelsStop(context Context, args ...string) error {
 		request,
 	)
 
-	err = call.Do()
-	if err != nil {
+	if err := call.Do(); err != nil {
 		return err
 	}
 
@@ -1359,8 +1570,7 @@ func Storage_v1_DefaultObjectAccessControlsDelete(context Context, args ...strin
 
 	call := service.Delete(param_bucket, param_entity)
 
-	err = call.Do()
-	if err != nil {
+	if err := call.Do(); err != nil {
 		return err
 	}
 
@@ -1419,8 +1629,7 @@ func Storage_v1_DefaultObjectAccessControlsGet(context Context, args ...string) 
 
 	call := service.Get(param_bucket, param_entity)
 
-	var response *api_client.ObjectAccessControl
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1504,8 +1713,7 @@ func Storage_v1_DefaultObjectAccessControlsInsert(context Context, args ...strin
 		request,
 	)
 
-	var response *api_client.ObjectAccessControl
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1600,8 +1808,7 @@ func Storage_v1_DefaultObjectAccessControlsList(context Context, args ...string)
 		call.IfMetagenerationNotMatch(query_ifMetagenerationNotMatch)
 	}
 
-	var response *api_client.ObjectAccessControls
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1691,8 +1898,7 @@ func Storage_v1_DefaultObjectAccessControlsPatch(context Context, args ...string
 		request,
 	)
 
-	var response *api_client.ObjectAccessControl
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1782,8 +1988,269 @@ func Storage_v1_DefaultObjectAccessControlsUpdate(context Context, args ...strin
 		request,
 	)
 
-	var response *api_client.ObjectAccessControl
-	response, err = call.Do()
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Storage_v1_NotificationsDelete(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("notification"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("notifications/{notification}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewNotificationsService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"notification",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_notification, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Delete(param_notification)
+
+	if err := call.Do(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Storage_v1_NotificationsGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("notification"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("notifications/{notification}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewNotificationsService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"notification",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_notification, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_notification)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Storage_v1_NotificationsInsert(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+
+		if len(pathParams) != 0 {
+			if strings.Contains("notifications", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Notification{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewNotificationsService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.Notification{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	call := service.Insert(
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Storage_v1_NotificationsList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("notifications", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " --bucket=VALUE"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewNotificationsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"bucket": true,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_bucket, err := commands_util.ConvertValue_string(flagValues["bucket"])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_bucket)
+
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1880,8 +2347,7 @@ func Storage_v1_ObjectAccessControlsDelete(context Context, args ...string) erro
 		call.Generation(query_generation)
 	}
 
-	err = call.Do()
-	if err != nil {
+	if err := call.Do(); err != nil {
 		return err
 	}
 
@@ -1972,8 +2438,7 @@ func Storage_v1_ObjectAccessControlsGet(context Context, args ...string) error {
 		call.Generation(query_generation)
 	}
 
-	var response *api_client.ObjectAccessControl
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -2090,8 +2555,7 @@ func Storage_v1_ObjectAccessControlsInsert(context Context, args ...string) erro
 		call.Generation(query_generation)
 	}
 
-	var response *api_client.ObjectAccessControl
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -2182,8 +2646,7 @@ func Storage_v1_ObjectAccessControlsList(context Context, args ...string) error 
 		call.Generation(query_generation)
 	}
 
-	var response *api_client.ObjectAccessControls
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -2306,8 +2769,7 @@ func Storage_v1_ObjectAccessControlsPatch(context Context, args ...string) error
 		call.Generation(query_generation)
 	}
 
-	var response *api_client.ObjectAccessControl
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -2430,8 +2892,7 @@ func Storage_v1_ObjectAccessControlsUpdate(context Context, args ...string) erro
 		call.Generation(query_generation)
 	}
 
-	var response *api_client.ObjectAccessControl
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -2468,6 +2929,8 @@ func Storage_v1_ObjectsCompose(context Context, args ...string) error {
 
 		usageBits += " [--ifMetagenerationMatch=VALUE]"
 
+		usageBits += " [--kmsKeyName=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.ComposeRequest{})
 
@@ -2484,6 +2947,7 @@ func Storage_v1_ObjectsCompose(context Context, args ...string) error {
 		"destinationPredefinedAcl": false,
 		"ifGenerationMatch":        false,
 		"ifMetagenerationMatch":    false,
+		"kmsKeyName":               false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -2567,9 +3031,15 @@ func Storage_v1_ObjectsCompose(context Context, args ...string) error {
 		}
 		call.IfMetagenerationMatch(query_ifMetagenerationMatch)
 	}
+	if value, ok := flagValues["kmsKeyName"]; ok {
+		query_kmsKeyName, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.KmsKeyName(query_kmsKeyName)
+	}
 
-	var response *api_client.Object
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -2798,8 +3268,7 @@ func Storage_v1_ObjectsCopy(context Context, args ...string) error {
 		call.SourceGeneration(query_sourceGeneration)
 	}
 
-	var response *api_client.Object
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -2930,8 +3399,7 @@ func Storage_v1_ObjectsDelete(context Context, args ...string) error {
 		call.IfMetagenerationNotMatch(query_ifMetagenerationNotMatch)
 	}
 
-	err = call.Do()
-	if err != nil {
+	if err := call.Do(); err != nil {
 		return err
 	}
 
@@ -3066,8 +3534,98 @@ func Storage_v1_ObjectsGet(context Context, args ...string) error {
 		call.Projection(query_projection)
 	}
 
-	var response *api_client.Object
-	response, err = call.Do()
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Storage_v1_ObjectsGetIamPolicy(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("object"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/o/{object}/iam", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--generation=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewObjectsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"generation": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"bucket",
+		"object",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_bucket, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_object, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.GetIamPolicy(param_bucket, param_object)
+
+	// Set query parameters.
+	if value, ok := flagValues["generation"]; ok {
+		query_generation, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.Generation(query_generation)
+	}
+
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -3107,6 +3665,8 @@ func Storage_v1_ObjectsInsert(context Context, args ...string) error {
 
 		usageBits += " [--ifMetagenerationNotMatch=VALUE]"
 
+		usageBits += " [--kmsKeyName=VALUE]"
+
 		usageBits += " [--name=VALUE]"
 
 		usageBits += " [--predefinedAcl=VALUE]"
@@ -3131,9 +3691,10 @@ func Storage_v1_ObjectsInsert(context Context, args ...string) error {
 		"ifGenerationNotMatch":     false,
 		"ifMetagenerationMatch":    false,
 		"ifMetagenerationNotMatch": false,
-		"name":          false,
-		"predefinedAcl": false,
-		"projection":    false,
+		"kmsKeyName":               false,
+		"name":                     false,
+		"predefinedAcl":            false,
+		"projection":               false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -3238,6 +3799,13 @@ func Storage_v1_ObjectsInsert(context Context, args ...string) error {
 		}
 		call.IfMetagenerationNotMatch(query_ifMetagenerationNotMatch)
 	}
+	if value, ok := flagValues["kmsKeyName"]; ok {
+		query_kmsKeyName, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.KmsKeyName(query_kmsKeyName)
+	}
 	if value, ok := flagValues["name"]; ok {
 		query_name, err := commands_util.ConvertValue_string(value)
 		if err != nil {
@@ -3264,8 +3832,7 @@ func Storage_v1_ObjectsInsert(context Context, args ...string) error {
 		call.Media(media)
 	}
 
-	var response *api_client.Object
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -3400,8 +3967,7 @@ func Storage_v1_ObjectsList(context Context, args ...string) error {
 		call.Versions(query_versions)
 	}
 
-	var response *api_client.Objects
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -3578,8 +4144,7 @@ func Storage_v1_ObjectsPatch(context Context, args ...string) error {
 		call.Projection(query_projection)
 	}
 
-	var response *api_client.Object
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -3611,6 +4176,8 @@ func Storage_v1_ObjectsRewrite(context Context, args ...string) error {
 		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		usageBits += " [--destinationKmsKeyName=VALUE]"
 
 		usageBits += " [--destinationPredefinedAcl=VALUE]"
 
@@ -3651,6 +4218,7 @@ func Storage_v1_ObjectsRewrite(context Context, args ...string) error {
 	service := api_client.NewObjectsService(api_service)
 
 	queryParamNames := map[string]bool{
+		"destinationKmsKeyName":          false,
 		"destinationPredefinedAcl":       false,
 		"ifGenerationMatch":              false,
 		"ifGenerationNotMatch":           false,
@@ -3736,6 +4304,13 @@ func Storage_v1_ObjectsRewrite(context Context, args ...string) error {
 	)
 
 	// Set query parameters.
+	if value, ok := flagValues["destinationKmsKeyName"]; ok {
+		query_destinationKmsKeyName, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.DestinationKmsKeyName(query_destinationKmsKeyName)
+	}
 	if value, ok := flagValues["destinationPredefinedAcl"]; ok {
 		query_destinationPredefinedAcl, err := commands_util.ConvertValue_string(value)
 		if err != nil {
@@ -3828,8 +4403,223 @@ func Storage_v1_ObjectsRewrite(context Context, args ...string) error {
 		call.SourceGeneration(query_sourceGeneration)
 	}
 
-	var response *api_client.RewriteResponse
-	response, err = call.Do()
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Storage_v1_ObjectsSetIamPolicy(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("object"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/o/{object}/iam", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		usageBits += " [--generation=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Policy{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewObjectsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"generation": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.Policy{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"bucket",
+		"object",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_bucket, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_object, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.SetIamPolicy(param_bucket, param_object,
+		request,
+	)
+
+	// Set query parameters.
+	if value, ok := flagValues["generation"]; ok {
+		query_generation, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.Generation(query_generation)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Storage_v1_ObjectsTestIamPermissions(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("bucket"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("object"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("permissions"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("b/{bucket}/o/{object}/iam/testPermissions", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--generation=VALUE]"
+
+		usageBits += " --permissions=VALUE"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewObjectsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"generation":  false,
+		"permissions": true,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"bucket",
+		"object",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_bucket, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_object, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_permissions, err := commands_util.ConvertValue_strings(flagValues["permissions"])
+	if err != nil {
+		return err
+	}
+
+	call := service.TestIamPermissions(param_bucket, param_object, param_permissions)
+
+	// Set query parameters.
+	if value, ok := flagValues["generation"]; ok {
+		query_generation, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.Generation(query_generation)
+	}
+
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -4006,8 +4796,7 @@ func Storage_v1_ObjectsUpdate(context Context, args ...string) error {
 		call.Projection(query_projection)
 	}
 
-	var response *api_client.Object
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -4168,8 +4957,7 @@ func Storage_v1_ObjectsWatchAll(context Context, args ...string) error {
 		call.Versions(query_versions)
 	}
 
-	var response *api_client.Channel
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}

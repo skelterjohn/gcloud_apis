@@ -113,8 +113,7 @@ func Sql_v1beta3_BackupRunsGet(context Context, args ...string) error {
 
 	call := service.Get(param_project, param_instance, param_backupConfiguration, param_dueTime)
 
-	var response *api_client.BackupRun
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -223,8 +222,7 @@ func Sql_v1beta3_BackupRunsList(context Context, args ...string) error {
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.BackupRunsListResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -275,8 +273,7 @@ func Sql_v1beta3_FlagsList(context Context, args ...string) error {
 
 	call := service.List()
 
-	var response *api_client.FlagsListResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -360,8 +357,7 @@ func Sql_v1beta3_InstancesClone(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.InstancesCloneResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -426,8 +422,7 @@ func Sql_v1beta3_InstancesDelete(context Context, args ...string) error {
 
 	call := service.Delete(param_project, param_instance)
 
-	var response *api_client.InstancesDeleteResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -517,8 +512,7 @@ func Sql_v1beta3_InstancesExport(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.InstancesExportResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -583,8 +577,7 @@ func Sql_v1beta3_InstancesGet(context Context, args ...string) error {
 
 	call := service.Get(param_project, param_instance)
 
-	var response *api_client.DatabaseInstance
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -674,8 +667,7 @@ func Sql_v1beta3_InstancesImport(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.InstancesImportResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -759,8 +751,7 @@ func Sql_v1beta3_InstancesInsert(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.InstancesInsertResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -855,8 +846,7 @@ func Sql_v1beta3_InstancesList(context Context, args ...string) error {
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.InstancesListResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -946,8 +936,7 @@ func Sql_v1beta3_InstancesPatch(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.InstancesUpdateResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1012,8 +1001,7 @@ func Sql_v1beta3_InstancesPromoteReplica(context Context, args ...string) error 
 
 	call := service.PromoteReplica(param_project, param_instance)
 
-	var response *api_client.InstancesPromoteReplicaResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1078,8 +1066,7 @@ func Sql_v1beta3_InstancesResetSslConfig(context Context, args ...string) error 
 
 	call := service.ResetSslConfig(param_project, param_instance)
 
-	var response *api_client.InstancesResetSslConfigResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1144,8 +1131,7 @@ func Sql_v1beta3_InstancesRestart(context Context, args ...string) error {
 
 	call := service.Restart(param_project, param_instance)
 
-	var response *api_client.InstancesRestartResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1240,8 +1226,7 @@ func Sql_v1beta3_InstancesRestoreBackup(context Context, args ...string) error {
 
 	call := service.RestoreBackup(param_project, param_instance, param_backupConfiguration, param_dueTime)
 
-	var response *api_client.InstancesRestoreBackupResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1331,8 +1316,7 @@ func Sql_v1beta3_InstancesSetRootPassword(context Context, args ...string) error
 		request,
 	)
 
-	var response *api_client.InstancesSetRootPasswordResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1422,8 +1406,7 @@ func Sql_v1beta3_InstancesUpdate(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.InstancesUpdateResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1494,8 +1477,7 @@ func Sql_v1beta3_OperationsGet(context Context, args ...string) error {
 
 	call := service.Get(param_project, param_instance, param_operation)
 
-	var response *api_client.InstanceOperation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1596,8 +1578,7 @@ func Sql_v1beta3_OperationsList(context Context, args ...string) error {
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.OperationsListResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1668,8 +1649,7 @@ func Sql_v1beta3_SslCertsDelete(context Context, args ...string) error {
 
 	call := service.Delete(param_project, param_instance, param_sha1Fingerprint)
 
-	var response *api_client.SslCertsDeleteResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1740,8 +1720,7 @@ func Sql_v1beta3_SslCertsGet(context Context, args ...string) error {
 
 	call := service.Get(param_project, param_instance, param_sha1Fingerprint)
 
-	var response *api_client.SslCert
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1831,8 +1810,7 @@ func Sql_v1beta3_SslCertsInsert(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.SslCertsInsertResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1897,8 +1875,7 @@ func Sql_v1beta3_SslCertsList(context Context, args ...string) error {
 
 	call := service.List(param_project, param_instance)
 
-	var response *api_client.SslCertsListResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1957,8 +1934,7 @@ func Sql_v1beta3_TiersList(context Context, args ...string) error {
 
 	call := service.List(param_project)
 
-	var response *api_client.TiersListResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}

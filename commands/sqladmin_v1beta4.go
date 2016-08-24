@@ -91,8 +91,7 @@ func Sql_v1beta4_BackupRunsDelete(context Context, args ...string) error {
 
 	call := service.Delete(param_project, param_instance, param_id)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -163,8 +162,97 @@ func Sql_v1beta4_BackupRunsGet(context Context, args ...string) error {
 
 	call := service.Get(param_project, param_instance, param_id)
 
-	var response *api_client.BackupRun
-	response, err = call.Do()
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Sql_v1beta4_BackupRunsInsert(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("projects/{project}/instances/{instance}/backupRuns", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.BackupRun{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewBackupRunsService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.BackupRun{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"instance",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.Insert(param_project, param_instance,
+		request,
+	)
+
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -265,8 +353,7 @@ func Sql_v1beta4_BackupRunsList(context Context, args ...string) error {
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.BackupRunsListResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -337,8 +424,7 @@ func Sql_v1beta4_DatabasesDelete(context Context, args ...string) error {
 
 	call := service.Delete(param_project, param_instance, param_database)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -409,8 +495,7 @@ func Sql_v1beta4_DatabasesGet(context Context, args ...string) error {
 
 	call := service.Get(param_project, param_instance, param_database)
 
-	var response *api_client.Database
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -500,8 +585,7 @@ func Sql_v1beta4_DatabasesInsert(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -566,8 +650,7 @@ func Sql_v1beta4_DatabasesList(context Context, args ...string) error {
 
 	call := service.List(param_project, param_instance)
 
-	var response *api_client.DatabasesListResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -663,8 +746,7 @@ func Sql_v1beta4_DatabasesPatch(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -760,8 +842,7 @@ func Sql_v1beta4_DatabasesUpdate(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -812,8 +893,7 @@ func Sql_v1beta4_FlagsList(context Context, args ...string) error {
 
 	call := service.List()
 
-	var response *api_client.FlagsListResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -903,8 +983,7 @@ func Sql_v1beta4_InstancesClone(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -969,8 +1048,7 @@ func Sql_v1beta4_InstancesDelete(context Context, args ...string) error {
 
 	call := service.Delete(param_project, param_instance)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1060,8 +1138,7 @@ func Sql_v1beta4_InstancesExport(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1151,8 +1228,7 @@ func Sql_v1beta4_InstancesFailover(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1217,8 +1293,7 @@ func Sql_v1beta4_InstancesGet(context Context, args ...string) error {
 
 	call := service.Get(param_project, param_instance)
 
-	var response *api_client.DatabaseInstance
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1308,8 +1383,7 @@ func Sql_v1beta4_InstancesImport(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1393,8 +1467,7 @@ func Sql_v1beta4_InstancesInsert(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1489,8 +1562,7 @@ func Sql_v1beta4_InstancesList(context Context, args ...string) error {
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.InstancesListResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1580,8 +1652,7 @@ func Sql_v1beta4_InstancesPatch(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1646,8 +1717,7 @@ func Sql_v1beta4_InstancesPromoteReplica(context Context, args ...string) error 
 
 	call := service.PromoteReplica(param_project, param_instance)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1712,8 +1782,7 @@ func Sql_v1beta4_InstancesResetSslConfig(context Context, args ...string) error 
 
 	call := service.ResetSslConfig(param_project, param_instance)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1778,8 +1847,7 @@ func Sql_v1beta4_InstancesRestart(context Context, args ...string) error {
 
 	call := service.Restart(param_project, param_instance)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1869,8 +1937,7 @@ func Sql_v1beta4_InstancesRestoreBackup(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1935,8 +2002,7 @@ func Sql_v1beta4_InstancesStartReplica(context Context, args ...string) error {
 
 	call := service.StartReplica(param_project, param_instance)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -2001,8 +2067,7 @@ func Sql_v1beta4_InstancesStopReplica(context Context, args ...string) error {
 
 	call := service.StopReplica(param_project, param_instance)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -2092,8 +2157,7 @@ func Sql_v1beta4_InstancesUpdate(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -2158,8 +2222,7 @@ func Sql_v1beta4_OperationsGet(context Context, args ...string) error {
 
 	call := service.Get(param_project, param_operation)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -2262,8 +2325,7 @@ func Sql_v1beta4_OperationsList(context Context, args ...string) error {
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.OperationsListResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -2353,8 +2415,7 @@ func Sql_v1beta4_SslCertsCreateEphemeral(context Context, args ...string) error 
 		request,
 	)
 
-	var response *api_client.SslCert
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -2425,8 +2486,7 @@ func Sql_v1beta4_SslCertsDelete(context Context, args ...string) error {
 
 	call := service.Delete(param_project, param_instance, param_sha1Fingerprint)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -2497,8 +2557,7 @@ func Sql_v1beta4_SslCertsGet(context Context, args ...string) error {
 
 	call := service.Get(param_project, param_instance, param_sha1Fingerprint)
 
-	var response *api_client.SslCert
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -2588,8 +2647,7 @@ func Sql_v1beta4_SslCertsInsert(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.SslCertsInsertResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -2654,8 +2712,7 @@ func Sql_v1beta4_SslCertsList(context Context, args ...string) error {
 
 	call := service.List(param_project, param_instance)
 
-	var response *api_client.SslCertsListResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -2714,8 +2771,7 @@ func Sql_v1beta4_TiersList(context Context, args ...string) error {
 
 	call := service.List(param_project)
 
-	var response *api_client.TiersListResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -2810,8 +2866,7 @@ func Sql_v1beta4_UsersDelete(context Context, args ...string) error {
 
 	call := service.Delete(param_project, param_instance, param_host, param_name)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -2901,8 +2956,7 @@ func Sql_v1beta4_UsersInsert(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -2967,8 +3021,7 @@ func Sql_v1beta4_UsersList(context Context, args ...string) error {
 
 	call := service.List(param_project, param_instance)
 
-	var response *api_client.UsersListResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -3089,8 +3142,7 @@ func Sql_v1beta4_UsersUpdate(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}

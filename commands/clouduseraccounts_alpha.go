@@ -85,8 +85,7 @@ func Clouduseraccounts_alpha_GlobalAccountsOperationsDelete(context Context, arg
 
 	call := service.Delete(param_project, param_operation)
 
-	err = call.Do()
-	if err != nil {
+	if err := call.Do(); err != nil {
 		return err
 	}
 
@@ -145,8 +144,7 @@ func Clouduseraccounts_alpha_GlobalAccountsOperationsGet(context Context, args .
 
 	call := service.Get(param_project, param_operation)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -261,8 +259,7 @@ func Clouduseraccounts_alpha_GlobalAccountsOperationsList(context Context, args 
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.OperationList
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -352,8 +349,7 @@ func Clouduseraccounts_alpha_GroupsAddMember(context Context, args ...string) er
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -418,8 +414,7 @@ func Clouduseraccounts_alpha_GroupsDelete(context Context, args ...string) error
 
 	call := service.Delete(param_project, param_groupName)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -484,8 +479,7 @@ func Clouduseraccounts_alpha_GroupsGet(context Context, args ...string) error {
 
 	call := service.Get(param_project, param_groupName)
 
-	var response *api_client.Group
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -550,8 +544,7 @@ func Clouduseraccounts_alpha_GroupsGetIamPolicy(context Context, args ...string)
 
 	call := service.GetIamPolicy(param_project, param_resource)
 
-	var response *api_client.Policy
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -635,8 +628,7 @@ func Clouduseraccounts_alpha_GroupsInsert(context Context, args ...string) error
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -751,8 +743,7 @@ func Clouduseraccounts_alpha_GroupsList(context Context, args ...string) error {
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.GroupList
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -842,8 +833,7 @@ func Clouduseraccounts_alpha_GroupsRemoveMember(context Context, args ...string)
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -933,8 +923,7 @@ func Clouduseraccounts_alpha_GroupsSetIamPolicy(context Context, args ...string)
 		request,
 	)
 
-	var response *api_client.Policy
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1024,8 +1013,7 @@ func Clouduseraccounts_alpha_GroupsTestIamPermissions(context Context, args ...s
 		request,
 	)
 
-	var response *api_client.TestPermissionsResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1130,8 +1118,7 @@ func Clouduseraccounts_alpha_LinuxGetAuthorizedKeysView(context Context, args ..
 		call.Login(query_login)
 	}
 
-	var response *api_client.LinuxGetAuthorizedKeysViewResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1260,8 +1247,7 @@ func Clouduseraccounts_alpha_LinuxGetLinuxAccountViews(context Context, args ...
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.LinuxGetLinuxAccountViewsResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1351,8 +1337,7 @@ func Clouduseraccounts_alpha_UsersAddPublicKey(context Context, args ...string) 
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1417,8 +1402,7 @@ func Clouduseraccounts_alpha_UsersDelete(context Context, args ...string) error 
 
 	call := service.Delete(param_project, param_user)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1483,8 +1467,7 @@ func Clouduseraccounts_alpha_UsersGet(context Context, args ...string) error {
 
 	call := service.Get(param_project, param_user)
 
-	var response *api_client.User
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1549,8 +1532,7 @@ func Clouduseraccounts_alpha_UsersGetIamPolicy(context Context, args ...string) 
 
 	call := service.GetIamPolicy(param_project, param_resource)
 
-	var response *api_client.Policy
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1634,8 +1616,7 @@ func Clouduseraccounts_alpha_UsersInsert(context Context, args ...string) error 
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1750,8 +1731,7 @@ func Clouduseraccounts_alpha_UsersList(context Context, args ...string) error {
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.UserList
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1838,8 +1818,7 @@ func Clouduseraccounts_alpha_UsersRemovePublicKey(context Context, args ...strin
 
 	call := service.RemovePublicKey(param_project, param_user, param_fingerprint)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1929,8 +1908,7 @@ func Clouduseraccounts_alpha_UsersSetIamPolicy(context Context, args ...string) 
 		request,
 	)
 
-	var response *api_client.Policy
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -2020,8 +1998,7 @@ func Clouduseraccounts_alpha_UsersTestIamPermissions(context Context, args ...st
 		request,
 	)
 
-	var response *api_client.TestPermissionsResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}

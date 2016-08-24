@@ -104,8 +104,7 @@ func Bigtableclusteradmin_v1_OperationsCancel(context Context, args ...string) e
 		request,
 	)
 
-	var response *api_client.Empty
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -164,8 +163,7 @@ func Bigtableclusteradmin_v1_OperationsDelete(context Context, args ...string) e
 
 	call := service.Delete(param_name)
 
-	var response *api_client.Empty
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -224,8 +222,7 @@ func Bigtableclusteradmin_v1_OperationsGet(context Context, args ...string) erro
 
 	call := service.Get(param_name)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -330,8 +327,7 @@ func Bigtableclusteradmin_v1_OperationsList(context Context, args ...string) err
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.ListOperationsResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -390,8 +386,7 @@ func Bigtableclusteradmin_v1_ProjectsAggregatedClustersList(context Context, arg
 
 	call := service.List(param_name)
 
-	var response *api_client.ListClustersResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -475,8 +470,7 @@ func Bigtableclusteradmin_v1_ProjectsZonesClustersCreate(context Context, args .
 		request,
 	)
 
-	var response *api_client.Cluster
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -535,8 +529,7 @@ func Bigtableclusteradmin_v1_ProjectsZonesClustersDelete(context Context, args .
 
 	call := service.Delete(param_name)
 
-	var response *api_client.Empty
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -595,8 +588,7 @@ func Bigtableclusteradmin_v1_ProjectsZonesClustersGet(context Context, args ...s
 
 	call := service.Get(param_name)
 
-	var response *api_client.Cluster
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -680,8 +672,7 @@ func Bigtableclusteradmin_v1_ProjectsZonesClustersPatch(context Context, args ..
 		request,
 	)
 
-	var response *api_client.Cluster
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -740,8 +731,7 @@ func Bigtableclusteradmin_v1_ProjectsZonesClustersUndelete(context Context, args
 
 	call := service.Undelete(param_name)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -825,8 +815,7 @@ func Bigtableclusteradmin_v1_ProjectsZonesClustersUpdate(context Context, args .
 		request,
 	)
 
-	var response *api_client.Cluster
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -885,8 +874,7 @@ func Bigtableclusteradmin_v1_ProjectsZonesList(context Context, args ...string) 
 
 	call := service.List(param_name)
 
-	var response *api_client.ListZonesResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}

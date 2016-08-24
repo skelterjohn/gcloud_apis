@@ -131,8 +131,7 @@ func Testing_v1_ProjectsDevicesCreate(context Context, args ...string) error {
 		call.SshPublicKey(query_sshPublicKey)
 	}
 
-	var response *api_client.Device
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -197,8 +196,7 @@ func Testing_v1_ProjectsDevicesDelete(context Context, args ...string) error {
 
 	call := service.Delete(param_projectId, param_deviceId)
 
-	var response *api_client.Empty
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -263,8 +261,7 @@ func Testing_v1_ProjectsDevicesGet(context Context, args ...string) error {
 
 	call := service.Get(param_projectId, param_deviceId)
 
-	var response *api_client.Device
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -329,8 +326,7 @@ func Testing_v1_ProjectsDevicesKeepalive(context Context, args ...string) error 
 
 	call := service.Keepalive(param_projectId, param_deviceId)
 
-	var response *api_client.Empty
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -425,8 +421,7 @@ func Testing_v1_ProjectsDevicesList(context Context, args ...string) error {
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.ListDevicesResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -491,8 +486,7 @@ func Testing_v1_ProjectsTestMatricesCancel(context Context, args ...string) erro
 
 	call := service.Cancel(param_projectId, param_testMatrixId)
 
-	var response *api_client.CancelTestMatrixResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -603,8 +597,7 @@ func Testing_v1_ProjectsTestMatricesCreate(context Context, args ...string) erro
 		call.RequestId(query_requestId)
 	}
 
-	var response *api_client.TestMatrix
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -669,8 +662,7 @@ func Testing_v1_ProjectsTestMatricesDelete(context Context, args ...string) erro
 
 	call := service.Delete(param_projectId, param_testMatrixId)
 
-	var response *api_client.Empty
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -735,8 +727,7 @@ func Testing_v1_ProjectsTestMatricesGet(context Context, args ...string) error {
 
 	call := service.Get(param_projectId, param_testMatrixId)
 
-	var response *api_client.TestMatrix
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -795,412 +786,7 @@ func Testing_v1_ProjectsTestMatricesList(context Context, args ...string) error 
 
 	call := service.List(param_projectId)
 
-	var response *api_client.ListTestMatricesResponse
-	response, err = call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Testing_v1_ProjectsWebdriverCreate(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1/projects/{projectId}/webdriver", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		commands_util.PrintRequestExample(&api_client.WebDriver{})
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewProjectsWebdriverService(api_service)
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
-
-	// Only positional arguments should remain in args.
-	if len(args) == 0 || len(args) > 2 {
-		usageFunc()
-	}
-
-	request := &api_client.WebDriver{}
-	if len(args) == 2 {
-		err = commands_util.PopulateRequestFromFilename(&request, args[1])
-		if err != nil {
-			return err
-		}
-	}
-
-	keyValues := flagValues
-
-	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
-	if err != nil {
-		return err
-	}
-
-	expectedParams := []string{
-		"projectId",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-
-	call := service.Create(param_projectId,
-		request,
-	)
-
-	var response *api_client.WebDriver
-	response, err = call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Testing_v1_ProjectsWebdriverDelete(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("webdriverId"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1/projects/{projectId}/webdriver/{webdriverId}", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewProjectsWebdriverService(api_service)
-
-	// Only positional arguments should remain in args.
-	if len(args) != 1 {
-		usageFunc()
-	}
-
-	expectedParams := []string{
-		"projectId",
-		"webdriverId",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_webdriverId, err := commands_util.ConvertValue_string(paramValues[1])
-	if err != nil {
-		return err
-	}
-
-	call := service.Delete(param_projectId, param_webdriverId)
-
-	var response *api_client.Empty
-	response, err = call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Testing_v1_ProjectsWebdriverGet(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("webdriverId"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1/projects/{projectId}/webdriver/{webdriverId}", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewProjectsWebdriverService(api_service)
-
-	// Only positional arguments should remain in args.
-	if len(args) != 1 {
-		usageFunc()
-	}
-
-	expectedParams := []string{
-		"projectId",
-		"webdriverId",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_webdriverId, err := commands_util.ConvertValue_string(paramValues[1])
-	if err != nil {
-		return err
-	}
-
-	call := service.Get(param_projectId, param_webdriverId)
-
-	var response *api_client.WebDriver
-	response, err = call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Testing_v1_ProjectsWebdriverKeepalive(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("webdriverId"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1/projects/{projectId}/webdriver/{webdriverId}:keepalive", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		commands_util.PrintRequestExample(&api_client.WebDriverKeepAliveRequest{})
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewProjectsWebdriverService(api_service)
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
-
-	// Only positional arguments should remain in args.
-	if len(args) == 0 || len(args) > 2 {
-		usageFunc()
-	}
-
-	request := &api_client.WebDriverKeepAliveRequest{}
-	if len(args) == 2 {
-		err = commands_util.PopulateRequestFromFilename(&request, args[1])
-		if err != nil {
-			return err
-		}
-	}
-
-	keyValues := flagValues
-
-	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
-	if err != nil {
-		return err
-	}
-
-	expectedParams := []string{
-		"projectId",
-		"webdriverId",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_webdriverId, err := commands_util.ConvertValue_string(paramValues[1])
-	if err != nil {
-		return err
-	}
-
-	call := service.Keepalive(param_projectId, param_webdriverId,
-		request,
-	)
-
-	var response *api_client.Empty
-	response, err = call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Testing_v1_ProjectsWebdriverList(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1/projects/{projectId}/webdriver", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		usageBits += " [--pageSize=VALUE]"
-
-		usageBits += " [--pageToken=VALUE]"
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewProjectsWebdriverService(api_service)
-
-	queryParamNames := map[string]bool{
-		"pageSize":  false,
-		"pageToken": false,
-	}
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
-
-	for k, r := range queryParamNames {
-		if _, ok := flagValues[k]; r && !ok {
-			return fmt.Errorf("missing required flag %q", "--"+k)
-		}
-	}
-
-	// Only positional arguments should remain in args.
-	if len(args) != 1 {
-		usageFunc()
-	}
-
-	expectedParams := []string{
-		"projectId",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-
-	call := service.List(param_projectId)
-
-	// Set query parameters.
-	if value, ok := flagValues["pageSize"]; ok {
-		query_pageSize, err := commands_util.ConvertValue_int64(value)
-		if err != nil {
-			return err
-		}
-		call.PageSize(query_pageSize)
-	}
-	if value, ok := flagValues["pageToken"]; ok {
-		query_pageToken, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.PageToken(query_pageToken)
-	}
-
-	var response *api_client.ListWebDriverResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1259,8 +845,7 @@ func Testing_v1_TestEnvironmentCatalogGet(context Context, args ...string) error
 
 	call := service.Get(param_environmentType)
 
-	var response *api_client.TestEnvironmentCatalog
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}

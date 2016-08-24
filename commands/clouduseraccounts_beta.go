@@ -85,8 +85,7 @@ func Clouduseraccounts_beta_GlobalAccountsOperationsDelete(context Context, args
 
 	call := service.Delete(param_project, param_operation)
 
-	err = call.Do()
-	if err != nil {
+	if err := call.Do(); err != nil {
 		return err
 	}
 
@@ -145,8 +144,7 @@ func Clouduseraccounts_beta_GlobalAccountsOperationsGet(context Context, args ..
 
 	call := service.Get(param_project, param_operation)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -261,8 +259,7 @@ func Clouduseraccounts_beta_GlobalAccountsOperationsList(context Context, args .
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.OperationList
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -352,8 +349,7 @@ func Clouduseraccounts_beta_GroupsAddMember(context Context, args ...string) err
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -418,8 +414,7 @@ func Clouduseraccounts_beta_GroupsDelete(context Context, args ...string) error 
 
 	call := service.Delete(param_project, param_groupName)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -484,8 +479,7 @@ func Clouduseraccounts_beta_GroupsGet(context Context, args ...string) error {
 
 	call := service.Get(param_project, param_groupName)
 
-	var response *api_client.Group
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -569,8 +563,7 @@ func Clouduseraccounts_beta_GroupsInsert(context Context, args ...string) error 
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -685,8 +678,7 @@ func Clouduseraccounts_beta_GroupsList(context Context, args ...string) error {
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.GroupList
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -776,8 +768,7 @@ func Clouduseraccounts_beta_GroupsRemoveMember(context Context, args ...string) 
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -882,8 +873,7 @@ func Clouduseraccounts_beta_LinuxGetAuthorizedKeysView(context Context, args ...
 		call.Login(query_login)
 	}
 
-	var response *api_client.LinuxGetAuthorizedKeysViewResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1012,8 +1002,7 @@ func Clouduseraccounts_beta_LinuxGetLinuxAccountViews(context Context, args ...s
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.LinuxGetLinuxAccountViewsResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1103,8 +1092,7 @@ func Clouduseraccounts_beta_UsersAddPublicKey(context Context, args ...string) e
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1169,8 +1157,7 @@ func Clouduseraccounts_beta_UsersDelete(context Context, args ...string) error {
 
 	call := service.Delete(param_project, param_user)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1235,8 +1222,7 @@ func Clouduseraccounts_beta_UsersGet(context Context, args ...string) error {
 
 	call := service.Get(param_project, param_user)
 
-	var response *api_client.User
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1320,8 +1306,7 @@ func Clouduseraccounts_beta_UsersInsert(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1436,8 +1421,7 @@ func Clouduseraccounts_beta_UsersList(context Context, args ...string) error {
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.UserList
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1524,8 +1508,7 @@ func Clouduseraccounts_beta_UsersRemovePublicKey(context Context, args ...string
 
 	call := service.RemovePublicKey(param_project, param_user, param_fingerprint)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}

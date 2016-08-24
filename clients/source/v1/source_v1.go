@@ -480,7 +480,8 @@ type CommitWorkspaceRequest struct {
 	// the workspace, or ABORTED is returned.
 	CurrentSnapshotId string `json:"currentSnapshotId,omitempty"`
 
-	// Message: required
+	// Message: The commit message.
+	// required
 	Message string `json:"message,omitempty"`
 
 	// Paths: The subset of modified paths to commit. If empty, then commit
@@ -547,6 +548,7 @@ type CreateWorkspaceRequest struct {
 	// RPC.
 	Actions []*Action `json:"actions,omitempty"`
 
+	// RepoId: The repo within which to create the workspace.
 	RepoId *RepoId `json:"repoId,omitempty"`
 
 	// Workspace: The following fields of workspace, with the allowable
@@ -935,7 +937,7 @@ func (s *ListChangedFilesResponse) MarshalJSON() ([]byte, error) {
 
 // ListFilesResponse: Response for ListFiles.
 type ListFilesResponse struct {
-	// Files: info.size and contents are not set.
+	// Files: The contents field is empty.
 	Files []*File `json:"files,omitempty"`
 
 	// NextPageToken: Use as the value of page_token in the next
@@ -1193,25 +1195,6 @@ func (s *ModifyWorkspaceRequest) MarshalJSON() ([]byte, error) {
 // ID
 // (e.g. winged-cargo-31) and a repo name within that project.
 type ProjectRepoId struct {
-	// ProjectId: The ID of the project.
-	ProjectId string `json:"projectId,omitempty"`
-
-	// RepoName: The name of the repo. Leave empty for the default repo.
-	RepoName string `json:"repoName,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "ProjectId") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *ProjectRepoId) MarshalJSON() ([]byte, error) {
-	type noMethod ProjectRepoId
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
 // ReadResponse: Response to read request. Exactly one of entries, file
@@ -1591,6 +1574,40 @@ func (s *SourceContext) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
+// UpdateRepoRequest: Request for UpdateRepo.
+type UpdateRepoRequest struct {
+	// RepoId: The ID of the repo to be updated.
+	RepoId *RepoId `json:"repoId,omitempty"`
+
+	// RepoName: Renames the repo. repo_name cannot already be in use by a
+	// LIVE repo
+	// within the project. This field is ignored if left blank or set to the
+	// empty
+	// string. If you want to rename a repo to "default," you need to
+	// explicitly
+	// set that value here.
+	RepoName string `json:"repoName,omitempty"`
+
+	// RepoSyncConfig: Sets or updates the RepoSync config. When the
+	// repo_sync_config field is not
+	// set it actually clears the repo sync config.
+	RepoSyncConfig *RepoSyncConfig `json:"repoSyncConfig,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "RepoId") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *UpdateRepoRequest) MarshalJSON() ([]byte, error) {
+	type noMethod UpdateRepoRequest
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
 // Workspace: A Cloud Workspace stores modified files before they are
 // committed to
 // a repo. This message contains metadata. Use the Read
@@ -1838,10 +1855,10 @@ func (r *ProjectsReposService) Delete(projectId string, repoName string) *Projec
 	return c
 }
 
-// Uid sets the optional parameter "uid": A server-assigned, globally
-// unique identifier.
-func (c *ProjectsReposDeleteCall) Uid(uid string) *ProjectsReposDeleteCall {
-	c.urlParams_.Set("uid", uid)
+// RepoIdUid sets the optional parameter "repoId.uid": A
+// server-assigned, globally unique identifier.
+func (c *ProjectsReposDeleteCall) RepoIdUid(repoIdUid string) *ProjectsReposDeleteCall {
+	c.urlParams_.Set("repoId.uid", repoIdUid)
 	return c
 }
 
@@ -1933,15 +1950,15 @@ func (c *ProjectsReposDeleteCall) Do(opts ...googleapi.CallOption) (*Empty, erro
 	//       "required": true,
 	//       "type": "string"
 	//     },
+	//     "repoId.uid": {
+	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
 	//     "repoName": {
 	//       "description": "The name of the repo. Leave empty for the default repo.",
 	//       "location": "path",
 	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "uid": {
-	//       "description": "A server-assigned, globally unique identifier.",
-	//       "location": "query",
 	//       "type": "string"
 	//     }
 	//   },
@@ -1975,10 +1992,10 @@ func (r *ProjectsReposService) Get(projectId string, repoName string) *ProjectsR
 	return c
 }
 
-// Uid sets the optional parameter "uid": A server-assigned, globally
-// unique identifier.
-func (c *ProjectsReposGetCall) Uid(uid string) *ProjectsReposGetCall {
-	c.urlParams_.Set("uid", uid)
+// RepoIdUid sets the optional parameter "repoId.uid": A
+// server-assigned, globally unique identifier.
+func (c *ProjectsReposGetCall) RepoIdUid(repoIdUid string) *ProjectsReposGetCall {
+	c.urlParams_.Set("repoId.uid", repoIdUid)
 	return c
 }
 
@@ -2083,15 +2100,15 @@ func (c *ProjectsReposGetCall) Do(opts ...googleapi.CallOption) (*Repo, error) {
 	//       "required": true,
 	//       "type": "string"
 	//     },
+	//     "repoId.uid": {
+	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
 	//     "repoName": {
 	//       "description": "The name of the repo. Leave empty for the default repo.",
 	//       "location": "path",
 	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "uid": {
-	//       "description": "A server-assigned, globally unique identifier.",
-	//       "location": "query",
 	//       "type": "string"
 	//     }
 	//   },
@@ -2378,6 +2395,145 @@ func (c *ProjectsReposMergeCall) Do(opts ...googleapi.CallOption) (*Workspace, e
 
 }
 
+// method id "source.projects.repos.update":
+
+type ProjectsReposUpdateCall struct {
+	s                 *Service
+	projectId         string
+	repoName          string
+	updatereporequest *UpdateRepoRequest
+	urlParams_        gensupport.URLParams
+	ctx_              context.Context
+}
+
+// Update: Updates an existing repo. The only things you can change
+// about a repo are:
+//   1) its repo_sync_config (and then only to add one that is not
+// present);
+//   2) its last-updated time; and
+//   3) its name.
+func (r *ProjectsReposService) Update(projectId string, repoName string, updatereporequest *UpdateRepoRequest) *ProjectsReposUpdateCall {
+	c := &ProjectsReposUpdateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.projectId = projectId
+	c.repoName = repoName
+	c.updatereporequest = updatereporequest
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *ProjectsReposUpdateCall) Fields(s ...googleapi.Field) *ProjectsReposUpdateCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsReposUpdateCall) Context(ctx context.Context) *ProjectsReposUpdateCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsReposUpdateCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.updatereporequest)
+	if err != nil {
+		return nil, err
+	}
+	reqHeaders.Set("Content-Type", "application/json")
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/repos/{repoName}")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("PUT", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"projectId": c.projectId,
+		"repoName":  c.repoName,
+	})
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "source.projects.repos.update" call.
+// Exactly one of *Repo or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Repo.ServerResponse.Header or (if a response was returned at all) in
+// error.(*googleapi.Error).Header. Use googleapi.IsNotModified to check
+// whether the returned error was because http.StatusNotModified was
+// returned.
+func (c *ProjectsReposUpdateCall) Do(opts ...googleapi.CallOption) (*Repo, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Repo{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Updates an existing repo. The only things you can change about a repo are:\n  1) its repo_sync_config (and then only to add one that is not present);\n  2) its last-updated time; and\n  3) its name.",
+	//   "flatPath": "v1/projects/{projectId}/repos/{repoName}",
+	//   "httpMethod": "PUT",
+	//   "id": "source.projects.repos.update",
+	//   "parameterOrder": [
+	//     "projectId",
+	//     "repoName"
+	//   ],
+	//   "parameters": {
+	//     "projectId": {
+	//       "description": "The ID of the project.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "repoName": {
+	//       "description": "The name of the repo. Leave empty for the default repo.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "v1/projects/{projectId}/repos/{repoName}",
+	//   "request": {
+	//     "$ref": "UpdateRepoRequest"
+	//   },
+	//   "response": {
+	//     "$ref": "Repo"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform"
+	//   ]
+	// }
+
+}
+
 // method id "source.projects.repos.aliases.create":
 
 type ProjectsReposAliasesCreateCall struct {
@@ -2400,10 +2556,10 @@ func (r *ProjectsReposAliasesService) Create(projectId string, repoName string, 
 	return c
 }
 
-// Uid sets the optional parameter "uid": A server-assigned, globally
-// unique identifier.
-func (c *ProjectsReposAliasesCreateCall) Uid(uid string) *ProjectsReposAliasesCreateCall {
-	c.urlParams_.Set("uid", uid)
+// RepoIdUid sets the optional parameter "repoId.uid": A
+// server-assigned, globally unique identifier.
+func (c *ProjectsReposAliasesCreateCall) RepoIdUid(repoIdUid string) *ProjectsReposAliasesCreateCall {
+	c.urlParams_.Set("repoId.uid", repoIdUid)
 	return c
 }
 
@@ -2500,15 +2656,15 @@ func (c *ProjectsReposAliasesCreateCall) Do(opts ...googleapi.CallOption) (*Alia
 	//       "required": true,
 	//       "type": "string"
 	//     },
+	//     "repoId.uid": {
+	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
 	//     "repoName": {
 	//       "description": "The name of the repo. Leave empty for the default repo.",
 	//       "location": "path",
 	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "uid": {
-	//       "description": "A server-assigned, globally unique identifier.",
-	//       "location": "query",
 	//       "type": "string"
 	//     }
 	//   },
@@ -2554,17 +2710,17 @@ func (r *ProjectsReposAliasesService) Delete(projectId string, repoName string, 
 	return c
 }
 
+// RepoIdUid sets the optional parameter "repoId.uid": A
+// server-assigned, globally unique identifier.
+func (c *ProjectsReposAliasesDeleteCall) RepoIdUid(repoIdUid string) *ProjectsReposAliasesDeleteCall {
+	c.urlParams_.Set("repoId.uid", repoIdUid)
+	return c
+}
+
 // RevisionId sets the optional parameter "revisionId": If non-empty,
 // must match the revision that the alias refers to.
 func (c *ProjectsReposAliasesDeleteCall) RevisionId(revisionId string) *ProjectsReposAliasesDeleteCall {
 	c.urlParams_.Set("revisionId", revisionId)
-	return c
-}
-
-// Uid sets the optional parameter "uid": A server-assigned, globally
-// unique identifier.
-func (c *ProjectsReposAliasesDeleteCall) Uid(uid string) *ProjectsReposAliasesDeleteCall {
-	c.urlParams_.Set("uid", uid)
 	return c
 }
 
@@ -2680,6 +2836,11 @@ func (c *ProjectsReposAliasesDeleteCall) Do(opts ...googleapi.CallOption) (*Empt
 	//       "required": true,
 	//       "type": "string"
 	//     },
+	//     "repoId.uid": {
+	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
 	//     "repoName": {
 	//       "description": "The name of the repo. Leave empty for the default repo.",
 	//       "location": "path",
@@ -2688,11 +2849,6 @@ func (c *ProjectsReposAliasesDeleteCall) Do(opts ...googleapi.CallOption) (*Empt
 	//     },
 	//     "revisionId": {
 	//       "description": "If non-empty, must match the revision that the alias refers to.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "uid": {
-	//       "description": "A server-assigned, globally unique identifier.",
 	//       "location": "query",
 	//       "type": "string"
 	//     }
@@ -2733,10 +2889,10 @@ func (r *ProjectsReposAliasesService) Get(projectId string, repoName string, kin
 	return c
 }
 
-// Uid sets the optional parameter "uid": A server-assigned, globally
-// unique identifier.
-func (c *ProjectsReposAliasesGetCall) Uid(uid string) *ProjectsReposAliasesGetCall {
-	c.urlParams_.Set("uid", uid)
+// RepoIdUid sets the optional parameter "repoId.uid": A
+// server-assigned, globally unique identifier.
+func (c *ProjectsReposAliasesGetCall) RepoIdUid(repoIdUid string) *ProjectsReposAliasesGetCall {
+	c.urlParams_.Set("repoId.uid", repoIdUid)
 	return c
 }
 
@@ -2865,15 +3021,15 @@ func (c *ProjectsReposAliasesGetCall) Do(opts ...googleapi.CallOption) (*Alias, 
 	//       "required": true,
 	//       "type": "string"
 	//     },
+	//     "repoId.uid": {
+	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
 	//     "repoName": {
 	//       "description": "The name of the repo. Leave empty for the default repo.",
 	//       "location": "path",
 	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "uid": {
-	//       "description": "A server-assigned, globally unique identifier.",
-	//       "location": "query",
 	//       "type": "string"
 	//     }
 	//   },
@@ -2940,10 +3096,10 @@ func (c *ProjectsReposAliasesListCall) PageToken(pageToken string) *ProjectsRepo
 	return c
 }
 
-// Uid sets the optional parameter "uid": A server-assigned, globally
-// unique identifier.
-func (c *ProjectsReposAliasesListCall) Uid(uid string) *ProjectsReposAliasesListCall {
-	c.urlParams_.Set("uid", uid)
+// RepoIdUid sets the optional parameter "repoId.uid": A
+// server-assigned, globally unique identifier.
+func (c *ProjectsReposAliasesListCall) RepoIdUid(repoIdUid string) *ProjectsReposAliasesListCall {
+	c.urlParams_.Set("repoId.uid", repoIdUid)
 	return c
 }
 
@@ -3072,15 +3228,15 @@ func (c *ProjectsReposAliasesListCall) Do(opts ...googleapi.CallOption) (*ListAl
 	//       "required": true,
 	//       "type": "string"
 	//     },
+	//     "repoId.uid": {
+	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
 	//     "repoName": {
 	//       "description": "The name of the repo. Leave empty for the default repo.",
 	//       "location": "path",
 	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "uid": {
-	//       "description": "A server-assigned, globally unique identifier.",
-	//       "location": "query",
 	//       "type": "string"
 	//     }
 	//   },
@@ -3142,121 +3298,6 @@ func (r *ProjectsReposAliasesService) ListFiles(projectId string, repoName strin
 	return c
 }
 
-// AliasName sets the optional parameter "aliasName": The name of an
-// alias (branch, tag, etc.).
-func (c *ProjectsReposAliasesListFilesCall) AliasName(aliasName string) *ProjectsReposAliasesListFilesCall {
-	c.urlParams_.Set("aliasName", aliasName)
-	return c
-}
-
-// CloudWorkspaceSnapshotId sets the optional parameter
-// "cloudWorkspace.snapshotId": The ID of the snapshot.
-// An empty snapshot_id refers to the most recent snapshot.
-func (c *ProjectsReposAliasesListFilesCall) CloudWorkspaceSnapshotId(cloudWorkspaceSnapshotId string) *ProjectsReposAliasesListFilesCall {
-	c.urlParams_.Set("cloudWorkspace.snapshotId", cloudWorkspaceSnapshotId)
-	return c
-}
-
-// CloudWorkspaceWorkspaceIdName sets the optional parameter
-// "cloudWorkspace.workspaceId.name": The unique name of the workspace
-// within the repo.  This is the name
-// chosen by the client in the Source API's CreateWorkspace method.
-func (c *ProjectsReposAliasesListFilesCall) CloudWorkspaceWorkspaceIdName(cloudWorkspaceWorkspaceIdName string) *ProjectsReposAliasesListFilesCall {
-	c.urlParams_.Set("cloudWorkspace.workspaceId.name", cloudWorkspaceWorkspaceIdName)
-	return c
-}
-
-// CloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId sets the
-// optional parameter
-// "cloudWorkspace.workspaceId.repoId.projectRepoId.projectId": The ID
-// of the project.
-func (c *ProjectsReposAliasesListFilesCall) CloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId(cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId string) *ProjectsReposAliasesListFilesCall {
-	c.urlParams_.Set("cloudWorkspace.workspaceId.repoId.projectRepoId.projectId", cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId)
-	return c
-}
-
-// CloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName sets the
-// optional parameter
-// "cloudWorkspace.workspaceId.repoId.projectRepoId.repoName": The name
-// of the repo. Leave empty for the default repo.
-func (c *ProjectsReposAliasesListFilesCall) CloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName(cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName string) *ProjectsReposAliasesListFilesCall {
-	c.urlParams_.Set("cloudWorkspace.workspaceId.repoId.projectRepoId.repoName", cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName)
-	return c
-}
-
-// CloudWorkspaceWorkspaceIdRepoIdUid sets the optional parameter
-// "cloudWorkspace.workspaceId.repoId.uid": A server-assigned, globally
-// unique identifier.
-func (c *ProjectsReposAliasesListFilesCall) CloudWorkspaceWorkspaceIdRepoIdUid(cloudWorkspaceWorkspaceIdRepoIdUid string) *ProjectsReposAliasesListFilesCall {
-	c.urlParams_.Set("cloudWorkspace.workspaceId.repoId.uid", cloudWorkspaceWorkspaceIdRepoIdUid)
-	return c
-}
-
-// GerritAliasContextKind sets the optional parameter
-// "gerrit.aliasContext.kind": The alias kind.
-//
-// Possible values:
-//   "ANY"
-//   "FIXED"
-//   "MOVABLE"
-//   "OTHER"
-func (c *ProjectsReposAliasesListFilesCall) GerritAliasContextKind(gerritAliasContextKind string) *ProjectsReposAliasesListFilesCall {
-	c.urlParams_.Set("gerrit.aliasContext.kind", gerritAliasContextKind)
-	return c
-}
-
-// GerritAliasContextName sets the optional parameter
-// "gerrit.aliasContext.name": The alias name.
-func (c *ProjectsReposAliasesListFilesCall) GerritAliasContextName(gerritAliasContextName string) *ProjectsReposAliasesListFilesCall {
-	c.urlParams_.Set("gerrit.aliasContext.name", gerritAliasContextName)
-	return c
-}
-
-// GerritAliasName sets the optional parameter "gerrit.aliasName": The
-// name of an alias (branch, tag, etc.).
-func (c *ProjectsReposAliasesListFilesCall) GerritAliasName(gerritAliasName string) *ProjectsReposAliasesListFilesCall {
-	c.urlParams_.Set("gerrit.aliasName", gerritAliasName)
-	return c
-}
-
-// GerritGerritProject sets the optional parameter
-// "gerrit.gerritProject": The full project name within the host.
-// Projects may be nested, so
-// "project/subproject" is a valid project name.
-// The "repo name" is hostURI/project.
-func (c *ProjectsReposAliasesListFilesCall) GerritGerritProject(gerritGerritProject string) *ProjectsReposAliasesListFilesCall {
-	c.urlParams_.Set("gerrit.gerritProject", gerritGerritProject)
-	return c
-}
-
-// GerritHostUri sets the optional parameter "gerrit.hostUri": The URI
-// of a running Gerrit instance.
-func (c *ProjectsReposAliasesListFilesCall) GerritHostUri(gerritHostUri string) *ProjectsReposAliasesListFilesCall {
-	c.urlParams_.Set("gerrit.hostUri", gerritHostUri)
-	return c
-}
-
-// GerritRevisionId sets the optional parameter "gerrit.revisionId": A
-// revision (commit) ID.
-func (c *ProjectsReposAliasesListFilesCall) GerritRevisionId(gerritRevisionId string) *ProjectsReposAliasesListFilesCall {
-	c.urlParams_.Set("gerrit.revisionId", gerritRevisionId)
-	return c
-}
-
-// GitRevisionId sets the optional parameter "git.revisionId": Git
-// commit hash.
-// required.
-func (c *ProjectsReposAliasesListFilesCall) GitRevisionId(gitRevisionId string) *ProjectsReposAliasesListFilesCall {
-	c.urlParams_.Set("git.revisionId", gitRevisionId)
-	return c
-}
-
-// GitUrl sets the optional parameter "git.url": Git repository URL.
-func (c *ProjectsReposAliasesListFilesCall) GitUrl(gitUrl string) *ProjectsReposAliasesListFilesCall {
-	c.urlParams_.Set("git.url", gitUrl)
-	return c
-}
-
 // PageSize sets the optional parameter "pageSize": The maximum number
 // of values to return.
 func (c *ProjectsReposAliasesListFilesCall) PageSize(pageSize int64) *ProjectsReposAliasesListFilesCall {
@@ -3272,16 +3313,136 @@ func (c *ProjectsReposAliasesListFilesCall) PageToken(pageToken string) *Project
 	return c
 }
 
-// RevisionId sets the optional parameter "revisionId": A revision ID.
-func (c *ProjectsReposAliasesListFilesCall) RevisionId(revisionId string) *ProjectsReposAliasesListFilesCall {
-	c.urlParams_.Set("revisionId", revisionId)
+// SourceContextCloudRepoAliasName sets the optional parameter
+// "sourceContext.cloudRepo.aliasName": The name of an alias (branch,
+// tag, etc.).
+func (c *ProjectsReposAliasesListFilesCall) SourceContextCloudRepoAliasName(sourceContextCloudRepoAliasName string) *ProjectsReposAliasesListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.aliasName", sourceContextCloudRepoAliasName)
 	return c
 }
 
-// Uid sets the optional parameter "uid": A server-assigned, globally
+// SourceContextCloudRepoRepoIdUid sets the optional parameter
+// "sourceContext.cloudRepo.repoId.uid": A server-assigned, globally
 // unique identifier.
-func (c *ProjectsReposAliasesListFilesCall) Uid(uid string) *ProjectsReposAliasesListFilesCall {
-	c.urlParams_.Set("uid", uid)
+func (c *ProjectsReposAliasesListFilesCall) SourceContextCloudRepoRepoIdUid(sourceContextCloudRepoRepoIdUid string) *ProjectsReposAliasesListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.repoId.uid", sourceContextCloudRepoRepoIdUid)
+	return c
+}
+
+// SourceContextCloudRepoRevisionId sets the optional parameter
+// "sourceContext.cloudRepo.revisionId": A revision ID.
+func (c *ProjectsReposAliasesListFilesCall) SourceContextCloudRepoRevisionId(sourceContextCloudRepoRevisionId string) *ProjectsReposAliasesListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.revisionId", sourceContextCloudRepoRevisionId)
+	return c
+}
+
+// SourceContextCloudWorkspaceSnapshotId sets the optional parameter
+// "sourceContext.cloudWorkspace.snapshotId": The ID of the snapshot.
+// An empty snapshot_id refers to the most recent snapshot.
+func (c *ProjectsReposAliasesListFilesCall) SourceContextCloudWorkspaceSnapshotId(sourceContextCloudWorkspaceSnapshotId string) *ProjectsReposAliasesListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudWorkspace.snapshotId", sourceContextCloudWorkspaceSnapshotId)
+	return c
+}
+
+// SourceContextCloudWorkspaceWorkspaceIdName sets the optional
+// parameter "sourceContext.cloudWorkspace.workspaceId.name": The unique
+// name of the workspace within the repo.  This is the name
+// chosen by the client in the Source API's CreateWorkspace method.
+func (c *ProjectsReposAliasesListFilesCall) SourceContextCloudWorkspaceWorkspaceIdName(sourceContextCloudWorkspaceWorkspaceIdName string) *ProjectsReposAliasesListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudWorkspace.workspaceId.name", sourceContextCloudWorkspaceWorkspaceIdName)
+	return c
+}
+
+// SourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId
+// sets the optional parameter
+// "sourceContext.cloudWorkspace.workspaceId.repoId.projectRepoId.project
+// Id": The ID of the project.
+func (c *ProjectsReposAliasesListFilesCall) SourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId(sourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId string) *ProjectsReposAliasesListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudWorkspace.workspaceId.repoId.projectRepoId.projectId", sourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId)
+	return c
+}
+
+// SourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName
+// sets the optional parameter
+// "sourceContext.cloudWorkspace.workspaceId.repoId.projectRepoId.repoNam
+// e": The name of the repo. Leave empty for the default repo.
+func (c *ProjectsReposAliasesListFilesCall) SourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName(sourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName string) *ProjectsReposAliasesListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudWorkspace.workspaceId.repoId.projectRepoId.repoName", sourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName)
+	return c
+}
+
+// SourceContextCloudWorkspaceWorkspaceIdRepoIdUid sets the optional
+// parameter "sourceContext.cloudWorkspace.workspaceId.repoId.uid": A
+// server-assigned, globally unique identifier.
+func (c *ProjectsReposAliasesListFilesCall) SourceContextCloudWorkspaceWorkspaceIdRepoIdUid(sourceContextCloudWorkspaceWorkspaceIdRepoIdUid string) *ProjectsReposAliasesListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudWorkspace.workspaceId.repoId.uid", sourceContextCloudWorkspaceWorkspaceIdRepoIdUid)
+	return c
+}
+
+// SourceContextGerritAliasContextKind sets the optional parameter
+// "sourceContext.gerrit.aliasContext.kind": The alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
+func (c *ProjectsReposAliasesListFilesCall) SourceContextGerritAliasContextKind(sourceContextGerritAliasContextKind string) *ProjectsReposAliasesListFilesCall {
+	c.urlParams_.Set("sourceContext.gerrit.aliasContext.kind", sourceContextGerritAliasContextKind)
+	return c
+}
+
+// SourceContextGerritAliasContextName sets the optional parameter
+// "sourceContext.gerrit.aliasContext.name": The alias name.
+func (c *ProjectsReposAliasesListFilesCall) SourceContextGerritAliasContextName(sourceContextGerritAliasContextName string) *ProjectsReposAliasesListFilesCall {
+	c.urlParams_.Set("sourceContext.gerrit.aliasContext.name", sourceContextGerritAliasContextName)
+	return c
+}
+
+// SourceContextGerritAliasName sets the optional parameter
+// "sourceContext.gerrit.aliasName": The name of an alias (branch, tag,
+// etc.).
+func (c *ProjectsReposAliasesListFilesCall) SourceContextGerritAliasName(sourceContextGerritAliasName string) *ProjectsReposAliasesListFilesCall {
+	c.urlParams_.Set("sourceContext.gerrit.aliasName", sourceContextGerritAliasName)
+	return c
+}
+
+// SourceContextGerritGerritProject sets the optional parameter
+// "sourceContext.gerrit.gerritProject": The full project name within
+// the host. Projects may be nested, so
+// "project/subproject" is a valid project name.
+// The "repo name" is hostURI/project.
+func (c *ProjectsReposAliasesListFilesCall) SourceContextGerritGerritProject(sourceContextGerritGerritProject string) *ProjectsReposAliasesListFilesCall {
+	c.urlParams_.Set("sourceContext.gerrit.gerritProject", sourceContextGerritGerritProject)
+	return c
+}
+
+// SourceContextGerritHostUri sets the optional parameter
+// "sourceContext.gerrit.hostUri": The URI of a running Gerrit instance.
+func (c *ProjectsReposAliasesListFilesCall) SourceContextGerritHostUri(sourceContextGerritHostUri string) *ProjectsReposAliasesListFilesCall {
+	c.urlParams_.Set("sourceContext.gerrit.hostUri", sourceContextGerritHostUri)
+	return c
+}
+
+// SourceContextGerritRevisionId sets the optional parameter
+// "sourceContext.gerrit.revisionId": A revision (commit) ID.
+func (c *ProjectsReposAliasesListFilesCall) SourceContextGerritRevisionId(sourceContextGerritRevisionId string) *ProjectsReposAliasesListFilesCall {
+	c.urlParams_.Set("sourceContext.gerrit.revisionId", sourceContextGerritRevisionId)
+	return c
+}
+
+// SourceContextGitRevisionId sets the optional parameter
+// "sourceContext.git.revisionId": Git commit hash.
+// required.
+func (c *ProjectsReposAliasesListFilesCall) SourceContextGitRevisionId(sourceContextGitRevisionId string) *ProjectsReposAliasesListFilesCall {
+	c.urlParams_.Set("sourceContext.git.revisionId", sourceContextGitRevisionId)
+	return c
+}
+
+// SourceContextGitUrl sets the optional parameter
+// "sourceContext.git.url": Git repository URL.
+func (c *ProjectsReposAliasesListFilesCall) SourceContextGitUrl(sourceContextGitUrl string) *ProjectsReposAliasesListFilesCall {
+	c.urlParams_.Set("sourceContext.git.url", sourceContextGitUrl)
 	return c
 }
 
@@ -3384,82 +3545,6 @@ func (c *ProjectsReposAliasesListFilesCall) Do(opts ...googleapi.CallOption) (*L
 	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "aliasName": {
-	//       "description": "The name of an alias (branch, tag, etc.).",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudWorkspace.snapshotId": {
-	//       "description": "The ID of the snapshot.\nAn empty snapshot_id refers to the most recent snapshot.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudWorkspace.workspaceId.name": {
-	//       "description": "The unique name of the workspace within the repo.  This is the name\nchosen by the client in the Source API's CreateWorkspace method.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudWorkspace.workspaceId.repoId.projectRepoId.projectId": {
-	//       "description": "The ID of the project.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudWorkspace.workspaceId.repoId.projectRepoId.repoName": {
-	//       "description": "The name of the repo. Leave empty for the default repo.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudWorkspace.workspaceId.repoId.uid": {
-	//       "description": "A server-assigned, globally unique identifier.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.aliasContext.kind": {
-	//       "description": "The alias kind.",
-	//       "enum": [
-	//         "ANY",
-	//         "FIXED",
-	//         "MOVABLE",
-	//         "OTHER"
-	//       ],
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.aliasContext.name": {
-	//       "description": "The alias name.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.aliasName": {
-	//       "description": "The name of an alias (branch, tag, etc.).",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.gerritProject": {
-	//       "description": "The full project name within the host. Projects may be nested, so\n\"project/subproject\" is a valid project name.\nThe \"repo name\" is hostURI/project.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.hostUri": {
-	//       "description": "The URI of a running Gerrit instance.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.revisionId": {
-	//       "description": "A revision (commit) ID.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "git.revisionId": {
-	//       "description": "Git commit hash.\nrequired.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "git.url": {
-	//       "description": "Git repository URL.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
 	//     "kind": {
 	//       "description": "The alias kind.",
 	//       "enum": [
@@ -3501,13 +3586,89 @@ func (c *ProjectsReposAliasesListFilesCall) Do(opts ...googleapi.CallOption) (*L
 	//       "required": true,
 	//       "type": "string"
 	//     },
-	//     "revisionId": {
+	//     "sourceContext.cloudRepo.aliasName": {
+	//       "description": "The name of an alias (branch, tag, etc.).",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.repoId.uid": {
+	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.revisionId": {
 	//       "description": "A revision ID.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
-	//     "uid": {
+	//     "sourceContext.cloudWorkspace.snapshotId": {
+	//       "description": "The ID of the snapshot.\nAn empty snapshot_id refers to the most recent snapshot.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudWorkspace.workspaceId.name": {
+	//       "description": "The unique name of the workspace within the repo.  This is the name\nchosen by the client in the Source API's CreateWorkspace method.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudWorkspace.workspaceId.repoId.projectRepoId.projectId": {
+	//       "description": "The ID of the project.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudWorkspace.workspaceId.repoId.projectRepoId.repoName": {
+	//       "description": "The name of the repo. Leave empty for the default repo.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudWorkspace.workspaceId.repoId.uid": {
 	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.aliasContext.kind": {
+	//       "description": "The alias kind.",
+	//       "enum": [
+	//         "ANY",
+	//         "FIXED",
+	//         "MOVABLE",
+	//         "OTHER"
+	//       ],
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.aliasContext.name": {
+	//       "description": "The alias name.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.aliasName": {
+	//       "description": "The name of an alias (branch, tag, etc.).",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.gerritProject": {
+	//       "description": "The full project name within the host. Projects may be nested, so\n\"project/subproject\" is a valid project name.\nThe \"repo name\" is hostURI/project.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.hostUri": {
+	//       "description": "The URI of a running Gerrit instance.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.revisionId": {
+	//       "description": "A revision (commit) ID.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.git.revisionId": {
+	//       "description": "Git commit hash.\nrequired.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.git.url": {
+	//       "description": "Git repository URL.",
 	//       "location": "query",
 	//       "type": "string"
 	//     }
@@ -3579,10 +3740,10 @@ func (c *ProjectsReposAliasesUpdateCall) OldRevisionId(oldRevisionId string) *Pr
 	return c
 }
 
-// Uid sets the optional parameter "uid": A server-assigned, globally
-// unique identifier.
-func (c *ProjectsReposAliasesUpdateCall) Uid(uid string) *ProjectsReposAliasesUpdateCall {
-	c.urlParams_.Set("uid", uid)
+// RepoIdUid sets the optional parameter "repoId.uid": A
+// server-assigned, globally unique identifier.
+func (c *ProjectsReposAliasesUpdateCall) RepoIdUid(repoIdUid string) *ProjectsReposAliasesUpdateCall {
+	c.urlParams_.Set("repoId.uid", repoIdUid)
 	return c
 }
 
@@ -3691,15 +3852,15 @@ func (c *ProjectsReposAliasesUpdateCall) Do(opts ...googleapi.CallOption) (*Alia
 	//       "required": true,
 	//       "type": "string"
 	//     },
+	//     "repoId.uid": {
+	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
 	//     "repoName": {
 	//       "description": "The name of the repo. Leave empty for the default repo.",
 	//       "location": "path",
 	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "uid": {
-	//       "description": "A server-assigned, globally unique identifier.",
-	//       "location": "query",
 	//       "type": "string"
 	//     }
 	//   },
@@ -3743,121 +3904,6 @@ func (r *ProjectsReposAliasesFilesService) Get(projectId string, repoName string
 	return c
 }
 
-// AliasName sets the optional parameter "aliasName": The name of an
-// alias (branch, tag, etc.).
-func (c *ProjectsReposAliasesFilesGetCall) AliasName(aliasName string) *ProjectsReposAliasesFilesGetCall {
-	c.urlParams_.Set("aliasName", aliasName)
-	return c
-}
-
-// CloudWorkspaceSnapshotId sets the optional parameter
-// "cloudWorkspace.snapshotId": The ID of the snapshot.
-// An empty snapshot_id refers to the most recent snapshot.
-func (c *ProjectsReposAliasesFilesGetCall) CloudWorkspaceSnapshotId(cloudWorkspaceSnapshotId string) *ProjectsReposAliasesFilesGetCall {
-	c.urlParams_.Set("cloudWorkspace.snapshotId", cloudWorkspaceSnapshotId)
-	return c
-}
-
-// CloudWorkspaceWorkspaceIdName sets the optional parameter
-// "cloudWorkspace.workspaceId.name": The unique name of the workspace
-// within the repo.  This is the name
-// chosen by the client in the Source API's CreateWorkspace method.
-func (c *ProjectsReposAliasesFilesGetCall) CloudWorkspaceWorkspaceIdName(cloudWorkspaceWorkspaceIdName string) *ProjectsReposAliasesFilesGetCall {
-	c.urlParams_.Set("cloudWorkspace.workspaceId.name", cloudWorkspaceWorkspaceIdName)
-	return c
-}
-
-// CloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId sets the
-// optional parameter
-// "cloudWorkspace.workspaceId.repoId.projectRepoId.projectId": The ID
-// of the project.
-func (c *ProjectsReposAliasesFilesGetCall) CloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId(cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId string) *ProjectsReposAliasesFilesGetCall {
-	c.urlParams_.Set("cloudWorkspace.workspaceId.repoId.projectRepoId.projectId", cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId)
-	return c
-}
-
-// CloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName sets the
-// optional parameter
-// "cloudWorkspace.workspaceId.repoId.projectRepoId.repoName": The name
-// of the repo. Leave empty for the default repo.
-func (c *ProjectsReposAliasesFilesGetCall) CloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName(cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName string) *ProjectsReposAliasesFilesGetCall {
-	c.urlParams_.Set("cloudWorkspace.workspaceId.repoId.projectRepoId.repoName", cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName)
-	return c
-}
-
-// CloudWorkspaceWorkspaceIdRepoIdUid sets the optional parameter
-// "cloudWorkspace.workspaceId.repoId.uid": A server-assigned, globally
-// unique identifier.
-func (c *ProjectsReposAliasesFilesGetCall) CloudWorkspaceWorkspaceIdRepoIdUid(cloudWorkspaceWorkspaceIdRepoIdUid string) *ProjectsReposAliasesFilesGetCall {
-	c.urlParams_.Set("cloudWorkspace.workspaceId.repoId.uid", cloudWorkspaceWorkspaceIdRepoIdUid)
-	return c
-}
-
-// GerritAliasContextKind sets the optional parameter
-// "gerrit.aliasContext.kind": The alias kind.
-//
-// Possible values:
-//   "ANY"
-//   "FIXED"
-//   "MOVABLE"
-//   "OTHER"
-func (c *ProjectsReposAliasesFilesGetCall) GerritAliasContextKind(gerritAliasContextKind string) *ProjectsReposAliasesFilesGetCall {
-	c.urlParams_.Set("gerrit.aliasContext.kind", gerritAliasContextKind)
-	return c
-}
-
-// GerritAliasContextName sets the optional parameter
-// "gerrit.aliasContext.name": The alias name.
-func (c *ProjectsReposAliasesFilesGetCall) GerritAliasContextName(gerritAliasContextName string) *ProjectsReposAliasesFilesGetCall {
-	c.urlParams_.Set("gerrit.aliasContext.name", gerritAliasContextName)
-	return c
-}
-
-// GerritAliasName sets the optional parameter "gerrit.aliasName": The
-// name of an alias (branch, tag, etc.).
-func (c *ProjectsReposAliasesFilesGetCall) GerritAliasName(gerritAliasName string) *ProjectsReposAliasesFilesGetCall {
-	c.urlParams_.Set("gerrit.aliasName", gerritAliasName)
-	return c
-}
-
-// GerritGerritProject sets the optional parameter
-// "gerrit.gerritProject": The full project name within the host.
-// Projects may be nested, so
-// "project/subproject" is a valid project name.
-// The "repo name" is hostURI/project.
-func (c *ProjectsReposAliasesFilesGetCall) GerritGerritProject(gerritGerritProject string) *ProjectsReposAliasesFilesGetCall {
-	c.urlParams_.Set("gerrit.gerritProject", gerritGerritProject)
-	return c
-}
-
-// GerritHostUri sets the optional parameter "gerrit.hostUri": The URI
-// of a running Gerrit instance.
-func (c *ProjectsReposAliasesFilesGetCall) GerritHostUri(gerritHostUri string) *ProjectsReposAliasesFilesGetCall {
-	c.urlParams_.Set("gerrit.hostUri", gerritHostUri)
-	return c
-}
-
-// GerritRevisionId sets the optional parameter "gerrit.revisionId": A
-// revision (commit) ID.
-func (c *ProjectsReposAliasesFilesGetCall) GerritRevisionId(gerritRevisionId string) *ProjectsReposAliasesFilesGetCall {
-	c.urlParams_.Set("gerrit.revisionId", gerritRevisionId)
-	return c
-}
-
-// GitRevisionId sets the optional parameter "git.revisionId": Git
-// commit hash.
-// required.
-func (c *ProjectsReposAliasesFilesGetCall) GitRevisionId(gitRevisionId string) *ProjectsReposAliasesFilesGetCall {
-	c.urlParams_.Set("git.revisionId", gitRevisionId)
-	return c
-}
-
-// GitUrl sets the optional parameter "git.url": Git repository URL.
-func (c *ProjectsReposAliasesFilesGetCall) GitUrl(gitUrl string) *ProjectsReposAliasesFilesGetCall {
-	c.urlParams_.Set("git.url", gitUrl)
-	return c
-}
-
 // PageSize sets the optional parameter "pageSize": The maximum number
 // of values to return.
 func (c *ProjectsReposAliasesFilesGetCall) PageSize(pageSize int64) *ProjectsReposAliasesFilesGetCall {
@@ -3873,9 +3919,136 @@ func (c *ProjectsReposAliasesFilesGetCall) PageToken(pageToken string) *Projects
 	return c
 }
 
-// RevisionId sets the optional parameter "revisionId": A revision ID.
-func (c *ProjectsReposAliasesFilesGetCall) RevisionId(revisionId string) *ProjectsReposAliasesFilesGetCall {
-	c.urlParams_.Set("revisionId", revisionId)
+// SourceContextCloudRepoAliasName sets the optional parameter
+// "sourceContext.cloudRepo.aliasName": The name of an alias (branch,
+// tag, etc.).
+func (c *ProjectsReposAliasesFilesGetCall) SourceContextCloudRepoAliasName(sourceContextCloudRepoAliasName string) *ProjectsReposAliasesFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.aliasName", sourceContextCloudRepoAliasName)
+	return c
+}
+
+// SourceContextCloudRepoRepoIdUid sets the optional parameter
+// "sourceContext.cloudRepo.repoId.uid": A server-assigned, globally
+// unique identifier.
+func (c *ProjectsReposAliasesFilesGetCall) SourceContextCloudRepoRepoIdUid(sourceContextCloudRepoRepoIdUid string) *ProjectsReposAliasesFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.repoId.uid", sourceContextCloudRepoRepoIdUid)
+	return c
+}
+
+// SourceContextCloudRepoRevisionId sets the optional parameter
+// "sourceContext.cloudRepo.revisionId": A revision ID.
+func (c *ProjectsReposAliasesFilesGetCall) SourceContextCloudRepoRevisionId(sourceContextCloudRepoRevisionId string) *ProjectsReposAliasesFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.revisionId", sourceContextCloudRepoRevisionId)
+	return c
+}
+
+// SourceContextCloudWorkspaceSnapshotId sets the optional parameter
+// "sourceContext.cloudWorkspace.snapshotId": The ID of the snapshot.
+// An empty snapshot_id refers to the most recent snapshot.
+func (c *ProjectsReposAliasesFilesGetCall) SourceContextCloudWorkspaceSnapshotId(sourceContextCloudWorkspaceSnapshotId string) *ProjectsReposAliasesFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudWorkspace.snapshotId", sourceContextCloudWorkspaceSnapshotId)
+	return c
+}
+
+// SourceContextCloudWorkspaceWorkspaceIdName sets the optional
+// parameter "sourceContext.cloudWorkspace.workspaceId.name": The unique
+// name of the workspace within the repo.  This is the name
+// chosen by the client in the Source API's CreateWorkspace method.
+func (c *ProjectsReposAliasesFilesGetCall) SourceContextCloudWorkspaceWorkspaceIdName(sourceContextCloudWorkspaceWorkspaceIdName string) *ProjectsReposAliasesFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudWorkspace.workspaceId.name", sourceContextCloudWorkspaceWorkspaceIdName)
+	return c
+}
+
+// SourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId
+// sets the optional parameter
+// "sourceContext.cloudWorkspace.workspaceId.repoId.projectRepoId.project
+// Id": The ID of the project.
+func (c *ProjectsReposAliasesFilesGetCall) SourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId(sourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId string) *ProjectsReposAliasesFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudWorkspace.workspaceId.repoId.projectRepoId.projectId", sourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId)
+	return c
+}
+
+// SourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName
+// sets the optional parameter
+// "sourceContext.cloudWorkspace.workspaceId.repoId.projectRepoId.repoNam
+// e": The name of the repo. Leave empty for the default repo.
+func (c *ProjectsReposAliasesFilesGetCall) SourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName(sourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName string) *ProjectsReposAliasesFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudWorkspace.workspaceId.repoId.projectRepoId.repoName", sourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName)
+	return c
+}
+
+// SourceContextCloudWorkspaceWorkspaceIdRepoIdUid sets the optional
+// parameter "sourceContext.cloudWorkspace.workspaceId.repoId.uid": A
+// server-assigned, globally unique identifier.
+func (c *ProjectsReposAliasesFilesGetCall) SourceContextCloudWorkspaceWorkspaceIdRepoIdUid(sourceContextCloudWorkspaceWorkspaceIdRepoIdUid string) *ProjectsReposAliasesFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudWorkspace.workspaceId.repoId.uid", sourceContextCloudWorkspaceWorkspaceIdRepoIdUid)
+	return c
+}
+
+// SourceContextGerritAliasContextKind sets the optional parameter
+// "sourceContext.gerrit.aliasContext.kind": The alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
+func (c *ProjectsReposAliasesFilesGetCall) SourceContextGerritAliasContextKind(sourceContextGerritAliasContextKind string) *ProjectsReposAliasesFilesGetCall {
+	c.urlParams_.Set("sourceContext.gerrit.aliasContext.kind", sourceContextGerritAliasContextKind)
+	return c
+}
+
+// SourceContextGerritAliasContextName sets the optional parameter
+// "sourceContext.gerrit.aliasContext.name": The alias name.
+func (c *ProjectsReposAliasesFilesGetCall) SourceContextGerritAliasContextName(sourceContextGerritAliasContextName string) *ProjectsReposAliasesFilesGetCall {
+	c.urlParams_.Set("sourceContext.gerrit.aliasContext.name", sourceContextGerritAliasContextName)
+	return c
+}
+
+// SourceContextGerritAliasName sets the optional parameter
+// "sourceContext.gerrit.aliasName": The name of an alias (branch, tag,
+// etc.).
+func (c *ProjectsReposAliasesFilesGetCall) SourceContextGerritAliasName(sourceContextGerritAliasName string) *ProjectsReposAliasesFilesGetCall {
+	c.urlParams_.Set("sourceContext.gerrit.aliasName", sourceContextGerritAliasName)
+	return c
+}
+
+// SourceContextGerritGerritProject sets the optional parameter
+// "sourceContext.gerrit.gerritProject": The full project name within
+// the host. Projects may be nested, so
+// "project/subproject" is a valid project name.
+// The "repo name" is hostURI/project.
+func (c *ProjectsReposAliasesFilesGetCall) SourceContextGerritGerritProject(sourceContextGerritGerritProject string) *ProjectsReposAliasesFilesGetCall {
+	c.urlParams_.Set("sourceContext.gerrit.gerritProject", sourceContextGerritGerritProject)
+	return c
+}
+
+// SourceContextGerritHostUri sets the optional parameter
+// "sourceContext.gerrit.hostUri": The URI of a running Gerrit instance.
+func (c *ProjectsReposAliasesFilesGetCall) SourceContextGerritHostUri(sourceContextGerritHostUri string) *ProjectsReposAliasesFilesGetCall {
+	c.urlParams_.Set("sourceContext.gerrit.hostUri", sourceContextGerritHostUri)
+	return c
+}
+
+// SourceContextGerritRevisionId sets the optional parameter
+// "sourceContext.gerrit.revisionId": A revision (commit) ID.
+func (c *ProjectsReposAliasesFilesGetCall) SourceContextGerritRevisionId(sourceContextGerritRevisionId string) *ProjectsReposAliasesFilesGetCall {
+	c.urlParams_.Set("sourceContext.gerrit.revisionId", sourceContextGerritRevisionId)
+	return c
+}
+
+// SourceContextGitRevisionId sets the optional parameter
+// "sourceContext.git.revisionId": Git commit hash.
+// required.
+func (c *ProjectsReposAliasesFilesGetCall) SourceContextGitRevisionId(sourceContextGitRevisionId string) *ProjectsReposAliasesFilesGetCall {
+	c.urlParams_.Set("sourceContext.git.revisionId", sourceContextGitRevisionId)
+	return c
+}
+
+// SourceContextGitUrl sets the optional parameter
+// "sourceContext.git.url": Git repository URL.
+func (c *ProjectsReposAliasesFilesGetCall) SourceContextGitUrl(sourceContextGitUrl string) *ProjectsReposAliasesFilesGetCall {
+	c.urlParams_.Set("sourceContext.git.url", sourceContextGitUrl)
 	return c
 }
 
@@ -3886,13 +4059,6 @@ func (c *ProjectsReposAliasesFilesGetCall) RevisionId(revisionId string) *Projec
 // in the listing. If page_token is specified, this field is ignored.
 func (c *ProjectsReposAliasesFilesGetCall) StartPosition(startPosition int64) *ProjectsReposAliasesFilesGetCall {
 	c.urlParams_.Set("startPosition", fmt.Sprint(startPosition))
-	return c
-}
-
-// Uid sets the optional parameter "uid": A server-assigned, globally
-// unique identifier.
-func (c *ProjectsReposAliasesFilesGetCall) Uid(uid string) *ProjectsReposAliasesFilesGetCall {
-	c.urlParams_.Set("uid", uid)
 	return c
 }
 
@@ -3997,82 +4163,6 @@ func (c *ProjectsReposAliasesFilesGetCall) Do(opts ...googleapi.CallOption) (*Re
 	//     "path"
 	//   ],
 	//   "parameters": {
-	//     "aliasName": {
-	//       "description": "The name of an alias (branch, tag, etc.).",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudWorkspace.snapshotId": {
-	//       "description": "The ID of the snapshot.\nAn empty snapshot_id refers to the most recent snapshot.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudWorkspace.workspaceId.name": {
-	//       "description": "The unique name of the workspace within the repo.  This is the name\nchosen by the client in the Source API's CreateWorkspace method.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudWorkspace.workspaceId.repoId.projectRepoId.projectId": {
-	//       "description": "The ID of the project.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudWorkspace.workspaceId.repoId.projectRepoId.repoName": {
-	//       "description": "The name of the repo. Leave empty for the default repo.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudWorkspace.workspaceId.repoId.uid": {
-	//       "description": "A server-assigned, globally unique identifier.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.aliasContext.kind": {
-	//       "description": "The alias kind.",
-	//       "enum": [
-	//         "ANY",
-	//         "FIXED",
-	//         "MOVABLE",
-	//         "OTHER"
-	//       ],
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.aliasContext.name": {
-	//       "description": "The alias name.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.aliasName": {
-	//       "description": "The name of an alias (branch, tag, etc.).",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.gerritProject": {
-	//       "description": "The full project name within the host. Projects may be nested, so\n\"project/subproject\" is a valid project name.\nThe \"repo name\" is hostURI/project.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.hostUri": {
-	//       "description": "The URI of a running Gerrit instance.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.revisionId": {
-	//       "description": "A revision (commit) ID.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "git.revisionId": {
-	//       "description": "Git commit hash.\nrequired.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "git.url": {
-	//       "description": "Git repository URL.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
 	//     "kind": {
 	//       "description": "The alias kind.",
 	//       "enum": [
@@ -4121,19 +4211,95 @@ func (c *ProjectsReposAliasesFilesGetCall) Do(opts ...googleapi.CallOption) (*Re
 	//       "required": true,
 	//       "type": "string"
 	//     },
-	//     "revisionId": {
+	//     "sourceContext.cloudRepo.aliasName": {
+	//       "description": "The name of an alias (branch, tag, etc.).",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.repoId.uid": {
+	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.revisionId": {
 	//       "description": "A revision ID.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudWorkspace.snapshotId": {
+	//       "description": "The ID of the snapshot.\nAn empty snapshot_id refers to the most recent snapshot.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudWorkspace.workspaceId.name": {
+	//       "description": "The unique name of the workspace within the repo.  This is the name\nchosen by the client in the Source API's CreateWorkspace method.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudWorkspace.workspaceId.repoId.projectRepoId.projectId": {
+	//       "description": "The ID of the project.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudWorkspace.workspaceId.repoId.projectRepoId.repoName": {
+	//       "description": "The name of the repo. Leave empty for the default repo.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudWorkspace.workspaceId.repoId.uid": {
+	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.aliasContext.kind": {
+	//       "description": "The alias kind.",
+	//       "enum": [
+	//         "ANY",
+	//         "FIXED",
+	//         "MOVABLE",
+	//         "OTHER"
+	//       ],
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.aliasContext.name": {
+	//       "description": "The alias name.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.aliasName": {
+	//       "description": "The name of an alias (branch, tag, etc.).",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.gerritProject": {
+	//       "description": "The full project name within the host. Projects may be nested, so\n\"project/subproject\" is a valid project name.\nThe \"repo name\" is hostURI/project.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.hostUri": {
+	//       "description": "The URI of a running Gerrit instance.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.revisionId": {
+	//       "description": "A revision (commit) ID.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.git.revisionId": {
+	//       "description": "Git commit hash.\nrequired.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.git.url": {
+	//       "description": "Git repository URL.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "startPosition": {
 	//       "description": "If path refers to a file, the position of the first byte of its contents\nto return. If path refers to a directory, the position of the first entry\nin the listing. If page_token is specified, this field is ignored.",
 	//       "format": "int64",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "uid": {
-	//       "description": "A server-assigned, globally unique identifier.",
 	//       "location": "query",
 	//       "type": "string"
 	//     }
@@ -4218,6 +4384,13 @@ func (c *ProjectsReposFilesReadFromWorkspaceOrAliasCall) PageToken(pageToken str
 	return c
 }
 
+// RepoIdUid sets the optional parameter "repoId.uid": A
+// server-assigned, globally unique identifier.
+func (c *ProjectsReposFilesReadFromWorkspaceOrAliasCall) RepoIdUid(repoIdUid string) *ProjectsReposFilesReadFromWorkspaceOrAliasCall {
+	c.urlParams_.Set("repoId.uid", repoIdUid)
+	return c
+}
+
 // StartPosition sets the optional parameter "startPosition": If path
 // refers to a file, the position of the first byte of its contents
 // to return. If path refers to a directory, the position of the first
@@ -4225,13 +4398,6 @@ func (c *ProjectsReposFilesReadFromWorkspaceOrAliasCall) PageToken(pageToken str
 // in the listing. If page_token is specified, this field is ignored.
 func (c *ProjectsReposFilesReadFromWorkspaceOrAliasCall) StartPosition(startPosition int64) *ProjectsReposFilesReadFromWorkspaceOrAliasCall {
 	c.urlParams_.Set("startPosition", fmt.Sprint(startPosition))
-	return c
-}
-
-// Uid sets the optional parameter "uid": A server-assigned, globally
-// unique identifier.
-func (c *ProjectsReposFilesReadFromWorkspaceOrAliasCall) Uid(uid string) *ProjectsReposFilesReadFromWorkspaceOrAliasCall {
-	c.urlParams_.Set("uid", uid)
 	return c
 }
 
@@ -4368,6 +4534,11 @@ func (c *ProjectsReposFilesReadFromWorkspaceOrAliasCall) Do(opts ...googleapi.Ca
 	//       "required": true,
 	//       "type": "string"
 	//     },
+	//     "repoId.uid": {
+	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
 	//     "repoName": {
 	//       "description": "The name of the repo. Leave empty for the default repo.",
 	//       "location": "path",
@@ -4377,11 +4548,6 @@ func (c *ProjectsReposFilesReadFromWorkspaceOrAliasCall) Do(opts ...googleapi.Ca
 	//     "startPosition": {
 	//       "description": "If path refers to a file, the position of the first byte of its contents\nto return. If path refers to a directory, the position of the first entry\nin the listing. If page_token is specified, this field is ignored.",
 	//       "format": "int64",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "uid": {
-	//       "description": "A server-assigned, globally unique identifier.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
@@ -4444,10 +4610,10 @@ func (r *ProjectsReposRevisionsService) Get(projectId string, repoName string, r
 	return c
 }
 
-// Uid sets the optional parameter "uid": A server-assigned, globally
-// unique identifier.
-func (c *ProjectsReposRevisionsGetCall) Uid(uid string) *ProjectsReposRevisionsGetCall {
-	c.urlParams_.Set("uid", uid)
+// RepoIdUid sets the optional parameter "repoId.uid": A
+// server-assigned, globally unique identifier.
+func (c *ProjectsReposRevisionsGetCall) RepoIdUid(repoIdUid string) *ProjectsReposRevisionsGetCall {
+	c.urlParams_.Set("repoId.uid", repoIdUid)
 	return c
 }
 
@@ -4554,6 +4720,11 @@ func (c *ProjectsReposRevisionsGetCall) Do(opts ...googleapi.CallOption) (*Revis
 	//       "required": true,
 	//       "type": "string"
 	//     },
+	//     "repoId.uid": {
+	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
 	//     "repoName": {
 	//       "description": "The name of the repo. Leave empty for the default repo.",
 	//       "location": "path",
@@ -4564,11 +4735,6 @@ func (c *ProjectsReposRevisionsGetCall) Do(opts ...googleapi.CallOption) (*Revis
 	//       "description": "The ID of the revision.",
 	//       "location": "path",
 	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "uid": {
-	//       "description": "A server-assigned, globally unique identifier.",
-	//       "location": "query",
 	//       "type": "string"
 	//     }
 	//   },
@@ -4604,17 +4770,17 @@ func (r *ProjectsReposRevisionsService) GetBatchGet(projectId string, repoName s
 	return c
 }
 
+// RepoIdUid sets the optional parameter "repoId.uid": A
+// server-assigned, globally unique identifier.
+func (c *ProjectsReposRevisionsGetBatchGetCall) RepoIdUid(repoIdUid string) *ProjectsReposRevisionsGetBatchGetCall {
+	c.urlParams_.Set("repoId.uid", repoIdUid)
+	return c
+}
+
 // RevisionIds sets the optional parameter "revisionIds": The revision
 // IDs to retrieve.
 func (c *ProjectsReposRevisionsGetBatchGetCall) RevisionIds(revisionIds ...string) *ProjectsReposRevisionsGetBatchGetCall {
 	c.urlParams_.SetMulti("revisionIds", append([]string{}, revisionIds...))
-	return c
-}
-
-// Uid sets the optional parameter "uid": A server-assigned, globally
-// unique identifier.
-func (c *ProjectsReposRevisionsGetBatchGetCall) Uid(uid string) *ProjectsReposRevisionsGetBatchGetCall {
-	c.urlParams_.Set("uid", uid)
 	return c
 }
 
@@ -4719,6 +4885,11 @@ func (c *ProjectsReposRevisionsGetBatchGetCall) Do(opts ...googleapi.CallOption)
 	//       "required": true,
 	//       "type": "string"
 	//     },
+	//     "repoId.uid": {
+	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
 	//     "repoName": {
 	//       "description": "The name of the repo. Leave empty for the default repo.",
 	//       "location": "path",
@@ -4729,11 +4900,6 @@ func (c *ProjectsReposRevisionsGetBatchGetCall) Do(opts ...googleapi.CallOption)
 	//       "description": "The revision IDs to retrieve.",
 	//       "location": "query",
 	//       "repeated": true,
-	//       "type": "string"
-	//     },
-	//     "uid": {
-	//       "description": "A server-assigned, globally unique identifier.",
-	//       "location": "query",
 	//       "type": "string"
 	//     }
 	//   },
@@ -4803,19 +4969,19 @@ func (c *ProjectsReposRevisionsListCall) Path(path string) *ProjectsReposRevisio
 	return c
 }
 
+// RepoIdUid sets the optional parameter "repoId.uid": A
+// server-assigned, globally unique identifier.
+func (c *ProjectsReposRevisionsListCall) RepoIdUid(repoIdUid string) *ProjectsReposRevisionsListCall {
+	c.urlParams_.Set("repoId.uid", repoIdUid)
+	return c
+}
+
 // Starts sets the optional parameter "starts": Revision IDs
 // (hexadecimal strings) that specify where the listing
 // begins. If empty, the repo heads (revisions with no children) are
 // used.
 func (c *ProjectsReposRevisionsListCall) Starts(starts ...string) *ProjectsReposRevisionsListCall {
 	c.urlParams_.SetMulti("starts", append([]string{}, starts...))
-	return c
-}
-
-// Uid sets the optional parameter "uid": A server-assigned, globally
-// unique identifier.
-func (c *ProjectsReposRevisionsListCall) Uid(uid string) *ProjectsReposRevisionsListCall {
-	c.urlParams_.Set("uid", uid)
 	return c
 }
 
@@ -4953,6 +5119,11 @@ func (c *ProjectsReposRevisionsListCall) Do(opts ...googleapi.CallOption) (*List
 	//       "required": true,
 	//       "type": "string"
 	//     },
+	//     "repoId.uid": {
+	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
 	//     "repoName": {
 	//       "description": "The name of the repo. Leave empty for the default repo.",
 	//       "location": "path",
@@ -4963,11 +5134,6 @@ func (c *ProjectsReposRevisionsListCall) Do(opts ...googleapi.CallOption) (*List
 	//       "description": "Revision IDs (hexadecimal strings) that specify where the listing\nbegins. If empty, the repo heads (revisions with no children) are used.",
 	//       "location": "query",
 	//       "repeated": true,
-	//       "type": "string"
-	//     },
-	//     "uid": {
-	//       "description": "A server-assigned, globally unique identifier.",
-	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "walkDirection": {
@@ -5036,141 +5202,6 @@ func (r *ProjectsReposRevisionsService) ListFiles(projectId string, repoName str
 	return c
 }
 
-// AliasContextKind sets the optional parameter "aliasContext.kind": The
-// alias kind.
-//
-// Possible values:
-//   "ANY"
-//   "FIXED"
-//   "MOVABLE"
-//   "OTHER"
-func (c *ProjectsReposRevisionsListFilesCall) AliasContextKind(aliasContextKind string) *ProjectsReposRevisionsListFilesCall {
-	c.urlParams_.Set("aliasContext.kind", aliasContextKind)
-	return c
-}
-
-// AliasContextName sets the optional parameter "aliasContext.name": The
-// alias name.
-func (c *ProjectsReposRevisionsListFilesCall) AliasContextName(aliasContextName string) *ProjectsReposRevisionsListFilesCall {
-	c.urlParams_.Set("aliasContext.name", aliasContextName)
-	return c
-}
-
-// AliasName sets the optional parameter "aliasName": The name of an
-// alias (branch, tag, etc.).
-func (c *ProjectsReposRevisionsListFilesCall) AliasName(aliasName string) *ProjectsReposRevisionsListFilesCall {
-	c.urlParams_.Set("aliasName", aliasName)
-	return c
-}
-
-// CloudWorkspaceSnapshotId sets the optional parameter
-// "cloudWorkspace.snapshotId": The ID of the snapshot.
-// An empty snapshot_id refers to the most recent snapshot.
-func (c *ProjectsReposRevisionsListFilesCall) CloudWorkspaceSnapshotId(cloudWorkspaceSnapshotId string) *ProjectsReposRevisionsListFilesCall {
-	c.urlParams_.Set("cloudWorkspace.snapshotId", cloudWorkspaceSnapshotId)
-	return c
-}
-
-// CloudWorkspaceWorkspaceIdName sets the optional parameter
-// "cloudWorkspace.workspaceId.name": The unique name of the workspace
-// within the repo.  This is the name
-// chosen by the client in the Source API's CreateWorkspace method.
-func (c *ProjectsReposRevisionsListFilesCall) CloudWorkspaceWorkspaceIdName(cloudWorkspaceWorkspaceIdName string) *ProjectsReposRevisionsListFilesCall {
-	c.urlParams_.Set("cloudWorkspace.workspaceId.name", cloudWorkspaceWorkspaceIdName)
-	return c
-}
-
-// CloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId sets the
-// optional parameter
-// "cloudWorkspace.workspaceId.repoId.projectRepoId.projectId": The ID
-// of the project.
-func (c *ProjectsReposRevisionsListFilesCall) CloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId(cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId string) *ProjectsReposRevisionsListFilesCall {
-	c.urlParams_.Set("cloudWorkspace.workspaceId.repoId.projectRepoId.projectId", cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId)
-	return c
-}
-
-// CloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName sets the
-// optional parameter
-// "cloudWorkspace.workspaceId.repoId.projectRepoId.repoName": The name
-// of the repo. Leave empty for the default repo.
-func (c *ProjectsReposRevisionsListFilesCall) CloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName(cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName string) *ProjectsReposRevisionsListFilesCall {
-	c.urlParams_.Set("cloudWorkspace.workspaceId.repoId.projectRepoId.repoName", cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName)
-	return c
-}
-
-// CloudWorkspaceWorkspaceIdRepoIdUid sets the optional parameter
-// "cloudWorkspace.workspaceId.repoId.uid": A server-assigned, globally
-// unique identifier.
-func (c *ProjectsReposRevisionsListFilesCall) CloudWorkspaceWorkspaceIdRepoIdUid(cloudWorkspaceWorkspaceIdRepoIdUid string) *ProjectsReposRevisionsListFilesCall {
-	c.urlParams_.Set("cloudWorkspace.workspaceId.repoId.uid", cloudWorkspaceWorkspaceIdRepoIdUid)
-	return c
-}
-
-// GerritAliasContextKind sets the optional parameter
-// "gerrit.aliasContext.kind": The alias kind.
-//
-// Possible values:
-//   "ANY"
-//   "FIXED"
-//   "MOVABLE"
-//   "OTHER"
-func (c *ProjectsReposRevisionsListFilesCall) GerritAliasContextKind(gerritAliasContextKind string) *ProjectsReposRevisionsListFilesCall {
-	c.urlParams_.Set("gerrit.aliasContext.kind", gerritAliasContextKind)
-	return c
-}
-
-// GerritAliasContextName sets the optional parameter
-// "gerrit.aliasContext.name": The alias name.
-func (c *ProjectsReposRevisionsListFilesCall) GerritAliasContextName(gerritAliasContextName string) *ProjectsReposRevisionsListFilesCall {
-	c.urlParams_.Set("gerrit.aliasContext.name", gerritAliasContextName)
-	return c
-}
-
-// GerritAliasName sets the optional parameter "gerrit.aliasName": The
-// name of an alias (branch, tag, etc.).
-func (c *ProjectsReposRevisionsListFilesCall) GerritAliasName(gerritAliasName string) *ProjectsReposRevisionsListFilesCall {
-	c.urlParams_.Set("gerrit.aliasName", gerritAliasName)
-	return c
-}
-
-// GerritGerritProject sets the optional parameter
-// "gerrit.gerritProject": The full project name within the host.
-// Projects may be nested, so
-// "project/subproject" is a valid project name.
-// The "repo name" is hostURI/project.
-func (c *ProjectsReposRevisionsListFilesCall) GerritGerritProject(gerritGerritProject string) *ProjectsReposRevisionsListFilesCall {
-	c.urlParams_.Set("gerrit.gerritProject", gerritGerritProject)
-	return c
-}
-
-// GerritHostUri sets the optional parameter "gerrit.hostUri": The URI
-// of a running Gerrit instance.
-func (c *ProjectsReposRevisionsListFilesCall) GerritHostUri(gerritHostUri string) *ProjectsReposRevisionsListFilesCall {
-	c.urlParams_.Set("gerrit.hostUri", gerritHostUri)
-	return c
-}
-
-// GerritRevisionId sets the optional parameter "gerrit.revisionId": A
-// revision (commit) ID.
-func (c *ProjectsReposRevisionsListFilesCall) GerritRevisionId(gerritRevisionId string) *ProjectsReposRevisionsListFilesCall {
-	c.urlParams_.Set("gerrit.revisionId", gerritRevisionId)
-	return c
-}
-
-// GitRevisionId sets the optional parameter "git.revisionId": Git
-// commit hash.
-// required.
-func (c *ProjectsReposRevisionsListFilesCall) GitRevisionId(gitRevisionId string) *ProjectsReposRevisionsListFilesCall {
-	c.urlParams_.Set("git.revisionId", gitRevisionId)
-	return c
-}
-
-// GitUrl sets the optional parameter "git.url": Git repository URL.
-func (c *ProjectsReposRevisionsListFilesCall) GitUrl(gitUrl string) *ProjectsReposRevisionsListFilesCall {
-	c.urlParams_.Set("git.url", gitUrl)
-	return c
-}
-
 // PageSize sets the optional parameter "pageSize": The maximum number
 // of values to return.
 func (c *ProjectsReposRevisionsListFilesCall) PageSize(pageSize int64) *ProjectsReposRevisionsListFilesCall {
@@ -5186,10 +5217,149 @@ func (c *ProjectsReposRevisionsListFilesCall) PageToken(pageToken string) *Proje
 	return c
 }
 
-// Uid sets the optional parameter "uid": A server-assigned, globally
+// SourceContextCloudRepoAliasContextKind sets the optional parameter
+// "sourceContext.cloudRepo.aliasContext.kind": The alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
+func (c *ProjectsReposRevisionsListFilesCall) SourceContextCloudRepoAliasContextKind(sourceContextCloudRepoAliasContextKind string) *ProjectsReposRevisionsListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.aliasContext.kind", sourceContextCloudRepoAliasContextKind)
+	return c
+}
+
+// SourceContextCloudRepoAliasContextName sets the optional parameter
+// "sourceContext.cloudRepo.aliasContext.name": The alias name.
+func (c *ProjectsReposRevisionsListFilesCall) SourceContextCloudRepoAliasContextName(sourceContextCloudRepoAliasContextName string) *ProjectsReposRevisionsListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.aliasContext.name", sourceContextCloudRepoAliasContextName)
+	return c
+}
+
+// SourceContextCloudRepoAliasName sets the optional parameter
+// "sourceContext.cloudRepo.aliasName": The name of an alias (branch,
+// tag, etc.).
+func (c *ProjectsReposRevisionsListFilesCall) SourceContextCloudRepoAliasName(sourceContextCloudRepoAliasName string) *ProjectsReposRevisionsListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.aliasName", sourceContextCloudRepoAliasName)
+	return c
+}
+
+// SourceContextCloudRepoRepoIdUid sets the optional parameter
+// "sourceContext.cloudRepo.repoId.uid": A server-assigned, globally
 // unique identifier.
-func (c *ProjectsReposRevisionsListFilesCall) Uid(uid string) *ProjectsReposRevisionsListFilesCall {
-	c.urlParams_.Set("uid", uid)
+func (c *ProjectsReposRevisionsListFilesCall) SourceContextCloudRepoRepoIdUid(sourceContextCloudRepoRepoIdUid string) *ProjectsReposRevisionsListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.repoId.uid", sourceContextCloudRepoRepoIdUid)
+	return c
+}
+
+// SourceContextCloudWorkspaceSnapshotId sets the optional parameter
+// "sourceContext.cloudWorkspace.snapshotId": The ID of the snapshot.
+// An empty snapshot_id refers to the most recent snapshot.
+func (c *ProjectsReposRevisionsListFilesCall) SourceContextCloudWorkspaceSnapshotId(sourceContextCloudWorkspaceSnapshotId string) *ProjectsReposRevisionsListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudWorkspace.snapshotId", sourceContextCloudWorkspaceSnapshotId)
+	return c
+}
+
+// SourceContextCloudWorkspaceWorkspaceIdName sets the optional
+// parameter "sourceContext.cloudWorkspace.workspaceId.name": The unique
+// name of the workspace within the repo.  This is the name
+// chosen by the client in the Source API's CreateWorkspace method.
+func (c *ProjectsReposRevisionsListFilesCall) SourceContextCloudWorkspaceWorkspaceIdName(sourceContextCloudWorkspaceWorkspaceIdName string) *ProjectsReposRevisionsListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudWorkspace.workspaceId.name", sourceContextCloudWorkspaceWorkspaceIdName)
+	return c
+}
+
+// SourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId
+// sets the optional parameter
+// "sourceContext.cloudWorkspace.workspaceId.repoId.projectRepoId.project
+// Id": The ID of the project.
+func (c *ProjectsReposRevisionsListFilesCall) SourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId(sourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId string) *ProjectsReposRevisionsListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudWorkspace.workspaceId.repoId.projectRepoId.projectId", sourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId)
+	return c
+}
+
+// SourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName
+// sets the optional parameter
+// "sourceContext.cloudWorkspace.workspaceId.repoId.projectRepoId.repoNam
+// e": The name of the repo. Leave empty for the default repo.
+func (c *ProjectsReposRevisionsListFilesCall) SourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName(sourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName string) *ProjectsReposRevisionsListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudWorkspace.workspaceId.repoId.projectRepoId.repoName", sourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName)
+	return c
+}
+
+// SourceContextCloudWorkspaceWorkspaceIdRepoIdUid sets the optional
+// parameter "sourceContext.cloudWorkspace.workspaceId.repoId.uid": A
+// server-assigned, globally unique identifier.
+func (c *ProjectsReposRevisionsListFilesCall) SourceContextCloudWorkspaceWorkspaceIdRepoIdUid(sourceContextCloudWorkspaceWorkspaceIdRepoIdUid string) *ProjectsReposRevisionsListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudWorkspace.workspaceId.repoId.uid", sourceContextCloudWorkspaceWorkspaceIdRepoIdUid)
+	return c
+}
+
+// SourceContextGerritAliasContextKind sets the optional parameter
+// "sourceContext.gerrit.aliasContext.kind": The alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
+func (c *ProjectsReposRevisionsListFilesCall) SourceContextGerritAliasContextKind(sourceContextGerritAliasContextKind string) *ProjectsReposRevisionsListFilesCall {
+	c.urlParams_.Set("sourceContext.gerrit.aliasContext.kind", sourceContextGerritAliasContextKind)
+	return c
+}
+
+// SourceContextGerritAliasContextName sets the optional parameter
+// "sourceContext.gerrit.aliasContext.name": The alias name.
+func (c *ProjectsReposRevisionsListFilesCall) SourceContextGerritAliasContextName(sourceContextGerritAliasContextName string) *ProjectsReposRevisionsListFilesCall {
+	c.urlParams_.Set("sourceContext.gerrit.aliasContext.name", sourceContextGerritAliasContextName)
+	return c
+}
+
+// SourceContextGerritAliasName sets the optional parameter
+// "sourceContext.gerrit.aliasName": The name of an alias (branch, tag,
+// etc.).
+func (c *ProjectsReposRevisionsListFilesCall) SourceContextGerritAliasName(sourceContextGerritAliasName string) *ProjectsReposRevisionsListFilesCall {
+	c.urlParams_.Set("sourceContext.gerrit.aliasName", sourceContextGerritAliasName)
+	return c
+}
+
+// SourceContextGerritGerritProject sets the optional parameter
+// "sourceContext.gerrit.gerritProject": The full project name within
+// the host. Projects may be nested, so
+// "project/subproject" is a valid project name.
+// The "repo name" is hostURI/project.
+func (c *ProjectsReposRevisionsListFilesCall) SourceContextGerritGerritProject(sourceContextGerritGerritProject string) *ProjectsReposRevisionsListFilesCall {
+	c.urlParams_.Set("sourceContext.gerrit.gerritProject", sourceContextGerritGerritProject)
+	return c
+}
+
+// SourceContextGerritHostUri sets the optional parameter
+// "sourceContext.gerrit.hostUri": The URI of a running Gerrit instance.
+func (c *ProjectsReposRevisionsListFilesCall) SourceContextGerritHostUri(sourceContextGerritHostUri string) *ProjectsReposRevisionsListFilesCall {
+	c.urlParams_.Set("sourceContext.gerrit.hostUri", sourceContextGerritHostUri)
+	return c
+}
+
+// SourceContextGerritRevisionId sets the optional parameter
+// "sourceContext.gerrit.revisionId": A revision (commit) ID.
+func (c *ProjectsReposRevisionsListFilesCall) SourceContextGerritRevisionId(sourceContextGerritRevisionId string) *ProjectsReposRevisionsListFilesCall {
+	c.urlParams_.Set("sourceContext.gerrit.revisionId", sourceContextGerritRevisionId)
+	return c
+}
+
+// SourceContextGitRevisionId sets the optional parameter
+// "sourceContext.git.revisionId": Git commit hash.
+// required.
+func (c *ProjectsReposRevisionsListFilesCall) SourceContextGitRevisionId(sourceContextGitRevisionId string) *ProjectsReposRevisionsListFilesCall {
+	c.urlParams_.Set("sourceContext.git.revisionId", sourceContextGitRevisionId)
+	return c
+}
+
+// SourceContextGitUrl sets the optional parameter
+// "sourceContext.git.url": Git repository URL.
+func (c *ProjectsReposRevisionsListFilesCall) SourceContextGitUrl(sourceContextGitUrl string) *ProjectsReposRevisionsListFilesCall {
+	c.urlParams_.Set("sourceContext.git.url", sourceContextGitUrl)
 	return c
 }
 
@@ -5290,98 +5460,6 @@ func (c *ProjectsReposRevisionsListFilesCall) Do(opts ...googleapi.CallOption) (
 	//     "revisionId"
 	//   ],
 	//   "parameters": {
-	//     "aliasContext.kind": {
-	//       "description": "The alias kind.",
-	//       "enum": [
-	//         "ANY",
-	//         "FIXED",
-	//         "MOVABLE",
-	//         "OTHER"
-	//       ],
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "aliasContext.name": {
-	//       "description": "The alias name.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "aliasName": {
-	//       "description": "The name of an alias (branch, tag, etc.).",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudWorkspace.snapshotId": {
-	//       "description": "The ID of the snapshot.\nAn empty snapshot_id refers to the most recent snapshot.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudWorkspace.workspaceId.name": {
-	//       "description": "The unique name of the workspace within the repo.  This is the name\nchosen by the client in the Source API's CreateWorkspace method.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudWorkspace.workspaceId.repoId.projectRepoId.projectId": {
-	//       "description": "The ID of the project.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudWorkspace.workspaceId.repoId.projectRepoId.repoName": {
-	//       "description": "The name of the repo. Leave empty for the default repo.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudWorkspace.workspaceId.repoId.uid": {
-	//       "description": "A server-assigned, globally unique identifier.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.aliasContext.kind": {
-	//       "description": "The alias kind.",
-	//       "enum": [
-	//         "ANY",
-	//         "FIXED",
-	//         "MOVABLE",
-	//         "OTHER"
-	//       ],
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.aliasContext.name": {
-	//       "description": "The alias name.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.aliasName": {
-	//       "description": "The name of an alias (branch, tag, etc.).",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.gerritProject": {
-	//       "description": "The full project name within the host. Projects may be nested, so\n\"project/subproject\" is a valid project name.\nThe \"repo name\" is hostURI/project.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.hostUri": {
-	//       "description": "The URI of a running Gerrit instance.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.revisionId": {
-	//       "description": "A revision (commit) ID.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "git.revisionId": {
-	//       "description": "Git commit hash.\nrequired.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "git.url": {
-	//       "description": "Git repository URL.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
 	//     "pageSize": {
 	//       "description": "The maximum number of values to return.",
 	//       "format": "int32",
@@ -5411,8 +5489,100 @@ func (c *ProjectsReposRevisionsListFilesCall) Do(opts ...googleapi.CallOption) (
 	//       "required": true,
 	//       "type": "string"
 	//     },
-	//     "uid": {
+	//     "sourceContext.cloudRepo.aliasContext.kind": {
+	//       "description": "The alias kind.",
+	//       "enum": [
+	//         "ANY",
+	//         "FIXED",
+	//         "MOVABLE",
+	//         "OTHER"
+	//       ],
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.aliasContext.name": {
+	//       "description": "The alias name.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.aliasName": {
+	//       "description": "The name of an alias (branch, tag, etc.).",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.repoId.uid": {
 	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudWorkspace.snapshotId": {
+	//       "description": "The ID of the snapshot.\nAn empty snapshot_id refers to the most recent snapshot.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudWorkspace.workspaceId.name": {
+	//       "description": "The unique name of the workspace within the repo.  This is the name\nchosen by the client in the Source API's CreateWorkspace method.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudWorkspace.workspaceId.repoId.projectRepoId.projectId": {
+	//       "description": "The ID of the project.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudWorkspace.workspaceId.repoId.projectRepoId.repoName": {
+	//       "description": "The name of the repo. Leave empty for the default repo.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudWorkspace.workspaceId.repoId.uid": {
+	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.aliasContext.kind": {
+	//       "description": "The alias kind.",
+	//       "enum": [
+	//         "ANY",
+	//         "FIXED",
+	//         "MOVABLE",
+	//         "OTHER"
+	//       ],
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.aliasContext.name": {
+	//       "description": "The alias name.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.aliasName": {
+	//       "description": "The name of an alias (branch, tag, etc.).",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.gerritProject": {
+	//       "description": "The full project name within the host. Projects may be nested, so\n\"project/subproject\" is a valid project name.\nThe \"repo name\" is hostURI/project.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.hostUri": {
+	//       "description": "The URI of a running Gerrit instance.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.revisionId": {
+	//       "description": "A revision (commit) ID.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.git.revisionId": {
+	//       "description": "Git commit hash.\nrequired.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.git.url": {
+	//       "description": "Git repository URL.",
 	//       "location": "query",
 	//       "type": "string"
 	//     }
@@ -5473,141 +5643,6 @@ func (r *ProjectsReposRevisionsFilesService) Get(projectId string, repoName stri
 	return c
 }
 
-// AliasContextKind sets the optional parameter "aliasContext.kind": The
-// alias kind.
-//
-// Possible values:
-//   "ANY"
-//   "FIXED"
-//   "MOVABLE"
-//   "OTHER"
-func (c *ProjectsReposRevisionsFilesGetCall) AliasContextKind(aliasContextKind string) *ProjectsReposRevisionsFilesGetCall {
-	c.urlParams_.Set("aliasContext.kind", aliasContextKind)
-	return c
-}
-
-// AliasContextName sets the optional parameter "aliasContext.name": The
-// alias name.
-func (c *ProjectsReposRevisionsFilesGetCall) AliasContextName(aliasContextName string) *ProjectsReposRevisionsFilesGetCall {
-	c.urlParams_.Set("aliasContext.name", aliasContextName)
-	return c
-}
-
-// AliasName sets the optional parameter "aliasName": The name of an
-// alias (branch, tag, etc.).
-func (c *ProjectsReposRevisionsFilesGetCall) AliasName(aliasName string) *ProjectsReposRevisionsFilesGetCall {
-	c.urlParams_.Set("aliasName", aliasName)
-	return c
-}
-
-// CloudWorkspaceSnapshotId sets the optional parameter
-// "cloudWorkspace.snapshotId": The ID of the snapshot.
-// An empty snapshot_id refers to the most recent snapshot.
-func (c *ProjectsReposRevisionsFilesGetCall) CloudWorkspaceSnapshotId(cloudWorkspaceSnapshotId string) *ProjectsReposRevisionsFilesGetCall {
-	c.urlParams_.Set("cloudWorkspace.snapshotId", cloudWorkspaceSnapshotId)
-	return c
-}
-
-// CloudWorkspaceWorkspaceIdName sets the optional parameter
-// "cloudWorkspace.workspaceId.name": The unique name of the workspace
-// within the repo.  This is the name
-// chosen by the client in the Source API's CreateWorkspace method.
-func (c *ProjectsReposRevisionsFilesGetCall) CloudWorkspaceWorkspaceIdName(cloudWorkspaceWorkspaceIdName string) *ProjectsReposRevisionsFilesGetCall {
-	c.urlParams_.Set("cloudWorkspace.workspaceId.name", cloudWorkspaceWorkspaceIdName)
-	return c
-}
-
-// CloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId sets the
-// optional parameter
-// "cloudWorkspace.workspaceId.repoId.projectRepoId.projectId": The ID
-// of the project.
-func (c *ProjectsReposRevisionsFilesGetCall) CloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId(cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId string) *ProjectsReposRevisionsFilesGetCall {
-	c.urlParams_.Set("cloudWorkspace.workspaceId.repoId.projectRepoId.projectId", cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId)
-	return c
-}
-
-// CloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName sets the
-// optional parameter
-// "cloudWorkspace.workspaceId.repoId.projectRepoId.repoName": The name
-// of the repo. Leave empty for the default repo.
-func (c *ProjectsReposRevisionsFilesGetCall) CloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName(cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName string) *ProjectsReposRevisionsFilesGetCall {
-	c.urlParams_.Set("cloudWorkspace.workspaceId.repoId.projectRepoId.repoName", cloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName)
-	return c
-}
-
-// CloudWorkspaceWorkspaceIdRepoIdUid sets the optional parameter
-// "cloudWorkspace.workspaceId.repoId.uid": A server-assigned, globally
-// unique identifier.
-func (c *ProjectsReposRevisionsFilesGetCall) CloudWorkspaceWorkspaceIdRepoIdUid(cloudWorkspaceWorkspaceIdRepoIdUid string) *ProjectsReposRevisionsFilesGetCall {
-	c.urlParams_.Set("cloudWorkspace.workspaceId.repoId.uid", cloudWorkspaceWorkspaceIdRepoIdUid)
-	return c
-}
-
-// GerritAliasContextKind sets the optional parameter
-// "gerrit.aliasContext.kind": The alias kind.
-//
-// Possible values:
-//   "ANY"
-//   "FIXED"
-//   "MOVABLE"
-//   "OTHER"
-func (c *ProjectsReposRevisionsFilesGetCall) GerritAliasContextKind(gerritAliasContextKind string) *ProjectsReposRevisionsFilesGetCall {
-	c.urlParams_.Set("gerrit.aliasContext.kind", gerritAliasContextKind)
-	return c
-}
-
-// GerritAliasContextName sets the optional parameter
-// "gerrit.aliasContext.name": The alias name.
-func (c *ProjectsReposRevisionsFilesGetCall) GerritAliasContextName(gerritAliasContextName string) *ProjectsReposRevisionsFilesGetCall {
-	c.urlParams_.Set("gerrit.aliasContext.name", gerritAliasContextName)
-	return c
-}
-
-// GerritAliasName sets the optional parameter "gerrit.aliasName": The
-// name of an alias (branch, tag, etc.).
-func (c *ProjectsReposRevisionsFilesGetCall) GerritAliasName(gerritAliasName string) *ProjectsReposRevisionsFilesGetCall {
-	c.urlParams_.Set("gerrit.aliasName", gerritAliasName)
-	return c
-}
-
-// GerritGerritProject sets the optional parameter
-// "gerrit.gerritProject": The full project name within the host.
-// Projects may be nested, so
-// "project/subproject" is a valid project name.
-// The "repo name" is hostURI/project.
-func (c *ProjectsReposRevisionsFilesGetCall) GerritGerritProject(gerritGerritProject string) *ProjectsReposRevisionsFilesGetCall {
-	c.urlParams_.Set("gerrit.gerritProject", gerritGerritProject)
-	return c
-}
-
-// GerritHostUri sets the optional parameter "gerrit.hostUri": The URI
-// of a running Gerrit instance.
-func (c *ProjectsReposRevisionsFilesGetCall) GerritHostUri(gerritHostUri string) *ProjectsReposRevisionsFilesGetCall {
-	c.urlParams_.Set("gerrit.hostUri", gerritHostUri)
-	return c
-}
-
-// GerritRevisionId sets the optional parameter "gerrit.revisionId": A
-// revision (commit) ID.
-func (c *ProjectsReposRevisionsFilesGetCall) GerritRevisionId(gerritRevisionId string) *ProjectsReposRevisionsFilesGetCall {
-	c.urlParams_.Set("gerrit.revisionId", gerritRevisionId)
-	return c
-}
-
-// GitRevisionId sets the optional parameter "git.revisionId": Git
-// commit hash.
-// required.
-func (c *ProjectsReposRevisionsFilesGetCall) GitRevisionId(gitRevisionId string) *ProjectsReposRevisionsFilesGetCall {
-	c.urlParams_.Set("git.revisionId", gitRevisionId)
-	return c
-}
-
-// GitUrl sets the optional parameter "git.url": Git repository URL.
-func (c *ProjectsReposRevisionsFilesGetCall) GitUrl(gitUrl string) *ProjectsReposRevisionsFilesGetCall {
-	c.urlParams_.Set("git.url", gitUrl)
-	return c
-}
-
 // PageSize sets the optional parameter "pageSize": The maximum number
 // of values to return.
 func (c *ProjectsReposRevisionsFilesGetCall) PageSize(pageSize int64) *ProjectsReposRevisionsFilesGetCall {
@@ -5623,6 +5658,152 @@ func (c *ProjectsReposRevisionsFilesGetCall) PageToken(pageToken string) *Projec
 	return c
 }
 
+// SourceContextCloudRepoAliasContextKind sets the optional parameter
+// "sourceContext.cloudRepo.aliasContext.kind": The alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
+func (c *ProjectsReposRevisionsFilesGetCall) SourceContextCloudRepoAliasContextKind(sourceContextCloudRepoAliasContextKind string) *ProjectsReposRevisionsFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.aliasContext.kind", sourceContextCloudRepoAliasContextKind)
+	return c
+}
+
+// SourceContextCloudRepoAliasContextName sets the optional parameter
+// "sourceContext.cloudRepo.aliasContext.name": The alias name.
+func (c *ProjectsReposRevisionsFilesGetCall) SourceContextCloudRepoAliasContextName(sourceContextCloudRepoAliasContextName string) *ProjectsReposRevisionsFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.aliasContext.name", sourceContextCloudRepoAliasContextName)
+	return c
+}
+
+// SourceContextCloudRepoAliasName sets the optional parameter
+// "sourceContext.cloudRepo.aliasName": The name of an alias (branch,
+// tag, etc.).
+func (c *ProjectsReposRevisionsFilesGetCall) SourceContextCloudRepoAliasName(sourceContextCloudRepoAliasName string) *ProjectsReposRevisionsFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.aliasName", sourceContextCloudRepoAliasName)
+	return c
+}
+
+// SourceContextCloudRepoRepoIdUid sets the optional parameter
+// "sourceContext.cloudRepo.repoId.uid": A server-assigned, globally
+// unique identifier.
+func (c *ProjectsReposRevisionsFilesGetCall) SourceContextCloudRepoRepoIdUid(sourceContextCloudRepoRepoIdUid string) *ProjectsReposRevisionsFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.repoId.uid", sourceContextCloudRepoRepoIdUid)
+	return c
+}
+
+// SourceContextCloudWorkspaceSnapshotId sets the optional parameter
+// "sourceContext.cloudWorkspace.snapshotId": The ID of the snapshot.
+// An empty snapshot_id refers to the most recent snapshot.
+func (c *ProjectsReposRevisionsFilesGetCall) SourceContextCloudWorkspaceSnapshotId(sourceContextCloudWorkspaceSnapshotId string) *ProjectsReposRevisionsFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudWorkspace.snapshotId", sourceContextCloudWorkspaceSnapshotId)
+	return c
+}
+
+// SourceContextCloudWorkspaceWorkspaceIdName sets the optional
+// parameter "sourceContext.cloudWorkspace.workspaceId.name": The unique
+// name of the workspace within the repo.  This is the name
+// chosen by the client in the Source API's CreateWorkspace method.
+func (c *ProjectsReposRevisionsFilesGetCall) SourceContextCloudWorkspaceWorkspaceIdName(sourceContextCloudWorkspaceWorkspaceIdName string) *ProjectsReposRevisionsFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudWorkspace.workspaceId.name", sourceContextCloudWorkspaceWorkspaceIdName)
+	return c
+}
+
+// SourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId
+// sets the optional parameter
+// "sourceContext.cloudWorkspace.workspaceId.repoId.projectRepoId.project
+// Id": The ID of the project.
+func (c *ProjectsReposRevisionsFilesGetCall) SourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId(sourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId string) *ProjectsReposRevisionsFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudWorkspace.workspaceId.repoId.projectRepoId.projectId", sourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdProjectId)
+	return c
+}
+
+// SourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName
+// sets the optional parameter
+// "sourceContext.cloudWorkspace.workspaceId.repoId.projectRepoId.repoNam
+// e": The name of the repo. Leave empty for the default repo.
+func (c *ProjectsReposRevisionsFilesGetCall) SourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName(sourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName string) *ProjectsReposRevisionsFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudWorkspace.workspaceId.repoId.projectRepoId.repoName", sourceContextCloudWorkspaceWorkspaceIdRepoIdProjectRepoIdRepoName)
+	return c
+}
+
+// SourceContextCloudWorkspaceWorkspaceIdRepoIdUid sets the optional
+// parameter "sourceContext.cloudWorkspace.workspaceId.repoId.uid": A
+// server-assigned, globally unique identifier.
+func (c *ProjectsReposRevisionsFilesGetCall) SourceContextCloudWorkspaceWorkspaceIdRepoIdUid(sourceContextCloudWorkspaceWorkspaceIdRepoIdUid string) *ProjectsReposRevisionsFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudWorkspace.workspaceId.repoId.uid", sourceContextCloudWorkspaceWorkspaceIdRepoIdUid)
+	return c
+}
+
+// SourceContextGerritAliasContextKind sets the optional parameter
+// "sourceContext.gerrit.aliasContext.kind": The alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
+func (c *ProjectsReposRevisionsFilesGetCall) SourceContextGerritAliasContextKind(sourceContextGerritAliasContextKind string) *ProjectsReposRevisionsFilesGetCall {
+	c.urlParams_.Set("sourceContext.gerrit.aliasContext.kind", sourceContextGerritAliasContextKind)
+	return c
+}
+
+// SourceContextGerritAliasContextName sets the optional parameter
+// "sourceContext.gerrit.aliasContext.name": The alias name.
+func (c *ProjectsReposRevisionsFilesGetCall) SourceContextGerritAliasContextName(sourceContextGerritAliasContextName string) *ProjectsReposRevisionsFilesGetCall {
+	c.urlParams_.Set("sourceContext.gerrit.aliasContext.name", sourceContextGerritAliasContextName)
+	return c
+}
+
+// SourceContextGerritAliasName sets the optional parameter
+// "sourceContext.gerrit.aliasName": The name of an alias (branch, tag,
+// etc.).
+func (c *ProjectsReposRevisionsFilesGetCall) SourceContextGerritAliasName(sourceContextGerritAliasName string) *ProjectsReposRevisionsFilesGetCall {
+	c.urlParams_.Set("sourceContext.gerrit.aliasName", sourceContextGerritAliasName)
+	return c
+}
+
+// SourceContextGerritGerritProject sets the optional parameter
+// "sourceContext.gerrit.gerritProject": The full project name within
+// the host. Projects may be nested, so
+// "project/subproject" is a valid project name.
+// The "repo name" is hostURI/project.
+func (c *ProjectsReposRevisionsFilesGetCall) SourceContextGerritGerritProject(sourceContextGerritGerritProject string) *ProjectsReposRevisionsFilesGetCall {
+	c.urlParams_.Set("sourceContext.gerrit.gerritProject", sourceContextGerritGerritProject)
+	return c
+}
+
+// SourceContextGerritHostUri sets the optional parameter
+// "sourceContext.gerrit.hostUri": The URI of a running Gerrit instance.
+func (c *ProjectsReposRevisionsFilesGetCall) SourceContextGerritHostUri(sourceContextGerritHostUri string) *ProjectsReposRevisionsFilesGetCall {
+	c.urlParams_.Set("sourceContext.gerrit.hostUri", sourceContextGerritHostUri)
+	return c
+}
+
+// SourceContextGerritRevisionId sets the optional parameter
+// "sourceContext.gerrit.revisionId": A revision (commit) ID.
+func (c *ProjectsReposRevisionsFilesGetCall) SourceContextGerritRevisionId(sourceContextGerritRevisionId string) *ProjectsReposRevisionsFilesGetCall {
+	c.urlParams_.Set("sourceContext.gerrit.revisionId", sourceContextGerritRevisionId)
+	return c
+}
+
+// SourceContextGitRevisionId sets the optional parameter
+// "sourceContext.git.revisionId": Git commit hash.
+// required.
+func (c *ProjectsReposRevisionsFilesGetCall) SourceContextGitRevisionId(sourceContextGitRevisionId string) *ProjectsReposRevisionsFilesGetCall {
+	c.urlParams_.Set("sourceContext.git.revisionId", sourceContextGitRevisionId)
+	return c
+}
+
+// SourceContextGitUrl sets the optional parameter
+// "sourceContext.git.url": Git repository URL.
+func (c *ProjectsReposRevisionsFilesGetCall) SourceContextGitUrl(sourceContextGitUrl string) *ProjectsReposRevisionsFilesGetCall {
+	c.urlParams_.Set("sourceContext.git.url", sourceContextGitUrl)
+	return c
+}
+
 // StartPosition sets the optional parameter "startPosition": If path
 // refers to a file, the position of the first byte of its contents
 // to return. If path refers to a directory, the position of the first
@@ -5630,13 +5811,6 @@ func (c *ProjectsReposRevisionsFilesGetCall) PageToken(pageToken string) *Projec
 // in the listing. If page_token is specified, this field is ignored.
 func (c *ProjectsReposRevisionsFilesGetCall) StartPosition(startPosition int64) *ProjectsReposRevisionsFilesGetCall {
 	c.urlParams_.Set("startPosition", fmt.Sprint(startPosition))
-	return c
-}
-
-// Uid sets the optional parameter "uid": A server-assigned, globally
-// unique identifier.
-func (c *ProjectsReposRevisionsFilesGetCall) Uid(uid string) *ProjectsReposRevisionsFilesGetCall {
-	c.urlParams_.Set("uid", uid)
 	return c
 }
 
@@ -5739,98 +5913,6 @@ func (c *ProjectsReposRevisionsFilesGetCall) Do(opts ...googleapi.CallOption) (*
 	//     "path"
 	//   ],
 	//   "parameters": {
-	//     "aliasContext.kind": {
-	//       "description": "The alias kind.",
-	//       "enum": [
-	//         "ANY",
-	//         "FIXED",
-	//         "MOVABLE",
-	//         "OTHER"
-	//       ],
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "aliasContext.name": {
-	//       "description": "The alias name.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "aliasName": {
-	//       "description": "The name of an alias (branch, tag, etc.).",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudWorkspace.snapshotId": {
-	//       "description": "The ID of the snapshot.\nAn empty snapshot_id refers to the most recent snapshot.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudWorkspace.workspaceId.name": {
-	//       "description": "The unique name of the workspace within the repo.  This is the name\nchosen by the client in the Source API's CreateWorkspace method.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudWorkspace.workspaceId.repoId.projectRepoId.projectId": {
-	//       "description": "The ID of the project.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudWorkspace.workspaceId.repoId.projectRepoId.repoName": {
-	//       "description": "The name of the repo. Leave empty for the default repo.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudWorkspace.workspaceId.repoId.uid": {
-	//       "description": "A server-assigned, globally unique identifier.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.aliasContext.kind": {
-	//       "description": "The alias kind.",
-	//       "enum": [
-	//         "ANY",
-	//         "FIXED",
-	//         "MOVABLE",
-	//         "OTHER"
-	//       ],
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.aliasContext.name": {
-	//       "description": "The alias name.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.aliasName": {
-	//       "description": "The name of an alias (branch, tag, etc.).",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.gerritProject": {
-	//       "description": "The full project name within the host. Projects may be nested, so\n\"project/subproject\" is a valid project name.\nThe \"repo name\" is hostURI/project.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.hostUri": {
-	//       "description": "The URI of a running Gerrit instance.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.revisionId": {
-	//       "description": "A revision (commit) ID.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "git.revisionId": {
-	//       "description": "Git commit hash.\nrequired.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "git.url": {
-	//       "description": "Git repository URL.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
 	//     "pageSize": {
 	//       "description": "The maximum number of values to return.",
 	//       "format": "int64",
@@ -5867,14 +5949,106 @@ func (c *ProjectsReposRevisionsFilesGetCall) Do(opts ...googleapi.CallOption) (*
 	//       "required": true,
 	//       "type": "string"
 	//     },
-	//     "startPosition": {
-	//       "description": "If path refers to a file, the position of the first byte of its contents\nto return. If path refers to a directory, the position of the first entry\nin the listing. If page_token is specified, this field is ignored.",
-	//       "format": "int64",
+	//     "sourceContext.cloudRepo.aliasContext.kind": {
+	//       "description": "The alias kind.",
+	//       "enum": [
+	//         "ANY",
+	//         "FIXED",
+	//         "MOVABLE",
+	//         "OTHER"
+	//       ],
 	//       "location": "query",
 	//       "type": "string"
 	//     },
-	//     "uid": {
+	//     "sourceContext.cloudRepo.aliasContext.name": {
+	//       "description": "The alias name.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.aliasName": {
+	//       "description": "The name of an alias (branch, tag, etc.).",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.repoId.uid": {
 	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudWorkspace.snapshotId": {
+	//       "description": "The ID of the snapshot.\nAn empty snapshot_id refers to the most recent snapshot.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudWorkspace.workspaceId.name": {
+	//       "description": "The unique name of the workspace within the repo.  This is the name\nchosen by the client in the Source API's CreateWorkspace method.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudWorkspace.workspaceId.repoId.projectRepoId.projectId": {
+	//       "description": "The ID of the project.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudWorkspace.workspaceId.repoId.projectRepoId.repoName": {
+	//       "description": "The name of the repo. Leave empty for the default repo.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudWorkspace.workspaceId.repoId.uid": {
+	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.aliasContext.kind": {
+	//       "description": "The alias kind.",
+	//       "enum": [
+	//         "ANY",
+	//         "FIXED",
+	//         "MOVABLE",
+	//         "OTHER"
+	//       ],
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.aliasContext.name": {
+	//       "description": "The alias name.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.aliasName": {
+	//       "description": "The name of an alias (branch, tag, etc.).",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.gerritProject": {
+	//       "description": "The full project name within the host. Projects may be nested, so\n\"project/subproject\" is a valid project name.\nThe \"repo name\" is hostURI/project.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.hostUri": {
+	//       "description": "The URI of a running Gerrit instance.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.revisionId": {
+	//       "description": "A revision (commit) ID.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.git.revisionId": {
+	//       "description": "Git commit hash.\nrequired.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.git.url": {
+	//       "description": "Git repository URL.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "startPosition": {
+	//       "description": "If path refers to a file, the position of the first byte of its contents\nto return. If path refers to a directory, the position of the first entry\nin the listing. If page_token is specified, this field is ignored.",
+	//       "format": "int64",
 	//       "location": "query",
 	//       "type": "string"
 	//     }
@@ -6230,10 +6404,11 @@ func (c *ProjectsReposWorkspacesDeleteCall) CurrentSnapshotId(currentSnapshotId 
 	return c
 }
 
-// Uid sets the optional parameter "uid": A server-assigned, globally
-// unique identifier.
-func (c *ProjectsReposWorkspacesDeleteCall) Uid(uid string) *ProjectsReposWorkspacesDeleteCall {
-	c.urlParams_.Set("uid", uid)
+// WorkspaceIdRepoIdUid sets the optional parameter
+// "workspaceId.repoId.uid": A server-assigned, globally unique
+// identifier.
+func (c *ProjectsReposWorkspacesDeleteCall) WorkspaceIdRepoIdUid(workspaceIdRepoIdUid string) *ProjectsReposWorkspacesDeleteCall {
+	c.urlParams_.Set("workspaceId.repoId.uid", workspaceIdRepoIdUid)
 	return c
 }
 
@@ -6344,7 +6519,7 @@ func (c *ProjectsReposWorkspacesDeleteCall) Do(opts ...googleapi.CallOption) (*E
 	//       "required": true,
 	//       "type": "string"
 	//     },
-	//     "uid": {
+	//     "workspaceId.repoId.uid": {
 	//       "description": "A server-assigned, globally unique identifier.",
 	//       "location": "query",
 	//       "type": "string"
@@ -6382,10 +6557,11 @@ func (r *ProjectsReposWorkspacesService) Get(projectId string, repoName string, 
 	return c
 }
 
-// Uid sets the optional parameter "uid": A server-assigned, globally
-// unique identifier.
-func (c *ProjectsReposWorkspacesGetCall) Uid(uid string) *ProjectsReposWorkspacesGetCall {
-	c.urlParams_.Set("uid", uid)
+// WorkspaceIdRepoIdUid sets the optional parameter
+// "workspaceId.repoId.uid": A server-assigned, globally unique
+// identifier.
+func (c *ProjectsReposWorkspacesGetCall) WorkspaceIdRepoIdUid(workspaceIdRepoIdUid string) *ProjectsReposWorkspacesGetCall {
+	c.urlParams_.Set("workspaceId.repoId.uid", workspaceIdRepoIdUid)
 	return c
 }
 
@@ -6504,7 +6680,7 @@ func (c *ProjectsReposWorkspacesGetCall) Do(opts ...googleapi.CallOption) (*Work
 	//       "required": true,
 	//       "type": "string"
 	//     },
-	//     "uid": {
+	//     "workspaceId.repoId.uid": {
 	//       "description": "A server-assigned, globally unique identifier.",
 	//       "location": "query",
 	//       "type": "string"
@@ -6540,10 +6716,10 @@ func (r *ProjectsReposWorkspacesService) List(projectId string, repoName string)
 	return c
 }
 
-// Uid sets the optional parameter "uid": A server-assigned, globally
-// unique identifier.
-func (c *ProjectsReposWorkspacesListCall) Uid(uid string) *ProjectsReposWorkspacesListCall {
-	c.urlParams_.Set("uid", uid)
+// RepoIdUid sets the optional parameter "repoId.uid": A
+// server-assigned, globally unique identifier.
+func (c *ProjectsReposWorkspacesListCall) RepoIdUid(repoIdUid string) *ProjectsReposWorkspacesListCall {
+	c.urlParams_.Set("repoId.uid", repoIdUid)
 	return c
 }
 
@@ -6661,15 +6837,15 @@ func (c *ProjectsReposWorkspacesListCall) Do(opts ...googleapi.CallOption) (*Lis
 	//       "required": true,
 	//       "type": "string"
 	//     },
+	//     "repoId.uid": {
+	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
 	//     "repoName": {
 	//       "description": "The name of the repo. Leave empty for the default repo.",
 	//       "location": "path",
 	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "uid": {
-	//       "description": "A server-assigned, globally unique identifier.",
-	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "view": {
@@ -6718,128 +6894,6 @@ func (r *ProjectsReposWorkspacesService) ListFiles(projectId string, repoName st
 	return c
 }
 
-// CloudRepoAliasContextKind sets the optional parameter
-// "cloudRepo.aliasContext.kind": The alias kind.
-//
-// Possible values:
-//   "ANY"
-//   "FIXED"
-//   "MOVABLE"
-//   "OTHER"
-func (c *ProjectsReposWorkspacesListFilesCall) CloudRepoAliasContextKind(cloudRepoAliasContextKind string) *ProjectsReposWorkspacesListFilesCall {
-	c.urlParams_.Set("cloudRepo.aliasContext.kind", cloudRepoAliasContextKind)
-	return c
-}
-
-// CloudRepoAliasContextName sets the optional parameter
-// "cloudRepo.aliasContext.name": The alias name.
-func (c *ProjectsReposWorkspacesListFilesCall) CloudRepoAliasContextName(cloudRepoAliasContextName string) *ProjectsReposWorkspacesListFilesCall {
-	c.urlParams_.Set("cloudRepo.aliasContext.name", cloudRepoAliasContextName)
-	return c
-}
-
-// CloudRepoAliasName sets the optional parameter "cloudRepo.aliasName":
-// The name of an alias (branch, tag, etc.).
-func (c *ProjectsReposWorkspacesListFilesCall) CloudRepoAliasName(cloudRepoAliasName string) *ProjectsReposWorkspacesListFilesCall {
-	c.urlParams_.Set("cloudRepo.aliasName", cloudRepoAliasName)
-	return c
-}
-
-// CloudRepoRepoIdProjectRepoIdProjectId sets the optional parameter
-// "cloudRepo.repoId.projectRepoId.projectId": The ID of the project.
-func (c *ProjectsReposWorkspacesListFilesCall) CloudRepoRepoIdProjectRepoIdProjectId(cloudRepoRepoIdProjectRepoIdProjectId string) *ProjectsReposWorkspacesListFilesCall {
-	c.urlParams_.Set("cloudRepo.repoId.projectRepoId.projectId", cloudRepoRepoIdProjectRepoIdProjectId)
-	return c
-}
-
-// CloudRepoRepoIdProjectRepoIdRepoName sets the optional parameter
-// "cloudRepo.repoId.projectRepoId.repoName": The name of the repo.
-// Leave empty for the default repo.
-func (c *ProjectsReposWorkspacesListFilesCall) CloudRepoRepoIdProjectRepoIdRepoName(cloudRepoRepoIdProjectRepoIdRepoName string) *ProjectsReposWorkspacesListFilesCall {
-	c.urlParams_.Set("cloudRepo.repoId.projectRepoId.repoName", cloudRepoRepoIdProjectRepoIdRepoName)
-	return c
-}
-
-// CloudRepoRepoIdUid sets the optional parameter
-// "cloudRepo.repoId.uid": A server-assigned, globally unique
-// identifier.
-func (c *ProjectsReposWorkspacesListFilesCall) CloudRepoRepoIdUid(cloudRepoRepoIdUid string) *ProjectsReposWorkspacesListFilesCall {
-	c.urlParams_.Set("cloudRepo.repoId.uid", cloudRepoRepoIdUid)
-	return c
-}
-
-// CloudRepoRevisionId sets the optional parameter
-// "cloudRepo.revisionId": A revision ID.
-func (c *ProjectsReposWorkspacesListFilesCall) CloudRepoRevisionId(cloudRepoRevisionId string) *ProjectsReposWorkspacesListFilesCall {
-	c.urlParams_.Set("cloudRepo.revisionId", cloudRepoRevisionId)
-	return c
-}
-
-// GerritAliasContextKind sets the optional parameter
-// "gerrit.aliasContext.kind": The alias kind.
-//
-// Possible values:
-//   "ANY"
-//   "FIXED"
-//   "MOVABLE"
-//   "OTHER"
-func (c *ProjectsReposWorkspacesListFilesCall) GerritAliasContextKind(gerritAliasContextKind string) *ProjectsReposWorkspacesListFilesCall {
-	c.urlParams_.Set("gerrit.aliasContext.kind", gerritAliasContextKind)
-	return c
-}
-
-// GerritAliasContextName sets the optional parameter
-// "gerrit.aliasContext.name": The alias name.
-func (c *ProjectsReposWorkspacesListFilesCall) GerritAliasContextName(gerritAliasContextName string) *ProjectsReposWorkspacesListFilesCall {
-	c.urlParams_.Set("gerrit.aliasContext.name", gerritAliasContextName)
-	return c
-}
-
-// GerritAliasName sets the optional parameter "gerrit.aliasName": The
-// name of an alias (branch, tag, etc.).
-func (c *ProjectsReposWorkspacesListFilesCall) GerritAliasName(gerritAliasName string) *ProjectsReposWorkspacesListFilesCall {
-	c.urlParams_.Set("gerrit.aliasName", gerritAliasName)
-	return c
-}
-
-// GerritGerritProject sets the optional parameter
-// "gerrit.gerritProject": The full project name within the host.
-// Projects may be nested, so
-// "project/subproject" is a valid project name.
-// The "repo name" is hostURI/project.
-func (c *ProjectsReposWorkspacesListFilesCall) GerritGerritProject(gerritGerritProject string) *ProjectsReposWorkspacesListFilesCall {
-	c.urlParams_.Set("gerrit.gerritProject", gerritGerritProject)
-	return c
-}
-
-// GerritHostUri sets the optional parameter "gerrit.hostUri": The URI
-// of a running Gerrit instance.
-func (c *ProjectsReposWorkspacesListFilesCall) GerritHostUri(gerritHostUri string) *ProjectsReposWorkspacesListFilesCall {
-	c.urlParams_.Set("gerrit.hostUri", gerritHostUri)
-	return c
-}
-
-// GerritRevisionId sets the optional parameter "gerrit.revisionId": A
-// revision (commit) ID.
-func (c *ProjectsReposWorkspacesListFilesCall) GerritRevisionId(gerritRevisionId string) *ProjectsReposWorkspacesListFilesCall {
-	c.urlParams_.Set("gerrit.revisionId", gerritRevisionId)
-	return c
-}
-
-// GitRevisionId sets the optional parameter "git.revisionId": Git
-// commit hash.
-// required.
-func (c *ProjectsReposWorkspacesListFilesCall) GitRevisionId(gitRevisionId string) *ProjectsReposWorkspacesListFilesCall {
-	c.urlParams_.Set("git.revisionId", gitRevisionId)
-	return c
-}
-
-// GitUrl sets the optional parameter "git.url": Git repository URL.
-func (c *ProjectsReposWorkspacesListFilesCall) GitUrl(gitUrl string) *ProjectsReposWorkspacesListFilesCall {
-	c.urlParams_.Set("git.url", gitUrl)
-	return c
-}
-
 // PageSize sets the optional parameter "pageSize": The maximum number
 // of values to return.
 func (c *ProjectsReposWorkspacesListFilesCall) PageSize(pageSize int64) *ProjectsReposWorkspacesListFilesCall {
@@ -6855,18 +6909,145 @@ func (c *ProjectsReposWorkspacesListFilesCall) PageToken(pageToken string) *Proj
 	return c
 }
 
-// SnapshotId sets the optional parameter "snapshotId": The ID of the
-// snapshot.
-// An empty snapshot_id refers to the most recent snapshot.
-func (c *ProjectsReposWorkspacesListFilesCall) SnapshotId(snapshotId string) *ProjectsReposWorkspacesListFilesCall {
-	c.urlParams_.Set("snapshotId", snapshotId)
+// SourceContextCloudRepoAliasContextKind sets the optional parameter
+// "sourceContext.cloudRepo.aliasContext.kind": The alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
+func (c *ProjectsReposWorkspacesListFilesCall) SourceContextCloudRepoAliasContextKind(sourceContextCloudRepoAliasContextKind string) *ProjectsReposWorkspacesListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.aliasContext.kind", sourceContextCloudRepoAliasContextKind)
 	return c
 }
 
-// Uid sets the optional parameter "uid": A server-assigned, globally
+// SourceContextCloudRepoAliasContextName sets the optional parameter
+// "sourceContext.cloudRepo.aliasContext.name": The alias name.
+func (c *ProjectsReposWorkspacesListFilesCall) SourceContextCloudRepoAliasContextName(sourceContextCloudRepoAliasContextName string) *ProjectsReposWorkspacesListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.aliasContext.name", sourceContextCloudRepoAliasContextName)
+	return c
+}
+
+// SourceContextCloudRepoAliasName sets the optional parameter
+// "sourceContext.cloudRepo.aliasName": The name of an alias (branch,
+// tag, etc.).
+func (c *ProjectsReposWorkspacesListFilesCall) SourceContextCloudRepoAliasName(sourceContextCloudRepoAliasName string) *ProjectsReposWorkspacesListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.aliasName", sourceContextCloudRepoAliasName)
+	return c
+}
+
+// SourceContextCloudRepoRepoIdProjectRepoIdProjectId sets the optional
+// parameter "sourceContext.cloudRepo.repoId.projectRepoId.projectId":
+// The ID of the project.
+func (c *ProjectsReposWorkspacesListFilesCall) SourceContextCloudRepoRepoIdProjectRepoIdProjectId(sourceContextCloudRepoRepoIdProjectRepoIdProjectId string) *ProjectsReposWorkspacesListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.repoId.projectRepoId.projectId", sourceContextCloudRepoRepoIdProjectRepoIdProjectId)
+	return c
+}
+
+// SourceContextCloudRepoRepoIdProjectRepoIdRepoName sets the optional
+// parameter "sourceContext.cloudRepo.repoId.projectRepoId.repoName":
+// The name of the repo. Leave empty for the default repo.
+func (c *ProjectsReposWorkspacesListFilesCall) SourceContextCloudRepoRepoIdProjectRepoIdRepoName(sourceContextCloudRepoRepoIdProjectRepoIdRepoName string) *ProjectsReposWorkspacesListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.repoId.projectRepoId.repoName", sourceContextCloudRepoRepoIdProjectRepoIdRepoName)
+	return c
+}
+
+// SourceContextCloudRepoRepoIdUid sets the optional parameter
+// "sourceContext.cloudRepo.repoId.uid": A server-assigned, globally
 // unique identifier.
-func (c *ProjectsReposWorkspacesListFilesCall) Uid(uid string) *ProjectsReposWorkspacesListFilesCall {
-	c.urlParams_.Set("uid", uid)
+func (c *ProjectsReposWorkspacesListFilesCall) SourceContextCloudRepoRepoIdUid(sourceContextCloudRepoRepoIdUid string) *ProjectsReposWorkspacesListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.repoId.uid", sourceContextCloudRepoRepoIdUid)
+	return c
+}
+
+// SourceContextCloudRepoRevisionId sets the optional parameter
+// "sourceContext.cloudRepo.revisionId": A revision ID.
+func (c *ProjectsReposWorkspacesListFilesCall) SourceContextCloudRepoRevisionId(sourceContextCloudRepoRevisionId string) *ProjectsReposWorkspacesListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.revisionId", sourceContextCloudRepoRevisionId)
+	return c
+}
+
+// SourceContextCloudWorkspaceSnapshotId sets the optional parameter
+// "sourceContext.cloudWorkspace.snapshotId": The ID of the snapshot.
+// An empty snapshot_id refers to the most recent snapshot.
+func (c *ProjectsReposWorkspacesListFilesCall) SourceContextCloudWorkspaceSnapshotId(sourceContextCloudWorkspaceSnapshotId string) *ProjectsReposWorkspacesListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudWorkspace.snapshotId", sourceContextCloudWorkspaceSnapshotId)
+	return c
+}
+
+// SourceContextCloudWorkspaceWorkspaceIdRepoIdUid sets the optional
+// parameter "sourceContext.cloudWorkspace.workspaceId.repoId.uid": A
+// server-assigned, globally unique identifier.
+func (c *ProjectsReposWorkspacesListFilesCall) SourceContextCloudWorkspaceWorkspaceIdRepoIdUid(sourceContextCloudWorkspaceWorkspaceIdRepoIdUid string) *ProjectsReposWorkspacesListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudWorkspace.workspaceId.repoId.uid", sourceContextCloudWorkspaceWorkspaceIdRepoIdUid)
+	return c
+}
+
+// SourceContextGerritAliasContextKind sets the optional parameter
+// "sourceContext.gerrit.aliasContext.kind": The alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
+func (c *ProjectsReposWorkspacesListFilesCall) SourceContextGerritAliasContextKind(sourceContextGerritAliasContextKind string) *ProjectsReposWorkspacesListFilesCall {
+	c.urlParams_.Set("sourceContext.gerrit.aliasContext.kind", sourceContextGerritAliasContextKind)
+	return c
+}
+
+// SourceContextGerritAliasContextName sets the optional parameter
+// "sourceContext.gerrit.aliasContext.name": The alias name.
+func (c *ProjectsReposWorkspacesListFilesCall) SourceContextGerritAliasContextName(sourceContextGerritAliasContextName string) *ProjectsReposWorkspacesListFilesCall {
+	c.urlParams_.Set("sourceContext.gerrit.aliasContext.name", sourceContextGerritAliasContextName)
+	return c
+}
+
+// SourceContextGerritAliasName sets the optional parameter
+// "sourceContext.gerrit.aliasName": The name of an alias (branch, tag,
+// etc.).
+func (c *ProjectsReposWorkspacesListFilesCall) SourceContextGerritAliasName(sourceContextGerritAliasName string) *ProjectsReposWorkspacesListFilesCall {
+	c.urlParams_.Set("sourceContext.gerrit.aliasName", sourceContextGerritAliasName)
+	return c
+}
+
+// SourceContextGerritGerritProject sets the optional parameter
+// "sourceContext.gerrit.gerritProject": The full project name within
+// the host. Projects may be nested, so
+// "project/subproject" is a valid project name.
+// The "repo name" is hostURI/project.
+func (c *ProjectsReposWorkspacesListFilesCall) SourceContextGerritGerritProject(sourceContextGerritGerritProject string) *ProjectsReposWorkspacesListFilesCall {
+	c.urlParams_.Set("sourceContext.gerrit.gerritProject", sourceContextGerritGerritProject)
+	return c
+}
+
+// SourceContextGerritHostUri sets the optional parameter
+// "sourceContext.gerrit.hostUri": The URI of a running Gerrit instance.
+func (c *ProjectsReposWorkspacesListFilesCall) SourceContextGerritHostUri(sourceContextGerritHostUri string) *ProjectsReposWorkspacesListFilesCall {
+	c.urlParams_.Set("sourceContext.gerrit.hostUri", sourceContextGerritHostUri)
+	return c
+}
+
+// SourceContextGerritRevisionId sets the optional parameter
+// "sourceContext.gerrit.revisionId": A revision (commit) ID.
+func (c *ProjectsReposWorkspacesListFilesCall) SourceContextGerritRevisionId(sourceContextGerritRevisionId string) *ProjectsReposWorkspacesListFilesCall {
+	c.urlParams_.Set("sourceContext.gerrit.revisionId", sourceContextGerritRevisionId)
+	return c
+}
+
+// SourceContextGitRevisionId sets the optional parameter
+// "sourceContext.git.revisionId": Git commit hash.
+// required.
+func (c *ProjectsReposWorkspacesListFilesCall) SourceContextGitRevisionId(sourceContextGitRevisionId string) *ProjectsReposWorkspacesListFilesCall {
+	c.urlParams_.Set("sourceContext.git.revisionId", sourceContextGitRevisionId)
+	return c
+}
+
+// SourceContextGitUrl sets the optional parameter
+// "sourceContext.git.url": Git repository URL.
+func (c *ProjectsReposWorkspacesListFilesCall) SourceContextGitUrl(sourceContextGitUrl string) *ProjectsReposWorkspacesListFilesCall {
+	c.urlParams_.Set("sourceContext.git.url", sourceContextGitUrl)
 	return c
 }
 
@@ -6967,93 +7148,6 @@ func (c *ProjectsReposWorkspacesListFilesCall) Do(opts ...googleapi.CallOption) 
 	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "cloudRepo.aliasContext.kind": {
-	//       "description": "The alias kind.",
-	//       "enum": [
-	//         "ANY",
-	//         "FIXED",
-	//         "MOVABLE",
-	//         "OTHER"
-	//       ],
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudRepo.aliasContext.name": {
-	//       "description": "The alias name.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudRepo.aliasName": {
-	//       "description": "The name of an alias (branch, tag, etc.).",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudRepo.repoId.projectRepoId.projectId": {
-	//       "description": "The ID of the project.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudRepo.repoId.projectRepoId.repoName": {
-	//       "description": "The name of the repo. Leave empty for the default repo.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudRepo.repoId.uid": {
-	//       "description": "A server-assigned, globally unique identifier.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudRepo.revisionId": {
-	//       "description": "A revision ID.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.aliasContext.kind": {
-	//       "description": "The alias kind.",
-	//       "enum": [
-	//         "ANY",
-	//         "FIXED",
-	//         "MOVABLE",
-	//         "OTHER"
-	//       ],
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.aliasContext.name": {
-	//       "description": "The alias name.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.aliasName": {
-	//       "description": "The name of an alias (branch, tag, etc.).",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.gerritProject": {
-	//       "description": "The full project name within the host. Projects may be nested, so\n\"project/subproject\" is a valid project name.\nThe \"repo name\" is hostURI/project.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.hostUri": {
-	//       "description": "The URI of a running Gerrit instance.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.revisionId": {
-	//       "description": "A revision (commit) ID.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "git.revisionId": {
-	//       "description": "Git commit hash.\nrequired.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "git.url": {
-	//       "description": "Git repository URL.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
 	//     "name": {
 	//       "description": "The unique name of the workspace within the repo.  This is the name\nchosen by the client in the Source API's CreateWorkspace method.",
 	//       "location": "path",
@@ -7083,13 +7177,100 @@ func (c *ProjectsReposWorkspacesListFilesCall) Do(opts ...googleapi.CallOption) 
 	//       "required": true,
 	//       "type": "string"
 	//     },
-	//     "snapshotId": {
+	//     "sourceContext.cloudRepo.aliasContext.kind": {
+	//       "description": "The alias kind.",
+	//       "enum": [
+	//         "ANY",
+	//         "FIXED",
+	//         "MOVABLE",
+	//         "OTHER"
+	//       ],
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.aliasContext.name": {
+	//       "description": "The alias name.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.aliasName": {
+	//       "description": "The name of an alias (branch, tag, etc.).",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.repoId.projectRepoId.projectId": {
+	//       "description": "The ID of the project.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.repoId.projectRepoId.repoName": {
+	//       "description": "The name of the repo. Leave empty for the default repo.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.repoId.uid": {
+	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.revisionId": {
+	//       "description": "A revision ID.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudWorkspace.snapshotId": {
 	//       "description": "The ID of the snapshot.\nAn empty snapshot_id refers to the most recent snapshot.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
-	//     "uid": {
+	//     "sourceContext.cloudWorkspace.workspaceId.repoId.uid": {
 	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.aliasContext.kind": {
+	//       "description": "The alias kind.",
+	//       "enum": [
+	//         "ANY",
+	//         "FIXED",
+	//         "MOVABLE",
+	//         "OTHER"
+	//       ],
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.aliasContext.name": {
+	//       "description": "The alias name.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.aliasName": {
+	//       "description": "The name of an alias (branch, tag, etc.).",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.gerritProject": {
+	//       "description": "The full project name within the host. Projects may be nested, so\n\"project/subproject\" is a valid project name.\nThe \"repo name\" is hostURI/project.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.hostUri": {
+	//       "description": "The URI of a running Gerrit instance.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.revisionId": {
+	//       "description": "A revision (commit) ID.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.git.revisionId": {
+	//       "description": "Git commit hash.\nrequired.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.git.url": {
+	//       "description": "Git repository URL.",
 	//       "location": "query",
 	//       "type": "string"
 	//     }
@@ -7763,128 +7944,6 @@ func (r *ProjectsReposWorkspacesFilesService) Get(projectId string, repoName str
 	return c
 }
 
-// CloudRepoAliasContextKind sets the optional parameter
-// "cloudRepo.aliasContext.kind": The alias kind.
-//
-// Possible values:
-//   "ANY"
-//   "FIXED"
-//   "MOVABLE"
-//   "OTHER"
-func (c *ProjectsReposWorkspacesFilesGetCall) CloudRepoAliasContextKind(cloudRepoAliasContextKind string) *ProjectsReposWorkspacesFilesGetCall {
-	c.urlParams_.Set("cloudRepo.aliasContext.kind", cloudRepoAliasContextKind)
-	return c
-}
-
-// CloudRepoAliasContextName sets the optional parameter
-// "cloudRepo.aliasContext.name": The alias name.
-func (c *ProjectsReposWorkspacesFilesGetCall) CloudRepoAliasContextName(cloudRepoAliasContextName string) *ProjectsReposWorkspacesFilesGetCall {
-	c.urlParams_.Set("cloudRepo.aliasContext.name", cloudRepoAliasContextName)
-	return c
-}
-
-// CloudRepoAliasName sets the optional parameter "cloudRepo.aliasName":
-// The name of an alias (branch, tag, etc.).
-func (c *ProjectsReposWorkspacesFilesGetCall) CloudRepoAliasName(cloudRepoAliasName string) *ProjectsReposWorkspacesFilesGetCall {
-	c.urlParams_.Set("cloudRepo.aliasName", cloudRepoAliasName)
-	return c
-}
-
-// CloudRepoRepoIdProjectRepoIdProjectId sets the optional parameter
-// "cloudRepo.repoId.projectRepoId.projectId": The ID of the project.
-func (c *ProjectsReposWorkspacesFilesGetCall) CloudRepoRepoIdProjectRepoIdProjectId(cloudRepoRepoIdProjectRepoIdProjectId string) *ProjectsReposWorkspacesFilesGetCall {
-	c.urlParams_.Set("cloudRepo.repoId.projectRepoId.projectId", cloudRepoRepoIdProjectRepoIdProjectId)
-	return c
-}
-
-// CloudRepoRepoIdProjectRepoIdRepoName sets the optional parameter
-// "cloudRepo.repoId.projectRepoId.repoName": The name of the repo.
-// Leave empty for the default repo.
-func (c *ProjectsReposWorkspacesFilesGetCall) CloudRepoRepoIdProjectRepoIdRepoName(cloudRepoRepoIdProjectRepoIdRepoName string) *ProjectsReposWorkspacesFilesGetCall {
-	c.urlParams_.Set("cloudRepo.repoId.projectRepoId.repoName", cloudRepoRepoIdProjectRepoIdRepoName)
-	return c
-}
-
-// CloudRepoRepoIdUid sets the optional parameter
-// "cloudRepo.repoId.uid": A server-assigned, globally unique
-// identifier.
-func (c *ProjectsReposWorkspacesFilesGetCall) CloudRepoRepoIdUid(cloudRepoRepoIdUid string) *ProjectsReposWorkspacesFilesGetCall {
-	c.urlParams_.Set("cloudRepo.repoId.uid", cloudRepoRepoIdUid)
-	return c
-}
-
-// CloudRepoRevisionId sets the optional parameter
-// "cloudRepo.revisionId": A revision ID.
-func (c *ProjectsReposWorkspacesFilesGetCall) CloudRepoRevisionId(cloudRepoRevisionId string) *ProjectsReposWorkspacesFilesGetCall {
-	c.urlParams_.Set("cloudRepo.revisionId", cloudRepoRevisionId)
-	return c
-}
-
-// GerritAliasContextKind sets the optional parameter
-// "gerrit.aliasContext.kind": The alias kind.
-//
-// Possible values:
-//   "ANY"
-//   "FIXED"
-//   "MOVABLE"
-//   "OTHER"
-func (c *ProjectsReposWorkspacesFilesGetCall) GerritAliasContextKind(gerritAliasContextKind string) *ProjectsReposWorkspacesFilesGetCall {
-	c.urlParams_.Set("gerrit.aliasContext.kind", gerritAliasContextKind)
-	return c
-}
-
-// GerritAliasContextName sets the optional parameter
-// "gerrit.aliasContext.name": The alias name.
-func (c *ProjectsReposWorkspacesFilesGetCall) GerritAliasContextName(gerritAliasContextName string) *ProjectsReposWorkspacesFilesGetCall {
-	c.urlParams_.Set("gerrit.aliasContext.name", gerritAliasContextName)
-	return c
-}
-
-// GerritAliasName sets the optional parameter "gerrit.aliasName": The
-// name of an alias (branch, tag, etc.).
-func (c *ProjectsReposWorkspacesFilesGetCall) GerritAliasName(gerritAliasName string) *ProjectsReposWorkspacesFilesGetCall {
-	c.urlParams_.Set("gerrit.aliasName", gerritAliasName)
-	return c
-}
-
-// GerritGerritProject sets the optional parameter
-// "gerrit.gerritProject": The full project name within the host.
-// Projects may be nested, so
-// "project/subproject" is a valid project name.
-// The "repo name" is hostURI/project.
-func (c *ProjectsReposWorkspacesFilesGetCall) GerritGerritProject(gerritGerritProject string) *ProjectsReposWorkspacesFilesGetCall {
-	c.urlParams_.Set("gerrit.gerritProject", gerritGerritProject)
-	return c
-}
-
-// GerritHostUri sets the optional parameter "gerrit.hostUri": The URI
-// of a running Gerrit instance.
-func (c *ProjectsReposWorkspacesFilesGetCall) GerritHostUri(gerritHostUri string) *ProjectsReposWorkspacesFilesGetCall {
-	c.urlParams_.Set("gerrit.hostUri", gerritHostUri)
-	return c
-}
-
-// GerritRevisionId sets the optional parameter "gerrit.revisionId": A
-// revision (commit) ID.
-func (c *ProjectsReposWorkspacesFilesGetCall) GerritRevisionId(gerritRevisionId string) *ProjectsReposWorkspacesFilesGetCall {
-	c.urlParams_.Set("gerrit.revisionId", gerritRevisionId)
-	return c
-}
-
-// GitRevisionId sets the optional parameter "git.revisionId": Git
-// commit hash.
-// required.
-func (c *ProjectsReposWorkspacesFilesGetCall) GitRevisionId(gitRevisionId string) *ProjectsReposWorkspacesFilesGetCall {
-	c.urlParams_.Set("git.revisionId", gitRevisionId)
-	return c
-}
-
-// GitUrl sets the optional parameter "git.url": Git repository URL.
-func (c *ProjectsReposWorkspacesFilesGetCall) GitUrl(gitUrl string) *ProjectsReposWorkspacesFilesGetCall {
-	c.urlParams_.Set("git.url", gitUrl)
-	return c
-}
-
 // PageSize sets the optional parameter "pageSize": The maximum number
 // of values to return.
 func (c *ProjectsReposWorkspacesFilesGetCall) PageSize(pageSize int64) *ProjectsReposWorkspacesFilesGetCall {
@@ -7900,11 +7959,145 @@ func (c *ProjectsReposWorkspacesFilesGetCall) PageToken(pageToken string) *Proje
 	return c
 }
 
-// SnapshotId sets the optional parameter "snapshotId": The ID of the
-// snapshot.
+// SourceContextCloudRepoAliasContextKind sets the optional parameter
+// "sourceContext.cloudRepo.aliasContext.kind": The alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
+func (c *ProjectsReposWorkspacesFilesGetCall) SourceContextCloudRepoAliasContextKind(sourceContextCloudRepoAliasContextKind string) *ProjectsReposWorkspacesFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.aliasContext.kind", sourceContextCloudRepoAliasContextKind)
+	return c
+}
+
+// SourceContextCloudRepoAliasContextName sets the optional parameter
+// "sourceContext.cloudRepo.aliasContext.name": The alias name.
+func (c *ProjectsReposWorkspacesFilesGetCall) SourceContextCloudRepoAliasContextName(sourceContextCloudRepoAliasContextName string) *ProjectsReposWorkspacesFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.aliasContext.name", sourceContextCloudRepoAliasContextName)
+	return c
+}
+
+// SourceContextCloudRepoAliasName sets the optional parameter
+// "sourceContext.cloudRepo.aliasName": The name of an alias (branch,
+// tag, etc.).
+func (c *ProjectsReposWorkspacesFilesGetCall) SourceContextCloudRepoAliasName(sourceContextCloudRepoAliasName string) *ProjectsReposWorkspacesFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.aliasName", sourceContextCloudRepoAliasName)
+	return c
+}
+
+// SourceContextCloudRepoRepoIdProjectRepoIdProjectId sets the optional
+// parameter "sourceContext.cloudRepo.repoId.projectRepoId.projectId":
+// The ID of the project.
+func (c *ProjectsReposWorkspacesFilesGetCall) SourceContextCloudRepoRepoIdProjectRepoIdProjectId(sourceContextCloudRepoRepoIdProjectRepoIdProjectId string) *ProjectsReposWorkspacesFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.repoId.projectRepoId.projectId", sourceContextCloudRepoRepoIdProjectRepoIdProjectId)
+	return c
+}
+
+// SourceContextCloudRepoRepoIdProjectRepoIdRepoName sets the optional
+// parameter "sourceContext.cloudRepo.repoId.projectRepoId.repoName":
+// The name of the repo. Leave empty for the default repo.
+func (c *ProjectsReposWorkspacesFilesGetCall) SourceContextCloudRepoRepoIdProjectRepoIdRepoName(sourceContextCloudRepoRepoIdProjectRepoIdRepoName string) *ProjectsReposWorkspacesFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.repoId.projectRepoId.repoName", sourceContextCloudRepoRepoIdProjectRepoIdRepoName)
+	return c
+}
+
+// SourceContextCloudRepoRepoIdUid sets the optional parameter
+// "sourceContext.cloudRepo.repoId.uid": A server-assigned, globally
+// unique identifier.
+func (c *ProjectsReposWorkspacesFilesGetCall) SourceContextCloudRepoRepoIdUid(sourceContextCloudRepoRepoIdUid string) *ProjectsReposWorkspacesFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.repoId.uid", sourceContextCloudRepoRepoIdUid)
+	return c
+}
+
+// SourceContextCloudRepoRevisionId sets the optional parameter
+// "sourceContext.cloudRepo.revisionId": A revision ID.
+func (c *ProjectsReposWorkspacesFilesGetCall) SourceContextCloudRepoRevisionId(sourceContextCloudRepoRevisionId string) *ProjectsReposWorkspacesFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.revisionId", sourceContextCloudRepoRevisionId)
+	return c
+}
+
+// SourceContextCloudWorkspaceSnapshotId sets the optional parameter
+// "sourceContext.cloudWorkspace.snapshotId": The ID of the snapshot.
 // An empty snapshot_id refers to the most recent snapshot.
-func (c *ProjectsReposWorkspacesFilesGetCall) SnapshotId(snapshotId string) *ProjectsReposWorkspacesFilesGetCall {
-	c.urlParams_.Set("snapshotId", snapshotId)
+func (c *ProjectsReposWorkspacesFilesGetCall) SourceContextCloudWorkspaceSnapshotId(sourceContextCloudWorkspaceSnapshotId string) *ProjectsReposWorkspacesFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudWorkspace.snapshotId", sourceContextCloudWorkspaceSnapshotId)
+	return c
+}
+
+// SourceContextCloudWorkspaceWorkspaceIdRepoIdUid sets the optional
+// parameter "sourceContext.cloudWorkspace.workspaceId.repoId.uid": A
+// server-assigned, globally unique identifier.
+func (c *ProjectsReposWorkspacesFilesGetCall) SourceContextCloudWorkspaceWorkspaceIdRepoIdUid(sourceContextCloudWorkspaceWorkspaceIdRepoIdUid string) *ProjectsReposWorkspacesFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudWorkspace.workspaceId.repoId.uid", sourceContextCloudWorkspaceWorkspaceIdRepoIdUid)
+	return c
+}
+
+// SourceContextGerritAliasContextKind sets the optional parameter
+// "sourceContext.gerrit.aliasContext.kind": The alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
+func (c *ProjectsReposWorkspacesFilesGetCall) SourceContextGerritAliasContextKind(sourceContextGerritAliasContextKind string) *ProjectsReposWorkspacesFilesGetCall {
+	c.urlParams_.Set("sourceContext.gerrit.aliasContext.kind", sourceContextGerritAliasContextKind)
+	return c
+}
+
+// SourceContextGerritAliasContextName sets the optional parameter
+// "sourceContext.gerrit.aliasContext.name": The alias name.
+func (c *ProjectsReposWorkspacesFilesGetCall) SourceContextGerritAliasContextName(sourceContextGerritAliasContextName string) *ProjectsReposWorkspacesFilesGetCall {
+	c.urlParams_.Set("sourceContext.gerrit.aliasContext.name", sourceContextGerritAliasContextName)
+	return c
+}
+
+// SourceContextGerritAliasName sets the optional parameter
+// "sourceContext.gerrit.aliasName": The name of an alias (branch, tag,
+// etc.).
+func (c *ProjectsReposWorkspacesFilesGetCall) SourceContextGerritAliasName(sourceContextGerritAliasName string) *ProjectsReposWorkspacesFilesGetCall {
+	c.urlParams_.Set("sourceContext.gerrit.aliasName", sourceContextGerritAliasName)
+	return c
+}
+
+// SourceContextGerritGerritProject sets the optional parameter
+// "sourceContext.gerrit.gerritProject": The full project name within
+// the host. Projects may be nested, so
+// "project/subproject" is a valid project name.
+// The "repo name" is hostURI/project.
+func (c *ProjectsReposWorkspacesFilesGetCall) SourceContextGerritGerritProject(sourceContextGerritGerritProject string) *ProjectsReposWorkspacesFilesGetCall {
+	c.urlParams_.Set("sourceContext.gerrit.gerritProject", sourceContextGerritGerritProject)
+	return c
+}
+
+// SourceContextGerritHostUri sets the optional parameter
+// "sourceContext.gerrit.hostUri": The URI of a running Gerrit instance.
+func (c *ProjectsReposWorkspacesFilesGetCall) SourceContextGerritHostUri(sourceContextGerritHostUri string) *ProjectsReposWorkspacesFilesGetCall {
+	c.urlParams_.Set("sourceContext.gerrit.hostUri", sourceContextGerritHostUri)
+	return c
+}
+
+// SourceContextGerritRevisionId sets the optional parameter
+// "sourceContext.gerrit.revisionId": A revision (commit) ID.
+func (c *ProjectsReposWorkspacesFilesGetCall) SourceContextGerritRevisionId(sourceContextGerritRevisionId string) *ProjectsReposWorkspacesFilesGetCall {
+	c.urlParams_.Set("sourceContext.gerrit.revisionId", sourceContextGerritRevisionId)
+	return c
+}
+
+// SourceContextGitRevisionId sets the optional parameter
+// "sourceContext.git.revisionId": Git commit hash.
+// required.
+func (c *ProjectsReposWorkspacesFilesGetCall) SourceContextGitRevisionId(sourceContextGitRevisionId string) *ProjectsReposWorkspacesFilesGetCall {
+	c.urlParams_.Set("sourceContext.git.revisionId", sourceContextGitRevisionId)
+	return c
+}
+
+// SourceContextGitUrl sets the optional parameter
+// "sourceContext.git.url": Git repository URL.
+func (c *ProjectsReposWorkspacesFilesGetCall) SourceContextGitUrl(sourceContextGitUrl string) *ProjectsReposWorkspacesFilesGetCall {
+	c.urlParams_.Set("sourceContext.git.url", sourceContextGitUrl)
 	return c
 }
 
@@ -7915,13 +8108,6 @@ func (c *ProjectsReposWorkspacesFilesGetCall) SnapshotId(snapshotId string) *Pro
 // in the listing. If page_token is specified, this field is ignored.
 func (c *ProjectsReposWorkspacesFilesGetCall) StartPosition(startPosition int64) *ProjectsReposWorkspacesFilesGetCall {
 	c.urlParams_.Set("startPosition", fmt.Sprint(startPosition))
-	return c
-}
-
-// Uid sets the optional parameter "uid": A server-assigned, globally
-// unique identifier.
-func (c *ProjectsReposWorkspacesFilesGetCall) Uid(uid string) *ProjectsReposWorkspacesFilesGetCall {
-	c.urlParams_.Set("uid", uid)
 	return c
 }
 
@@ -8024,93 +8210,6 @@ func (c *ProjectsReposWorkspacesFilesGetCall) Do(opts ...googleapi.CallOption) (
 	//     "path"
 	//   ],
 	//   "parameters": {
-	//     "cloudRepo.aliasContext.kind": {
-	//       "description": "The alias kind.",
-	//       "enum": [
-	//         "ANY",
-	//         "FIXED",
-	//         "MOVABLE",
-	//         "OTHER"
-	//       ],
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudRepo.aliasContext.name": {
-	//       "description": "The alias name.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudRepo.aliasName": {
-	//       "description": "The name of an alias (branch, tag, etc.).",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudRepo.repoId.projectRepoId.projectId": {
-	//       "description": "The ID of the project.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudRepo.repoId.projectRepoId.repoName": {
-	//       "description": "The name of the repo. Leave empty for the default repo.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudRepo.repoId.uid": {
-	//       "description": "A server-assigned, globally unique identifier.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudRepo.revisionId": {
-	//       "description": "A revision ID.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.aliasContext.kind": {
-	//       "description": "The alias kind.",
-	//       "enum": [
-	//         "ANY",
-	//         "FIXED",
-	//         "MOVABLE",
-	//         "OTHER"
-	//       ],
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.aliasContext.name": {
-	//       "description": "The alias name.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.aliasName": {
-	//       "description": "The name of an alias (branch, tag, etc.).",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.gerritProject": {
-	//       "description": "The full project name within the host. Projects may be nested, so\n\"project/subproject\" is a valid project name.\nThe \"repo name\" is hostURI/project.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.hostUri": {
-	//       "description": "The URI of a running Gerrit instance.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.revisionId": {
-	//       "description": "A revision (commit) ID.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "git.revisionId": {
-	//       "description": "Git commit hash.\nrequired.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "git.url": {
-	//       "description": "Git repository URL.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
 	//     "name": {
 	//       "description": "The unique name of the workspace within the repo.  This is the name\nchosen by the client in the Source API's CreateWorkspace method.",
 	//       "location": "path",
@@ -8147,19 +8246,106 @@ func (c *ProjectsReposWorkspacesFilesGetCall) Do(opts ...googleapi.CallOption) (
 	//       "required": true,
 	//       "type": "string"
 	//     },
-	//     "snapshotId": {
+	//     "sourceContext.cloudRepo.aliasContext.kind": {
+	//       "description": "The alias kind.",
+	//       "enum": [
+	//         "ANY",
+	//         "FIXED",
+	//         "MOVABLE",
+	//         "OTHER"
+	//       ],
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.aliasContext.name": {
+	//       "description": "The alias name.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.aliasName": {
+	//       "description": "The name of an alias (branch, tag, etc.).",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.repoId.projectRepoId.projectId": {
+	//       "description": "The ID of the project.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.repoId.projectRepoId.repoName": {
+	//       "description": "The name of the repo. Leave empty for the default repo.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.repoId.uid": {
+	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.revisionId": {
+	//       "description": "A revision ID.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudWorkspace.snapshotId": {
 	//       "description": "The ID of the snapshot.\nAn empty snapshot_id refers to the most recent snapshot.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudWorkspace.workspaceId.repoId.uid": {
+	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.aliasContext.kind": {
+	//       "description": "The alias kind.",
+	//       "enum": [
+	//         "ANY",
+	//         "FIXED",
+	//         "MOVABLE",
+	//         "OTHER"
+	//       ],
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.aliasContext.name": {
+	//       "description": "The alias name.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.aliasName": {
+	//       "description": "The name of an alias (branch, tag, etc.).",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.gerritProject": {
+	//       "description": "The full project name within the host. Projects may be nested, so\n\"project/subproject\" is a valid project name.\nThe \"repo name\" is hostURI/project.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.hostUri": {
+	//       "description": "The URI of a running Gerrit instance.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.revisionId": {
+	//       "description": "A revision (commit) ID.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.git.revisionId": {
+	//       "description": "Git commit hash.\nrequired.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.git.url": {
+	//       "description": "Git repository URL.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "startPosition": {
 	//       "description": "If path refers to a file, the position of the first byte of its contents\nto return. If path refers to a directory, the position of the first entry\nin the listing. If page_token is specified, this field is ignored.",
 	//       "format": "int64",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "uid": {
-	//       "description": "A server-assigned, globally unique identifier.",
 	//       "location": "query",
 	//       "type": "string"
 	//     }
@@ -8219,10 +8405,11 @@ func (r *ProjectsReposWorkspacesSnapshotsService) Get(projectId string, repoName
 	return c
 }
 
-// Uid sets the optional parameter "uid": A server-assigned, globally
-// unique identifier.
-func (c *ProjectsReposWorkspacesSnapshotsGetCall) Uid(uid string) *ProjectsReposWorkspacesSnapshotsGetCall {
-	c.urlParams_.Set("uid", uid)
+// WorkspaceIdRepoIdUid sets the optional parameter
+// "workspaceId.repoId.uid": A server-assigned, globally unique
+// identifier.
+func (c *ProjectsReposWorkspacesSnapshotsGetCall) WorkspaceIdRepoIdUid(workspaceIdRepoIdUid string) *ProjectsReposWorkspacesSnapshotsGetCall {
+	c.urlParams_.Set("workspaceId.repoId.uid", workspaceIdRepoIdUid)
 	return c
 }
 
@@ -8349,7 +8536,7 @@ func (c *ProjectsReposWorkspacesSnapshotsGetCall) Do(opts ...googleapi.CallOptio
 	//       "required": true,
 	//       "type": "string"
 	//     },
-	//     "uid": {
+	//     "workspaceId.repoId.uid": {
 	//       "description": "A server-assigned, globally unique identifier.",
 	//       "location": "query",
 	//       "type": "string"
@@ -8404,10 +8591,11 @@ func (c *ProjectsReposWorkspacesSnapshotsListCall) PageToken(pageToken string) *
 	return c
 }
 
-// Uid sets the optional parameter "uid": A server-assigned, globally
-// unique identifier.
-func (c *ProjectsReposWorkspacesSnapshotsListCall) Uid(uid string) *ProjectsReposWorkspacesSnapshotsListCall {
-	c.urlParams_.Set("uid", uid)
+// WorkspaceIdRepoIdUid sets the optional parameter
+// "workspaceId.repoId.uid": A server-assigned, globally unique
+// identifier.
+func (c *ProjectsReposWorkspacesSnapshotsListCall) WorkspaceIdRepoIdUid(workspaceIdRepoIdUid string) *ProjectsReposWorkspacesSnapshotsListCall {
+	c.urlParams_.Set("workspaceId.repoId.uid", workspaceIdRepoIdUid)
 	return c
 }
 
@@ -8537,7 +8725,7 @@ func (c *ProjectsReposWorkspacesSnapshotsListCall) Do(opts ...googleapi.CallOpti
 	//       "required": true,
 	//       "type": "string"
 	//     },
-	//     "uid": {
+	//     "workspaceId.repoId.uid": {
 	//       "description": "A server-assigned, globally unique identifier.",
 	//       "location": "query",
 	//       "type": "string"
@@ -8601,128 +8789,6 @@ func (r *ProjectsReposWorkspacesSnapshotsService) ListFiles(projectId string, re
 	return c
 }
 
-// CloudRepoAliasContextKind sets the optional parameter
-// "cloudRepo.aliasContext.kind": The alias kind.
-//
-// Possible values:
-//   "ANY"
-//   "FIXED"
-//   "MOVABLE"
-//   "OTHER"
-func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) CloudRepoAliasContextKind(cloudRepoAliasContextKind string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.urlParams_.Set("cloudRepo.aliasContext.kind", cloudRepoAliasContextKind)
-	return c
-}
-
-// CloudRepoAliasContextName sets the optional parameter
-// "cloudRepo.aliasContext.name": The alias name.
-func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) CloudRepoAliasContextName(cloudRepoAliasContextName string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.urlParams_.Set("cloudRepo.aliasContext.name", cloudRepoAliasContextName)
-	return c
-}
-
-// CloudRepoAliasName sets the optional parameter "cloudRepo.aliasName":
-// The name of an alias (branch, tag, etc.).
-func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) CloudRepoAliasName(cloudRepoAliasName string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.urlParams_.Set("cloudRepo.aliasName", cloudRepoAliasName)
-	return c
-}
-
-// CloudRepoRepoIdProjectRepoIdProjectId sets the optional parameter
-// "cloudRepo.repoId.projectRepoId.projectId": The ID of the project.
-func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) CloudRepoRepoIdProjectRepoIdProjectId(cloudRepoRepoIdProjectRepoIdProjectId string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.urlParams_.Set("cloudRepo.repoId.projectRepoId.projectId", cloudRepoRepoIdProjectRepoIdProjectId)
-	return c
-}
-
-// CloudRepoRepoIdProjectRepoIdRepoName sets the optional parameter
-// "cloudRepo.repoId.projectRepoId.repoName": The name of the repo.
-// Leave empty for the default repo.
-func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) CloudRepoRepoIdProjectRepoIdRepoName(cloudRepoRepoIdProjectRepoIdRepoName string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.urlParams_.Set("cloudRepo.repoId.projectRepoId.repoName", cloudRepoRepoIdProjectRepoIdRepoName)
-	return c
-}
-
-// CloudRepoRepoIdUid sets the optional parameter
-// "cloudRepo.repoId.uid": A server-assigned, globally unique
-// identifier.
-func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) CloudRepoRepoIdUid(cloudRepoRepoIdUid string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.urlParams_.Set("cloudRepo.repoId.uid", cloudRepoRepoIdUid)
-	return c
-}
-
-// CloudRepoRevisionId sets the optional parameter
-// "cloudRepo.revisionId": A revision ID.
-func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) CloudRepoRevisionId(cloudRepoRevisionId string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.urlParams_.Set("cloudRepo.revisionId", cloudRepoRevisionId)
-	return c
-}
-
-// GerritAliasContextKind sets the optional parameter
-// "gerrit.aliasContext.kind": The alias kind.
-//
-// Possible values:
-//   "ANY"
-//   "FIXED"
-//   "MOVABLE"
-//   "OTHER"
-func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) GerritAliasContextKind(gerritAliasContextKind string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.urlParams_.Set("gerrit.aliasContext.kind", gerritAliasContextKind)
-	return c
-}
-
-// GerritAliasContextName sets the optional parameter
-// "gerrit.aliasContext.name": The alias name.
-func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) GerritAliasContextName(gerritAliasContextName string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.urlParams_.Set("gerrit.aliasContext.name", gerritAliasContextName)
-	return c
-}
-
-// GerritAliasName sets the optional parameter "gerrit.aliasName": The
-// name of an alias (branch, tag, etc.).
-func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) GerritAliasName(gerritAliasName string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.urlParams_.Set("gerrit.aliasName", gerritAliasName)
-	return c
-}
-
-// GerritGerritProject sets the optional parameter
-// "gerrit.gerritProject": The full project name within the host.
-// Projects may be nested, so
-// "project/subproject" is a valid project name.
-// The "repo name" is hostURI/project.
-func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) GerritGerritProject(gerritGerritProject string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.urlParams_.Set("gerrit.gerritProject", gerritGerritProject)
-	return c
-}
-
-// GerritHostUri sets the optional parameter "gerrit.hostUri": The URI
-// of a running Gerrit instance.
-func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) GerritHostUri(gerritHostUri string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.urlParams_.Set("gerrit.hostUri", gerritHostUri)
-	return c
-}
-
-// GerritRevisionId sets the optional parameter "gerrit.revisionId": A
-// revision (commit) ID.
-func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) GerritRevisionId(gerritRevisionId string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.urlParams_.Set("gerrit.revisionId", gerritRevisionId)
-	return c
-}
-
-// GitRevisionId sets the optional parameter "git.revisionId": Git
-// commit hash.
-// required.
-func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) GitRevisionId(gitRevisionId string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.urlParams_.Set("git.revisionId", gitRevisionId)
-	return c
-}
-
-// GitUrl sets the optional parameter "git.url": Git repository URL.
-func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) GitUrl(gitUrl string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.urlParams_.Set("git.url", gitUrl)
-	return c
-}
-
 // PageSize sets the optional parameter "pageSize": The maximum number
 // of values to return.
 func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) PageSize(pageSize int64) *ProjectsReposWorkspacesSnapshotsListFilesCall {
@@ -8738,10 +8804,137 @@ func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) PageToken(pageToken stri
 	return c
 }
 
-// Uid sets the optional parameter "uid": A server-assigned, globally
+// SourceContextCloudRepoAliasContextKind sets the optional parameter
+// "sourceContext.cloudRepo.aliasContext.kind": The alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
+func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) SourceContextCloudRepoAliasContextKind(sourceContextCloudRepoAliasContextKind string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.aliasContext.kind", sourceContextCloudRepoAliasContextKind)
+	return c
+}
+
+// SourceContextCloudRepoAliasContextName sets the optional parameter
+// "sourceContext.cloudRepo.aliasContext.name": The alias name.
+func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) SourceContextCloudRepoAliasContextName(sourceContextCloudRepoAliasContextName string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.aliasContext.name", sourceContextCloudRepoAliasContextName)
+	return c
+}
+
+// SourceContextCloudRepoAliasName sets the optional parameter
+// "sourceContext.cloudRepo.aliasName": The name of an alias (branch,
+// tag, etc.).
+func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) SourceContextCloudRepoAliasName(sourceContextCloudRepoAliasName string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.aliasName", sourceContextCloudRepoAliasName)
+	return c
+}
+
+// SourceContextCloudRepoRepoIdProjectRepoIdProjectId sets the optional
+// parameter "sourceContext.cloudRepo.repoId.projectRepoId.projectId":
+// The ID of the project.
+func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) SourceContextCloudRepoRepoIdProjectRepoIdProjectId(sourceContextCloudRepoRepoIdProjectRepoIdProjectId string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.repoId.projectRepoId.projectId", sourceContextCloudRepoRepoIdProjectRepoIdProjectId)
+	return c
+}
+
+// SourceContextCloudRepoRepoIdProjectRepoIdRepoName sets the optional
+// parameter "sourceContext.cloudRepo.repoId.projectRepoId.repoName":
+// The name of the repo. Leave empty for the default repo.
+func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) SourceContextCloudRepoRepoIdProjectRepoIdRepoName(sourceContextCloudRepoRepoIdProjectRepoIdRepoName string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.repoId.projectRepoId.repoName", sourceContextCloudRepoRepoIdProjectRepoIdRepoName)
+	return c
+}
+
+// SourceContextCloudRepoRepoIdUid sets the optional parameter
+// "sourceContext.cloudRepo.repoId.uid": A server-assigned, globally
 // unique identifier.
-func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) Uid(uid string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
-	c.urlParams_.Set("uid", uid)
+func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) SourceContextCloudRepoRepoIdUid(sourceContextCloudRepoRepoIdUid string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.repoId.uid", sourceContextCloudRepoRepoIdUid)
+	return c
+}
+
+// SourceContextCloudRepoRevisionId sets the optional parameter
+// "sourceContext.cloudRepo.revisionId": A revision ID.
+func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) SourceContextCloudRepoRevisionId(sourceContextCloudRepoRevisionId string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.revisionId", sourceContextCloudRepoRevisionId)
+	return c
+}
+
+// SourceContextCloudWorkspaceWorkspaceIdRepoIdUid sets the optional
+// parameter "sourceContext.cloudWorkspace.workspaceId.repoId.uid": A
+// server-assigned, globally unique identifier.
+func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) SourceContextCloudWorkspaceWorkspaceIdRepoIdUid(sourceContextCloudWorkspaceWorkspaceIdRepoIdUid string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
+	c.urlParams_.Set("sourceContext.cloudWorkspace.workspaceId.repoId.uid", sourceContextCloudWorkspaceWorkspaceIdRepoIdUid)
+	return c
+}
+
+// SourceContextGerritAliasContextKind sets the optional parameter
+// "sourceContext.gerrit.aliasContext.kind": The alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
+func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) SourceContextGerritAliasContextKind(sourceContextGerritAliasContextKind string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
+	c.urlParams_.Set("sourceContext.gerrit.aliasContext.kind", sourceContextGerritAliasContextKind)
+	return c
+}
+
+// SourceContextGerritAliasContextName sets the optional parameter
+// "sourceContext.gerrit.aliasContext.name": The alias name.
+func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) SourceContextGerritAliasContextName(sourceContextGerritAliasContextName string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
+	c.urlParams_.Set("sourceContext.gerrit.aliasContext.name", sourceContextGerritAliasContextName)
+	return c
+}
+
+// SourceContextGerritAliasName sets the optional parameter
+// "sourceContext.gerrit.aliasName": The name of an alias (branch, tag,
+// etc.).
+func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) SourceContextGerritAliasName(sourceContextGerritAliasName string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
+	c.urlParams_.Set("sourceContext.gerrit.aliasName", sourceContextGerritAliasName)
+	return c
+}
+
+// SourceContextGerritGerritProject sets the optional parameter
+// "sourceContext.gerrit.gerritProject": The full project name within
+// the host. Projects may be nested, so
+// "project/subproject" is a valid project name.
+// The "repo name" is hostURI/project.
+func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) SourceContextGerritGerritProject(sourceContextGerritGerritProject string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
+	c.urlParams_.Set("sourceContext.gerrit.gerritProject", sourceContextGerritGerritProject)
+	return c
+}
+
+// SourceContextGerritHostUri sets the optional parameter
+// "sourceContext.gerrit.hostUri": The URI of a running Gerrit instance.
+func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) SourceContextGerritHostUri(sourceContextGerritHostUri string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
+	c.urlParams_.Set("sourceContext.gerrit.hostUri", sourceContextGerritHostUri)
+	return c
+}
+
+// SourceContextGerritRevisionId sets the optional parameter
+// "sourceContext.gerrit.revisionId": A revision (commit) ID.
+func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) SourceContextGerritRevisionId(sourceContextGerritRevisionId string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
+	c.urlParams_.Set("sourceContext.gerrit.revisionId", sourceContextGerritRevisionId)
+	return c
+}
+
+// SourceContextGitRevisionId sets the optional parameter
+// "sourceContext.git.revisionId": Git commit hash.
+// required.
+func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) SourceContextGitRevisionId(sourceContextGitRevisionId string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
+	c.urlParams_.Set("sourceContext.git.revisionId", sourceContextGitRevisionId)
+	return c
+}
+
+// SourceContextGitUrl sets the optional parameter
+// "sourceContext.git.url": Git repository URL.
+func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) SourceContextGitUrl(sourceContextGitUrl string) *ProjectsReposWorkspacesSnapshotsListFilesCall {
+	c.urlParams_.Set("sourceContext.git.url", sourceContextGitUrl)
 	return c
 }
 
@@ -8844,93 +9037,6 @@ func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) Do(opts ...googleapi.Cal
 	//     "snapshotId"
 	//   ],
 	//   "parameters": {
-	//     "cloudRepo.aliasContext.kind": {
-	//       "description": "The alias kind.",
-	//       "enum": [
-	//         "ANY",
-	//         "FIXED",
-	//         "MOVABLE",
-	//         "OTHER"
-	//       ],
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudRepo.aliasContext.name": {
-	//       "description": "The alias name.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudRepo.aliasName": {
-	//       "description": "The name of an alias (branch, tag, etc.).",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudRepo.repoId.projectRepoId.projectId": {
-	//       "description": "The ID of the project.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudRepo.repoId.projectRepoId.repoName": {
-	//       "description": "The name of the repo. Leave empty for the default repo.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudRepo.repoId.uid": {
-	//       "description": "A server-assigned, globally unique identifier.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudRepo.revisionId": {
-	//       "description": "A revision ID.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.aliasContext.kind": {
-	//       "description": "The alias kind.",
-	//       "enum": [
-	//         "ANY",
-	//         "FIXED",
-	//         "MOVABLE",
-	//         "OTHER"
-	//       ],
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.aliasContext.name": {
-	//       "description": "The alias name.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.aliasName": {
-	//       "description": "The name of an alias (branch, tag, etc.).",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.gerritProject": {
-	//       "description": "The full project name within the host. Projects may be nested, so\n\"project/subproject\" is a valid project name.\nThe \"repo name\" is hostURI/project.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.hostUri": {
-	//       "description": "The URI of a running Gerrit instance.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.revisionId": {
-	//       "description": "A revision (commit) ID.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "git.revisionId": {
-	//       "description": "Git commit hash.\nrequired.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "git.url": {
-	//       "description": "Git repository URL.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
 	//     "name": {
 	//       "description": "The unique name of the workspace within the repo.  This is the name\nchosen by the client in the Source API's CreateWorkspace method.",
 	//       "location": "path",
@@ -8966,8 +9072,95 @@ func (c *ProjectsReposWorkspacesSnapshotsListFilesCall) Do(opts ...googleapi.Cal
 	//       "required": true,
 	//       "type": "string"
 	//     },
-	//     "uid": {
+	//     "sourceContext.cloudRepo.aliasContext.kind": {
+	//       "description": "The alias kind.",
+	//       "enum": [
+	//         "ANY",
+	//         "FIXED",
+	//         "MOVABLE",
+	//         "OTHER"
+	//       ],
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.aliasContext.name": {
+	//       "description": "The alias name.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.aliasName": {
+	//       "description": "The name of an alias (branch, tag, etc.).",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.repoId.projectRepoId.projectId": {
+	//       "description": "The ID of the project.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.repoId.projectRepoId.repoName": {
+	//       "description": "The name of the repo. Leave empty for the default repo.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.repoId.uid": {
 	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.revisionId": {
+	//       "description": "A revision ID.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudWorkspace.workspaceId.repoId.uid": {
+	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.aliasContext.kind": {
+	//       "description": "The alias kind.",
+	//       "enum": [
+	//         "ANY",
+	//         "FIXED",
+	//         "MOVABLE",
+	//         "OTHER"
+	//       ],
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.aliasContext.name": {
+	//       "description": "The alias name.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.aliasName": {
+	//       "description": "The name of an alias (branch, tag, etc.).",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.gerritProject": {
+	//       "description": "The full project name within the host. Projects may be nested, so\n\"project/subproject\" is a valid project name.\nThe \"repo name\" is hostURI/project.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.hostUri": {
+	//       "description": "The URI of a running Gerrit instance.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.revisionId": {
+	//       "description": "A revision (commit) ID.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.git.revisionId": {
+	//       "description": "Git commit hash.\nrequired.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.git.url": {
+	//       "description": "Git repository URL.",
 	//       "location": "query",
 	//       "type": "string"
 	//     }
@@ -9030,128 +9223,6 @@ func (r *ProjectsReposWorkspacesSnapshotsFilesService) Get(projectId string, rep
 	return c
 }
 
-// CloudRepoAliasContextKind sets the optional parameter
-// "cloudRepo.aliasContext.kind": The alias kind.
-//
-// Possible values:
-//   "ANY"
-//   "FIXED"
-//   "MOVABLE"
-//   "OTHER"
-func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) CloudRepoAliasContextKind(cloudRepoAliasContextKind string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.urlParams_.Set("cloudRepo.aliasContext.kind", cloudRepoAliasContextKind)
-	return c
-}
-
-// CloudRepoAliasContextName sets the optional parameter
-// "cloudRepo.aliasContext.name": The alias name.
-func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) CloudRepoAliasContextName(cloudRepoAliasContextName string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.urlParams_.Set("cloudRepo.aliasContext.name", cloudRepoAliasContextName)
-	return c
-}
-
-// CloudRepoAliasName sets the optional parameter "cloudRepo.aliasName":
-// The name of an alias (branch, tag, etc.).
-func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) CloudRepoAliasName(cloudRepoAliasName string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.urlParams_.Set("cloudRepo.aliasName", cloudRepoAliasName)
-	return c
-}
-
-// CloudRepoRepoIdProjectRepoIdProjectId sets the optional parameter
-// "cloudRepo.repoId.projectRepoId.projectId": The ID of the project.
-func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) CloudRepoRepoIdProjectRepoIdProjectId(cloudRepoRepoIdProjectRepoIdProjectId string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.urlParams_.Set("cloudRepo.repoId.projectRepoId.projectId", cloudRepoRepoIdProjectRepoIdProjectId)
-	return c
-}
-
-// CloudRepoRepoIdProjectRepoIdRepoName sets the optional parameter
-// "cloudRepo.repoId.projectRepoId.repoName": The name of the repo.
-// Leave empty for the default repo.
-func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) CloudRepoRepoIdProjectRepoIdRepoName(cloudRepoRepoIdProjectRepoIdRepoName string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.urlParams_.Set("cloudRepo.repoId.projectRepoId.repoName", cloudRepoRepoIdProjectRepoIdRepoName)
-	return c
-}
-
-// CloudRepoRepoIdUid sets the optional parameter
-// "cloudRepo.repoId.uid": A server-assigned, globally unique
-// identifier.
-func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) CloudRepoRepoIdUid(cloudRepoRepoIdUid string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.urlParams_.Set("cloudRepo.repoId.uid", cloudRepoRepoIdUid)
-	return c
-}
-
-// CloudRepoRevisionId sets the optional parameter
-// "cloudRepo.revisionId": A revision ID.
-func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) CloudRepoRevisionId(cloudRepoRevisionId string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.urlParams_.Set("cloudRepo.revisionId", cloudRepoRevisionId)
-	return c
-}
-
-// GerritAliasContextKind sets the optional parameter
-// "gerrit.aliasContext.kind": The alias kind.
-//
-// Possible values:
-//   "ANY"
-//   "FIXED"
-//   "MOVABLE"
-//   "OTHER"
-func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) GerritAliasContextKind(gerritAliasContextKind string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.urlParams_.Set("gerrit.aliasContext.kind", gerritAliasContextKind)
-	return c
-}
-
-// GerritAliasContextName sets the optional parameter
-// "gerrit.aliasContext.name": The alias name.
-func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) GerritAliasContextName(gerritAliasContextName string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.urlParams_.Set("gerrit.aliasContext.name", gerritAliasContextName)
-	return c
-}
-
-// GerritAliasName sets the optional parameter "gerrit.aliasName": The
-// name of an alias (branch, tag, etc.).
-func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) GerritAliasName(gerritAliasName string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.urlParams_.Set("gerrit.aliasName", gerritAliasName)
-	return c
-}
-
-// GerritGerritProject sets the optional parameter
-// "gerrit.gerritProject": The full project name within the host.
-// Projects may be nested, so
-// "project/subproject" is a valid project name.
-// The "repo name" is hostURI/project.
-func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) GerritGerritProject(gerritGerritProject string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.urlParams_.Set("gerrit.gerritProject", gerritGerritProject)
-	return c
-}
-
-// GerritHostUri sets the optional parameter "gerrit.hostUri": The URI
-// of a running Gerrit instance.
-func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) GerritHostUri(gerritHostUri string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.urlParams_.Set("gerrit.hostUri", gerritHostUri)
-	return c
-}
-
-// GerritRevisionId sets the optional parameter "gerrit.revisionId": A
-// revision (commit) ID.
-func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) GerritRevisionId(gerritRevisionId string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.urlParams_.Set("gerrit.revisionId", gerritRevisionId)
-	return c
-}
-
-// GitRevisionId sets the optional parameter "git.revisionId": Git
-// commit hash.
-// required.
-func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) GitRevisionId(gitRevisionId string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.urlParams_.Set("git.revisionId", gitRevisionId)
-	return c
-}
-
-// GitUrl sets the optional parameter "git.url": Git repository URL.
-func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) GitUrl(gitUrl string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.urlParams_.Set("git.url", gitUrl)
-	return c
-}
-
 // PageSize sets the optional parameter "pageSize": The maximum number
 // of values to return.
 func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) PageSize(pageSize int64) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
@@ -9167,6 +9238,140 @@ func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) PageToken(pageToken strin
 	return c
 }
 
+// SourceContextCloudRepoAliasContextKind sets the optional parameter
+// "sourceContext.cloudRepo.aliasContext.kind": The alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
+func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) SourceContextCloudRepoAliasContextKind(sourceContextCloudRepoAliasContextKind string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.aliasContext.kind", sourceContextCloudRepoAliasContextKind)
+	return c
+}
+
+// SourceContextCloudRepoAliasContextName sets the optional parameter
+// "sourceContext.cloudRepo.aliasContext.name": The alias name.
+func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) SourceContextCloudRepoAliasContextName(sourceContextCloudRepoAliasContextName string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.aliasContext.name", sourceContextCloudRepoAliasContextName)
+	return c
+}
+
+// SourceContextCloudRepoAliasName sets the optional parameter
+// "sourceContext.cloudRepo.aliasName": The name of an alias (branch,
+// tag, etc.).
+func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) SourceContextCloudRepoAliasName(sourceContextCloudRepoAliasName string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.aliasName", sourceContextCloudRepoAliasName)
+	return c
+}
+
+// SourceContextCloudRepoRepoIdProjectRepoIdProjectId sets the optional
+// parameter "sourceContext.cloudRepo.repoId.projectRepoId.projectId":
+// The ID of the project.
+func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) SourceContextCloudRepoRepoIdProjectRepoIdProjectId(sourceContextCloudRepoRepoIdProjectRepoIdProjectId string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.repoId.projectRepoId.projectId", sourceContextCloudRepoRepoIdProjectRepoIdProjectId)
+	return c
+}
+
+// SourceContextCloudRepoRepoIdProjectRepoIdRepoName sets the optional
+// parameter "sourceContext.cloudRepo.repoId.projectRepoId.repoName":
+// The name of the repo. Leave empty for the default repo.
+func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) SourceContextCloudRepoRepoIdProjectRepoIdRepoName(sourceContextCloudRepoRepoIdProjectRepoIdRepoName string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.repoId.projectRepoId.repoName", sourceContextCloudRepoRepoIdProjectRepoIdRepoName)
+	return c
+}
+
+// SourceContextCloudRepoRepoIdUid sets the optional parameter
+// "sourceContext.cloudRepo.repoId.uid": A server-assigned, globally
+// unique identifier.
+func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) SourceContextCloudRepoRepoIdUid(sourceContextCloudRepoRepoIdUid string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.repoId.uid", sourceContextCloudRepoRepoIdUid)
+	return c
+}
+
+// SourceContextCloudRepoRevisionId sets the optional parameter
+// "sourceContext.cloudRepo.revisionId": A revision ID.
+func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) SourceContextCloudRepoRevisionId(sourceContextCloudRepoRevisionId string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudRepo.revisionId", sourceContextCloudRepoRevisionId)
+	return c
+}
+
+// SourceContextCloudWorkspaceWorkspaceIdRepoIdUid sets the optional
+// parameter "sourceContext.cloudWorkspace.workspaceId.repoId.uid": A
+// server-assigned, globally unique identifier.
+func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) SourceContextCloudWorkspaceWorkspaceIdRepoIdUid(sourceContextCloudWorkspaceWorkspaceIdRepoIdUid string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
+	c.urlParams_.Set("sourceContext.cloudWorkspace.workspaceId.repoId.uid", sourceContextCloudWorkspaceWorkspaceIdRepoIdUid)
+	return c
+}
+
+// SourceContextGerritAliasContextKind sets the optional parameter
+// "sourceContext.gerrit.aliasContext.kind": The alias kind.
+//
+// Possible values:
+//   "ANY"
+//   "FIXED"
+//   "MOVABLE"
+//   "OTHER"
+func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) SourceContextGerritAliasContextKind(sourceContextGerritAliasContextKind string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
+	c.urlParams_.Set("sourceContext.gerrit.aliasContext.kind", sourceContextGerritAliasContextKind)
+	return c
+}
+
+// SourceContextGerritAliasContextName sets the optional parameter
+// "sourceContext.gerrit.aliasContext.name": The alias name.
+func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) SourceContextGerritAliasContextName(sourceContextGerritAliasContextName string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
+	c.urlParams_.Set("sourceContext.gerrit.aliasContext.name", sourceContextGerritAliasContextName)
+	return c
+}
+
+// SourceContextGerritAliasName sets the optional parameter
+// "sourceContext.gerrit.aliasName": The name of an alias (branch, tag,
+// etc.).
+func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) SourceContextGerritAliasName(sourceContextGerritAliasName string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
+	c.urlParams_.Set("sourceContext.gerrit.aliasName", sourceContextGerritAliasName)
+	return c
+}
+
+// SourceContextGerritGerritProject sets the optional parameter
+// "sourceContext.gerrit.gerritProject": The full project name within
+// the host. Projects may be nested, so
+// "project/subproject" is a valid project name.
+// The "repo name" is hostURI/project.
+func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) SourceContextGerritGerritProject(sourceContextGerritGerritProject string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
+	c.urlParams_.Set("sourceContext.gerrit.gerritProject", sourceContextGerritGerritProject)
+	return c
+}
+
+// SourceContextGerritHostUri sets the optional parameter
+// "sourceContext.gerrit.hostUri": The URI of a running Gerrit instance.
+func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) SourceContextGerritHostUri(sourceContextGerritHostUri string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
+	c.urlParams_.Set("sourceContext.gerrit.hostUri", sourceContextGerritHostUri)
+	return c
+}
+
+// SourceContextGerritRevisionId sets the optional parameter
+// "sourceContext.gerrit.revisionId": A revision (commit) ID.
+func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) SourceContextGerritRevisionId(sourceContextGerritRevisionId string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
+	c.urlParams_.Set("sourceContext.gerrit.revisionId", sourceContextGerritRevisionId)
+	return c
+}
+
+// SourceContextGitRevisionId sets the optional parameter
+// "sourceContext.git.revisionId": Git commit hash.
+// required.
+func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) SourceContextGitRevisionId(sourceContextGitRevisionId string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
+	c.urlParams_.Set("sourceContext.git.revisionId", sourceContextGitRevisionId)
+	return c
+}
+
+// SourceContextGitUrl sets the optional parameter
+// "sourceContext.git.url": Git repository URL.
+func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) SourceContextGitUrl(sourceContextGitUrl string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
+	c.urlParams_.Set("sourceContext.git.url", sourceContextGitUrl)
+	return c
+}
+
 // StartPosition sets the optional parameter "startPosition": If path
 // refers to a file, the position of the first byte of its contents
 // to return. If path refers to a directory, the position of the first
@@ -9174,13 +9379,6 @@ func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) PageToken(pageToken strin
 // in the listing. If page_token is specified, this field is ignored.
 func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) StartPosition(startPosition int64) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
 	c.urlParams_.Set("startPosition", fmt.Sprint(startPosition))
-	return c
-}
-
-// Uid sets the optional parameter "uid": A server-assigned, globally
-// unique identifier.
-func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) Uid(uid string) *ProjectsReposWorkspacesSnapshotsFilesGetCall {
-	c.urlParams_.Set("uid", uid)
 	return c
 }
 
@@ -9285,93 +9483,6 @@ func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) Do(opts ...googleapi.Call
 	//     "path"
 	//   ],
 	//   "parameters": {
-	//     "cloudRepo.aliasContext.kind": {
-	//       "description": "The alias kind.",
-	//       "enum": [
-	//         "ANY",
-	//         "FIXED",
-	//         "MOVABLE",
-	//         "OTHER"
-	//       ],
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudRepo.aliasContext.name": {
-	//       "description": "The alias name.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudRepo.aliasName": {
-	//       "description": "The name of an alias (branch, tag, etc.).",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudRepo.repoId.projectRepoId.projectId": {
-	//       "description": "The ID of the project.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudRepo.repoId.projectRepoId.repoName": {
-	//       "description": "The name of the repo. Leave empty for the default repo.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudRepo.repoId.uid": {
-	//       "description": "A server-assigned, globally unique identifier.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "cloudRepo.revisionId": {
-	//       "description": "A revision ID.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.aliasContext.kind": {
-	//       "description": "The alias kind.",
-	//       "enum": [
-	//         "ANY",
-	//         "FIXED",
-	//         "MOVABLE",
-	//         "OTHER"
-	//       ],
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.aliasContext.name": {
-	//       "description": "The alias name.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.aliasName": {
-	//       "description": "The name of an alias (branch, tag, etc.).",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.gerritProject": {
-	//       "description": "The full project name within the host. Projects may be nested, so\n\"project/subproject\" is a valid project name.\nThe \"repo name\" is hostURI/project.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.hostUri": {
-	//       "description": "The URI of a running Gerrit instance.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "gerrit.revisionId": {
-	//       "description": "A revision (commit) ID.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "git.revisionId": {
-	//       "description": "Git commit hash.\nrequired.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "git.url": {
-	//       "description": "Git repository URL.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
 	//     "name": {
 	//       "description": "The unique name of the workspace within the repo.  This is the name\nchosen by the client in the Source API's CreateWorkspace method.",
 	//       "location": "path",
@@ -9414,14 +9525,101 @@ func (c *ProjectsReposWorkspacesSnapshotsFilesGetCall) Do(opts ...googleapi.Call
 	//       "required": true,
 	//       "type": "string"
 	//     },
-	//     "startPosition": {
-	//       "description": "If path refers to a file, the position of the first byte of its contents\nto return. If path refers to a directory, the position of the first entry\nin the listing. If page_token is specified, this field is ignored.",
-	//       "format": "int64",
+	//     "sourceContext.cloudRepo.aliasContext.kind": {
+	//       "description": "The alias kind.",
+	//       "enum": [
+	//         "ANY",
+	//         "FIXED",
+	//         "MOVABLE",
+	//         "OTHER"
+	//       ],
 	//       "location": "query",
 	//       "type": "string"
 	//     },
-	//     "uid": {
+	//     "sourceContext.cloudRepo.aliasContext.name": {
+	//       "description": "The alias name.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.aliasName": {
+	//       "description": "The name of an alias (branch, tag, etc.).",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.repoId.projectRepoId.projectId": {
+	//       "description": "The ID of the project.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.repoId.projectRepoId.repoName": {
+	//       "description": "The name of the repo. Leave empty for the default repo.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.repoId.uid": {
 	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudRepo.revisionId": {
+	//       "description": "A revision ID.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.cloudWorkspace.workspaceId.repoId.uid": {
+	//       "description": "A server-assigned, globally unique identifier.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.aliasContext.kind": {
+	//       "description": "The alias kind.",
+	//       "enum": [
+	//         "ANY",
+	//         "FIXED",
+	//         "MOVABLE",
+	//         "OTHER"
+	//       ],
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.aliasContext.name": {
+	//       "description": "The alias name.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.aliasName": {
+	//       "description": "The name of an alias (branch, tag, etc.).",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.gerritProject": {
+	//       "description": "The full project name within the host. Projects may be nested, so\n\"project/subproject\" is a valid project name.\nThe \"repo name\" is hostURI/project.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.hostUri": {
+	//       "description": "The URI of a running Gerrit instance.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.gerrit.revisionId": {
+	//       "description": "A revision (commit) ID.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.git.revisionId": {
+	//       "description": "Git commit hash.\nrequired.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceContext.git.url": {
+	//       "description": "Git repository URL.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "startPosition": {
+	//       "description": "If path refers to a file, the position of the first byte of its contents\nto return. If path refers to a directory, the position of the first entry\nin the listing. If page_token is specified, this field is ignored.",
+	//       "format": "int64",
 	//       "location": "query",
 	//       "type": "string"
 	//     }

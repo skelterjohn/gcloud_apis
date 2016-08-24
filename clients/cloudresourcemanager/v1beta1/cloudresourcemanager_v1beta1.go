@@ -99,6 +99,26 @@ type ProjectsService struct {
 	s *Service
 }
 
+// Ancestor: Identifying information for a single ancestor of a project.
+type Ancestor struct {
+	// ResourceId: Resource id of the ancestor.
+	ResourceId *ResourceId `json:"resourceId,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "ResourceId") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *Ancestor) MarshalJSON() ([]byte, error) {
+	type noMethod Ancestor
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
 // Binding: Associates `members` with a `role`.
 type Binding struct {
 	// Members: Specifies the identities requesting access for a Cloud
@@ -128,7 +148,9 @@ type Binding struct {
 	//
 	// * `domain:{domain}`: A Google Apps domain name that represents all
 	// the
-	//    users of that domain. For example, `google.com` or `example.com`.
+	//    users of that domain. For example, `google.com` or
+	// `example.com`.
+	//
 	//
 	Members []string `json:"members,omitempty"`
 
@@ -169,6 +191,40 @@ type Empty struct {
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
 	googleapi.ServerResponse `json:"-"`
+}
+
+// GetAncestryRequest: The request sent to the
+// GetAncestry
+// method.
+type GetAncestryRequest struct {
+}
+
+// GetAncestryResponse: Response from the GetAncestry method.
+type GetAncestryResponse struct {
+	// Ancestor: Ancestors are ordered from bottom to top of the resource
+	// hierarchy. The
+	// first ancestor is the project itself, followed by the project's
+	// parent,
+	// etc.
+	Ancestor []*Ancestor `json:"ancestor,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "Ancestor") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *GetAncestryResponse) MarshalJSON() ([]byte, error) {
+	type noMethod GetAncestryResponse
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
 // GetIamPolicyRequest: Request message for `GetIamPolicy` method.
@@ -275,13 +331,36 @@ type Organization struct {
 
 	// DisplayName: A friendly string to be used to refer to the
 	// Organization in the UI.
-	// This field is required.
+	// Assigned by the server, set to the firm name of the Google For
+	// Work
+	// customer that owns this organization.
+	// @OutputOnly
 	DisplayName string `json:"displayName,omitempty"`
+
+	// LifecycleState: The organization's current lifecycle state. Assigned
+	// by the server.
+	// @OutputOnly
+	//
+	// Possible values:
+	//   "LIFECYCLE_STATE_UNSPECIFIED" - Unspecified state.  This is only
+	// useful for distinguishing unset values.
+	//   "ACTIVE" - The normal and active state.
+	//   "DELETE_REQUESTED" - The organization has been marked for deletion
+	// by the user.
+	LifecycleState string `json:"lifecycleState,omitempty"`
+
+	// Name: Output Only. The resource name of the organization. This is
+	// the
+	// organization's relative path in the API. Its format
+	// is
+	// "organizations/[organization_id]". For example, "organizations/1234".
+	Name string `json:"name,omitempty"`
 
 	// OrganizationId: An immutable id for the Organization that is assigned
 	// on creation. This
 	// should be omitted when creating a new Organization.
 	// This field is read-only.
+	// This field is deprecated and will be removed in v1. Use name instead.
 	OrganizationId string `json:"organizationId,omitempty"`
 
 	// Owner: The owner of this Organization. The owner should be specified
@@ -352,21 +431,22 @@ func (s *OrganizationOwner) MarshalJSON() ([]byte, error) {
 // **Example**
 //
 //     {
-//         "bindings": [
-//          {
-//              "role": "roles/owner",
-//              "members": [
-//              "user:mike@example.com",
-//              "group:admins@example.com",
-//              "domain:google.com",
+//       "bindings": [
+//         {
+//           "role": "roles/owner",
+//           "members": [
+//             "user:mike@example.com",
+//             "group:admins@example.com",
+//             "domain:google.com",
 //
-// "serviceAccount:my-other-app@appspot.gserviceaccount.com"]
-//          },
-//          {
-//              "role": "roles/viewer",
-//              "members": ["user:sean@example.com"]
-//          }
-//          ]
+// "serviceAccount:my-other-app@appspot.gserviceaccount.com",
+//           ]
+//         },
+//         {
+//           "role": "roles/viewer",
+//           "members": ["user:sean@example.com"]
+//         }
+//       ]
 //     }
 //
 // For a description of IAM and its features, see the
@@ -467,12 +547,11 @@ type Project struct {
 	// (by invoking DeleteProject)
 	// or by the system (Google Cloud Platform).
 	// This can generally be reversed by invoking UndeleteProject.
-	//   "DELETE_IN_PROGRESS" - The process of deleting the project has
-	// begun.  Reversing the deletion
-	// is no longer possible.
+	//   "DELETE_IN_PROGRESS" - This lifecycle state is no longer used and
+	// is not returned by the API.
 	LifecycleState string `json:"lifecycleState,omitempty"`
 
-	// Name: The user-assigned name of the Project.
+	// Name: The user-assigned display name of the Project.
 	// It must be 4 to 30 characters.
 	// Allowed characters are: lowercase and uppercase letters,
 	// numbers,
@@ -544,7 +623,7 @@ type ResourceId struct {
 
 	// Type: Required field representing the resource type this id is
 	// for.
-	// At present, the only valid type is "organization".
+	// At present, the valid types are "project" and "organization".
 	Type string `json:"type,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Id") to
@@ -595,7 +674,8 @@ type TestIamPermissionsRequest struct {
 	// wildcards (such as '*' or 'storage.*') are not allowed. For
 	// more
 	// information see
-	// IAM Overview.
+	// [IAM
+	// Overview](https://cloud.google.com/iam/docs/overview#permissions).
 	Permissions []string `json:"permissions,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Permissions") to
@@ -640,22 +720,35 @@ func (s *TestIamPermissionsResponse) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
+// UndeleteProjectRequest: The request sent to the
+// UndeleteProject
+// method.
+type UndeleteProjectRequest struct {
+}
+
 // method id "cloudresourcemanager.organizations.get":
 
 type OrganizationsGetCall struct {
-	s              *Service
-	organizationId string
-	urlParams_     gensupport.URLParams
-	ifNoneMatch_   string
-	ctx_           context.Context
+	s               *Service
+	organizationsId string
+	urlParams_      gensupport.URLParams
+	ifNoneMatch_    string
+	ctx_            context.Context
 }
 
-// Get: Fetches an Organization resource identified by the
-// specified
-// `organization_id`.
-func (r *OrganizationsService) Get(organizationId string) *OrganizationsGetCall {
+// Get: Fetches an Organization resource identified by the specified
+// resource name.
+func (r *OrganizationsService) Get(organizationsId string) *OrganizationsGetCall {
 	c := &OrganizationsGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.organizationId = organizationId
+	c.organizationsId = organizationsId
+	return c
+}
+
+// OrganizationId sets the optional parameter "organizationId": The id
+// of the Organization resource to fetch.
+// This field is deprecated and will be removed in v1. Use name instead.
+func (c *OrganizationsGetCall) OrganizationId(organizationId string) *OrganizationsGetCall {
+	c.urlParams_.Set("organizationId", organizationId)
 	return c
 }
 
@@ -693,12 +786,12 @@ func (c *OrganizationsGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/organizations/{organizationId}")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/organizations/{organizationsId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"organizationId": c.organizationId,
+		"organizationsId": c.organizationsId,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -744,22 +837,27 @@ func (c *OrganizationsGetCall) Do(opts ...googleapi.CallOption) (*Organization, 
 	}
 	return ret, nil
 	// {
-	//   "description": "Fetches an Organization resource identified by the specified\n`organization_id`.",
-	//   "flatPath": "v1beta1/organizations/{organizationId}",
+	//   "description": "Fetches an Organization resource identified by the specified resource name.",
+	//   "flatPath": "v1beta1/organizations/{organizationsId}",
 	//   "httpMethod": "GET",
 	//   "id": "cloudresourcemanager.organizations.get",
 	//   "parameterOrder": [
-	//     "organizationId"
+	//     "organizationsId"
 	//   ],
 	//   "parameters": {
 	//     "organizationId": {
-	//       "description": "The id of the Organization resource to fetch.",
+	//       "description": "The id of the Organization resource to fetch.\nThis field is deprecated and will be removed in v1. Use name instead.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "organizationsId": {
+	//       "description": "Part of `name`. The resource name of the Organization to fetch, e.g. \"organizations/1234\".",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/organizations/{organizationId}",
+	//   "path": "v1beta1/organizations/{organizationsId}",
 	//   "response": {
 	//     "$ref": "Organization"
 	//   },
@@ -775,7 +873,7 @@ func (c *OrganizationsGetCall) Do(opts ...googleapi.CallOption) (*Organization, 
 
 type OrganizationsGetIamPolicyCall struct {
 	s                   *Service
-	resource            string
+	organizationsId     string
 	getiampolicyrequest *GetIamPolicyRequest
 	urlParams_          gensupport.URLParams
 	ctx_                context.Context
@@ -783,10 +881,12 @@ type OrganizationsGetIamPolicyCall struct {
 
 // GetIamPolicy: Gets the access control policy for an Organization
 // resource. May be empty
-// if no such policy or resource exists.
-func (r *OrganizationsService) GetIamPolicy(resource string, getiampolicyrequest *GetIamPolicyRequest) *OrganizationsGetIamPolicyCall {
+// if no such policy or resource exists. The `resource` field should be
+// the
+// organization's resource name, e.g. "organizations/123".
+func (r *OrganizationsService) GetIamPolicy(organizationsId string, getiampolicyrequest *GetIamPolicyRequest) *OrganizationsGetIamPolicyCall {
 	c := &OrganizationsGetIamPolicyCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.resource = resource
+	c.organizationsId = organizationsId
 	c.getiampolicyrequest = getiampolicyrequest
 	return c
 }
@@ -817,12 +917,12 @@ func (c *OrganizationsGetIamPolicyCall) doRequest(alt string) (*http.Response, e
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/organizations/{resource}:getIamPolicy")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/organizations/{organizationsId}:getIamPolicy")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"resource": c.resource,
+		"organizationsId": c.organizationsId,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -868,22 +968,22 @@ func (c *OrganizationsGetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Polic
 	}
 	return ret, nil
 	// {
-	//   "description": "Gets the access control policy for an Organization resource. May be empty\nif no such policy or resource exists.",
-	//   "flatPath": "v1beta1/organizations/{resource}:getIamPolicy",
+	//   "description": "Gets the access control policy for an Organization resource. May be empty\nif no such policy or resource exists. The `resource` field should be the\norganization's resource name, e.g. \"organizations/123\".",
+	//   "flatPath": "v1beta1/organizations/{organizationsId}:getIamPolicy",
 	//   "httpMethod": "POST",
 	//   "id": "cloudresourcemanager.organizations.getIamPolicy",
 	//   "parameterOrder": [
-	//     "resource"
+	//     "organizationsId"
 	//   ],
 	//   "parameters": {
-	//     "resource": {
-	//       "description": "REQUIRED: The resource for which the policy is being requested.\n`resource` is usually specified as a path, such as\n`projects/*project*/zones/*zone*/disks/*disk*`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the `getIamPolicy` documentation.",
+	//     "organizationsId": {
+	//       "description": "Part of `resource`. REQUIRED: The resource for which the policy is being requested.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/organizations/{resource}:getIamPolicy",
+	//   "path": "v1beta1/organizations/{organizationsId}:getIamPolicy",
 	//   "request": {
 	//     "$ref": "GetIamPolicyRequest"
 	//   },
@@ -1102,7 +1202,7 @@ func (c *OrganizationsListCall) Pages(ctx context.Context, f func(*ListOrganizat
 
 type OrganizationsSetIamPolicyCall struct {
 	s                   *Service
-	resource            string
+	organizationsId     string
 	setiampolicyrequest *SetIamPolicyRequest
 	urlParams_          gensupport.URLParams
 	ctx_                context.Context
@@ -1110,10 +1210,12 @@ type OrganizationsSetIamPolicyCall struct {
 
 // SetIamPolicy: Sets the access control policy on an Organization
 // resource. Replaces any
-// existing policy.
-func (r *OrganizationsService) SetIamPolicy(resource string, setiampolicyrequest *SetIamPolicyRequest) *OrganizationsSetIamPolicyCall {
+// existing policy. The `resource` field should be the organization's
+// resource
+// name, e.g. "organizations/123".
+func (r *OrganizationsService) SetIamPolicy(organizationsId string, setiampolicyrequest *SetIamPolicyRequest) *OrganizationsSetIamPolicyCall {
 	c := &OrganizationsSetIamPolicyCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.resource = resource
+	c.organizationsId = organizationsId
 	c.setiampolicyrequest = setiampolicyrequest
 	return c
 }
@@ -1144,12 +1246,12 @@ func (c *OrganizationsSetIamPolicyCall) doRequest(alt string) (*http.Response, e
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/organizations/{resource}:setIamPolicy")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/organizations/{organizationsId}:setIamPolicy")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"resource": c.resource,
+		"organizationsId": c.organizationsId,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -1195,22 +1297,22 @@ func (c *OrganizationsSetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Polic
 	}
 	return ret, nil
 	// {
-	//   "description": "Sets the access control policy on an Organization resource. Replaces any\nexisting policy.",
-	//   "flatPath": "v1beta1/organizations/{resource}:setIamPolicy",
+	//   "description": "Sets the access control policy on an Organization resource. Replaces any\nexisting policy. The `resource` field should be the organization's resource\nname, e.g. \"organizations/123\".",
+	//   "flatPath": "v1beta1/organizations/{organizationsId}:setIamPolicy",
 	//   "httpMethod": "POST",
 	//   "id": "cloudresourcemanager.organizations.setIamPolicy",
 	//   "parameterOrder": [
-	//     "resource"
+	//     "organizationsId"
 	//   ],
 	//   "parameters": {
-	//     "resource": {
-	//       "description": "REQUIRED: The resource for which the policy is being specified.\n`resource` is usually specified as a path, such as\n`projects/*project*/zones/*zone*/disks/*disk*`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the `setIamPolicy` documentation.",
+	//     "organizationsId": {
+	//       "description": "Part of `resource`. REQUIRED: The resource for which the policy is being specified.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/organizations/{resource}:setIamPolicy",
+	//   "path": "v1beta1/organizations/{organizationsId}:setIamPolicy",
 	//   "request": {
 	//     "$ref": "SetIamPolicyRequest"
 	//   },
@@ -1228,7 +1330,7 @@ func (c *OrganizationsSetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Polic
 
 type OrganizationsTestIamPermissionsCall struct {
 	s                         *Service
-	resource                  string
+	organizationsId           string
 	testiampermissionsrequest *TestIamPermissionsRequest
 	urlParams_                gensupport.URLParams
 	ctx_                      context.Context
@@ -1236,9 +1338,11 @@ type OrganizationsTestIamPermissionsCall struct {
 
 // TestIamPermissions: Returns permissions that a caller has on the
 // specified Organization.
-func (r *OrganizationsService) TestIamPermissions(resource string, testiampermissionsrequest *TestIamPermissionsRequest) *OrganizationsTestIamPermissionsCall {
+// The `resource` field should be the organization's resource name,
+// e.g. "organizations/123".
+func (r *OrganizationsService) TestIamPermissions(organizationsId string, testiampermissionsrequest *TestIamPermissionsRequest) *OrganizationsTestIamPermissionsCall {
 	c := &OrganizationsTestIamPermissionsCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.resource = resource
+	c.organizationsId = organizationsId
 	c.testiampermissionsrequest = testiampermissionsrequest
 	return c
 }
@@ -1269,12 +1373,12 @@ func (c *OrganizationsTestIamPermissionsCall) doRequest(alt string) (*http.Respo
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/organizations/{resource}:testIamPermissions")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/organizations/{organizationsId}:testIamPermissions")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"resource": c.resource,
+		"organizationsId": c.organizationsId,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -1320,22 +1424,22 @@ func (c *OrganizationsTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (
 	}
 	return ret, nil
 	// {
-	//   "description": "Returns permissions that a caller has on the specified Organization.",
-	//   "flatPath": "v1beta1/organizations/{resource}:testIamPermissions",
+	//   "description": "Returns permissions that a caller has on the specified Organization.\nThe `resource` field should be the organization's resource name,\ne.g. \"organizations/123\".",
+	//   "flatPath": "v1beta1/organizations/{organizationsId}:testIamPermissions",
 	//   "httpMethod": "POST",
 	//   "id": "cloudresourcemanager.organizations.testIamPermissions",
 	//   "parameterOrder": [
-	//     "resource"
+	//     "organizationsId"
 	//   ],
 	//   "parameters": {
-	//     "resource": {
-	//       "description": "REQUIRED: The resource for which the policy detail is being requested.\n`resource` is usually specified as a path, such as\n`projects/*project*/zones/*zone*/disks/*disk*`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the `testIamPermissions` documentation.",
+	//     "organizationsId": {
+	//       "description": "Part of `resource`. REQUIRED: The resource for which the policy detail is being requested.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/organizations/{resource}:testIamPermissions",
+	//   "path": "v1beta1/organizations/{organizationsId}:testIamPermissions",
 	//   "request": {
 	//     "$ref": "TestIamPermissionsRequest"
 	//   },
@@ -1353,19 +1457,18 @@ func (c *OrganizationsTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (
 // method id "cloudresourcemanager.organizations.update":
 
 type OrganizationsUpdateCall struct {
-	s              *Service
-	organizationId string
-	organization   *Organization
-	urlParams_     gensupport.URLParams
-	ctx_           context.Context
+	s               *Service
+	organizationsId string
+	organization    *Organization
+	urlParams_      gensupport.URLParams
+	ctx_            context.Context
 }
 
-// Update: Updates an Organization resource identified by the
-// specified
-// `organization_id`.
-func (r *OrganizationsService) Update(organizationId string, organization *Organization) *OrganizationsUpdateCall {
+// Update: Updates an Organization resource identified by the specified
+// resource name.
+func (r *OrganizationsService) Update(organizationsId string, organization *Organization) *OrganizationsUpdateCall {
 	c := &OrganizationsUpdateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.organizationId = organizationId
+	c.organizationsId = organizationsId
 	c.organization = organization
 	return c
 }
@@ -1396,12 +1499,12 @@ func (c *OrganizationsUpdateCall) doRequest(alt string) (*http.Response, error) 
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/organizations/{organizationId}")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/organizations/{organizationsId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PUT", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"organizationId": c.organizationId,
+		"organizationsId": c.organizationsId,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -1447,22 +1550,22 @@ func (c *OrganizationsUpdateCall) Do(opts ...googleapi.CallOption) (*Organizatio
 	}
 	return ret, nil
 	// {
-	//   "description": "Updates an Organization resource identified by the specified\n`organization_id`.",
-	//   "flatPath": "v1beta1/organizations/{organizationId}",
+	//   "description": "Updates an Organization resource identified by the specified resource name.",
+	//   "flatPath": "v1beta1/organizations/{organizationsId}",
 	//   "httpMethod": "PUT",
 	//   "id": "cloudresourcemanager.organizations.update",
 	//   "parameterOrder": [
-	//     "organizationId"
+	//     "organizationsId"
 	//   ],
 	//   "parameters": {
-	//     "organizationId": {
-	//       "description": "An immutable id for the Organization that is assigned on creation. This\nshould be omitted when creating a new Organization.\nThis field is read-only.",
+	//     "organizationsId": {
+	//       "description": "Part of `name`. Output Only. The resource name of the organization. This is the\norganization's relative path in the API. Its format is\n\"organizations/[organization_id]\". For example, \"organizations/1234\".",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/organizations/{organizationId}",
+	//   "path": "v1beta1/organizations/{organizationsId}",
 	//   "request": {
 	//     "$ref": "Organization"
 	//   },
@@ -1499,6 +1602,13 @@ type ProjectsCreateCall struct {
 func (r *ProjectsService) Create(project *Project) *ProjectsCreateCall {
 	c := &ProjectsCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.project = project
+	return c
+}
+
+// UseLegacyStack sets the optional parameter "useLegacyStack": A safety
+// hatch to opt out of the new reliable project creation process.
+func (c *ProjectsCreateCall) UseLegacyStack(useLegacyStack bool) *ProjectsCreateCall {
+	c.urlParams_.Set("useLegacyStack", fmt.Sprint(useLegacyStack))
 	return c
 }
 
@@ -1582,7 +1692,13 @@ func (c *ProjectsCreateCall) Do(opts ...googleapi.CallOption) (*Project, error) 
 	//   "httpMethod": "POST",
 	//   "id": "cloudresourcemanager.projects.create",
 	//   "parameterOrder": [],
-	//   "parameters": {},
+	//   "parameters": {
+	//     "useLegacyStack": {
+	//       "description": "A safety hatch to opt out of the new reliable project creation process.",
+	//       "location": "query",
+	//       "type": "boolean"
+	//     }
+	//   },
 	//   "path": "v1beta1/projects",
 	//   "request": {
 	//     "$ref": "Project"
@@ -1618,9 +1734,9 @@ type ProjectsDeleteCall struct {
 // This method changes the Project's lifecycle state from
 // ACTIVE
 // to DELETE_REQUESTED.
-// The deletion starts at an unspecified time,
-// at which point the lifecycle state changes to
-// DELETE_IN_PROGRESS.
+// The deletion starts at an unspecified time, at which point the
+// project is
+// no longer accessible.
 //
 // Until the deletion completes, you can check the lifecycle
 // state
@@ -1711,7 +1827,7 @@ func (c *ProjectsDeleteCall) Do(opts ...googleapi.CallOption) (*Empty, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Marks the Project identified by the specified\n`project_id` (for example, `my-project-123`) for deletion.\nThis method will only affect the Project if the following criteria are met:\n\n+ The Project does not have a billing account associated with it.\n+ The Project has a lifecycle state of\nACTIVE.\n\nThis method changes the Project's lifecycle state from\nACTIVE\nto DELETE_REQUESTED.\nThe deletion starts at an unspecified time,\nat which point the lifecycle state changes to DELETE_IN_PROGRESS.\n\nUntil the deletion completes, you can check the lifecycle state\nchecked by retrieving the Project with GetProject,\nand the Project remains visible to ListProjects.\nHowever, you cannot update the project.\n\nAfter the deletion completes, the Project is not retrievable by\nthe  GetProject and\nListProjects methods.\n\nThe caller must have modify permissions for this Project.",
+	//   "description": "Marks the Project identified by the specified\n`project_id` (for example, `my-project-123`) for deletion.\nThis method will only affect the Project if the following criteria are met:\n\n+ The Project does not have a billing account associated with it.\n+ The Project has a lifecycle state of\nACTIVE.\n\nThis method changes the Project's lifecycle state from\nACTIVE\nto DELETE_REQUESTED.\nThe deletion starts at an unspecified time, at which point the project is\nno longer accessible.\n\nUntil the deletion completes, you can check the lifecycle state\nchecked by retrieving the Project with GetProject,\nand the Project remains visible to ListProjects.\nHowever, you cannot update the project.\n\nAfter the deletion completes, the Project is not retrievable by\nthe  GetProject and\nListProjects methods.\n\nThe caller must have modify permissions for this Project.",
 	//   "flatPath": "v1beta1/projects/{projectId}",
 	//   "httpMethod": "DELETE",
 	//   "id": "cloudresourcemanager.projects.delete",
@@ -1869,6 +1985,136 @@ func (c *ProjectsGetCall) Do(opts ...googleapi.CallOption) (*Project, error) {
 
 }
 
+// method id "cloudresourcemanager.projects.getAncestry":
+
+type ProjectsGetAncestryCall struct {
+	s                  *Service
+	projectId          string
+	getancestryrequest *GetAncestryRequest
+	urlParams_         gensupport.URLParams
+	ctx_               context.Context
+}
+
+// GetAncestry: Gets a list of ancestors in the resource hierarchy for
+// the Project
+// identified by the specified `project_id` (for example,
+// `my-project-123`).
+//
+// The caller must have read permissions for this Project.
+func (r *ProjectsService) GetAncestry(projectId string, getancestryrequest *GetAncestryRequest) *ProjectsGetAncestryCall {
+	c := &ProjectsGetAncestryCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.projectId = projectId
+	c.getancestryrequest = getancestryrequest
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *ProjectsGetAncestryCall) Fields(s ...googleapi.Field) *ProjectsGetAncestryCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsGetAncestryCall) Context(ctx context.Context) *ProjectsGetAncestryCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsGetAncestryCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.getancestryrequest)
+	if err != nil {
+		return nil, err
+	}
+	reqHeaders.Set("Content-Type", "application/json")
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/projects/{projectId}:getAncestry")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"projectId": c.projectId,
+	})
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "cloudresourcemanager.projects.getAncestry" call.
+// Exactly one of *GetAncestryResponse or error will be non-nil. Any
+// non-2xx status code is an error. Response headers are in either
+// *GetAncestryResponse.ServerResponse.Header or (if a response was
+// returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *ProjectsGetAncestryCall) Do(opts ...googleapi.CallOption) (*GetAncestryResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &GetAncestryResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Gets a list of ancestors in the resource hierarchy for the Project\nidentified by the specified `project_id` (for example, `my-project-123`).\n\nThe caller must have read permissions for this Project.",
+	//   "flatPath": "v1beta1/projects/{projectId}:getAncestry",
+	//   "httpMethod": "POST",
+	//   "id": "cloudresourcemanager.projects.getAncestry",
+	//   "parameterOrder": [
+	//     "projectId"
+	//   ],
+	//   "parameters": {
+	//     "projectId": {
+	//       "description": "The Project ID (for example, `my-project-123`).\n\nRequired.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "v1beta1/projects/{projectId}:getAncestry",
+	//   "request": {
+	//     "$ref": "GetAncestryRequest"
+	//   },
+	//   "response": {
+	//     "$ref": "GetAncestryResponse"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only"
+	//   ]
+	// }
+
+}
+
 // method id "cloudresourcemanager.projects.getIamPolicy":
 
 type ProjectsGetIamPolicyCall struct {
@@ -1975,7 +2221,7 @@ func (c *ProjectsGetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Policy, er
 	//   ],
 	//   "parameters": {
 	//     "resource": {
-	//       "description": "REQUIRED: The resource for which the policy is being requested.\n`resource` is usually specified as a path, such as\n`projects/*project*/zones/*zone*/disks/*disk*`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the `getIamPolicy` documentation.",
+	//       "description": "REQUIRED: The resource for which the policy is being requested.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -2217,21 +2463,42 @@ type ProjectsSetIamPolicyCall struct {
 //
 // The following constraints apply when using `setIamPolicy()`:
 //
-// + Project currently supports only `user:{emailid}`
-// and
-// `serviceAccount:{emailid}` members in a `Binding` of a `Policy`.
+// + Project does not support `allUsers` and `allAuthenticatedUsers`
+// as
+// `members` in a `Binding` of a `Policy`.
 //
-// + To be added as an `owner`, a user must be invited via Cloud
-// Platform
-// console and must accept the invitation.
+// + The owner role can be granted only to `user` and
+// `serviceAccount`.
 //
-// + Members cannot be added to more than one role in the same
-// policy.
+// + Service accounts can be made owners of a project directly
+// without any restrictions. However, to be added as an owner, a user
+// must be
+// invited via Cloud Platform console and must accept the invitation.
+//
+// + A user cannot be granted the owner role using `setIamPolicy()`. The
+// user
+// must be granted the owner role using the Cloud Platform Console and
+// must
+// explicitly accept the invitation.
+//
+// + Invitations to grant the owner role cannot be sent using
+// `setIamPolicy()`;
+// they must be sent only using the Cloud Platform Console.
+//
+// + Membership changes that leave the project without any owners that
+// have
+// accepted the Terms of Service (ToS) will be rejected.
 //
 // + There must be at least one owner who has accepted the Terms
 // of
 // Service (ToS) agreement in the policy. Calling `setIamPolicy()` to
 // to remove the last ToS-accepted owner from the policy will fail.
+// This
+// restriction also applies to legacy projects that no longer have
+// owners
+// who have accepted the ToS. Edits to IAM policies will be rejected
+// until
+// the lack of a ToS-accepting owner is rectified.
 //
 // + Calling this method requires enabling the App Engine Admin
 // API.
@@ -2326,7 +2593,7 @@ func (c *ProjectsSetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Policy, er
 	}
 	return ret, nil
 	// {
-	//   "description": "Sets the IAM access control policy for the specified Project. Replaces\nany existing policy.\n\nThe following constraints apply when using `setIamPolicy()`:\n\n+ Project currently supports only `user:{emailid}` and\n`serviceAccount:{emailid}` members in a `Binding` of a `Policy`.\n\n+ To be added as an `owner`, a user must be invited via Cloud Platform\nconsole and must accept the invitation.\n\n+ Members cannot be added to more than one role in the same policy.\n\n+ There must be at least one owner who has accepted the Terms of\nService (ToS) agreement in the policy. Calling `setIamPolicy()` to\nto remove the last ToS-accepted owner from the policy will fail.\n\n+ Calling this method requires enabling the App Engine Admin API.\n\nNote: Removing service accounts from policies or changing their roles\ncan render services completely inoperable. It is important to understand\nhow the service account is being used before removing or updating its roles.",
+	//   "description": "Sets the IAM access control policy for the specified Project. Replaces\nany existing policy.\n\nThe following constraints apply when using `setIamPolicy()`:\n\n+ Project does not support `allUsers` and `allAuthenticatedUsers` as\n`members` in a `Binding` of a `Policy`.\n\n+ The owner role can be granted only to `user` and `serviceAccount`.\n\n+ Service accounts can be made owners of a project directly\nwithout any restrictions. However, to be added as an owner, a user must be\ninvited via Cloud Platform console and must accept the invitation.\n\n+ A user cannot be granted the owner role using `setIamPolicy()`. The user\nmust be granted the owner role using the Cloud Platform Console and must\nexplicitly accept the invitation.\n\n+ Invitations to grant the owner role cannot be sent using `setIamPolicy()`;\nthey must be sent only using the Cloud Platform Console.\n\n+ Membership changes that leave the project without any owners that have\naccepted the Terms of Service (ToS) will be rejected.\n\n+ There must be at least one owner who has accepted the Terms of\nService (ToS) agreement in the policy. Calling `setIamPolicy()` to\nto remove the last ToS-accepted owner from the policy will fail. This\nrestriction also applies to legacy projects that no longer have owners\nwho have accepted the ToS. Edits to IAM policies will be rejected until\nthe lack of a ToS-accepting owner is rectified.\n\n+ Calling this method requires enabling the App Engine Admin API.\n\nNote: Removing service accounts from policies or changing their roles\ncan render services completely inoperable. It is important to understand\nhow the service account is being used before removing or updating its roles.",
 	//   "flatPath": "v1beta1/projects/{resource}:setIamPolicy",
 	//   "httpMethod": "POST",
 	//   "id": "cloudresourcemanager.projects.setIamPolicy",
@@ -2335,7 +2602,7 @@ func (c *ProjectsSetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Policy, er
 	//   ],
 	//   "parameters": {
 	//     "resource": {
-	//       "description": "REQUIRED: The resource for which the policy is being specified.\n`resource` is usually specified as a path, such as\n`projects/*project*/zones/*zone*/disks/*disk*`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the `setIamPolicy` documentation.",
+	//       "description": "REQUIRED: The resource for which the policy is being specified.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -2460,7 +2727,7 @@ func (c *ProjectsTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (*Test
 	//   ],
 	//   "parameters": {
 	//     "resource": {
-	//       "description": "REQUIRED: The resource for which the policy detail is being requested.\n`resource` is usually specified as a path, such as\n`projects/*project*/zones/*zone*/disks/*disk*`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the `testIamPermissions` documentation.",
+	//       "description": "REQUIRED: The resource for which the policy detail is being requested.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -2484,10 +2751,11 @@ func (c *ProjectsTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (*Test
 // method id "cloudresourcemanager.projects.undelete":
 
 type ProjectsUndeleteCall struct {
-	s          *Service
-	projectId  string
-	urlParams_ gensupport.URLParams
-	ctx_       context.Context
+	s                      *Service
+	projectId              string
+	undeleteprojectrequest *UndeleteProjectRequest
+	urlParams_             gensupport.URLParams
+	ctx_                   context.Context
 }
 
 // Undelete: Restores the Project identified by the
@@ -2496,15 +2764,13 @@ type ProjectsUndeleteCall struct {
 // You can only use this method for a Project that has a lifecycle state
 // of
 // DELETE_REQUESTED.
-// After deletion starts, as indicated by a lifecycle state
-// of
-// DELETE_IN_PROGRESS,
-// the Project cannot be restored.
+// After deletion starts, the Project cannot be restored.
 //
 // The caller must have modify permissions for this Project.
-func (r *ProjectsService) Undelete(projectId string) *ProjectsUndeleteCall {
+func (r *ProjectsService) Undelete(projectId string, undeleteprojectrequest *UndeleteProjectRequest) *ProjectsUndeleteCall {
 	c := &ProjectsUndeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
+	c.undeleteprojectrequest = undeleteprojectrequest
 	return c
 }
 
@@ -2528,6 +2794,11 @@ func (c *ProjectsUndeleteCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.undeleteprojectrequest)
+	if err != nil {
+		return nil, err
+	}
+	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/projects/{projectId}:undelete")
 	urls += "?" + c.urlParams_.Encode()
@@ -2580,7 +2851,7 @@ func (c *ProjectsUndeleteCall) Do(opts ...googleapi.CallOption) (*Empty, error) 
 	}
 	return ret, nil
 	// {
-	//   "description": "Restores the Project identified by the specified\n`project_id` (for example, `my-project-123`).\nYou can only use this method for a Project that has a lifecycle state of\nDELETE_REQUESTED.\nAfter deletion starts, as indicated by a lifecycle state of\nDELETE_IN_PROGRESS,\nthe Project cannot be restored.\n\nThe caller must have modify permissions for this Project.",
+	//   "description": "Restores the Project identified by the specified\n`project_id` (for example, `my-project-123`).\nYou can only use this method for a Project that has a lifecycle state of\nDELETE_REQUESTED.\nAfter deletion starts, the Project cannot be restored.\n\nThe caller must have modify permissions for this Project.",
 	//   "flatPath": "v1beta1/projects/{projectId}:undelete",
 	//   "httpMethod": "POST",
 	//   "id": "cloudresourcemanager.projects.undelete",
@@ -2596,6 +2867,9 @@ func (c *ProjectsUndeleteCall) Do(opts ...googleapi.CallOption) (*Empty, error) 
 	//     }
 	//   },
 	//   "path": "v1beta1/projects/{projectId}:undelete",
+	//   "request": {
+	//     "$ref": "UndeleteProjectRequest"
+	//   },
 	//   "response": {
 	//     "$ref": "Empty"
 	//   },

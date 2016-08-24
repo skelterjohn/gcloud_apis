@@ -1,4 +1,4 @@
-// Package iam provides access to the Google Identity and Access Management API.
+// Package iam provides access to the Google Identity and Access Management (IAM) API.
 //
 // See https://cloud.google.com/iam/
 //
@@ -56,10 +56,8 @@ func New(client *http.Client) (*Service, error) {
 		return nil, errors.New("client is nil")
 	}
 	s := &Service{client: client, BasePath: basePath}
-	s.IamPolicies = NewIamPoliciesService(s)
 	s.Projects = NewProjectsService(s)
 	s.Roles = NewRolesService(s)
-	s.V1 = NewV1Service(s)
 	return s, nil
 }
 
@@ -68,13 +66,9 @@ type Service struct {
 	BasePath  string // API endpoint base URL
 	UserAgent string // optional additional User-Agent fragment
 
-	IamPolicies *IamPoliciesService
-
 	Projects *ProjectsService
 
 	Roles *RolesService
-
-	V1 *V1Service
 }
 
 func (s *Service) userAgent() string {
@@ -82,15 +76,6 @@ func (s *Service) userAgent() string {
 		return googleapi.UserAgent
 	}
 	return googleapi.UserAgent + " " + s.UserAgent
-}
-
-func NewIamPoliciesService(s *Service) *IamPoliciesService {
-	rs := &IamPoliciesService{s: s}
-	return rs
-}
-
-type IamPoliciesService struct {
-	s *Service
 }
 
 func NewProjectsService(s *Service) *ProjectsService {
@@ -135,33 +120,37 @@ type RolesService struct {
 	s *Service
 }
 
-func NewV1Service(s *Service) *V1Service {
-	rs := &V1Service{s: s}
-	return rs
-}
+// AuditConfigDelta: One delta entry for AuditConfig. Each individual
+// change (only one
+// exempted_member in each entry) to a AuditConfig will be a separate
+// entry.
+type AuditConfigDelta struct {
+	// Action: The action that was performed on an audit configuration in a
+	// policy.
+	// Required
+	//
+	// Possible values:
+	//   "ACTION_UNSPECIFIED" - Unspecified.
+	//   "ADD" - Addition of an audit configuration.
+	//   "REMOVE" - Removal of an audit configuration.
+	Action string `json:"action,omitempty"`
 
-type V1Service struct {
-	s *Service
-}
-
-// AuditConfig: Enables "data access" audit logging for a service and
-// specifies a list
-// of members that are log-exempted.
-type AuditConfig struct {
-	// ExemptedMembers: Specifies the identities that are exempted from
-	// "data access" audit
+	// ExemptedMember: A single identity that is exempted from "data access"
+	// audit
 	// logging for the `service` specified above.
 	// Follows the same format of Binding.members.
-	ExemptedMembers []string `json:"exemptedMembers,omitempty"`
+	// Required
+	ExemptedMember string `json:"exemptedMember,omitempty"`
 
 	// Service: Specifies a service that will be enabled for "data access"
 	// audit
 	// logging.
 	// For example, `resourcemanager`, `storage`, `compute`.
 	// `allServices` is a special value that covers all services.
+	// Required
 	Service string `json:"service,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "ExemptedMembers") to
+	// ForceSendFields is a list of field names (e.g. "Action") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -170,8 +159,32 @@ type AuditConfig struct {
 	ForceSendFields []string `json:"-"`
 }
 
-func (s *AuditConfig) MarshalJSON() ([]byte, error) {
-	type noMethod AuditConfig
+func (s *AuditConfigDelta) MarshalJSON() ([]byte, error) {
+	type noMethod AuditConfigDelta
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// AuditData: Audit log information specific to Cloud IAM. This message
+// is serialized
+// as an `Any` type in the `ServiceData` message of an
+// `AuditLog` message.
+type AuditData struct {
+	// PolicyDelta: Policy delta between the original policy and the newly
+	// set policy.
+	PolicyDelta *PolicyDelta `json:"policyDelta,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "PolicyDelta") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *AuditData) MarshalJSON() ([]byte, error) {
+	type noMethod AuditData
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
@@ -205,7 +218,9 @@ type Binding struct {
 	//
 	// * `domain:{domain}`: A Google Apps domain name that represents all
 	// the
-	//    users of that domain. For example, `google.com` or `example.com`.
+	//    users of that domain. For example, `google.com` or
+	// `example.com`.
+	//
 	//
 	Members []string `json:"members,omitempty"`
 
@@ -230,55 +245,32 @@ func (s *Binding) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// CloudAuditOptions: Write a Cloud Audit log
-type CloudAuditOptions struct {
-}
-
-// Condition: A condition to be met.
-type Condition struct {
-	// Iam: Trusted attributes supplied by the IAM system.
+// BindingDelta: One delta entry for Binding. Each individual change
+// (only one member in each
+// entry) to a binding will be a separate entry.
+type BindingDelta struct {
+	// Action: The action that was performed on a Binding.
+	// Required
 	//
 	// Possible values:
-	//   "NO_ATTR" - Default non-attribute.
-	//   "AUTHORITY" - Either principal or (if present) authority
-	//   "ATTRIBUTION" - selector
-	// Always the original principal, but making clear
-	Iam string `json:"iam,omitempty"`
+	//   "ACTION_UNSPECIFIED" - Unspecified.
+	//   "ADD" - Addition of a Binding.
+	//   "REMOVE" - Removal of a Binding.
+	Action string `json:"action,omitempty"`
 
-	// Op: An operator to apply the subject with.
-	//
-	// Possible values:
-	//   "NO_OP" - Default no-op.
-	//   "EQUALS" - Equality check.
-	//   "NOT_EQUALS" - Non-equality check.
-	//   "IN" - Set-inclusion check.
-	//   "NOT_IN" - Set-exclusion check.
-	//   "DISCHARGED" - Subject is discharged
-	Op string `json:"op,omitempty"`
+	// Member: A single identity requesting access for a Cloud Platform
+	// resource.
+	// Follows the same format of Binding.members.
+	// Required
+	Member string `json:"member,omitempty"`
 
-	// Svc: Trusted attributes discharged by the service.
-	Svc string `json:"svc,omitempty"`
+	// Role: Role that is assigned to `members`.
+	// For example, `roles/viewer`, `roles/editor`, or
+	// `roles/owner`.
+	// Required
+	Role string `json:"role,omitempty"`
 
-	// Sys: Trusted attributes supplied by any service that owns resources
-	// and uses
-	// the IAM system for access control.
-	//
-	// Possible values:
-	//   "NO_ATTR" - Default non-attribute type
-	//   "REGION" - Region of the resource
-	//   "SERVICE" - Service name
-	//   "NAME" - Resource name
-	//   "IP" - IP address of the caller
-	Sys string `json:"sys,omitempty"`
-
-	// Value: The object of the condition. Exactly one of these must be set.
-	Value string `json:"value,omitempty"`
-
-	// Values: The objects of the condition. This is mutually exclusive with
-	// 'value'.
-	Values []string `json:"values,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "Iam") to
+	// ForceSendFields is a list of field names (e.g. "Action") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -287,21 +279,40 @@ type Condition struct {
 	ForceSendFields []string `json:"-"`
 }
 
-func (s *Condition) MarshalJSON() ([]byte, error) {
-	type noMethod Condition
+func (s *BindingDelta) MarshalJSON() ([]byte, error) {
+	type noMethod BindingDelta
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// CounterOptions: Options for counters
-type CounterOptions struct {
-	// Field: The field value to attribute.
-	Field string `json:"field,omitempty"`
+// CreateServiceAccountKeyRequest: The service account key create
+// request.
+type CreateServiceAccountKeyRequest struct {
+	// KeyAlgorithm: Which type of key and algorithm to use for the key.
+	// The default is currently a 4K RSA key.  However this may change in
+	// the
+	// future.
+	//
+	// Possible values:
+	//   "KEY_ALG_UNSPECIFIED" - An unspecified key algorithm.
+	//   "KEY_ALG_RSA_1024" - 1k RSA Key.
+	//   "KEY_ALG_RSA_2048" - 2k RSA Key.
+	KeyAlgorithm string `json:"keyAlgorithm,omitempty"`
 
-	// Metric: The metric to update.
-	Metric string `json:"metric,omitempty"`
+	// PrivateKeyType: The output format of the private key.
+	// `GOOGLE_CREDENTIALS_FILE` is the
+	// default output format.
+	//
+	// Possible values:
+	//   "TYPE_UNSPECIFIED" - Unspecified. Equivalent to
+	// `TYPE_GOOGLE_CREDENTIALS_FILE`.
+	//   "TYPE_PKCS12_FILE" - PKCS12 format.
+	// The password for the PKCS12 file is `notasecret`.
+	// For more information, see https://tools.ietf.org/html/rfc7292.
+	//   "TYPE_GOOGLE_CREDENTIALS_FILE" - Google Credentials File format.
+	PrivateKeyType string `json:"privateKeyType,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "Field") to
+	// ForceSendFields is a list of field names (e.g. "KeyAlgorithm") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -310,8 +321,8 @@ type CounterOptions struct {
 	ForceSendFields []string `json:"-"`
 }
 
-func (s *CounterOptions) MarshalJSON() ([]byte, error) {
-	type noMethod CounterOptions
+func (s *CreateServiceAccountKeyRequest) MarshalJSON() ([]byte, error) {
+	type noMethod CreateServiceAccountKeyRequest
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
@@ -324,12 +335,13 @@ type CreateServiceAccountRequest struct {
 	// project,
 	// must be 1-63 characters long, and match the regular
 	// expression
-	// [a-z]([-a-z0-9]*[a-z0-9]) to comply with RFC1035.
+	// `[a-z]([-a-z0-9]*[a-z0-9])` to comply with RFC1035.
 	AccountId string `json:"accountId,omitempty"`
 
-	// ServiceAccount: The ServiceAccount resource to create. Currently only
-	// the
-	// display_name and the description are user assignable values.
+	// ServiceAccount: The ServiceAccount resource to create.
+	// Currently, only the following values are user
+	// assignable:
+	// `display_name` .
 	ServiceAccount *ServiceAccount `json:"serviceAccount,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "AccountId") to
@@ -345,10 +357,6 @@ func (s *CreateServiceAccountRequest) MarshalJSON() ([]byte, error) {
 	type noMethod CreateServiceAccountRequest
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// DataAccessOptions: Write a Data Access (Gin) log
-type DataAccessOptions struct {
 }
 
 // Empty: A generic empty message that you can re-use to avoid defining
@@ -367,86 +375,6 @@ type Empty struct {
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
 	googleapi.ServerResponse `json:"-"`
-}
-
-// GetPolicyDetailsRequest: The request to get the current policy and
-// the policies on the inherited
-// resources the user has access to.
-type GetPolicyDetailsRequest struct {
-	// FullResourcePath: REQUIRED: The full resource path of the current
-	// policy being
-	// requested, e.g., //dataflow.googleapis.com/projects/../jobs/..
-	FullResourcePath string `json:"fullResourcePath,omitempty"`
-
-	// PageSize: Limit on the number of policies to include in the
-	// response.
-	// Further accounts can subsequently be obtained by including
-	// the
-	// [GetPolicyDetailsResponse.next_page_token] in a subsequent
-	// request.
-	// If zero, the default page size 20 will be used.
-	// Must be given a value in range [0, 100], otherwise an invalid
-	// argument
-	// error will be returned.
-	PageSize int64 `json:"pageSize,omitempty"`
-
-	// PageToken: Optional pagination token returned in an
-	// earlier
-	// [GetPolicyDetailsResponse.next_page_token].
-	PageToken string `json:"pageToken,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "FullResourcePath") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *GetPolicyDetailsRequest) MarshalJSON() ([]byte, error) {
-	type noMethod GetPolicyDetailsRequest
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// GetPolicyDetailsResponse: The response to the GetPolicyDetailsRequest
-// containing the current policy and
-// the policies on the inherited resources the user has access to.
-type GetPolicyDetailsResponse struct {
-	// NextPageToken: To retrieve the next page of results,
-	// set
-	// [GetPolicyDetailsRequest.page_token] to this value.
-	// If this value is empty, then there are not any further policies that
-	// the
-	// user has access to.
-	// The lifetime is 60 minutes. An "Expired pagination token" error will
-	// be
-	// returned if exceeded.
-	NextPageToken string `json:"nextPageToken,omitempty"`
-
-	// Policies: The current policy and all the inherited policies the user
-	// has
-	// access to.
-	Policies []*PolicyDetail `json:"policies,omitempty"`
-
-	// ServerResponse contains the HTTP response code and headers from the
-	// server.
-	googleapi.ServerResponse `json:"-"`
-
-	// ForceSendFields is a list of field names (e.g. "NextPageToken") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *GetPolicyDetailsResponse) MarshalJSON() ([]byte, error) {
-	type noMethod GetPolicyDetailsResponse
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
 // ListServiceAccountKeysResponse: The service account keys list
@@ -481,7 +409,8 @@ type ListServiceAccountsResponse struct {
 
 	// NextPageToken: To retrieve the next page of results,
 	// set
-	// [ListServiceAccountsRequest.page_token] to this value.
+	// ListServiceAccountsRequest.page_token
+	// to this value.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
@@ -503,60 +432,6 @@ func (s *ListServiceAccountsResponse) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// LogConfig: Specifies what kind of log the caller must write
-// Increment a streamz counter with the specified metric and field
-// names.
-//
-// Metric names should start with a '/', generally be
-// lowercase-only,
-// and end in "_count". Field names should not contain an initial
-// slash.
-// The actual exported metric names will have "/iam/policy"
-// prepended.
-//
-// Field names correspond to IAM request parameters and field values
-// are
-// their respective values.
-//
-// At present only "iam_principal", corresponding to
-// IAMContext.principal,
-// is supported.
-//
-// Examples:
-//   counter { metric: "/debug_access_count"  field: "iam_principal" }
-//   ==> increment counter /iam/policy/backend_debug_access_count
-//                         {iam_principal=[value of
-// IAMContext.principal]}
-//
-// At this time we do not support:
-// * multiple field names (though this may be supported in the future)
-// * decrementing the counter
-// * incrementing it by anything other than 1
-type LogConfig struct {
-	// CloudAudit: Cloud audit options.
-	CloudAudit *CloudAuditOptions `json:"cloudAudit,omitempty"`
-
-	// Counter: Counter options.
-	Counter *CounterOptions `json:"counter,omitempty"`
-
-	// DataAccess: Data access options.
-	DataAccess *DataAccessOptions `json:"dataAccess,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "CloudAudit") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *LogConfig) MarshalJSON() ([]byte, error) {
-	type noMethod LogConfig
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
 // Policy: Defines an Identity and Access Management (IAM) policy. It is
 // used to
 // specify access control policies for Cloud Platform resources.
@@ -573,37 +448,27 @@ func (s *LogConfig) MarshalJSON() ([]byte, error) {
 // **Example**
 //
 //     {
-//         "bindings": [
-//          {
-//              "role": "roles/owner",
-//              "members": [
-//              "user:mike@example.com",
-//              "group:admins@example.com",
-//              "domain:google.com",
+//       "bindings": [
+//         {
+//           "role": "roles/owner",
+//           "members": [
+//             "user:mike@example.com",
+//             "group:admins@example.com",
+//             "domain:google.com",
 //
-// "serviceAccount:my-other-app@appspot.gserviceaccount.com"]
-//          },
-//          {
-//              "role": "roles/viewer",
-//              "members": ["user:sean@example.com"]
-//          }
-//          ]
+// "serviceAccount:my-other-app@appspot.gserviceaccount.com",
+//           ]
+//         },
+//         {
+//           "role": "roles/viewer",
+//           "members": ["user:sean@example.com"]
+//         }
+//       ]
 //     }
 //
 // For a description of IAM and its features, see the
 // [IAM developer's guide](https://cloud.google.com/iam).
 type Policy struct {
-	// AuditConfigs: Specifies audit logging configs for "data
-	// access".
-	// "data access": generally refers to data reads/writes and admin
-	// reads.
-	// "admin activity": generally refers to admin writes.
-	//
-	// Note: `AuditConfig` doesn't apply to "admin activity", which
-	// always
-	// enables audit logging.
-	AuditConfigs []*AuditConfig `json:"auditConfigs,omitempty"`
-
 	// Bindings: Associates a list of `members` to a `role`.
 	// Multiple `bindings` must not be specified for the same
 	// `role`.
@@ -630,10 +495,6 @@ type Policy struct {
 	// policy is overwritten blindly.
 	Etag string `json:"etag,omitempty"`
 
-	IamOwned bool `json:"iamOwned,omitempty"`
-
-	Rules []*Rule `json:"rules,omitempty"`
-
 	// Version: Version of the `Policy`. The default version is 0.
 	Version int64 `json:"version,omitempty"`
 
@@ -641,7 +502,7 @@ type Policy struct {
 	// server.
 	googleapi.ServerResponse `json:"-"`
 
-	// ForceSendFields is a list of field names (e.g. "AuditConfigs") to
+	// ForceSendFields is a list of field names (e.g. "Bindings") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -656,20 +517,16 @@ func (s *Policy) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// PolicyDetail: A policy and its full resource path.
-type PolicyDetail struct {
-	// FullResourcePath: The full resource path of the policy
-	// e.g., //dataflow.googleapis.com/projects/../jobs/..
-	// Note that a resource and its inherited resource have
-	// different
-	// full_resource_path.
-	FullResourcePath string `json:"fullResourcePath,omitempty"`
+// PolicyDelta: The difference delta between two policies.
+type PolicyDelta struct {
+	// AuditConfigDeltas: The delta for AuditConfigs between two policies.
+	AuditConfigDeltas []*AuditConfigDelta `json:"auditConfigDeltas,omitempty"`
 
-	// Policy: The policy of a resource/project/folder.
-	Policy *Policy `json:"policy,omitempty"`
+	// BindingDeltas: The delta for Bindings between two policies.
+	BindingDeltas []*BindingDelta `json:"bindingDeltas,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "FullResourcePath") to
-	// unconditionally include in API requests. By default, fields with
+	// ForceSendFields is a list of field names (e.g. "AuditConfigDeltas")
+	// to unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
 	// server regardless of whether the field is empty or not. This may be
@@ -677,21 +534,21 @@ type PolicyDetail struct {
 	ForceSendFields []string `json:"-"`
 }
 
-func (s *PolicyDetail) MarshalJSON() ([]byte, error) {
-	type noMethod PolicyDetail
+func (s *PolicyDelta) MarshalJSON() ([]byte, error) {
+	type noMethod PolicyDelta
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
 // QueryGrantableRolesRequest: The grantable role query request.
 type QueryGrantableRolesRequest struct {
-	// FullResourceName: Required. The full resource name to query the list
-	// of grantable roles for.
+	// FullResourceName: Required. The full resource name to query from the
+	// list of grantable roles.
 	//
-	// This will follow the GCP resource format.
-	// For example, a GCP project of ID "my-project" will be
+	// The name follows the Google Cloud Platform resource format.
+	// For example, a Cloud Platform project with id `my-project` will be
 	// named
-	// "//cloudresourcemanager.googleapis.com/projects/my-project".
+	// `//cloudresourcemanager.googleapis.com/projects/my-project`.
 	FullResourceName string `json:"fullResourceName,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "FullResourceName") to
@@ -741,7 +598,7 @@ type Role struct {
 	// Name: The name of the role.
 	//
 	// Examples of roles names are:
-	// "roles/editor", "roles/viewer" and "roles/logging.viewer"
+	// `roles/editor`, `roles/viewer` and `roles/logging.viewer`.
 	Name string `json:"name,omitempty"`
 
 	// Title: Optional.  A human-readable title for the role.  Typically
@@ -764,116 +621,58 @@ func (s *Role) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// Rule: A rule to be applied in a Policy.
-type Rule struct {
-	// Action: Required
-	//
-	// Possible values:
-	//   "NO_ACTION" - Default no action.
-	//   "ALLOW" - Matching 'Entries' grant access.
-	//   "ALLOW_WITH_LOG" - Matching 'Entries' grant access and the caller
-	// promises to log
-	// the request per the returned log_configs.
-	//   "DENY" - Matching 'Entries' deny access.
-	//   "DENY_WITH_LOG" - Matching 'Entries' deny access and the caller
-	// promises to log
-	// the request per the returned log_configs.
-	//   "LOG" - Matching 'Entries' tell IAM.Check callers to generate logs.
-	Action string `json:"action,omitempty"`
-
-	// Conditions: Additional restrictions that must be met
-	Conditions []*Condition `json:"conditions,omitempty"`
-
-	// Description: Human-readable description of the rule.
-	Description string `json:"description,omitempty"`
-
-	// In: The rule matches if the PRINCIPAL/AUTHORITY_SELECTOR is in
-	// this
-	// set of entries.
-	In []string `json:"in,omitempty"`
-
-	// LogConfig: The config returned to callers of tech.iam.IAM.CheckPolicy
-	// for any entries
-	// that match the LOG action.
-	LogConfig []*LogConfig `json:"logConfig,omitempty"`
-
-	// NotIn: The rule matches if the PRINCIPAL/AUTHORITY_SELECTOR is not in
-	// this
-	// set of entries.
-	// The format for in and not_in entries is the same as for members in
-	// a
-	// Binding (see google/iam/v1/policy.proto).
-	NotIn []string `json:"notIn,omitempty"`
-
-	// Permissions: A permission is a string of form '<service>.<resource
-	// type>.<verb>'
-	// (e.g., 'storage.buckets.list'). A value of '*' matches all
-	// permissions,
-	// and a verb part of '*' (e.g., 'storage.buckets.*') matches all verbs.
-	Permissions []string `json:"permissions,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "Action") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *Rule) MarshalJSON() ([]byte, error) {
-	type noMethod Rule
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
 // ServiceAccount: A service account in the Identity and Access
 // Management API.
 //
-// To create a service account, you specify the project_id and
-// account_id
-// for the account.  The account_id is unique within the project, and
-// used
-// to generate the service account email address and a stable
-// unique id.
+// To create a service account, specify the `project_id` and the
+// `account_id`
+// for the account.  The `account_id` is unique within the project, and
+// is used
+// to generate the service account email address and a
+// stable
+// `unique_id`.
 //
-// All other methods can identify accounts using the
+// If the account already exists, the account's resource name is
+// returned
+// in util::Status's ResourceInfo.resource_name in the format
+// of
+// projects/{project}/serviceAccounts/{email}. The caller can use the
+// name in
+// other methods to access the account.
+//
+// All other methods can identify the service account using the
 // format
-// "projects/{project}/serviceAccounts/{account}".
-// Using '-' as a wildcard for the project, will infer the project
+// `projects/{project}/serviceAccounts/{account}`.
+// Using `-` as a wildcard for the project will infer the project
 // from
-// the account. The account value can be the email address or the
-// unique_id
-// of the service account.
+// the account. The `account` value can be the `email` address or
+// the
+// `unique_id` of the service account.
 type ServiceAccount struct {
-	// Description: Optional. A user-specified opaque description of the
-	// service account.
-	Description string `json:"description,omitempty"`
-
 	// DisplayName: Optional. A user-specified description of the service
 	// account.  Must be
 	// fewer than 100 UTF-8 bytes.
 	DisplayName string `json:"displayName,omitempty"`
 
-	// Email: @OutputOnly Email address of the service account.
+	// Email: @OutputOnly The email address of the service account.
 	Email string `json:"email,omitempty"`
 
 	// Etag: Used to perform a consistent read-modify-write.
 	Etag string `json:"etag,omitempty"`
 
-	// Name: The resource name of the service account in the
-	// format
-	// "projects/{project}/serviceAccounts/{account}".
+	// Name: The resource name of the service account in the following
+	// format:
+	// `projects/{project}/serviceAccounts/{account}`.
 	//
-	// In requests using '-' as a wildcard for the project, will infer the
+	// Requests using `-` as a wildcard for the project will infer the
 	// project
-	// from the account and the account value can be the email address or
-	// the
-	// unique_id of the service account.
+	// from the `account` and the `account` value can be the `email` address
+	// or
+	// the `unique_id` of the service account.
 	//
 	// In responses the resource name will always be in the
 	// format
-	// "projects/{project}/serviceAccounts/{email}".
+	// `projects/{project}/serviceAccounts/{email}`.
 	Name string `json:"name,omitempty"`
 
 	// Oauth2ClientId: @OutputOnly. The OAuth2 client id for the service
@@ -887,14 +686,15 @@ type ServiceAccount struct {
 	// account.
 	ProjectId string `json:"projectId,omitempty"`
 
-	// UniqueId: @OutputOnly unique and stable id of the service account.
+	// UniqueId: @OutputOnly The unique and stable id of the service
+	// account.
 	UniqueId string `json:"uniqueId,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
 	googleapi.ServerResponse `json:"-"`
 
-	// ForceSendFields is a list of field names (e.g. "Description") to
+	// ForceSendFields is a list of field names (e.g. "DisplayName") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -911,28 +711,68 @@ func (s *ServiceAccount) MarshalJSON() ([]byte, error) {
 
 // ServiceAccountKey: Represents a service account key.
 //
-// A service account can have 0 or more key pairs. The private keys for
-// these
-// are not stored by Google.
-// ServiceAccountKeys are immutable.
+// A service account has two sets of key-pairs: user-managed,
+// and
+// system-managed.
+//
+// User-managed key-pairs can be created and deleted by users.  Users
+// are
+// responsible for rotating these keys periodically to ensure security
+// of
+// their service accounts.  Users retain the private key of these
+// key-pairs,
+// and Google retains ONLY the public key.
+//
+// System-managed key-pairs are managed automatically by Google, and
+// rotated
+// daily without user intervention.  The private key never leaves
+// Google's
+// servers to maximize security.
+//
+// Public keys for all service accounts are also published at the
+// OAuth2
+// Service Account API.
 type ServiceAccountKey struct {
-	// Name: The resource name of the service account key in the
-	// format
-	// "projects/{project}/serviceAccounts/{email}/keys/{key}".
-	Name string `json:"name,omitempty"`
-
-	// PrivateKeyData: The key data.
-	PrivateKeyData string `json:"privateKeyData,omitempty"`
-
-	// PrivateKeyType: The type of the private key.
+	// KeyAlgorithm: Specifies the algorithm (and possibly key size) for the
+	// key.
 	//
 	// Possible values:
-	//   "TYPE_UNSPECIFIED" - Unspecified.
+	//   "KEY_ALG_UNSPECIFIED" - An unspecified key algorithm.
+	//   "KEY_ALG_RSA_1024" - 1k RSA Key.
+	//   "KEY_ALG_RSA_2048" - 2k RSA Key.
+	KeyAlgorithm string `json:"keyAlgorithm,omitempty"`
+
+	// Name: The resource name of the service account key in the following
+	// format
+	// `projects/{project}/serviceAccounts/{account}/keys/{key}`.
+	Name string `json:"name,omitempty"`
+
+	// PrivateKeyData: The private key data. Only provided in
+	// `CreateServiceAccountKey`
+	// responses.
+	PrivateKeyData string `json:"privateKeyData,omitempty"`
+
+	// PrivateKeyType: The output format for the private key.
+	// Only provided in `CreateServiceAccountKey` responses, not
+	// in `GetServiceAccountKey` or `ListServiceAccountKey`
+	// responses.
+	//
+	// Google never exposes system-managed private keys, and never
+	// retains
+	// user-managed private keys.
+	//
+	// Possible values:
+	//   "TYPE_UNSPECIFIED" - Unspecified. Equivalent to
+	// `TYPE_GOOGLE_CREDENTIALS_FILE`.
 	//   "TYPE_PKCS12_FILE" - PKCS12 format.
-	// The password for the PKCS12 file is 'notasecret'.
+	// The password for the PKCS12 file is `notasecret`.
 	// For more information, see https://tools.ietf.org/html/rfc7292.
 	//   "TYPE_GOOGLE_CREDENTIALS_FILE" - Google Credentials File format.
 	PrivateKeyType string `json:"privateKeyType,omitempty"`
+
+	// PublicKeyData: The public key data. Only provided in
+	// `GetServiceAccountKey` responses.
+	PublicKeyData string `json:"publicKeyData,omitempty"`
 
 	// ValidAfterTime: The key can be used after this timestamp.
 	ValidAfterTime string `json:"validAfterTime,omitempty"`
@@ -944,7 +784,7 @@ type ServiceAccountKey struct {
 	// server.
 	googleapi.ServerResponse `json:"-"`
 
-	// ForceSendFields is a list of field names (e.g. "Name") to
+	// ForceSendFields is a list of field names (e.g. "KeyAlgorithm") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -986,7 +826,7 @@ func (s *SetIamPolicyRequest) MarshalJSON() ([]byte, error) {
 
 // SignBlobRequest: The service account sign blob request.
 type SignBlobRequest struct {
-	// BytesToSign: The bytes to sign
+	// BytesToSign: The bytes to sign.
 	BytesToSign string `json:"bytesToSign,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "BytesToSign") to
@@ -1039,7 +879,8 @@ type TestIamPermissionsRequest struct {
 	// wildcards (such as '*' or 'storage.*') are not allowed. For
 	// more
 	// information see
-	// IAM Overview.
+	// [IAM
+	// Overview](https://cloud.google.com/iam/docs/overview#permissions).
 	Permissions []string `json:"permissions,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Permissions") to
@@ -1084,119 +925,6 @@ func (s *TestIamPermissionsResponse) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// method id "iam.iamPolicies.getPolicyDetails":
-
-type IamPoliciesGetPolicyDetailsCall struct {
-	s                       *Service
-	getpolicydetailsrequest *GetPolicyDetailsRequest
-	urlParams_              gensupport.URLParams
-	ctx_                    context.Context
-}
-
-// GetPolicyDetails: Returns the current policy and the policies on the
-// inherited resources
-// the user has access to.
-func (r *IamPoliciesService) GetPolicyDetails(getpolicydetailsrequest *GetPolicyDetailsRequest) *IamPoliciesGetPolicyDetailsCall {
-	c := &IamPoliciesGetPolicyDetailsCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.getpolicydetailsrequest = getpolicydetailsrequest
-	return c
-}
-
-// Fields allows partial responses to be retrieved. See
-// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
-// for more information.
-func (c *IamPoliciesGetPolicyDetailsCall) Fields(s ...googleapi.Field) *IamPoliciesGetPolicyDetailsCall {
-	c.urlParams_.Set("fields", googleapi.CombineFields(s))
-	return c
-}
-
-// Context sets the context to be used in this call's Do method. Any
-// pending HTTP request will be aborted if the provided context is
-// canceled.
-func (c *IamPoliciesGetPolicyDetailsCall) Context(ctx context.Context) *IamPoliciesGetPolicyDetailsCall {
-	c.ctx_ = ctx
-	return c
-}
-
-func (c *IamPoliciesGetPolicyDetailsCall) doRequest(alt string) (*http.Response, error) {
-	reqHeaders := make(http.Header)
-	reqHeaders.Set("User-Agent", c.s.userAgent())
-	var body io.Reader = nil
-	body, err := googleapi.WithoutDataWrapper.JSONReader(c.getpolicydetailsrequest)
-	if err != nil {
-		return nil, err
-	}
-	reqHeaders.Set("Content-Type", "application/json")
-	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/iamPolicies:getPolicyDetails")
-	urls += "?" + c.urlParams_.Encode()
-	req, _ := http.NewRequest("POST", urls, body)
-	req.Header = reqHeaders
-	googleapi.SetOpaque(req.URL)
-	if c.ctx_ != nil {
-		return ctxhttp.Do(c.ctx_, c.s.client, req)
-	}
-	return c.s.client.Do(req)
-}
-
-// Do executes the "iam.iamPolicies.getPolicyDetails" call.
-// Exactly one of *GetPolicyDetailsResponse or error will be non-nil.
-// Any non-2xx status code is an error. Response headers are in either
-// *GetPolicyDetailsResponse.ServerResponse.Header or (if a response was
-// returned at all) in error.(*googleapi.Error).Header. Use
-// googleapi.IsNotModified to check whether the returned error was
-// because http.StatusNotModified was returned.
-func (c *IamPoliciesGetPolicyDetailsCall) Do(opts ...googleapi.CallOption) (*GetPolicyDetailsResponse, error) {
-	gensupport.SetOptions(c.urlParams_, opts...)
-	res, err := c.doRequest("json")
-	if res != nil && res.StatusCode == http.StatusNotModified {
-		if res.Body != nil {
-			res.Body.Close()
-		}
-		return nil, &googleapi.Error{
-			Code:   res.StatusCode,
-			Header: res.Header,
-		}
-	}
-	if err != nil {
-		return nil, err
-	}
-	defer googleapi.CloseBody(res)
-	if err := googleapi.CheckResponse(res); err != nil {
-		return nil, err
-	}
-	ret := &GetPolicyDetailsResponse{
-		ServerResponse: googleapi.ServerResponse{
-			Header:         res.Header,
-			HTTPStatusCode: res.StatusCode,
-		},
-	}
-	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
-		return nil, err
-	}
-	return ret, nil
-	// {
-	//   "description": "Returns the current policy and the policies on the inherited resources\nthe user has access to.",
-	//   "flatPath": "v1/iamPolicies:getPolicyDetails",
-	//   "httpMethod": "POST",
-	//   "id": "iam.iamPolicies.getPolicyDetails",
-	//   "parameterOrder": [],
-	//   "parameters": {},
-	//   "path": "v1/iamPolicies:getPolicyDetails",
-	//   "request": {
-	//     "$ref": "GetPolicyDetailsRequest"
-	//   },
-	//   "response": {
-	//     "$ref": "GetPolicyDetailsResponse"
-	//   },
-	//   "scopes": [
-	//     "https://www.googleapis.com/auth/cloud-platform"
-	//   ]
-	// }
-
-}
-
 // method id "iam.projects.serviceAccounts.create":
 
 type ProjectsServiceAccountsCreateCall struct {
@@ -1207,7 +935,8 @@ type ProjectsServiceAccountsCreateCall struct {
 	ctx_                        context.Context
 }
 
-// Create: Creates a service account and returns it.
+// Create: Creates a ServiceAccount
+// and returns it.
 func (r *ProjectsServiceAccountsService) Create(name string, createserviceaccountrequest *CreateServiceAccountRequest) *ProjectsServiceAccountsCreateCall {
 	c := &ProjectsServiceAccountsCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -1292,7 +1021,7 @@ func (c *ProjectsServiceAccountsCreateCall) Do(opts ...googleapi.CallOption) (*S
 	}
 	return ret, nil
 	// {
-	//   "description": "Creates a service account and returns it.",
+	//   "description": "Creates a ServiceAccount\nand returns it.",
 	//   "flatPath": "v1/projects/{projectsId}/serviceAccounts",
 	//   "httpMethod": "POST",
 	//   "id": "iam.projects.serviceAccounts.create",
@@ -1301,7 +1030,7 @@ func (c *ProjectsServiceAccountsCreateCall) Do(opts ...googleapi.CallOption) (*S
 	//   ],
 	//   "parameters": {
 	//     "name": {
-	//       "description": "Required. The resource name of the project associated with the service\naccounts, such as \"projects/123\"",
+	//       "description": "Required. The resource name of the project associated with the service\naccounts, such as `projects/my-project-123`.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]*$",
 	//       "required": true,
@@ -1331,7 +1060,7 @@ type ProjectsServiceAccountsDeleteCall struct {
 	ctx_       context.Context
 }
 
-// Delete: Deletes a service acount.
+// Delete: Deletes a ServiceAccount.
 func (r *ProjectsServiceAccountsService) Delete(name string) *ProjectsServiceAccountsDeleteCall {
 	c := &ProjectsServiceAccountsDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -1410,7 +1139,7 @@ func (c *ProjectsServiceAccountsDeleteCall) Do(opts ...googleapi.CallOption) (*E
 	}
 	return ret, nil
 	// {
-	//   "description": "Deletes a service acount.",
+	//   "description": "Deletes a ServiceAccount.",
 	//   "flatPath": "v1/projects/{projectsId}/serviceAccounts/{serviceAccountsId}",
 	//   "httpMethod": "DELETE",
 	//   "id": "iam.projects.serviceAccounts.delete",
@@ -1419,7 +1148,7 @@ func (c *ProjectsServiceAccountsDeleteCall) Do(opts ...googleapi.CallOption) (*E
 	//   ],
 	//   "parameters": {
 	//     "name": {
-	//       "description": "The resource name of the service account in the format\n\"projects/{project}/serviceAccounts/{account}\".\nUsing '-' as a wildcard for the project, will infer the project from\nthe account. The account value can be the email address or the unique_id\nof the service account.",
+	//       "description": "The resource name of the service account in the following format:\n`projects/{project}/serviceAccounts/{account}`.\nUsing `-` as a wildcard for the project will infer the project from\nthe account. The `account` value can be the `email` address or the\n`unique_id` of the service account.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]*/serviceAccounts/[^/]*$",
 	//       "required": true,
@@ -1447,7 +1176,7 @@ type ProjectsServiceAccountsGetCall struct {
 	ctx_         context.Context
 }
 
-// Get: Gets a ServiceAccount
+// Get: Gets a ServiceAccount.
 func (r *ProjectsServiceAccountsService) Get(name string) *ProjectsServiceAccountsGetCall {
 	c := &ProjectsServiceAccountsGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -1539,7 +1268,7 @@ func (c *ProjectsServiceAccountsGetCall) Do(opts ...googleapi.CallOption) (*Serv
 	}
 	return ret, nil
 	// {
-	//   "description": "Gets a ServiceAccount",
+	//   "description": "Gets a ServiceAccount.",
 	//   "flatPath": "v1/projects/{projectsId}/serviceAccounts/{serviceAccountsId}",
 	//   "httpMethod": "GET",
 	//   "id": "iam.projects.serviceAccounts.get",
@@ -1548,7 +1277,7 @@ func (c *ProjectsServiceAccountsGetCall) Do(opts ...googleapi.CallOption) (*Serv
 	//   ],
 	//   "parameters": {
 	//     "name": {
-	//       "description": "The resource name of the service account in the format\n\"projects/{project}/serviceAccounts/{account}\".\nUsing '-' as a wildcard for the project, will infer the project from\nthe account. The account value can be the email address or the unique_id\nof the service account.",
+	//       "description": "The resource name of the service account in the following format:\n`projects/{project}/serviceAccounts/{account}`.\nUsing `-` as a wildcard for the project will infer the project from\nthe account. The `account` value can be the `email` address or the\n`unique_id` of the service account.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]*/serviceAccounts/[^/]*$",
 	//       "required": true,
@@ -1558,6 +1287,123 @@ func (c *ProjectsServiceAccountsGetCall) Do(opts ...googleapi.CallOption) (*Serv
 	//   "path": "v1/{+name}",
 	//   "response": {
 	//     "$ref": "ServiceAccount"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform"
+	//   ]
+	// }
+
+}
+
+// method id "iam.projects.serviceAccounts.getIamPolicy":
+
+type ProjectsServiceAccountsGetIamPolicyCall struct {
+	s          *Service
+	resource   string
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
+}
+
+// GetIamPolicy: Returns the IAM access control policy for
+// a
+// ServiceAccount.
+func (r *ProjectsServiceAccountsService) GetIamPolicy(resource string) *ProjectsServiceAccountsGetIamPolicyCall {
+	c := &ProjectsServiceAccountsGetIamPolicyCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.resource = resource
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *ProjectsServiceAccountsGetIamPolicyCall) Fields(s ...googleapi.Field) *ProjectsServiceAccountsGetIamPolicyCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsServiceAccountsGetIamPolicyCall) Context(ctx context.Context) *ProjectsServiceAccountsGetIamPolicyCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsServiceAccountsGetIamPolicyCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+resource}:getIamPolicy")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"resource": c.resource,
+	})
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "iam.projects.serviceAccounts.getIamPolicy" call.
+// Exactly one of *Policy or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Policy.ServerResponse.Header or (if a response was returned at all)
+// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
+// check whether the returned error was because http.StatusNotModified
+// was returned.
+func (c *ProjectsServiceAccountsGetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Policy, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Policy{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Returns the IAM access control policy for a\nServiceAccount.",
+	//   "flatPath": "v1/projects/{projectsId}/serviceAccounts/{serviceAccountsId}:getIamPolicy",
+	//   "httpMethod": "POST",
+	//   "id": "iam.projects.serviceAccounts.getIamPolicy",
+	//   "parameterOrder": [
+	//     "resource"
+	//   ],
+	//   "parameters": {
+	//     "resource": {
+	//       "description": "REQUIRED: The resource for which the policy is being requested.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
+	//       "location": "path",
+	//       "pattern": "^projects/[^/]*/serviceAccounts/[^/]*$",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "v1/{+resource}:getIamPolicy",
+	//   "response": {
+	//     "$ref": "Policy"
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform"
@@ -1576,7 +1422,7 @@ type ProjectsServiceAccountsListCall struct {
 	ctx_         context.Context
 }
 
-// List: Lists service accounts for a project.
+// List: Lists ServiceAccounts for a project.
 func (r *ProjectsServiceAccountsService) List(name string) *ProjectsServiceAccountsListCall {
 	c := &ProjectsServiceAccountsListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -1587,8 +1433,8 @@ func (r *ProjectsServiceAccountsService) List(name string) *ProjectsServiceAccou
 // the number of service accounts to include in the
 // response. Further accounts can subsequently be obtained by including
 // the
-// [ListServiceAccountsResponse.next_page_token] in a subsequent
-// request.
+// ListServiceAccountsResponse.next_page_token
+// in a subsequent request.
 func (c *ProjectsServiceAccountsListCall) PageSize(pageSize int64) *ProjectsServiceAccountsListCall {
 	c.urlParams_.Set("pageSize", fmt.Sprint(pageSize))
 	return c
@@ -1597,19 +1443,9 @@ func (c *ProjectsServiceAccountsListCall) PageSize(pageSize int64) *ProjectsServ
 // PageToken sets the optional parameter "pageToken": Optional
 // pagination token returned in an
 // earlier
-// [ListServiceAccountsResponse.next_page_token].
+// ListServiceAccountsResponse.next_page_token.
 func (c *ProjectsServiceAccountsListCall) PageToken(pageToken string) *ProjectsServiceAccountsListCall {
 	c.urlParams_.Set("pageToken", pageToken)
-	return c
-}
-
-// RemoveDeletedServiceAccounts sets the optional parameter
-// "removeDeletedServiceAccounts": Do not list service accounts deleted
-// from Gaia.
-// <b><font color="red">DO NOT INCLUDE IN EXTERNAL
-// DOCUMENTATION</font></b>.
-func (c *ProjectsServiceAccountsListCall) RemoveDeletedServiceAccounts(removeDeletedServiceAccounts bool) *ProjectsServiceAccountsListCall {
-	c.urlParams_.Set("removeDeletedServiceAccounts", fmt.Sprint(removeDeletedServiceAccounts))
 	return c
 }
 
@@ -1698,7 +1534,7 @@ func (c *ProjectsServiceAccountsListCall) Do(opts ...googleapi.CallOption) (*Lis
 	}
 	return ret, nil
 	// {
-	//   "description": "Lists service accounts for a project.",
+	//   "description": "Lists ServiceAccounts for a project.",
 	//   "flatPath": "v1/projects/{projectsId}/serviceAccounts",
 	//   "httpMethod": "GET",
 	//   "id": "iam.projects.serviceAccounts.list",
@@ -1707,27 +1543,22 @@ func (c *ProjectsServiceAccountsListCall) Do(opts ...googleapi.CallOption) (*Lis
 	//   ],
 	//   "parameters": {
 	//     "name": {
-	//       "description": "Required. The resource name of the project associated with the service\naccounts, such as \"projects/123\"",
+	//       "description": "Required. The resource name of the project associated with the service\naccounts, such as `projects/my-project-123`.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]*$",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "pageSize": {
-	//       "description": "Optional limit on the number of service accounts to include in the\nresponse. Further accounts can subsequently be obtained by including the\n[ListServiceAccountsResponse.next_page_token] in a subsequent request.",
+	//       "description": "Optional limit on the number of service accounts to include in the\nresponse. Further accounts can subsequently be obtained by including the\nListServiceAccountsResponse.next_page_token\nin a subsequent request.",
 	//       "format": "int32",
 	//       "location": "query",
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional pagination token returned in an earlier\n[ListServiceAccountsResponse.next_page_token].",
+	//       "description": "Optional pagination token returned in an earlier\nListServiceAccountsResponse.next_page_token.",
 	//       "location": "query",
 	//       "type": "string"
-	//     },
-	//     "removeDeletedServiceAccounts": {
-	//       "description": "Do not list service accounts deleted from Gaia.\n\u003cb\u003e\u003cfont color=\"red\"\u003eDO NOT INCLUDE IN EXTERNAL DOCUMENTATION\u003c/font\u003e\u003c/b\u003e.",
-	//       "location": "query",
-	//       "type": "boolean"
 	//     }
 	//   },
 	//   "path": "v1/{+name}/serviceAccounts",
@@ -1762,6 +1593,133 @@ func (c *ProjectsServiceAccountsListCall) Pages(ctx context.Context, f func(*Lis
 	}
 }
 
+// method id "iam.projects.serviceAccounts.setIamPolicy":
+
+type ProjectsServiceAccountsSetIamPolicyCall struct {
+	s                   *Service
+	resource            string
+	setiampolicyrequest *SetIamPolicyRequest
+	urlParams_          gensupport.URLParams
+	ctx_                context.Context
+}
+
+// SetIamPolicy: Sets the IAM access control policy for
+// a
+// ServiceAccount.
+func (r *ProjectsServiceAccountsService) SetIamPolicy(resource string, setiampolicyrequest *SetIamPolicyRequest) *ProjectsServiceAccountsSetIamPolicyCall {
+	c := &ProjectsServiceAccountsSetIamPolicyCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.resource = resource
+	c.setiampolicyrequest = setiampolicyrequest
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *ProjectsServiceAccountsSetIamPolicyCall) Fields(s ...googleapi.Field) *ProjectsServiceAccountsSetIamPolicyCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsServiceAccountsSetIamPolicyCall) Context(ctx context.Context) *ProjectsServiceAccountsSetIamPolicyCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsServiceAccountsSetIamPolicyCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.setiampolicyrequest)
+	if err != nil {
+		return nil, err
+	}
+	reqHeaders.Set("Content-Type", "application/json")
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+resource}:setIamPolicy")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"resource": c.resource,
+	})
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "iam.projects.serviceAccounts.setIamPolicy" call.
+// Exactly one of *Policy or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Policy.ServerResponse.Header or (if a response was returned at all)
+// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
+// check whether the returned error was because http.StatusNotModified
+// was returned.
+func (c *ProjectsServiceAccountsSetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Policy, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Policy{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Sets the IAM access control policy for a\nServiceAccount.",
+	//   "flatPath": "v1/projects/{projectsId}/serviceAccounts/{serviceAccountsId}:setIamPolicy",
+	//   "httpMethod": "POST",
+	//   "id": "iam.projects.serviceAccounts.setIamPolicy",
+	//   "parameterOrder": [
+	//     "resource"
+	//   ],
+	//   "parameters": {
+	//     "resource": {
+	//       "description": "REQUIRED: The resource for which the policy is being specified.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
+	//       "location": "path",
+	//       "pattern": "^projects/[^/]*/serviceAccounts/[^/]*$",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "v1/{+resource}:setIamPolicy",
+	//   "request": {
+	//     "$ref": "SetIamPolicyRequest"
+	//   },
+	//   "response": {
+	//     "$ref": "Policy"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform"
+	//   ]
+	// }
+
+}
+
 // method id "iam.projects.serviceAccounts.signBlob":
 
 type ProjectsServiceAccountsSignBlobCall struct {
@@ -1772,7 +1730,8 @@ type ProjectsServiceAccountsSignBlobCall struct {
 	ctx_            context.Context
 }
 
-// SignBlob: Signs a blob using a service account.
+// SignBlob: Signs a blob using a service account's system-managed
+// private key.
 func (r *ProjectsServiceAccountsService) SignBlob(name string, signblobrequest *SignBlobRequest) *ProjectsServiceAccountsSignBlobCall {
 	c := &ProjectsServiceAccountsSignBlobCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -1857,7 +1816,7 @@ func (c *ProjectsServiceAccountsSignBlobCall) Do(opts ...googleapi.CallOption) (
 	}
 	return ret, nil
 	// {
-	//   "description": "Signs a blob using a service account.",
+	//   "description": "Signs a blob using a service account's system-managed private key.",
 	//   "flatPath": "v1/projects/{projectsId}/serviceAccounts/{serviceAccountsId}:signBlob",
 	//   "httpMethod": "POST",
 	//   "id": "iam.projects.serviceAccounts.signBlob",
@@ -1866,7 +1825,7 @@ func (c *ProjectsServiceAccountsSignBlobCall) Do(opts ...googleapi.CallOption) (
 	//   ],
 	//   "parameters": {
 	//     "name": {
-	//       "description": "The resource name of the service account in the format\n\"projects/{project}/serviceAccounts/{account}\".\nUsing '-' as a wildcard for the project, will infer the project from\nthe account. The account value can be the email address or the unique_id\nof the service account.",
+	//       "description": "The resource name of the service account in the following format:\n`projects/{project}/serviceAccounts/{account}`.\nUsing `-` as a wildcard for the project will infer the project from\nthe account. The `account` value can be the `email` address or the\n`unique_id` of the service account.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]*/serviceAccounts/[^/]*$",
 	//       "required": true,
@@ -1887,6 +1846,133 @@ func (c *ProjectsServiceAccountsSignBlobCall) Do(opts ...googleapi.CallOption) (
 
 }
 
+// method id "iam.projects.serviceAccounts.testIamPermissions":
+
+type ProjectsServiceAccountsTestIamPermissionsCall struct {
+	s                         *Service
+	resource                  string
+	testiampermissionsrequest *TestIamPermissionsRequest
+	urlParams_                gensupport.URLParams
+	ctx_                      context.Context
+}
+
+// TestIamPermissions: Tests the specified permissions against the IAM
+// access control policy
+// for a ServiceAccount.
+func (r *ProjectsServiceAccountsService) TestIamPermissions(resource string, testiampermissionsrequest *TestIamPermissionsRequest) *ProjectsServiceAccountsTestIamPermissionsCall {
+	c := &ProjectsServiceAccountsTestIamPermissionsCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.resource = resource
+	c.testiampermissionsrequest = testiampermissionsrequest
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *ProjectsServiceAccountsTestIamPermissionsCall) Fields(s ...googleapi.Field) *ProjectsServiceAccountsTestIamPermissionsCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsServiceAccountsTestIamPermissionsCall) Context(ctx context.Context) *ProjectsServiceAccountsTestIamPermissionsCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsServiceAccountsTestIamPermissionsCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.testiampermissionsrequest)
+	if err != nil {
+		return nil, err
+	}
+	reqHeaders.Set("Content-Type", "application/json")
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+resource}:testIamPermissions")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"resource": c.resource,
+	})
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "iam.projects.serviceAccounts.testIamPermissions" call.
+// Exactly one of *TestIamPermissionsResponse or error will be non-nil.
+// Any non-2xx status code is an error. Response headers are in either
+// *TestIamPermissionsResponse.ServerResponse.Header or (if a response
+// was returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *ProjectsServiceAccountsTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (*TestIamPermissionsResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &TestIamPermissionsResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Tests the specified permissions against the IAM access control policy\nfor a ServiceAccount.",
+	//   "flatPath": "v1/projects/{projectsId}/serviceAccounts/{serviceAccountsId}:testIamPermissions",
+	//   "httpMethod": "POST",
+	//   "id": "iam.projects.serviceAccounts.testIamPermissions",
+	//   "parameterOrder": [
+	//     "resource"
+	//   ],
+	//   "parameters": {
+	//     "resource": {
+	//       "description": "REQUIRED: The resource for which the policy detail is being requested.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
+	//       "location": "path",
+	//       "pattern": "^projects/[^/]*/serviceAccounts/[^/]*$",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "v1/{+resource}:testIamPermissions",
+	//   "request": {
+	//     "$ref": "TestIamPermissionsRequest"
+	//   },
+	//   "response": {
+	//     "$ref": "TestIamPermissionsResponse"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform"
+	//   ]
+	// }
+
+}
+
 // method id "iam.projects.serviceAccounts.update":
 
 type ProjectsServiceAccountsUpdateCall struct {
@@ -1897,11 +1983,11 @@ type ProjectsServiceAccountsUpdateCall struct {
 	ctx_           context.Context
 }
 
-// Update: Updates a service account.
+// Update: Updates a ServiceAccount.
 //
-// Currently the only updatable fields are 'display_name' and
-// 'description'.
-// The 'etag' is mandatory.
+// Currently, only the following fields are updatable:
+// `display_name` .
+// The `etag` is mandatory.
 func (r *ProjectsServiceAccountsService) Update(name string, serviceaccount *ServiceAccount) *ProjectsServiceAccountsUpdateCall {
 	c := &ProjectsServiceAccountsUpdateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -1986,7 +2072,7 @@ func (c *ProjectsServiceAccountsUpdateCall) Do(opts ...googleapi.CallOption) (*S
 	}
 	return ret, nil
 	// {
-	//   "description": "Updates a service account.\n\nCurrently the only updatable fields are 'display_name' and 'description'.\nThe 'etag' is mandatory.",
+	//   "description": "Updates a ServiceAccount.\n\nCurrently, only the following fields are updatable:\n`display_name` .\nThe `etag` is mandatory.",
 	//   "flatPath": "v1/projects/{projectsId}/serviceAccounts/{serviceAccountsId}",
 	//   "httpMethod": "PUT",
 	//   "id": "iam.projects.serviceAccounts.update",
@@ -1995,7 +2081,7 @@ func (c *ProjectsServiceAccountsUpdateCall) Do(opts ...googleapi.CallOption) (*S
 	//   ],
 	//   "parameters": {
 	//     "name": {
-	//       "description": "The resource name of the service account in the format\n\"projects/{project}/serviceAccounts/{account}\".\n\nIn requests using '-' as a wildcard for the project, will infer the project\nfrom the account and the account value can be the email address or the\nunique_id of the service account.\n\nIn responses the resource name will always be in the format\n\"projects/{project}/serviceAccounts/{email}\".",
+	//       "description": "The resource name of the service account in the following format:\n`projects/{project}/serviceAccounts/{account}`.\n\nRequests using `-` as a wildcard for the project will infer the project\nfrom the `account` and the `account` value can be the `email` address or\nthe `unique_id` of the service account.\n\nIn responses the resource name will always be in the format\n`projects/{project}/serviceAccounts/{email}`.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]*/serviceAccounts/[^/]*$",
 	//       "required": true,
@@ -2019,28 +2105,19 @@ func (c *ProjectsServiceAccountsUpdateCall) Do(opts ...googleapi.CallOption) (*S
 // method id "iam.projects.serviceAccounts.keys.create":
 
 type ProjectsServiceAccountsKeysCreateCall struct {
-	s          *Service
-	name       string
-	urlParams_ gensupport.URLParams
-	ctx_       context.Context
+	s                              *Service
+	name                           string
+	createserviceaccountkeyrequest *CreateServiceAccountKeyRequest
+	urlParams_                     gensupport.URLParams
+	ctx_                           context.Context
 }
 
-// Create: Creates a service account key and returns it.
-func (r *ProjectsServiceAccountsKeysService) Create(name string) *ProjectsServiceAccountsKeysCreateCall {
+// Create: Creates a ServiceAccountKey
+// and returns it.
+func (r *ProjectsServiceAccountsKeysService) Create(name string, createserviceaccountkeyrequest *CreateServiceAccountKeyRequest) *ProjectsServiceAccountsKeysCreateCall {
 	c := &ProjectsServiceAccountsKeysCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
-	return c
-}
-
-// PrivateKeyType sets the optional parameter "privateKeyType": The type
-// of the key requested. GOOGLE_CREDENTIALS is the default key type.
-//
-// Possible values:
-//   "TYPE_UNSPECIFIED"
-//   "TYPE_PKCS12_FILE"
-//   "TYPE_GOOGLE_CREDENTIALS_FILE"
-func (c *ProjectsServiceAccountsKeysCreateCall) PrivateKeyType(privateKeyType string) *ProjectsServiceAccountsKeysCreateCall {
-	c.urlParams_.Set("privateKeyType", privateKeyType)
+	c.createserviceaccountkeyrequest = createserviceaccountkeyrequest
 	return c
 }
 
@@ -2064,6 +2141,11 @@ func (c *ProjectsServiceAccountsKeysCreateCall) doRequest(alt string) (*http.Res
 	reqHeaders := make(http.Header)
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.createserviceaccountkeyrequest)
+	if err != nil {
+		return nil, err
+	}
+	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}/keys")
 	urls += "?" + c.urlParams_.Encode()
@@ -2116,7 +2198,7 @@ func (c *ProjectsServiceAccountsKeysCreateCall) Do(opts ...googleapi.CallOption)
 	}
 	return ret, nil
 	// {
-	//   "description": "Creates a service account key and returns it.",
+	//   "description": "Creates a ServiceAccountKey\nand returns it.",
 	//   "flatPath": "v1/projects/{projectsId}/serviceAccounts/{serviceAccountsId}/keys",
 	//   "httpMethod": "POST",
 	//   "id": "iam.projects.serviceAccounts.keys.create",
@@ -2125,24 +2207,17 @@ func (c *ProjectsServiceAccountsKeysCreateCall) Do(opts ...googleapi.CallOption)
 	//   ],
 	//   "parameters": {
 	//     "name": {
-	//       "description": "The resource name of the service account in the format\n\"projects/{project}/serviceAccounts/{account}\".\nUsing '-' as a wildcard for the project, will infer the project from\nthe account. The account value can be the email address or the unique_id\nof the service account.",
+	//       "description": "The resource name of the service account in the following format:\n`projects/{project}/serviceAccounts/{account}`.\nUsing `-` as a wildcard for the project will infer the project from\nthe account. The `account` value can be the `email` address or the\n`unique_id` of the service account.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]*/serviceAccounts/[^/]*$",
 	//       "required": true,
 	//       "type": "string"
-	//     },
-	//     "privateKeyType": {
-	//       "description": "The type of the key requested. GOOGLE_CREDENTIALS is the default key type.",
-	//       "enum": [
-	//         "TYPE_UNSPECIFIED",
-	//         "TYPE_PKCS12_FILE",
-	//         "TYPE_GOOGLE_CREDENTIALS_FILE"
-	//       ],
-	//       "location": "query",
-	//       "type": "string"
 	//     }
 	//   },
 	//   "path": "v1/{+name}/keys",
+	//   "request": {
+	//     "$ref": "CreateServiceAccountKeyRequest"
+	//   },
 	//   "response": {
 	//     "$ref": "ServiceAccountKey"
 	//   },
@@ -2162,7 +2237,7 @@ type ProjectsServiceAccountsKeysDeleteCall struct {
 	ctx_       context.Context
 }
 
-// Delete: Deletes a service account key.
+// Delete: Deletes a ServiceAccountKey.
 func (r *ProjectsServiceAccountsKeysService) Delete(name string) *ProjectsServiceAccountsKeysDeleteCall {
 	c := &ProjectsServiceAccountsKeysDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -2241,7 +2316,7 @@ func (c *ProjectsServiceAccountsKeysDeleteCall) Do(opts ...googleapi.CallOption)
 	}
 	return ret, nil
 	// {
-	//   "description": "Deletes a service account key.",
+	//   "description": "Deletes a ServiceAccountKey.",
 	//   "flatPath": "v1/projects/{projectsId}/serviceAccounts/{serviceAccountsId}/keys/{keysId}",
 	//   "httpMethod": "DELETE",
 	//   "id": "iam.projects.serviceAccounts.keys.delete",
@@ -2250,7 +2325,7 @@ func (c *ProjectsServiceAccountsKeysDeleteCall) Do(opts ...googleapi.CallOption)
 	//   ],
 	//   "parameters": {
 	//     "name": {
-	//       "description": "The resource name of the service account key in the format\n\"projects/{project}/serviceAccounts/{account}/keys/{key}\".\nUsing '-' as a wildcard for the project will infer the project from\nthe account. The account value can be the email address or the unique_id\nof the service account.",
+	//       "description": "The resource name of the service account key in the following format:\n`projects/{project}/serviceAccounts/{account}/keys/{key}`.\nUsing `-` as a wildcard for the project will infer the project from\nthe account. The `account` value can be the `email` address or the\n`unique_id` of the service account.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]*/serviceAccounts/[^/]*/keys/[^/]*$",
 	//       "required": true,
@@ -2283,6 +2358,19 @@ type ProjectsServiceAccountsKeysGetCall struct {
 func (r *ProjectsServiceAccountsKeysService) Get(name string) *ProjectsServiceAccountsKeysGetCall {
 	c := &ProjectsServiceAccountsKeysGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
+	return c
+}
+
+// PublicKeyType sets the optional parameter "publicKeyType": The output
+// format of the public key requested.
+// X509_PEM is the default output format.
+//
+// Possible values:
+//   "TYPE_NONE"
+//   "TYPE_X509_PEM_FILE"
+//   "TYPE_RAW_PUBLIC_KEY"
+func (c *ProjectsServiceAccountsKeysGetCall) PublicKeyType(publicKeyType string) *ProjectsServiceAccountsKeysGetCall {
+	c.urlParams_.Set("publicKeyType", publicKeyType)
 	return c
 }
 
@@ -2380,10 +2468,20 @@ func (c *ProjectsServiceAccountsKeysGetCall) Do(opts ...googleapi.CallOption) (*
 	//   ],
 	//   "parameters": {
 	//     "name": {
-	//       "description": "The resource name of the service account key in the format\n\"projects/{project}/serviceAccounts/{account}/keys/{key}\".\nUsing '-' as a wildcard for the project will infer the project from\nthe account. The account value can be the email address or the unique_id\nof the service account.",
+	//       "description": "The resource name of the service account key in the following format:\n`projects/{project}/serviceAccounts/{account}/keys/{key}`.\n\nUsing `-` as a wildcard for the project will infer the project from\nthe account. The `account` value can be the `email` address or the\n`unique_id` of the service account.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]*/serviceAccounts/[^/]*/keys/[^/]*$",
 	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "publicKeyType": {
+	//       "description": "The output format of the public key requested.\nX509_PEM is the default output format.",
+	//       "enum": [
+	//         "TYPE_NONE",
+	//         "TYPE_X509_PEM_FILE",
+	//         "TYPE_RAW_PUBLIC_KEY"
+	//       ],
+	//       "location": "query",
 	//       "type": "string"
 	//     }
 	//   },
@@ -2408,17 +2506,17 @@ type ProjectsServiceAccountsKeysListCall struct {
 	ctx_         context.Context
 }
 
-// List: Lists service account keys
+// List: Lists ServiceAccountKeys.
 func (r *ProjectsServiceAccountsKeysService) List(name string) *ProjectsServiceAccountsKeysListCall {
 	c := &ProjectsServiceAccountsKeysListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
 	return c
 }
 
-// KeyTypes sets the optional parameter "keyTypes": The type of keys the
-// user wants to list. If empty, all
-// key types are included in the response. Duplicate key
-// types are not allowed.
+// KeyTypes sets the optional parameter "keyTypes": Filters the types of
+// keys the user wants to include in the list
+// response. Duplicate key types are not allowed. If no key type
+// is provided, all keys are returned.
 //
 // Possible values:
 //   "KEY_TYPE_UNSPECIFIED"
@@ -2514,7 +2612,7 @@ func (c *ProjectsServiceAccountsKeysListCall) Do(opts ...googleapi.CallOption) (
 	}
 	return ret, nil
 	// {
-	//   "description": "Lists service account keys",
+	//   "description": "Lists ServiceAccountKeys.",
 	//   "flatPath": "v1/projects/{projectsId}/serviceAccounts/{serviceAccountsId}/keys",
 	//   "httpMethod": "GET",
 	//   "id": "iam.projects.serviceAccounts.keys.list",
@@ -2523,7 +2621,7 @@ func (c *ProjectsServiceAccountsKeysListCall) Do(opts ...googleapi.CallOption) (
 	//   ],
 	//   "parameters": {
 	//     "keyTypes": {
-	//       "description": "The type of keys the user wants to list. If empty, all\nkey types are included in the response. Duplicate key\ntypes are not allowed.",
+	//       "description": "Filters the types of keys the user wants to include in the list\nresponse. Duplicate key types are not allowed. If no key type\nis provided, all keys are returned.",
 	//       "enum": [
 	//         "KEY_TYPE_UNSPECIFIED",
 	//         "USER_MANAGED",
@@ -2534,7 +2632,7 @@ func (c *ProjectsServiceAccountsKeysListCall) Do(opts ...googleapi.CallOption) (
 	//       "type": "string"
 	//     },
 	//     "name": {
-	//       "description": "The resource name of the service account in the format\n\"projects/{project}/serviceAccounts/{account}\".\nUsing '-' as a wildcard for the project, will infer the project from\nthe account. The account value can be the email address or the unique_id\nof the service account.",
+	//       "description": "The resource name of the service account in the following format:\n`projects/{project}/serviceAccounts/{account}`.\n\nUsing `-` as a wildcard for the project, will infer the project from\nthe account. The `account` value can be the `email` address or the\n`unique_id` of the service account.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]*/serviceAccounts/[^/]*$",
 	//       "required": true,
@@ -2563,6 +2661,9 @@ type RolesQueryGrantableRolesCall struct {
 
 // QueryGrantableRoles: Queries roles that can be granted on a
 // particular resource.
+// A role is grantable if it can be used as the role in a binding for a
+// policy
+// for that resource.
 func (r *RolesService) QueryGrantableRoles(querygrantablerolesrequest *QueryGrantableRolesRequest) *RolesQueryGrantableRolesCall {
 	c := &RolesQueryGrantableRolesCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.querygrantablerolesrequest = querygrantablerolesrequest
@@ -2644,7 +2745,7 @@ func (c *RolesQueryGrantableRolesCall) Do(opts ...googleapi.CallOption) (*QueryG
 	}
 	return ret, nil
 	// {
-	//   "description": "Queries roles that can be granted on a particular resource.",
+	//   "description": "Queries roles that can be granted on a particular resource.\nA role is grantable if it can be used as the role in a binding for a policy\nfor that resource.",
 	//   "flatPath": "v1/roles:queryGrantableRoles",
 	//   "httpMethod": "POST",
 	//   "id": "iam.roles.queryGrantableRoles",
@@ -2656,375 +2757,6 @@ func (c *RolesQueryGrantableRolesCall) Do(opts ...googleapi.CallOption) (*QueryG
 	//   },
 	//   "response": {
 	//     "$ref": "QueryGrantableRolesResponse"
-	//   },
-	//   "scopes": [
-	//     "https://www.googleapis.com/auth/cloud-platform"
-	//   ]
-	// }
-
-}
-
-// method id "iam.getIamPolicy":
-
-type V1GetIamPolicyCall struct {
-	s          *Service
-	resource   string
-	urlParams_ gensupport.URLParams
-	ctx_       context.Context
-}
-
-// GetIamPolicy: Returns the IAM access control policy for specified IAM
-// resource.
-func (r *V1Service) GetIamPolicy(resource string) *V1GetIamPolicyCall {
-	c := &V1GetIamPolicyCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.resource = resource
-	return c
-}
-
-// Fields allows partial responses to be retrieved. See
-// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
-// for more information.
-func (c *V1GetIamPolicyCall) Fields(s ...googleapi.Field) *V1GetIamPolicyCall {
-	c.urlParams_.Set("fields", googleapi.CombineFields(s))
-	return c
-}
-
-// Context sets the context to be used in this call's Do method. Any
-// pending HTTP request will be aborted if the provided context is
-// canceled.
-func (c *V1GetIamPolicyCall) Context(ctx context.Context) *V1GetIamPolicyCall {
-	c.ctx_ = ctx
-	return c
-}
-
-func (c *V1GetIamPolicyCall) doRequest(alt string) (*http.Response, error) {
-	reqHeaders := make(http.Header)
-	reqHeaders.Set("User-Agent", c.s.userAgent())
-	var body io.Reader = nil
-	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+resource}:getIamPolicy")
-	urls += "?" + c.urlParams_.Encode()
-	req, _ := http.NewRequest("POST", urls, body)
-	req.Header = reqHeaders
-	googleapi.Expand(req.URL, map[string]string{
-		"resource": c.resource,
-	})
-	if c.ctx_ != nil {
-		return ctxhttp.Do(c.ctx_, c.s.client, req)
-	}
-	return c.s.client.Do(req)
-}
-
-// Do executes the "iam.getIamPolicy" call.
-// Exactly one of *Policy or error will be non-nil. Any non-2xx status
-// code is an error. Response headers are in either
-// *Policy.ServerResponse.Header or (if a response was returned at all)
-// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
-// check whether the returned error was because http.StatusNotModified
-// was returned.
-func (c *V1GetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Policy, error) {
-	gensupport.SetOptions(c.urlParams_, opts...)
-	res, err := c.doRequest("json")
-	if res != nil && res.StatusCode == http.StatusNotModified {
-		if res.Body != nil {
-			res.Body.Close()
-		}
-		return nil, &googleapi.Error{
-			Code:   res.StatusCode,
-			Header: res.Header,
-		}
-	}
-	if err != nil {
-		return nil, err
-	}
-	defer googleapi.CloseBody(res)
-	if err := googleapi.CheckResponse(res); err != nil {
-		return nil, err
-	}
-	ret := &Policy{
-		ServerResponse: googleapi.ServerResponse{
-			Header:         res.Header,
-			HTTPStatusCode: res.StatusCode,
-		},
-	}
-	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
-		return nil, err
-	}
-	return ret, nil
-	// {
-	//   "description": "Returns the IAM access control policy for specified IAM resource.",
-	//   "flatPath": "v1/{v1Id}:getIamPolicy",
-	//   "httpMethod": "POST",
-	//   "id": "iam.getIamPolicy",
-	//   "parameterOrder": [
-	//     "resource"
-	//   ],
-	//   "parameters": {
-	//     "resource": {
-	//       "description": "REQUIRED: The resource for which the policy is being requested.\n`resource` is usually specified as a path, such as\n`projects/*project*/zones/*zone*/disks/*disk*`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the `getIamPolicy` documentation.",
-	//       "location": "path",
-	//       "pattern": "^.*$",
-	//       "required": true,
-	//       "type": "string"
-	//     }
-	//   },
-	//   "path": "v1/{+resource}:getIamPolicy",
-	//   "response": {
-	//     "$ref": "Policy"
-	//   },
-	//   "scopes": [
-	//     "https://www.googleapis.com/auth/cloud-platform"
-	//   ]
-	// }
-
-}
-
-// method id "iam.setIamPolicy":
-
-type V1SetIamPolicyCall struct {
-	s                   *Service
-	resource            string
-	setiampolicyrequest *SetIamPolicyRequest
-	urlParams_          gensupport.URLParams
-	ctx_                context.Context
-}
-
-// SetIamPolicy: Sets the IAM access control policy for the specified
-// IAM resource.
-func (r *V1Service) SetIamPolicy(resource string, setiampolicyrequest *SetIamPolicyRequest) *V1SetIamPolicyCall {
-	c := &V1SetIamPolicyCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.resource = resource
-	c.setiampolicyrequest = setiampolicyrequest
-	return c
-}
-
-// Fields allows partial responses to be retrieved. See
-// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
-// for more information.
-func (c *V1SetIamPolicyCall) Fields(s ...googleapi.Field) *V1SetIamPolicyCall {
-	c.urlParams_.Set("fields", googleapi.CombineFields(s))
-	return c
-}
-
-// Context sets the context to be used in this call's Do method. Any
-// pending HTTP request will be aborted if the provided context is
-// canceled.
-func (c *V1SetIamPolicyCall) Context(ctx context.Context) *V1SetIamPolicyCall {
-	c.ctx_ = ctx
-	return c
-}
-
-func (c *V1SetIamPolicyCall) doRequest(alt string) (*http.Response, error) {
-	reqHeaders := make(http.Header)
-	reqHeaders.Set("User-Agent", c.s.userAgent())
-	var body io.Reader = nil
-	body, err := googleapi.WithoutDataWrapper.JSONReader(c.setiampolicyrequest)
-	if err != nil {
-		return nil, err
-	}
-	reqHeaders.Set("Content-Type", "application/json")
-	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+resource}:setIamPolicy")
-	urls += "?" + c.urlParams_.Encode()
-	req, _ := http.NewRequest("POST", urls, body)
-	req.Header = reqHeaders
-	googleapi.Expand(req.URL, map[string]string{
-		"resource": c.resource,
-	})
-	if c.ctx_ != nil {
-		return ctxhttp.Do(c.ctx_, c.s.client, req)
-	}
-	return c.s.client.Do(req)
-}
-
-// Do executes the "iam.setIamPolicy" call.
-// Exactly one of *Policy or error will be non-nil. Any non-2xx status
-// code is an error. Response headers are in either
-// *Policy.ServerResponse.Header or (if a response was returned at all)
-// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
-// check whether the returned error was because http.StatusNotModified
-// was returned.
-func (c *V1SetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Policy, error) {
-	gensupport.SetOptions(c.urlParams_, opts...)
-	res, err := c.doRequest("json")
-	if res != nil && res.StatusCode == http.StatusNotModified {
-		if res.Body != nil {
-			res.Body.Close()
-		}
-		return nil, &googleapi.Error{
-			Code:   res.StatusCode,
-			Header: res.Header,
-		}
-	}
-	if err != nil {
-		return nil, err
-	}
-	defer googleapi.CloseBody(res)
-	if err := googleapi.CheckResponse(res); err != nil {
-		return nil, err
-	}
-	ret := &Policy{
-		ServerResponse: googleapi.ServerResponse{
-			Header:         res.Header,
-			HTTPStatusCode: res.StatusCode,
-		},
-	}
-	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
-		return nil, err
-	}
-	return ret, nil
-	// {
-	//   "description": "Sets the IAM access control policy for the specified IAM resource.",
-	//   "flatPath": "v1/{v1Id}:setIamPolicy",
-	//   "httpMethod": "POST",
-	//   "id": "iam.setIamPolicy",
-	//   "parameterOrder": [
-	//     "resource"
-	//   ],
-	//   "parameters": {
-	//     "resource": {
-	//       "description": "REQUIRED: The resource for which the policy is being specified.\n`resource` is usually specified as a path, such as\n`projects/*project*/zones/*zone*/disks/*disk*`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the `setIamPolicy` documentation.",
-	//       "location": "path",
-	//       "pattern": "^.*$",
-	//       "required": true,
-	//       "type": "string"
-	//     }
-	//   },
-	//   "path": "v1/{+resource}:setIamPolicy",
-	//   "request": {
-	//     "$ref": "SetIamPolicyRequest"
-	//   },
-	//   "response": {
-	//     "$ref": "Policy"
-	//   },
-	//   "scopes": [
-	//     "https://www.googleapis.com/auth/cloud-platform"
-	//   ]
-	// }
-
-}
-
-// method id "iam.testIamPermissions":
-
-type V1TestIamPermissionsCall struct {
-	s                         *Service
-	resource                  string
-	testiampermissionsrequest *TestIamPermissionsRequest
-	urlParams_                gensupport.URLParams
-	ctx_                      context.Context
-}
-
-// TestIamPermissions: Tests the specified permissions against the IAM
-// access control policy
-// for the specified IAM resource.
-func (r *V1Service) TestIamPermissions(resource string, testiampermissionsrequest *TestIamPermissionsRequest) *V1TestIamPermissionsCall {
-	c := &V1TestIamPermissionsCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.resource = resource
-	c.testiampermissionsrequest = testiampermissionsrequest
-	return c
-}
-
-// Fields allows partial responses to be retrieved. See
-// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
-// for more information.
-func (c *V1TestIamPermissionsCall) Fields(s ...googleapi.Field) *V1TestIamPermissionsCall {
-	c.urlParams_.Set("fields", googleapi.CombineFields(s))
-	return c
-}
-
-// Context sets the context to be used in this call's Do method. Any
-// pending HTTP request will be aborted if the provided context is
-// canceled.
-func (c *V1TestIamPermissionsCall) Context(ctx context.Context) *V1TestIamPermissionsCall {
-	c.ctx_ = ctx
-	return c
-}
-
-func (c *V1TestIamPermissionsCall) doRequest(alt string) (*http.Response, error) {
-	reqHeaders := make(http.Header)
-	reqHeaders.Set("User-Agent", c.s.userAgent())
-	var body io.Reader = nil
-	body, err := googleapi.WithoutDataWrapper.JSONReader(c.testiampermissionsrequest)
-	if err != nil {
-		return nil, err
-	}
-	reqHeaders.Set("Content-Type", "application/json")
-	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+resource}:testIamPermissions")
-	urls += "?" + c.urlParams_.Encode()
-	req, _ := http.NewRequest("POST", urls, body)
-	req.Header = reqHeaders
-	googleapi.Expand(req.URL, map[string]string{
-		"resource": c.resource,
-	})
-	if c.ctx_ != nil {
-		return ctxhttp.Do(c.ctx_, c.s.client, req)
-	}
-	return c.s.client.Do(req)
-}
-
-// Do executes the "iam.testIamPermissions" call.
-// Exactly one of *TestIamPermissionsResponse or error will be non-nil.
-// Any non-2xx status code is an error. Response headers are in either
-// *TestIamPermissionsResponse.ServerResponse.Header or (if a response
-// was returned at all) in error.(*googleapi.Error).Header. Use
-// googleapi.IsNotModified to check whether the returned error was
-// because http.StatusNotModified was returned.
-func (c *V1TestIamPermissionsCall) Do(opts ...googleapi.CallOption) (*TestIamPermissionsResponse, error) {
-	gensupport.SetOptions(c.urlParams_, opts...)
-	res, err := c.doRequest("json")
-	if res != nil && res.StatusCode == http.StatusNotModified {
-		if res.Body != nil {
-			res.Body.Close()
-		}
-		return nil, &googleapi.Error{
-			Code:   res.StatusCode,
-			Header: res.Header,
-		}
-	}
-	if err != nil {
-		return nil, err
-	}
-	defer googleapi.CloseBody(res)
-	if err := googleapi.CheckResponse(res); err != nil {
-		return nil, err
-	}
-	ret := &TestIamPermissionsResponse{
-		ServerResponse: googleapi.ServerResponse{
-			Header:         res.Header,
-			HTTPStatusCode: res.StatusCode,
-		},
-	}
-	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
-		return nil, err
-	}
-	return ret, nil
-	// {
-	//   "description": "Tests the specified permissions against the IAM access control policy\nfor the specified IAM resource.",
-	//   "flatPath": "v1/{v1Id}:testIamPermissions",
-	//   "httpMethod": "POST",
-	//   "id": "iam.testIamPermissions",
-	//   "parameterOrder": [
-	//     "resource"
-	//   ],
-	//   "parameters": {
-	//     "resource": {
-	//       "description": "REQUIRED: The resource for which the policy detail is being requested.\n`resource` is usually specified as a path, such as\n`projects/*project*/zones/*zone*/disks/*disk*`.\n\nThe format for the path specified in this value is resource specific and\nis specified in the `testIamPermissions` documentation.",
-	//       "location": "path",
-	//       "pattern": "^.*$",
-	//       "required": true,
-	//       "type": "string"
-	//     }
-	//   },
-	//   "path": "v1/{+resource}:testIamPermissions",
-	//   "request": {
-	//     "$ref": "TestIamPermissionsRequest"
-	//   },
-	//   "response": {
-	//     "$ref": "TestIamPermissionsResponse"
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform"

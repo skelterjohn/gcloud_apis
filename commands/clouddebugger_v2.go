@@ -115,8 +115,7 @@ func Clouddebugger_v2_ControllerDebuggeesBreakpointsList(context Context, args .
 		call.WaitToken(query_waitToken)
 	}
 
-	var response *api_client.ListActiveBreakpointsResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -206,8 +205,7 @@ func Clouddebugger_v2_ControllerDebuggeesBreakpointsUpdate(context Context, args
 		request,
 	)
 
-	var response *api_client.UpdateActiveBreakpointResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -283,8 +281,7 @@ func Clouddebugger_v2_ControllerDebuggeesRegister(context Context, args ...strin
 		request,
 	)
 
-	var response *api_client.RegisterDebuggeeResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -313,6 +310,8 @@ func Clouddebugger_v2_DebuggerDebuggeesBreakpointsDelete(context Context, args .
 			}
 		}
 
+		usageBits += " [--clientVersion=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -323,6 +322,21 @@ func Clouddebugger_v2_DebuggerDebuggeesBreakpointsDelete(context Context, args .
 		return err
 	}
 	service := api_client.NewDebuggerDebuggeesBreakpointsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"clientVersion": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -349,8 +363,16 @@ func Clouddebugger_v2_DebuggerDebuggeesBreakpointsDelete(context Context, args .
 
 	call := service.Delete(param_debuggeeId, param_breakpointId)
 
-	var response *api_client.Empty
-	response, err = call.Do()
+	// Set query parameters.
+	if value, ok := flagValues["clientVersion"]; ok {
+		query_clientVersion, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.ClientVersion(query_clientVersion)
+	}
+
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -379,6 +401,8 @@ func Clouddebugger_v2_DebuggerDebuggeesBreakpointsGet(context Context, args ...s
 			}
 		}
 
+		usageBits += " [--clientVersion=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -389,6 +413,21 @@ func Clouddebugger_v2_DebuggerDebuggeesBreakpointsGet(context Context, args ...s
 		return err
 	}
 	service := api_client.NewDebuggerDebuggeesBreakpointsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"clientVersion": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -415,8 +454,16 @@ func Clouddebugger_v2_DebuggerDebuggeesBreakpointsGet(context Context, args ...s
 
 	call := service.Get(param_debuggeeId, param_breakpointId)
 
-	var response *api_client.GetBreakpointResponse
-	response, err = call.Do()
+	// Set query parameters.
+	if value, ok := flagValues["clientVersion"]; ok {
+		query_clientVersion, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.ClientVersion(query_clientVersion)
+	}
+
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -446,6 +493,8 @@ func Clouddebugger_v2_DebuggerDebuggeesBreakpointsList(context Context, args ...
 
 		usageBits += " [--action.value=VALUE]"
 
+		usageBits += " [--clientVersion=VALUE]"
+
 		usageBits += " [--includeAllUsers=VALUE]"
 
 		usageBits += " [--includeInactive=VALUE]"
@@ -467,6 +516,7 @@ func Clouddebugger_v2_DebuggerDebuggeesBreakpointsList(context Context, args ...
 
 	queryParamNames := map[string]bool{
 		"action.value":    false,
+		"clientVersion":   false,
 		"includeAllUsers": false,
 		"includeInactive": false,
 		"stripResults":    false,
@@ -512,6 +562,13 @@ func Clouddebugger_v2_DebuggerDebuggeesBreakpointsList(context Context, args ...
 		}
 		call.ActionValue(query_action_value)
 	}
+	if value, ok := flagValues["clientVersion"]; ok {
+		query_clientVersion, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.ClientVersion(query_clientVersion)
+	}
 	if value, ok := flagValues["includeAllUsers"]; ok {
 		query_includeAllUsers, err := commands_util.ConvertValue_bool(value)
 		if err != nil {
@@ -541,8 +598,7 @@ func Clouddebugger_v2_DebuggerDebuggeesBreakpointsList(context Context, args ...
 		call.WaitToken(query_waitToken)
 	}
 
-	var response *api_client.ListBreakpointsResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -572,6 +628,8 @@ func Clouddebugger_v2_DebuggerDebuggeesBreakpointsSet(context Context, args ...s
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--clientVersion=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Breakpoint{})
 
@@ -584,9 +642,19 @@ func Clouddebugger_v2_DebuggerDebuggeesBreakpointsSet(context Context, args ...s
 	}
 	service := api_client.NewDebuggerDebuggeesBreakpointsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"clientVersion": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -602,7 +670,13 @@ func Clouddebugger_v2_DebuggerDebuggeesBreakpointsSet(context Context, args ...s
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -626,8 +700,16 @@ func Clouddebugger_v2_DebuggerDebuggeesBreakpointsSet(context Context, args ...s
 		request,
 	)
 
-	var response *api_client.SetBreakpointResponse
-	response, err = call.Do()
+	// Set query parameters.
+	if value, ok := flagValues["clientVersion"]; ok {
+		query_clientVersion, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.ClientVersion(query_clientVersion)
+	}
+
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -654,6 +736,8 @@ func Clouddebugger_v2_DebuggerDebuggeesList(context Context, args ...string) err
 			}
 		}
 
+		usageBits += " [--clientVersion=VALUE]"
+
 		usageBits += " [--includeInactive=VALUE]"
 
 		usageBits += " [--project=VALUE]"
@@ -670,6 +754,7 @@ func Clouddebugger_v2_DebuggerDebuggeesList(context Context, args ...string) err
 	service := api_client.NewDebuggerDebuggeesService(api_service)
 
 	queryParamNames := map[string]bool{
+		"clientVersion":   false,
 		"includeInactive": false,
 		"project":         false,
 	}
@@ -699,6 +784,13 @@ func Clouddebugger_v2_DebuggerDebuggeesList(context Context, args ...string) err
 	call := service.List()
 
 	// Set query parameters.
+	if value, ok := flagValues["clientVersion"]; ok {
+		query_clientVersion, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.ClientVersion(query_clientVersion)
+	}
 	if value, ok := flagValues["includeInactive"]; ok {
 		query_includeInactive, err := commands_util.ConvertValue_bool(value)
 		if err != nil {
@@ -714,8 +806,7 @@ func Clouddebugger_v2_DebuggerDebuggeesList(context Context, args ...string) err
 		call.Project(query_project)
 	}
 
-	var response *api_client.ListDebuggeesResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}

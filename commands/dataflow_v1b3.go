@@ -141,8 +141,187 @@ func Dataflow_v1b3_ProjectsJobsCreate(context Context, args ...string) error {
 		call.View(query_view)
 	}
 
-	var response *api_client.Job
-	response, err = call.Do()
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Dataflow_v1b3_ProjectsJobsDebugGetConfig(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("jobId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1b3/projects/{projectId}/jobs/{jobId}/debug/getConfig", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.GetDebugConfigRequest{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewProjectsJobsDebugService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.GetDebugConfigRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"projectId",
+		"jobId",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_jobId, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.GetConfig(param_projectId, param_jobId,
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Dataflow_v1b3_ProjectsJobsDebugSendCapture(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("jobId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1b3/projects/{projectId}/jobs/{jobId}/debug/sendCapture", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.SendDebugCaptureRequest{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewProjectsJobsDebugService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.SendDebugCaptureRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"projectId",
+		"jobId",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_jobId, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.SendCapture(param_projectId, param_jobId,
+		request,
+	)
+
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -233,8 +412,7 @@ func Dataflow_v1b3_ProjectsJobsGet(context Context, args ...string) error {
 		call.View(query_view)
 	}
 
-	var response *api_client.Job
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -325,8 +503,7 @@ func Dataflow_v1b3_ProjectsJobsGetMetrics(context Context, args ...string) error
 		call.StartTime(query_startTime)
 	}
 
-	var response *api_client.JobMetrics
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -354,6 +531,8 @@ func Dataflow_v1b3_ProjectsJobsList(context Context, args ...string) error {
 			}
 		}
 
+		usageBits += " [--filter=VALUE]"
+
 		usageBits += " [--pageSize=VALUE]"
 
 		usageBits += " [--pageToken=VALUE]"
@@ -372,6 +551,7 @@ func Dataflow_v1b3_ProjectsJobsList(context Context, args ...string) error {
 	service := api_client.NewProjectsJobsService(api_service)
 
 	queryParamNames := map[string]bool{
+		"filter":    false,
 		"pageSize":  false,
 		"pageToken": false,
 		"view":      false,
@@ -409,6 +589,13 @@ func Dataflow_v1b3_ProjectsJobsList(context Context, args ...string) error {
 	call := service.List(param_projectId)
 
 	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
 	if value, ok := flagValues["pageSize"]; ok {
 		query_pageSize, err := commands_util.ConvertValue_int64(value)
 		if err != nil {
@@ -431,8 +618,7 @@ func Dataflow_v1b3_ProjectsJobsList(context Context, args ...string) error {
 		call.View(query_view)
 	}
 
-	var response *api_client.ListJobsResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -563,8 +749,7 @@ func Dataflow_v1b3_ProjectsJobsMessagesList(context Context, args ...string) err
 		call.StartTime(query_startTime)
 	}
 
-	var response *api_client.ListJobMessagesResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -654,8 +839,7 @@ func Dataflow_v1b3_ProjectsJobsUpdate(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.Job
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -745,8 +929,7 @@ func Dataflow_v1b3_ProjectsJobsWorkItemsLease(context Context, args ...string) e
 		request,
 	)
 
-	var response *api_client.LeaseWorkItemResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -836,8 +1019,91 @@ func Dataflow_v1b3_ProjectsJobsWorkItemsReportStatus(context Context, args ...st
 		request,
 	)
 
-	var response *api_client.ReportWorkItemStatusResponse
-	response, err = call.Do()
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Dataflow_v1b3_ProjectsTemplatesCreate(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1b3/projects/{projectId}/templates", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.CreateJobFromTemplateRequest{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewProjectsTemplatesService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.CreateJobFromTemplateRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"projectId",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Create(param_projectId,
+		request,
+	)
+
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -921,8 +1187,7 @@ func Dataflow_v1b3_ProjectsWorkerMessages(context Context, args ...string) error
 		request,
 	)
 
-	var response *api_client.SendWorkerMessagesResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}

@@ -110,8 +110,7 @@ func Deploymentmanager_v2_DeploymentsCancelPreview(context Context, args ...stri
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -176,8 +175,7 @@ func Deploymentmanager_v2_DeploymentsDelete(context Context, args ...string) err
 
 	call := service.Delete(param_project, param_deployment)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -242,8 +240,7 @@ func Deploymentmanager_v2_DeploymentsGet(context Context, args ...string) error 
 
 	call := service.Get(param_project, param_deployment)
 
-	var response *api_client.Deployment
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -354,8 +351,7 @@ func Deploymentmanager_v2_DeploymentsInsert(context Context, args ...string) err
 		call.Preview(query_preview)
 	}
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -460,8 +456,7 @@ func Deploymentmanager_v2_DeploymentsList(context Context, args ...string) error
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.DeploymentsListResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -598,8 +593,7 @@ func Deploymentmanager_v2_DeploymentsPatch(context Context, args ...string) erro
 		call.Preview(query_preview)
 	}
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -689,8 +683,7 @@ func Deploymentmanager_v2_DeploymentsStop(context Context, args ...string) error
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -827,8 +820,7 @@ func Deploymentmanager_v2_DeploymentsUpdate(context Context, args ...string) err
 		call.Preview(query_preview)
 	}
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -899,8 +891,7 @@ func Deploymentmanager_v2_ManifestsGet(context Context, args ...string) error {
 
 	call := service.Get(param_project, param_deployment, param_manifest)
 
-	var response *api_client.Manifest
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1011,8 +1002,7 @@ func Deploymentmanager_v2_ManifestsList(context Context, args ...string) error {
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.ManifestsListResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1077,8 +1067,7 @@ func Deploymentmanager_v2_OperationsGet(context Context, args ...string) error {
 
 	call := service.Get(param_project, param_operation)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1183,8 +1172,7 @@ func Deploymentmanager_v2_OperationsList(context Context, args ...string) error 
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.OperationsListResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1255,8 +1243,7 @@ func Deploymentmanager_v2_ResourcesGet(context Context, args ...string) error {
 
 	call := service.Get(param_project, param_deployment, param_resource)
 
-	var response *api_client.Resource
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1367,8 +1354,7 @@ func Deploymentmanager_v2_ResourcesList(context Context, args ...string) error {
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.ResourcesListResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1473,8 +1459,7 @@ func Deploymentmanager_v2_TypesList(context Context, args ...string) error {
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.TypesListResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}

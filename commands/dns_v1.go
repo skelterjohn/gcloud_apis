@@ -110,8 +110,7 @@ func Dns_v1_ChangesCreate(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.Change
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -182,8 +181,7 @@ func Dns_v1_ChangesGet(context Context, args ...string) error {
 
 	call := service.Get(param_project, param_managedZone, param_changeId)
 
-	var response *api_client.Change
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -304,8 +302,7 @@ func Dns_v1_ChangesList(context Context, args ...string) error {
 		call.SortOrder(query_sortOrder)
 	}
 
-	var response *api_client.ChangesListResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -389,8 +386,7 @@ func Dns_v1_ManagedZonesCreate(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.ManagedZone
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -455,8 +451,7 @@ func Dns_v1_ManagedZonesDelete(context Context, args ...string) error {
 
 	call := service.Delete(param_project, param_managedZone)
 
-	err = call.Do()
-	if err != nil {
+	if err := call.Do(); err != nil {
 		return err
 	}
 
@@ -515,8 +510,7 @@ func Dns_v1_ManagedZonesGet(context Context, args ...string) error {
 
 	call := service.Get(param_project, param_managedZone)
 
-	var response *api_client.ManagedZone
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -621,8 +615,7 @@ func Dns_v1_ManagedZonesList(context Context, args ...string) error {
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.ManagedZonesListResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -681,8 +674,7 @@ func Dns_v1_ProjectsGet(context Context, args ...string) error {
 
 	call := service.Get(param_project)
 
-	var response *api_client.Project
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -803,8 +795,7 @@ func Dns_v1_ResourceRecordSetsList(context Context, args ...string) error {
 		call.Type(query_type)
 	}
 
-	var response *api_client.ResourceRecordSetsListResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}

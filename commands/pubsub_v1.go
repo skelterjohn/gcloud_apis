@@ -104,8 +104,7 @@ func Pubsub_v1_ProjectsSubscriptionsAcknowledge(context Context, args ...string)
 		request,
 	)
 
-	var response *api_client.Empty
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -189,8 +188,7 @@ func Pubsub_v1_ProjectsSubscriptionsCreate(context Context, args ...string) erro
 		request,
 	)
 
-	var response *api_client.Subscription
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -249,8 +247,7 @@ func Pubsub_v1_ProjectsSubscriptionsDelete(context Context, args ...string) erro
 
 	call := service.Delete(param_subscription)
 
-	var response *api_client.Empty
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -309,8 +306,7 @@ func Pubsub_v1_ProjectsSubscriptionsGet(context Context, args ...string) error {
 
 	call := service.Get(param_subscription)
 
-	var response *api_client.Subscription
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -369,8 +365,7 @@ func Pubsub_v1_ProjectsSubscriptionsGetIamPolicy(context Context, args ...string
 
 	call := service.GetIamPolicy(param_resource)
 
-	var response *api_client.Policy
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -465,8 +460,7 @@ func Pubsub_v1_ProjectsSubscriptionsList(context Context, args ...string) error 
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.ListSubscriptionsResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -550,8 +544,7 @@ func Pubsub_v1_ProjectsSubscriptionsModifyAckDeadline(context Context, args ...s
 		request,
 	)
 
-	var response *api_client.Empty
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -635,8 +628,7 @@ func Pubsub_v1_ProjectsSubscriptionsModifyPushConfig(context Context, args ...st
 		request,
 	)
 
-	var response *api_client.Empty
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -720,8 +712,7 @@ func Pubsub_v1_ProjectsSubscriptionsPull(context Context, args ...string) error 
 		request,
 	)
 
-	var response *api_client.PullResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -805,8 +796,7 @@ func Pubsub_v1_ProjectsSubscriptionsSetIamPolicy(context Context, args ...string
 		request,
 	)
 
-	var response *api_client.Policy
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -890,8 +880,7 @@ func Pubsub_v1_ProjectsSubscriptionsTestIamPermissions(context Context, args ...
 		request,
 	)
 
-	var response *api_client.TestIamPermissionsResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -975,8 +964,7 @@ func Pubsub_v1_ProjectsTopicsCreate(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.Topic
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1035,8 +1023,7 @@ func Pubsub_v1_ProjectsTopicsDelete(context Context, args ...string) error {
 
 	call := service.Delete(param_topic)
 
-	var response *api_client.Empty
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1095,8 +1082,7 @@ func Pubsub_v1_ProjectsTopicsGet(context Context, args ...string) error {
 
 	call := service.Get(param_topic)
 
-	var response *api_client.Topic
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1155,8 +1141,7 @@ func Pubsub_v1_ProjectsTopicsGetIamPolicy(context Context, args ...string) error
 
 	call := service.GetIamPolicy(param_resource)
 
-	var response *api_client.Policy
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1251,8 +1236,7 @@ func Pubsub_v1_ProjectsTopicsList(context Context, args ...string) error {
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.ListTopicsResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1336,8 +1320,7 @@ func Pubsub_v1_ProjectsTopicsPublish(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.PublishResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1421,8 +1404,7 @@ func Pubsub_v1_ProjectsTopicsSetIamPolicy(context Context, args ...string) error
 		request,
 	)
 
-	var response *api_client.Policy
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1517,8 +1499,7 @@ func Pubsub_v1_ProjectsTopicsSubscriptionsList(context Context, args ...string) 
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.ListTopicSubscriptionsResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1602,8 +1583,7 @@ func Pubsub_v1_ProjectsTopicsTestIamPermissions(context Context, args ...string)
 		request,
 	)
 
-	var response *api_client.TestIamPermissionsResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}

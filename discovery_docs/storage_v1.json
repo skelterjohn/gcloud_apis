@@ -4,9 +4,9 @@
  "id": "storage:v1",
  "name": "storage",
  "version": "v1",
- "revision": "20160119",
+ "revision": "20160823",
  "title": "Cloud Storage JSON API",
- "description": "Lets you store and retrieve potentially-large, immutable data objects.",
+ "description": "Stores and retrieves potentially large, immutable data objects.",
  "ownerDomain": "google.com",
  "ownerName": "Google",
  "icons": {
@@ -147,6 +147,15 @@
      "description": "Default access controls to apply to new objects when no ACL is provided.",
      "items": {
       "$ref": "ObjectAccessControl"
+     }
+    },
+    "encryption": {
+     "type": "object",
+     "description": "Encryption configuration used by default for newly inserted objects, when no encryption config is specified.",
+     "properties": {
+      "default_kms_key_name": {
+       "type": "string"
+      }
      }
     },
     "etag": {
@@ -293,15 +302,15 @@
     },
     "website": {
      "type": "object",
-     "description": "The bucket's website configuration.",
+     "description": "The bucket's website configuration, controlling how the service behaves when accessing bucket contents as a web site. See the Static Website Examples for more information.",
      "properties": {
       "mainPageSuffix": {
        "type": "string",
-       "description": "Behaves as the bucket's directory index where missing objects are treated as potential directories."
+       "description": "If the requested object path is missing, the service will ensure the path has a trailing '/', append this suffix, and attempt to retrieve the resulting object. This allows the creation of index.html objects to represent directory pages."
       },
       "notFoundPage": {
        "type": "string",
-       "description": "The custom object to return when a requested resource is not found."
+       "description": "If the requested object path is missing, and any mainPageSuffix object is missing, if applicable, the service will return the named object from this bucket as the content for a 404 Not Found result."
       }
      }
     }
@@ -360,13 +369,13 @@
       },
       "team": {
        "type": "string",
-       "description": "The team. Can be owners, editors, or viewers."
+       "description": "The team."
       }
      }
     },
     "role": {
      "type": "string",
-     "description": "The access permission for the entity. Can be READER, WRITER, or OWNER.",
+     "description": "The access permission for the entity.",
      "annotations": {
       "required": [
        "storage.bucketAccessControls.insert"
@@ -529,6 +538,95 @@
     }
    }
   },
+  "Notification": {
+   "id": "Notification",
+   "type": "object",
+   "description": "A subscription to receive Google PubSub notifications.",
+   "properties": {
+    "bucket": {
+     "type": "string",
+     "description": "The name of the bucket this subscription is particular to.",
+     "annotations": {
+      "required": [
+       "storage.notifications.insert"
+      ]
+     }
+    },
+    "custom_attributes": {
+     "type": "object",
+     "description": "An optional list of additional attributes to attach to each Cloud PubSub message published for this notification subscription.",
+     "additionalProperties": {
+      "type": "string"
+     }
+    },
+    "etag": {
+     "type": "string",
+     "description": "HTTP 1.1 Entity tag for this subscription notification."
+    },
+    "event_types": {
+     "type": "array",
+     "description": "If present, only send notifications about listed event types. If empty, sent notifications for all event types.",
+     "items": {
+      "type": "string"
+     }
+    },
+    "id": {
+     "type": "string",
+     "description": "The ID of the notification."
+    },
+    "kind": {
+     "type": "string",
+     "description": "The kind of item this is. For notifications, this is always storage#notification.",
+     "default": "storage#notification"
+    },
+    "object_metadata_format": {
+     "type": "string",
+     "description": "If payload_content is OBJECT_METADATA, controls the format of that metadata. Otherwise, must not be set.",
+     "default": "JSON_API_V1"
+    },
+    "object_name_prefix": {
+     "type": "string",
+     "description": "If present, only apply this notification configuration to object names that begin with this prefix."
+    },
+    "payload_content": {
+     "type": "string",
+     "description": "The desired content of the Payload. Defaults to OBJECT_METADATA.",
+     "default": "OBJECT_METADATA"
+    },
+    "selfLink": {
+     "type": "string",
+     "description": "The canonical URL of this notification."
+    },
+    "topic": {
+     "type": "string",
+     "description": "The Cloud PubSub topic to which this subscription publishes. Formatted as: '//pubsub.googleapis.com/projects/{project-identifier}/topics/{my-topic}'",
+     "annotations": {
+      "required": [
+       "storage.notifications.insert"
+      ]
+     }
+    }
+   }
+  },
+  "Notifications": {
+   "id": "Notifications",
+   "type": "object",
+   "description": "A list of notification subscriptions.",
+   "properties": {
+    "items": {
+     "type": "array",
+     "description": "The list of items.",
+     "items": {
+      "$ref": "Notification"
+     }
+    },
+    "kind": {
+     "type": "string",
+     "description": "The kind of item this is. For lists of notifications, this is always storage#notifications.",
+     "default": "storage#notifications"
+    }
+   }
+  },
   "Object": {
    "id": "Object",
    "type": "object",
@@ -552,7 +650,7 @@
     },
     "cacheControl": {
      "type": "string",
-     "description": "Cache-Control directive for the object data."
+     "description": "Cache-Control directive for the object data. If omitted, and the object is accessible to all anonymous users, the default will be public, max-age=3600."
     },
     "componentCount": {
      "type": "integer",
@@ -573,7 +671,7 @@
     },
     "contentType": {
      "type": "string",
-     "description": "Content-Type of the object data."
+     "description": "Content-Type of the object data. If contentType is not specified, object downloads will be served as application/octet-stream."
     },
     "crc32c": {
      "type": "string",
@@ -610,6 +708,10 @@
      "type": "string",
      "description": "The kind of item this is. For objects, this is always storage#object.",
      "default": "storage#object"
+    },
+    "kmsKeyName": {
+     "type": "string",
+     "description": "Cloud KMS Key used to encrypt this object, if the object is encrypted by such a key."
     },
     "md5Hash": {
      "type": "string",
@@ -737,13 +839,13 @@
       },
       "team": {
        "type": "string",
-       "description": "The team. Can be owners, editors, or viewers."
+       "description": "The team."
       }
      }
     },
     "role": {
      "type": "string",
-     "description": "The access permission for the entity. Can be READER or OWNER."
+     "description": "The access permission for the entity."
     },
     "selfLink": {
      "type": "string",
@@ -800,6 +902,65 @@
     }
    }
   },
+  "Policy": {
+   "id": "Policy",
+   "type": "object",
+   "description": "A bucket/object IAM policy.",
+   "properties": {
+    "bindings": {
+     "type": "array",
+     "description": "An association between a role, which comes with a set of permissions, and members who may assume that role.",
+     "items": {
+      "type": "object",
+      "properties": {
+       "members": {
+        "type": "array",
+        "description": "A collection of identifiers for members who may assume the provided role. Recognized identifiers are as follows:  \n- allUsers — A special identifier that represents anyone on the internet; with or without a Google account.  \n- allAuthenticatedUsers — A special identifier that represents anyone who is authenticated with a Google account or a service account.  \n- user:emailid — An email address that represents a specific account. For example, user:alice@gmail.com or user:joe@example.com.  \n- serviceAccount:emailid — An email address that represents a service account. For example,  serviceAccount:my-other-app@appspot.gserviceaccount.com .  \n- group:emailid — An email address that represents a Google group. For example, group:admins@example.com.  \n- domain:domain — A Google Apps domain name that represents all the users of that domain. For example, domain:google.com or domain:example.com.  \n- projectOwner:projectid — Owners of the given project. For example, projectOwner:my-example-project  \n- projectEditor:projectid — Editors of the given project. For example, projectEditor:my-example-project  \n- projectViewer:projectid — Viewers of the given project. For example, projectViewer:my-example-project",
+        "items": {
+         "type": "string"
+        },
+        "annotations": {
+         "required": [
+          "storage.buckets.setIamPolicy",
+          "storage.objects.setIamPolicy"
+         ]
+        }
+       },
+       "role": {
+        "type": "string",
+        "description": "The role to which members belong. Two types of roles are supported: new IAM roles, which grant permissions that do not map directly to those provided by ACLs, and legacy IAM roles, which do map directly to ACL permissions. All roles are of the format roles/storage.specificRole.\nThe new IAM roles are:  \n- roles/storage.admin — Full control of Google Cloud Storage resources.  \n- roles/storage.objectViewer — Read-Only access to Google Cloud Storage objects.  \n- roles/storage.objectCreator — Access to create objects in Google Cloud Storage.  \n- roles/storage.objectAdmin — Full control of Google Cloud Storage objects.   The legacy IAM roles are:  \n- roles/storage.legacyObjectReader — Read-only access to objects without listing. Equivalent to an ACL entry on an object with the READER role.  \n- roles/storage.legacyObjectOwner — Read/write access to existing objects without listing. Equivalent to an ACL entry on an object with the OWNER role.  \n- roles/storage.legacyBucketReader — Read access to buckets with object listing. Equivalent to an ACL entry on a bucket with the READER role.  \n- roles/storage.legacyBucketWriter — Read access to buckets with object listing/creation/deletion. Equivalent to an ACL entry on a bucket with the WRITER role.  \n- roles/storage.legacyBucketOwner — Read and write access to existing buckets with object listing/creation/deletion. Equivalent to an ACL entry on a bucket with the OWNER role.",
+        "annotations": {
+         "required": [
+          "storage.buckets.setIamPolicy",
+          "storage.objects.setIamPolicy"
+         ]
+        }
+       }
+      }
+     },
+     "annotations": {
+      "required": [
+       "storage.buckets.setIamPolicy",
+       "storage.objects.setIamPolicy"
+      ]
+     }
+    },
+    "etag": {
+     "type": "string",
+     "description": "HTTP 1.1  Entity tag for the policy.",
+     "format": "byte"
+    },
+    "kind": {
+     "type": "string",
+     "description": "The kind of item this is. For policies, this is always storage#policy. This field is ignored on input.",
+     "default": "storage#policy"
+    },
+    "resourceId": {
+     "type": "string",
+     "description": "The ID of the resource to which this policy belongs. Will be of the form buckets/bucket for buckets, and buckets/bucket/objects/object for objects. A specific generation may be specified by appending #generationNumber to the end of the object name, e.g. buckets/my-bucket/objects/data.txt#17. The current generation can be denoted with #0. This field is ignored on input."
+    }
+   }
+  },
   "RewriteResponse": {
    "id": "RewriteResponse",
    "type": "object",
@@ -831,6 +992,25 @@
      "type": "string",
      "description": "The total bytes written so far, which can be used to provide a waiting user with a progress indicator. This property is always present in the response.",
      "format": "uint64"
+    }
+   }
+  },
+  "TestIamPermissionsResponse": {
+   "id": "TestIamPermissionsResponse",
+   "type": "object",
+   "description": "A storage.(buckets|objects).testIamPermissions response.",
+   "properties": {
+    "kind": {
+     "type": "string",
+     "description": "The kind of item this is.",
+     "default": "storage#testIamPermissionsResponse"
+    },
+    "permissions": {
+     "type": "array",
+     "description": "The permissions held by the caller. Permissions are always of the format storage.resource.capability, where resource is one of buckets or objects. The supported permissions are as follows:  \n- storage.buckets.delete — Delete bucket.  \n- storage.buckets.get — Read bucket metadata.  \n- storage.buckets.getIamPolicy — Read bucket IAM policy.  \n- storage.buckets.create — Create bucket.  \n- storage.buckets.list — List buckets.  \n- storage.buckets.setIamPolicy — Update bucket IAM policy.  \n- storage.buckets.update — Update bucket metadata.  \n- storage.objects.delete — Delete object.  \n- storage.objects.get — Read object data and metadata.  \n- storage.objects.getIamPolicy — Read object IAM policy.  \n- storage.objects.create — Create object.  \n- storage.objects.list — List objects.  \n- storage.objects.setIamPolicy — Update object IAM policy.  \n- storage.objects.update — Update object metadata.",
+     "items": {
+      "type": "string"
+     }
     }
    }
   }
@@ -1087,7 +1267,7 @@
        ],
        "enumDescriptions": [
         "Include all properties.",
-        "Omit acl and defaultObjectAcl properties."
+        "Omit owner, acl and defaultObjectAcl properties."
        ],
        "location": "query"
       }
@@ -1097,6 +1277,33 @@
      ],
      "response": {
       "$ref": "Bucket"
+     },
+     "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
+      "https://www.googleapis.com/auth/cloud-platform.read-only",
+      "https://www.googleapis.com/auth/devstorage.full_control",
+      "https://www.googleapis.com/auth/devstorage.read_only",
+      "https://www.googleapis.com/auth/devstorage.read_write"
+     ]
+    },
+    "getIamPolicy": {
+     "id": "storage.buckets.getIamPolicy",
+     "path": "b/{bucket}/iam",
+     "httpMethod": "GET",
+     "description": "Returns an IAM policy for the specified bucket.",
+     "parameters": {
+      "bucket": {
+       "type": "string",
+       "description": "Name of a bucket.",
+       "required": true,
+       "location": "path"
+      }
+     },
+     "parameterOrder": [
+      "bucket"
+     ],
+     "response": {
+      "$ref": "Policy"
      },
      "scopes": [
       "https://www.googleapis.com/auth/cloud-platform",
@@ -1167,7 +1374,7 @@
        ],
        "enumDescriptions": [
         "Include all properties.",
-        "Omit acl and defaultObjectAcl properties."
+        "Omit owner, acl and defaultObjectAcl properties."
        ],
        "location": "query"
       }
@@ -1225,7 +1432,7 @@
        ],
        "enumDescriptions": [
         "Include all properties.",
-        "Omit acl and defaultObjectAcl properties."
+        "Omit owner, acl and defaultObjectAcl properties."
        ],
        "location": "query"
       }
@@ -1317,7 +1524,7 @@
        ],
        "enumDescriptions": [
         "Include all properties.",
-        "Omit acl and defaultObjectAcl properties."
+        "Omit owner, acl and defaultObjectAcl properties."
        ],
        "location": "query"
       }
@@ -1333,7 +1540,69 @@
      },
      "scopes": [
       "https://www.googleapis.com/auth/cloud-platform",
+      "https://www.googleapis.com/auth/devstorage.full_control"
+     ]
+    },
+    "setIamPolicy": {
+     "id": "storage.buckets.setIamPolicy",
+     "path": "b/{bucket}/iam",
+     "httpMethod": "PUT",
+     "description": "Updates an IAM policy for the specified bucket.",
+     "parameters": {
+      "bucket": {
+       "type": "string",
+       "description": "Name of a bucket.",
+       "required": true,
+       "location": "path"
+      }
+     },
+     "parameterOrder": [
+      "bucket"
+     ],
+     "request": {
+      "$ref": "Policy"
+     },
+     "response": {
+      "$ref": "Policy"
+     },
+     "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/devstorage.full_control",
+      "https://www.googleapis.com/auth/devstorage.read_write"
+     ]
+    },
+    "testIamPermissions": {
+     "id": "storage.buckets.testIamPermissions",
+     "path": "b/{bucket}/iam/testPermissions",
+     "httpMethod": "GET",
+     "description": "Tests a set of permissions on the given bucket to see which, if any, are held by the caller.",
+     "parameters": {
+      "bucket": {
+       "type": "string",
+       "description": "Name of a bucket.",
+       "required": true,
+       "location": "path"
+      },
+      "permissions": {
+       "type": "string",
+       "description": "Permissions to test.",
+       "required": true,
+       "repeated": true,
+       "location": "query"
+      }
+     },
+     "parameterOrder": [
+      "bucket",
+      "permissions"
+     ],
+     "response": {
+      "$ref": "TestIamPermissionsResponse"
+     },
+     "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
+      "https://www.googleapis.com/auth/cloud-platform.read-only",
+      "https://www.googleapis.com/auth/devstorage.full_control",
+      "https://www.googleapis.com/auth/devstorage.read_only",
       "https://www.googleapis.com/auth/devstorage.read_write"
      ]
     },
@@ -1410,7 +1679,7 @@
        ],
        "enumDescriptions": [
         "Include all properties.",
-        "Omit acl and defaultObjectAcl properties."
+        "Omit owner, acl and defaultObjectAcl properties."
        ],
        "location": "query"
       }
@@ -1426,8 +1695,7 @@
      },
      "scopes": [
       "https://www.googleapis.com/auth/cloud-platform",
-      "https://www.googleapis.com/auth/devstorage.full_control",
-      "https://www.googleapis.com/auth/devstorage.read_write"
+      "https://www.googleapis.com/auth/devstorage.full_control"
      ]
     }
    }
@@ -1643,6 +1911,103 @@
      "scopes": [
       "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/devstorage.full_control"
+     ]
+    }
+   }
+  },
+  "notifications": {
+   "methods": {
+    "delete": {
+     "id": "storage.notifications.delete",
+     "path": "notifications/{notification}",
+     "httpMethod": "DELETE",
+     "description": "Permanently deletes a notification subscription.",
+     "parameters": {
+      "notification": {
+       "type": "string",
+       "description": "ID of the notification to delete.",
+       "required": true,
+       "location": "path"
+      }
+     },
+     "parameterOrder": [
+      "notification"
+     ],
+     "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
+      "https://www.googleapis.com/auth/devstorage.full_control",
+      "https://www.googleapis.com/auth/devstorage.read_write"
+     ]
+    },
+    "get": {
+     "id": "storage.notifications.get",
+     "path": "notifications/{notification}",
+     "httpMethod": "GET",
+     "description": "View a notification configuration.",
+     "parameters": {
+      "notification": {
+       "type": "string",
+       "description": "Notification ID",
+       "required": true,
+       "location": "path"
+      }
+     },
+     "parameterOrder": [
+      "notification"
+     ],
+     "response": {
+      "$ref": "Notification"
+     },
+     "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
+      "https://www.googleapis.com/auth/cloud-platform.read-only",
+      "https://www.googleapis.com/auth/devstorage.full_control",
+      "https://www.googleapis.com/auth/devstorage.read_only",
+      "https://www.googleapis.com/auth/devstorage.read_write"
+     ]
+    },
+    "insert": {
+     "id": "storage.notifications.insert",
+     "path": "notifications",
+     "httpMethod": "POST",
+     "description": "Creates a notification subscription for a given bucket.",
+     "request": {
+      "$ref": "Notification"
+     },
+     "response": {
+      "$ref": "Notification"
+     },
+     "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
+      "https://www.googleapis.com/auth/devstorage.full_control",
+      "https://www.googleapis.com/auth/devstorage.read_write"
+     ]
+    },
+    "list": {
+     "id": "storage.notifications.list",
+     "path": "notifications",
+     "httpMethod": "GET",
+     "description": "Retrieves a list of notification subscriptions for a given bucket.",
+     "parameters": {
+      "bucket": {
+       "type": "string",
+       "description": "Name of a GCS bucket.",
+       "required": true,
+       "location": "query"
+      }
+     },
+     "parameterOrder": [
+      "bucket"
+     ],
+     "response": {
+      "$ref": "Notifications"
+     },
+     "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
+      "https://www.googleapis.com/auth/cloud-platform.read-only",
+      "https://www.googleapis.com/auth/devstorage.full_control",
+      "https://www.googleapis.com/auth/devstorage.read_only",
+      "https://www.googleapis.com/auth/devstorage.read_write"
      ]
     }
    }
@@ -1959,6 +2324,11 @@
        "description": "Makes the operation conditional on whether the object's current metageneration matches the given value.",
        "format": "int64",
        "location": "query"
+      },
+      "kmsKeyName": {
+       "type": "string",
+       "description": "Resource name of the Cloud KMS key, of the form projects/my-project/locations/global/keyRings/my-kr/cryptoKeys/my-key, that will be used to encrypt the object. Overrides the object metadata's kms_key_name value, if any.",
+       "location": "query"
       }
      },
      "parameterOrder": [
@@ -2074,7 +2444,7 @@
        ],
        "enumDescriptions": [
         "Include all properties.",
-        "Omit the acl property."
+        "Omit the owner, acl property."
        ],
        "location": "query"
       },
@@ -2232,7 +2602,7 @@
        ],
        "enumDescriptions": [
         "Include all properties.",
-        "Omit the acl property."
+        "Omit the owner, acl property."
        ],
        "location": "query"
       }
@@ -2252,6 +2622,46 @@
       "https://www.googleapis.com/auth/devstorage.read_write"
      ],
      "supportsMediaDownload": true
+    },
+    "getIamPolicy": {
+     "id": "storage.objects.getIamPolicy",
+     "path": "b/{bucket}/o/{object}/iam",
+     "httpMethod": "GET",
+     "description": "Returns an IAM policy for the specified object.",
+     "parameters": {
+      "bucket": {
+       "type": "string",
+       "description": "Name of the bucket in which the object resides.",
+       "required": true,
+       "location": "path"
+      },
+      "generation": {
+       "type": "string",
+       "description": "If present, selects a specific revision of this object (as opposed to the latest version, the default).",
+       "format": "int64",
+       "location": "query"
+      },
+      "object": {
+       "type": "string",
+       "description": "Name of the object. For information about how to URL encode object names to be path safe, see Encoding URI Path Parts.",
+       "required": true,
+       "location": "path"
+      }
+     },
+     "parameterOrder": [
+      "bucket",
+      "object"
+     ],
+     "response": {
+      "$ref": "Policy"
+     },
+     "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
+      "https://www.googleapis.com/auth/cloud-platform.read-only",
+      "https://www.googleapis.com/auth/devstorage.full_control",
+      "https://www.googleapis.com/auth/devstorage.read_only",
+      "https://www.googleapis.com/auth/devstorage.read_write"
+     ]
     },
     "insert": {
      "id": "storage.objects.insert",
@@ -2294,6 +2704,11 @@
        "format": "int64",
        "location": "query"
       },
+      "kmsKeyName": {
+       "type": "string",
+       "description": "Resource name of the Cloud KMS key, of the form projects/my-project/locations/global/keyRings/my-kr/cryptoKeys/my-key, that will be used to encrypt the object. Overrides the object metadata's kms_key_name value, if any.",
+       "location": "query"
+      },
       "name": {
        "type": "string",
        "description": "Name of the object. Required when the object metadata is not otherwise provided. Overrides the object metadata's name value, if any. For information about how to URL encode object names to be path safe, see Encoding URI Path Parts.",
@@ -2329,7 +2744,7 @@
        ],
        "enumDescriptions": [
         "Include all properties.",
-        "Omit the acl property."
+        "Omit the owner, acl property."
        ],
        "location": "query"
       }
@@ -2409,7 +2824,7 @@
        ],
        "enumDescriptions": [
         "Include all properties.",
-        "Omit the acl property."
+        "Omit the owner, acl property."
        ],
        "location": "query"
       },
@@ -2512,7 +2927,7 @@
        ],
        "enumDescriptions": [
         "Include all properties.",
-        "Omit the acl property."
+        "Omit the owner, acl property."
        ],
        "location": "query"
       }
@@ -2529,8 +2944,7 @@
      },
      "scopes": [
       "https://www.googleapis.com/auth/cloud-platform",
-      "https://www.googleapis.com/auth/devstorage.full_control",
-      "https://www.googleapis.com/auth/devstorage.read_write"
+      "https://www.googleapis.com/auth/devstorage.full_control"
      ]
     },
     "rewrite": {
@@ -2544,6 +2958,11 @@
        "description": "Name of the bucket in which to store the new object. Overrides the provided object metadata's bucket value, if any.",
        "required": true,
        "location": "path"
+      },
+      "destinationKmsKeyName": {
+       "type": "string",
+       "description": "Resource name of the Cloud KMS key, of the form projects/my-project/locations/global/keyRings/my-kr/cryptoKeys/my-key, that will be used to encrypt the object. Overrides the object metadata's kms_key_name value, if any.",
+       "location": "query"
       },
       "destinationObject": {
        "type": "string",
@@ -2635,7 +3054,7 @@
        ],
        "enumDescriptions": [
         "Include all properties.",
-        "Omit the acl property."
+        "Omit the owner, acl property."
        ],
        "location": "query"
       },
@@ -2678,6 +3097,95 @@
      "scopes": [
       "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/devstorage.full_control",
+      "https://www.googleapis.com/auth/devstorage.read_write"
+     ]
+    },
+    "setIamPolicy": {
+     "id": "storage.objects.setIamPolicy",
+     "path": "b/{bucket}/o/{object}/iam",
+     "httpMethod": "PUT",
+     "description": "Updates an IAM policy for the specified object.",
+     "parameters": {
+      "bucket": {
+       "type": "string",
+       "description": "Name of the bucket in which the object resides.",
+       "required": true,
+       "location": "path"
+      },
+      "generation": {
+       "type": "string",
+       "description": "If present, selects a specific revision of this object (as opposed to the latest version, the default).",
+       "format": "int64",
+       "location": "query"
+      },
+      "object": {
+       "type": "string",
+       "description": "Name of the object. For information about how to URL encode object names to be path safe, see Encoding URI Path Parts.",
+       "required": true,
+       "location": "path"
+      }
+     },
+     "parameterOrder": [
+      "bucket",
+      "object"
+     ],
+     "request": {
+      "$ref": "Policy"
+     },
+     "response": {
+      "$ref": "Policy"
+     },
+     "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
+      "https://www.googleapis.com/auth/devstorage.full_control",
+      "https://www.googleapis.com/auth/devstorage.read_write"
+     ]
+    },
+    "testIamPermissions": {
+     "id": "storage.objects.testIamPermissions",
+     "path": "b/{bucket}/o/{object}/iam/testPermissions",
+     "httpMethod": "GET",
+     "description": "Tests a set of permissions on the given object to see which, if any, are held by the caller.",
+     "parameters": {
+      "bucket": {
+       "type": "string",
+       "description": "Name of the bucket in which the object resides.",
+       "required": true,
+       "location": "path"
+      },
+      "generation": {
+       "type": "string",
+       "description": "If present, selects a specific revision of this object (as opposed to the latest version, the default).",
+       "format": "int64",
+       "location": "query"
+      },
+      "object": {
+       "type": "string",
+       "description": "Name of the object. For information about how to URL encode object names to be path safe, see Encoding URI Path Parts.",
+       "required": true,
+       "location": "path"
+      },
+      "permissions": {
+       "type": "string",
+       "description": "Permissions to test.",
+       "required": true,
+       "repeated": true,
+       "location": "query"
+      }
+     },
+     "parameterOrder": [
+      "bucket",
+      "object",
+      "permissions"
+     ],
+     "response": {
+      "$ref": "TestIamPermissionsResponse"
+     },
+     "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform",
+      "https://www.googleapis.com/auth/cloud-platform.read-only",
+      "https://www.googleapis.com/auth/devstorage.full_control",
+      "https://www.googleapis.com/auth/devstorage.read_only",
       "https://www.googleapis.com/auth/devstorage.read_write"
      ]
     },
@@ -2759,7 +3267,7 @@
        ],
        "enumDescriptions": [
         "Include all properties.",
-        "Omit the acl property."
+        "Omit the owner, acl property."
        ],
        "location": "query"
       }
@@ -2776,8 +3284,7 @@
      },
      "scopes": [
       "https://www.googleapis.com/auth/cloud-platform",
-      "https://www.googleapis.com/auth/devstorage.full_control",
-      "https://www.googleapis.com/auth/devstorage.read_write"
+      "https://www.googleapis.com/auth/devstorage.full_control"
      ],
      "supportsMediaDownload": true
     },
@@ -2824,7 +3331,7 @@
        ],
        "enumDescriptions": [
         "Include all properties.",
-        "Omit the acl property."
+        "Omit the owner, acl property."
        ],
        "location": "query"
       },

@@ -38,15 +38,17 @@ func Cloudresourcemanager_v1beta1_OrganizationsGet(context Context, args ...stri
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("organizationId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("organizationsId"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v1beta1/organizations/{organizationId}", "+") {
+			if strings.Contains("v1beta1/organizations/{organizationsId}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
 			}
 		}
+
+		usageBits += " [--organizationId=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
@@ -59,28 +61,51 @@ func Cloudresourcemanager_v1beta1_OrganizationsGet(context Context, args ...stri
 	}
 	service := api_client.NewOrganizationsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"organizationId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
 		usageFunc()
 	}
 
 	expectedParams := []string{
-		"organizationId",
+		"organizationsId",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_organizationId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_organizationsId, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Get(param_organizationId)
+	call := service.Get(param_organizationsId)
 
-	var response *api_client.Organization
-	response, err = call.Do()
+	// Set query parameters.
+	if value, ok := flagValues["organizationId"]; ok {
+		query_organizationId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrganizationId(query_organizationId)
+	}
+
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -98,10 +123,10 @@ func Cloudresourcemanager_v1beta1_OrganizationsGetIamPolicy(context Context, arg
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("resource"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("organizationsId"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v1beta1/organizations/{resource}:getIamPolicy", "+") {
+			if strings.Contains("v1beta1/organizations/{organizationsId}:getIamPolicy", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -148,24 +173,23 @@ func Cloudresourcemanager_v1beta1_OrganizationsGetIamPolicy(context Context, arg
 	}
 
 	expectedParams := []string{
-		"resource",
+		"organizationsId",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_resource, err := commands_util.ConvertValue_string(paramValues[0])
+	param_organizationsId, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.GetIamPolicy(param_resource,
+	call := service.GetIamPolicy(param_organizationsId,
 		request,
 	)
 
-	var response *api_client.Policy
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -262,8 +286,7 @@ func Cloudresourcemanager_v1beta1_OrganizationsList(context Context, args ...str
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.ListOrganizationsResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -281,10 +304,10 @@ func Cloudresourcemanager_v1beta1_OrganizationsSetIamPolicy(context Context, arg
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("resource"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("organizationsId"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v1beta1/organizations/{resource}:setIamPolicy", "+") {
+			if strings.Contains("v1beta1/organizations/{organizationsId}:setIamPolicy", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -331,24 +354,23 @@ func Cloudresourcemanager_v1beta1_OrganizationsSetIamPolicy(context Context, arg
 	}
 
 	expectedParams := []string{
-		"resource",
+		"organizationsId",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_resource, err := commands_util.ConvertValue_string(paramValues[0])
+	param_organizationsId, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.SetIamPolicy(param_resource,
+	call := service.SetIamPolicy(param_organizationsId,
 		request,
 	)
 
-	var response *api_client.Policy
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -366,10 +388,10 @@ func Cloudresourcemanager_v1beta1_OrganizationsTestIamPermissions(context Contex
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("resource"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("organizationsId"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v1beta1/organizations/{resource}:testIamPermissions", "+") {
+			if strings.Contains("v1beta1/organizations/{organizationsId}:testIamPermissions", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -416,24 +438,23 @@ func Cloudresourcemanager_v1beta1_OrganizationsTestIamPermissions(context Contex
 	}
 
 	expectedParams := []string{
-		"resource",
+		"organizationsId",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_resource, err := commands_util.ConvertValue_string(paramValues[0])
+	param_organizationsId, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.TestIamPermissions(param_resource,
+	call := service.TestIamPermissions(param_organizationsId,
 		request,
 	)
 
-	var response *api_client.TestIamPermissionsResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -451,10 +472,10 @@ func Cloudresourcemanager_v1beta1_OrganizationsUpdate(context Context, args ...s
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("organizationId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("organizationsId"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v1beta1/organizations/{organizationId}", "+") {
+			if strings.Contains("v1beta1/organizations/{organizationsId}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -501,24 +522,23 @@ func Cloudresourcemanager_v1beta1_OrganizationsUpdate(context Context, args ...s
 	}
 
 	expectedParams := []string{
-		"organizationId",
+		"organizationsId",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_organizationId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_organizationsId, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Update(param_organizationId,
+	call := service.Update(param_organizationsId,
 		request,
 	)
 
-	var response *api_client.Organization
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -547,6 +567,8 @@ func Cloudresourcemanager_v1beta1_ProjectsCreate(context Context, args ...string
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--useLegacyStack=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Project{})
 
@@ -559,9 +581,19 @@ func Cloudresourcemanager_v1beta1_ProjectsCreate(context Context, args ...string
 	}
 	service := api_client.NewProjectsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"useLegacyStack": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -577,7 +609,13 @@ func Cloudresourcemanager_v1beta1_ProjectsCreate(context Context, args ...string
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -594,8 +632,16 @@ func Cloudresourcemanager_v1beta1_ProjectsCreate(context Context, args ...string
 		request,
 	)
 
-	var response *api_client.Project
-	response, err = call.Do()
+	// Set query parameters.
+	if value, ok := flagValues["useLegacyStack"]; ok {
+		query_useLegacyStack, err := commands_util.ConvertValue_bool(value)
+		if err != nil {
+			return err
+		}
+		call.UseLegacyStack(query_useLegacyStack)
+	}
+
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -654,8 +700,7 @@ func Cloudresourcemanager_v1beta1_ProjectsDelete(context Context, args ...string
 
 	call := service.Delete(param_projectId)
 
-	var response *api_client.Empty
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -714,8 +759,91 @@ func Cloudresourcemanager_v1beta1_ProjectsGet(context Context, args ...string) e
 
 	call := service.Get(param_projectId)
 
-	var response *api_client.Project
-	response, err = call.Do()
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Cloudresourcemanager_v1beta1_ProjectsGetAncestry(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta1/projects/{projectId}:getAncestry", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.GetAncestryRequest{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewProjectsService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.GetAncestryRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"projectId",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.GetAncestry(param_projectId,
+		request,
+	)
+
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -799,8 +927,7 @@ func Cloudresourcemanager_v1beta1_ProjectsGetIamPolicy(context Context, args ...
 		request,
 	)
 
-	var response *api_client.Policy
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -897,8 +1024,7 @@ func Cloudresourcemanager_v1beta1_ProjectsList(context Context, args ...string) 
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.ListProjectsResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -982,8 +1108,7 @@ func Cloudresourcemanager_v1beta1_ProjectsSetIamPolicy(context Context, args ...
 		request,
 	)
 
-	var response *api_client.Policy
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1067,8 +1192,7 @@ func Cloudresourcemanager_v1beta1_ProjectsTestIamPermissions(context Context, ar
 		request,
 	)
 
-	var response *api_client.TestIamPermissionsResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1096,7 +1220,10 @@ func Cloudresourcemanager_v1beta1_ProjectsUndelete(context Context, args ...stri
 			}
 		}
 
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.UndeleteProjectRequest{})
 
 		os.Exit(1)
 	}
@@ -1107,9 +1234,29 @@ func Cloudresourcemanager_v1beta1_ProjectsUndelete(context Context, args ...stri
 	}
 	service := api_client.NewProjectsService(api_service)
 
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
 	// Only positional arguments should remain in args.
-	if len(args) != 1 {
+	if len(args) == 0 || len(args) > 2 {
 		usageFunc()
+	}
+
+	request := &api_client.UndeleteProjectRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
 	}
 
 	expectedParams := []string{
@@ -1125,10 +1272,11 @@ func Cloudresourcemanager_v1beta1_ProjectsUndelete(context Context, args ...stri
 		return err
 	}
 
-	call := service.Undelete(param_projectId)
+	call := service.Undelete(param_projectId,
+		request,
+	)
 
-	var response *api_client.Empty
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1212,8 +1360,7 @@ func Cloudresourcemanager_v1beta1_ProjectsUpdate(context Context, args ...string
 		request,
 	)
 
-	var response *api_client.Project
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}

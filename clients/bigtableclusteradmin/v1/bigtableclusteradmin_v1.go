@@ -1,5 +1,7 @@
 // Package bigtableclusteradmin provides access to the Google Cloud Bigtable Cluster Admin API.
 //
+// See https://cloud.google.com/bigtable/
+//
 // Usage example:
 //
 //   import "github.com/skelterjohn/gcloud_apis/clients/bigtableclusteradmin/v1"

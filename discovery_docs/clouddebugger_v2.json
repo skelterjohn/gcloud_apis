@@ -3,17 +3,18 @@
   "discoveryVersion": "v1",
   "id": "clouddebugger:v2",
   "name": "clouddebugger",
+  "canonicalName": "Cloud Debugger",
   "version": "v2",
   "revision": "0",
-  "title": "Google Cloud Debugger API",
-  "description": "Lets you examine the stack and variables of your running application without stopping or slowing it down.\n",
+  "title": "Stackdriver Debugger API",
+  "description": "Examines the call stack and variables of a running application without stopping or slowing it down.\n",
   "ownerDomain": "google.com",
   "ownerName": "Google",
   "icons": {
     "x16": "http://www.google.com/images/icons/product/search-16.gif",
     "x32": "http://www.google.com/images/icons/product/search-32.gif"
    },
-  "documentationLink": "https://cloud.google.com/tools/cloud-debugger",
+  "documentationLink": "http://cloud.google.com/debugger",
   "protocol": "rest",
   "rootUrl": "https://clouddebugger.googleapis.com/",
   "servicePath": "",
@@ -116,9 +117,6 @@
         },
         "https://www.googleapis.com/auth/cloud_debugger": {
           "description": "Manage cloud debugger"
-        },
-        "https://www.googleapis.com/auth/cloud_debugletcontroller": {
-          "description": "Manage active breakpoints in cloud debugger"
         }
       }
     }
@@ -565,7 +563,7 @@
           }
         },
         "variableTable": {
-          "description": "The `variable_table` exists to aid with computation, memory and network\ntraffic optimization.  It enables storing a variable once and reference\nit from multiple variables, including variables stored in the\n`variable_table` itself.\nFor example, the same `this` object, which may appear at many levels of\nthe stack, can have all of its data stored once in this table.  The\nstack frame variables then would hold only a reference to it.\n\nThe variable `var_table_index` field is an index into this repeated field.\nThe stored objects are nameless and get their name from the referencing\nvariable. The effective variable is a merge of the referencing veariable\nand the referenced variable.",
+          "description": "The `variable_table` exists to aid with computation, memory and network\ntraffic optimization.  It enables storing a variable once and reference\nit from multiple variables, including variables stored in the\n`variable_table` itself.\nFor example, the same `this` object, which may appear at many levels of\nthe stack, can have all of its data stored once in this table.  The\nstack frame variables then would hold only a reference to it.\n\nThe variable `var_table_index` field is an index into this repeated field.\nThe stored objects are nameless and get their name from the referencing\nvariable. The effective variable is a merge of the referencing variable\nand the referenced variable.",
           "type": "array",
           "items": {
             "$ref": "Variable"
@@ -763,7 +761,7 @@
               },
               "scopes": [
                 "https://www.googleapis.com/auth/cloud-platform",
-                "https://www.googleapis.com/auth/cloud_debugletcontroller"
+                "https://www.googleapis.com/auth/cloud_debugger"
               ]
             }
           }
@@ -803,7 +801,7 @@
                   },
                   "scopes": [
                     "https://www.googleapis.com/auth/cloud-platform",
-                    "https://www.googleapis.com/auth/cloud_debugletcontroller"
+                    "https://www.googleapis.com/auth/cloud_debugger"
                   ]
                 },
                 "update": {
@@ -838,7 +836,7 @@
                   },
                   "scopes": [
                     "https://www.googleapis.com/auth/cloud-platform",
-                    "https://www.googleapis.com/auth/cloud_debugletcontroller"
+                    "https://www.googleapis.com/auth/cloud_debugger"
                   ]
                 }
               }
@@ -867,6 +865,11 @@
                   "description": "When set to `true`, the result includes all debuggees. Otherwise, the\nresult includes only debuggees that are active.",
                   "location": "query",
                   "type": "boolean"
+                },
+                "clientVersion": {
+                  "description": "The client version making the call.\nFollowing: `domain\/type\/version` (e.g., `google.com\/intellij\/v1`).",
+                  "location": "query",
+                  "type": "string"
                 }
               },
               "parameterOrder": [
@@ -895,6 +898,11 @@
                       "description": "ID of the debuggee where the breakpoint is to be set.",
                       "location": "path",
                       "required": true,
+                      "type": "string"
+                    },
+                    "clientVersion": {
+                      "description": "The client version making the call.\nFollowing: `domain\/type\/version` (e.g., `google.com\/intellij\/v1`).",
+                      "location": "query",
                       "type": "string"
                     }
                   },
@@ -930,6 +938,11 @@
                       "location": "path",
                       "required": true,
                       "type": "string"
+                    },
+                    "clientVersion": {
+                      "description": "The client version making the call.\nFollowing: `domain\/type\/version` (e.g., `google.com\/intellij\/v1`).",
+                      "location": "query",
+                      "type": "string"
                     }
                   },
                   "parameterOrder": [
@@ -961,6 +974,11 @@
                       "description": "ID of the breakpoint to delete.",
                       "location": "path",
                       "required": true,
+                      "type": "string"
+                    },
+                    "clientVersion": {
+                      "description": "The client version making the call.\nFollowing: `domain\/type\/version` (e.g., `google.com\/intellij\/v1`).",
+                      "location": "query",
                       "type": "string"
                     }
                   },
@@ -1015,6 +1033,11 @@
                     },
                     "waitToken": {
                       "description": "A wait token that, if specified, blocks the call until the breakpoints\nlist has changed, or a server selected timeout has expired.  The value\nshould be set from the last response. The error code\n`google.rpc.Code.ABORTED` (RPC) is returned on wait timeout, which\nshould be called again with the same `wait_token`.",
+                      "location": "query",
+                      "type": "string"
+                    },
+                    "clientVersion": {
+                      "description": "The client version making the call.\nFollowing: `domain\/type\/version` (e.g., `google.com\/intellij\/v1`).",
                       "location": "query",
                       "type": "string"
                     }

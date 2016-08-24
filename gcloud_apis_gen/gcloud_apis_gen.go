@@ -167,6 +167,9 @@ func writeCommandsSource(commands_dir string, docs map[string]*discovery.Discove
 					default:
 						panic("unknown parameter type: " + paramData.Type)
 					}
+					if paramData.Repeated && paramData.Required {
+						paramType += "s"
+					}
 					switch paramData.Location {
 					case "query":
 						methodInfo.HasFlags = true

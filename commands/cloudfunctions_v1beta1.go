@@ -79,8 +79,112 @@ func Cloudfunctions_v1beta1_OperationsGet(context Context, args ...string) error
 
 	call := service.Get(param_name)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Cloudfunctions_v1beta1_ProjectsLocationsList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1beta1/{+name}/locations", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--pageSize=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewProjectsLocationsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":    false,
+		"pageSize":  false,
+		"pageToken": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"name",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_name)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["pageSize"]; ok {
+		query_pageSize, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.PageSize(query_pageSize)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -164,8 +268,7 @@ func Cloudfunctions_v1beta1_ProjectsRegionsFunctionsCall(context Context, args .
 		request,
 	)
 
-	var response *api_client.CallFunctionResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -249,8 +352,7 @@ func Cloudfunctions_v1beta1_ProjectsRegionsFunctionsCreate(context Context, args
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -309,8 +411,7 @@ func Cloudfunctions_v1beta1_ProjectsRegionsFunctionsDelete(context Context, args
 
 	call := service.Delete(param_name)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -369,8 +470,7 @@ func Cloudfunctions_v1beta1_ProjectsRegionsFunctionsGet(context Context, args ..
 
 	call := service.Get(param_name)
 
-	var response *api_client.HostedFunction
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -465,8 +565,7 @@ func Cloudfunctions_v1beta1_ProjectsRegionsFunctionsList(context Context, args .
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.ListFunctionsResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -550,8 +649,7 @@ func Cloudfunctions_v1beta1_ProjectsRegionsFunctionsUpdate(context Context, args
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}

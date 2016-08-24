@@ -6,7 +6,7 @@
   "version": "v1b3",
   "revision": "0",
   "title": "Google Dataflow API",
-  "description": "Google Dataflow API.",
+  "description": "Develops and executes data processing patterns like ETL, batch computation, and continuous computation.",
   "ownerDomain": "google.com",
   "ownerName": "Google",
   "icons": {
@@ -120,6 +120,58 @@
     }
   },
   "schemas": {
+    "GetDebugConfigRequest": {
+      "id": "GetDebugConfigRequest",
+      "description": "Request to get updated debug configuration for component.",
+      "type": "object",
+      "properties": {
+        "workerId": {
+          "description": "The worker id, i.e., VM hostname.",
+          "type": "string"
+        },
+        "componentId": {
+          "description": "The internal component id for which debug configuration is\nrequested.",
+          "type": "string"
+        }
+      }
+    },
+    "GetDebugConfigResponse": {
+      "id": "GetDebugConfigResponse",
+      "description": "Response to a get debug configuration request.",
+      "type": "object",
+      "properties": {
+        "config": {
+          "description": "The encoded debug configuration for the requested component.",
+          "type": "string"
+        }
+      }
+    },
+    "SendDebugCaptureRequest": {
+      "id": "SendDebugCaptureRequest",
+      "description": "Request to send encoded debug information.",
+      "type": "object",
+      "properties": {
+        "workerId": {
+          "description": "The worker id, i.e., VM hostname.",
+          "type": "string"
+        },
+        "componentId": {
+          "description": "The internal component id for which debug information is sent.",
+          "type": "string"
+        },
+        "data": {
+          "description": "The encoded debug information.",
+          "type": "string"
+        }
+      }
+    },
+    "SendDebugCaptureResponse": {
+      "id": "SendDebugCaptureResponse",
+      "description": "Response to a send capture request.\nnothing",
+      "type": "object",
+      "properties": {
+      }
+    },
     "Job": {
       "id": "Job",
       "description": "Defines a job to be run by the Dataflow service.",
@@ -253,6 +305,13 @@
           "items": {
             "type": "string"
           }
+        },
+        "labels": {
+          "description": "User-defined labels for this job.\n\nThe labels map can contain no more than 64 entries.  Entries of the labels\nmap are UTF8 strings that comply with the following restrictions:\n\n* Keys must conform to regexp:  \\p{Ll}\\p{Lo}{0,62}\n* Values must conform to regexp:  [\\p{Ll}\\p{Lo}\\p{N}_-]{0,63}\n* Both keys and values are additionally constrained to be <= 128 bytes in\nsize.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
         }
       }
     },
@@ -316,7 +375,7 @@
           "type": "object",
           "additionalProperties": {
             "type": "any",
-            "description": "Properties of the object. Contains field @ype with type URL."
+            "description": "Properties of the object. Contains field @type with type URL."
           }
         }
       }
@@ -426,12 +485,39 @@
           "type": "object",
           "additionalProperties": {
             "type": "any",
-            "description": "Properties of the object. Contains field @ype with type URL."
+            "description": "Properties of the object. Contains field @type with type URL."
           }
         },
         "network": {
           "description": "Network to which VMs will be assigned.  If empty or unspecified,\nthe service will use the network \"default\".",
           "type": "string"
+        },
+        "subnetwork": {
+          "description": "Subnetwork to which VMs will be assigned, if desired.  Expected to be of\nthe form \"regions\/REGION\/subnetworks\/SUBNETWORK\".",
+          "type": "string"
+        },
+        "workerHarnessContainerImage": {
+          "description": "Docker container image that executes Dataflow worker harness, residing in\nGoogle Container Registry. Required.",
+          "type": "string"
+        },
+        "numThreadsPerWorker": {
+          "description": "The number of threads per worker harness. If empty or unspecified, the\nservice will choose a number of threads (according to the number of cores\non the selected machine type for batch, or 1 by convention for streaming).",
+          "type": "integer",
+          "format": "int32"
+        },
+        "ipConfiguration": {
+          "description": "Configuration for VM IPs.",
+          "enumDescriptions": [
+            "The configuration is unknown, or unspecified.",
+            "Workers should have public IP addresses.",
+            "Workers should have private IP addresses."
+          ],
+          "type": "string",
+          "enum": [
+            "WORKER_IP_UNSPECIFIED",
+            "WORKER_IP_PUBLIC",
+            "WORKER_IP_PRIVATE"
+          ]
         }
       }
     },
@@ -825,6 +911,24 @@
         }
       }
     },
+    "CreateJobFromTemplateRequest": {
+      "id": "CreateJobFromTemplateRequest",
+      "description": "Request to create a Dataflow job.",
+      "type": "object",
+      "properties": {
+        "gcsPath": {
+          "description": "A path to the serialized JSON representation of the job.",
+          "type": "string"
+        },
+        "parameters": {
+          "description": "Dynamic parameterization of the job's runtime environment.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "ReportWorkItemStatusRequest": {
       "id": "ReportWorkItemStatusRequest",
       "description": "Request to report the status of WorkItems.",
@@ -878,8 +982,15 @@
             "$ref": "Status"
           }
         },
+        "counterUpdates": {
+          "description": "Worker output counters for this WorkItem.",
+          "type": "array",
+          "items": {
+            "$ref": "CounterUpdate"
+          }
+        },
         "metricUpdates": {
-          "description": "Worker output metrics (counters) for this WorkItem.",
+          "description": "DEPRECATED in favor of counter_updates.",
           "type": "array",
           "items": {
             "$ref": "MetricUpdate"
@@ -932,8 +1043,330 @@
             "type": "object",
             "additionalProperties": {
               "type": "any",
-              "description": "Properties of the object. Contains field @ype with type URL."
+              "description": "Properties of the object. Contains field @type with type URL."
             }
+          }
+        }
+      }
+    },
+    "CounterUpdate": {
+      "id": "CounterUpdate",
+      "description": "An update to a Counter sent from a worker.",
+      "type": "object",
+      "properties": {
+        "nameAndKind": {
+          "description": "Counter name and aggregation type.",
+          "$ref": "NameAndKind"
+        },
+        "shortId": {
+          "description": "The service-generated short identifier for this counter.\nThe short_id -> (name, metadata) mapping is constant for the lifetime of\na job.",
+          "type": "string",
+          "format": "int64"
+        },
+        "structuredNameAndMetadata": {
+          "description": "Counter structured name and metadata.",
+          "$ref": "CounterStructuredNameAndMetadata"
+        },
+        "cumulative": {
+          "description": "True if this counter is reported as the total cumulative aggregate\nvalue accumulated since the worker started working on this WorkItem.\nBy default this is false, indicating that this counter is reported\nas a delta.",
+          "type": "boolean"
+        },
+        "integer": {
+          "description": "Integer value for Sum, Max, Min.",
+          "$ref": "SplitInt64"
+        },
+        "floatingPoint": {
+          "description": "Floating point value for Sum, Max, Min.",
+          "type": "number",
+          "format": "double"
+        },
+        "boolean": {
+          "description": "Boolean value for And, Or.",
+          "type": "boolean"
+        },
+        "integerMean": {
+          "description": "Integer mean aggregation value for Mean.",
+          "$ref": "IntegerMean"
+        },
+        "floatingPointMean": {
+          "description": "Floating point mean aggregation value for Mean.",
+          "$ref": "FloatingPointMean"
+        },
+        "integerList": {
+          "description": "List of integers, for Set.",
+          "$ref": "IntegerList"
+        },
+        "floatingPointList": {
+          "description": "List of floating point numbers, for Set.",
+          "$ref": "FloatingPointList"
+        },
+        "stringList": {
+          "description": "List of strings, for Set.",
+          "$ref": "StringList"
+        },
+        "internal": {
+          "description": "Value for internally-defined counters used by the Dataflow service.",
+          "type": "any"
+        }
+      }
+    },
+    "NameAndKind": {
+      "id": "NameAndKind",
+      "description": "Basic metadata about a counter.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Name of the counter.",
+          "type": "string"
+        },
+        "kind": {
+          "description": "Counter aggregation kind.",
+          "enumDescriptions": [
+            "Counter aggregation kind was not set.",
+            "Aggregated value is the sum of all contributed values.",
+            "Aggregated value is the max of all contributed values.",
+            "Aggregated value is the min of all contributed values.",
+            "Aggregated value is the mean of all contributed values.",
+            "Aggregated value represents the logical 'or' of all contributed values.",
+            "Aggregated value represents the logical 'and' of all contributed values.",
+            "Aggregated value is a set of unique contributed values."
+          ],
+          "type": "string",
+          "enum": [
+            "INVALID",
+            "SUM",
+            "MAX",
+            "MIN",
+            "MEAN",
+            "OR",
+            "AND",
+            "SET"
+          ]
+        }
+      }
+    },
+    "CounterStructuredNameAndMetadata": {
+      "id": "CounterStructuredNameAndMetadata",
+      "description": "A single message which encapsulates structured name and metadata for a given\ncounter.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Structured name of the counter.",
+          "$ref": "CounterStructuredName"
+        },
+        "metadata": {
+          "description": "Metadata associated with a counter",
+          "$ref": "CounterMetadata"
+        }
+      }
+    },
+    "CounterStructuredName": {
+      "id": "CounterStructuredName",
+      "description": "Identifies a counter within a per-job namespace. Counters whose structured\nnames are the same get merged into a single value for the job.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Counter name. Not necessarily globally-unique, but unique within the\ncontext of the other fields.\nRequired.",
+          "type": "string"
+        },
+        "standardOrigin": {
+          "description": "One of the standard Origins defined above.",
+          "enumDescriptions": [
+            "Counter was created by the Dataflow system.",
+            "Counter was created by the user."
+          ],
+          "type": "string",
+          "enum": [
+            "DATAFLOW",
+            "USER"
+          ]
+        },
+        "otherOrigin": {
+          "description": "A string containing the origin of the counter.",
+          "type": "string"
+        },
+        "originalStepName": {
+          "description": "System generated name of the original step in the user's graph, before\noptimization.",
+          "type": "string"
+        },
+        "componentStepName": {
+          "description": "Name of the optimized step being executed by the workers.",
+          "type": "string"
+        },
+        "executionStepName": {
+          "description": "Name of the stage. An execution step contains multiple component steps.",
+          "type": "string"
+        },
+        "workerId": {
+          "description": "ID of a particular worker.",
+          "type": "string"
+        },
+        "portion": {
+          "description": "Portion of this counter, either key or value.",
+          "enumDescriptions": [
+            "Counter portion has not been set.",
+            "Counter reports a key.",
+            "Counter reports a value."
+          ],
+          "type": "string",
+          "enum": [
+            "ALL",
+            "KEY",
+            "VALUE"
+          ]
+        }
+      }
+    },
+    "CounterMetadata": {
+      "id": "CounterMetadata",
+      "description": "CounterMetadata includes all static non-name non-value counter attributes.",
+      "type": "object",
+      "properties": {
+        "kind": {
+          "description": "Counter aggregation kind.",
+          "enumDescriptions": [
+            "Counter aggregation kind was not set.",
+            "Aggregated value is the sum of all contributed values.",
+            "Aggregated value is the max of all contributed values.",
+            "Aggregated value is the min of all contributed values.",
+            "Aggregated value is the mean of all contributed values.",
+            "Aggregated value represents the logical 'or' of all contributed values.",
+            "Aggregated value represents the logical 'and' of all contributed values.",
+            "Aggregated value is a set of unique contributed values."
+          ],
+          "type": "string",
+          "enum": [
+            "INVALID",
+            "SUM",
+            "MAX",
+            "MIN",
+            "MEAN",
+            "OR",
+            "AND",
+            "SET"
+          ]
+        },
+        "description": {
+          "description": "Human-readable description of the counter semantics.",
+          "type": "string"
+        },
+        "standardUnits": {
+          "description": "System defined Units, see above enum.",
+          "enumDescriptions": [
+            "Counter returns a value in bytes.",
+            "Counter returns a value in bytes per second.",
+            "Counter returns a value in milliseconds.",
+            "Counter returns a value in microseconds.",
+            "Counter returns a value in nanoseconds.",
+            "Counter returns a timestamp in milliseconds.",
+            "Counter returns a timestamp in microseconds.",
+            "Counter returns a timestamp in nanoseconds."
+          ],
+          "type": "string",
+          "enum": [
+            "BYTES",
+            "BYTES_PER_SEC",
+            "MILLISECONDS",
+            "MICROSECONDS",
+            "NANOSECONDS",
+            "TIMESTAMP_MSEC",
+            "TIMESTAMP_USEC",
+            "TIMESTAMP_NSEC"
+          ]
+        },
+        "otherUnits": {
+          "description": "A string referring to the unit type.",
+          "type": "string"
+        }
+      }
+    },
+    "SplitInt64": {
+      "id": "SplitInt64",
+      "description": "A representation of an int64, n, that is immune to precision loss when\nencoded in JSON.",
+      "type": "object",
+      "properties": {
+        "lowBits": {
+          "description": "The low order bits: n & 0xffffffff.",
+          "type": "integer",
+          "format": "uint32"
+        },
+        "highBits": {
+          "description": "The high order bits, including the sign: n >> 32.",
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "IntegerMean": {
+      "id": "IntegerMean",
+      "description": "A representation of an integer mean metric contribution.",
+      "type": "object",
+      "properties": {
+        "sum": {
+          "description": "The sum of all values being aggregated.",
+          "$ref": "SplitInt64"
+        },
+        "count": {
+          "description": "The number of values being aggregated.",
+          "$ref": "SplitInt64"
+        }
+      }
+    },
+    "FloatingPointMean": {
+      "id": "FloatingPointMean",
+      "description": "A representation of a floating point mean metric contribution.",
+      "type": "object",
+      "properties": {
+        "sum": {
+          "description": "The sum of all values being aggregated.",
+          "type": "number",
+          "format": "double"
+        },
+        "count": {
+          "description": "The number of values being aggregated.",
+          "$ref": "SplitInt64"
+        }
+      }
+    },
+    "IntegerList": {
+      "id": "IntegerList",
+      "description": "A metric value representing a list of integers.",
+      "type": "object",
+      "properties": {
+        "elements": {
+          "description": "Elements of the list.",
+          "type": "array",
+          "items": {
+            "$ref": "SplitInt64"
+          }
+        }
+      }
+    },
+    "FloatingPointList": {
+      "id": "FloatingPointList",
+      "description": "A metric value representing a list of floating point numbers.",
+      "type": "object",
+      "properties": {
+        "elements": {
+          "description": "Elements of the list.",
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      }
+    },
+    "StringList": {
+      "id": "StringList",
+      "description": "A metric value representing a list of strings.",
+      "type": "object",
+      "properties": {
+        "elements": {
+          "description": "Elements of the list.",
+          "type": "array",
+          "items": {
+            "type": "string"
           }
         }
       }
@@ -953,11 +1386,11 @@
           "format": "double"
         },
         "remainingParallelism": {
-          "description": "Total amount of parallelism in the input of this WorkItem that has not\nbeen consumed yet (i.e. can be delegated to a new WorkItem via dynamic\nsplitting).\n\n\"Amount of parallelism\" refers to how many non-empty parts of the input\ncan be read in parallel. This does not necessarily equal number\nof records. An input that can be read in parallel down to the\nindividual records is called \"perfectly splittable\".\nAn example of non-perfectly parallelizable input is a block-compressed\nfile format where a block of records has to be read as a whole,\nbut different blocks can be read in parallel.\n\nExamples:\n* If we have read 30 records out of 50 in a perfectly splittable\n  50-record input, this value should be 20.\n* If we are reading through block 3 in a block-compressed file consisting\n  of 5 blocks, this value should be 2 (since blocks 4 and 5 can be\n  processed in parallel by new work items via dynamic splitting).\n* If we are reading through the last block in a block-compressed file,\n  or reading or processing the last record in a perfectly splittable\n  input, this value should be 0, because the remainder of the work item\n  cannot be further split.",
+          "description": "Total amount of parallelism in the input of this task that remains,\n(i.e. can be delegated to this task and any new tasks via dynamic\nsplitting). Always at least 1 for non-finished work items and 0 for\nfinished.\n\n\"Amount of parallelism\" refers to how many non-empty parts of the input\ncan be read in parallel. This does not necessarily equal number\nof records. An input that can be read in parallel down to the\nindividual records is called \"perfectly splittable\".\nAn example of non-perfectly parallelizable input is a block-compressed\nfile format where a block of records has to be read as a whole,\nbut different blocks can be read in parallel.\n\nExamples:\n* If we are processing record #30 (starting at 1) out of 50 in a perfectly\n  splittable 50-record input, this value should be 21 (20 remaining + 1\n  current).\n* If we are reading through block 3 in a block-compressed file consisting\n  of 5 blocks, this value should be 3 (since blocks 4 and 5 can be\n  processed in parallel by new tasks via dynamic splitting and the current\n  task remains processing block 3).\n* If we are reading through the last block in a block-compressed file,\n  or reading or processing the last record in a perfectly splittable\n  input, this value should be 1, because apart from the current task, no\n  additional remainder can be split off.",
           "$ref": "ReportedParallelism"
         },
         "consumedParallelism": {
-          "description": "Total amount of parallelism in the portion of input of this work item\nthat has already been consumed. In the first two examples above\n(see remaining_parallelism), the value should be 30 or 3 respectively.\nThe sum of remaining_parallelism and consumed_parallelism should equal\nthe total amount of parallelism in this work item.\nIf specified, must be finite.",
+          "description": "Total amount of parallelism in the portion of input of this task that has\nalready been consumed and is no longer active. In the first two examples\nabove (see remaining_parallelism), the value should be 29 or 2\nrespectively.  The sum of remaining_parallelism and consumed_parallelism\nshould equal the total amount of parallelism in this work item.  If\nspecified, must be finite.",
           "$ref": "ReportedParallelism"
         }
       }
@@ -1309,6 +1742,13 @@
           "type": "string",
           "format": "int64"
         },
+        "metricShortId": {
+          "description": "The short ids that workers should use in subsequent metric updates.\nWorkers should strive to use short ids whenever possible, but it is ok\nto request the short_id again if a worker lost track of it\n(e.g. if the worker is recovering from a crash).\nNOTE: it is possible that the response may have short ids for a subset\nof the metrics.",
+          "type": "array",
+          "items": {
+            "$ref": "MetricShortId"
+          }
+        },
         "suggestedStopPosition": {
           "description": "Obsolete, always empty.",
           "$ref": "Position"
@@ -1332,6 +1772,23 @@
           "description": "A fraction at which to split the work item, from 0.0 (beginning of the\ninput) to 1.0 (end of the input).",
           "type": "number",
           "format": "double"
+        }
+      }
+    },
+    "MetricShortId": {
+      "id": "MetricShortId",
+      "description": "The metric short id is returned to the user alongside an offset into\nReportWorkItemStatusRequest",
+      "type": "object",
+      "properties": {
+        "metricIndex": {
+          "description": "The index of the corresponding metric in\nthe ReportWorkItemStatusRequest. Required.",
+          "type": "integer",
+          "format": "int32"
+        },
+        "shortId": {
+          "description": "The service-generated short identifier for the metric.",
+          "type": "string",
+          "format": "int64"
         }
       }
     },
@@ -1433,6 +1890,10 @@
           "description": "Additional information for StreamingComputationTask WorkItems.",
           "$ref": "StreamingComputationTask"
         },
+        "streamingConfigTask": {
+          "description": "Additional information for StreamingConfigTask WorkItems.",
+          "$ref": "StreamingConfigTask"
+        },
         "reportStatusInterval": {
           "description": "Recommended reporting interval.",
           "type": "string",
@@ -1487,6 +1948,10 @@
         },
         "name": {
           "description": "User-provided name of this operation.",
+          "type": "string"
+        },
+        "originalName": {
+          "description": "System-defined name for the operation in the original workflow graph.",
           "type": "string"
         },
         "read": {
@@ -1690,6 +2155,14 @@
           "items": {
             "$ref": "SideInputInfo"
           }
+        },
+        "originalCombineValuesStepName": {
+          "description": "If this instruction includes a combining function, this is the name of the\nCombineValues instruction lifted into this instruction.",
+          "type": "string"
+        },
+        "originalCombineValuesInputStoreName": {
+          "description": "If this instruction includes a combining function this is the name of the\nintermediate store between the GBK and the CombineValues.",
+          "type": "string"
         }
       }
     },
@@ -1720,6 +2193,10 @@
           "description": "System-defined name of this output.\nUnique across the workflow.",
           "type": "string"
         },
+        "originalName": {
+          "description": "System-defined name for this output in the original workflow graph.\nOutputs that do not contribute to an original instruction do not set this.",
+          "type": "string"
+        },
         "codec": {
           "description": "The codec to use to encode data being written via this output.",
           "type": "object",
@@ -1727,6 +2204,14 @@
             "type": "any",
             "description": "Properties of the object."
           }
+        },
+        "onlyCountKeyBytes": {
+          "description": "For system-generated byte and mean byte metrics, certain instructions\nshould only report the key size.",
+          "type": "boolean"
+        },
+        "onlyCountValueBytes": {
+          "description": "For system-generated byte and mean byte metrics, certain instructions\nshould only report the value size.",
+          "type": "boolean"
         }
       }
     },
@@ -1820,6 +2305,10 @@
         "streamingComputationTopology": {
           "description": "The global topology of the streaming Dataflow job.",
           "$ref": "TopologyConfig"
+        },
+        "drain": {
+          "description": "The user has requested drain.",
+          "type": "boolean"
         }
       }
     },
@@ -1851,6 +2340,11 @@
         },
         "forwardingKeyBits": {
           "description": "The size (in bits) of keys that will be assigned to source messages.",
+          "type": "integer",
+          "format": "int32"
+        },
+        "persistentStateVersion": {
+          "description": "Version number for persistent state.",
           "type": "integer",
           "format": "int32"
         }
@@ -2195,6 +2689,53 @@
         }
       }
     },
+    "StreamingConfigTask": {
+      "id": "StreamingConfigTask",
+      "description": "A task that carries configuration information for streaming computations.",
+      "type": "object",
+      "properties": {
+        "streamingComputationConfigs": {
+          "description": "Set of computation configuration information.",
+          "type": "array",
+          "items": {
+            "$ref": "StreamingComputationConfig"
+          }
+        },
+        "userStepToStateFamilyNameMap": {
+          "description": "Map from user step names to state families.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "StreamingComputationConfig": {
+      "id": "StreamingComputationConfig",
+      "description": "Configuration information for a single streaming computation.",
+      "type": "object",
+      "properties": {
+        "computationId": {
+          "description": "Unique identifier for this computation.",
+          "type": "string"
+        },
+        "systemName": {
+          "description": "System defined name for this computation.",
+          "type": "string"
+        },
+        "stageName": {
+          "description": "Stage name of this computation.",
+          "type": "string"
+        },
+        "instructions": {
+          "description": "Instructions that comprise the computation.",
+          "type": "array",
+          "items": {
+            "$ref": "ParallelInstruction"
+          }
+        }
+      }
+    },
     "SendWorkerMessagesRequest": {
       "id": "SendWorkerMessagesRequest",
       "description": "A request for sending worker messages to the service.",
@@ -2494,6 +3035,17 @@
                   "required": true,
                   "type": "string"
                 },
+                "filter": {
+                  "description": "The kind of filter to use.",
+                  "location": "query",
+                  "type": "string",
+                  "enum": [
+                    "UNKNOWN",
+                    "ALL",
+                    "TERMINATED",
+                    "ACTIVE"
+                  ]
+                },
                 "view": {
                   "description": "Level of information requested in response. Default is SUMMARY.",
                   "location": "query",
@@ -2568,6 +3120,80 @@
           }
           ,
           "resources": {
+            "debug": {
+              "methods": {
+                "getConfig": {
+                  "id": "dataflow.projects.jobs.debug.getConfig",
+                  "path": "v1b3/projects/{projectId}/jobs/{jobId}/debug/getConfig",
+                  "flatPath": "v1b3/projects/{projectId}/jobs/{jobId}/debug/getConfig",
+                  "httpMethod": "POST",
+                  "description": "Get encoded debug configuration for component. Not cacheable.",
+                  "parameters": {
+                    "projectId": {
+                      "description": "The project id.",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    },
+                    "jobId": {
+                      "description": "The job id.",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "parameterOrder": [
+                    "projectId",
+                    "jobId"
+                  ],
+                  "request": {
+                    "$ref": "GetDebugConfigRequest"
+                  },
+                  "response": {
+                    "$ref": "GetDebugConfigResponse"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/userinfo.email"
+                  ]
+                },
+                "sendCapture": {
+                  "id": "dataflow.projects.jobs.debug.sendCapture",
+                  "path": "v1b3/projects/{projectId}/jobs/{jobId}/debug/sendCapture",
+                  "flatPath": "v1b3/projects/{projectId}/jobs/{jobId}/debug/sendCapture",
+                  "httpMethod": "POST",
+                  "description": "Send encoded debug capture data for component.",
+                  "parameters": {
+                    "projectId": {
+                      "description": "The project id.",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    },
+                    "jobId": {
+                      "description": "The job id.",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "parameterOrder": [
+                    "projectId",
+                    "jobId"
+                  ],
+                  "request": {
+                    "$ref": "SendDebugCaptureRequest"
+                  },
+                  "response": {
+                    "$ref": "SendDebugCaptureResponse"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/userinfo.email"
+                  ]
+                }
+              }
+            },
             "messages": {
               "methods": {
                 "list": {
@@ -2713,6 +3339,38 @@
                   ]
                 }
               }
+            }
+          }
+        },
+        "templates": {
+          "methods": {
+            "create": {
+              "id": "dataflow.projects.templates.create",
+              "path": "v1b3/projects/{projectId}/templates",
+              "flatPath": "v1b3/projects/{projectId}/templates",
+              "httpMethod": "POST",
+              "description": "Creates a dataflow job from a template.",
+              "parameters": {
+                "projectId": {
+                  "description": "The project which owns the job.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "parameterOrder": [
+                "projectId"
+              ],
+              "request": {
+                "$ref": "CreateJobFromTemplateRequest"
+              },
+              "response": {
+                "$ref": "Job"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/cloud-platform",
+                "https://www.googleapis.com/auth/userinfo.email"
+              ]
             }
           }
         }

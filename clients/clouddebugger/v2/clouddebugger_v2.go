@@ -1,6 +1,6 @@
-// Package clouddebugger provides access to the Google Cloud Debugger API.
+// Package clouddebugger provides access to the Stackdriver Debugger API.
 //
-// See https://cloud.google.com/tools/cloud-debugger
+// See http://cloud.google.com/debugger
 //
 // Usage example:
 //
@@ -52,9 +52,6 @@ const (
 
 	// Manage cloud debugger
 	CloudDebuggerScope = "https://www.googleapis.com/auth/cloud_debugger"
-
-	// Manage active breakpoints in cloud debugger
-	CloudDebugletcontrollerScope = "https://www.googleapis.com/auth/cloud_debugletcontroller"
 )
 
 func New(client *http.Client) (*Service, error) {
@@ -317,7 +314,7 @@ type Breakpoint struct {
 	// The stored objects are nameless and get their name from the
 	// referencing
 	// variable. The effective variable is a merge of the referencing
-	// veariable
+	// variable
 	// and the referenced variable.
 	VariableTable []*Variable `json:"variableTable,omitempty"`
 
@@ -1379,7 +1376,7 @@ func (c *ControllerDebuggeesRegisterCall) Do(opts ...googleapi.CallOption) (*Reg
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",
-	//     "https://www.googleapis.com/auth/cloud_debugletcontroller"
+	//     "https://www.googleapis.com/auth/cloud_debugger"
 	//   ]
 	// }
 
@@ -1563,7 +1560,7 @@ func (c *ControllerDebuggeesBreakpointsListCall) Do(opts ...googleapi.CallOption
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",
-	//     "https://www.googleapis.com/auth/cloud_debugletcontroller"
+	//     "https://www.googleapis.com/auth/cloud_debugger"
 	//   ]
 	// }
 
@@ -1711,7 +1708,7 @@ func (c *ControllerDebuggeesBreakpointsUpdateCall) Do(opts ...googleapi.CallOpti
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",
-	//     "https://www.googleapis.com/auth/cloud_debugletcontroller"
+	//     "https://www.googleapis.com/auth/cloud_debugger"
 	//   ]
 	// }
 
@@ -1729,6 +1726,14 @@ type DebuggerDebuggeesListCall struct {
 // List: Lists all the debuggees that the user can set breakpoints to.
 func (r *DebuggerDebuggeesService) List() *DebuggerDebuggeesListCall {
 	c := &DebuggerDebuggeesListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	return c
+}
+
+// ClientVersion sets the optional parameter "clientVersion": The client
+// version making the call.
+// Following: `domain/type/version` (e.g., `google.com/intellij/v1`).
+func (c *DebuggerDebuggeesListCall) ClientVersion(clientVersion string) *DebuggerDebuggeesListCall {
+	c.urlParams_.Set("clientVersion", clientVersion)
 	return c
 }
 
@@ -1837,6 +1842,11 @@ func (c *DebuggerDebuggeesListCall) Do(opts ...googleapi.CallOption) (*ListDebug
 	//   "id": "clouddebugger.debugger.debuggees.list",
 	//   "parameterOrder": [],
 	//   "parameters": {
+	//     "clientVersion": {
+	//       "description": "The client version making the call.\nFollowing: `domain/type/version` (e.g., `google.com/intellij/v1`).",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
 	//     "includeInactive": {
 	//       "description": "When set to `true`, the result includes all debuggees. Otherwise, the\nresult includes only debuggees that are active.",
 	//       "location": "query",
@@ -1875,6 +1885,14 @@ func (r *DebuggerDebuggeesBreakpointsService) Delete(debuggeeId string, breakpoi
 	c := &DebuggerDebuggeesBreakpointsDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.debuggeeId = debuggeeId
 	c.breakpointId = breakpointId
+	return c
+}
+
+// ClientVersion sets the optional parameter "clientVersion": The client
+// version making the call.
+// Following: `domain/type/version` (e.g., `google.com/intellij/v1`).
+func (c *DebuggerDebuggeesBreakpointsDeleteCall) ClientVersion(clientVersion string) *DebuggerDebuggeesBreakpointsDeleteCall {
+	c.urlParams_.Set("clientVersion", clientVersion)
 	return c
 }
 
@@ -1966,6 +1984,11 @@ func (c *DebuggerDebuggeesBreakpointsDeleteCall) Do(opts ...googleapi.CallOption
 	//       "required": true,
 	//       "type": "string"
 	//     },
+	//     "clientVersion": {
+	//       "description": "The client version making the call.\nFollowing: `domain/type/version` (e.g., `google.com/intellij/v1`).",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
 	//     "debuggeeId": {
 	//       "description": "ID of the debuggee whose breakpoint to delete.",
 	//       "location": "path",
@@ -2001,6 +2024,14 @@ func (r *DebuggerDebuggeesBreakpointsService) Get(debuggeeId string, breakpointI
 	c := &DebuggerDebuggeesBreakpointsGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.debuggeeId = debuggeeId
 	c.breakpointId = breakpointId
+	return c
+}
+
+// ClientVersion sets the optional parameter "clientVersion": The client
+// version making the call.
+// Following: `domain/type/version` (e.g., `google.com/intellij/v1`).
+func (c *DebuggerDebuggeesBreakpointsGetCall) ClientVersion(clientVersion string) *DebuggerDebuggeesBreakpointsGetCall {
+	c.urlParams_.Set("clientVersion", clientVersion)
 	return c
 }
 
@@ -2105,6 +2136,11 @@ func (c *DebuggerDebuggeesBreakpointsGetCall) Do(opts ...googleapi.CallOption) (
 	//       "required": true,
 	//       "type": "string"
 	//     },
+	//     "clientVersion": {
+	//       "description": "The client version making the call.\nFollowing: `domain/type/version` (e.g., `google.com/intellij/v1`).",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
 	//     "debuggeeId": {
 	//       "description": "ID of the debuggee whose breakpoint to get.",
 	//       "location": "path",
@@ -2149,6 +2185,14 @@ func (r *DebuggerDebuggeesBreakpointsService) List(debuggeeId string) *DebuggerD
 //   "LOG"
 func (c *DebuggerDebuggeesBreakpointsListCall) ActionValue(actionValue string) *DebuggerDebuggeesBreakpointsListCall {
 	c.urlParams_.Set("action.value", actionValue)
+	return c
+}
+
+// ClientVersion sets the optional parameter "clientVersion": The client
+// version making the call.
+// Following: `domain/type/version` (e.g., `google.com/intellij/v1`).
+func (c *DebuggerDebuggeesBreakpointsListCall) ClientVersion(clientVersion string) *DebuggerDebuggeesBreakpointsListCall {
+	c.urlParams_.Set("clientVersion", clientVersion)
 	return c
 }
 
@@ -2295,6 +2339,11 @@ func (c *DebuggerDebuggeesBreakpointsListCall) Do(opts ...googleapi.CallOption) 
 	//       "location": "query",
 	//       "type": "string"
 	//     },
+	//     "clientVersion": {
+	//       "description": "The client version making the call.\nFollowing: `domain/type/version` (e.g., `google.com/intellij/v1`).",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
 	//     "debuggeeId": {
 	//       "description": "ID of the debuggee whose breakpoints to list.",
 	//       "location": "path",
@@ -2349,6 +2398,14 @@ func (r *DebuggerDebuggeesBreakpointsService) Set(debuggeeId string, breakpoint 
 	c := &DebuggerDebuggeesBreakpointsSetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.debuggeeId = debuggeeId
 	c.breakpoint = breakpoint
+	return c
+}
+
+// ClientVersion sets the optional parameter "clientVersion": The client
+// version making the call.
+// Following: `domain/type/version` (e.g., `google.com/intellij/v1`).
+func (c *DebuggerDebuggeesBreakpointsSetCall) ClientVersion(clientVersion string) *DebuggerDebuggeesBreakpointsSetCall {
+	c.urlParams_.Set("clientVersion", clientVersion)
 	return c
 }
 
@@ -2437,6 +2494,11 @@ func (c *DebuggerDebuggeesBreakpointsSetCall) Do(opts ...googleapi.CallOption) (
 	//     "debuggeeId"
 	//   ],
 	//   "parameters": {
+	//     "clientVersion": {
+	//       "description": "The client version making the call.\nFollowing: `domain/type/version` (e.g., `google.com/intellij/v1`).",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
 	//     "debuggeeId": {
 	//       "description": "ID of the debuggee where the breakpoint is to be set.",
 	//       "location": "path",

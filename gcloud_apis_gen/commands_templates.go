@@ -257,11 +257,16 @@ func {{.FuncName}}(context Context, args ...string) error {
   {{end}}
 
   {{if .Method.Response.Ref}}
-  var response *api_client.{{.Method.Response.Ref}}
-  response, {{end}}err = call.Do()
+  response, err := call.Do()
   if err != nil {
     return err
   }
+  {{else}}
+
+  if err := call.Do(); err != nil {
+    return err
+  }
+  {{end}}
 
   {{if .Method.Response.Ref}}err = commands_util.PrintResponse(response)
   if err != nil {

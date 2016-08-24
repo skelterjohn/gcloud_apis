@@ -263,7 +263,7 @@ type Condition struct {
 	//   "SERVICE"
 	Sys string `json:"sys,omitempty"`
 
-	// Value: The object of the condition. Exactly one of these must be set.
+	// Value: DEPRECATED. Use 'values' instead.
 	Value string `json:"value,omitempty"`
 
 	// Values: The objects of the condition. This is mutually exclusive with
@@ -651,8 +651,8 @@ type Operation struct {
 	// increase as the operation progresses.
 	Progress int64 `json:"progress,omitempty"`
 
-	// Region: [Output Only] URL of the region where the operation resides.
-	// Only available when performing regional operations.
+	// Region: [Output Only] The URL of the region where the operation
+	// resides. Only available when performing regional operations.
 	Region string `json:"region,omitempty"`
 
 	// SelfLink: [Output Only] Server-defined URL for the resource.
@@ -680,7 +680,8 @@ type Operation struct {
 	TargetId uint64 `json:"targetId,omitempty,string"`
 
 	// TargetLink: [Output Only] The URL of the resource that the operation
-	// is modifying.
+	// modifies. If creating a persistent disk snapshot, this points to the
+	// persistent disk that the snapshot was created from.
 	TargetLink string `json:"targetLink,omitempty"`
 
 	// User: [Output Only] User who requested the operation, for example:
@@ -691,8 +692,8 @@ type Operation struct {
 	// processing of the operation, this field will be populated.
 	Warnings []*OperationWarnings `json:"warnings,omitempty"`
 
-	// Zone: [Output Only] URL of the zone where the operation resides. Only
-	// available when performing per-zone operations.
+	// Zone: [Output Only] The URL of the zone where the operation resides.
+	// Only available when performing per-zone operations.
 	Zone string `json:"zone,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
@@ -740,7 +741,7 @@ type OperationErrorErrors struct {
 	// Code: [Output Only] The error type identifier for this error.
 	Code string `json:"code,omitempty"`
 
-	// Location: [Output Only] Indicates the field in the request which
+	// Location: [Output Only] Indicates the field in the request that
 	// caused the error. This property is optional.
 	Location string `json:"location,omitempty"`
 
@@ -768,8 +769,10 @@ type OperationWarnings struct {
 	// the response.
 	//
 	// Possible values:
+	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
@@ -813,7 +816,7 @@ type OperationWarningsData struct {
 	// being returned. For example, for warnings where there are no results
 	// in a list request for a particular zone, this key might be scope and
 	// the key value might be the zone name. Other examples might be a key
-	// indicating a deprecated resource, and a suggested replacement, or a
+	// indicating a deprecated resource and a suggested replacement, or a
 	// warning about invalid network settings (for example, if an instance
 	// attempts to perform IP forwarding but is not enabled for IP
 	// forwarding).
@@ -843,7 +846,7 @@ type OperationList struct {
 	// identifier is defined by the server.
 	Id string `json:"id,omitempty"`
 
-	// Items: [Output Only] The Operation resources.
+	// Items: [Output Only] A list of Operation resources.
 	Items []*Operation `json:"items,omitempty"`
 
 	// Kind: [Output Only] Type of resource. Always compute#operations for
@@ -896,7 +899,7 @@ func (s *OperationList) MarshalJSON() ([]byte, error) {
 // { "bindings": [ { "role": "roles/owner", "members": [
 // "user:mike@example.com", "group:admins@example.com",
 // "domain:google.com",
-// "serviceAccount:my-other-app@appspot.gserviceaccount.com"] }, {
+// "serviceAccount:my-other-app@appspot.gserviceaccount.com", ] }, {
 // "role": "roles/viewer", "members": ["user:sean@example.com"] } ]
 // }
 //
@@ -931,6 +934,14 @@ type Policy struct {
 
 	IamOwned bool `json:"iamOwned,omitempty"`
 
+	// Rules: If more than one rule is specified, the rules are applied in
+	// the following manner: - All matching LOG rules are always applied. -
+	// If any DENY/DENY_WITH_LOG rule matches, permission is denied. Logging
+	// will be applied if one or more matching rule requires logging. -
+	// Otherwise, if any ALLOW/ALLOW_WITH_LOG rule matches, permission is
+	// granted. Logging will be applied if one or more matching rule
+	// requires logging. - Otherwise, if no rule applies, permission is
+	// denied.
 	Rules []*Rule `json:"rules,omitempty"`
 
 	// Version: Version of the `Policy`. The default version is 0.
@@ -1011,16 +1022,17 @@ type Rule struct {
 	// Description: Human-readable description of the rule.
 	Description string `json:"description,omitempty"`
 
-	// Ins: The rule matches if the PRINCIPAL/AUTHORITY_SELECTOR is in this
-	// set of entries.
+	// Ins: If one or more 'in' clauses are specified, the rule matches if
+	// the PRINCIPAL/AUTHORITY_SELECTOR is in at least one of these entries.
 	Ins []string `json:"ins,omitempty"`
 
 	// LogConfigs: The config returned to callers of
 	// tech.iam.IAM.CheckPolicy for any entries that match the LOG action.
 	LogConfigs []*LogConfig `json:"logConfigs,omitempty"`
 
-	// NotIns: The rule matches if the PRINCIPAL/AUTHORITY_SELECTOR is not
-	// in this set of entries.
+	// NotIns: If one or more 'not_in' clauses are specified, the rule
+	// matches if the PRINCIPAL/AUTHORITY_SELECTOR is in none of the
+	// entries.
 	NotIns []string `json:"notIns,omitempty"`
 
 	// Permissions: A permission is a string of form '..' (e.g.,
@@ -1267,7 +1279,7 @@ func (c *GlobalAccountsOperationsDeleteCall) Do(opts ...googleapi.CallOption) er
 	//     "project": {
 	//       "description": "Project ID for this request.",
 	//       "location": "path",
-	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     }
@@ -1404,7 +1416,7 @@ func (c *GlobalAccountsOperationsGetCall) Do(opts ...googleapi.CallOption) (*Ope
 	//     "project": {
 	//       "description": "Project ID for this request.",
 	//       "location": "path",
-	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     }
@@ -1455,20 +1467,19 @@ func (r *GlobalAccountsOperationsService) List(project string) *GlobalAccountsOp
 // as a regular expression using RE2 syntax. The literal value must
 // match the entire field.
 //
-// For example, filter=name ne example-instance.
+// For example, to filter for instances that do not have a name of
+// example-instance, you would use filter=name ne example-instance.
 //
-// Compute Engine Beta API Only: If you use filtering in the Beta API,
-// you can also filter on nested fields. For example, you could filter
-// on instances that have set the scheduling.automaticRestart field to
-// true. In particular, use filtering on nested fields to take advantage
-// of instance labels to organize and filter results based on label
-// values.
+// You can filter on nested fields. For example, you could filter on
+// instances that have set the scheduling.automaticRestart field to
+// true. Use filtering on nested fields to take advantage of labels to
+// organize and search for results based on label values.
 //
-// The Beta API also supports filtering on multiple expressions by
-// providing each separate expression within parentheses. For example,
-// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
-// Multiple expressions are treated as AND expressions meaning that
-// resources must match all expressions to pass the filters.
+// To filter on multiple expressions, provide each separate expression
+// within parentheses. For example, (scheduling.automaticRestart eq
+// true) (zone eq us-central1-f). Multiple expressions are treated as
+// AND expressions, meaning that resources must match all expressions to
+// pass the filters.
 func (c *GlobalAccountsOperationsListCall) Filter(filter string) *GlobalAccountsOperationsListCall {
 	c.urlParams_.Set("filter", filter)
 	return c
@@ -1602,7 +1613,7 @@ func (c *GlobalAccountsOperationsListCall) Do(opts ...googleapi.CallOption) (*Op
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: field_name comparison_string literal_string.\n\nThe field_name is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The comparison_string must be either eq (equals) or ne (not equals). The literal_string is the string value to filter to. The literal value must be valid for the type of field you are filtering by (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances that have set the scheduling.automaticRestart field to true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: field_name comparison_string literal_string.\n\nThe field_name is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The comparison_string must be either eq (equals) or ne (not equals). The literal_string is the string value to filter to. The literal value must be valid for the type of field you are filtering by (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, to filter for instances that do not have a name of example-instance, you would use filter=name ne example-instance.\n\nYou can filter on nested fields. For example, you could filter on instances that have set the scheduling.automaticRestart field to true. Use filtering on nested fields to take advantage of labels to organize and search for results based on label values.\n\nTo filter on multiple expressions, provide each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions, meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
@@ -1628,7 +1639,7 @@ func (c *GlobalAccountsOperationsListCall) Do(opts ...googleapi.CallOption) (*Op
 	//     "project": {
 	//       "description": "Project ID for this request.",
 	//       "location": "path",
-	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     }
@@ -2189,7 +2200,7 @@ func (c *GroupsGetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Policy, erro
 	//     "project": {
 	//       "description": "Project ID for this request.",
 	//       "location": "path",
-	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
@@ -2373,20 +2384,19 @@ func (r *GroupsService) List(project string) *GroupsListCall {
 // as a regular expression using RE2 syntax. The literal value must
 // match the entire field.
 //
-// For example, filter=name ne example-instance.
+// For example, to filter for instances that do not have a name of
+// example-instance, you would use filter=name ne example-instance.
 //
-// Compute Engine Beta API Only: If you use filtering in the Beta API,
-// you can also filter on nested fields. For example, you could filter
-// on instances that have set the scheduling.automaticRestart field to
-// true. In particular, use filtering on nested fields to take advantage
-// of instance labels to organize and filter results based on label
-// values.
+// You can filter on nested fields. For example, you could filter on
+// instances that have set the scheduling.automaticRestart field to
+// true. Use filtering on nested fields to take advantage of labels to
+// organize and search for results based on label values.
 //
-// The Beta API also supports filtering on multiple expressions by
-// providing each separate expression within parentheses. For example,
-// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
-// Multiple expressions are treated as AND expressions meaning that
-// resources must match all expressions to pass the filters.
+// To filter on multiple expressions, provide each separate expression
+// within parentheses. For example, (scheduling.automaticRestart eq
+// true) (zone eq us-central1-f). Multiple expressions are treated as
+// AND expressions, meaning that resources must match all expressions to
+// pass the filters.
 func (c *GroupsListCall) Filter(filter string) *GroupsListCall {
 	c.urlParams_.Set("filter", filter)
 	return c
@@ -2520,7 +2530,7 @@ func (c *GroupsListCall) Do(opts ...googleapi.CallOption) (*GroupList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: field_name comparison_string literal_string.\n\nThe field_name is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The comparison_string must be either eq (equals) or ne (not equals). The literal_string is the string value to filter to. The literal value must be valid for the type of field you are filtering by (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances that have set the scheduling.automaticRestart field to true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: field_name comparison_string literal_string.\n\nThe field_name is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The comparison_string must be either eq (equals) or ne (not equals). The literal_string is the string value to filter to. The literal value must be valid for the type of field you are filtering by (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, to filter for instances that do not have a name of example-instance, you would use filter=name ne example-instance.\n\nYou can filter on nested fields. For example, you could filter on instances that have set the scheduling.automaticRestart field to true. Use filtering on nested fields to take advantage of labels to organize and search for results based on label values.\n\nTo filter on multiple expressions, provide each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions, meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
@@ -2832,7 +2842,7 @@ func (c *GroupsSetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Policy, erro
 	//     "project": {
 	//       "description": "Project ID for this request.",
 	//       "location": "path",
-	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
@@ -2971,7 +2981,7 @@ func (c *GroupsTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (*TestPe
 	//     "project": {
 	//       "description": "Project ID for this request.",
 	//       "location": "path",
-	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
@@ -3195,20 +3205,19 @@ func (r *LinuxService) GetLinuxAccountViews(project string, zone string, instanc
 // as a regular expression using RE2 syntax. The literal value must
 // match the entire field.
 //
-// For example, filter=name ne example-instance.
+// For example, to filter for instances that do not have a name of
+// example-instance, you would use filter=name ne example-instance.
 //
-// Compute Engine Beta API Only: If you use filtering in the Beta API,
-// you can also filter on nested fields. For example, you could filter
-// on instances that have set the scheduling.automaticRestart field to
-// true. In particular, use filtering on nested fields to take advantage
-// of instance labels to organize and filter results based on label
-// values.
+// You can filter on nested fields. For example, you could filter on
+// instances that have set the scheduling.automaticRestart field to
+// true. Use filtering on nested fields to take advantage of labels to
+// organize and search for results based on label values.
 //
-// The Beta API also supports filtering on multiple expressions by
-// providing each separate expression within parentheses. For example,
-// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
-// Multiple expressions are treated as AND expressions meaning that
-// resources must match all expressions to pass the filters.
+// To filter on multiple expressions, provide each separate expression
+// within parentheses. For example, (scheduling.automaticRestart eq
+// true) (zone eq us-central1-f). Multiple expressions are treated as
+// AND expressions, meaning that resources must match all expressions to
+// pass the filters.
 func (c *LinuxGetLinuxAccountViewsCall) Filter(filter string) *LinuxGetLinuxAccountViewsCall {
 	c.urlParams_.Set("filter", filter)
 	return c
@@ -3333,7 +3342,7 @@ func (c *LinuxGetLinuxAccountViewsCall) Do(opts ...googleapi.CallOption) (*Linux
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: field_name comparison_string literal_string.\n\nThe field_name is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The comparison_string must be either eq (equals) or ne (not equals). The literal_string is the string value to filter to. The literal value must be valid for the type of field you are filtering by (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances that have set the scheduling.automaticRestart field to true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: field_name comparison_string literal_string.\n\nThe field_name is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The comparison_string must be either eq (equals) or ne (not equals). The literal_string is the string value to filter to. The literal value must be valid for the type of field you are filtering by (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, to filter for instances that do not have a name of example-instance, you would use filter=name ne example-instance.\n\nYou can filter on nested fields. For example, you could filter on instances that have set the scheduling.automaticRestart field to true. Use filtering on nested fields to take advantage of labels to organize and search for results based on label values.\n\nTo filter on multiple expressions, provide each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions, meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
@@ -3913,7 +3922,7 @@ func (c *UsersGetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Policy, error
 	//     "project": {
 	//       "description": "Project ID for this request.",
 	//       "location": "path",
-	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
@@ -4097,20 +4106,19 @@ func (r *UsersService) List(project string) *UsersListCall {
 // as a regular expression using RE2 syntax. The literal value must
 // match the entire field.
 //
-// For example, filter=name ne example-instance.
+// For example, to filter for instances that do not have a name of
+// example-instance, you would use filter=name ne example-instance.
 //
-// Compute Engine Beta API Only: If you use filtering in the Beta API,
-// you can also filter on nested fields. For example, you could filter
-// on instances that have set the scheduling.automaticRestart field to
-// true. In particular, use filtering on nested fields to take advantage
-// of instance labels to organize and filter results based on label
-// values.
+// You can filter on nested fields. For example, you could filter on
+// instances that have set the scheduling.automaticRestart field to
+// true. Use filtering on nested fields to take advantage of labels to
+// organize and search for results based on label values.
 //
-// The Beta API also supports filtering on multiple expressions by
-// providing each separate expression within parentheses. For example,
-// (scheduling.automaticRestart eq true) (zone eq us-central1-f).
-// Multiple expressions are treated as AND expressions meaning that
-// resources must match all expressions to pass the filters.
+// To filter on multiple expressions, provide each separate expression
+// within parentheses. For example, (scheduling.automaticRestart eq
+// true) (zone eq us-central1-f). Multiple expressions are treated as
+// AND expressions, meaning that resources must match all expressions to
+// pass the filters.
 func (c *UsersListCall) Filter(filter string) *UsersListCall {
 	c.urlParams_.Set("filter", filter)
 	return c
@@ -4244,7 +4252,7 @@ func (c *UsersListCall) Do(opts ...googleapi.CallOption) (*UserList, error) {
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: field_name comparison_string literal_string.\n\nThe field_name is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The comparison_string must be either eq (equals) or ne (not equals). The literal_string is the string value to filter to. The literal value must be valid for the type of field you are filtering by (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, filter=name ne example-instance.\n\nCompute Engine Beta API Only: If you use filtering in the Beta API, you can also filter on nested fields. For example, you could filter on instances that have set the scheduling.automaticRestart field to true. In particular, use filtering on nested fields to take advantage of instance labels to organize and filter results based on label values.\n\nThe Beta API also supports filtering on multiple expressions by providing each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions meaning that resources must match all expressions to pass the filters.",
+	//       "description": "Sets a filter expression for filtering listed resources, in the form filter={expression}. Your {expression} must be in the format: field_name comparison_string literal_string.\n\nThe field_name is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The comparison_string must be either eq (equals) or ne (not equals). The literal_string is the string value to filter to. The literal value must be valid for the type of field you are filtering by (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, to filter for instances that do not have a name of example-instance, you would use filter=name ne example-instance.\n\nYou can filter on nested fields. For example, you could filter on instances that have set the scheduling.automaticRestart field to true. Use filtering on nested fields to take advantage of labels to organize and search for results based on label values.\n\nTo filter on multiple expressions, provide each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions, meaning that resources must match all expressions to pass the filters.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
@@ -4555,7 +4563,7 @@ func (c *UsersSetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Policy, error
 	//     "project": {
 	//       "description": "Project ID for this request.",
 	//       "location": "path",
-	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },
@@ -4694,7 +4702,7 @@ func (c *UsersTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (*TestPer
 	//     "project": {
 	//       "description": "Project ID for this request.",
 	//       "location": "path",
-	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?))",
 	//       "required": true,
 	//       "type": "string"
 	//     },

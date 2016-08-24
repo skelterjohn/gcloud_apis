@@ -234,12 +234,30 @@ type Empty struct {
 	googleapi.ServerResponse `json:"-"`
 }
 
-// HttpRequest: A common proto for logging HTTP requests.
-//
+// HttpRequest: A common proto for logging HTTP requests. Only contains
+// semantics
+// defined by the HTTP specification. Product-specific
+// logging
+// information MUST be defined in a separate message.
 type HttpRequest struct {
+	// CacheFillBytes: The number of HTTP response bytes inserted into
+	// cache. Set only when a
+	// cache fill was attempted.
+	CacheFillBytes int64 `json:"cacheFillBytes,omitempty,string"`
+
 	// CacheHit: Whether or not an entity was served from cache
 	// (with or without validation).
 	CacheHit bool `json:"cacheHit,omitempty"`
+
+	// CacheLookup: Whether or not a cache lookup was attempted.
+	CacheLookup bool `json:"cacheLookup,omitempty"`
+
+	// CacheValidatedWithOriginServer: Whether or not the response was
+	// validated with the origin server before
+	// being served from cache. This field is only meaningful if `cache_hit`
+	// is
+	// True.
+	CacheValidatedWithOriginServer bool `json:"cacheValidatedWithOriginServer,omitempty"`
 
 	// Referer: The referer URL of the request, as defined in
 	// [HTTP/1.1 Header Field
@@ -271,6 +289,11 @@ type HttpRequest struct {
 	// including the response headers and the response body.
 	ResponseSize int64 `json:"responseSize,omitempty,string"`
 
+	// ServerIp: The IP address (IPv4 or IPv6) of the origin server that the
+	// request was
+	// sent to.
+	ServerIp string `json:"serverIp,omitempty"`
+
 	// Status: The response code indicating the status of
 	// response.
 	// Examples: 200, 404.
@@ -281,14 +304,7 @@ type HttpRequest struct {
 	// 1.0.3705)".
 	UserAgent string `json:"userAgent,omitempty"`
 
-	// ValidatedWithOriginServer: Whether or not the response was validated
-	// with the origin server before
-	// being served from cache. This field is only meaningful if `cache_hit`
-	// is
-	// True.
-	ValidatedWithOriginServer bool `json:"validatedWithOriginServer,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "CacheHit") to
+	// ForceSendFields is a list of field names (e.g. "CacheFillBytes") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -358,6 +374,15 @@ type ListLogEntriesResponse struct {
 	// entries.
 	Entries []*LogEntry `json:"entries,omitempty"`
 
+	// LastObservedEntryTimestamp: The timestamp of the last log entry that
+	// was examined before returning this
+	// response. This can be used to observe progress between successive
+	// queries,
+	// in particular when only a page token is returned. Deprecated:
+	// use
+	// searched_through_timestamp.
+	LastObservedEntryTimestamp string `json:"lastObservedEntryTimestamp,omitempty"`
+
 	// NextPageToken: If there are more results, then `nextPageToken` is
 	// returned in the
 	// response.  To get the next batch of entries, use the value
@@ -366,6 +391,17 @@ type ListLogEntriesResponse struct {
 	// `ListLogEntries`.
 	// If `nextPageToken` is empty, then there are no more results.
 	NextPageToken string `json:"nextPageToken,omitempty"`
+
+	// SearchedThroughTimestamp: The furthest point in time through which
+	// the search has progressed. All
+	// future entries returned using next_page_token are guaranteed to have
+	// a
+	// timestamp at or past this point in time in the direction of the
+	// search.
+	// This can be used to observe progress between successive queries,
+	// in
+	// particular when only a page token is returned.
+	SearchedThroughTimestamp string `json:"searchedThroughTimestamp,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
@@ -652,18 +688,20 @@ type LogEntry struct {
 	HttpRequest *HttpRequest `json:"httpRequest,omitempty"`
 
 	// InsertId: A unique ID for the log entry. If you provide this field,
-	// the logging
-	// service considers other log entries in the same log with the same ID
-	// as
-	// duplicates which can be removed.
+	// the
+	// logging service considers other log entries in the same project
+	// with
+	// the same ID as duplicates which can be removed.  If
+	// omitted,
+	// Stackdriver Logging will generate a unique ID for this log entry.
 	InsertId string `json:"insertId,omitempty"`
 
 	// Log: The log to which this entry belongs. When a log entry is
-	// ingested,
+	// written,
 	// the value of this field is set by the logging system.
 	Log string `json:"log,omitempty"`
 
-	// Metadata: Information about the log entry.
+	// Metadata: Required. Information about the log entry.
 	Metadata *LogEntryMetadata `json:"metadata,omitempty"`
 
 	// Operation: Optional. Information about an operation associated with
@@ -673,8 +711,8 @@ type LogEntry struct {
 
 	// ProtoPayload: The log entry payload, represented as a protocol buffer
 	// that is
-	// expressed as a JSON object. You can only pass `protoPayload`
-	// values that belong to a set of approved types.
+	// expressed as a JSON object. Some Google Cloud Platform services
+	// use this field for their log entry payloads.
 	ProtoPayload LogEntryProtoPayload `json:"protoPayload,omitempty"`
 
 	// StructPayload: The log entry payload, represented as a structure
@@ -740,7 +778,8 @@ type LogEntryMetadata struct {
 	// entry.
 	ProjectId string `json:"projectId,omitempty"`
 
-	// ProjectNumber: This field is populated by the API at ingestion time.
+	// ProjectNumber: This field is supplied by the API at when the entry is
+	// written.
 	ProjectNumber int64 `json:"projectNumber,omitempty,string"`
 
 	// Region: The region name of the Google Cloud Platform service that
@@ -748,12 +787,14 @@ type LogEntryMetadata struct {
 	// entry.  For example, "us-central1".
 	Region string `json:"region,omitempty"`
 
-	// ServiceName: The API name of the Google Cloud Platform service that
-	// created the log
-	// entry.  For example, "compute.googleapis.com".
+	// ServiceName: Required. The API name of the Google Cloud Platform
+	// service that
+	// created the log entry.  For example, "compute.googleapis.com".
 	ServiceName string `json:"serviceName,omitempty"`
 
-	// Severity: The severity of the log entry.
+	// Severity: The severity of the log entry. If omitted,
+	// `LogSeverity.DEFAULT`
+	// is used.
 	//
 	// Possible values:
 	//   "DEFAULT" - The log entry has no assigned severity level.
@@ -773,16 +814,12 @@ type LogEntryMetadata struct {
 
 	// Timestamp: The time the event described by the log entry
 	// occurred.
-	// Timestamps must be later than January 1, 1970.
+	// Timestamps must be later than January 1, 1970.  If
+	// omitted,
+	// Stackdriver Logging will use the time the log entry is received.
 	Timestamp string `json:"timestamp,omitempty"`
 
-	// UserId: The fully-qualified email address of the authenticated user
-	// that performed
-	// or requested the action represented by the log entry. If the log
-	// entry does
-	// not apply to an action taken by an authenticated user, then the
-	// field
-	// should be empty.
+	// UserId: This field is not used and its value is discarded.
 	UserId string `json:"userId,omitempty"`
 
 	// Zone: The zone of the Google Cloud Platform service that created the
@@ -815,7 +852,6 @@ type LogEntryOperation struct {
 	// Id: An opaque identifier. A producer of log entries should ensure
 	// that `id` is
 	// only reused for entries related to one operation.
-	//
 	Id string `json:"id,omitempty"`
 
 	// Last: True for the last entry associated with `id`.
@@ -826,7 +862,6 @@ type LogEntryOperation struct {
 	// and `producer` should be made globally unique by filling `producer`
 	// with a
 	// value that disambiguates the service that created `id`.
-	//
 	Producer string `json:"producer,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "First") to
@@ -1002,11 +1037,12 @@ func (s *LogService) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// LogSink: Describes where log entries are written outside of Cloud
-// Logging.
+// LogSink: Describes where log entries are written outside of
+// Stackdriver Logging.
 type LogSink struct {
 	// Destination: The resource name of the destination.
-	// Cloud Logging writes designated log entries to this destination.
+	// Stackdriver Logging writes designated log entries to this
+	// destination.
 	// For example, "storage.googleapis.com/my-output-bucket".
 	Destination string `json:"destination,omitempty"`
 
@@ -1051,7 +1087,6 @@ func (s *LogSink) MarshalJSON() ([]byte, error) {
 // RequestLog: Complete log information about a single HTTP request to
 // an App Engine
 // application.
-//
 type RequestLog struct {
 	// AppEngineRelease: App Engine release version.
 	AppEngineRelease string `json:"appEngineRelease,omitempty"`
@@ -1067,6 +1102,13 @@ type RequestLog struct {
 
 	// Finished: Whether this request is finished or active.
 	Finished bool `json:"finished,omitempty"`
+
+	// First: Whether this is the first RequestLog entry for this request.
+	// If an active
+	// request has several RequestLog entries written to Cloud Logging, this
+	// field
+	// will be set for one of them.
+	First bool `json:"first,omitempty"`
 
 	// Host: Internet host and port number of the resource being requested.
 	Host string `json:"host,omitempty"`
@@ -1115,7 +1157,6 @@ type RequestLog struct {
 	// available to the application via the App Engine Users API.
 	//
 	// This field will be populated starting with App Engine 1.9.21.
-	//
 	Nickname string `json:"nickname,omitempty"`
 
 	// PendingTime: Time this request spent in the pending request queue.
@@ -1388,7 +1429,7 @@ type WriteLogEntriesRequest struct {
 	// `commonLabels`.
 	CommonLabels map[string]string `json:"commonLabels,omitempty"`
 
-	// Entries: Log entries to insert.
+	// Entries: Log entries to write.
 	Entries []*LogEntry `json:"entries,omitempty"`
 
 	// PartialSuccess: Optional. Whether valid entries should be written
@@ -1436,7 +1477,6 @@ type ProjectsEntriesListCall struct {
 }
 
 // List: Lists log entries in the specified project.
-//
 func (r *ProjectsEntriesService) List(projectsId string, listlogentriesrequest *ListLogEntriesRequest) *ProjectsEntriesListCall {
 	c := &ProjectsEntriesListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectsId = projectsId
@@ -1521,7 +1561,7 @@ func (c *ProjectsEntriesListCall) Do(opts ...googleapi.CallOption) (*ListLogEntr
 	}
 	return ret, nil
 	// {
-	//   "description": "Lists log entries in the specified project.\n",
+	//   "description": "Lists log entries in the specified project.",
 	//   "flatPath": "v1beta3/projects/{projectsId}/entries:list",
 	//   "httpMethod": "POST",
 	//   "id": "logging.projects.entries.list",
@@ -1530,7 +1570,7 @@ func (c *ProjectsEntriesListCall) Do(opts ...googleapi.CallOption) (*ListLogEntr
 	//   ],
 	//   "parameters": {
 	//     "projectsId": {
-	//       "description": "Part of `projectName`. The resource name of the project from which to retrieve log entries.  The\nlog service or log containing the entries is specified in the `filter`\nparameter.  Example: `projects/my_project_id`.\n",
+	//       "description": "Part of `projectName`. The resource name of the project from which to retrieve log entries.  The\nlog service or log containing the entries is specified in the `filter`\nparameter.  Example: `projects/my_project_id`.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -1564,7 +1604,6 @@ type ProjectsLogEntriesListCall struct {
 }
 
 // List: Lists log entries in the specified project.
-//
 func (r *ProjectsLogEntriesService) List(projectsId string) *ProjectsLogEntriesListCall {
 	c := &ProjectsLogEntriesListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectsId = projectsId
@@ -1698,7 +1737,7 @@ func (c *ProjectsLogEntriesListCall) Do(opts ...googleapi.CallOption) (*ListLogE
 	}
 	return ret, nil
 	// {
-	//   "description": "Lists log entries in the specified project.\n",
+	//   "description": "Lists log entries in the specified project.",
 	//   "flatPath": "v1beta3/projects/{projectsId}/logEntries",
 	//   "httpMethod": "GET",
 	//   "id": "logging.projects.logEntries.list",
@@ -1729,7 +1768,7 @@ func (c *ProjectsLogEntriesListCall) Do(opts ...googleapi.CallOption) (*ListLogE
 	//       "type": "string"
 	//     },
 	//     "projectsId": {
-	//       "description": "Part of `projectName`. The resource name of the project from which to retrieve log entries.  The\nlog service or log containing the entries is specified in the `filter`\nparameter.  Example: `projects/my_project_id`.\n",
+	//       "description": "Part of `projectName`. The resource name of the project from which to retrieve log entries.  The\nlog service or log containing the entries is specified in the `filter`\nparameter.  Example: `projects/my_project_id`.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -1781,7 +1820,6 @@ type ProjectsLogServicesListCall struct {
 }
 
 // List: Lists the log services that have log entries in this project.
-//
 func (r *ProjectsLogServicesService) List(projectsId string) *ProjectsLogServicesListCall {
 	c := &ProjectsLogServicesListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectsId = projectsId
@@ -1892,7 +1930,7 @@ func (c *ProjectsLogServicesListCall) Do(opts ...googleapi.CallOption) (*ListLog
 	}
 	return ret, nil
 	// {
-	//   "description": "Lists the log services that have log entries in this project.\n",
+	//   "description": "Lists the log services that have log entries in this project.",
 	//   "flatPath": "v1beta3/projects/{projectsId}/logServices",
 	//   "httpMethod": "GET",
 	//   "id": "logging.projects.logServices.list",
@@ -1965,7 +2003,6 @@ type ProjectsLogServicesIndexesListCall struct {
 }
 
 // List: Lists the current index values for a log service.
-//
 func (r *ProjectsLogServicesIndexesService) List(projectsId string, logServicesId string) *ProjectsLogServicesIndexesListCall {
 	c := &ProjectsLogServicesIndexesListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectsId = projectsId
@@ -2121,7 +2158,7 @@ func (c *ProjectsLogServicesIndexesListCall) Do(opts ...googleapi.CallOption) (*
 	}
 	return ret, nil
 	// {
-	//   "description": "Lists the current index values for a log service.\n",
+	//   "description": "Lists the current index values for a log service.",
 	//   "flatPath": "v1beta3/projects/{projectsId}/logServices/{logServicesId}/indexes",
 	//   "httpMethod": "GET",
 	//   "id": "logging.projects.logServices.indexes.list",
@@ -2924,7 +2961,6 @@ type ProjectsLogsDeleteCall struct {
 
 // Delete: Deletes a log and all its log entries.
 // The log will reappear if it receives new entries.
-//
 func (r *ProjectsLogsService) Delete(projectsId string, logsId string) *ProjectsLogsDeleteCall {
 	c := &ProjectsLogsDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectsId = projectsId
@@ -3005,7 +3041,7 @@ func (c *ProjectsLogsDeleteCall) Do(opts ...googleapi.CallOption) (*Empty, error
 	}
 	return ret, nil
 	// {
-	//   "description": "Deletes a log and all its log entries.\nThe log will reappear if it receives new entries.\n",
+	//   "description": "Deletes a log and all its log entries.\nThe log will reappear if it receives new entries.",
 	//   "flatPath": "v1beta3/projects/{projectsId}/logs/{logsId}",
 	//   "httpMethod": "DELETE",
 	//   "id": "logging.projects.logs.delete",
@@ -3051,7 +3087,6 @@ type ProjectsLogsListCall struct {
 
 // List: Lists the logs in the project.
 // Only logs that have entries are listed.
-//
 func (r *ProjectsLogsService) List(projectsId string) *ProjectsLogsListCall {
 	c := &ProjectsLogsListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectsId = projectsId
@@ -3191,7 +3226,7 @@ func (c *ProjectsLogsListCall) Do(opts ...googleapi.CallOption) (*ListLogsRespon
 	}
 	return ret, nil
 	// {
-	//   "description": "Lists the logs in the project.\nOnly logs that have entries are listed.\n",
+	//   "description": "Lists the logs in the project.\nOnly logs that have entries are listed.",
 	//   "flatPath": "v1beta3/projects/{projectsId}/logs",
 	//   "httpMethod": "GET",
 	//   "id": "logging.projects.logs.list",
@@ -3273,15 +3308,16 @@ type ProjectsLogsEntriesWriteCall struct {
 	ctx_                   context.Context
 }
 
-// Write: Writes log entries to Cloud Logging. Each entry consists of
-// a
-// `LogEntry` object.  You must fill in all the fields of the
-// object, including one of the payload fields.  You may supply a
-// map, `commonLabels`, that holds default (key, value) data for
+// Write: Writes log entries to Stackdriver Logging. Each entry consists
+// of a
+// `LogEntry` object.  You must fill in the required fields of
 // the
-// `entries[].metadata.labels` map in each entry, saving you the
-// trouble of creating identical copies for each entry.
-//
+// object.  You can supply a map, `commonLabels`, that holds
+// default
+// (key, value) data for the `entries[].metadata.labels` map in
+// each
+// entry, saving you the trouble of creating identical copies for
+// each entry.
 //
 func (r *ProjectsLogsEntriesService) Write(projectsId string, logsId string, writelogentriesrequest *WriteLogEntriesRequest) *ProjectsLogsEntriesWriteCall {
 	c := &ProjectsLogsEntriesWriteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
@@ -3369,7 +3405,7 @@ func (c *ProjectsLogsEntriesWriteCall) Do(opts ...googleapi.CallOption) (*WriteL
 	}
 	return ret, nil
 	// {
-	//   "description": "Writes log entries to Cloud Logging. Each entry consists of a\n`LogEntry` object.  You must fill in all the fields of the\nobject, including one of the payload fields.  You may supply a\nmap, `commonLabels`, that holds default (key, value) data for the\n`entries[].metadata.labels` map in each entry, saving you the\ntrouble of creating identical copies for each entry.\n\n",
+	//   "description": "Writes log entries to Stackdriver Logging. Each entry consists of a\n`LogEntry` object.  You must fill in the required fields of the\nobject.  You can supply a map, `commonLabels`, that holds default\n(key, value) data for the `entries[].metadata.labels` map in each\nentry, saving you the trouble of creating identical copies for\neach entry.\n",
 	//   "flatPath": "v1beta3/projects/{projectsId}/logs/{logsId}/entries:write",
 	//   "httpMethod": "POST",
 	//   "id": "logging.projects.logs.entries.write",

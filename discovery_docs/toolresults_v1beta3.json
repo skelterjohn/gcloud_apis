@@ -3,17 +3,18 @@
  "discoveryVersion": "v1",
  "id": "toolresults:v1beta3",
  "name": "toolresults",
+ "canonicalName": "Tool Results",
  "version": "v1beta3",
- "revision": "20160119",
+ "revision": "20160823",
  "title": "Cloud Tool Results API",
- "description": "Read and publish results from tools such as Build and Test.",
+ "description": "Reads and publishes results from Cloud Test Lab.",
  "ownerDomain": "google.com",
  "ownerName": "Google",
  "icons": {
   "x16": "http://www.google.com/images/icons/product/search-16.gif",
   "x32": "http://www.google.com/images/icons/product/search-32.gif"
  },
- "documentationLink": "http://code.google.com/apis/cloud/toolresults/v1/using_rest.html",
+ "documentationLink": "https://developers.google.com/cloud-test-lab/",
  "protocol": "rest",
  "baseUrl": "https://www.googleapis.com/toolresults/v1beta3/projects/",
  "basePath": "/toolresults/v1beta3/projects/",
@@ -78,16 +79,16 @@
   "Any": {
    "id": "Any",
    "type": "object",
-   "description": "`Any` contains an arbitrary serialized message along with a URL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form of utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\nFoo foo = ...; Any any; any.PackFrom(foo); ... if (any.UnpackTo(&foo)) { ... }\n\nExample 2: Pack and unpack a message in Java.\n\nFoo foo = ...; Any any = Any.pack(foo); ... if (any.is(Foo.class)) { foo = any.unpack(Foo.class); }\n\nThe pack methods provided by protobuf library will by default use 'type.googleapis.com/full.type.name' as the type URL and the unpack methods only use the fully qualified type name after the last '/' in the type URL, for example \"foo.bar.com/x/y.z\" will yield type name \"y.z\".\n\n\n\nJSON ==== The JSON representation of an `Any` value uses the regular representation of the deserialized, embedded message, with an additional field `@type` which contains the type URL. Example:\n\npackage google.profile; message Person { string first_name = 1; string last_name = 2; }\n\n{ \"@type\": \"type.googleapis.com/google.profile.Person\", \"firstName\": , \"lastName\":  }\n\nIf the embedded message type is well-known and has a custom JSON representation, that representation will be embedded adding a field `value` which holds the custom JSON in addition to the `@type` field. Example (for message [google.protobuf.Duration][]):\n\n{ \"@type\": \"type.googleapis.com/google.protobuf.Duration\", \"value\": \"1.212s\" }",
+   "description": "`Any` contains an arbitrary serialized protocol buffer message along with a URL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form of utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\nFoo foo = ...; Any any; any.PackFrom(foo); ... if (any.UnpackTo(&foo)) { ... }\n\nExample 2: Pack and unpack a message in Java.\n\nFoo foo = ...; Any any = Any.pack(foo); ... if (any.is(Foo.class)) { foo = any.unpack(Foo.class); }\n\nExample 3: Pack and unpack a message in Python.\n\nfoo = Foo(...) any = Any() any.Pack(foo) ... if any.Is(Foo.DESCRIPTOR): any.Unpack(foo) ...\n\nThe pack methods provided by protobuf library will by default use 'type.googleapis.com/full.type.name' as the type URL and the unpack methods only use the fully qualified type name after the last '/' in the type URL, for example \"foo.bar.com/x/y.z\" will yield type name \"y.z\".\n\n\n\nJSON ==== The JSON representation of an `Any` value uses the regular representation of the deserialized, embedded message, with an additional field `@type` which contains the type URL. Example:\n\npackage google.profile; message Person { string first_name = 1; string last_name = 2; }\n\n{ \"@type\": \"type.googleapis.com/google.profile.Person\", \"firstName\": , \"lastName\":  }\n\nIf the embedded message type is well-known and has a custom JSON representation, that representation will be embedded adding a field `value` which holds the custom JSON in addition to the `@type` field. Example (for message [google.protobuf.Duration][]):\n\n{ \"@type\": \"type.googleapis.com/google.protobuf.Duration\", \"value\": \"1.212s\" }",
    "externalTypeName": "google.protobuf.Any",
    "properties": {
     "typeUrl": {
      "type": "string",
-     "description": "A URL/resource name whose content describes the type of the serialized message.\n\nFor URLs which use the schema `http`, `https`, or no schema, the following restrictions and interpretations apply:\n\n* If no schema is provided, `https` is assumed. * The last segment of the URL's path must represent the fully qualified name of the type (as in `path/google.protobuf.Duration`). * An HTTP GET on the URL must yield a [google.protobuf.Type][] value in binary format, or produce an error. * Applications are allowed to cache lookup results based on the URL, or have them precompiled into a binary to avoid any lookup. Therefore, binary compatibility needs to be preserved on changes to types. (Use versioned type names to manage breaking changes.)\n\nSchemas other than `http`, `https` (or the empty schema) might be used with implementation specific semantics."
+     "description": "A URL/resource name whose content describes the type of the serialized protocol buffer message.\n\nFor URLs which use the scheme `http`, `https`, or no scheme, the following restrictions and interpretations apply:\n\n* If no scheme is provided, `https` is assumed. * The last segment of the URL's path must represent the fully qualified name of the type (as in `path/google.protobuf.Duration`). The name should be in a canonical form (e.g., leading \".\" is not accepted). * An HTTP GET on the URL must yield a [google.protobuf.Type][] value in binary format, or produce an error. * Applications are allowed to cache lookup results based on the URL, or have them precompiled into a binary to avoid any lookup. Therefore, binary compatibility needs to be preserved on changes to types. (Use versioned type names to manage breaking changes.)\n\nSchemes other than `http`, `https` (or the empty scheme) might be used with implementation specific semantics."
     },
     "value": {
      "type": "string",
-     "description": "Must be valid serialized data of the above specified type.",
+     "description": "Must be a valid serialized protocol buffer of the above specified type.",
      "format": "byte"
     }
    }
@@ -95,7 +96,7 @@
   "Duration": {
    "id": "Duration",
    "type": "object",
-   "description": "A Duration represents a signed, fixed-length span of time represented as a count of seconds and fractions of seconds at nanosecond resolution. It is independent of any calendar and concepts like \"day\" or \"month\". It is related to Timestamp in that the difference between two Timestamp values is a Duration and it can be added or subtracted from a Timestamp. Range is approximately +-10,000 years.\n\nExample 1: Compute Duration from two Timestamps in pseudo code.\n\nTimestamp start = ...; Timestamp end = ...; Duration duration = ...;\n\nduration.seconds = end.seconds - start.seconds; duration.nanos = end.nanos - start.nanos;\n\nif (duration.seconds  0) { duration.seconds += 1; duration.nanos -= 1000000000; } else if (durations.seconds \u003e 0 && duration.nanos \u003c 0) { duration.seconds -= 1; duration.nanos += 1000000000; }\n\nExample 2: Compute Timestamp from Timestamp + Duration in pseudo code.\n\nTimestamp start = ...; Duration duration = ...; Timestamp end = ...;\n\nend.seconds = start.seconds + duration.seconds; end.nanos = start.nanos + duration.nanos;\n\nif (end.nanos = 1000000000) { end.seconds += 1; end.nanos -= 1000000000; }",
+   "description": "A Duration represents a signed, fixed-length span of time represented as a count of seconds and fractions of seconds at nanosecond resolution. It is independent of any calendar and concepts like \"day\" or \"month\". It is related to Timestamp in that the difference between two Timestamp values is a Duration and it can be added or subtracted from a Timestamp. Range is approximately +-10,000 years.\n\nExample 1: Compute Duration from two Timestamps in pseudo code.\n\nTimestamp start = ...; Timestamp end = ...; Duration duration = ...;\n\nduration.seconds = end.seconds - start.seconds; duration.nanos = end.nanos - start.nanos;\n\nif (duration.seconds  0) { duration.seconds += 1; duration.nanos -= 1000000000; } else if (durations.seconds \u003e 0 && duration.nanos \u003c 0) { duration.seconds -= 1; duration.nanos += 1000000000; }\n\nExample 2: Compute Timestamp from Timestamp + Duration in pseudo code.\n\nTimestamp start = ...; Duration duration = ...; Timestamp end = ...;\n\nend.seconds = start.seconds + duration.seconds; end.nanos = start.nanos + duration.nanos;\n\nif (end.nanos = 1000000000) { end.seconds += 1; end.nanos -= 1000000000; }\n\nExample 3: Compute Duration from datetime.timedelta in Python.\n\ntd = datetime.timedelta(days=3, minutes=10) duration = Duration() duration.FromTimedelta(td)",
    "externalTypeName": "google.protobuf.Duration",
    "properties": {
     "nanos": {
@@ -113,7 +114,7 @@
   "Execution": {
    "id": "Execution",
    "type": "object",
-   "description": "An Execution represents a collection of Steps. For instance, it could represent: - a mobile test executed across a range of device configurations - a jenkins job with a build step followed by a test step\n\nThe maximum size of an execution message is 1 MiB.\n\nAn Execution can be updated until its state is set to COMPLETE at which point it becomes immutable. Next tag: 12",
+   "description": "An Execution represents a collection of Steps. For instance, it could represent: - a mobile test executed across a range of device configurations - a jenkins job with a build step followed by a test step\n\nThe maximum size of an execution message is 1 MiB.\n\nAn Execution can be updated until its state is set to COMPLETE at which point it becomes immutable.",
    "externalTypeName": "google.devtools.toolresults.v1.Execution",
    "properties": {
     "completionTime": {
@@ -174,6 +175,10 @@
     "timedOut": {
      "type": "boolean",
      "description": "If the test overran some time limit, and that is why it failed."
+    },
+    "unableToCrawl": {
+     "type": "boolean",
+     "description": "If the robo was unable to crawl the app; perhaps because the app did not start."
     }
    }
   },
@@ -192,7 +197,7 @@
   "History": {
    "id": "History",
    "type": "object",
-   "description": "A History represents a sorted list of Executions ordered by the start_timestamp_millis field (descending). It can be used to group all the Executions of a continuous build.\n\nNote that the ordering only operates on one-dimension. If a repository has multiple branches, it means that multiple histories will need to be used in order to order Executions per branch. Next tag: 7",
+   "description": "A History represents a sorted list of Executions ordered by the start_timestamp_millis field (descending). It can be used to group all the Executions of a continuous build.\n\nNote that the ordering only operates on one-dimension. If a repository has multiple branches, it means that multiple histories will need to be used in order to order Executions per branch.",
    "externalTypeName": "google.devtools.toolresults.v1.History",
    "properties": {
     "displayName": {
@@ -212,7 +217,7 @@
   "Image": {
    "id": "Image",
    "type": "object",
-   "description": "An image, with a link to the main image and a thumbnail.\n\nNext tag: 6",
+   "description": "An image, with a link to the main image and a thumbnail.",
    "externalTypeName": "google.devtools.toolresults.v1.Image",
    "properties": {
     "error": {
@@ -245,17 +250,12 @@
     "infrastructureFailure": {
      "type": "boolean",
      "description": "If the test runner could not determine success or failure because the test depends on a component other than the system under test which failed.\n\nFor example, a mobile test requires provisioning a device where the test executes, and that provisioning can fail."
-    },
-    "nativeCrash": {
-     "type": "boolean",
-     "description": "A native process crashed on the device, producing a tombstone. It is unclear whether the crash was related to the app under test.\n\nFor example, OpenGL crashed, but it is unclear if the app is responsible. TODO(yinfu): Remove after all reference from TestService are deleted."
     }
    }
   },
   "ListExecutionsResponse": {
    "id": "ListExecutionsResponse",
    "type": "object",
-   "description": "Next tag: 3",
    "externalTypeName": "google.devtools.toolresults.v1.ListExecutionsResponse",
    "properties": {
     "executions": {
@@ -293,7 +293,7 @@
   "ListStepThumbnailsResponse": {
    "id": "ListStepThumbnailsResponse",
    "type": "object",
-   "description": "A response containing the thumbnails in a step.\n\nNext tag: 3",
+   "description": "A response containing the thumbnails in a step.",
    "externalTypeName": "google.devtools.toolresults.v1.ListStepThumbnailsResponse",
    "properties": {
     "nextPageToken": {
@@ -420,6 +420,18 @@
     }
    }
   },
+  "StackTrace": {
+   "id": "StackTrace",
+   "type": "object",
+   "description": "A stacktrace.",
+   "externalTypeName": "google.devtools.toolresults.v1.StackTrace",
+   "properties": {
+    "exception": {
+     "type": "string",
+     "description": "The stack trace message.\n\nRequired"
+    }
+   }
+  },
   "Status": {
    "id": "Status",
    "type": "object",
@@ -447,7 +459,7 @@
   "Step": {
    "id": "Step",
    "type": "object",
-   "description": "A Step represents a single operation performed as part of Execution. A step can be used to represent the execution of a tool ( for example a test runner execution or an execution of a compiler).\n\nSteps can overlap (for instance two steps might have the same start time if some operations are done in parallel).\n\nHere is an example, let's consider that we have a continuous build is executing a test runner for each iteration. The workflow would look like: - user creates a Execution with id 1 - user creates an TestExecutionStep with id 100 for Execution 1 - user update TestExecutionStep with id 100 to add a raw xml log + the service parses the xml logs and returns a TestExecutionStep with updated TestResult(s). - user update the status of TestExecutionStep with id 100 to COMPLETE\n\nA Step can be updated until its state is set to COMPLETE at which points it becomes immutable.\n\nNext tag: 20",
+   "description": "A Step represents a single operation performed as part of Execution. A step can be used to represent the execution of a tool ( for example a test runner execution or an execution of a compiler).\n\nSteps can overlap (for instance two steps might have the same start time if some operations are done in parallel).\n\nHere is an example, let's consider that we have a continuous build is executing a test runner for each iteration. The workflow would look like: - user creates a Execution with id 1 - user creates an TestExecutionStep with id 100 for Execution 1 - user update TestExecutionStep with id 100 to add a raw xml log + the service parses the xml logs and returns a TestExecutionStep with updated TestResult(s). - user update the status of TestExecutionStep with id 100 to COMPLETE\n\nA Step can be updated until its state is set to COMPLETE at which points it becomes immutable.",
    "externalTypeName": "google.devtools.toolresults.v1.Step",
    "properties": {
     "completionTime": {
@@ -586,9 +598,16 @@
   "TestExecutionStep": {
    "id": "TestExecutionStep",
    "type": "object",
-   "description": "A step that represents running tests.\n\nIt accepts ant-junit xml files which will be parsed into structured test results by the service. Xml file paths are updated in order to append more files, however they can't be deleted.\n\nUsers can also add test results manually by using the test_result field. Next tag: 7",
+   "description": "A step that represents running tests.\n\nIt accepts ant-junit xml files which will be parsed into structured test results by the service. Xml file paths are updated in order to append more files, however they can't be deleted.\n\nUsers can also add test results manually by using the test_result field.",
    "externalTypeName": "google.devtools.toolresults.v1.TestExecutionStep",
    "properties": {
+    "testIssues": {
+     "type": "array",
+     "description": "Issues observed during the test execution.\n\nFor example, if the mobile app under test crashed during the test, the error message and the stack trace content can be recorded here to assist debugging.\n\n- In response: present if set by create or update - In create/update request: optional",
+     "items": {
+      "$ref": "TestIssue"
+     }
+    },
     "testSuiteOverviews": {
      "type": "array",
      "description": "List of test suite overview contents. This could be parsed from xUnit XML log by server, or uploaded directly by user. This references should only be called when test suites are fully parsed or uploaded.\n\nThe maximum allowed number of test suite overviews per step is 1000.\n\n- In response: always set - In create request: optional - In update request: never (use publishXunitXmlFiles custom method instead)",
@@ -606,10 +625,26 @@
     }
    }
   },
+  "TestIssue": {
+   "id": "TestIssue",
+   "type": "object",
+   "description": "An abnormal event observed during the test execution.",
+   "externalTypeName": "google.devtools.toolresults.v1.TestIssue",
+   "properties": {
+    "errorMessage": {
+     "type": "string",
+     "description": "A brief human-readable message describing the abnormal event.\n\nRequired."
+    },
+    "stackTrace": {
+     "$ref": "StackTrace",
+     "description": "Optional."
+    }
+   }
+  },
   "TestSuiteOverview": {
    "id": "TestSuiteOverview",
    "type": "object",
-   "description": "A summary of a test suite result either parsed from XML or uploaded directly by a user.\n\nNote: the API related comments are for StepService only. This message is also being used in ExecutionService in a read only mode for the corresponding step.\n\nNext tag: 7",
+   "description": "A summary of a test suite result either parsed from XML or uploaded directly by a user.\n\nNote: the API related comments are for StepService only. This message is also being used in ExecutionService in a read only mode for the corresponding step.",
    "externalTypeName": "google.devtools.toolresults.v1.TestSuiteOverview",
    "properties": {
     "errorCount": {
@@ -657,7 +692,7 @@
   "Thumbnail": {
    "id": "Thumbnail",
    "type": "object",
-   "description": "A single thumbnail, with its size and format.\n\nNext tag: 102",
+   "description": "A single thumbnail, with its size and format.",
    "externalTypeName": "google.devtools.toolresults.v1.Thumbnail",
    "properties": {
     "contentType": {
@@ -684,7 +719,7 @@
   "Timestamp": {
    "id": "Timestamp",
    "type": "object",
-   "description": "A Timestamp represents a point in time independent of any time zone or calendar, represented as seconds and fractions of seconds at nanosecond resolution in UTC Epoch time. It is encoded using the Proleptic Gregorian Calendar which extends the Gregorian calendar backwards to year one. It is encoded assuming all minutes are 60 seconds long, i.e. leap seconds are \"smeared\" so that no leap second table is needed for interpretation. Range is from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59.999999999Z. By restricting to that range, we ensure that we can convert to and from RFC 3339 date strings. See [https://www.ietf.org/rfc/rfc3339.txt](https://www.ietf.org/rfc/rfc3339.txt).\n\nExample 1: Compute Timestamp from POSIX `time()`.\n\nTimestamp timestamp; timestamp.set_seconds(time(NULL)); timestamp.set_nanos(0);\n\nExample 2: Compute Timestamp from POSIX `gettimeofday()`.\n\nstruct timeval tv; gettimeofday(&tv, NULL);\n\nTimestamp timestamp; timestamp.set_seconds(tv.tv_sec); timestamp.set_nanos(tv.tv_usec * 1000);\n\nExample 3: Compute Timestamp from Win32 `GetSystemTimeAsFileTime()`.\n\nFILETIME ft; GetSystemTimeAsFileTime(&ft); UINT64 ticks = (((UINT64)ft.dwHighDateTime) \u003c\u003c 32) | ft.dwLowDateTime;\n\n// A Windows tick is 100 nanoseconds. Windows epoch 1601-01-01T00:00:00Z // is 11644473600 seconds before Unix epoch 1970-01-01T00:00:00Z. Timestamp timestamp; timestamp.set_seconds((INT64) ((ticks / 10000000) - 11644473600LL)); timestamp.set_nanos((INT32) ((ticks % 10000000) * 100));\n\nExample 4: Compute Timestamp from Java `System.currentTimeMillis()`.\n\nlong millis = System.currentTimeMillis();\n\nTimestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000) .setNanos((int) ((millis % 1000) * 1000000)).build();\n\n\n\nExample 5: Compute Timestamp from current time in Python.\n\nnow = time.time() seconds = int(now) nanos = int((now - seconds) * 10**9) timestamp = Timestamp(seconds=seconds, nanos=nanos)",
+   "description": "A Timestamp represents a point in time independent of any time zone or calendar, represented as seconds and fractions of seconds at nanosecond resolution in UTC Epoch time. It is encoded using the Proleptic Gregorian Calendar which extends the Gregorian calendar backwards to year one. It is encoded assuming all minutes are 60 seconds long, i.e. leap seconds are \"smeared\" so that no leap second table is needed for interpretation. Range is from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59.999999999Z. By restricting to that range, we ensure that we can convert to and from RFC 3339 date strings. See [https://www.ietf.org/rfc/rfc3339.txt](https://www.ietf.org/rfc/rfc3339.txt).\n\nExample 1: Compute Timestamp from POSIX `time()`.\n\nTimestamp timestamp; timestamp.set_seconds(time(NULL)); timestamp.set_nanos(0);\n\nExample 2: Compute Timestamp from POSIX `gettimeofday()`.\n\nstruct timeval tv; gettimeofday(&tv, NULL);\n\nTimestamp timestamp; timestamp.set_seconds(tv.tv_sec); timestamp.set_nanos(tv.tv_usec * 1000);\n\nExample 3: Compute Timestamp from Win32 `GetSystemTimeAsFileTime()`.\n\nFILETIME ft; GetSystemTimeAsFileTime(&ft); UINT64 ticks = (((UINT64)ft.dwHighDateTime) \u003c\u003c 32) | ft.dwLowDateTime;\n\n// A Windows tick is 100 nanoseconds. Windows epoch 1601-01-01T00:00:00Z // is 11644473600 seconds before Unix epoch 1970-01-01T00:00:00Z. Timestamp timestamp; timestamp.set_seconds((INT64) ((ticks / 10000000) - 11644473600LL)); timestamp.set_nanos((INT32) ((ticks % 10000000) * 100));\n\nExample 4: Compute Timestamp from Java `System.currentTimeMillis()`.\n\nlong millis = System.currentTimeMillis();\n\nTimestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000) .setNanos((int) ((millis % 1000) * 1000000)).build();\n\n\n\nExample 5: Compute Timestamp from current time in Python.\n\ntimestamp = Timestamp() timestamp.GetCurrentTime()",
    "externalTypeName": "google.protobuf.Timestamp",
    "properties": {
     "nanos": {
@@ -694,7 +729,7 @@
     },
     "seconds": {
      "type": "string",
-     "description": "Represents seconds of UTC time since Unix epoch 1970-01-01T00:00:00Z. Must be from from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59Z inclusive.",
+     "description": "Represents seconds of UTC time since Unix epoch 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59Z inclusive.",
      "format": "int64"
     }
    }
@@ -702,7 +737,7 @@
   "ToolExecution": {
    "id": "ToolExecution",
    "type": "object",
-   "description": "An execution of an arbitrary tool. It could be a test runner or a tool copying artifacts or deploying code. Next tag: 7",
+   "description": "An execution of an arbitrary tool. It could be a test runner or a tool copying artifacts or deploying code.",
    "externalTypeName": "google.devtools.toolresults.v1.ToolExecution",
    "properties": {
     "commandLineArguments": {
@@ -808,7 +843,7 @@
      "id": "toolresults.projects.initializeSettings",
      "path": "{projectId}:initializeSettings",
      "httpMethod": "POST",
-     "description": "Creates resources for settings which have not yet been set.\n\nCurrently, this creates a single resource: a Google Cloud Storage bucket, to be used as the default bucket for this project. The bucket is created in the name of the user calling. Except in rare cases, calling this method in parallel from multiple clients will only create a single bucket. In order to avoid unnecessary storage charges, the bucket is configured to automatically delete objects older than 90 days.\n\nThe bucket is created with the project-private ACL: All project team members are given permissions to the bucket and objects created within it according to their roles. Project owners have owners rights, and so on. The default ACL on objects created in the bucket is project-private as well. See Google Cloud Storage documentation for more details.\n\nIf there is already a default bucket set, this call does nothing.\n\nMay return any canonical error codes, including the following:\n\n- PERMISSION_DENIED - if the user is not authorized to write to project - Any error code raised by Google Cloud Storage",
+     "description": "Creates resources for settings which have not yet been set.\n\nCurrently, this creates a single resource: a Google Cloud Storage bucket, to be used as the default bucket for this project. The bucket is created in the name of the user calling. Except in rare cases, calling this method in parallel from multiple clients will only create a single bucket. In order to avoid unnecessary storage charges, the bucket is configured to automatically delete objects older than 90 days.\n\nThe bucket is created with the project-private ACL: All project team members are given permissions to the bucket and objects created within it according to their roles. Project owners have owners rights, and so on. The default ACL on objects created in the bucket is project-private as well. See Google Cloud Storage documentation for more details.\n\nIf there is already a default bucket set and the project can access the bucket, this call does nothing. However, if the project doesn't have the permission to access the bucket or the bucket is deteleted, a new bucket will be created.\n\nMay return any canonical error codes, including the following:\n\n- PERMISSION_DENIED - if the user is not authorized to write to project - Any error code raised by Google Cloud Storage",
      "parameters": {
       "projectId": {
        "type": "string",
@@ -842,6 +877,11 @@
          "description": "A Project id.\n\nRequired.",
          "required": true,
          "location": "path"
+        },
+        "requestId": {
+         "type": "string",
+         "description": "A unique request ID for server to detect duplicated requests. For example, a UUID.\n\nOptional, but strongly recommended.",
+         "location": "query"
         }
        },
        "parameterOrder": [
@@ -947,6 +987,11 @@
            "description": "A Project id.\n\nRequired.",
            "required": true,
            "location": "path"
+          },
+          "requestId": {
+           "type": "string",
+           "description": "A unique request ID for server to detect duplicated requests. For example, a UUID.\n\nOptional, but strongly recommended.",
+           "location": "query"
           }
          },
          "parameterOrder": [
@@ -1064,6 +1109,11 @@
            "description": "A Project id. Required.",
            "required": true,
            "location": "path"
+          },
+          "requestId": {
+           "type": "string",
+           "description": "A unique request ID for server to detect duplicated requests. For example, a UUID.\n\nOptional, but strongly recommended.",
+           "location": "query"
           }
          },
          "parameterOrder": [
@@ -1108,6 +1158,11 @@
              "description": "A Project id.\n\nRequired.",
              "required": true,
              "location": "path"
+            },
+            "requestId": {
+             "type": "string",
+             "description": "A unique request ID for server to detect duplicated requests. For example, a UUID.\n\nOptional, but strongly recommended.",
+             "location": "query"
             }
            },
            "parameterOrder": [
@@ -1240,6 +1295,11 @@
              "description": "A Project id.\n\nRequired.",
              "required": true,
              "location": "path"
+            },
+            "requestId": {
+             "type": "string",
+             "description": "A unique request ID for server to detect duplicated requests. For example, a UUID.\n\nOptional, but strongly recommended.",
+             "location": "query"
             },
             "stepId": {
              "type": "string",

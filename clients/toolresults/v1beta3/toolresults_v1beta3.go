@@ -1,6 +1,6 @@
 // Package toolresults provides access to the Cloud Tool Results API.
 //
-// See http://code.google.com/apis/cloud/toolresults/v1/using_rest.html
+// See https://developers.google.com/cloud-test-lab/
 //
 // Usage example:
 //
@@ -132,8 +132,9 @@ type ProjectsHistoriesExecutionsStepsThumbnailsService struct {
 	s *Service
 }
 
-// Any: `Any` contains an arbitrary serialized message along with a URL
-// that describes the type of the serialized message.
+// Any: `Any` contains an arbitrary serialized protocol buffer message
+// along with a URL that describes the type of the serialized
+// message.
 //
 // Protobuf library provides support to pack/unpack Any values in the
 // form of utility functions or additional generated methods of the Any
@@ -148,6 +149,11 @@ type ProjectsHistoriesExecutionsStepsThumbnailsService struct {
 //
 // Foo foo = ...; Any any = Any.pack(foo); ... if (any.is(Foo.class)) {
 // foo = any.unpack(Foo.class); }
+//
+// Example 3: Pack and unpack a message in Python.
+//
+// foo = Foo(...) any = Any() any.Pack(foo) ... if
+// any.Is(Foo.DESCRIPTOR): any.Unpack(foo) ...
 //
 // The pack methods provided by protobuf library will by default use
 // 'type.googleapis.com/full.type.name' as the type URL and the unpack
@@ -177,26 +183,28 @@ type ProjectsHistoriesExecutionsStepsThumbnailsService struct {
 // "1.212s" }
 type Any struct {
 	// TypeUrl: A URL/resource name whose content describes the type of the
-	// serialized message.
+	// serialized protocol buffer message.
 	//
-	// For URLs which use the schema `http`, `https`, or no schema, the
+	// For URLs which use the scheme `http`, `https`, or no scheme, the
 	// following restrictions and interpretations apply:
 	//
-	// * If no schema is provided, `https` is assumed. * The last segment of
+	// * If no scheme is provided, `https` is assumed. * The last segment of
 	// the URL's path must represent the fully qualified name of the type
-	// (as in `path/google.protobuf.Duration`). * An HTTP GET on the URL
-	// must yield a [google.protobuf.Type][] value in binary format, or
-	// produce an error. * Applications are allowed to cache lookup results
-	// based on the URL, or have them precompiled into a binary to avoid any
-	// lookup. Therefore, binary compatibility needs to be preserved on
-	// changes to types. (Use versioned type names to manage breaking
-	// changes.)
+	// (as in `path/google.protobuf.Duration`). The name should be in a
+	// canonical form (e.g., leading "." is not accepted). * An HTTP GET on
+	// the URL must yield a [google.protobuf.Type][] value in binary format,
+	// or produce an error. * Applications are allowed to cache lookup
+	// results based on the URL, or have them precompiled into a binary to
+	// avoid any lookup. Therefore, binary compatibility needs to be
+	// preserved on changes to types. (Use versioned type names to manage
+	// breaking changes.)
 	//
-	// Schemas other than `http`, `https` (or the empty schema) might be
+	// Schemes other than `http`, `https` (or the empty scheme) might be
 	// used with implementation specific semantics.
 	TypeUrl string `json:"typeUrl,omitempty"`
 
-	// Value: Must be valid serialized data of the above specified type.
+	// Value: Must be a valid serialized protocol buffer of the above
+	// specified type.
 	Value string `json:"value,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "TypeUrl") to
@@ -246,6 +254,11 @@ func (s *Any) MarshalJSON() ([]byte, error) {
 //
 // if (end.nanos = 1000000000) { end.seconds += 1; end.nanos -=
 // 1000000000; }
+//
+// Example 3: Compute Duration from datetime.timedelta in Python.
+//
+// td = datetime.timedelta(days=3, minutes=10) duration = Duration()
+// duration.FromTimedelta(td)
 type Duration struct {
 	// Nanos: Signed fractions of a second at nanosecond resolution of the
 	// span of time. Durations less than one second are represented with a 0
@@ -282,7 +295,7 @@ func (s *Duration) MarshalJSON() ([]byte, error) {
 // The maximum size of an execution message is 1 MiB.
 //
 // An Execution can be updated until its state is set to COMPLETE at
-// which point it becomes immutable. Next tag: 12
+// which point it becomes immutable.
 type Execution struct {
 	// CompletionTime: The time when the Execution status transitioned to
 	// COMPLETE.
@@ -383,6 +396,10 @@ type FailureDetail struct {
 	// failed.
 	TimedOut bool `json:"timedOut,omitempty"`
 
+	// UnableToCrawl: If the robo was unable to crawl the app; perhaps
+	// because the app did not start.
+	UnableToCrawl bool `json:"unableToCrawl,omitempty"`
+
 	// ForceSendFields is a list of field names (e.g. "Crashed") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
@@ -434,8 +451,7 @@ func (s *FileReference) MarshalJSON() ([]byte, error) {
 //
 // Note that the ordering only operates on one-dimension. If a
 // repository has multiple branches, it means that multiple histories
-// will need to be used in order to order Executions per branch. Next
-// tag: 7
+// will need to be used in order to order Executions per branch.
 type History struct {
 	// DisplayName: A short human-readable (plain text) name to display in
 	// the UI. Maximum of 100 characters.
@@ -479,8 +495,6 @@ func (s *History) MarshalJSON() ([]byte, error) {
 }
 
 // Image: An image, with a link to the main image and a thumbnail.
-//
-// Next tag: 6
 type Image struct {
 	// Error: An error explaining why the thumbnail could not be rendered.
 	Error *Status `json:"error,omitempty"`
@@ -531,15 +545,6 @@ type InconclusiveDetail struct {
 	// test executes, and that provisioning can fail.
 	InfrastructureFailure bool `json:"infrastructureFailure,omitempty"`
 
-	// NativeCrash: A native process crashed on the device, producing a
-	// tombstone. It is unclear whether the crash was related to the app
-	// under test.
-	//
-	// For example, OpenGL crashed, but it is unclear if the app is
-	// responsible. TODO(yinfu): Remove after all reference from TestService
-	// are deleted.
-	NativeCrash bool `json:"nativeCrash,omitempty"`
-
 	// ForceSendFields is a list of field names (e.g. "AbortedByUser") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
@@ -555,7 +560,6 @@ func (s *InconclusiveDetail) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// ListExecutionsResponse: Next tag: 3
 type ListExecutionsResponse struct {
 	// Executions: Executions.
 	//
@@ -624,8 +628,6 @@ func (s *ListHistoriesResponse) MarshalJSON() ([]byte, error) {
 
 // ListStepThumbnailsResponse: A response containing the thumbnails in a
 // step.
-//
-// Next tag: 3
 type ListStepThumbnailsResponse struct {
 	// NextPageToken: A continuation token to resume the query at the next
 	// item.
@@ -849,6 +851,28 @@ func (s *SkippedDetail) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
+// StackTrace: A stacktrace.
+type StackTrace struct {
+	// Exception: The stack trace message.
+	//
+	// Required
+	Exception string `json:"exception,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Exception") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *StackTrace) MarshalJSON() ([]byte, error) {
+	type noMethod StackTrace
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
 // Status: The `Status` type defines a logical error model that is
 // suitable for different programming environments, including REST APIs
 // and RPC APIs. It is used by [gRPC](https://github.com/grpc). The
@@ -954,8 +978,6 @@ func (s *Status) MarshalJSON() ([]byte, error) {
 //
 // A Step can be updated until its state is set to COMPLETE at which
 // points it becomes immutable.
-//
-// Next tag: 20
 type Step struct {
 	// CompletionTime: The time when the step status was set to
 	// complete.
@@ -1240,8 +1262,18 @@ func (s *TestCaseReference) MarshalJSON() ([]byte, error) {
 // append more files, however they can't be deleted.
 //
 // Users can also add test results manually by using the test_result
-// field. Next tag: 7
+// field.
 type TestExecutionStep struct {
+	// TestIssues: Issues observed during the test execution.
+	//
+	// For example, if the mobile app under test crashed during the test,
+	// the error message and the stack trace content can be recorded here to
+	// assist debugging.
+	//
+	// - In response: present if set by create or update - In create/update
+	// request: optional
+	TestIssues []*TestIssue `json:"testIssues,omitempty"`
+
 	// TestSuiteOverviews: List of test suite overview contents. This could
 	// be parsed from xUnit XML log by server, or uploaded directly by user.
 	// This references should only be called when test suites are fully
@@ -1268,8 +1300,8 @@ type TestExecutionStep struct {
 	// - In response: always set - In create/update request: optional
 	ToolExecution *ToolExecution `json:"toolExecution,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "TestSuiteOverviews")
-	// to unconditionally include in API requests. By default, fields with
+	// ForceSendFields is a list of field names (e.g. "TestIssues") to
+	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
 	// server regardless of whether the field is empty or not. This may be
@@ -1283,14 +1315,38 @@ func (s *TestExecutionStep) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
+// TestIssue: An abnormal event observed during the test execution.
+type TestIssue struct {
+	// ErrorMessage: A brief human-readable message describing the abnormal
+	// event.
+	//
+	// Required.
+	ErrorMessage string `json:"errorMessage,omitempty"`
+
+	// StackTrace: Optional.
+	StackTrace *StackTrace `json:"stackTrace,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "ErrorMessage") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *TestIssue) MarshalJSON() ([]byte, error) {
+	type noMethod TestIssue
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
 // TestSuiteOverview: A summary of a test suite result either parsed
 // from XML or uploaded directly by a user.
 //
 // Note: the API related comments are for StepService only. This message
 // is also being used in ExecutionService in a read only mode for the
 // corresponding step.
-//
-// Next tag: 7
 type TestSuiteOverview struct {
 	// ErrorCount: Number of test cases in error, typically set by the
 	// service by parsing the xml_source.
@@ -1370,8 +1426,6 @@ func (s *TestTiming) MarshalJSON() ([]byte, error) {
 }
 
 // Thumbnail: A single thumbnail, with its size and format.
-//
-// Next tag: 102
 type Thumbnail struct {
 	// ContentType: The thumbnail's content type, i.e. "image/png".
 	//
@@ -1462,8 +1516,7 @@ func (s *Thumbnail) MarshalJSON() ([]byte, error) {
 //
 // Example 5: Compute Timestamp from current time in Python.
 //
-// now = time.time() seconds = int(now) nanos = int((now - seconds) *
-// 10**9) timestamp = Timestamp(seconds=seconds, nanos=nanos)
+// timestamp = Timestamp() timestamp.GetCurrentTime()
 type Timestamp struct {
 	// Nanos: Non-negative fractions of a second at nanosecond resolution.
 	// Negative second values with fractions must still have non-negative
@@ -1472,7 +1525,7 @@ type Timestamp struct {
 	Nanos int64 `json:"nanos,omitempty"`
 
 	// Seconds: Represents seconds of UTC time since Unix epoch
-	// 1970-01-01T00:00:00Z. Must be from from 0001-01-01T00:00:00Z to
+	// 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to
 	// 9999-12-31T23:59:59Z inclusive.
 	Seconds int64 `json:"seconds,omitempty,string"`
 
@@ -1492,7 +1545,7 @@ func (s *Timestamp) MarshalJSON() ([]byte, error) {
 }
 
 // ToolExecution: An execution of an arbitrary tool. It could be a test
-// runner or a tool copying artifacts or deploying code. Next tag: 7
+// runner or a tool copying artifacts or deploying code.
 type ToolExecution struct {
 	// CommandLineArguments: The full tokenized command line including the
 	// program name (equivalent to argv in a C program).
@@ -1791,8 +1844,10 @@ type ProjectsInitializeSettingsCall struct {
 // is project-private as well. See Google Cloud Storage documentation
 // for more details.
 //
-// If there is already a default bucket set, this call does
-// nothing.
+// If there is already a default bucket set and the project can access
+// the bucket, this call does nothing. However, if the project doesn't
+// have the permission to access the bucket or the bucket is deteleted,
+// a new bucket will be created.
 //
 // May return any canonical error codes, including the following:
 //
@@ -1876,7 +1931,7 @@ func (c *ProjectsInitializeSettingsCall) Do(opts ...googleapi.CallOption) (*Proj
 	}
 	return ret, nil
 	// {
-	//   "description": "Creates resources for settings which have not yet been set.\n\nCurrently, this creates a single resource: a Google Cloud Storage bucket, to be used as the default bucket for this project. The bucket is created in the name of the user calling. Except in rare cases, calling this method in parallel from multiple clients will only create a single bucket. In order to avoid unnecessary storage charges, the bucket is configured to automatically delete objects older than 90 days.\n\nThe bucket is created with the project-private ACL: All project team members are given permissions to the bucket and objects created within it according to their roles. Project owners have owners rights, and so on. The default ACL on objects created in the bucket is project-private as well. See Google Cloud Storage documentation for more details.\n\nIf there is already a default bucket set, this call does nothing.\n\nMay return any canonical error codes, including the following:\n\n- PERMISSION_DENIED - if the user is not authorized to write to project - Any error code raised by Google Cloud Storage",
+	//   "description": "Creates resources for settings which have not yet been set.\n\nCurrently, this creates a single resource: a Google Cloud Storage bucket, to be used as the default bucket for this project. The bucket is created in the name of the user calling. Except in rare cases, calling this method in parallel from multiple clients will only create a single bucket. In order to avoid unnecessary storage charges, the bucket is configured to automatically delete objects older than 90 days.\n\nThe bucket is created with the project-private ACL: All project team members are given permissions to the bucket and objects created within it according to their roles. Project owners have owners rights, and so on. The default ACL on objects created in the bucket is project-private as well. See Google Cloud Storage documentation for more details.\n\nIf there is already a default bucket set and the project can access the bucket, this call does nothing. However, if the project doesn't have the permission to access the bucket or the bucket is deteleted, a new bucket will be created.\n\nMay return any canonical error codes, including the following:\n\n- PERMISSION_DENIED - if the user is not authorized to write to project - Any error code raised by Google Cloud Storage",
 	//   "httpMethod": "POST",
 	//   "id": "toolresults.projects.initializeSettings",
 	//   "parameterOrder": [
@@ -1924,6 +1979,16 @@ func (r *ProjectsHistoriesService) Create(projectId string, history *History) *P
 	c := &ProjectsHistoriesCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectId = projectId
 	c.history = history
+	return c
+}
+
+// RequestId sets the optional parameter "requestId": A unique request
+// ID for server to detect duplicated requests. For example, a
+// UUID.
+//
+// Optional, but strongly recommended.
+func (c *ProjectsHistoriesCreateCall) RequestId(requestId string) *ProjectsHistoriesCreateCall {
+	c.urlParams_.Set("requestId", requestId)
 	return c
 }
 
@@ -2015,6 +2080,11 @@ func (c *ProjectsHistoriesCreateCall) Do(opts ...googleapi.CallOption) (*History
 	//       "description": "A Project id.\n\nRequired.",
 	//       "location": "path",
 	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "requestId": {
+	//       "description": "A unique request ID for server to detect duplicated requests. For example, a UUID.\n\nOptional, but strongly recommended.",
+	//       "location": "query",
 	//       "type": "string"
 	//     }
 	//   },
@@ -2402,6 +2472,16 @@ func (r *ProjectsHistoriesExecutionsService) Create(projectId string, historyId 
 	return c
 }
 
+// RequestId sets the optional parameter "requestId": A unique request
+// ID for server to detect duplicated requests. For example, a
+// UUID.
+//
+// Optional, but strongly recommended.
+func (c *ProjectsHistoriesExecutionsCreateCall) RequestId(requestId string) *ProjectsHistoriesExecutionsCreateCall {
+	c.urlParams_.Set("requestId", requestId)
+	return c
+}
+
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
@@ -2498,6 +2578,11 @@ func (c *ProjectsHistoriesExecutionsCreateCall) Do(opts ...googleapi.CallOption)
 	//       "description": "A Project id.\n\nRequired.",
 	//       "location": "path",
 	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "requestId": {
+	//       "description": "A unique request ID for server to detect duplicated requests. For example, a UUID.\n\nOptional, but strongly recommended.",
+	//       "location": "query",
 	//       "type": "string"
 	//     }
 	//   },
@@ -2894,6 +2979,16 @@ func (r *ProjectsHistoriesExecutionsService) Patch(projectId string, historyId s
 	return c
 }
 
+// RequestId sets the optional parameter "requestId": A unique request
+// ID for server to detect duplicated requests. For example, a
+// UUID.
+//
+// Optional, but strongly recommended.
+func (c *ProjectsHistoriesExecutionsPatchCall) RequestId(requestId string) *ProjectsHistoriesExecutionsPatchCall {
+	c.urlParams_.Set("requestId", requestId)
+	return c
+}
+
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
@@ -2999,6 +3094,11 @@ func (c *ProjectsHistoriesExecutionsPatchCall) Do(opts ...googleapi.CallOption) 
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
+	//     },
+	//     "requestId": {
+	//       "description": "A unique request ID for server to detect duplicated requests. For example, a UUID.\n\nOptional, but strongly recommended.",
+	//       "location": "query",
+	//       "type": "string"
 	//     }
 	//   },
 	//   "path": "{projectId}/histories/{historyId}/executions/{executionId}",
@@ -3043,6 +3143,16 @@ func (r *ProjectsHistoriesExecutionsStepsService) Create(projectId string, histo
 	c.historyId = historyId
 	c.executionId = executionId
 	c.step = step
+	return c
+}
+
+// RequestId sets the optional parameter "requestId": A unique request
+// ID for server to detect duplicated requests. For example, a
+// UUID.
+//
+// Optional, but strongly recommended.
+func (c *ProjectsHistoriesExecutionsStepsCreateCall) RequestId(requestId string) *ProjectsHistoriesExecutionsStepsCreateCall {
+	c.urlParams_.Set("requestId", requestId)
 	return c
 }
 
@@ -3150,6 +3260,11 @@ func (c *ProjectsHistoriesExecutionsStepsCreateCall) Do(opts ...googleapi.CallOp
 	//       "description": "A Project id.\n\nRequired.",
 	//       "location": "path",
 	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "requestId": {
+	//       "description": "A unique request ID for server to detect duplicated requests. For example, a UUID.\n\nOptional, but strongly recommended.",
+	//       "location": "query",
 	//       "type": "string"
 	//     }
 	//   },
@@ -3572,6 +3687,16 @@ func (r *ProjectsHistoriesExecutionsStepsService) Patch(projectId string, histor
 	return c
 }
 
+// RequestId sets the optional parameter "requestId": A unique request
+// ID for server to detect duplicated requests. For example, a
+// UUID.
+//
+// Optional, but strongly recommended.
+func (c *ProjectsHistoriesExecutionsStepsPatchCall) RequestId(requestId string) *ProjectsHistoriesExecutionsStepsPatchCall {
+	c.urlParams_.Set("requestId", requestId)
+	return c
+}
+
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
@@ -3678,6 +3803,11 @@ func (c *ProjectsHistoriesExecutionsStepsPatchCall) Do(opts ...googleapi.CallOpt
 	//       "description": "A Project id.\n\nRequired.",
 	//       "location": "path",
 	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "requestId": {
+	//       "description": "A unique request ID for server to detect duplicated requests. For example, a UUID.\n\nOptional, but strongly recommended.",
+	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "stepId": {

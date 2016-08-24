@@ -111,8 +111,7 @@ func Bigquery_v2_DatasetsDelete(context Context, args ...string) error {
 		call.DeleteContents(query_deleteContents)
 	}
 
-	err = call.Do()
-	if err != nil {
+	if err := call.Do(); err != nil {
 		return err
 	}
 
@@ -171,8 +170,7 @@ func Bigquery_v2_DatasetsGet(context Context, args ...string) error {
 
 	call := service.Get(param_projectId, param_datasetId)
 
-	var response *api_client.Dataset
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -256,8 +254,7 @@ func Bigquery_v2_DatasetsInsert(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.Dataset
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -287,6 +284,8 @@ func Bigquery_v2_DatasetsList(context Context, args ...string) error {
 
 		usageBits += " [--all=VALUE]"
 
+		usageBits += " [--filter=VALUE]"
+
 		usageBits += " [--maxResults=VALUE]"
 
 		usageBits += " [--pageToken=VALUE]"
@@ -304,6 +303,7 @@ func Bigquery_v2_DatasetsList(context Context, args ...string) error {
 
 	queryParamNames := map[string]bool{
 		"all":        false,
+		"filter":     false,
 		"maxResults": false,
 		"pageToken":  false,
 	}
@@ -347,6 +347,13 @@ func Bigquery_v2_DatasetsList(context Context, args ...string) error {
 		}
 		call.All(query_all)
 	}
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
 	if value, ok := flagValues["maxResults"]; ok {
 		query_maxResults, err := commands_util.ConvertValue_int64(value)
 		if err != nil {
@@ -362,8 +369,7 @@ func Bigquery_v2_DatasetsList(context Context, args ...string) error {
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.DatasetList
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -453,8 +459,7 @@ func Bigquery_v2_DatasetsPatch(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.Dataset
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -544,8 +549,7 @@ func Bigquery_v2_DatasetsUpdate(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.Dataset
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -610,8 +614,7 @@ func Bigquery_v2_JobsCancel(context Context, args ...string) error {
 
 	call := service.Cancel(param_projectId, param_jobId)
 
-	var response *api_client.JobCancelResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -676,8 +679,7 @@ func Bigquery_v2_JobsGet(context Context, args ...string) error {
 
 	call := service.Get(param_projectId, param_jobId)
 
-	var response *api_client.Job
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -798,8 +800,7 @@ func Bigquery_v2_JobsGetQueryResults(context Context, args ...string) error {
 		call.TimeoutMs(query_timeoutMs)
 	}
 
-	var response *api_client.GetQueryResultsResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -899,8 +900,7 @@ func Bigquery_v2_JobsInsert(context Context, args ...string) error {
 		call.Media(media)
 	}
 
-	var response *api_client.Job
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1025,8 +1025,7 @@ func Bigquery_v2_JobsList(context Context, args ...string) error {
 		call.StateFilter(query_stateFilter)
 	}
 
-	var response *api_client.JobList
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1110,8 +1109,7 @@ func Bigquery_v2_JobsQuery(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.QueryResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1198,8 +1196,7 @@ func Bigquery_v2_ProjectsList(context Context, args ...string) error {
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.ProjectList
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1295,8 +1292,7 @@ func Bigquery_v2_TabledataInsertAll(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.TableDataInsertAllResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1413,8 +1409,7 @@ func Bigquery_v2_TabledataList(context Context, args ...string) error {
 		call.StartIndex(query_startIndex)
 	}
 
-	var response *api_client.TableDataList
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1485,8 +1480,7 @@ func Bigquery_v2_TablesDelete(context Context, args ...string) error {
 
 	call := service.Delete(param_projectId, param_datasetId, param_tableId)
 
-	err = call.Do()
-	if err != nil {
+	if err := call.Do(); err != nil {
 		return err
 	}
 
@@ -1551,8 +1545,7 @@ func Bigquery_v2_TablesGet(context Context, args ...string) error {
 
 	call := service.Get(param_projectId, param_datasetId, param_tableId)
 
-	var response *api_client.Table
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1642,8 +1635,7 @@ func Bigquery_v2_TablesInsert(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.Table
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1744,8 +1736,7 @@ func Bigquery_v2_TablesList(context Context, args ...string) error {
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.TableList
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1841,8 +1832,7 @@ func Bigquery_v2_TablesPatch(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.Table
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1938,8 +1928,7 @@ func Bigquery_v2_TablesUpdate(context Context, args ...string) error {
 		request,
 	)
 
-	var response *api_client.Table
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}

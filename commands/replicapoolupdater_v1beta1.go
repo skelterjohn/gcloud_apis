@@ -91,8 +91,7 @@ func Replicapoolupdater_v1beta1_RollingUpdatesCancel(context Context, args ...st
 
 	call := service.Cancel(param_project, param_zone, param_rollingUpdate)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -163,8 +162,7 @@ func Replicapoolupdater_v1beta1_RollingUpdatesGet(context Context, args ...strin
 
 	call := service.Get(param_project, param_zone, param_rollingUpdate)
 
-	var response *api_client.RollingUpdate
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -254,8 +252,7 @@ func Replicapoolupdater_v1beta1_RollingUpdatesInsert(context Context, args ...st
 		request,
 	)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -366,8 +363,7 @@ func Replicapoolupdater_v1beta1_RollingUpdatesList(context Context, args ...stri
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.RollingUpdateList
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -484,8 +480,7 @@ func Replicapoolupdater_v1beta1_RollingUpdatesListInstanceUpdates(context Contex
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.InstanceUpdateList
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -556,8 +551,7 @@ func Replicapoolupdater_v1beta1_RollingUpdatesPause(context Context, args ...str
 
 	call := service.Pause(param_project, param_zone, param_rollingUpdate)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -628,8 +622,7 @@ func Replicapoolupdater_v1beta1_RollingUpdatesResume(context Context, args ...st
 
 	call := service.Resume(param_project, param_zone, param_rollingUpdate)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -700,8 +693,7 @@ func Replicapoolupdater_v1beta1_RollingUpdatesRollback(context Context, args ...
 
 	call := service.Rollback(param_project, param_zone, param_rollingUpdate)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -772,8 +764,7 @@ func Replicapoolupdater_v1beta1_ZoneOperationsGet(context Context, args ...strin
 
 	call := service.Get(param_project, param_zone, param_operation)
 
-	var response *api_client.Operation
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -884,8 +875,7 @@ func Replicapoolupdater_v1beta1_ZoneOperationsList(context Context, args ...stri
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.OperationList
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}

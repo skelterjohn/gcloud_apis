@@ -68,6 +68,10 @@ func ConvertValue_string(s string) (string, error) {
 	return s, nil
 }
 
+func ConvertValue_strings(s string) ([]string, error) {
+	return strings.Split(s, ","), nil
+}
+
 func ConvertValue_int64(s string) (int64, error) {
 	return strconv.ParseInt(s, 10, 64)
 }

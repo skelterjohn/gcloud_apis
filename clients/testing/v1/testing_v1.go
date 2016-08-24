@@ -85,7 +85,6 @@ func NewProjectsService(s *Service) *ProjectsService {
 	rs := &ProjectsService{s: s}
 	rs.Devices = NewProjectsDevicesService(s)
 	rs.TestMatrices = NewProjectsTestMatricesService(s)
-	rs.Webdriver = NewProjectsWebdriverService(s)
 	return rs
 }
 
@@ -95,8 +94,6 @@ type ProjectsService struct {
 	Devices *ProjectsDevicesService
 
 	TestMatrices *ProjectsTestMatricesService
-
-	Webdriver *ProjectsWebdriverService
 }
 
 func NewProjectsDevicesService(s *Service) *ProjectsDevicesService {
@@ -117,15 +114,6 @@ type ProjectsTestMatricesService struct {
 	s *Service
 }
 
-func NewProjectsWebdriverService(s *Service) *ProjectsWebdriverService {
-	rs := &ProjectsWebdriverService{s: s}
-	return rs
-}
-
-type ProjectsWebdriverService struct {
-	s *Service
-}
-
 func NewTestEnvironmentCatalogService(s *Service) *TestEnvironmentCatalogService {
 	rs := &TestEnvironmentCatalogService{s: s}
 	return rs
@@ -133,6 +121,26 @@ func NewTestEnvironmentCatalogService(s *Service) *TestEnvironmentCatalogService
 
 type TestEnvironmentCatalogService struct {
 	s *Service
+}
+
+// Account: Identifies an account and how to log into it
+type Account struct {
+	// GoogleAuto: An automatic google login account
+	GoogleAuto *GoogleAuto `json:"googleAuto,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "GoogleAuto") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *Account) MarshalJSON() ([]byte, error) {
+	type noMethod Account
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
 // AndroidDevice: A single Android device.
@@ -253,7 +261,7 @@ type AndroidInstrumentationTest struct {
 	//  - "class package_name.class_name"
 	//  - "class package_name.class_name#method_name"
 	//
-	// If empty, all targets in the module will be run.
+	// Optional, if empty, all targets in the module will be run.
 	TestTargets []string `json:"testTargets,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "AppApk") to
@@ -358,6 +366,11 @@ type AndroidModel struct {
 	// @OutputOnly
 	Name string `json:"name,omitempty"`
 
+	// ScreenDensity: Screen density in DPI.
+	// This corresponds to ro.sf.lcd_density
+	// @OutputOnly
+	ScreenDensity int64 `json:"screenDensity,omitempty"`
+
 	// ScreenX: Screen size in the horizontal (X) dimension measured in
 	// pixels.
 	// @OutputOnly
@@ -372,6 +385,13 @@ type AndroidModel struct {
 	// This corresponds to either android.os.Build.SUPPORTED_ABIS (for API
 	// level
 	// 21 and above) or android.os.Build.CPU_ABI/CPU_ABI2.
+	// The most preferred ABI is the first element in the list.
+	//
+	// Elements are optionally prefixed by "version_id:" (where version_id
+	// is
+	// the id of an AndroidVersion), denoting an ABI that is supported only
+	// on
+	// a particular version.
 	// @OutputOnly
 	SupportedAbis []string `json:"supportedAbis,omitempty"`
 
@@ -395,57 +415,6 @@ type AndroidModel struct {
 
 func (s *AndroidModel) MarshalJSON() ([]byte, error) {
 	type noMethod AndroidModel
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// AndroidMonkeyTest: A test of an Android application that uses the
-// UI/Application Exerciser
-// Monkey from the Android SDK. (Not to be confused with the
-// "monkeyrunner"
-// tool, which is also included in the SDK.)
-//
-// See http://developer.android.com/tools/help/monkey.html for details.
-type AndroidMonkeyTest struct {
-	// AppApk: The APK for the application under test.
-	// Required
-	AppApk *FileReference `json:"appApk,omitempty"`
-
-	// AppPackageId: The java package for the application under
-	// test.
-	// Optional, default is determined by examining the application's
-	// manifest.
-	AppPackageId string `json:"appPackageId,omitempty"`
-
-	// EventCount: Number of random monkey events (e.g. clicks, touches) to
-	// generate.
-	// Defaults to 2000.
-	EventCount int64 `json:"eventCount,omitempty"`
-
-	// EventDelay: Fixed delay between events.
-	// Defaults to 10ms.
-	EventDelay string `json:"eventDelay,omitempty"`
-
-	// RandomSeed: Seed value for pseudo-random number generator.
-	// Note that, although specifying a seed causes the monkey to generate
-	// the
-	// same sequence of events, it does not guarantee that a particular
-	// outcome
-	// will be reproducible across runs.
-	// Optional
-	RandomSeed int64 `json:"randomSeed,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "AppApk") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *AndroidMonkeyTest) MarshalJSON() ([]byte, error) {
-	type noMethod AndroidMonkeyTest
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
@@ -481,10 +450,13 @@ type AndroidRoboTest struct {
 	// Optional
 	MaxSteps int64 `json:"maxSteps,omitempty"`
 
-	// RandomizeSteps: Whether Robo follows a random order of steps on a
-	// given activity state.
+	// RoboDirectives: A set of directives Robo should apply during the
+	// crawl.
+	// This allows users to customize the crawl. For example, the username
+	// and
+	// password for a test account can be provided.
 	// Optional
-	RandomizeSteps bool `json:"randomizeSteps,omitempty"`
+	RoboDirectives []*RoboDirective `json:"roboDirectives,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "AppApk") to
 	// unconditionally include in API requests. By default, fields with
@@ -578,93 +550,13 @@ func (s *AndroidVersion) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// BlobstoreFile: Reference to a blob in Blobstore.
-type BlobstoreFile struct {
-	// BlobId: A blob ID.
-	// Example: /android_test/blobs/4e9AAT9sqHRY_oBBzIKHSEFgg
-	BlobId string `json:"blobId,omitempty"`
-
-	// Md5Hash: The MD5 hash of the referenced blob. (This is necessary to
-	// create a
-	// Bigstore object directly from the Blobstore reference.)
-	Md5Hash string `json:"md5Hash,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "BlobId") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *BlobstoreFile) MarshalJSON() ([]byte, error) {
-	type noMethod BlobstoreFile
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// Browser: An available browser.
-type Browser struct {
-	// AndroidCatalog: The catalog of Android devices for which we offer
-	// this browser.
-	// @OutputOnly
-	AndroidCatalog *AndroidDeviceCatalog `json:"androidCatalog,omitempty"`
-
-	// Id: A human readable id for this Browser version.
-	// Use this id to invoke the TestExecutionService.
-	// Examples: "chrome-stable-channel", "firefox-beta-channel"
-	// @OutputOnly
-	Id string `json:"id,omitempty"`
-
-	// LinuxCatalog: The catalog of Linux machines which we offer this
-	// browser.
-	// @OutputOnly
-	LinuxCatalog *LinuxMachineCatalog `json:"linuxCatalog,omitempty"`
-
-	// Name: A string representing the browser name.
-	// Examples: "chrome", "firefox", "ie"
-	// @OutputOnly
-	Name string `json:"name,omitempty"`
-
-	// Release: The release of the browser.
-	// Examples: "stable-channel", "beta-channel", "10" (for ie),
-	// etc
-	// @OutputOnly
-	Release string `json:"release,omitempty"`
-
-	// VersionString: A string representing the version of the
-	// browser.
-	// Examples:  "42.12.34.1234", "37.01", "10.0.9200.16384" (for
-	// ie)
-	// @OutputOnly
-	VersionString string `json:"versionString,omitempty"`
-
-	// WindowsCatalog: The catalog of Windows machines which we offer this
-	// browser.
-	// @OutputOnly
-	WindowsCatalog *WindowsMachineCatalog `json:"windowsCatalog,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "AndroidCatalog") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *Browser) MarshalJSON() ([]byte, error) {
-	type noMethod Browser
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// CancelTestMatrixResponse: Response containing the state of a
-// cancelled test matrix.
+// CancelTestMatrixResponse: Response containing the current state of
+// the specified test matrix.
 type CancelTestMatrixResponse struct {
-	// TestState: The rolled-up state of the test matrix just before it was
-	// cancelled.
+	// TestState: The current rolled-up state of the test matrix.
+	// If this state is already final, then the cancelation request
+	// will
+	// have no effect.
 	//
 	// Possible values:
 	//   "TEST_STATE_UNSPECIFIED" - Do not use.  For proto versioning only.
@@ -738,6 +630,7 @@ func (s *CancelTestMatrixResponse) MarshalJSON() ([]byte, error) {
 // ClientInfo: Information about the client which invoked the test.
 type ClientInfo struct {
 	// Name: Client name, such as gcloud.
+	// Required
 	Name string `json:"name,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Name") to
@@ -933,9 +826,8 @@ func (s *DeviceDetails) MarshalJSON() ([]byte, error) {
 
 // DeviceFile: A single device file description.
 type DeviceFile struct {
+	// ObbFile: A reference to an opaque binary blob file
 	ObbFile *ObbFile `json:"obbFile,omitempty"`
-
-	RegularFile *RegularFile `json:"regularFile,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "ObbFile") to
 	// unconditionally include in API requests. By default, fields with
@@ -1052,7 +944,7 @@ func (s *Environment) MarshalJSON() ([]byte, error) {
 // EnvironmentMatrix: The matrix of environments in which the test is to
 // be executed.
 type EnvironmentMatrix struct {
-	// AndroidMatrix: A matrix of Android devices
+	// AndroidMatrix: A matrix of Android devices.
 	AndroidMatrix *AndroidMatrix `json:"androidMatrix,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "AndroidMatrix") to
@@ -1070,16 +962,37 @@ func (s *EnvironmentMatrix) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
+// EnvironmentVariable: A key-value pair passed as an environment
+// variable to the test
+type EnvironmentVariable struct {
+	// Key: Key for the environment variable
+	Key string `json:"key,omitempty"`
+
+	// Value: Value for the environment variable
+	Value string `json:"value,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Key") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *EnvironmentVariable) MarshalJSON() ([]byte, error) {
+	type noMethod EnvironmentVariable
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
 // FileReference: A reference to a file, used for user inputs.
 type FileReference struct {
-	// Blob: A blob in Blobstore.
-	Blob *BlobstoreFile `json:"blob,omitempty"`
-
 	// GcsPath: A path to a file in Google Cloud Storage.
 	// Example: gs://build-app-1414623860166/app-debug-unaligned.apk
 	GcsPath string `json:"gcsPath,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "Blob") to
+	// ForceSendFields is a list of field names (e.g. "GcsPath") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -1132,6 +1045,20 @@ func (s *GceInstanceDetails) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
+// GoogleAuto: Enables automatic Google account login.
+// If set, the service will automatically generate a Google test account
+// and add
+// it to the device, before executing the test. Note that test accounts
+// might be
+// reused.
+// Many applications show their full set of functionalities when an
+// account is
+// present on the device. Logging into the device with these generated
+// accounts
+// allows testing more functionalities.
+type GoogleAuto struct {
+}
+
 // GoogleCloudStorage: A storage location within Google cloud storage
 // (GCS).
 type GoogleCloudStorage struct {
@@ -1140,6 +1067,7 @@ type GoogleCloudStorage struct {
 	// The requesting user must have write access on the bucket in the
 	// supplied
 	// path.
+	// Required
 	GcsPath string `json:"gcsPath,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "GcsPath") to
@@ -1153,80 +1081,6 @@ type GoogleCloudStorage struct {
 
 func (s *GoogleCloudStorage) MarshalJSON() ([]byte, error) {
 	type noMethod GoogleCloudStorage
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// LinuxMachine: A single Linux machine.
-type LinuxMachine struct {
-	// VersionId: The version id of the Linux OS to be used.
-	// Use the EnvironmentDiscoveryService to get supported options.
-	VersionId string `json:"versionId,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "VersionId") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *LinuxMachine) MarshalJSON() ([]byte, error) {
-	type noMethod LinuxMachine
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// LinuxMachineCatalog: The currently supported Linux machines.
-type LinuxMachineCatalog struct {
-	// Versions: The set of supported Linux versions.
-	// @OutputOnly
-	Versions []*LinuxVersion `json:"versions,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "Versions") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *LinuxMachineCatalog) MarshalJSON() ([]byte, error) {
-	type noMethod LinuxMachineCatalog
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// LinuxVersion: A verison of a Linux OS.
-type LinuxVersion struct {
-	// Id: The unique opaque id for this Linux Version.
-	// @OutputOnly
-	Id string `json:"id,omitempty"`
-
-	// Tags: Tags for this version.
-	// Examples: "default"
-	Tags []string `json:"tags,omitempty"`
-
-	// VersionString: A string representing this version of the Linux
-	// OS.
-	// Examples: "debian-7-wheezy-v20150325",
-	// "debian-7-wheezy-v30150325"
-	// @OutputOnly
-	VersionString string `json:"versionString,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "Id") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *LinuxVersion) MarshalJSON() ([]byte, error) {
-	type noMethod LinuxVersion
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
@@ -1284,35 +1138,6 @@ func (s *ListTestMatricesResponse) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// ListWebDriverResponse: Response containing a list of WebDriver
-// environments. Supports pagination.
-type ListWebDriverResponse struct {
-	// NextPageToken: The pagination token to retrieve the next page of
-	// WebDriver results.
-	NextPageToken string `json:"nextPageToken,omitempty"`
-
-	// WebdriverEnvironments: The WebDriver environments to be returned.
-	WebdriverEnvironments []*WebDriver `json:"webdriverEnvironments,omitempty"`
-
-	// ServerResponse contains the HTTP response code and headers from the
-	// server.
-	googleapi.ServerResponse `json:"-"`
-
-	// ForceSendFields is a list of field names (e.g. "NextPageToken") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *ListWebDriverResponse) MarshalJSON() ([]byte, error) {
-	type noMethod ListWebDriverResponse
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
 // Locale: A location/region designation for language.
 type Locale struct {
 	// Id: The id for this locale.
@@ -1351,8 +1176,12 @@ func (s *Locale) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
+// ObbFile: An opaque binary blob file to install on the device before
+// the test starts
 type ObbFile struct {
-	// Obb: Opaque Binary Blob (OBB) file(s) to install on the device
+	// Obb: Opaque Binary Blob (OBB) file(s) to install on the
+	// device
+	// Required
 	Obb *FileReference `json:"obb,omitempty"`
 
 	// ObbFileName: OBB file name which must conform to the format as
@@ -1362,6 +1191,7 @@ type ObbFile struct {
 	// which will be installed into
 	//   <shared-storage>/Android/obb/<package-name>/
 	// on the device
+	// Required
 	ObbFileName string `json:"obbFileName,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Obb") to
@@ -1410,55 +1240,6 @@ func (s *Orientation) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// RegularFile: A file or directory to install on the device before the
-// test starts
-type RegularFile struct {
-	Content *FileReference `json:"content,omitempty"`
-
-	// DevicePath: Where to put the content on the device, must be a full,
-	// whitelisted path.
-	// If it exists, it will be completely replaced.
-	// TODO(fsteen): Make the following path substitutions available:
-	// <p> ${EXTERNAL_STORAGE} - the external storage mount point
-	// (/sdcard)
-	// <p> ${ANDROID_DATA} - the userdata partition mount point
-	// (/data)
-	// Note: /data/local/tmp is whitelisted, but /data is not.
-	//
-	// <p> The corresponding paths (in parentheses) will be made available
-	// and
-	// treated as implicit path substitutions, so the user may use
-	// them
-	// interchangeably. E.g. if /sdcard on a particular device does not map
-	// to
-	// external storage, the system will replace it with the external
-	// storage path
-	// prefix for that device and copy the file there.
-	//
-	// <p> It is strongly advised to use the <a
-	// href=
-	// "http://developer.android.com/reference/android/os/Environment.h
-	// tml">
-	// Environment API</a> in app and test code to access files on the
-	// device in a
-	// portable way.
-	DevicePath string `json:"devicePath,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "Content") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *RegularFile) MarshalJSON() ([]byte, error) {
-	type noMethod RegularFile
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
 // ResultStorage: Locations where the results of running the test are
 // stored.
 type ResultStorage struct {
@@ -1474,7 +1255,8 @@ type ResultStorage struct {
 	// results execution that
 	// results are written to.
 	//
-	// If not provided the service will choose an appropriate value.
+	// Optional, if not provided the service will choose an appropriate
+	// value.
 	ToolResultsHistory *ToolResultsHistory `json:"toolResultsHistory,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "GoogleCloudStorage")
@@ -1488,6 +1270,41 @@ type ResultStorage struct {
 
 func (s *ResultStorage) MarshalJSON() ([]byte, error) {
 	type noMethod ResultStorage
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// RoboDirective: Directs Robo to interact with a specific UI element if
+// it is encountered
+// during the crawl. Currently, Robo can set text in text fields.
+type RoboDirective struct {
+	// InputText: The text that Robo is directed to set.
+	// Required
+	InputText string `json:"inputText,omitempty"`
+
+	// ResourceName: The android resource name of the target UI element
+	// For example,
+	//    in Java: R.string.foo
+	//    in xml: @string/foo
+	// Only the “foo” part is needed.
+	// Reference
+	// doc:
+	// https://developer.android.com/guide/topics/resources/accessing-re
+	// sources.html
+	// Required
+	ResourceName string `json:"resourceName,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "InputText") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *RoboDirective) MarshalJSON() ([]byte, error) {
+	type noMethod RoboDirective
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
@@ -1530,10 +1347,6 @@ type TestEnvironmentCatalog struct {
 	// AndroidDeviceCatalog: Android devices suitable for running Android
 	// Instrumentation Tests.
 	AndroidDeviceCatalog *AndroidDeviceCatalog `json:"androidDeviceCatalog,omitempty"`
-
-	// WebDriverCatalog: WebDriver environments suitable for running web
-	// tests.
-	WebDriverCatalog *WebDriverCatalog `json:"webDriverCatalog,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
@@ -1666,12 +1479,40 @@ func (s *TestExecution) MarshalJSON() ([]byte, error) {
 // a
 // product of values over a pre-defined set of axes.
 type TestMatrix struct {
-	// ClientInfo: Information about the client which invoked the test.
+	// ClientInfo: Information about the client which invoked the
+	// test.
+	// Optional
 	ClientInfo *ClientInfo `json:"clientInfo,omitempty"`
 
 	// EnvironmentMatrix: How the host machine(s) are configured.
 	// Required
 	EnvironmentMatrix *EnvironmentMatrix `json:"environmentMatrix,omitempty"`
+
+	// InvalidMatrixDetails: Describes why the matrix is considered
+	// invalid.
+	// Only useful for matrices in the INVALID state.
+	// @OutputOnly
+	//
+	// Possible values:
+	//   "INVALID_MATRIX_DETAILS_UNSPECIFIED" - Do not use. For proto
+	// versioning only.
+	//   "DETAILS_UNAVAILABLE" - The matrix is INVALID, but there are no
+	// further details available.
+	//   "MALFORMED_APK" - The input app APK could not be parsed.
+	//   "MALFORMED_TEST_APK" - The input test APK could not be parsed.
+	//   "NO_MANIFEST" - The AndroidManifest.xml could not be found.
+	//   "NO_PACKAGE_NAME" - The APK manifest does not declare a package
+	// name.
+	//   "TEST_SAME_AS_APP" - The test package and app package are the same.
+	//   "NO_INSTRUMENTATION" - The test apk does not declare an
+	// instrumentation.
+	//   "NO_LAUNCHER_ACTIVITY" - A main launcher activity could not be
+	// found.
+	//   "FORBIDDEN_PERMISSIONS" - The app declares one or more permissions
+	// that are not allowed.
+	//   "INVALID_ROBO_DIRECTIVES" - There is a conflict in the provided
+	// robo_directives.
+	InvalidMatrixDetails string `json:"invalidMatrixDetails,omitempty"`
 
 	// ProjectId: The cloud project that owns the test matrix.
 	// @OutputOnly
@@ -1775,9 +1616,25 @@ func (s *TestMatrix) MarshalJSON() ([]byte, error) {
 // TestSetup: A description of how to set up the device prior to running
 // the test
 type TestSetup struct {
+	// Account: The device will be logged in on this account for the
+	// duration of the test.
+	// Optional
+	Account *Account `json:"account,omitempty"`
+
+	// DirectoriesToPull: The directories on the device to upload to GCS at
+	// the end of the test;
+	// they must be absolute, whitelisted paths.
+	// Refer to RegularFile for whitelisted paths.
+	// Optional
+	DirectoriesToPull []string `json:"directoriesToPull,omitempty"`
+
+	// EnvironmentVariables: Environment variables to set for the test.
+	EnvironmentVariables []*EnvironmentVariable `json:"environmentVariables,omitempty"`
+
+	// FilesToPush: Optional
 	FilesToPush []*DeviceFile `json:"filesToPush,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "FilesToPush") to
+	// ForceSendFields is a list of field names (e.g. "Account") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -1797,32 +1654,33 @@ type TestSpecification struct {
 	// AndroidInstrumentationTest: An Android instrumentation test.
 	AndroidInstrumentationTest *AndroidInstrumentationTest `json:"androidInstrumentationTest,omitempty"`
 
-	// AndroidMonkeyTest: An Android monkey test.
-	AndroidMonkeyTest *AndroidMonkeyTest `json:"androidMonkeyTest,omitempty"`
-
 	// AndroidRoboTest: An Android robo test.
 	AndroidRoboTest *AndroidRoboTest `json:"androidRoboTest,omitempty"`
 
 	// AutoGoogleLogin: Enables automatic Google account login.
-	// If set, the service will automatically generate a Google test
-	// account
-	// and use it to log into the device, before executing the test. Note
-	// that
-	// test accounts might be reused.
-	// Many applications can be tested more effectively in the context
-	// of
-	// such an account.
+	// If set, the service will automatically generate a Google test account
+	// and
+	// add it to the device, before executing the test. Note that test
+	// accounts
+	// might be reused.
+	// Many applications show their full set of functionalities when an
+	// account is
+	// present on the device. Logging into the device with these
+	// generated
+	// accounts allows testing more functionalities.
 	// Default is false.
 	// Optional
 	AutoGoogleLogin bool `json:"autoGoogleLogin,omitempty"`
 
 	// TestSetup: Test setup requirements e.g. files to install, bootstrap
 	// scripts
+	// Optional
 	TestSetup *TestSetup `json:"testSetup,omitempty"`
 
 	// TestTimeout: Max time a test execution is allowed to run before it
 	// is
 	// automatically cancelled.
+	// Optional, default is 5 min.
 	TestTimeout string `json:"testTimeout,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g.
@@ -1877,9 +1735,12 @@ func (s *ToolResultsExecution) MarshalJSON() ([]byte, error) {
 // ToolResultsHistory: Represents a tool results history resource.
 type ToolResultsHistory struct {
 	// HistoryId: A tool results history ID.
+	// Required
 	HistoryId string `json:"historyId,omitempty"`
 
-	// ProjectId: The cloud project that owns the tool results history.
+	// ProjectId: The cloud project that owns the tool results
+	// history.
+	// Required
 	ProjectId string `json:"projectId,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "HistoryId") to
@@ -1929,206 +1790,6 @@ type ToolResultsStep struct {
 
 func (s *ToolResultsStep) MarshalJSON() ([]byte, error) {
 	type noMethod ToolResultsStep
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-type VMDetails struct {
-	// CreationTime: The time this device was initially created.
-	// @OutputOnly
-	CreationTime string `json:"creationTime,omitempty"`
-
-	// DeviceDetails: Information about the backing GCE instance and
-	// connection.
-	// @OutputOnly
-	DeviceDetails *DeviceDetails `json:"deviceDetails,omitempty"`
-
-	// State: State of the device.
-	// @OutputOnly
-	//
-	// Possible values:
-	//   "DEVICE_UNSPECIFIED" - Do not use.  For proto versioning only.
-	//   "PREPARING" - The device is in the process of spinning up.
-	//   "READY" - The device is created and ready to use.
-	//   "CLOSED" - The device has been closed.
-	//   "DEVICE_ERROR" - There has been an error.
-	State string `json:"state,omitempty"`
-
-	// StateDetails: Details about the state of the device.
-	// @OutputOnly
-	StateDetails *DeviceStateDetails `json:"stateDetails,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "CreationTime") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *VMDetails) MarshalJSON() ([]byte, error) {
-	type noMethod VMDetails
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// WebDriver: A WebDriver environment.
-type WebDriver struct {
-	// AndroidDevice: An Android device.
-	AndroidDevice *AndroidDevice `json:"androidDevice,omitempty"`
-
-	// BrowserId: The id of the browser to be used.
-	// Use the EnvironmentDiscoveryService to get supported values.
-	// Required
-	BrowserId string `json:"browserId,omitempty"`
-
-	// Endpoint: The endpoint in host:port format where the target running
-	// the specified
-	// browser accepts WebDriver protocol commands.
-	// @OutputOnly
-	Endpoint string `json:"endpoint,omitempty"`
-
-	// Id: Unique id set by the system.
-	// @OutputOnly
-	Id string `json:"id,omitempty"`
-
-	// LinuxMachine: A Linux virtual machine.
-	LinuxMachine *LinuxMachine `json:"linuxMachine,omitempty"`
-
-	// ProjectId: The GCE project for this WebDriver test
-	// environment.
-	// @OutputOnly
-	ProjectId string `json:"projectId,omitempty"`
-
-	// SshPublicKey: The public key to be set on the VM in order to SSH into
-	// it.
-	SshPublicKey string `json:"sshPublicKey,omitempty"`
-
-	// VmDetails: The state details of the target
-	// device/machine.
-	// @OutputOnly
-	VmDetails *VMDetails `json:"vmDetails,omitempty"`
-
-	// WindowsMachine: A Windows virtual machine.
-	WindowsMachine *WindowsMachine `json:"windowsMachine,omitempty"`
-
-	// ServerResponse contains the HTTP response code and headers from the
-	// server.
-	googleapi.ServerResponse `json:"-"`
-
-	// ForceSendFields is a list of field names (e.g. "AndroidDevice") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *WebDriver) MarshalJSON() ([]byte, error) {
-	type noMethod WebDriver
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// WebDriverCatalog: The currently supported WebDriver VM resources.
-type WebDriverCatalog struct {
-	// Browsers: The set of supported browsers.
-	// @OutputOnly
-	Browsers []*Browser `json:"browsers,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "Browsers") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *WebDriverCatalog) MarshalJSON() ([]byte, error) {
-	type noMethod WebDriverCatalog
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// WebDriverKeepAliveRequest: Request to issue a keep-alive to a
-// WebDriver environment instance by
-// project and webdriver ids.
-type WebDriverKeepAliveRequest struct {
-}
-
-// WindowsMachine: A single Windows machine.
-type WindowsMachine struct {
-	// VersionId: The version id of the Windows OS to be used.
-	// Use the EnvironmentDiscoveryService to get supported options.
-	VersionId string `json:"versionId,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "VersionId") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *WindowsMachine) MarshalJSON() ([]byte, error) {
-	type noMethod WindowsMachine
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// WindowsMachineCatalog: The currently supported Windows machines.
-type WindowsMachineCatalog struct {
-	// Versions: The set of supported Windows versions.
-	// @OutputOnly
-	Versions []*WindowsVersion `json:"versions,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "Versions") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *WindowsMachineCatalog) MarshalJSON() ([]byte, error) {
-	type noMethod WindowsMachineCatalog
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// WindowsVersion: A version of a Windows OS.
-type WindowsVersion struct {
-	// Id: The unique opaque id for this Windows Version.
-	// @OutputOnly
-	Id string `json:"id,omitempty"`
-
-	// Tags: Tags for this version.
-	// Examples: "default"
-	Tags []string `json:"tags,omitempty"`
-
-	// VersionString: A string representing this version of the Windows
-	// OS.
-	// Examples: "windows-server-2008-r2-dc-v20150331",
-	// windows-7"
-	// @OutputOnly
-	VersionString string `json:"versionString,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "Id") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *WindowsVersion) MarshalJSON() ([]byte, error) {
-	type noMethod WindowsVersion
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
@@ -2873,6 +2534,10 @@ type ProjectsTestMatricesCancelCall struct {
 }
 
 // Cancel: Cancels unfinished test executions in a test matrix.
+// This call returns immediately and cancellation proceeds
+// asychronously.
+// If the matrix is already final, this operation will have no
+// effect.
 //
 // May return any of the following canonical error codes:
 //
@@ -2959,7 +2624,7 @@ func (c *ProjectsTestMatricesCancelCall) Do(opts ...googleapi.CallOption) (*Canc
 	}
 	return ret, nil
 	// {
-	//   "description": "Cancels unfinished test executions in a test matrix.\n\nMay return any of the following canonical error codes:\n\n- PERMISSION_DENIED - if the user is not authorized to read project\n- INVALID_ARGUMENT - if the request is malformed\n- NOT_FOUND - if the Test Matrix does not exist",
+	//   "description": "Cancels unfinished test executions in a test matrix.\nThis call returns immediately and cancellation proceeds asychronously.\nIf the matrix is already final, this operation will have no effect.\n\nMay return any of the following canonical error codes:\n\n- PERMISSION_DENIED - if the user is not authorized to read project\n- INVALID_ARGUMENT - if the request is malformed\n- NOT_FOUND - if the Test Matrix does not exist",
 	//   "flatPath": "v1/projects/{projectId}/testMatrices/{testMatrixId}:cancel",
 	//   "httpMethod": "POST",
 	//   "id": "testing.projects.testMatrices.cancel",
@@ -3557,736 +3222,6 @@ func (c *ProjectsTestMatricesListCall) Do(opts ...googleapi.CallOption) (*ListTe
 
 }
 
-// method id "testing.projects.webdriver.create":
-
-type ProjectsWebdriverCreateCall struct {
-	s          *Service
-	projectId  string
-	webdriver  *WebDriver
-	urlParams_ gensupport.URLParams
-	ctx_       context.Context
-}
-
-// Create: Creates a new WebDriver environment and returns the endpoint
-// for the user
-// to access.
-//
-// May return any of the following canonical error codes:
-//
-// - PERMISSION_DENIED - if the user is not authorized to write to
-// project
-// - INVALID_ARGUMENT - if the request is malformed
-// - NOT_FOUND - if the WebDriver environment or project does not exist
-func (r *ProjectsWebdriverService) Create(projectId string, webdriver *WebDriver) *ProjectsWebdriverCreateCall {
-	c := &ProjectsWebdriverCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectId = projectId
-	c.webdriver = webdriver
-	return c
-}
-
-// Fields allows partial responses to be retrieved. See
-// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
-// for more information.
-func (c *ProjectsWebdriverCreateCall) Fields(s ...googleapi.Field) *ProjectsWebdriverCreateCall {
-	c.urlParams_.Set("fields", googleapi.CombineFields(s))
-	return c
-}
-
-// Context sets the context to be used in this call's Do method. Any
-// pending HTTP request will be aborted if the provided context is
-// canceled.
-func (c *ProjectsWebdriverCreateCall) Context(ctx context.Context) *ProjectsWebdriverCreateCall {
-	c.ctx_ = ctx
-	return c
-}
-
-func (c *ProjectsWebdriverCreateCall) doRequest(alt string) (*http.Response, error) {
-	reqHeaders := make(http.Header)
-	reqHeaders.Set("User-Agent", c.s.userAgent())
-	var body io.Reader = nil
-	body, err := googleapi.WithoutDataWrapper.JSONReader(c.webdriver)
-	if err != nil {
-		return nil, err
-	}
-	reqHeaders.Set("Content-Type", "application/json")
-	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/webdriver")
-	urls += "?" + c.urlParams_.Encode()
-	req, _ := http.NewRequest("POST", urls, body)
-	req.Header = reqHeaders
-	googleapi.Expand(req.URL, map[string]string{
-		"projectId": c.projectId,
-	})
-	if c.ctx_ != nil {
-		return ctxhttp.Do(c.ctx_, c.s.client, req)
-	}
-	return c.s.client.Do(req)
-}
-
-// Do executes the "testing.projects.webdriver.create" call.
-// Exactly one of *WebDriver or error will be non-nil. Any non-2xx
-// status code is an error. Response headers are in either
-// *WebDriver.ServerResponse.Header or (if a response was returned at
-// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
-// to check whether the returned error was because
-// http.StatusNotModified was returned.
-func (c *ProjectsWebdriverCreateCall) Do(opts ...googleapi.CallOption) (*WebDriver, error) {
-	gensupport.SetOptions(c.urlParams_, opts...)
-	res, err := c.doRequest("json")
-	if res != nil && res.StatusCode == http.StatusNotModified {
-		if res.Body != nil {
-			res.Body.Close()
-		}
-		return nil, &googleapi.Error{
-			Code:   res.StatusCode,
-			Header: res.Header,
-		}
-	}
-	if err != nil {
-		return nil, err
-	}
-	defer googleapi.CloseBody(res)
-	if err := googleapi.CheckResponse(res); err != nil {
-		return nil, err
-	}
-	ret := &WebDriver{
-		ServerResponse: googleapi.ServerResponse{
-			Header:         res.Header,
-			HTTPStatusCode: res.StatusCode,
-		},
-	}
-	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
-		return nil, err
-	}
-	return ret, nil
-	// {
-	//   "description": "Creates a new WebDriver environment and returns the endpoint for the user\nto access.\n\nMay return any of the following canonical error codes:\n\n- PERMISSION_DENIED - if the user is not authorized to write to project\n- INVALID_ARGUMENT - if the request is malformed\n- NOT_FOUND - if the WebDriver environment or project does not exist",
-	//   "flatPath": "v1/projects/{projectId}/webdriver",
-	//   "httpMethod": "POST",
-	//   "id": "testing.projects.webdriver.create",
-	//   "parameterOrder": [
-	//     "projectId"
-	//   ],
-	//   "parameters": {
-	//     "projectId": {
-	//       "description": "The GCP project under which to create the WebDriver environment.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     }
-	//   },
-	//   "path": "v1/projects/{projectId}/webdriver",
-	//   "request": {
-	//     "$ref": "WebDriver"
-	//   },
-	//   "response": {
-	//     "$ref": "WebDriver"
-	//   },
-	//   "scopes": [
-	//     "https://www.googleapis.com/auth/cloud-platform"
-	//   ]
-	// }
-
-}
-
-// method id "testing.projects.webdriver.delete":
-
-type ProjectsWebdriverDeleteCall struct {
-	s           *Service
-	projectId   string
-	webdriverId string
-	urlParams_  gensupport.URLParams
-	ctx_        context.Context
-}
-
-// Delete: Deletes a WebDriver environment instance.
-//
-// May return any of the following canonical error codes:
-//
-// - PERMISSION_DENIED - if the user is not authorized to read project
-// - INVALID_ARGUMENT - if the request is malformed
-// - NOT_FOUND - if the project does not exist
-func (r *ProjectsWebdriverService) Delete(projectId string, webdriverId string) *ProjectsWebdriverDeleteCall {
-	c := &ProjectsWebdriverDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectId = projectId
-	c.webdriverId = webdriverId
-	return c
-}
-
-// Fields allows partial responses to be retrieved. See
-// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
-// for more information.
-func (c *ProjectsWebdriverDeleteCall) Fields(s ...googleapi.Field) *ProjectsWebdriverDeleteCall {
-	c.urlParams_.Set("fields", googleapi.CombineFields(s))
-	return c
-}
-
-// Context sets the context to be used in this call's Do method. Any
-// pending HTTP request will be aborted if the provided context is
-// canceled.
-func (c *ProjectsWebdriverDeleteCall) Context(ctx context.Context) *ProjectsWebdriverDeleteCall {
-	c.ctx_ = ctx
-	return c
-}
-
-func (c *ProjectsWebdriverDeleteCall) doRequest(alt string) (*http.Response, error) {
-	reqHeaders := make(http.Header)
-	reqHeaders.Set("User-Agent", c.s.userAgent())
-	var body io.Reader = nil
-	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/webdriver/{webdriverId}")
-	urls += "?" + c.urlParams_.Encode()
-	req, _ := http.NewRequest("DELETE", urls, body)
-	req.Header = reqHeaders
-	googleapi.Expand(req.URL, map[string]string{
-		"projectId":   c.projectId,
-		"webdriverId": c.webdriverId,
-	})
-	if c.ctx_ != nil {
-		return ctxhttp.Do(c.ctx_, c.s.client, req)
-	}
-	return c.s.client.Do(req)
-}
-
-// Do executes the "testing.projects.webdriver.delete" call.
-// Exactly one of *Empty or error will be non-nil. Any non-2xx status
-// code is an error. Response headers are in either
-// *Empty.ServerResponse.Header or (if a response was returned at all)
-// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
-// check whether the returned error was because http.StatusNotModified
-// was returned.
-func (c *ProjectsWebdriverDeleteCall) Do(opts ...googleapi.CallOption) (*Empty, error) {
-	gensupport.SetOptions(c.urlParams_, opts...)
-	res, err := c.doRequest("json")
-	if res != nil && res.StatusCode == http.StatusNotModified {
-		if res.Body != nil {
-			res.Body.Close()
-		}
-		return nil, &googleapi.Error{
-			Code:   res.StatusCode,
-			Header: res.Header,
-		}
-	}
-	if err != nil {
-		return nil, err
-	}
-	defer googleapi.CloseBody(res)
-	if err := googleapi.CheckResponse(res); err != nil {
-		return nil, err
-	}
-	ret := &Empty{
-		ServerResponse: googleapi.ServerResponse{
-			Header:         res.Header,
-			HTTPStatusCode: res.StatusCode,
-		},
-	}
-	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
-		return nil, err
-	}
-	return ret, nil
-	// {
-	//   "description": "Deletes a WebDriver environment instance.\n\nMay return any of the following canonical error codes:\n\n- PERMISSION_DENIED - if the user is not authorized to read project\n- INVALID_ARGUMENT - if the request is malformed\n- NOT_FOUND - if the project does not exist",
-	//   "flatPath": "v1/projects/{projectId}/webdriver/{webdriverId}",
-	//   "httpMethod": "DELETE",
-	//   "id": "testing.projects.webdriver.delete",
-	//   "parameterOrder": [
-	//     "projectId",
-	//     "webdriverId"
-	//   ],
-	//   "parameters": {
-	//     "projectId": {
-	//       "description": "The GCP project that contains the WebDriver endpoint to be deleted.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "webdriverId": {
-	//       "description": "The GCE WebDriver environment to be deleted specified from the\nWebDriver id.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     }
-	//   },
-	//   "path": "v1/projects/{projectId}/webdriver/{webdriverId}",
-	//   "response": {
-	//     "$ref": "Empty"
-	//   },
-	//   "scopes": [
-	//     "https://www.googleapis.com/auth/cloud-platform"
-	//   ]
-	// }
-
-}
-
-// method id "testing.projects.webdriver.get":
-
-type ProjectsWebdriverGetCall struct {
-	s            *Service
-	projectId    string
-	webdriverId  string
-	urlParams_   gensupport.URLParams
-	ifNoneMatch_ string
-	ctx_         context.Context
-}
-
-// Get: Returns the WebDriver environment.
-//
-// May return any of the following canonical error codes:
-//
-// - PERMISSION_DENIED - if the user is not authorized to read project
-// - INVALID_ARGUMENT - if the request is malformed
-// - NOT_FOUND - if the WebDriver environment or project does not exist
-func (r *ProjectsWebdriverService) Get(projectId string, webdriverId string) *ProjectsWebdriverGetCall {
-	c := &ProjectsWebdriverGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectId = projectId
-	c.webdriverId = webdriverId
-	return c
-}
-
-// Fields allows partial responses to be retrieved. See
-// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
-// for more information.
-func (c *ProjectsWebdriverGetCall) Fields(s ...googleapi.Field) *ProjectsWebdriverGetCall {
-	c.urlParams_.Set("fields", googleapi.CombineFields(s))
-	return c
-}
-
-// IfNoneMatch sets the optional parameter which makes the operation
-// fail if the object's ETag matches the given value. This is useful for
-// getting updates only after the object has changed since the last
-// request. Use googleapi.IsNotModified to check whether the response
-// error from Do is the result of In-None-Match.
-func (c *ProjectsWebdriverGetCall) IfNoneMatch(entityTag string) *ProjectsWebdriverGetCall {
-	c.ifNoneMatch_ = entityTag
-	return c
-}
-
-// Context sets the context to be used in this call's Do method. Any
-// pending HTTP request will be aborted if the provided context is
-// canceled.
-func (c *ProjectsWebdriverGetCall) Context(ctx context.Context) *ProjectsWebdriverGetCall {
-	c.ctx_ = ctx
-	return c
-}
-
-func (c *ProjectsWebdriverGetCall) doRequest(alt string) (*http.Response, error) {
-	reqHeaders := make(http.Header)
-	reqHeaders.Set("User-Agent", c.s.userAgent())
-	if c.ifNoneMatch_ != "" {
-		reqHeaders.Set("If-None-Match", c.ifNoneMatch_)
-	}
-	var body io.Reader = nil
-	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/webdriver/{webdriverId}")
-	urls += "?" + c.urlParams_.Encode()
-	req, _ := http.NewRequest("GET", urls, body)
-	req.Header = reqHeaders
-	googleapi.Expand(req.URL, map[string]string{
-		"projectId":   c.projectId,
-		"webdriverId": c.webdriverId,
-	})
-	if c.ctx_ != nil {
-		return ctxhttp.Do(c.ctx_, c.s.client, req)
-	}
-	return c.s.client.Do(req)
-}
-
-// Do executes the "testing.projects.webdriver.get" call.
-// Exactly one of *WebDriver or error will be non-nil. Any non-2xx
-// status code is an error. Response headers are in either
-// *WebDriver.ServerResponse.Header or (if a response was returned at
-// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
-// to check whether the returned error was because
-// http.StatusNotModified was returned.
-func (c *ProjectsWebdriverGetCall) Do(opts ...googleapi.CallOption) (*WebDriver, error) {
-	gensupport.SetOptions(c.urlParams_, opts...)
-	res, err := c.doRequest("json")
-	if res != nil && res.StatusCode == http.StatusNotModified {
-		if res.Body != nil {
-			res.Body.Close()
-		}
-		return nil, &googleapi.Error{
-			Code:   res.StatusCode,
-			Header: res.Header,
-		}
-	}
-	if err != nil {
-		return nil, err
-	}
-	defer googleapi.CloseBody(res)
-	if err := googleapi.CheckResponse(res); err != nil {
-		return nil, err
-	}
-	ret := &WebDriver{
-		ServerResponse: googleapi.ServerResponse{
-			Header:         res.Header,
-			HTTPStatusCode: res.StatusCode,
-		},
-	}
-	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
-		return nil, err
-	}
-	return ret, nil
-	// {
-	//   "description": "Returns the WebDriver environment.\n\nMay return any of the following canonical error codes:\n\n- PERMISSION_DENIED - if the user is not authorized to read project\n- INVALID_ARGUMENT - if the request is malformed\n- NOT_FOUND - if the WebDriver environment or project does not exist",
-	//   "flatPath": "v1/projects/{projectId}/webdriver/{webdriverId}",
-	//   "httpMethod": "GET",
-	//   "id": "testing.projects.webdriver.get",
-	//   "parameterOrder": [
-	//     "projectId",
-	//     "webdriverId"
-	//   ],
-	//   "parameters": {
-	//     "projectId": {
-	//       "description": "The GCP project that contains this WebDriver instance.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "webdriverId": {
-	//       "description": "The GCE WebDriver environment to be deleted specified from the\nWebDriver id.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     }
-	//   },
-	//   "path": "v1/projects/{projectId}/webdriver/{webdriverId}",
-	//   "response": {
-	//     "$ref": "WebDriver"
-	//   },
-	//   "scopes": [
-	//     "https://www.googleapis.com/auth/cloud-platform",
-	//     "https://www.googleapis.com/auth/cloud-platform.read-only"
-	//   ]
-	// }
-
-}
-
-// method id "testing.projects.webdriver.keepalive":
-
-type ProjectsWebdriverKeepaliveCall struct {
-	s                         *Service
-	projectId                 string
-	webdriverId               string
-	webdriverkeepaliverequest *WebDriverKeepAliveRequest
-	urlParams_                gensupport.URLParams
-	ctx_                      context.Context
-}
-
-// Keepalive: Issues a keep-alive to the WebDriver environment
-// instance.
-//
-// May return any of the following canonical error codes:
-//
-// - PERMISSION_DENIED - if the user is not authorized to read project
-// - INVALID_ARGUMENT - if the request is malformed
-// - NOT_FOUND - if the project does not exist
-func (r *ProjectsWebdriverService) Keepalive(projectId string, webdriverId string, webdriverkeepaliverequest *WebDriverKeepAliveRequest) *ProjectsWebdriverKeepaliveCall {
-	c := &ProjectsWebdriverKeepaliveCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectId = projectId
-	c.webdriverId = webdriverId
-	c.webdriverkeepaliverequest = webdriverkeepaliverequest
-	return c
-}
-
-// Fields allows partial responses to be retrieved. See
-// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
-// for more information.
-func (c *ProjectsWebdriverKeepaliveCall) Fields(s ...googleapi.Field) *ProjectsWebdriverKeepaliveCall {
-	c.urlParams_.Set("fields", googleapi.CombineFields(s))
-	return c
-}
-
-// Context sets the context to be used in this call's Do method. Any
-// pending HTTP request will be aborted if the provided context is
-// canceled.
-func (c *ProjectsWebdriverKeepaliveCall) Context(ctx context.Context) *ProjectsWebdriverKeepaliveCall {
-	c.ctx_ = ctx
-	return c
-}
-
-func (c *ProjectsWebdriverKeepaliveCall) doRequest(alt string) (*http.Response, error) {
-	reqHeaders := make(http.Header)
-	reqHeaders.Set("User-Agent", c.s.userAgent())
-	var body io.Reader = nil
-	body, err := googleapi.WithoutDataWrapper.JSONReader(c.webdriverkeepaliverequest)
-	if err != nil {
-		return nil, err
-	}
-	reqHeaders.Set("Content-Type", "application/json")
-	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/webdriver/{webdriverId}:keepalive")
-	urls += "?" + c.urlParams_.Encode()
-	req, _ := http.NewRequest("POST", urls, body)
-	req.Header = reqHeaders
-	googleapi.Expand(req.URL, map[string]string{
-		"projectId":   c.projectId,
-		"webdriverId": c.webdriverId,
-	})
-	if c.ctx_ != nil {
-		return ctxhttp.Do(c.ctx_, c.s.client, req)
-	}
-	return c.s.client.Do(req)
-}
-
-// Do executes the "testing.projects.webdriver.keepalive" call.
-// Exactly one of *Empty or error will be non-nil. Any non-2xx status
-// code is an error. Response headers are in either
-// *Empty.ServerResponse.Header or (if a response was returned at all)
-// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
-// check whether the returned error was because http.StatusNotModified
-// was returned.
-func (c *ProjectsWebdriverKeepaliveCall) Do(opts ...googleapi.CallOption) (*Empty, error) {
-	gensupport.SetOptions(c.urlParams_, opts...)
-	res, err := c.doRequest("json")
-	if res != nil && res.StatusCode == http.StatusNotModified {
-		if res.Body != nil {
-			res.Body.Close()
-		}
-		return nil, &googleapi.Error{
-			Code:   res.StatusCode,
-			Header: res.Header,
-		}
-	}
-	if err != nil {
-		return nil, err
-	}
-	defer googleapi.CloseBody(res)
-	if err := googleapi.CheckResponse(res); err != nil {
-		return nil, err
-	}
-	ret := &Empty{
-		ServerResponse: googleapi.ServerResponse{
-			Header:         res.Header,
-			HTTPStatusCode: res.StatusCode,
-		},
-	}
-	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
-		return nil, err
-	}
-	return ret, nil
-	// {
-	//   "description": "Issues a keep-alive to the WebDriver environment instance.\n\nMay return any of the following canonical error codes:\n\n- PERMISSION_DENIED - if the user is not authorized to read project\n- INVALID_ARGUMENT - if the request is malformed\n- NOT_FOUND - if the project does not exist",
-	//   "flatPath": "v1/projects/{projectId}/webdriver/{webdriverId}:keepalive",
-	//   "httpMethod": "POST",
-	//   "id": "testing.projects.webdriver.keepalive",
-	//   "parameterOrder": [
-	//     "projectId",
-	//     "webdriverId"
-	//   ],
-	//   "parameters": {
-	//     "projectId": {
-	//       "description": "The GCP project that contains the webdriver to be issued the keep-alive.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "webdriverId": {
-	//       "description": "The WebDriver environment to be issued the keep-alive.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     }
-	//   },
-	//   "path": "v1/projects/{projectId}/webdriver/{webdriverId}:keepalive",
-	//   "request": {
-	//     "$ref": "WebDriverKeepAliveRequest"
-	//   },
-	//   "response": {
-	//     "$ref": "Empty"
-	//   },
-	//   "scopes": [
-	//     "https://www.googleapis.com/auth/cloud-platform"
-	//   ]
-	// }
-
-}
-
-// method id "testing.projects.webdriver.list":
-
-type ProjectsWebdriverListCall struct {
-	s            *Service
-	projectId    string
-	urlParams_   gensupport.URLParams
-	ifNoneMatch_ string
-	ctx_         context.Context
-}
-
-// List: Lists all the WebDriver environments.
-//
-// May return any of the following canonical error codes:
-//
-// - PERMISSION_DENIED - if the user is not authorized to read project
-// - INVALID_ARGUMENT - if the request is malformed
-// - NOT_FOUND - if the project does not exist
-func (r *ProjectsWebdriverService) List(projectId string) *ProjectsWebdriverListCall {
-	c := &ProjectsWebdriverListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectId = projectId
-	return c
-}
-
-// PageSize sets the optional parameter "pageSize": Used to specify the
-// max number of results to be returned.
-func (c *ProjectsWebdriverListCall) PageSize(pageSize int64) *ProjectsWebdriverListCall {
-	c.urlParams_.Set("pageSize", fmt.Sprint(pageSize))
-	return c
-}
-
-// PageToken sets the optional parameter "pageToken": Used to request a
-// specific page of the results list.
-func (c *ProjectsWebdriverListCall) PageToken(pageToken string) *ProjectsWebdriverListCall {
-	c.urlParams_.Set("pageToken", pageToken)
-	return c
-}
-
-// Fields allows partial responses to be retrieved. See
-// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
-// for more information.
-func (c *ProjectsWebdriverListCall) Fields(s ...googleapi.Field) *ProjectsWebdriverListCall {
-	c.urlParams_.Set("fields", googleapi.CombineFields(s))
-	return c
-}
-
-// IfNoneMatch sets the optional parameter which makes the operation
-// fail if the object's ETag matches the given value. This is useful for
-// getting updates only after the object has changed since the last
-// request. Use googleapi.IsNotModified to check whether the response
-// error from Do is the result of In-None-Match.
-func (c *ProjectsWebdriverListCall) IfNoneMatch(entityTag string) *ProjectsWebdriverListCall {
-	c.ifNoneMatch_ = entityTag
-	return c
-}
-
-// Context sets the context to be used in this call's Do method. Any
-// pending HTTP request will be aborted if the provided context is
-// canceled.
-func (c *ProjectsWebdriverListCall) Context(ctx context.Context) *ProjectsWebdriverListCall {
-	c.ctx_ = ctx
-	return c
-}
-
-func (c *ProjectsWebdriverListCall) doRequest(alt string) (*http.Response, error) {
-	reqHeaders := make(http.Header)
-	reqHeaders.Set("User-Agent", c.s.userAgent())
-	if c.ifNoneMatch_ != "" {
-		reqHeaders.Set("If-None-Match", c.ifNoneMatch_)
-	}
-	var body io.Reader = nil
-	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/webdriver")
-	urls += "?" + c.urlParams_.Encode()
-	req, _ := http.NewRequest("GET", urls, body)
-	req.Header = reqHeaders
-	googleapi.Expand(req.URL, map[string]string{
-		"projectId": c.projectId,
-	})
-	if c.ctx_ != nil {
-		return ctxhttp.Do(c.ctx_, c.s.client, req)
-	}
-	return c.s.client.Do(req)
-}
-
-// Do executes the "testing.projects.webdriver.list" call.
-// Exactly one of *ListWebDriverResponse or error will be non-nil. Any
-// non-2xx status code is an error. Response headers are in either
-// *ListWebDriverResponse.ServerResponse.Header or (if a response was
-// returned at all) in error.(*googleapi.Error).Header. Use
-// googleapi.IsNotModified to check whether the returned error was
-// because http.StatusNotModified was returned.
-func (c *ProjectsWebdriverListCall) Do(opts ...googleapi.CallOption) (*ListWebDriverResponse, error) {
-	gensupport.SetOptions(c.urlParams_, opts...)
-	res, err := c.doRequest("json")
-	if res != nil && res.StatusCode == http.StatusNotModified {
-		if res.Body != nil {
-			res.Body.Close()
-		}
-		return nil, &googleapi.Error{
-			Code:   res.StatusCode,
-			Header: res.Header,
-		}
-	}
-	if err != nil {
-		return nil, err
-	}
-	defer googleapi.CloseBody(res)
-	if err := googleapi.CheckResponse(res); err != nil {
-		return nil, err
-	}
-	ret := &ListWebDriverResponse{
-		ServerResponse: googleapi.ServerResponse{
-			Header:         res.Header,
-			HTTPStatusCode: res.StatusCode,
-		},
-	}
-	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
-		return nil, err
-	}
-	return ret, nil
-	// {
-	//   "description": "Lists all the WebDriver environments.\n\nMay return any of the following canonical error codes:\n\n- PERMISSION_DENIED - if the user is not authorized to read project\n- INVALID_ARGUMENT - if the request is malformed\n- NOT_FOUND - if the project does not exist",
-	//   "flatPath": "v1/projects/{projectId}/webdriver",
-	//   "httpMethod": "GET",
-	//   "id": "testing.projects.webdriver.list",
-	//   "parameterOrder": [
-	//     "projectId"
-	//   ],
-	//   "parameters": {
-	//     "pageSize": {
-	//       "description": "Used to specify the max number of results to be returned.",
-	//       "format": "int32",
-	//       "location": "query",
-	//       "type": "integer"
-	//     },
-	//     "pageToken": {
-	//       "description": "Used to request a specific page of the results list.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "projectId": {
-	//       "description": "The GCP project to list the environments from.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     }
-	//   },
-	//   "path": "v1/projects/{projectId}/webdriver",
-	//   "response": {
-	//     "$ref": "ListWebDriverResponse"
-	//   },
-	//   "scopes": [
-	//     "https://www.googleapis.com/auth/cloud-platform",
-	//     "https://www.googleapis.com/auth/cloud-platform.read-only"
-	//   ]
-	// }
-
-}
-
-// Pages invokes f for each page of results.
-// A non-nil error returned from f will halt the iteration.
-// The provided context supersedes any context provided to the Context method.
-func (c *ProjectsWebdriverListCall) Pages(ctx context.Context, f func(*ListWebDriverResponse) error) error {
-	c.ctx_ = ctx
-	defer c.PageToken(c.urlParams_.Get("pageToken")) // reset paging to original point
-	for {
-		x, err := c.Do()
-		if err != nil {
-			return err
-		}
-		if err := f(x); err != nil {
-			return err
-		}
-		if x.NextPageToken == "" {
-			return nil
-		}
-		c.PageToken(x.NextPageToken)
-	}
-}
-
 // method id "testing.testEnvironmentCatalog.get":
 
 type TestEnvironmentCatalogGetCall struct {
@@ -4407,8 +3342,7 @@ func (c *TestEnvironmentCatalogGetCall) Do(opts ...googleapi.CallOption) (*TestE
 	//       "description": "The type of environment that should be listed.",
 	//       "enum": [
 	//         "ENVIRONMENT_TYPE_UNSPECIFIED",
-	//         "ANDROID",
-	//         "WEBDRIVER"
+	//         "ANDROID"
 	//       ],
 	//       "location": "path",
 	//       "required": true,

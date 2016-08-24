@@ -79,8 +79,7 @@ func Toolresults_v1beta3_ProjectsGetSettings(context Context, args ...string) er
 
 	call := service.GetSettings(param_projectId)
 
-	var response *api_client.ProjectSettings
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -110,6 +109,8 @@ func Toolresults_v1beta3_ProjectsHistoriesCreate(context Context, args ...string
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.History{})
 
@@ -122,9 +123,19 @@ func Toolresults_v1beta3_ProjectsHistoriesCreate(context Context, args ...string
 	}
 	service := api_client.NewProjectsHistoriesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -140,7 +151,13 @@ func Toolresults_v1beta3_ProjectsHistoriesCreate(context Context, args ...string
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -164,8 +181,16 @@ func Toolresults_v1beta3_ProjectsHistoriesCreate(context Context, args ...string
 		request,
 	)
 
-	var response *api_client.History
-	response, err = call.Do()
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -196,6 +221,8 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsCreate(context Context, args
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Execution{})
 
@@ -208,9 +235,19 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsCreate(context Context, args
 	}
 	service := api_client.NewProjectsHistoriesExecutionsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -226,7 +263,13 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsCreate(context Context, args
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -255,8 +298,16 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsCreate(context Context, args
 		request,
 	)
 
-	var response *api_client.Execution
-	response, err = call.Do()
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -327,8 +378,7 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsGet(context Context, args ..
 
 	call := service.Get(param_projectId, param_historyId, param_executionId)
 
-	var response *api_client.Execution
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -429,8 +479,7 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsList(context Context, args .
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.ListExecutionsResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -462,6 +511,8 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsPatch(context Context, args 
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Execution{})
 
@@ -474,9 +525,19 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsPatch(context Context, args 
 	}
 	service := api_client.NewProjectsHistoriesExecutionsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -492,7 +553,13 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsPatch(context Context, args 
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -526,8 +593,16 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsPatch(context Context, args 
 		request,
 	)
 
-	var response *api_client.Execution
-	response, err = call.Do()
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -559,6 +634,8 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsCreate(context Context,
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Step{})
 
@@ -571,9 +648,19 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsCreate(context Context,
 	}
 	service := api_client.NewProjectsHistoriesExecutionsStepsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -589,7 +676,13 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsCreate(context Context,
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -623,8 +716,16 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsCreate(context Context,
 		request,
 	)
 
-	var response *api_client.Step
-	response, err = call.Do()
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -701,8 +802,7 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsGet(context Context, ar
 
 	call := service.Get(param_projectId, param_historyId, param_executionId, param_stepId)
 
-	var response *api_client.Step
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -809,8 +909,7 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsList(context Context, a
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.ListStepsResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -843,6 +942,8 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsPatch(context Context, 
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Step{})
 
@@ -855,9 +956,19 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsPatch(context Context, 
 	}
 	service := api_client.NewProjectsHistoriesExecutionsStepsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -873,7 +984,13 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsPatch(context Context, 
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -912,8 +1029,16 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsPatch(context Context, 
 		request,
 	)
 
-	var response *api_client.Step
-	response, err = call.Do()
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1015,8 +1140,7 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsPublishXunitXmlFiles(co
 		request,
 	)
 
-	var response *api_client.Step
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1129,8 +1253,7 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsThumbnailsList(context 
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.ListStepThumbnailsResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1195,8 +1318,7 @@ func Toolresults_v1beta3_ProjectsHistoriesGet(context Context, args ...string) e
 
 	call := service.Get(param_projectId, param_historyId)
 
-	var response *api_client.History
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1301,8 +1423,7 @@ func Toolresults_v1beta3_ProjectsHistoriesList(context Context, args ...string) 
 		call.PageToken(query_pageToken)
 	}
 
-	var response *api_client.ListHistoriesResponse
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
@@ -1361,8 +1482,7 @@ func Toolresults_v1beta3_ProjectsInitializeSettings(context Context, args ...str
 
 	call := service.InitializeSettings(param_projectId)
 
-	var response *api_client.ProjectSettings
-	response, err = call.Do()
+	response, err := call.Do()
 	if err != nil {
 		return err
 	}
