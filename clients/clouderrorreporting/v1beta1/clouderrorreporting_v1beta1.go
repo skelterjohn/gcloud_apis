@@ -250,11 +250,11 @@ func (s *ErrorGroup) MarshalJSON() ([]byte, error) {
 }
 
 // ErrorGroupStats: Data extracted for a specific group based on certain
-// selection criteria,
+// filter criteria,
 // such as a given time period and/or service filter.
 type ErrorGroupStats struct {
 	// AffectedServices: Service contexts with a non-zero error count for
-	// the given selection
+	// the given filter
 	// criteria. This list can be truncated if multiple services are
 	// affected.
 	// Refer to `num_affected_services` for the total count.
@@ -262,7 +262,7 @@ type ErrorGroupStats struct {
 
 	// AffectedUsersCount: Approximate number of affected users in the given
 	// group that
-	// match the selection criteria.
+	// match the filter criteria.
 	// Users are distinguished by data in the `ErrorContext` of
 	// the
 	// individual error events, such as their login name or their remote
@@ -280,25 +280,27 @@ type ErrorGroupStats struct {
 
 	// Count: Approximate total number of events in the given group that
 	// match
-	// the selection criteria.
+	// the filter criteria.
 	Count int64 `json:"count,omitempty,string"`
 
-	// FirstSeenTime: Approximate first occurrence that was seen for this
-	// group and
-	// which matches the given selection criteria.
+	// FirstSeenTime: Approximate first occurrence that was ever seen for
+	// this group
+	// and which matches the given filter criteria, ignoring the
+	// time_range that was specified in the request.
 	FirstSeenTime string `json:"firstSeenTime,omitempty"`
 
-	// Group: Group data that is independent of the selection criteria.
+	// Group: Group data that is independent of the filter criteria.
 	Group *ErrorGroup `json:"group,omitempty"`
 
-	// LastSeenTime: Approximate last occurrence that was seen for this
-	// group
-	// and which matches the given selection criteria.
+	// LastSeenTime: Approximate last occurrence that was ever seen for this
+	// group and
+	// which matches the given filter criteria, ignoring the time_range
+	// that was specified in the request.
 	LastSeenTime string `json:"lastSeenTime,omitempty"`
 
 	// NumAffectedServices: The total number of services with a non-zero
 	// error count for the given
-	// selection criteria.
+	// filter criteria.
 	NumAffectedServices int64 `json:"numAffectedServices,omitempty"`
 
 	// Representative: An arbitrary event that is chosen as representative
@@ -391,6 +393,10 @@ type ListEventsResponse struct {
 	// request, to view the next page of results.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
+	// TimeRangeBegin: The timestamp specifies the start time to which the
+	// request was restricted.
+	TimeRangeBegin string `json:"timeRangeBegin,omitempty"`
+
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
 	googleapi.ServerResponse `json:"-"`
@@ -421,6 +427,15 @@ type ListGroupStatsResponse struct {
 	// first
 	// request, to view the next page of results.
 	NextPageToken string `json:"nextPageToken,omitempty"`
+
+	// TimeRangeBegin: The timestamp specifies the start time to which the
+	// request was restricted.
+	// The start time is set based on the requested time range. It may be
+	// adjusted
+	// to a later time if a project has exceeded the storage quota and older
+	// data
+	// has been deleted.
+	TimeRangeBegin string `json:"timeRangeBegin,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
@@ -462,13 +477,40 @@ type ReportedErrorEvent struct {
 	// Error Reporting system will be used.
 	EventTime string `json:"eventTime,omitempty"`
 
-	// Message: [Required] A message describing the error. The message can
-	// contain an
-	// exception stack in one of the supported programming languages and
-	// formats.
-	// In that case, the message is parsed and detailed exception
-	// information
-	// is returned when retrieving the error event again.
+	// Message: [Required] The error message.
+	// If no `context.reportLocation` is provided, the message must contain
+	// a
+	// header (typically consisting of the exception type name and an
+	// error
+	// message) and an exception stack trace in one of the supported
+	// programming
+	// languages and formats.
+	// Supported languages are Java, Python, JavaScript, Ruby, C#, PHP, and
+	// Go.
+	// Supported stack trace formats are:
+	//
+	// * **Java**: Must be the return value of
+	// [`Throwable.printStackTrace()`](https://docs.oracle.com/javase/7/docs/
+	// api/java/lang/Throwable.html#printStackTrace%28%29).
+	// * **Python**: Must be the return value of
+	// [`traceback.format_exc()`](https://docs.python.org/2/library/traceback
+	// .html#traceback.format_exc).
+	// * **JavaScript**: Must be the value of
+	// [`error.stack`](https://github.com/v8/v8/wiki/Stack-Trace-API)
+	// as returned by V8.
+	// * **Ruby**: Must contain frames returned by
+	// [`Exception.backtrace`](https://ruby-doc.org/core-2.2.0/Exception.html
+	// #method-i-backtrace).
+	// * **C#**: Must be the return value of
+	// [`Exception.ToString()`](https://msdn.microsoft.com/en-us/library/syst
+	// em.exception.tostring.aspx).
+	// * **PHP**: Must start with `PHP (Notice|Parse error|Fatal
+	// error|Warning)`
+	// and contain the result of
+	// [`(string)$exception`](http://php.net/manual/en/exception.tostring.php
+	// ).
+	// * **Go**: Must be the return value of
+	// [`runtime.Stack()`](https://golang.org/pkg/runtime/debug/#Stack).
 	Message string `json:"message,omitempty"`
 
 	// ServiceContext: [Required] The service context in which this error
@@ -494,6 +536,15 @@ func (s *ReportedErrorEvent) MarshalJSON() ([]byte, error) {
 // Its version changes over time and multiple versions can run in
 // parallel.
 type ServiceContext struct {
+	// ResourceType: Type of the MonitoredResource. List of possible
+	// values:
+	// https://cloud.google.com/monitoring/api/resources
+	//
+	// Value is set automatically for incoming errors and must not be set
+	// when
+	// reporting errors.
+	ResourceType string `json:"resourceType,omitempty"`
+
 	// Service: An identifier of the service, such as the name of
 	// the
 	// executable, job, or Google App Engine service name. This field is
@@ -514,7 +565,7 @@ type ServiceContext struct {
 	// example.
 	Version string `json:"version,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "Service") to
+	// ForceSendFields is a list of field names (e.g. "ResourceType") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -716,9 +767,9 @@ func (c *ProjectsDeleteEventsCall) Do(opts ...googleapi.CallOption) (*DeleteEven
 	//   ],
 	//   "parameters": {
 	//     "projectName": {
-	//       "description": "[Required] The resource name of the Google Cloud Platform project. Written\nas `projects/` plus the\n[Google Cloud Platform project ID](https://support.google.com/cloud/answer/6158840).\nExample: `projects/my-project-123`.",
+	//       "description": "[Required] The resource name of the Google Cloud Platform project. Written\nas `projects/` plus the\n[Google Cloud Platform project\nID](https://support.google.com/cloud/answer/6158840).\nExample: `projects/my-project-123`.",
 	//       "location": "path",
-	//       "pattern": "^projects/[^/]*$",
+	//       "pattern": "^projects/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
@@ -769,6 +820,16 @@ func (c *ProjectsEventsListCall) PageSize(pageSize int64) *ProjectsEventsListCal
 // `next_page_token` provided by a previous response.
 func (c *ProjectsEventsListCall) PageToken(pageToken string) *ProjectsEventsListCall {
 	c.urlParams_.Set("pageToken", pageToken)
+	return c
+}
+
+// ServiceFilterResourceType sets the optional parameter
+// "serviceFilter.resourceType": [Optional] The exact value to match
+// against
+// [`ServiceContext.resource_type`](/error-reporting/reference/re
+// st/v1beta1/ServiceContext#FIELDS.resource_type).
+func (c *ProjectsEventsListCall) ServiceFilterResourceType(serviceFilterResourceType string) *ProjectsEventsListCall {
+	c.urlParams_.Set("serviceFilter.resourceType", serviceFilterResourceType)
 	return c
 }
 
@@ -917,10 +978,15 @@ func (c *ProjectsEventsListCall) Do(opts ...googleapi.CallOption) (*ListEventsRe
 	//       "type": "string"
 	//     },
 	//     "projectName": {
-	//       "description": "[Required] The resource name of the Google Cloud Platform project. Written\nas `projects/` plus the\n[Google Cloud Platform project ID](https://support.google.com/cloud/answer/6158840).\nExample: `projects/my-project-123`.",
+	//       "description": "[Required] The resource name of the Google Cloud Platform project. Written\nas `projects/` plus the\n[Google Cloud Platform project\nID](https://support.google.com/cloud/answer/6158840).\nExample: `projects/my-project-123`.",
 	//       "location": "path",
-	//       "pattern": "^projects/[^/]*$",
+	//       "pattern": "^projects/[^/]+$",
 	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "serviceFilter.resourceType": {
+	//       "description": "[Optional] The exact value to match against\n[`ServiceContext.resource_type`](/error-reporting/reference/rest/v1beta1/ServiceContext#FIELDS.resource_type).",
+	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "serviceFilter.service": {
@@ -1096,7 +1162,7 @@ func (c *ProjectsEventsReportCall) Do(opts ...googleapi.CallOption) (*ReportErro
 	//     "projectName": {
 	//       "description": "[Required] The resource name of the Google Cloud Platform project. Written\nas `projects/` plus the\n[Google Cloud Platform project ID](https://support.google.com/cloud/answer/6158840).\nExample: `projects/my-project-123`.",
 	//       "location": "path",
-	//       "pattern": "^projects/[^/]*$",
+	//       "pattern": "^projects/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
@@ -1155,9 +1221,6 @@ func (c *ProjectsGroupStatsListCall) AlignmentTime(alignmentTime string) *Projec
 
 // GroupId sets the optional parameter "groupId": [Optional] List all
 // <code>ErrorGroupStats</code> with these IDs.
-// If not specified, all error group stats with a non-zero error
-// count
-// for the given selection criteria are returned.
 func (c *ProjectsGroupStatsListCall) GroupId(groupId ...string) *ProjectsGroupStatsListCall {
 	c.urlParams_.SetMulti("groupId", append([]string{}, groupId...))
 	return c
@@ -1193,6 +1256,16 @@ func (c *ProjectsGroupStatsListCall) PageSize(pageSize int64) *ProjectsGroupStat
 // parameters as the first request.
 func (c *ProjectsGroupStatsListCall) PageToken(pageToken string) *ProjectsGroupStatsListCall {
 	c.urlParams_.Set("pageToken", pageToken)
+	return c
+}
+
+// ServiceFilterResourceType sets the optional parameter
+// "serviceFilter.resourceType": [Optional] The exact value to match
+// against
+// [`ServiceContext.resource_type`](/error-reporting/reference/re
+// st/v1beta1/ServiceContext#FIELDS.resource_type).
+func (c *ProjectsGroupStatsListCall) ServiceFilterResourceType(serviceFilterResourceType string) *ProjectsGroupStatsListCall {
+	c.urlParams_.Set("serviceFilter.resourceType", serviceFilterResourceType)
 	return c
 }
 
@@ -1350,7 +1423,7 @@ func (c *ProjectsGroupStatsListCall) Do(opts ...googleapi.CallOption) (*ListGrou
 	//       "type": "string"
 	//     },
 	//     "groupId": {
-	//       "description": "[Optional] List all \u003ccode\u003eErrorGroupStats\u003c/code\u003e with these IDs.\nIf not specified, all error group stats with a non-zero error count\nfor the given selection criteria are returned.",
+	//       "description": "[Optional] List all \u003ccode\u003eErrorGroupStats\u003c/code\u003e with these IDs.",
 	//       "location": "query",
 	//       "repeated": true,
 	//       "type": "string"
@@ -1381,8 +1454,13 @@ func (c *ProjectsGroupStatsListCall) Do(opts ...googleapi.CallOption) (*ListGrou
 	//     "projectName": {
 	//       "description": "[Required] The resource name of the Google Cloud Platform project. Written\nas \u003ccode\u003eprojects/\u003c/code\u003e plus the\n\u003ca href=\"https://support.google.com/cloud/answer/6158840\"\u003eGoogle Cloud\nPlatform project ID\u003c/a\u003e.\n\nExample: \u003ccode\u003eprojects/my-project-123\u003c/code\u003e.",
 	//       "location": "path",
-	//       "pattern": "^projects/[^/]*$",
+	//       "pattern": "^projects/[^/]+$",
 	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "serviceFilter.resourceType": {
+	//       "description": "[Optional] The exact value to match against\n[`ServiceContext.resource_type`](/error-reporting/reference/rest/v1beta1/ServiceContext#FIELDS.resource_type).",
+	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "serviceFilter.service": {
@@ -1560,7 +1638,7 @@ func (c *ProjectsGroupsGetCall) Do(opts ...googleapi.CallOption) (*ErrorGroup, e
 	//     "groupName": {
 	//       "description": "[Required] The group resource name. Written as\n\u003ccode\u003eprojects/\u003cvar\u003eprojectID\u003c/var\u003e/groups/\u003cvar\u003egroup_name\u003c/var\u003e\u003c/code\u003e.\nCall\n\u003ca href=\"/error-reporting/reference/rest/v1beta1/projects.groupStats/list\"\u003e\n\u003ccode\u003egroupStats.list\u003c/code\u003e\u003c/a\u003e to return a list of groups belonging to\nthis project.\n\nExample: \u003ccode\u003eprojects/my-project-123/groups/my-group\u003c/code\u003e",
 	//       "location": "path",
-	//       "pattern": "^projects/[^/]*/groups/[^/]*$",
+	//       "pattern": "^projects/[^/]+/groups/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
@@ -1683,7 +1761,7 @@ func (c *ProjectsGroupsUpdateCall) Do(opts ...googleapi.CallOption) (*ErrorGroup
 	//     "name": {
 	//       "description": "The group resource name.\nExample: \u003ccode\u003eprojects/my-project-123/groups/my-groupid\u003c/code\u003e",
 	//       "location": "path",
-	//       "pattern": "^projects/[^/]*/groups/[^/]*$",
+	//       "pattern": "^projects/[^/]+/groups/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }

@@ -66,6 +66,7 @@ func New(client *http.Client) (*Service, error) {
 	}
 	s := &Service{client: client, BasePath: basePath}
 	s.RollingUpdates = NewRollingUpdatesService(s)
+	s.Rollout = NewRolloutService(s)
 	s.ZoneOperations = NewZoneOperationsService(s)
 	return s, nil
 }
@@ -76,6 +77,8 @@ type Service struct {
 	UserAgent string // optional additional User-Agent fragment
 
 	RollingUpdates *RollingUpdatesService
+
+	Rollout *RolloutService
 
 	ZoneOperations *ZoneOperationsService
 }
@@ -96,6 +99,15 @@ type RollingUpdatesService struct {
 	s *Service
 }
 
+func NewRolloutService(s *Service) *RolloutService {
+	rs := &RolloutService{s: s}
+	return rs
+}
+
+type RolloutService struct {
+	s *Service
+}
+
 func NewZoneOperationsService(s *Service) *ZoneOperationsService {
 	rs := &ZoneOperationsService{s: s}
 	return rs
@@ -103,6 +115,31 @@ func NewZoneOperationsService(s *Service) *ZoneOperationsService {
 
 type ZoneOperationsService struct {
 	s *Service
+}
+
+// FixedOrPercent: Used to specify an amount of instances within an
+// instance group. Only one of fixed and percentage can be specified.
+type FixedOrPercent struct {
+	// Fixed: Specify a fixed amount of instances
+	Fixed int64 `json:"fixed,omitempty"`
+
+	// Percent: Specify a percentage of the total amount of instances within
+	// an instance group manager
+	Percent int64 `json:"percent,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Fixed") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *FixedOrPercent) MarshalJSON() ([]byte, error) {
+	type noMethod FixedOrPercent
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
 // InstanceUpdate: Update of a single instance.
@@ -217,6 +254,28 @@ type InstanceUpdateList struct {
 
 func (s *InstanceUpdateList) MarshalJSON() ([]byte, error) {
 	type noMethod InstanceUpdateList
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+type ListRolloutResponse struct {
+	Resources []*Rollout `json:"resources,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "Resources") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *ListRolloutResponse) MarshalJSON() ([]byte, error) {
+	type noMethod ListRolloutResponse
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
@@ -441,6 +500,26 @@ type OperationList struct {
 
 func (s *OperationList) MarshalJSON() ([]byte, error) {
 	type noMethod OperationList
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+type RampUpRolloutRequest struct {
+	// CanarySize: The new amount of instances in the IGM to update
+	// instances to.
+	CanarySize *FixedOrPercent `json:"canarySize,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "CanarySize") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *RampUpRolloutRequest) MarshalJSON() ([]byte, error) {
+	type noMethod RampUpRolloutRequest
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
@@ -670,6 +749,119 @@ type RollingUpdateList struct {
 
 func (s *RollingUpdateList) MarshalJSON() ([]byte, error) {
 	type noMethod RollingUpdateList
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+type Rollout struct {
+	// CanarySize: The amount of instances within the instance group manager
+	// to be updated to the new instance template.
+	CanarySize *FixedOrPercent `json:"canarySize,omitempty"`
+
+	// CanarySizeStages: A list of the amount of instances within the
+	// instance group manager to be updated to the new instance template.
+	// Each target size is updated sequentially, in the order supplied.
+	CanarySizeStages []*FixedOrPercent `json:"canarySizeStages,omitempty"`
+
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
+	CreationTimestamp string `json:"creationTimestamp,omitempty"`
+
+	// HealthCheckDeadlineSec: How long to wait for the health checks to
+	// return positive before assuming the update has failed or succeeded.
+	HealthCheckDeadlineSec int64 `json:"healthCheckDeadlineSec,omitempty,string"`
+
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
+	Id string `json:"id,omitempty"`
+
+	// InstanceGroupManager: Fully-qualified URL of an instance group
+	// manager being updated.
+	InstanceGroupManager string `json:"instanceGroupManager,omitempty"`
+
+	// InstanceTemplate: Fully-qualified URL of an instance template to
+	// apply.
+	InstanceTemplate string `json:"instanceTemplate,omitempty"`
+
+	// InstanceTemplateToRollback: Fully-qualified URL of the instance
+	// template to rollback to if the rollout is cancelled.
+	InstanceTemplateToRollback string `json:"instanceTemplateToRollback,omitempty"`
+
+	// Kind: [Output Only] Type of the resource.
+	Kind string `json:"kind,omitempty"`
+
+	// ParentRollout: The parent rollout to inherit unspecified fields from.
+	ParentRollout string `json:"parentRollout,omitempty"`
+
+	// SelfLink: [Output Only] The fully qualified URL for the resource.
+	SelfLink string `json:"selfLink,omitempty"`
+
+	// State: [Output Only] The current state of the rollout.
+	State string `json:"state,omitempty"`
+
+	// UpdatePolicy: Parameters of the update process.
+	UpdatePolicy *UpdatePolicy `json:"updatePolicy,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "CanarySize") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *Rollout) MarshalJSON() ([]byte, error) {
+	type noMethod Rollout
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+type UpdatePolicy struct {
+	// MaxSurge: Maximum number of instances that can be created above the
+	// InstanceGroupManager.targetSize during the update process. By
+	// default, a fixed value of 1 is used. Using maxSurge > 0 will cause
+	// instance names to change during the update process. At least one of {
+	// maxSurge, maxUnavailable } must be greater than 0.
+	MaxSurge *FixedOrPercent `json:"maxSurge,omitempty"`
+
+	// MaxUnavailable: Maximum number of instances that can be unavailable
+	// during the update process. The instance is considered available if
+	// all of the following conditions are satisfied: 1. instance's status
+	// is RUNNING 2. instance's liveness health check result was observed to
+	// be HEALTHY at least once By default, a fixed value of 1 is used. At
+	// least one of { maxSurge, maxUnavailable } must be greater than 0.
+	MaxUnavailable *FixedOrPercent `json:"maxUnavailable,omitempty"`
+
+	// MinReadySec: Minimum number of seconds to wait for after a newly
+	// created instance becomes available. This value must be from range [0,
+	// 3600].
+	MinReadySec int64 `json:"minReadySec,omitempty"`
+
+	// MinimalAction: Minimal action to be taken on an instance. The order
+	// of action types is: RESTART < REPLACE.
+	MinimalAction string `json:"minimalAction,omitempty"`
+
+	Type string `json:"type,omitempty"`
+
+	// UpdateType: The type of update
+	UpdateType string `json:"updateType,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "MaxSurge") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *UpdatePolicy) MarshalJSON() ([]byte, error) {
+	type noMethod UpdatePolicy
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
@@ -1925,6 +2117,1330 @@ func (c *RollingUpdatesRollbackCall) Do(opts ...googleapi.CallOption) (*Operatio
 	//   "path": "{project}/zones/{zone}/rollingUpdates/{rollingUpdate}/rollback",
 	//   "response": {
 	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/replicapool"
+	//   ]
+	// }
+
+}
+
+// method id "replicapoolupdater.rollout.abandon":
+
+type RolloutAbandonCall struct {
+	s          *Service
+	project    string
+	zone       string
+	rollout    string
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
+}
+
+// Abandon: Abandon a rollout, leaving the IGM in the state it is
+// already configured. This allows you to apply a new rollout to the
+// IGM.
+func (r *RolloutService) Abandon(project string, zone string, rollout string) *RolloutAbandonCall {
+	c := &RolloutAbandonCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.project = project
+	c.zone = zone
+	c.rollout = rollout
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *RolloutAbandonCall) Fields(s ...googleapi.Field) *RolloutAbandonCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *RolloutAbandonCall) Context(ctx context.Context) *RolloutAbandonCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *RolloutAbandonCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/rollouts/{rollout}/abandon")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+		"zone":    c.zone,
+		"rollout": c.rollout,
+	})
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "replicapoolupdater.rollout.abandon" call.
+// Exactly one of *Rollout or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Rollout.ServerResponse.Header or (if a response was returned at all)
+// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
+// check whether the returned error was because http.StatusNotModified
+// was returned.
+func (c *RolloutAbandonCall) Do(opts ...googleapi.CallOption) (*Rollout, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Rollout{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Abandon a rollout, leaving the IGM in the state it is already configured. This allows you to apply a new rollout to the IGM.",
+	//   "httpMethod": "POST",
+	//   "id": "replicapoolupdater.rollout.abandon",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "rollout"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "The Google Developers Console project name.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "rollout": {
+	//       "description": "The ID of the update.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone in which the update's target resides.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/rollouts/{rollout}/abandon",
+	//   "response": {
+	//     "$ref": "Rollout"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/replicapool"
+	//   ]
+	// }
+
+}
+
+// method id "replicapoolupdater.rollout.commit":
+
+type RolloutCommitCall struct {
+	s          *Service
+	project    string
+	zone       string
+	rollout    string
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
+}
+
+// Commit: Commits a rollout, so that it is final and can not be rolled
+// back
+func (r *RolloutService) Commit(project string, zone string, rollout string) *RolloutCommitCall {
+	c := &RolloutCommitCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.project = project
+	c.zone = zone
+	c.rollout = rollout
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *RolloutCommitCall) Fields(s ...googleapi.Field) *RolloutCommitCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *RolloutCommitCall) Context(ctx context.Context) *RolloutCommitCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *RolloutCommitCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/rollouts/{rollout}/commit")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+		"zone":    c.zone,
+		"rollout": c.rollout,
+	})
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "replicapoolupdater.rollout.commit" call.
+// Exactly one of *Rollout or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Rollout.ServerResponse.Header or (if a response was returned at all)
+// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
+// check whether the returned error was because http.StatusNotModified
+// was returned.
+func (c *RolloutCommitCall) Do(opts ...googleapi.CallOption) (*Rollout, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Rollout{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Commits a rollout, so that it is final and can not be rolled back",
+	//   "httpMethod": "POST",
+	//   "id": "replicapoolupdater.rollout.commit",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "rollout"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "The Google Developers Console project name.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "rollout": {
+	//       "description": "The ID of the update.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone in which the update's target resides.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/rollouts/{rollout}/commit",
+	//   "response": {
+	//     "$ref": "Rollout"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/replicapool"
+	//   ]
+	// }
+
+}
+
+// method id "replicapoolupdater.rollout.get":
+
+type RolloutGetCall struct {
+	s            *Service
+	project      string
+	zone         string
+	rollout      string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
+}
+
+// Get: Get the details of a rollout
+func (r *RolloutService) Get(project string, zone string, rollout string) *RolloutGetCall {
+	c := &RolloutGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.project = project
+	c.zone = zone
+	c.rollout = rollout
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *RolloutGetCall) Fields(s ...googleapi.Field) *RolloutGetCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *RolloutGetCall) IfNoneMatch(entityTag string) *RolloutGetCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *RolloutGetCall) Context(ctx context.Context) *RolloutGetCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *RolloutGetCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		reqHeaders.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	var body io.Reader = nil
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/rollouts/{rollout}")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+		"zone":    c.zone,
+		"rollout": c.rollout,
+	})
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "replicapoolupdater.rollout.get" call.
+// Exactly one of *Rollout or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Rollout.ServerResponse.Header or (if a response was returned at all)
+// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
+// check whether the returned error was because http.StatusNotModified
+// was returned.
+func (c *RolloutGetCall) Do(opts ...googleapi.CallOption) (*Rollout, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Rollout{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Get the details of a rollout",
+	//   "httpMethod": "GET",
+	//   "id": "replicapoolupdater.rollout.get",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "rollout"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "The Google Developers Console project name.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "rollout": {
+	//       "description": "The ID of the update.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone in which the update's target resides.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/rollouts/{rollout}",
+	//   "response": {
+	//     "$ref": "Rollout"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only",
+	//     "https://www.googleapis.com/auth/replicapool",
+	//     "https://www.googleapis.com/auth/replicapool.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "replicapoolupdater.rollout.insert":
+
+type RolloutInsertCall struct {
+	s          *Service
+	project    string
+	zone       string
+	rollout    *Rollout
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
+}
+
+// Insert: Inserts and starts a new rollout
+func (r *RolloutService) Insert(project string, zone string, rollout *Rollout) *RolloutInsertCall {
+	c := &RolloutInsertCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.project = project
+	c.zone = zone
+	c.rollout = rollout
+	return c
+}
+
+// UpdatePolicyInitialisationMethod sets the optional parameter
+// "updatePolicyInitialisationMethod": How the update policy should be
+// initialised.
+//
+// Possible values:
+//   "FROM_IGM"
+//   "FROM_PARENT"
+func (c *RolloutInsertCall) UpdatePolicyInitialisationMethod(updatePolicyInitialisationMethod string) *RolloutInsertCall {
+	c.urlParams_.Set("updatePolicyInitialisationMethod", updatePolicyInitialisationMethod)
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *RolloutInsertCall) Fields(s ...googleapi.Field) *RolloutInsertCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *RolloutInsertCall) Context(ctx context.Context) *RolloutInsertCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *RolloutInsertCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.rollout)
+	if err != nil {
+		return nil, err
+	}
+	reqHeaders.Set("Content-Type", "application/json")
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/rollouts")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+		"zone":    c.zone,
+	})
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "replicapoolupdater.rollout.insert" call.
+// Exactly one of *Rollout or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Rollout.ServerResponse.Header or (if a response was returned at all)
+// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
+// check whether the returned error was because http.StatusNotModified
+// was returned.
+func (c *RolloutInsertCall) Do(opts ...googleapi.CallOption) (*Rollout, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Rollout{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Inserts and starts a new rollout",
+	//   "httpMethod": "POST",
+	//   "id": "replicapoolupdater.rollout.insert",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "The Google Developers Console project name.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "updatePolicyInitialisationMethod": {
+	//       "description": "How the update policy should be initialised.",
+	//       "enum": [
+	//         "FROM_IGM",
+	//         "FROM_PARENT"
+	//       ],
+	//       "enumDescriptions": [
+	//         "",
+	//         ""
+	//       ],
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone in which the update's target resides.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/rollouts",
+	//   "request": {
+	//     "$ref": "Rollout"
+	//   },
+	//   "response": {
+	//     "$ref": "Rollout"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/replicapool"
+	//   ]
+	// }
+
+}
+
+// method id "replicapoolupdater.rollout.list":
+
+type RolloutListCall struct {
+	s            *Service
+	project      string
+	zone         string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
+}
+
+// List: Resume a rollout. This lets the rollout continue updating
+// instances after a pause.
+func (r *RolloutService) List(project string, zone string) *RolloutListCall {
+	c := &RolloutListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.project = project
+	c.zone = zone
+	return c
+}
+
+// Filter sets the optional parameter "filter": Filter expression for
+// filtering listed resources.
+func (c *RolloutListCall) Filter(filter string) *RolloutListCall {
+	c.urlParams_.Set("filter", filter)
+	return c
+}
+
+// MaxResults sets the optional parameter "maxResults": Maximum count of
+// results to be returned. Maximum value is 500 and default value is
+// 500.
+func (c *RolloutListCall) MaxResults(maxResults int64) *RolloutListCall {
+	c.urlParams_.Set("maxResults", fmt.Sprint(maxResults))
+	return c
+}
+
+// PageToken sets the optional parameter "pageToken": Tag returned by a
+// previous list request truncated by maxResults. Used to continue a
+// previous list request.
+func (c *RolloutListCall) PageToken(pageToken string) *RolloutListCall {
+	c.urlParams_.Set("pageToken", pageToken)
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *RolloutListCall) Fields(s ...googleapi.Field) *RolloutListCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *RolloutListCall) IfNoneMatch(entityTag string) *RolloutListCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *RolloutListCall) Context(ctx context.Context) *RolloutListCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *RolloutListCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		reqHeaders.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	var body io.Reader = nil
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/rollouts")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+		"zone":    c.zone,
+	})
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "replicapoolupdater.rollout.list" call.
+// Exactly one of *ListRolloutResponse or error will be non-nil. Any
+// non-2xx status code is an error. Response headers are in either
+// *ListRolloutResponse.ServerResponse.Header or (if a response was
+// returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *RolloutListCall) Do(opts ...googleapi.CallOption) (*ListRolloutResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &ListRolloutResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Resume a rollout. This lets the rollout continue updating instances after a pause.",
+	//   "httpMethod": "GET",
+	//   "id": "replicapoolupdater.rollout.list",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone"
+	//   ],
+	//   "parameters": {
+	//     "filter": {
+	//       "description": "Optional. Filter expression for filtering listed resources.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "maxResults": {
+	//       "default": "500",
+	//       "description": "Optional. Maximum count of results to be returned. Maximum value is 500 and default value is 500.",
+	//       "format": "uint32",
+	//       "location": "query",
+	//       "maximum": "500",
+	//       "minimum": "0",
+	//       "type": "integer"
+	//     },
+	//     "pageToken": {
+	//       "description": "Optional. Tag returned by a previous list request truncated by maxResults. Used to continue a previous list request.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "The Google Developers Console project name.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone in which the update's target resides.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/rollouts",
+	//   "response": {
+	//     "$ref": "ListRolloutResponse"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only",
+	//     "https://www.googleapis.com/auth/replicapool",
+	//     "https://www.googleapis.com/auth/replicapool.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "replicapoolupdater.rollout.pause":
+
+type RolloutPauseCall struct {
+	s          *Service
+	project    string
+	zone       string
+	rollout    string
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
+}
+
+// Pause: Pause the application of a rollout. This stops the update, and
+// the instances managed by the instance group manager do not change
+// their instance templates.
+func (r *RolloutService) Pause(project string, zone string, rollout string) *RolloutPauseCall {
+	c := &RolloutPauseCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.project = project
+	c.zone = zone
+	c.rollout = rollout
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *RolloutPauseCall) Fields(s ...googleapi.Field) *RolloutPauseCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *RolloutPauseCall) Context(ctx context.Context) *RolloutPauseCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *RolloutPauseCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/rollouts/{rollout}/pause")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+		"zone":    c.zone,
+		"rollout": c.rollout,
+	})
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "replicapoolupdater.rollout.pause" call.
+// Exactly one of *Rollout or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Rollout.ServerResponse.Header or (if a response was returned at all)
+// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
+// check whether the returned error was because http.StatusNotModified
+// was returned.
+func (c *RolloutPauseCall) Do(opts ...googleapi.CallOption) (*Rollout, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Rollout{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Pause the application of a rollout. This stops the update, and the instances managed by the instance group manager do not change their instance templates.",
+	//   "httpMethod": "POST",
+	//   "id": "replicapoolupdater.rollout.pause",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "rollout"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "The Google Developers Console project name.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "rollout": {
+	//       "description": "The ID of the update.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone in which the update's target resides.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/rollouts/{rollout}/pause",
+	//   "response": {
+	//     "$ref": "Rollout"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/replicapool"
+	//   ]
+	// }
+
+}
+
+// method id "replicapoolupdater.rollout.rampup":
+
+type RolloutRampupCall struct {
+	s                    *Service
+	project              string
+	zone                 string
+	rollout              string
+	rampuprolloutrequest *RampUpRolloutRequest
+	urlParams_           gensupport.URLParams
+	ctx_                 context.Context
+}
+
+// Rampup: Change the amount of instances within an IGM that should be
+// updated to the new instance template
+func (r *RolloutService) Rampup(project string, zone string, rollout string, rampuprolloutrequest *RampUpRolloutRequest) *RolloutRampupCall {
+	c := &RolloutRampupCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.project = project
+	c.zone = zone
+	c.rollout = rollout
+	c.rampuprolloutrequest = rampuprolloutrequest
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *RolloutRampupCall) Fields(s ...googleapi.Field) *RolloutRampupCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *RolloutRampupCall) Context(ctx context.Context) *RolloutRampupCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *RolloutRampupCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.rampuprolloutrequest)
+	if err != nil {
+		return nil, err
+	}
+	reqHeaders.Set("Content-Type", "application/json")
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/rollouts/{rollout}/rampup")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+		"zone":    c.zone,
+		"rollout": c.rollout,
+	})
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "replicapoolupdater.rollout.rampup" call.
+// Exactly one of *Rollout or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Rollout.ServerResponse.Header or (if a response was returned at all)
+// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
+// check whether the returned error was because http.StatusNotModified
+// was returned.
+func (c *RolloutRampupCall) Do(opts ...googleapi.CallOption) (*Rollout, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Rollout{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Change the amount of instances within an IGM that should be updated to the new instance template",
+	//   "httpMethod": "POST",
+	//   "id": "replicapoolupdater.rollout.rampup",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "rollout"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "The Google Developers Console project name.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "rollout": {
+	//       "description": "The ID of the update.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone in which the update's target resides.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/rollouts/{rollout}/rampup",
+	//   "request": {
+	//     "$ref": "RampUpRolloutRequest"
+	//   },
+	//   "response": {
+	//     "$ref": "Rollout"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/replicapool"
+	//   ]
+	// }
+
+}
+
+// method id "replicapoolupdater.rollout.resume":
+
+type RolloutResumeCall struct {
+	s          *Service
+	project    string
+	zone       string
+	rollout    string
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
+}
+
+// Resume: Resume a rollout. This lets the rollout continue updating
+// instances after a pause.
+func (r *RolloutService) Resume(project string, zone string, rollout string) *RolloutResumeCall {
+	c := &RolloutResumeCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.project = project
+	c.zone = zone
+	c.rollout = rollout
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *RolloutResumeCall) Fields(s ...googleapi.Field) *RolloutResumeCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *RolloutResumeCall) Context(ctx context.Context) *RolloutResumeCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *RolloutResumeCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/rollouts/{rollout}/resume")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+		"zone":    c.zone,
+		"rollout": c.rollout,
+	})
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "replicapoolupdater.rollout.resume" call.
+// Exactly one of *Rollout or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Rollout.ServerResponse.Header or (if a response was returned at all)
+// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
+// check whether the returned error was because http.StatusNotModified
+// was returned.
+func (c *RolloutResumeCall) Do(opts ...googleapi.CallOption) (*Rollout, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Rollout{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Resume a rollout. This lets the rollout continue updating instances after a pause.",
+	//   "httpMethod": "POST",
+	//   "id": "replicapoolupdater.rollout.resume",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "rollout"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "The Google Developers Console project name.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "rollout": {
+	//       "description": "The ID of the update.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone in which the update's target resides.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/rollouts/{rollout}/resume",
+	//   "response": {
+	//     "$ref": "Rollout"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/replicapool"
+	//   ]
+	// }
+
+}
+
+// method id "replicapoolupdater.rollout.rollback":
+
+type RolloutRollbackCall struct {
+	s          *Service
+	project    string
+	zone       string
+	rollout    string
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
+}
+
+// Rollback: Rollback a rollout, cancelling the update and changing all
+// instances with the updated version to have the
+// instanceTemplateToRollback template.
+func (r *RolloutService) Rollback(project string, zone string, rollout string) *RolloutRollbackCall {
+	c := &RolloutRollbackCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.project = project
+	c.zone = zone
+	c.rollout = rollout
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *RolloutRollbackCall) Fields(s ...googleapi.Field) *RolloutRollbackCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *RolloutRollbackCall) Context(ctx context.Context) *RolloutRollbackCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *RolloutRollbackCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/rollouts/{rollout}/rollback")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+		"zone":    c.zone,
+		"rollout": c.rollout,
+	})
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "replicapoolupdater.rollout.rollback" call.
+// Exactly one of *Rollout or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Rollout.ServerResponse.Header or (if a response was returned at all)
+// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
+// check whether the returned error was because http.StatusNotModified
+// was returned.
+func (c *RolloutRollbackCall) Do(opts ...googleapi.CallOption) (*Rollout, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Rollout{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Rollback a rollout, cancelling the update and changing all instances with the updated version to have the instanceTemplateToRollback template.",
+	//   "httpMethod": "POST",
+	//   "id": "replicapoolupdater.rollout.rollback",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "rollout"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "The Google Developers Console project name.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "rollout": {
+	//       "description": "The ID of the update.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone in which the update's target resides.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/rollouts/{rollout}/rollback",
+	//   "response": {
+	//     "$ref": "Rollout"
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",

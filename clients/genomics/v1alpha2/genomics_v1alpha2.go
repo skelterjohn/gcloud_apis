@@ -1,6 +1,6 @@
 // Package genomics provides access to the Genomics API.
 //
-// See https://cloud.google.com/genomics/
+// See https://cloud.google.com/genomics
 //
 // Usage example:
 //
@@ -182,16 +182,9 @@ func (s *ControllerConfig) MarshalJSON() ([]byte, error) {
 
 // Disk: A Google Compute Engine disk resource specification.
 type Disk struct {
-	// AutoDelete: Specifies whether or not to delete the disk when the
-	// pipeline
-	// completes. This field is applicable only for newly created disks.
-	// See
-	// https://cloud.google.com/compute/docs/reference/latest/instances#r
-	// esource
-	// for more details.
-	// By default, `autoDelete` is `false`. `autoDelete` will be enabled if
-	// set
-	// to `true` at create time or run time.
+	// AutoDelete: Deprecated. Disks created by the Pipelines API will be
+	// deleted at the end
+	// of the pipeline run, regardless of what this field is set to.
 	AutoDelete bool `json:"autoDelete,omitempty"`
 
 	// MountPoint: Required at create time and cannot be overridden at run
@@ -209,15 +202,6 @@ type Disk struct {
 	// parameters. Must be 1 - 63 characters.
 	// The name "boot" is reserved for system use.
 	Name string `json:"name,omitempty"`
-
-	// ReadOnly: Specifies how a sourced-base persistent disk will be
-	// mounted.
-	// See
-	// https://cloud.google.com/compute/docs/disks/persistent-disks#use_m
-	// ulti_instances
-	// for more details.
-	// Can only be set at create time.
-	ReadOnly bool `json:"readOnly,omitempty"`
 
 	// SizeGb: The size of the disk. Defaults to 500 (GB).
 	// This field is not applicable for local SSD.
@@ -267,15 +251,20 @@ func (s *Disk) MarshalJSON() ([]byte, error) {
 
 // DockerExecutor: The Docker execuctor specification.
 type DockerExecutor struct {
-	// Cmd: Required. The command string to run. Parameters that do not
-	// have
-	// `localCopy` specified should be used as environment variables,
-	// while
-	// those that do can be accessed at the defined paths.
+	// Cmd: Required. The command or newline delimited script to run. The
+	// command
+	// string will be executed within a bash shell.
+	//
+	// If the command exits with a non-zero exit code, output
+	// parameter
+	// de-localization will be skipped and the pipeline operation's
+	// `error` field will be populated.
+	//
+	// Maximum command string length is 16384.
 	Cmd string `json:"cmd,omitempty"`
 
 	// ImageName: Required. Image name from either Docker Hub or Google
-	// Container Repository.
+	// Container Registry.
 	// Users that run pipelines must have READ access to the image.
 	ImageName string `json:"imageName,omitempty"`
 
@@ -487,7 +476,8 @@ type Operation struct {
 	// available.
 	Done bool `json:"done,omitempty"`
 
-	// Error: The error result of the operation in case of failure.
+	// Error: The error result of the operation in case of failure or
+	// cancellation.
 	Error *Status `json:"error,omitempty"`
 
 	// Metadata: An OperationMetadata object. This will always be returned
@@ -501,7 +491,7 @@ type Operation struct {
 
 	// Response: If importing ReadGroupSets, an ImportReadGroupSetsResponse
 	// is returned. If importing Variants, an ImportVariantsResponse is
-	// returned. For exports, an empty response is returned.
+	// returned. For pipelines and exports, an empty response is returned.
 	Response OperationResponse `json:"response,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
@@ -558,9 +548,9 @@ func (s *OperationEvent) MarshalJSON() ([]byte, error) {
 
 // OperationMetadata1: Metadata describing an Operation.
 type OperationMetadata1 struct {
-	// ClientId: Optionally provided by the caller when submitting the
-	// request that creates
-	// the operation.
+	// ClientId: This field is deprecated. Use `labels` instead. Optionally
+	// provided by the
+	// caller when submitting the request that creates the operation.
 	ClientId string `json:"clientId,omitempty"`
 
 	// CreateTime: The time at which the job was submitted to the Genomics
@@ -575,6 +565,11 @@ type OperationMetadata1 struct {
 	// This also contains any warnings that were generated during import
 	// or export.
 	Events []*OperationEvent `json:"events,omitempty"`
+
+	// Labels: Optionally provided by the caller when submitting the request
+	// that creates
+	// the operation.
+	Labels map[string]string `json:"labels,omitempty"`
 
 	// ProjectId: The Google Cloud Project in which the job is scoped.
 	ProjectId string `json:"projectId,omitempty"`
@@ -854,19 +849,26 @@ type PipelineResources struct {
 	// MinimumRamGb: The minimum amount of RAM to use. Defaults to 3.75 (GB)
 	MinimumRamGb float64 `json:"minimumRamGb,omitempty"`
 
-	// NoAddress: Whether to assign an external IP to the instance. Defaults
-	// to false.
+	// NoAddress: Whether to assign an external IP to the instance. This is
+	// an experimental
+	// feature that may go away. Defaults to false.
 	// Corresponds to `--no_address` flag for [gcloud compute instances
 	// create]
 	// (https://cloud.google.com/sdk/gcloud/reference/compute/instanc
 	// es/create).
 	// In order to use this, must be true for both create time and run
 	// time.
-	// Cannot be true at run time if false at create time.  ** Note: To use
-	// this
-	// option, your project must be in Google Access for Private IPs Early
-	// Access
-	// Program.**
+	// Cannot be true at run time if false at create time. If you need to
+	// ssh into
+	// a private IP VM for debugging, you can ssh to a public VM and then
+	// ssh into
+	// the private VM's Internal IP.  If noAddress is set, this pipeline run
+	// may
+	// only load docker images from Google Container Registry and not Docker
+	// Hub.
+	// ** Note: To use this option, your project must be in Google Access
+	// for
+	// Private IPs Early Access Program.**
 	NoAddress bool `json:"noAddress,omitempty"`
 
 	// Preemptible: Whether to use preemptible VMs. Defaults to `false`. In
@@ -916,7 +918,9 @@ func (s *RepeatedString) MarshalJSON() ([]byte, error) {
 
 // RunPipelineArgs: The pipeline run arguments.
 type RunPipelineArgs struct {
-	// ClientId: Client-specified pipeline operation identifier.
+	// ClientId: This field is deprecated. Use `labels` instead.
+	// Client-specified pipeline
+	// operation identifier.
 	ClientId string `json:"clientId,omitempty"`
 
 	// Inputs: Pipeline input arguments; keys are defined in the pipeline
@@ -935,6 +939,27 @@ type RunPipelineArgs struct {
 	// can ssh into the VM to debug. Default is 0; maximum allowed value is
 	// 1 day.
 	KeepVmAliveOnFailureDuration string `json:"keepVmAliveOnFailureDuration,omitempty"`
+
+	// Labels: Labels to apply to this pipeline run. Labels will also be
+	// applied to
+	// compute resources (VM, disks) created by this pipeline run. When
+	// listing
+	// operations, operations can filtered by labels.
+	// Label keys may not be empty; label values may be empty. Non-empty
+	// labels
+	// must be 1-63 characters long, and comply with
+	// [RFC1035]
+	// (https://www.ietf.org/rfc/rfc1035.txt).
+	// Specifically, the name must be 1-63 characters long and match the
+	// regular
+	// expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the
+	// first
+	// character must be a lowercase letter, and all following characters
+	// must be
+	// a dash, lowercase letter, or digit, except the last character, which
+	// cannot
+	// be a dash.
+	Labels map[string]string `json:"labels,omitempty"`
 
 	// Logging: Required. Logging options. Used by the service to
 	// communicate results
@@ -1047,13 +1072,15 @@ type ServiceAccount struct {
 	// which uses the compute service account associated with the project.
 	Email string `json:"email,omitempty"`
 
-	// Scopes: List of scopes to be enabled for this service account on
-	// the
-	// pipeline virtual machine.
+	// Scopes: List of scopes to be enabled for this service account on the
+	// VM.
 	// The following scopes are automatically included:
-	// * https://www.googleapis.com/auth/genomics
+	//
 	// * https://www.googleapis.com/auth/compute
 	// * https://www.googleapis.com/auth/devstorage.full_control
+	// * https://www.googleapis.com/auth/genomics
+	// * https://www.googleapis.com/auth/logging.write
+	// * https://www.googleapis.com/auth/monitoring.write
 	Scopes []string `json:"scopes,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Email") to
@@ -1492,7 +1519,7 @@ func (c *OperationsCancelCall) Do(opts ...googleapi.CallOption) (*Empty, error) 
 	//     "name": {
 	//       "description": "The name of the operation resource to be cancelled.",
 	//       "location": "path",
-	//       "pattern": "^operations/.*$",
+	//       "pattern": "^operations/.+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
@@ -1629,7 +1656,7 @@ func (c *OperationsGetCall) Do(opts ...googleapi.CallOption) (*Operation, error)
 	//     "name": {
 	//       "description": "The name of the operation resource.",
 	//       "location": "path",
-	//       "pattern": "^operations/.*$",
+	//       "pattern": "^operations/.+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
@@ -1677,12 +1704,15 @@ func (r *OperationsService) List(name string) *OperationsListCall {
 // * status&#58; Can be `RUNNING`, `SUCCESS`, `FAILURE`, or `CANCELED`.
 // Only
 //   one status may be specified.
+// * labels.key where key is a label key.
 //
 // Examples&#58;
 //
 // * `projectId = my-project AND createTime >= 1432140000`
 // * `projectId = my-project AND createTime >= 1432140000 AND createTime
 // <= 1432150000 AND status = RUNNING`
+// * `projectId = my-project AND labels.color = *`
+// * `projectId = my-project AND labels.color = red`
 func (c *OperationsListCall) Filter(filter string) *OperationsListCall {
 	c.urlParams_.Set("filter", filter)
 	return c
@@ -1797,7 +1827,7 @@ func (c *OperationsListCall) Do(opts ...googleapi.CallOption) (*ListOperationsRe
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "A string for filtering Operations.\nThe following filter fields are supported\u0026#58;\n\n* projectId\u0026#58; Required. Corresponds to\n  OperationMetadata.projectId.\n* createTime\u0026#58; The time this job was created, in seconds from the\n  [epoch](http://en.wikipedia.org/wiki/Unix_time). Can use `\u003e=` and/or `\u003c=`\n  operators.\n* status\u0026#58; Can be `RUNNING`, `SUCCESS`, `FAILURE`, or `CANCELED`. Only\n  one status may be specified.\n\nExamples\u0026#58;\n\n* `projectId = my-project AND createTime \u003e= 1432140000`\n* `projectId = my-project AND createTime \u003e= 1432140000 AND createTime \u003c= 1432150000 AND status = RUNNING`",
+	//       "description": "A string for filtering Operations.\nThe following filter fields are supported\u0026#58;\n\n* projectId\u0026#58; Required. Corresponds to\n  OperationMetadata.projectId.\n* createTime\u0026#58; The time this job was created, in seconds from the\n  [epoch](http://en.wikipedia.org/wiki/Unix_time). Can use `\u003e=` and/or `\u003c=`\n  operators.\n* status\u0026#58; Can be `RUNNING`, `SUCCESS`, `FAILURE`, or `CANCELED`. Only\n  one status may be specified.\n* labels.key where key is a label key.\n\nExamples\u0026#58;\n\n* `projectId = my-project AND createTime \u003e= 1432140000`\n* `projectId = my-project AND createTime \u003e= 1432140000 AND createTime \u003c= 1432150000 AND status = RUNNING`\n* `projectId = my-project AND labels.color = *`\n* `projectId = my-project AND labels.color = red`",
 	//       "location": "query",
 	//       "type": "string"
 	//     },

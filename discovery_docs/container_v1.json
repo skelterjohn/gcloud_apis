@@ -206,7 +206,7 @@
           }
         },
         "enableKubernetesAlpha": {
-          "description": "Kubernetes alpha features are enabled on this cluster. This includes alpha\nAPI groups (e.g. v1alpha1) and features that may not be production ready in\nthe kubernetes version of the master and nodes.\nThe cluster has no SLA for uptime and master\/node upgrades are disabled.\nAlpha enabled clusters are automatically deleted two weeks after creation.",
+          "description": "Kubernetes alpha features are enabled on this cluster. This includes alpha\nAPI groups (e.g. v1alpha1) and features that may not be production ready in\nthe kubernetes version of the master and nodes.\nThe cluster has no SLA for uptime and master\/node upgrades are disabled.\nAlpha enabled clusters are automatically deleted thirty days after\ncreation.",
           "type": "boolean"
         },
         "selfLink": {
@@ -281,6 +281,10 @@
           "description": "[Output only] The number of nodes currently in the cluster.",
           "type": "integer",
           "format": "int32"
+        },
+        "expireTime": {
+          "description": "[Output only] The time the cluster will be automatically\ndeleted in [RFC3339](https:\/\/www.ietf.org\/rfc\/rfc3339.txt) text format.",
+          "type": "string"
         }
       }
     },
@@ -338,6 +342,10 @@
           "items": {
             "type": "string"
           }
+        },
+        "preemptible": {
+          "description": "Whether the nodes are created as preemptible VM instances. See:\nhttps:\/\/cloud.google.com\/compute\/docs\/instances\/preemptible for more\ninforamtion about preemptible VM instances.",
+          "type": "boolean"
         }
       }
     },
@@ -467,6 +475,10 @@
         "autoscaling": {
           "description": "Autoscaler configuration for this NodePool. Autoscaler is enabled\nonly if a valid configuration is present.",
           "$ref": "NodePoolAutoscaling"
+        },
+        "management": {
+          "description": "NodeManagement configuration for this NodePool.",
+          "$ref": "NodeManagement"
         }
       }
     },
@@ -488,6 +500,44 @@
           "description": "Maximum number of nodes in the NodePool. Must be >= min_node_count. There\nhas to enough quota to scale up the cluster.",
           "type": "integer",
           "format": "int32"
+        }
+      }
+    },
+    "NodeManagement": {
+      "id": "NodeManagement",
+      "description": "NodeManagement defines the set of node management services turned on for the\nnode pool.",
+      "type": "object",
+      "properties": {
+        "autoUpgrade": {
+          "description": "Whether the nodes will be automatically upgraded.",
+          "type": "boolean"
+        },
+        "autoRepair": {
+          "description": "Whether the nodes will be automatically repaired.",
+          "type": "boolean"
+        },
+        "upgradeOptions": {
+          "description": "Specifies the Auto Upgrade knobs for the node pool.",
+          "$ref": "AutoUpgradeOptions"
+        }
+      }
+    },
+    "AutoUpgradeOptions": {
+      "id": "AutoUpgradeOptions",
+      "description": "AutoUpgradeOptions defines the set of options for the user to control how\nthe Auto Upgrades will proceed.",
+      "type": "object",
+      "properties": {
+        "autoUpgradeStartTime": {
+          "description": "[Output only] This field is set when upgrades are about to commence\nwith the approximate start time for the upgrades, in\n[RFC3339](https:\/\/www.ietf.org\/rfc\/rfc3339.txt) text format.",
+          "type": "string"
+        },
+        "description": {
+          "description": "[Output only] This field is set when upgrades are about to commence\nwith the description of the upgrade.",
+          "type": "string"
+        },
+        "requestedUpgradeStartTime": {
+          "description": "User requested start time, in\n[RFC3339](https:\/\/www.ietf.org\/rfc\/rfc3339.txt) text format.",
+          "type": "string"
         }
       }
     },
@@ -526,7 +576,8 @@
             "Cluster repair.",
             "Cluster update.",
             "Node pool create.",
-            "Node pool delete."
+            "Node pool delete.",
+            "Set node pool management."
           ],
           "type": "string",
           "enum": [
@@ -538,7 +589,8 @@
             "REPAIR_CLUSTER",
             "UPDATE_CLUSTER",
             "CREATE_NODE_POOL",
-            "DELETE_NODE_POOL"
+            "DELETE_NODE_POOL",
+            "SET_NODE_POOL_MANAGEMENT"
           ]
         },
         "status": {
@@ -547,14 +599,16 @@
             "Not set.",
             "The operation has been created.",
             "The operation is currently running.",
-            "The operation is done, either cancelled or completed."
+            "The operation is done, either cancelled or completed.",
+            "The operation is aborting."
           ],
           "type": "string",
           "enum": [
             "STATUS_UNSPECIFIED",
             "PENDING",
             "RUNNING",
-            "DONE"
+            "DONE",
+            "ABORTING"
           ]
         },
         "detail": {
@@ -653,6 +707,20 @@
         }
       }
     },
+    "CancelOperationRequest": {
+      "id": "CancelOperationRequest",
+      "description": "CancelOperationRequest cancels a single operation.",
+      "type": "object",
+      "properties": {
+      }
+    },
+    "Empty": {
+      "id": "Empty",
+      "description": "A generic empty message that you can re-use to avoid defining duplicated\nempty messages in your APIs. A typical example is to use it as the request\nor the response type of an API method. For instance:\n\n    service Foo {\n      rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);\n    }\n\nThe JSON representation for `Empty` is empty JSON object `{}`.",
+      "type": "object",
+      "properties": {
+      }
+    },
     "ServerConfig": {
       "id": "ServerConfig",
       "description": "Container Engine service configuration.",
@@ -683,6 +751,13 @@
           "items": {
             "type": "string"
           }
+        },
+        "validMasterVersions": {
+          "description": "List of valid master versions.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -708,6 +783,24 @@
         "nodePool": {
           "description": "The node pool to create.",
           "$ref": "NodePool"
+        }
+      }
+    },
+    "RollbackNodePoolUpgradeRequest": {
+      "id": "RollbackNodePoolUpgradeRequest",
+      "description": "RollbackNodePoolUpgradeRequest rollbacks the previously Aborted or Failed\nNodePool upgrade. This will be an no-op if the last upgrade successfully\ncompleted.",
+      "type": "object",
+      "properties": {
+      }
+    },
+    "SetNodePoolManagementRequest": {
+      "id": "SetNodePoolManagementRequest",
+      "description": "SetNodePoolManagementRequest sets the node management properties of a node\npool.",
+      "type": "object",
+      "properties": {
+        "management": {
+          "description": "NodeManagement configuration for the node pool.",
+          "$ref": "NodeManagement"
         }
       }
     },
@@ -934,11 +1027,18 @@
           "description": "The user making the request.",
           "type": "string"
         },
-        "groups": {
-          "description": "Any groups this user may be a part of (this is not used for GKE IAM).",
+        "group": {
+          "description": "Any groups this user may be a part of (this is not used for GKE IAM). Note:\nnormally this field would be called \"groups\", but we have to match the\nstruct in Kubernetes.",
           "type": "array",
           "items": {
             "type": "string"
+          }
+        },
+        "extra": {
+          "description": "Any \"extra\" data from the user being authorized. Note: normally this field\nwould be called \"extras\", but we have to match the struct in Kubernetes.",
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "ExtraValue"
           }
         }
       }
@@ -990,6 +1090,20 @@
         "verb": {
           "description": "The verb of the request",
           "type": "string"
+        }
+      }
+    },
+    "ExtraValue": {
+      "id": "ExtraValue",
+      "description": "ExtraValue allows the extra field to be a mapstringstring",
+      "type": "object",
+      "properties": {
+        "items": {
+          "description": "items, if empty, will result in an empty slice",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -1529,6 +1643,102 @@
                       "scopes": [
                         "https://www.googleapis.com/auth/cloud-platform"
                       ]
+                    },
+                    "rollback": {
+                      "id": "container.projects.zones.clusters.nodePools.rollback",
+                      "path": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/nodePools/{nodePoolId}:rollback",
+                      "flatPath": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/nodePools/{nodePoolId}:rollback",
+                      "httpMethod": "POST",
+                      "description": "Roll back the previously Aborted or Failed NodePool upgrade.\nThis will be an no-op if the last upgrade successfully completed.",
+                      "parameters": {
+                        "projectId": {
+                          "description": "The Google Developers Console [project ID or project\nnumber](https:\/\/support.google.com\/cloud\/answer\/6158840).",
+                          "location": "path",
+                          "required": true,
+                          "type": "string"
+                        },
+                        "zone": {
+                          "description": "The name of the Google Compute Engine\n[zone](\/compute\/docs\/zones#available) in which the cluster\nresides.",
+                          "location": "path",
+                          "required": true,
+                          "type": "string"
+                        },
+                        "clusterId": {
+                          "description": "The name of the cluster to rollback.",
+                          "location": "path",
+                          "required": true,
+                          "type": "string"
+                        },
+                        "nodePoolId": {
+                          "description": "The name of the node pool to rollback.",
+                          "location": "path",
+                          "required": true,
+                          "type": "string"
+                        }
+                      },
+                      "parameterOrder": [
+                        "projectId",
+                        "zone",
+                        "clusterId",
+                        "nodePoolId"
+                      ],
+                      "request": {
+                        "$ref": "RollbackNodePoolUpgradeRequest"
+                      },
+                      "response": {
+                        "$ref": "Operation"
+                      },
+                      "scopes": [
+                        "https://www.googleapis.com/auth/cloud-platform"
+                      ]
+                    },
+                    "setManagement": {
+                      "id": "container.projects.zones.clusters.nodePools.setManagement",
+                      "path": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/nodePools/{nodePoolId}/setManagement",
+                      "flatPath": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/nodePools/{nodePoolId}/setManagement",
+                      "httpMethod": "POST",
+                      "description": "Sets the NodeManagement options for a node pool.",
+                      "parameters": {
+                        "projectId": {
+                          "description": "The Google Developers Console [project ID or project\nnumber](https:\/\/support.google.com\/cloud\/answer\/6158840).",
+                          "location": "path",
+                          "required": true,
+                          "type": "string"
+                        },
+                        "zone": {
+                          "description": "The name of the Google Compute Engine\n[zone](\/compute\/docs\/zones#available) in which the cluster\nresides.",
+                          "location": "path",
+                          "required": true,
+                          "type": "string"
+                        },
+                        "clusterId": {
+                          "description": "The name of the cluster to update.",
+                          "location": "path",
+                          "required": true,
+                          "type": "string"
+                        },
+                        "nodePoolId": {
+                          "description": "The name of the node pool to update.",
+                          "location": "path",
+                          "required": true,
+                          "type": "string"
+                        }
+                      },
+                      "parameterOrder": [
+                        "projectId",
+                        "zone",
+                        "clusterId",
+                        "nodePoolId"
+                      ],
+                      "request": {
+                        "$ref": "SetNodePoolManagementRequest"
+                      },
+                      "response": {
+                        "$ref": "Operation"
+                      },
+                      "scopes": [
+                        "https://www.googleapis.com/auth/cloud-platform"
+                      ]
                     }
                   }
                 }
@@ -1600,6 +1810,47 @@
                   ],
                   "response": {
                     "$ref": "Operation"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ]
+                },
+                "cancel": {
+                  "id": "container.projects.zones.operations.cancel",
+                  "path": "v1/projects/{projectId}/zones/{zone}/operations/{operationId}:cancel",
+                  "flatPath": "v1/projects/{projectId}/zones/{zone}/operations/{operationId}:cancel",
+                  "httpMethod": "POST",
+                  "description": "Cancels the specified operation.",
+                  "parameters": {
+                    "projectId": {
+                      "description": "The Google Developers Console [project ID or project\nnumber](https:\/\/support.google.com\/cloud\/answer\/6158840).",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    },
+                    "zone": {
+                      "description": "The name of the Google Compute Engine\n[zone](\/compute\/docs\/zones#available) in which the operation resides.",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    },
+                    "operationId": {
+                      "description": "The server-assigned `name` of the operation.",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "parameterOrder": [
+                    "projectId",
+                    "zone",
+                    "operationId"
+                  ],
+                  "request": {
+                    "$ref": "CancelOperationRequest"
+                  },
+                  "response": {
+                    "$ref": "Empty"
                   },
                   "scopes": [
                     "https://www.googleapis.com/auth/cloud-platform"

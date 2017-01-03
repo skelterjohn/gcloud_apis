@@ -715,9 +715,12 @@ func (s *ListActiveBreakpointsResponse) MarshalJSON() ([]byte, error) {
 
 // ListBreakpointsResponse: Response for listing breakpoints.
 type ListBreakpointsResponse struct {
-	// Breakpoints: List of all breakpoints with complete state.
+	// Breakpoints: List of breakpoints matching the request.
 	// The fields `id` and `location` are guaranteed to be set on each
 	// breakpoint.
+	// The fields: `stack_frames`, `evaluated_expressions` and
+	// `variable_table`
+	// are cleared on each breakpoint regardless of it's status.
 	Breakpoints []*Breakpoint `json:"breakpoints,omitempty"`
 
 	// NextWaitToken: A wait token that can be used in the next call to
@@ -1012,6 +1015,8 @@ type StatusMessage struct {
 	// related to its condition.
 	//   "BREAKPOINT_EXPRESSION" - Status applies to the breakpoint and is
 	// related to its expressions.
+	//   "BREAKPOINT_AGE" - Status applies to the breakpoint and is related
+	// to its age.
 	//   "VARIABLE_NAME" - Status applies to the entire variable.
 	//   "VARIABLE_VALUE" - Status applies to variable value (variable name
 	// is valid).
@@ -2213,10 +2218,9 @@ func (c *DebuggerDebuggeesBreakpointsListCall) IncludeInactive(includeInactive b
 	return c
 }
 
-// StripResults sets the optional parameter "stripResults": When set to
-// `true`, the response breakpoints are stripped of the
-// results fields: `stack_frames`, `evaluated_expressions`
-// and
+// StripResults sets the optional parameter "stripResults": This field
+// is deprecated. The following fields are always stripped out of
+// the result: `stack_frames`, `evaluated_expressions` and
 // `variable_table`.
 func (c *DebuggerDebuggeesBreakpointsListCall) StripResults(stripResults bool) *DebuggerDebuggeesBreakpointsListCall {
 	c.urlParams_.Set("stripResults", fmt.Sprint(stripResults))
@@ -2361,7 +2365,7 @@ func (c *DebuggerDebuggeesBreakpointsListCall) Do(opts ...googleapi.CallOption) 
 	//       "type": "boolean"
 	//     },
 	//     "stripResults": {
-	//       "description": "When set to `true`, the response breakpoints are stripped of the\nresults fields: `stack_frames`, `evaluated_expressions` and\n`variable_table`.",
+	//       "description": "This field is deprecated. The following fields are always stripped out of\nthe result: `stack_frames`, `evaluated_expressions` and `variable_table`.",
 	//       "location": "query",
 	//       "type": "boolean"
 	//     },

@@ -113,6 +113,8 @@ func Clouderrorreporting_v1beta1_ProjectsEventsList(context Context, args ...str
 
 		usageBits += " [--pageToken=VALUE]"
 
+		usageBits += " [--serviceFilter.resourceType=VALUE]"
+
 		usageBits += " [--serviceFilter.service=VALUE]"
 
 		usageBits += " [--serviceFilter.version=VALUE]"
@@ -131,12 +133,13 @@ func Clouderrorreporting_v1beta1_ProjectsEventsList(context Context, args ...str
 	service := api_client.NewProjectsEventsService(api_service)
 
 	queryParamNames := map[string]bool{
-		"groupId":               false,
-		"pageSize":              false,
-		"pageToken":             false,
-		"serviceFilter.service": false,
-		"serviceFilter.version": false,
-		"timeRange.period":      false,
+		"groupId":                    false,
+		"pageSize":                   false,
+		"pageToken":                  false,
+		"serviceFilter.resourceType": false,
+		"serviceFilter.service":      false,
+		"serviceFilter.version":      false,
+		"timeRange.period":           false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -191,6 +194,13 @@ func Clouderrorreporting_v1beta1_ProjectsEventsList(context Context, args ...str
 			return err
 		}
 		call.PageToken(query_pageToken)
+	}
+	if value, ok := flagValues["serviceFilter_resourceType"]; ok {
+		query_serviceFilter_resourceType, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.ServiceFilterResourceType(query_serviceFilter_resourceType)
 	}
 	if value, ok := flagValues["serviceFilter_service"]; ok {
 		query_serviceFilter_service, err := commands_util.ConvertValue_string(value)
@@ -338,6 +348,8 @@ func Clouderrorreporting_v1beta1_ProjectsGroupStatsList(context Context, args ..
 
 		usageBits += " [--pageToken=VALUE]"
 
+		usageBits += " [--serviceFilter.resourceType=VALUE]"
+
 		usageBits += " [--serviceFilter.service=VALUE]"
 
 		usageBits += " [--serviceFilter.version=VALUE]"
@@ -358,16 +370,17 @@ func Clouderrorreporting_v1beta1_ProjectsGroupStatsList(context Context, args ..
 	service := api_client.NewProjectsGroupStatsService(api_service)
 
 	queryParamNames := map[string]bool{
-		"alignment":             false,
-		"alignmentTime":         false,
-		"groupId":               false,
-		"order":                 false,
-		"pageSize":              false,
-		"pageToken":             false,
-		"serviceFilter.service": false,
-		"serviceFilter.version": false,
-		"timeRange.period":      false,
-		"timedCountDuration":    false,
+		"alignment":                  false,
+		"alignmentTime":              false,
+		"groupId":                    false,
+		"order":                      false,
+		"pageSize":                   false,
+		"pageToken":                  false,
+		"serviceFilter.resourceType": false,
+		"serviceFilter.service":      false,
+		"serviceFilter.version":      false,
+		"timeRange.period":           false,
+		"timedCountDuration":         false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -443,6 +456,13 @@ func Clouderrorreporting_v1beta1_ProjectsGroupStatsList(context Context, args ..
 			return err
 		}
 		call.PageToken(query_pageToken)
+	}
+	if value, ok := flagValues["serviceFilter_resourceType"]; ok {
+		query_serviceFilter_resourceType, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.ServiceFilterResourceType(query_serviceFilter_resourceType)
 	}
 	if value, ok := flagValues["serviceFilter_service"]; ok {
 		query_serviceFilter_service, err := commands_util.ConvertValue_string(value)

@@ -317,7 +317,8 @@ func (s *CreateInstanceRequest) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// CreateTableRequest: Request message for
+// CreateTableRequest: Request message
+// for
 // google.bigtable.admin.v2.BigtableTableAdmin.CreateTable
 type CreateTableRequest struct {
 	// InitialSplits: The optional list of row keys that will be used to
@@ -365,7 +366,8 @@ func (s *CreateTableRequest) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// DropRowRangeRequest: Request message for
+// DropRowRangeRequest: Request message
+// for
 // google.bigtable.admin.v2.BigtableTableAdmin.DropRowRange
 type DropRowRangeRequest struct {
 	// DeleteAllDataFromTable: Delete all rows in the table. Setting this to
@@ -476,6 +478,19 @@ type Instance struct {
 	// destroyed
 	// if the creation process encounters an error.
 	State string `json:"state,omitempty"`
+
+	// Type: The type of the instance. Defaults to `PRODUCTION`.
+	//
+	// Possible values:
+	//   "TYPE_UNSPECIFIED" - The type of the instance is unspecified. If
+	// set when creating an
+	// instance, a `PRODUCTION` instance will be created. If set when
+	// updating
+	// an instance, the type will be left unchanged.
+	//   "PRODUCTION" - An instance meant for production use. `serve_nodes`
+	// must be set
+	// on the cluster.
+	Type string `json:"type,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
@@ -628,7 +643,8 @@ func (s *ListOperationsResponse) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// ListTablesResponse: Response message for
+// ListTablesResponse: Response message
+// for
 // google.bigtable.admin.v2.BigtableTableAdmin.ListTables
 type ListTablesResponse struct {
 	// NextPageToken: Set if not all tables could be returned in a single
@@ -696,7 +712,8 @@ func (s *Modification) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// ModifyColumnFamiliesRequest: Request message for
+// ModifyColumnFamiliesRequest: Request message
+// for
 // google.bigtable.admin.v2.BigtableTableAdmin.ModifyColumnFamilies
 type ModifyColumnFamiliesRequest struct {
 	// Modifications: Modifications to be atomically applied to the
@@ -734,7 +751,8 @@ type Operation struct {
 	// available.
 	Done bool `json:"done,omitempty"`
 
-	// Error: The error result of the operation in case of failure.
+	// Error: The error result of the operation in case of failure or
+	// cancellation.
 	Error *Status `json:"error,omitempty"`
 
 	// Metadata: Service-specific metadata associated with the operation.
@@ -1031,10 +1049,10 @@ func (s *UpdateClusterMetadata) MarshalJSON() ([]byte, error) {
 // method id "bigtableadmin.operations.cancel":
 
 type OperationsCancelCall struct {
-	s            *Service
-	operationsId string
-	urlParams_   gensupport.URLParams
-	ctx_         context.Context
+	s          *Service
+	name       string
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
 }
 
 // Cancel: Starts asynchronous cancellation on a long-running operation.
@@ -1048,10 +1066,16 @@ type OperationsCancelCall struct {
 // Operations.GetOperation or
 // other methods to check whether the cancellation succeeded or whether
 // the
-// operation completed despite cancellation.
-func (r *OperationsService) Cancel(operationsId string) *OperationsCancelCall {
+// operation completed despite cancellation. On successful
+// cancellation,
+// the operation is not deleted; instead, it becomes an operation
+// with
+// an Operation.error value with a google.rpc.Status.code of
+// 1,
+// corresponding to `Code.CANCELLED`.
+func (r *OperationsService) Cancel(name string) *OperationsCancelCall {
 	c := &OperationsCancelCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.operationsId = operationsId
+	c.name = name
 	return c
 }
 
@@ -1076,12 +1100,12 @@ func (c *OperationsCancelCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/operations/{operationsId}:cancel")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/{+name}:cancel")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"operationsId": c.operationsId,
+		"name": c.name,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -1127,22 +1151,23 @@ func (c *OperationsCancelCall) Do(opts ...googleapi.CallOption) (*Empty, error) 
 	}
 	return ret, nil
 	// {
-	//   "description": "Starts asynchronous cancellation on a long-running operation.  The server\nmakes a best effort to cancel the operation, but success is not\nguaranteed.  If the server doesn't support this method, it returns\n`google.rpc.Code.UNIMPLEMENTED`.  Clients can use\nOperations.GetOperation or\nother methods to check whether the cancellation succeeded or whether the\noperation completed despite cancellation.",
+	//   "description": "Starts asynchronous cancellation on a long-running operation.  The server\nmakes a best effort to cancel the operation, but success is not\nguaranteed.  If the server doesn't support this method, it returns\n`google.rpc.Code.UNIMPLEMENTED`.  Clients can use\nOperations.GetOperation or\nother methods to check whether the cancellation succeeded or whether the\noperation completed despite cancellation. On successful cancellation,\nthe operation is not deleted; instead, it becomes an operation with\nan Operation.error value with a google.rpc.Status.code of 1,\ncorresponding to `Code.CANCELLED`.",
 	//   "flatPath": "v2/operations/{operationsId}:cancel",
 	//   "httpMethod": "POST",
 	//   "id": "bigtableadmin.operations.cancel",
 	//   "parameterOrder": [
-	//     "operationsId"
+	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "operationsId": {
-	//       "description": "Part of `name`. The name of the operation resource to be cancelled.",
+	//     "name": {
+	//       "description": "The name of the operation resource to be cancelled.",
 	//       "location": "path",
+	//       "pattern": "^operations/.+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v2/operations/{operationsId}:cancel",
+	//   "path": "v2/{+name}:cancel",
 	//   "response": {
 	//     "$ref": "Empty"
 	//   },
@@ -1156,10 +1181,10 @@ func (c *OperationsCancelCall) Do(opts ...googleapi.CallOption) (*Empty, error) 
 // method id "bigtableadmin.operations.delete":
 
 type OperationsDeleteCall struct {
-	s            *Service
-	operationsId string
-	urlParams_   gensupport.URLParams
-	ctx_         context.Context
+	s          *Service
+	name       string
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
 }
 
 // Delete: Deletes a long-running operation. This method indicates that
@@ -1169,9 +1194,9 @@ type OperationsDeleteCall struct {
 // operation. If the server doesn't support this method, it
 // returns
 // `google.rpc.Code.UNIMPLEMENTED`.
-func (r *OperationsService) Delete(operationsId string) *OperationsDeleteCall {
+func (r *OperationsService) Delete(name string) *OperationsDeleteCall {
 	c := &OperationsDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.operationsId = operationsId
+	c.name = name
 	return c
 }
 
@@ -1196,12 +1221,12 @@ func (c *OperationsDeleteCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/operations/{operationsId}")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"operationsId": c.operationsId,
+		"name": c.name,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -1252,17 +1277,18 @@ func (c *OperationsDeleteCall) Do(opts ...googleapi.CallOption) (*Empty, error) 
 	//   "httpMethod": "DELETE",
 	//   "id": "bigtableadmin.operations.delete",
 	//   "parameterOrder": [
-	//     "operationsId"
+	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "operationsId": {
-	//       "description": "Part of `name`. The name of the operation resource to be deleted.",
+	//     "name": {
+	//       "description": "The name of the operation resource to be deleted.",
 	//       "location": "path",
+	//       "pattern": "^operations/.+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v2/operations/{operationsId}",
+	//   "path": "v2/{+name}",
 	//   "response": {
 	//     "$ref": "Empty"
 	//   },
@@ -1277,7 +1303,7 @@ func (c *OperationsDeleteCall) Do(opts ...googleapi.CallOption) (*Empty, error) 
 
 type OperationsGetCall struct {
 	s            *Service
-	operationsId string
+	name         string
 	urlParams_   gensupport.URLParams
 	ifNoneMatch_ string
 	ctx_         context.Context
@@ -1288,9 +1314,9 @@ type OperationsGetCall struct {
 // method to poll the operation result at intervals as recommended by
 // the API
 // service.
-func (r *OperationsService) Get(operationsId string) *OperationsGetCall {
+func (r *OperationsService) Get(name string) *OperationsGetCall {
 	c := &OperationsGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.operationsId = operationsId
+	c.name = name
 	return c
 }
 
@@ -1328,12 +1354,12 @@ func (c *OperationsGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/operations/{operationsId}")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"operationsId": c.operationsId,
+		"name": c.name,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -1384,17 +1410,18 @@ func (c *OperationsGetCall) Do(opts ...googleapi.CallOption) (*Operation, error)
 	//   "httpMethod": "GET",
 	//   "id": "bigtableadmin.operations.get",
 	//   "parameterOrder": [
-	//     "operationsId"
+	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "operationsId": {
-	//       "description": "Part of `name`. The name of the operation resource.",
+	//     "name": {
+	//       "description": "The name of the operation resource.",
 	//       "location": "path",
+	//       "pattern": "^operations/.+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v2/operations/{operationsId}",
+	//   "path": "v2/{+name}",
 	//   "response": {
 	//     "$ref": "Operation"
 	//   },
@@ -1410,6 +1437,7 @@ func (c *OperationsGetCall) Do(opts ...googleapi.CallOption) (*Operation, error)
 
 type OperationsListCall struct {
 	s            *Service
+	name         string
 	urlParams_   gensupport.URLParams
 	ifNoneMatch_ string
 	ctx_         context.Context
@@ -1423,8 +1451,9 @@ type OperationsListCall struct {
 // NOTE: the `name` binding below allows API services to override the
 // binding
 // to use different resource name schemes, such as `users/*/operations`.
-func (r *OperationsService) List() *OperationsListCall {
+func (r *OperationsService) List(name string) *OperationsListCall {
 	c := &OperationsListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.name = name
 	return c
 }
 
@@ -1483,11 +1512,13 @@ func (c *OperationsListCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/operations")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	req.Header = reqHeaders
-	googleapi.SetOpaque(req.URL)
+	googleapi.Expand(req.URL, map[string]string{
+		"name": c.name,
+	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
 	}
@@ -1536,11 +1567,20 @@ func (c *OperationsListCall) Do(opts ...googleapi.CallOption) (*ListOperationsRe
 	//   "flatPath": "v2/operations",
 	//   "httpMethod": "GET",
 	//   "id": "bigtableadmin.operations.list",
-	//   "parameterOrder": [],
+	//   "parameterOrder": [
+	//     "name"
+	//   ],
 	//   "parameters": {
 	//     "filter": {
 	//       "description": "The standard list filter.",
 	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "name": {
+	//       "description": "The name of the operation collection.",
+	//       "location": "path",
+	//       "pattern": "^operations$",
+	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "pageSize": {
@@ -1555,7 +1595,7 @@ func (c *OperationsListCall) Do(opts ...googleapi.CallOption) (*ListOperationsRe
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v2/operations",
+	//   "path": "v2/{+name}",
 	//   "response": {
 	//     "$ref": "ListOperationsResponse"
 	//   },
@@ -1592,16 +1632,16 @@ func (c *OperationsListCall) Pages(ctx context.Context, f func(*ListOperationsRe
 
 type ProjectsInstancesCreateCall struct {
 	s                     *Service
-	projectsId            string
+	parent                string
 	createinstancerequest *CreateInstanceRequest
 	urlParams_            gensupport.URLParams
 	ctx_                  context.Context
 }
 
 // Create: Create an instance within a project.
-func (r *ProjectsInstancesService) Create(projectsId string, createinstancerequest *CreateInstanceRequest) *ProjectsInstancesCreateCall {
+func (r *ProjectsInstancesService) Create(parent string, createinstancerequest *CreateInstanceRequest) *ProjectsInstancesCreateCall {
 	c := &ProjectsInstancesCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
+	c.parent = parent
 	c.createinstancerequest = createinstancerequest
 	return c
 }
@@ -1632,12 +1672,12 @@ func (c *ProjectsInstancesCreateCall) doRequest(alt string) (*http.Response, err
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/projects/{projectsId}/instances")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/{+parent}/instances")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId": c.projectsId,
+		"parent": c.parent,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -1688,17 +1728,18 @@ func (c *ProjectsInstancesCreateCall) Do(opts ...googleapi.CallOption) (*Operati
 	//   "httpMethod": "POST",
 	//   "id": "bigtableadmin.projects.instances.create",
 	//   "parameterOrder": [
-	//     "projectsId"
+	//     "parent"
 	//   ],
 	//   "parameters": {
-	//     "projectsId": {
-	//       "description": "Part of `parent`. The unique name of the project in which to create the new instance.\nValues are of the form `projects/\u003cproject\u003e`.",
+	//     "parent": {
+	//       "description": "The unique name of the project in which to create the new instance.\nValues are of the form `projects/\u003cproject\u003e`.",
 	//       "location": "path",
+	//       "pattern": "^projects/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v2/projects/{projectsId}/instances",
+	//   "path": "v2/{+parent}/instances",
 	//   "request": {
 	//     "$ref": "CreateInstanceRequest"
 	//   },
@@ -1715,18 +1756,16 @@ func (c *ProjectsInstancesCreateCall) Do(opts ...googleapi.CallOption) (*Operati
 // method id "bigtableadmin.projects.instances.delete":
 
 type ProjectsInstancesDeleteCall struct {
-	s           *Service
-	projectsId  string
-	instancesId string
-	urlParams_  gensupport.URLParams
-	ctx_        context.Context
+	s          *Service
+	name       string
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
 }
 
 // Delete: Delete an instance from a project.
-func (r *ProjectsInstancesService) Delete(projectsId string, instancesId string) *ProjectsInstancesDeleteCall {
+func (r *ProjectsInstancesService) Delete(name string) *ProjectsInstancesDeleteCall {
 	c := &ProjectsInstancesDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
-	c.instancesId = instancesId
+	c.name = name
 	return c
 }
 
@@ -1751,13 +1790,12 @@ func (c *ProjectsInstancesDeleteCall) doRequest(alt string) (*http.Response, err
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/projects/{projectsId}/instances/{instancesId}")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId":  c.projectsId,
-		"instancesId": c.instancesId,
+		"name": c.name,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -1808,24 +1846,18 @@ func (c *ProjectsInstancesDeleteCall) Do(opts ...googleapi.CallOption) (*Empty, 
 	//   "httpMethod": "DELETE",
 	//   "id": "bigtableadmin.projects.instances.delete",
 	//   "parameterOrder": [
-	//     "projectsId",
-	//     "instancesId"
+	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "instancesId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
+	//     "name": {
+	//       "description": "The unique name of the instance to be deleted.\nValues are of the form `projects/\u003cproject\u003e/instances/\u003cinstance\u003e`.",
 	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "projectsId": {
-	//       "description": "Part of `name`. The unique name of the instance to be deleted.\nValues are of the form `projects/\u003cproject\u003e/instances/\u003cinstance\u003e`.",
-	//       "location": "path",
+	//       "pattern": "^projects/[^/]+/instances/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v2/projects/{projectsId}/instances/{instancesId}",
+	//   "path": "v2/{+name}",
 	//   "response": {
 	//     "$ref": "Empty"
 	//   },
@@ -1840,18 +1872,16 @@ func (c *ProjectsInstancesDeleteCall) Do(opts ...googleapi.CallOption) (*Empty, 
 
 type ProjectsInstancesGetCall struct {
 	s            *Service
-	projectsId   string
-	instancesId  string
+	name         string
 	urlParams_   gensupport.URLParams
 	ifNoneMatch_ string
 	ctx_         context.Context
 }
 
 // Get: Gets information about an instance.
-func (r *ProjectsInstancesService) Get(projectsId string, instancesId string) *ProjectsInstancesGetCall {
+func (r *ProjectsInstancesService) Get(name string) *ProjectsInstancesGetCall {
 	c := &ProjectsInstancesGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
-	c.instancesId = instancesId
+	c.name = name
 	return c
 }
 
@@ -1889,13 +1919,12 @@ func (c *ProjectsInstancesGetCall) doRequest(alt string) (*http.Response, error)
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/projects/{projectsId}/instances/{instancesId}")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId":  c.projectsId,
-		"instancesId": c.instancesId,
+		"name": c.name,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -1946,24 +1975,18 @@ func (c *ProjectsInstancesGetCall) Do(opts ...googleapi.CallOption) (*Instance, 
 	//   "httpMethod": "GET",
 	//   "id": "bigtableadmin.projects.instances.get",
 	//   "parameterOrder": [
-	//     "projectsId",
-	//     "instancesId"
+	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "instancesId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
+	//     "name": {
+	//       "description": "The unique name of the requested instance. Values are of the form\n`projects/\u003cproject\u003e/instances/\u003cinstance\u003e`.",
 	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "projectsId": {
-	//       "description": "Part of `name`. The unique name of the requested instance. Values are of the form\n`projects/\u003cproject\u003e/instances/\u003cinstance\u003e`.",
-	//       "location": "path",
+	//       "pattern": "^projects/[^/]+/instances/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v2/projects/{projectsId}/instances/{instancesId}",
+	//   "path": "v2/{+name}",
 	//   "response": {
 	//     "$ref": "Instance"
 	//   },
@@ -1979,16 +2002,16 @@ func (c *ProjectsInstancesGetCall) Do(opts ...googleapi.CallOption) (*Instance, 
 
 type ProjectsInstancesListCall struct {
 	s            *Service
-	projectsId   string
+	parent       string
 	urlParams_   gensupport.URLParams
 	ifNoneMatch_ string
 	ctx_         context.Context
 }
 
 // List: Lists information about instances in a project.
-func (r *ProjectsInstancesService) List(projectsId string) *ProjectsInstancesListCall {
+func (r *ProjectsInstancesService) List(parent string) *ProjectsInstancesListCall {
 	c := &ProjectsInstancesListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
+	c.parent = parent
 	return c
 }
 
@@ -2033,12 +2056,12 @@ func (c *ProjectsInstancesListCall) doRequest(alt string) (*http.Response, error
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/projects/{projectsId}/instances")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/{+parent}/instances")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId": c.projectsId,
+		"parent": c.parent,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -2089,7 +2112,7 @@ func (c *ProjectsInstancesListCall) Do(opts ...googleapi.CallOption) (*ListInsta
 	//   "httpMethod": "GET",
 	//   "id": "bigtableadmin.projects.instances.list",
 	//   "parameterOrder": [
-	//     "projectsId"
+	//     "parent"
 	//   ],
 	//   "parameters": {
 	//     "pageToken": {
@@ -2097,14 +2120,15 @@ func (c *ProjectsInstancesListCall) Do(opts ...googleapi.CallOption) (*ListInsta
 	//       "location": "query",
 	//       "type": "string"
 	//     },
-	//     "projectsId": {
-	//       "description": "Part of `parent`. The unique name of the project for which a list of instances is requested.\nValues are of the form `projects/\u003cproject\u003e`.",
+	//     "parent": {
+	//       "description": "The unique name of the project for which a list of instances is requested.\nValues are of the form `projects/\u003cproject\u003e`.",
 	//       "location": "path",
+	//       "pattern": "^projects/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v2/projects/{projectsId}/instances",
+	//   "path": "v2/{+parent}/instances",
 	//   "response": {
 	//     "$ref": "ListInstancesResponse"
 	//   },
@@ -2140,19 +2164,17 @@ func (c *ProjectsInstancesListCall) Pages(ctx context.Context, f func(*ListInsta
 // method id "bigtableadmin.projects.instances.update":
 
 type ProjectsInstancesUpdateCall struct {
-	s           *Service
-	projectsId  string
-	instancesId string
-	instance    *Instance
-	urlParams_  gensupport.URLParams
-	ctx_        context.Context
+	s          *Service
+	name       string
+	instance   *Instance
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
 }
 
 // Update: Updates an instance within a project.
-func (r *ProjectsInstancesService) Update(projectsId string, instancesId string, instance *Instance) *ProjectsInstancesUpdateCall {
+func (r *ProjectsInstancesService) Update(name string, instance *Instance) *ProjectsInstancesUpdateCall {
 	c := &ProjectsInstancesUpdateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
-	c.instancesId = instancesId
+	c.name = name
 	c.instance = instance
 	return c
 }
@@ -2183,13 +2205,12 @@ func (c *ProjectsInstancesUpdateCall) doRequest(alt string) (*http.Response, err
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/projects/{projectsId}/instances/{instancesId}")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PUT", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId":  c.projectsId,
-		"instancesId": c.instancesId,
+		"name": c.name,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -2240,24 +2261,18 @@ func (c *ProjectsInstancesUpdateCall) Do(opts ...googleapi.CallOption) (*Instanc
 	//   "httpMethod": "PUT",
 	//   "id": "bigtableadmin.projects.instances.update",
 	//   "parameterOrder": [
-	//     "projectsId",
-	//     "instancesId"
+	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "instancesId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
+	//     "name": {
+	//       "description": "(`OutputOnly`)\nThe unique name of the instance. Values are of the form\n`projects/\u003cproject\u003e/instances/a-z+[a-z0-9]`.",
 	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "projectsId": {
-	//       "description": "Part of `name`. (`OutputOnly`)\nThe unique name of the instance. Values are of the form\n`projects/\u003cproject\u003e/instances/a-z+[a-z0-9]`.",
-	//       "location": "path",
+	//       "pattern": "^projects/[^/]+/instances/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v2/projects/{projectsId}/instances/{instancesId}",
+	//   "path": "v2/{+name}",
 	//   "request": {
 	//     "$ref": "Instance"
 	//   },
@@ -2274,19 +2289,17 @@ func (c *ProjectsInstancesUpdateCall) Do(opts ...googleapi.CallOption) (*Instanc
 // method id "bigtableadmin.projects.instances.clusters.create":
 
 type ProjectsInstancesClustersCreateCall struct {
-	s           *Service
-	projectsId  string
-	instancesId string
-	cluster     *Cluster
-	urlParams_  gensupport.URLParams
-	ctx_        context.Context
+	s          *Service
+	parent     string
+	cluster    *Cluster
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
 }
 
 // Create: Creates a cluster within an instance.
-func (r *ProjectsInstancesClustersService) Create(projectsId string, instancesId string, cluster *Cluster) *ProjectsInstancesClustersCreateCall {
+func (r *ProjectsInstancesClustersService) Create(parent string, cluster *Cluster) *ProjectsInstancesClustersCreateCall {
 	c := &ProjectsInstancesClustersCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
-	c.instancesId = instancesId
+	c.parent = parent
 	c.cluster = cluster
 	return c
 }
@@ -2327,13 +2340,12 @@ func (c *ProjectsInstancesClustersCreateCall) doRequest(alt string) (*http.Respo
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/projects/{projectsId}/instances/{instancesId}/clusters")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/{+parent}/clusters")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId":  c.projectsId,
-		"instancesId": c.instancesId,
+		"parent": c.parent,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -2384,8 +2396,7 @@ func (c *ProjectsInstancesClustersCreateCall) Do(opts ...googleapi.CallOption) (
 	//   "httpMethod": "POST",
 	//   "id": "bigtableadmin.projects.instances.clusters.create",
 	//   "parameterOrder": [
-	//     "projectsId",
-	//     "instancesId"
+	//     "parent"
 	//   ],
 	//   "parameters": {
 	//     "clusterId": {
@@ -2393,20 +2404,15 @@ func (c *ProjectsInstancesClustersCreateCall) Do(opts ...googleapi.CallOption) (
 	//       "location": "query",
 	//       "type": "string"
 	//     },
-	//     "instancesId": {
-	//       "description": "Part of `parent`. See documentation of `projectsId`.",
+	//     "parent": {
+	//       "description": "The unique name of the instance in which to create the new cluster.\nValues are of the form\n`projects/\u003cproject\u003e/instances/\u003cinstance\u003e/clusters/a-z*`.",
 	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "projectsId": {
-	//       "description": "Part of `parent`. The unique name of the instance in which to create the new cluster.\nValues are of the form\n`projects/\u003cproject\u003e/instances/\u003cinstance\u003e/clusters/a-z*`.",
-	//       "location": "path",
+	//       "pattern": "^projects/[^/]+/instances/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v2/projects/{projectsId}/instances/{instancesId}/clusters",
+	//   "path": "v2/{+parent}/clusters",
 	//   "request": {
 	//     "$ref": "Cluster"
 	//   },
@@ -2423,20 +2429,16 @@ func (c *ProjectsInstancesClustersCreateCall) Do(opts ...googleapi.CallOption) (
 // method id "bigtableadmin.projects.instances.clusters.delete":
 
 type ProjectsInstancesClustersDeleteCall struct {
-	s           *Service
-	projectsId  string
-	instancesId string
-	clustersId  string
-	urlParams_  gensupport.URLParams
-	ctx_        context.Context
+	s          *Service
+	name       string
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
 }
 
 // Delete: Deletes a cluster from an instance.
-func (r *ProjectsInstancesClustersService) Delete(projectsId string, instancesId string, clustersId string) *ProjectsInstancesClustersDeleteCall {
+func (r *ProjectsInstancesClustersService) Delete(name string) *ProjectsInstancesClustersDeleteCall {
 	c := &ProjectsInstancesClustersDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
-	c.instancesId = instancesId
-	c.clustersId = clustersId
+	c.name = name
 	return c
 }
 
@@ -2461,14 +2463,12 @@ func (c *ProjectsInstancesClustersDeleteCall) doRequest(alt string) (*http.Respo
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/projects/{projectsId}/instances/{instancesId}/clusters/{clustersId}")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId":  c.projectsId,
-		"instancesId": c.instancesId,
-		"clustersId":  c.clustersId,
+		"name": c.name,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -2519,31 +2519,18 @@ func (c *ProjectsInstancesClustersDeleteCall) Do(opts ...googleapi.CallOption) (
 	//   "httpMethod": "DELETE",
 	//   "id": "bigtableadmin.projects.instances.clusters.delete",
 	//   "parameterOrder": [
-	//     "projectsId",
-	//     "instancesId",
-	//     "clustersId"
+	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "clustersId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
+	//     "name": {
+	//       "description": "The unique name of the cluster to be deleted. Values are of the form\n`projects/\u003cproject\u003e/instances/\u003cinstance\u003e/clusters/\u003ccluster\u003e`.",
 	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "instancesId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "projectsId": {
-	//       "description": "Part of `name`. The unique name of the cluster to be deleted. Values are of the form\n`projects/\u003cproject\u003e/instances/\u003cinstance\u003e/clusters/\u003ccluster\u003e`.",
-	//       "location": "path",
+	//       "pattern": "^projects/[^/]+/instances/[^/]+/clusters/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v2/projects/{projectsId}/instances/{instancesId}/clusters/{clustersId}",
+	//   "path": "v2/{+name}",
 	//   "response": {
 	//     "$ref": "Empty"
 	//   },
@@ -2558,20 +2545,16 @@ func (c *ProjectsInstancesClustersDeleteCall) Do(opts ...googleapi.CallOption) (
 
 type ProjectsInstancesClustersGetCall struct {
 	s            *Service
-	projectsId   string
-	instancesId  string
-	clustersId   string
+	name         string
 	urlParams_   gensupport.URLParams
 	ifNoneMatch_ string
 	ctx_         context.Context
 }
 
 // Get: Gets information about a cluster.
-func (r *ProjectsInstancesClustersService) Get(projectsId string, instancesId string, clustersId string) *ProjectsInstancesClustersGetCall {
+func (r *ProjectsInstancesClustersService) Get(name string) *ProjectsInstancesClustersGetCall {
 	c := &ProjectsInstancesClustersGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
-	c.instancesId = instancesId
-	c.clustersId = clustersId
+	c.name = name
 	return c
 }
 
@@ -2609,14 +2592,12 @@ func (c *ProjectsInstancesClustersGetCall) doRequest(alt string) (*http.Response
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/projects/{projectsId}/instances/{instancesId}/clusters/{clustersId}")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId":  c.projectsId,
-		"instancesId": c.instancesId,
-		"clustersId":  c.clustersId,
+		"name": c.name,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -2667,31 +2648,18 @@ func (c *ProjectsInstancesClustersGetCall) Do(opts ...googleapi.CallOption) (*Cl
 	//   "httpMethod": "GET",
 	//   "id": "bigtableadmin.projects.instances.clusters.get",
 	//   "parameterOrder": [
-	//     "projectsId",
-	//     "instancesId",
-	//     "clustersId"
+	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "clustersId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
+	//     "name": {
+	//       "description": "The unique name of the requested cluster. Values are of the form\n`projects/\u003cproject\u003e/instances/\u003cinstance\u003e/clusters/\u003ccluster\u003e`.",
 	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "instancesId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "projectsId": {
-	//       "description": "Part of `name`. The unique name of the requested cluster. Values are of the form\n`projects/\u003cproject\u003e/instances/\u003cinstance\u003e/clusters/\u003ccluster\u003e`.",
-	//       "location": "path",
+	//       "pattern": "^projects/[^/]+/instances/[^/]+/clusters/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v2/projects/{projectsId}/instances/{instancesId}/clusters/{clustersId}",
+	//   "path": "v2/{+name}",
 	//   "response": {
 	//     "$ref": "Cluster"
 	//   },
@@ -2707,18 +2675,16 @@ func (c *ProjectsInstancesClustersGetCall) Do(opts ...googleapi.CallOption) (*Cl
 
 type ProjectsInstancesClustersListCall struct {
 	s            *Service
-	projectsId   string
-	instancesId  string
+	parent       string
 	urlParams_   gensupport.URLParams
 	ifNoneMatch_ string
 	ctx_         context.Context
 }
 
 // List: Lists information about clusters in an instance.
-func (r *ProjectsInstancesClustersService) List(projectsId string, instancesId string) *ProjectsInstancesClustersListCall {
+func (r *ProjectsInstancesClustersService) List(parent string) *ProjectsInstancesClustersListCall {
 	c := &ProjectsInstancesClustersListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
-	c.instancesId = instancesId
+	c.parent = parent
 	return c
 }
 
@@ -2763,13 +2729,12 @@ func (c *ProjectsInstancesClustersListCall) doRequest(alt string) (*http.Respons
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/projects/{projectsId}/instances/{instancesId}/clusters")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/{+parent}/clusters")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId":  c.projectsId,
-		"instancesId": c.instancesId,
+		"parent": c.parent,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -2820,29 +2785,23 @@ func (c *ProjectsInstancesClustersListCall) Do(opts ...googleapi.CallOption) (*L
 	//   "httpMethod": "GET",
 	//   "id": "bigtableadmin.projects.instances.clusters.list",
 	//   "parameterOrder": [
-	//     "projectsId",
-	//     "instancesId"
+	//     "parent"
 	//   ],
 	//   "parameters": {
-	//     "instancesId": {
-	//       "description": "Part of `parent`. See documentation of `projectsId`.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
 	//     "pageToken": {
 	//       "description": "The value of `next_page_token` returned by a previous call.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
-	//     "projectsId": {
-	//       "description": "Part of `parent`. The unique name of the instance for which a list of clusters is requested.\nValues are of the form `projects/\u003cproject\u003e/instances/\u003cinstance\u003e`.\nUse `\u003cinstance\u003e = '-'` to list Clusters for all Instances in a project,\ne.g., `projects/myproject/instances/-`.",
+	//     "parent": {
+	//       "description": "The unique name of the instance for which a list of clusters is requested.\nValues are of the form `projects/\u003cproject\u003e/instances/\u003cinstance\u003e`.\nUse `\u003cinstance\u003e = '-'` to list Clusters for all Instances in a project,\ne.g., `projects/myproject/instances/-`.",
 	//       "location": "path",
+	//       "pattern": "^projects/[^/]+/instances/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v2/projects/{projectsId}/instances/{instancesId}/clusters",
+	//   "path": "v2/{+parent}/clusters",
 	//   "response": {
 	//     "$ref": "ListClustersResponse"
 	//   },
@@ -2878,21 +2837,17 @@ func (c *ProjectsInstancesClustersListCall) Pages(ctx context.Context, f func(*L
 // method id "bigtableadmin.projects.instances.clusters.update":
 
 type ProjectsInstancesClustersUpdateCall struct {
-	s           *Service
-	projectsId  string
-	instancesId string
-	clustersId  string
-	cluster     *Cluster
-	urlParams_  gensupport.URLParams
-	ctx_        context.Context
+	s          *Service
+	name       string
+	cluster    *Cluster
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
 }
 
 // Update: Updates a cluster within an instance.
-func (r *ProjectsInstancesClustersService) Update(projectsId string, instancesId string, clustersId string, cluster *Cluster) *ProjectsInstancesClustersUpdateCall {
+func (r *ProjectsInstancesClustersService) Update(name string, cluster *Cluster) *ProjectsInstancesClustersUpdateCall {
 	c := &ProjectsInstancesClustersUpdateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
-	c.instancesId = instancesId
-	c.clustersId = clustersId
+	c.name = name
 	c.cluster = cluster
 	return c
 }
@@ -2923,14 +2878,12 @@ func (c *ProjectsInstancesClustersUpdateCall) doRequest(alt string) (*http.Respo
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/projects/{projectsId}/instances/{instancesId}/clusters/{clustersId}")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PUT", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId":  c.projectsId,
-		"instancesId": c.instancesId,
-		"clustersId":  c.clustersId,
+		"name": c.name,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -2981,31 +2934,18 @@ func (c *ProjectsInstancesClustersUpdateCall) Do(opts ...googleapi.CallOption) (
 	//   "httpMethod": "PUT",
 	//   "id": "bigtableadmin.projects.instances.clusters.update",
 	//   "parameterOrder": [
-	//     "projectsId",
-	//     "instancesId",
-	//     "clustersId"
+	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "clustersId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
+	//     "name": {
+	//       "description": "(`OutputOnly`)\nThe unique name of the cluster. Values are of the form\n`projects/\u003cproject\u003e/instances/\u003cinstance\u003e/clusters/a-z*`.",
 	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "instancesId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "projectsId": {
-	//       "description": "Part of `name`. (`OutputOnly`)\nThe unique name of the cluster. Values are of the form\n`projects/\u003cproject\u003e/instances/\u003cinstance\u003e/clusters/a-z*`.",
-	//       "location": "path",
+	//       "pattern": "^projects/[^/]+/instances/[^/]+/clusters/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v2/projects/{projectsId}/instances/{instancesId}/clusters/{clustersId}",
+	//   "path": "v2/{+name}",
 	//   "request": {
 	//     "$ref": "Cluster"
 	//   },
@@ -3023,8 +2963,7 @@ func (c *ProjectsInstancesClustersUpdateCall) Do(opts ...googleapi.CallOption) (
 
 type ProjectsInstancesTablesCreateCall struct {
 	s                  *Service
-	projectsId         string
-	instancesId        string
+	parent             string
 	createtablerequest *CreateTableRequest
 	urlParams_         gensupport.URLParams
 	ctx_               context.Context
@@ -3034,10 +2973,9 @@ type ProjectsInstancesTablesCreateCall struct {
 // The table can be created with a full set of initial column
 // families,
 // specified in the request.
-func (r *ProjectsInstancesTablesService) Create(projectsId string, instancesId string, createtablerequest *CreateTableRequest) *ProjectsInstancesTablesCreateCall {
+func (r *ProjectsInstancesTablesService) Create(parent string, createtablerequest *CreateTableRequest) *ProjectsInstancesTablesCreateCall {
 	c := &ProjectsInstancesTablesCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
-	c.instancesId = instancesId
+	c.parent = parent
 	c.createtablerequest = createtablerequest
 	return c
 }
@@ -3068,13 +3006,12 @@ func (c *ProjectsInstancesTablesCreateCall) doRequest(alt string) (*http.Respons
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/projects/{projectsId}/instances/{instancesId}/tables")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/{+parent}/tables")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId":  c.projectsId,
-		"instancesId": c.instancesId,
+		"parent": c.parent,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -3125,24 +3062,18 @@ func (c *ProjectsInstancesTablesCreateCall) Do(opts ...googleapi.CallOption) (*T
 	//   "httpMethod": "POST",
 	//   "id": "bigtableadmin.projects.instances.tables.create",
 	//   "parameterOrder": [
-	//     "projectsId",
-	//     "instancesId"
+	//     "parent"
 	//   ],
 	//   "parameters": {
-	//     "instancesId": {
-	//       "description": "Part of `parent`. See documentation of `projectsId`.",
+	//     "parent": {
+	//       "description": "The unique name of the instance in which to create the table.\nValues are of the form `projects/\u003cproject\u003e/instances/\u003cinstance\u003e`.",
 	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "projectsId": {
-	//       "description": "Part of `parent`. The unique name of the instance in which to create the table.\nValues are of the form `projects/\u003cproject\u003e/instances/\u003cinstance\u003e`.",
-	//       "location": "path",
+	//       "pattern": "^projects/[^/]+/instances/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v2/projects/{projectsId}/instances/{instancesId}/tables",
+	//   "path": "v2/{+parent}/tables",
 	//   "request": {
 	//     "$ref": "CreateTableRequest"
 	//   },
@@ -3159,20 +3090,16 @@ func (c *ProjectsInstancesTablesCreateCall) Do(opts ...googleapi.CallOption) (*T
 // method id "bigtableadmin.projects.instances.tables.delete":
 
 type ProjectsInstancesTablesDeleteCall struct {
-	s           *Service
-	projectsId  string
-	instancesId string
-	tablesId    string
-	urlParams_  gensupport.URLParams
-	ctx_        context.Context
+	s          *Service
+	name       string
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
 }
 
 // Delete: Permanently deletes a specified table and all of its data.
-func (r *ProjectsInstancesTablesService) Delete(projectsId string, instancesId string, tablesId string) *ProjectsInstancesTablesDeleteCall {
+func (r *ProjectsInstancesTablesService) Delete(name string) *ProjectsInstancesTablesDeleteCall {
 	c := &ProjectsInstancesTablesDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
-	c.instancesId = instancesId
-	c.tablesId = tablesId
+	c.name = name
 	return c
 }
 
@@ -3197,14 +3124,12 @@ func (c *ProjectsInstancesTablesDeleteCall) doRequest(alt string) (*http.Respons
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/projects/{projectsId}/instances/{instancesId}/tables/{tablesId}")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId":  c.projectsId,
-		"instancesId": c.instancesId,
-		"tablesId":    c.tablesId,
+		"name": c.name,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -3255,31 +3180,18 @@ func (c *ProjectsInstancesTablesDeleteCall) Do(opts ...googleapi.CallOption) (*E
 	//   "httpMethod": "DELETE",
 	//   "id": "bigtableadmin.projects.instances.tables.delete",
 	//   "parameterOrder": [
-	//     "projectsId",
-	//     "instancesId",
-	//     "tablesId"
+	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "instancesId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
+	//     "name": {
+	//       "description": "The unique name of the table to be deleted.\nValues are of the form\n`projects/\u003cproject\u003e/instances/\u003cinstance\u003e/tables/\u003ctable\u003e`.",
 	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "projectsId": {
-	//       "description": "Part of `name`. The unique name of the table to be deleted.\nValues are of the form\n`projects/\u003cproject\u003e/instances/\u003cinstance\u003e/tables/\u003ctable\u003e`.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "tablesId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
-	//       "location": "path",
+	//       "pattern": "^projects/[^/]+/instances/[^/]+/tables/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v2/projects/{projectsId}/instances/{instancesId}/tables/{tablesId}",
+	//   "path": "v2/{+name}",
 	//   "response": {
 	//     "$ref": "Empty"
 	//   },
@@ -3294,9 +3206,7 @@ func (c *ProjectsInstancesTablesDeleteCall) Do(opts ...googleapi.CallOption) (*E
 
 type ProjectsInstancesTablesDropRowRangeCall struct {
 	s                   *Service
-	projectsId          string
-	instancesId         string
-	tablesId            string
+	name                string
 	droprowrangerequest *DropRowRangeRequest
 	urlParams_          gensupport.URLParams
 	ctx_                context.Context
@@ -3307,11 +3217,9 @@ type ProjectsInstancesTablesDropRowRangeCall struct {
 // specify whether to delete all rows in a table, or only those that
 // match a
 // particular prefix.
-func (r *ProjectsInstancesTablesService) DropRowRange(projectsId string, instancesId string, tablesId string, droprowrangerequest *DropRowRangeRequest) *ProjectsInstancesTablesDropRowRangeCall {
+func (r *ProjectsInstancesTablesService) DropRowRange(name string, droprowrangerequest *DropRowRangeRequest) *ProjectsInstancesTablesDropRowRangeCall {
 	c := &ProjectsInstancesTablesDropRowRangeCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
-	c.instancesId = instancesId
-	c.tablesId = tablesId
+	c.name = name
 	c.droprowrangerequest = droprowrangerequest
 	return c
 }
@@ -3342,14 +3250,12 @@ func (c *ProjectsInstancesTablesDropRowRangeCall) doRequest(alt string) (*http.R
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/projects/{projectsId}/instances/{instancesId}/tables/{tablesId}:dropRowRange")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/{+name}:dropRowRange")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId":  c.projectsId,
-		"instancesId": c.instancesId,
-		"tablesId":    c.tablesId,
+		"name": c.name,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -3400,31 +3306,18 @@ func (c *ProjectsInstancesTablesDropRowRangeCall) Do(opts ...googleapi.CallOptio
 	//   "httpMethod": "POST",
 	//   "id": "bigtableadmin.projects.instances.tables.dropRowRange",
 	//   "parameterOrder": [
-	//     "projectsId",
-	//     "instancesId",
-	//     "tablesId"
+	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "instancesId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
+	//     "name": {
+	//       "description": "The unique name of the table on which to drop a range of rows.\nValues are of the form\n`projects/\u003cproject\u003e/instances/\u003cinstance\u003e/tables/\u003ctable\u003e`.",
 	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "projectsId": {
-	//       "description": "Part of `name`. The unique name of the table on which to drop a range of rows.\nValues are of the form\n`projects/\u003cproject\u003e/instances/\u003cinstance\u003e/tables/\u003ctable\u003e`.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "tablesId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
-	//       "location": "path",
+	//       "pattern": "^projects/[^/]+/instances/[^/]+/tables/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v2/projects/{projectsId}/instances/{instancesId}/tables/{tablesId}:dropRowRange",
+	//   "path": "v2/{+name}:dropRowRange",
 	//   "request": {
 	//     "$ref": "DropRowRangeRequest"
 	//   },
@@ -3442,26 +3335,22 @@ func (c *ProjectsInstancesTablesDropRowRangeCall) Do(opts ...googleapi.CallOptio
 
 type ProjectsInstancesTablesGetCall struct {
 	s            *Service
-	projectsId   string
-	instancesId  string
-	tablesId     string
+	name         string
 	urlParams_   gensupport.URLParams
 	ifNoneMatch_ string
 	ctx_         context.Context
 }
 
 // Get: Gets metadata information about the specified table.
-func (r *ProjectsInstancesTablesService) Get(projectsId string, instancesId string, tablesId string) *ProjectsInstancesTablesGetCall {
+func (r *ProjectsInstancesTablesService) Get(name string) *ProjectsInstancesTablesGetCall {
 	c := &ProjectsInstancesTablesGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
-	c.instancesId = instancesId
-	c.tablesId = tablesId
+	c.name = name
 	return c
 }
 
 // View sets the optional parameter "view": The view to be applied to
 // the returned table's fields.
-// Defaults to SCHEMA_ONLY if unspecified.
+// Defaults to `SCHEMA_ONLY` if unspecified.
 //
 // Possible values:
 //   "VIEW_UNSPECIFIED"
@@ -3507,14 +3396,12 @@ func (c *ProjectsInstancesTablesGetCall) doRequest(alt string) (*http.Response, 
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/projects/{projectsId}/instances/{instancesId}/tables/{tablesId}")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId":  c.projectsId,
-		"instancesId": c.instancesId,
-		"tablesId":    c.tablesId,
+		"name": c.name,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -3565,31 +3452,18 @@ func (c *ProjectsInstancesTablesGetCall) Do(opts ...googleapi.CallOption) (*Tabl
 	//   "httpMethod": "GET",
 	//   "id": "bigtableadmin.projects.instances.tables.get",
 	//   "parameterOrder": [
-	//     "projectsId",
-	//     "instancesId",
-	//     "tablesId"
+	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "instancesId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
+	//     "name": {
+	//       "description": "The unique name of the requested table.\nValues are of the form\n`projects/\u003cproject\u003e/instances/\u003cinstance\u003e/tables/\u003ctable\u003e`.",
 	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "projectsId": {
-	//       "description": "Part of `name`. The unique name of the requested table.\nValues are of the form\n`projects/\u003cproject\u003e/instances/\u003cinstance\u003e/tables/\u003ctable\u003e`.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "tablesId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
-	//       "location": "path",
+	//       "pattern": "^projects/[^/]+/instances/[^/]+/tables/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "view": {
-	//       "description": "The view to be applied to the returned table's fields.\nDefaults to SCHEMA_ONLY if unspecified.",
+	//       "description": "The view to be applied to the returned table's fields.\nDefaults to `SCHEMA_ONLY` if unspecified.",
 	//       "enum": [
 	//         "VIEW_UNSPECIFIED",
 	//         "NAME_ONLY",
@@ -3600,7 +3474,7 @@ func (c *ProjectsInstancesTablesGetCall) Do(opts ...googleapi.CallOption) (*Tabl
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v2/projects/{projectsId}/instances/{instancesId}/tables/{tablesId}",
+	//   "path": "v2/{+name}",
 	//   "response": {
 	//     "$ref": "Table"
 	//   },
@@ -3616,18 +3490,16 @@ func (c *ProjectsInstancesTablesGetCall) Do(opts ...googleapi.CallOption) (*Tabl
 
 type ProjectsInstancesTablesListCall struct {
 	s            *Service
-	projectsId   string
-	instancesId  string
+	parent       string
 	urlParams_   gensupport.URLParams
 	ifNoneMatch_ string
 	ctx_         context.Context
 }
 
 // List: Lists all tables served from a specified instance.
-func (r *ProjectsInstancesTablesService) List(projectsId string, instancesId string) *ProjectsInstancesTablesListCall {
+func (r *ProjectsInstancesTablesService) List(parent string) *ProjectsInstancesTablesListCall {
 	c := &ProjectsInstancesTablesListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
-	c.instancesId = instancesId
+	c.parent = parent
 	return c
 }
 
@@ -3640,8 +3512,8 @@ func (c *ProjectsInstancesTablesListCall) PageToken(pageToken string) *ProjectsI
 
 // View sets the optional parameter "view": The view to be applied to
 // the returned tables' fields.
-// Defaults to NAME_ONLY if unspecified (no others are currently
-// supported).
+// Defaults to `NAME_ONLY` if unspecified; no others are currently
+// supported.
 //
 // Possible values:
 //   "VIEW_UNSPECIFIED"
@@ -3687,13 +3559,12 @@ func (c *ProjectsInstancesTablesListCall) doRequest(alt string) (*http.Response,
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/projects/{projectsId}/instances/{instancesId}/tables")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/{+parent}/tables")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId":  c.projectsId,
-		"instancesId": c.instancesId,
+		"parent": c.parent,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -3744,29 +3615,23 @@ func (c *ProjectsInstancesTablesListCall) Do(opts ...googleapi.CallOption) (*Lis
 	//   "httpMethod": "GET",
 	//   "id": "bigtableadmin.projects.instances.tables.list",
 	//   "parameterOrder": [
-	//     "projectsId",
-	//     "instancesId"
+	//     "parent"
 	//   ],
 	//   "parameters": {
-	//     "instancesId": {
-	//       "description": "Part of `parent`. See documentation of `projectsId`.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
 	//     "pageToken": {
 	//       "description": "The value of `next_page_token` returned by a previous call.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
-	//     "projectsId": {
-	//       "description": "Part of `parent`. The unique name of the instance for which tables should be listed.\nValues are of the form `projects/\u003cproject\u003e/instances/\u003cinstance\u003e`.",
+	//     "parent": {
+	//       "description": "The unique name of the instance for which tables should be listed.\nValues are of the form `projects/\u003cproject\u003e/instances/\u003cinstance\u003e`.",
 	//       "location": "path",
+	//       "pattern": "^projects/[^/]+/instances/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "view": {
-	//       "description": "The view to be applied to the returned tables' fields.\nDefaults to NAME_ONLY if unspecified (no others are currently supported).",
+	//       "description": "The view to be applied to the returned tables' fields.\nDefaults to `NAME_ONLY` if unspecified; no others are currently supported.",
 	//       "enum": [
 	//         "VIEW_UNSPECIFIED",
 	//         "NAME_ONLY",
@@ -3777,7 +3642,7 @@ func (c *ProjectsInstancesTablesListCall) Do(opts ...googleapi.CallOption) (*Lis
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v2/projects/{projectsId}/instances/{instancesId}/tables",
+	//   "path": "v2/{+parent}/tables",
 	//   "response": {
 	//     "$ref": "ListTablesResponse"
 	//   },
@@ -3814,9 +3679,7 @@ func (c *ProjectsInstancesTablesListCall) Pages(ctx context.Context, f func(*Lis
 
 type ProjectsInstancesTablesModifyColumnFamiliesCall struct {
 	s                           *Service
-	projectsId                  string
-	instancesId                 string
-	tablesId                    string
+	name                        string
 	modifycolumnfamiliesrequest *ModifyColumnFamiliesRequest
 	urlParams_                  gensupport.URLParams
 	ctx_                        context.Context
@@ -3825,11 +3688,9 @@ type ProjectsInstancesTablesModifyColumnFamiliesCall struct {
 // ModifyColumnFamilies: Atomically performs a series of column family
 // modifications
 // on the specified table.
-func (r *ProjectsInstancesTablesService) ModifyColumnFamilies(projectsId string, instancesId string, tablesId string, modifycolumnfamiliesrequest *ModifyColumnFamiliesRequest) *ProjectsInstancesTablesModifyColumnFamiliesCall {
+func (r *ProjectsInstancesTablesService) ModifyColumnFamilies(name string, modifycolumnfamiliesrequest *ModifyColumnFamiliesRequest) *ProjectsInstancesTablesModifyColumnFamiliesCall {
 	c := &ProjectsInstancesTablesModifyColumnFamiliesCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
-	c.instancesId = instancesId
-	c.tablesId = tablesId
+	c.name = name
 	c.modifycolumnfamiliesrequest = modifycolumnfamiliesrequest
 	return c
 }
@@ -3860,14 +3721,12 @@ func (c *ProjectsInstancesTablesModifyColumnFamiliesCall) doRequest(alt string) 
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/projects/{projectsId}/instances/{instancesId}/tables/{tablesId}:modifyColumnFamilies")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/{+name}:modifyColumnFamilies")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId":  c.projectsId,
-		"instancesId": c.instancesId,
-		"tablesId":    c.tablesId,
+		"name": c.name,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -3918,31 +3777,18 @@ func (c *ProjectsInstancesTablesModifyColumnFamiliesCall) Do(opts ...googleapi.C
 	//   "httpMethod": "POST",
 	//   "id": "bigtableadmin.projects.instances.tables.modifyColumnFamilies",
 	//   "parameterOrder": [
-	//     "projectsId",
-	//     "instancesId",
-	//     "tablesId"
+	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "instancesId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
+	//     "name": {
+	//       "description": "The unique name of the table whose families should be modified.\nValues are of the form\n`projects/\u003cproject\u003e/instances/\u003cinstance\u003e/tables/\u003ctable\u003e`.",
 	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "projectsId": {
-	//       "description": "Part of `name`. The unique name of the table whose families should be modified.\nValues are of the form\n`projects/\u003cproject\u003e/instances/\u003cinstance\u003e/tables/\u003ctable\u003e`.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "tablesId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
-	//       "location": "path",
+	//       "pattern": "^projects/[^/]+/instances/[^/]+/tables/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v2/projects/{projectsId}/instances/{instancesId}/tables/{tablesId}:modifyColumnFamilies",
+	//   "path": "v2/{+name}:modifyColumnFamilies",
 	//   "request": {
 	//     "$ref": "ModifyColumnFamiliesRequest"
 	//   },

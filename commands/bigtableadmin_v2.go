@@ -38,10 +38,10 @@ func Bigtableadmin_v2_OperationsCancel(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("operationsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2/operations/{operationsId}:cancel", "+") {
+			if strings.Contains("v2/{+name}:cancel", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -65,19 +65,19 @@ func Bigtableadmin_v2_OperationsCancel(context Context, args ...string) error {
 	}
 
 	expectedParams := []string{
-		"operationsId",
+		"name",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_operationsId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Cancel(param_operationsId)
+	call := service.Cancel(param_name)
 
 	response, err := call.Do()
 	if err != nil {
@@ -97,10 +97,10 @@ func Bigtableadmin_v2_OperationsDelete(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("operationsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2/operations/{operationsId}", "+") {
+			if strings.Contains("v2/{+name}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -124,19 +124,19 @@ func Bigtableadmin_v2_OperationsDelete(context Context, args ...string) error {
 	}
 
 	expectedParams := []string{
-		"operationsId",
+		"name",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_operationsId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Delete(param_operationsId)
+	call := service.Delete(param_name)
 
 	response, err := call.Do()
 	if err != nil {
@@ -156,10 +156,10 @@ func Bigtableadmin_v2_OperationsGet(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("operationsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2/operations/{operationsId}", "+") {
+			if strings.Contains("v2/{+name}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -183,19 +183,19 @@ func Bigtableadmin_v2_OperationsGet(context Context, args ...string) error {
 	}
 
 	expectedParams := []string{
-		"operationsId",
+		"name",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_operationsId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Get(param_operationsId)
+	call := service.Get(param_name)
 
 	response, err := call.Do()
 	if err != nil {
@@ -215,9 +215,10 @@ func Bigtableadmin_v2_OperationsList(context Context, args ...string) error {
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2/operations", "+") {
+			if strings.Contains("v2/{+name}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -263,13 +264,20 @@ func Bigtableadmin_v2_OperationsList(context Context, args ...string) error {
 		usageFunc()
 	}
 
-	expectedParams := []string{}
+	expectedParams := []string{
+		"name",
+	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	call := service.List()
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_name)
 
 	// Set query parameters.
 	if value, ok := flagValues["filter"]; ok {
@@ -312,11 +320,10 @@ func Bigtableadmin_v2_ProjectsInstancesClustersCreate(context Context, args ...s
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("instancesId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("parent"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2/projects/{projectsId}/instances/{instancesId}/clusters", "+") {
+			if strings.Contains("v2/{+parent}/clusters", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -381,24 +388,19 @@ func Bigtableadmin_v2_ProjectsInstancesClustersCreate(context Context, args ...s
 	}
 
 	expectedParams := []string{
-		"projectsId",
-		"instancesId",
+		"parent",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_instancesId, err := commands_util.ConvertValue_string(paramValues[1])
+	param_parent, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Create(param_projectsId, param_instancesId,
+	call := service.Create(param_parent,
 		request,
 	)
 
@@ -429,12 +431,10 @@ func Bigtableadmin_v2_ProjectsInstancesClustersDelete(context Context, args ...s
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("instancesId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("clustersId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2/projects/{projectsId}/instances/{instancesId}/clusters/{clustersId}", "+") {
+			if strings.Contains("v2/{+name}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -458,29 +458,19 @@ func Bigtableadmin_v2_ProjectsInstancesClustersDelete(context Context, args ...s
 	}
 
 	expectedParams := []string{
-		"projectsId",
-		"instancesId",
-		"clustersId",
+		"name",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_instancesId, err := commands_util.ConvertValue_string(paramValues[1])
-	if err != nil {
-		return err
-	}
-	param_clustersId, err := commands_util.ConvertValue_string(paramValues[2])
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Delete(param_projectsId, param_instancesId, param_clustersId)
+	call := service.Delete(param_name)
 
 	response, err := call.Do()
 	if err != nil {
@@ -500,12 +490,10 @@ func Bigtableadmin_v2_ProjectsInstancesClustersGet(context Context, args ...stri
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("instancesId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("clustersId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2/projects/{projectsId}/instances/{instancesId}/clusters/{clustersId}", "+") {
+			if strings.Contains("v2/{+name}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -529,29 +517,19 @@ func Bigtableadmin_v2_ProjectsInstancesClustersGet(context Context, args ...stri
 	}
 
 	expectedParams := []string{
-		"projectsId",
-		"instancesId",
-		"clustersId",
+		"name",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_instancesId, err := commands_util.ConvertValue_string(paramValues[1])
-	if err != nil {
-		return err
-	}
-	param_clustersId, err := commands_util.ConvertValue_string(paramValues[2])
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Get(param_projectsId, param_instancesId, param_clustersId)
+	call := service.Get(param_name)
 
 	response, err := call.Do()
 	if err != nil {
@@ -571,11 +549,10 @@ func Bigtableadmin_v2_ProjectsInstancesClustersList(context Context, args ...str
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("instancesId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("parent"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2/projects/{projectsId}/instances/{instancesId}/clusters", "+") {
+			if strings.Contains("v2/{+parent}/clusters", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -616,24 +593,19 @@ func Bigtableadmin_v2_ProjectsInstancesClustersList(context Context, args ...str
 	}
 
 	expectedParams := []string{
-		"projectsId",
-		"instancesId",
+		"parent",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_instancesId, err := commands_util.ConvertValue_string(paramValues[1])
+	param_parent, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.List(param_projectsId, param_instancesId)
+	call := service.List(param_parent)
 
 	// Set query parameters.
 	if value, ok := flagValues["pageToken"]; ok {
@@ -662,12 +634,10 @@ func Bigtableadmin_v2_ProjectsInstancesClustersUpdate(context Context, args ...s
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("instancesId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("clustersId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2/projects/{projectsId}/instances/{instancesId}/clusters/{clustersId}", "+") {
+			if strings.Contains("v2/{+name}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -714,29 +684,19 @@ func Bigtableadmin_v2_ProjectsInstancesClustersUpdate(context Context, args ...s
 	}
 
 	expectedParams := []string{
-		"projectsId",
-		"instancesId",
-		"clustersId",
+		"name",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_instancesId, err := commands_util.ConvertValue_string(paramValues[1])
-	if err != nil {
-		return err
-	}
-	param_clustersId, err := commands_util.ConvertValue_string(paramValues[2])
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Update(param_projectsId, param_instancesId, param_clustersId,
+	call := service.Update(param_name,
 		request,
 	)
 
@@ -758,10 +718,10 @@ func Bigtableadmin_v2_ProjectsInstancesCreate(context Context, args ...string) e
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("parent"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2/projects/{projectsId}/instances", "+") {
+			if strings.Contains("v2/{+parent}/instances", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -808,19 +768,19 @@ func Bigtableadmin_v2_ProjectsInstancesCreate(context Context, args ...string) e
 	}
 
 	expectedParams := []string{
-		"projectsId",
+		"parent",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_parent, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Create(param_projectsId,
+	call := service.Create(param_parent,
 		request,
 	)
 
@@ -842,11 +802,10 @@ func Bigtableadmin_v2_ProjectsInstancesDelete(context Context, args ...string) e
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("instancesId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2/projects/{projectsId}/instances/{instancesId}", "+") {
+			if strings.Contains("v2/{+name}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -870,24 +829,19 @@ func Bigtableadmin_v2_ProjectsInstancesDelete(context Context, args ...string) e
 	}
 
 	expectedParams := []string{
-		"projectsId",
-		"instancesId",
+		"name",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_instancesId, err := commands_util.ConvertValue_string(paramValues[1])
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Delete(param_projectsId, param_instancesId)
+	call := service.Delete(param_name)
 
 	response, err := call.Do()
 	if err != nil {
@@ -907,11 +861,10 @@ func Bigtableadmin_v2_ProjectsInstancesGet(context Context, args ...string) erro
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("instancesId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2/projects/{projectsId}/instances/{instancesId}", "+") {
+			if strings.Contains("v2/{+name}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -935,24 +888,19 @@ func Bigtableadmin_v2_ProjectsInstancesGet(context Context, args ...string) erro
 	}
 
 	expectedParams := []string{
-		"projectsId",
-		"instancesId",
+		"name",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_instancesId, err := commands_util.ConvertValue_string(paramValues[1])
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Get(param_projectsId, param_instancesId)
+	call := service.Get(param_name)
 
 	response, err := call.Do()
 	if err != nil {
@@ -972,10 +920,10 @@ func Bigtableadmin_v2_ProjectsInstancesList(context Context, args ...string) err
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("parent"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2/projects/{projectsId}/instances", "+") {
+			if strings.Contains("v2/{+parent}/instances", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -1016,19 +964,19 @@ func Bigtableadmin_v2_ProjectsInstancesList(context Context, args ...string) err
 	}
 
 	expectedParams := []string{
-		"projectsId",
+		"parent",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_parent, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.List(param_projectsId)
+	call := service.List(param_parent)
 
 	// Set query parameters.
 	if value, ok := flagValues["pageToken"]; ok {
@@ -1057,11 +1005,10 @@ func Bigtableadmin_v2_ProjectsInstancesTablesCreate(context Context, args ...str
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("instancesId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("parent"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2/projects/{projectsId}/instances/{instancesId}/tables", "+") {
+			if strings.Contains("v2/{+parent}/tables", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -1108,24 +1055,19 @@ func Bigtableadmin_v2_ProjectsInstancesTablesCreate(context Context, args ...str
 	}
 
 	expectedParams := []string{
-		"projectsId",
-		"instancesId",
+		"parent",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_instancesId, err := commands_util.ConvertValue_string(paramValues[1])
+	param_parent, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Create(param_projectsId, param_instancesId,
+	call := service.Create(param_parent,
 		request,
 	)
 
@@ -1147,12 +1089,10 @@ func Bigtableadmin_v2_ProjectsInstancesTablesDelete(context Context, args ...str
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("instancesId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("tablesId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2/projects/{projectsId}/instances/{instancesId}/tables/{tablesId}", "+") {
+			if strings.Contains("v2/{+name}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -1176,29 +1116,19 @@ func Bigtableadmin_v2_ProjectsInstancesTablesDelete(context Context, args ...str
 	}
 
 	expectedParams := []string{
-		"projectsId",
-		"instancesId",
-		"tablesId",
+		"name",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_instancesId, err := commands_util.ConvertValue_string(paramValues[1])
-	if err != nil {
-		return err
-	}
-	param_tablesId, err := commands_util.ConvertValue_string(paramValues[2])
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Delete(param_projectsId, param_instancesId, param_tablesId)
+	call := service.Delete(param_name)
 
 	response, err := call.Do()
 	if err != nil {
@@ -1218,12 +1148,10 @@ func Bigtableadmin_v2_ProjectsInstancesTablesDropRowRange(context Context, args 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("instancesId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("tablesId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2/projects/{projectsId}/instances/{instancesId}/tables/{tablesId}:dropRowRange", "+") {
+			if strings.Contains("v2/{+name}:dropRowRange", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -1270,29 +1198,19 @@ func Bigtableadmin_v2_ProjectsInstancesTablesDropRowRange(context Context, args 
 	}
 
 	expectedParams := []string{
-		"projectsId",
-		"instancesId",
-		"tablesId",
+		"name",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_instancesId, err := commands_util.ConvertValue_string(paramValues[1])
-	if err != nil {
-		return err
-	}
-	param_tablesId, err := commands_util.ConvertValue_string(paramValues[2])
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.DropRowRange(param_projectsId, param_instancesId, param_tablesId,
+	call := service.DropRowRange(param_name,
 		request,
 	)
 
@@ -1314,12 +1232,10 @@ func Bigtableadmin_v2_ProjectsInstancesTablesGet(context Context, args ...string
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("instancesId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("tablesId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2/projects/{projectsId}/instances/{instancesId}/tables/{tablesId}", "+") {
+			if strings.Contains("v2/{+name}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -1360,29 +1276,19 @@ func Bigtableadmin_v2_ProjectsInstancesTablesGet(context Context, args ...string
 	}
 
 	expectedParams := []string{
-		"projectsId",
-		"instancesId",
-		"tablesId",
+		"name",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_instancesId, err := commands_util.ConvertValue_string(paramValues[1])
-	if err != nil {
-		return err
-	}
-	param_tablesId, err := commands_util.ConvertValue_string(paramValues[2])
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Get(param_projectsId, param_instancesId, param_tablesId)
+	call := service.Get(param_name)
 
 	// Set query parameters.
 	if value, ok := flagValues["view"]; ok {
@@ -1411,11 +1317,10 @@ func Bigtableadmin_v2_ProjectsInstancesTablesList(context Context, args ...strin
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("instancesId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("parent"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2/projects/{projectsId}/instances/{instancesId}/tables", "+") {
+			if strings.Contains("v2/{+parent}/tables", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -1459,24 +1364,19 @@ func Bigtableadmin_v2_ProjectsInstancesTablesList(context Context, args ...strin
 	}
 
 	expectedParams := []string{
-		"projectsId",
-		"instancesId",
+		"parent",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_instancesId, err := commands_util.ConvertValue_string(paramValues[1])
+	param_parent, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.List(param_projectsId, param_instancesId)
+	call := service.List(param_parent)
 
 	// Set query parameters.
 	if value, ok := flagValues["pageToken"]; ok {
@@ -1512,12 +1412,10 @@ func Bigtableadmin_v2_ProjectsInstancesTablesModifyColumnFamilies(context Contex
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("instancesId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("tablesId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2/projects/{projectsId}/instances/{instancesId}/tables/{tablesId}:modifyColumnFamilies", "+") {
+			if strings.Contains("v2/{+name}:modifyColumnFamilies", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -1564,29 +1462,19 @@ func Bigtableadmin_v2_ProjectsInstancesTablesModifyColumnFamilies(context Contex
 	}
 
 	expectedParams := []string{
-		"projectsId",
-		"instancesId",
-		"tablesId",
+		"name",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_instancesId, err := commands_util.ConvertValue_string(paramValues[1])
-	if err != nil {
-		return err
-	}
-	param_tablesId, err := commands_util.ConvertValue_string(paramValues[2])
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.ModifyColumnFamilies(param_projectsId, param_instancesId, param_tablesId,
+	call := service.ModifyColumnFamilies(param_name,
 		request,
 	)
 
@@ -1608,11 +1496,10 @@ func Bigtableadmin_v2_ProjectsInstancesUpdate(context Context, args ...string) e
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("instancesId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2/projects/{projectsId}/instances/{instancesId}", "+") {
+			if strings.Contains("v2/{+name}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -1659,24 +1546,19 @@ func Bigtableadmin_v2_ProjectsInstancesUpdate(context Context, args ...string) e
 	}
 
 	expectedParams := []string{
-		"projectsId",
-		"instancesId",
+		"name",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_instancesId, err := commands_util.ConvertValue_string(paramValues[1])
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Update(param_projectsId, param_instancesId,
+	call := service.Update(param_name,
 		request,
 	)
 

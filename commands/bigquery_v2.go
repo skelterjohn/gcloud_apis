@@ -571,7 +571,7 @@ func Bigquery_v2_JobsCancel(context Context, args ...string) error {
 		pathParams = append(pathParams, commands_util.AngrySnakes("jobId"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("project/{projectId}/jobs/{jobId}/cancel", "+") {
+			if strings.Contains("projects/{projectId}/jobs/{jobId}/cancel", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")

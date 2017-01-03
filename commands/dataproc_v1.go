@@ -377,6 +377,8 @@ func Dataproc_v1_ProjectsRegionsClustersList(context Context, args ...string) er
 			}
 		}
 
+		usageBits += " [--filter=VALUE]"
+
 		usageBits += " [--pageSize=VALUE]"
 
 		usageBits += " [--pageToken=VALUE]"
@@ -393,6 +395,7 @@ func Dataproc_v1_ProjectsRegionsClustersList(context Context, args ...string) er
 	service := api_client.NewProjectsRegionsClustersService(api_service)
 
 	queryParamNames := map[string]bool{
+		"filter":    false,
 		"pageSize":  false,
 		"pageToken": false,
 	}
@@ -434,6 +437,13 @@ func Dataproc_v1_ProjectsRegionsClustersList(context Context, args ...string) er
 	call := service.List(param_projectId, param_region)
 
 	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
 	if value, ok := flagValues["pageSize"]; ok {
 		query_pageSize, err := commands_util.ConvertValue_int64(value)
 		if err != nil {
@@ -841,6 +851,8 @@ func Dataproc_v1_ProjectsRegionsJobsList(context Context, args ...string) error 
 
 		usageBits += " [--clusterName=VALUE]"
 
+		usageBits += " [--filter=VALUE]"
+
 		usageBits += " [--jobStateMatcher=VALUE]"
 
 		usageBits += " [--pageSize=VALUE]"
@@ -860,6 +872,7 @@ func Dataproc_v1_ProjectsRegionsJobsList(context Context, args ...string) error 
 
 	queryParamNames := map[string]bool{
 		"clusterName":     false,
+		"filter":          false,
 		"jobStateMatcher": false,
 		"pageSize":        false,
 		"pageToken":       false,
@@ -908,6 +921,13 @@ func Dataproc_v1_ProjectsRegionsJobsList(context Context, args ...string) error 
 			return err
 		}
 		call.ClusterName(query_clusterName)
+	}
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
 	}
 	if value, ok := flagValues["jobStateMatcher"]; ok {
 		query_jobStateMatcher, err := commands_util.ConvertValue_string(value)

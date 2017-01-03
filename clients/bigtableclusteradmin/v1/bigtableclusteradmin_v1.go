@@ -387,7 +387,12 @@ type OperationsCancelCall struct {
 // returns `google.rpc.Code.UNIMPLEMENTED`. Clients can use
 // [Operations.GetOperation][google.longrunning.Operations.GetOperation]
 // or other methods to check whether the cancellation succeeded or
-// whether the operation completed despite cancellation.
+// whether the operation completed despite cancellation. On successful
+// cancellation, the operation is not deleted; instead, it becomes an
+// operation with an
+// [Operation.error][google.longrunning.Operation.error] value with a
+// [google.rpc.Status.code][google.rpc.Status.code] of 1, corresponding
+// to `Code.CANCELLED`.
 func (r *OperationsService) Cancel(name string, canceloperationrequest *CancelOperationRequest) *OperationsCancelCall {
 	c := &OperationsCancelCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -472,7 +477,7 @@ func (c *OperationsCancelCall) Do(opts ...googleapi.CallOption) (*Empty, error) 
 	}
 	return ret, nil
 	// {
-	//   "description": "Starts asynchronous cancellation on a long-running operation. The server makes a best effort to cancel the operation, but success is not guaranteed. If the server doesn't support this method, it returns `google.rpc.Code.UNIMPLEMENTED`. Clients can use [Operations.GetOperation][google.longrunning.Operations.GetOperation] or other methods to check whether the cancellation succeeded or whether the operation completed despite cancellation.",
+	//   "description": "Starts asynchronous cancellation on a long-running operation. The server makes a best effort to cancel the operation, but success is not guaranteed. If the server doesn't support this method, it returns `google.rpc.Code.UNIMPLEMENTED`. Clients can use [Operations.GetOperation][google.longrunning.Operations.GetOperation] or other methods to check whether the cancellation succeeded or whether the operation completed despite cancellation. On successful cancellation, the operation is not deleted; instead, it becomes an operation with an [Operation.error][google.longrunning.Operation.error] value with a [google.rpc.Status.code][google.rpc.Status.code] of 1, corresponding to `Code.CANCELLED`.",
 	//   "httpMethod": "POST",
 	//   "id": "bigtableclusteradmin.operations.cancel",
 	//   "parameterOrder": [

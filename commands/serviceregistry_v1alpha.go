@@ -266,6 +266,8 @@ func Serviceregistry_v1alpha_EndpointsList(context Context, args ...string) erro
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -282,6 +284,7 @@ func Serviceregistry_v1alpha_EndpointsList(context Context, args ...string) erro
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -330,6 +333,13 @@ func Serviceregistry_v1alpha_EndpointsList(context Context, args ...string) erro
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -616,6 +626,8 @@ func Serviceregistry_v1alpha_OperationsList(context Context, args ...string) err
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -632,6 +644,7 @@ func Serviceregistry_v1alpha_OperationsList(context Context, args ...string) err
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -680,6 +693,13 @@ func Serviceregistry_v1alpha_OperationsList(context Context, args ...string) err
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)

@@ -186,6 +186,10 @@ type GoogleApi__HttpBody struct {
 	// Data: HTTP body binary data.
 	Data string `json:"data,omitempty"`
 
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
 	// ForceSendFields is a list of field names (e.g. "ContentType") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
@@ -197,618 +201,6 @@ type GoogleApi__HttpBody struct {
 
 func (s *GoogleApi__HttpBody) MarshalJSON() ([]byte, error) {
 	type noMethod GoogleApi__HttpBody
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// GoogleCloudMlV1alpha3__CreateVersionRequest: Uploads the provided
-// trained model version to Cloud Machine Learning.
-type GoogleCloudMlV1alpha3__CreateVersionRequest struct {
-	// Parent: The name of the model.
-	Parent string `json:"parent,omitempty"`
-
-	// Version: The version details.
-	Version *GoogleCloudMlV1alpha3__Version `json:"version,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "Parent") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *GoogleCloudMlV1alpha3__CreateVersionRequest) MarshalJSON() ([]byte, error) {
-	type noMethod GoogleCloudMlV1alpha3__CreateVersionRequest
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// GoogleCloudMlV1alpha3__HyperparameterJobResult: Represents the result
-// of a hyperparameter tuning run from a training job.
-type GoogleCloudMlV1alpha3__HyperparameterJobResult struct {
-	// BestObjectiveValue: The best objective value seen for this run.
-	BestObjectiveValue float64 `json:"bestObjectiveValue,omitempty"`
-
-	// BestTrainingStep: The training step associated with the best
-	// objective value.
-	BestTrainingStep int64 `json:"bestTrainingStep,omitempty,string"`
-
-	// Hyperparameters: The hyperparameters given to this run.
-	Hyperparameters map[string]string `json:"hyperparameters,omitempty"`
-
-	// RunId: The run id for these results.
-	RunId string `json:"runId,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "BestObjectiveValue")
-	// to unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *GoogleCloudMlV1alpha3__HyperparameterJobResult) MarshalJSON() ([]byte, error) {
-	type noMethod GoogleCloudMlV1alpha3__HyperparameterJobResult
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// GoogleCloudMlV1alpha3__HyperparameterSpec: Represents a set of
-// hyperparameters to optimize.
-type GoogleCloudMlV1alpha3__HyperparameterSpec struct {
-	// Goal: Should the evaluation metric be maximized or minimized?
-	//
-	// Possible values:
-	//   "GOAL_TYPE_UNSPECIFIED" - Goal Type will default to maximize.
-	//   "MAXIMIZE" - Maximize the goal metric.
-	//   "MINIMIZE" - Minimize the goal metric.
-	Goal string `json:"goal,omitempty"`
-
-	// MaxParallelRuns: How many training runs should be run in parallel.
-	// More parallelization
-	// will be faster, but parallel runs only benefit from the information
-	// gained
-	// by previous runs. Each run will use the number of workers specified
-	// by
-	// the worker, parameter server, and evaluator specs. Defaults to one.
-	MaxParallelRuns int64 `json:"maxParallelRuns,omitempty"`
-
-	// MaxRuns: How many training runs should be attempted to optimize.
-	// Defaults to one.
-	MaxRuns int64 `json:"maxRuns,omitempty"`
-
-	// Params: The set of parameters to tune.
-	Params []*GoogleCloudMlV1alpha3__ParameterConfig `json:"params,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "Goal") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *GoogleCloudMlV1alpha3__HyperparameterSpec) MarshalJSON() ([]byte, error) {
-	type noMethod GoogleCloudMlV1alpha3__HyperparameterSpec
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// GoogleCloudMlV1alpha3__JobMetadata: Represents the metadata of the
-// longrunning.Operation created by
-// the SubmitTrainingJob or SubmitPredictionJob method.
-type GoogleCloudMlV1alpha3__JobMetadata struct {
-	// CreateTime: When the job was submitted.
-	CreateTime string `json:"createTime,omitempty"`
-
-	// CreateVersionRequest: The create version job request recorded.
-	// The create version job request recorded.
-	CreateVersionRequest *GoogleCloudMlV1alpha3__CreateVersionRequest `json:"createVersionRequest,omitempty"`
-
-	// EndTime: When the job processing was completed.
-	EndTime string `json:"endTime,omitempty"`
-
-	// IsCancellationRequested: Whether the cancellation of this job has
-	// been requested.
-	IsCancellationRequested bool `json:"isCancellationRequested,omitempty"`
-
-	// JobState: The detailed state of a job.
-	//
-	// Possible values:
-	//   "UNKNOWN_JOB_STATE"
-	//   "QUEUED"
-	//   "PREPARING"
-	//   "RUNNING"
-	//   "SUCCEEDED"
-	//   "FAILED"
-	//   "CANCELLED"
-	JobState string `json:"jobState,omitempty"`
-
-	// PredictionRequest: The prediction job request recorded.
-	PredictionRequest *GoogleCloudMlV1alpha3__SubmitPredictionJobRequest `json:"predictionRequest,omitempty"`
-
-	// PredictionResult: The current prediction job result.
-	PredictionResult *GoogleCloudMlV1alpha3__PredictionJobResult `json:"predictionResult,omitempty"`
-
-	// StartTime: When the job processing was started.
-	StartTime string `json:"startTime,omitempty"`
-
-	// StatusMetricsSnapshot: Progress report. A set of key-value pairs that
-	// convey the current
-	// state of the job.
-	StatusMetricsSnapshot map[string]string `json:"statusMetricsSnapshot,omitempty"`
-
-	// StatusMetricsSnapshotTime: The time at which the 'status' field was
-	// populated.
-	StatusMetricsSnapshotTime string `json:"statusMetricsSnapshotTime,omitempty"`
-
-	// TrainingRequest: The training job request recorded.
-	TrainingRequest *GoogleCloudMlV1alpha3__SubmitTrainingJobRequest `json:"trainingRequest,omitempty"`
-
-	// TrainingResult: The current training job result.
-	TrainingResult *GoogleCloudMlV1alpha3__TrainingJobResult `json:"trainingResult,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "CreateTime") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *GoogleCloudMlV1alpha3__JobMetadata) MarshalJSON() ([]byte, error) {
-	type noMethod GoogleCloudMlV1alpha3__JobMetadata
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// GoogleCloudMlV1alpha3__MasterSpec: Represents a specification of
-// master worker.
-type GoogleCloudMlV1alpha3__MasterSpec struct {
-	// ReplicaCount: The required number of master worker servers. Defaults
-	// to 1.
-	// If the number of replicas is greater than 1, the first master
-	// worker
-	// will be the one monitored for success/failure.
-	ReplicaCount uint64 `json:"replicaCount,omitempty,string"`
-
-	// Resources: Resource requirements for a master.
-	// If not specified, default master configuration will be used.
-	Resources *GoogleCloudMlV1alpha3__ResourceSpec `json:"resources,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "ReplicaCount") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *GoogleCloudMlV1alpha3__MasterSpec) MarshalJSON() ([]byte, error) {
-	type noMethod GoogleCloudMlV1alpha3__MasterSpec
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// GoogleCloudMlV1alpha3__ParameterConfig: Represents a single
-// hyperparameter to optimize.
-type GoogleCloudMlV1alpha3__ParameterConfig struct {
-	// Categories: The list of possible categories. REQUIRED if
-	// type==CATEGORICAL.
-	Categories []string `json:"categories,omitempty"`
-
-	// FeasiblePoints: A list of feasible points, to be provided if and only
-	// if type==DISCRETE.
-	// The list should be in strictly increasing order. For instance,
-	// this
-	// Parameter might have possible settings of 1.5, 2.5, and 4.0. This
-	// list
-	// shouldn't be too large - probably not more than 1,000 points.
-	FeasiblePoints []float64 `json:"feasiblePoints,omitempty"`
-
-	// MaxValue: max_value is REQUIRED if type==DOUBLE or type==INTEGER.
-	// This field
-	// should be unset if type==CATEGORICAL. This value should be integers
-	// if
-	// type==INTEGER.
-	MaxValue float64 `json:"maxValue,omitempty"`
-
-	// MinValue: min_value is REQUIRED if type==DOUBLE or type==INTEGER.
-	// This field
-	// should be unset if type==CATEGORICAL. This value should be integers
-	// if
-	// type==INTEGER.
-	MinValue float64 `json:"minValue,omitempty"`
-
-	// Name: The parameter name must be unique amongst all ParameterConfigs
-	// in a
-	// HyperparameterConfig. E.g., "learning_rate".
-	Name string `json:"name,omitempty"`
-
-	// ScaleType: How the parameter should be scaled to the hypercube. Leave
-	// unset for
-	// categorical Parameters. We strongly suggest using some kind of
-	// scaling for
-	// real or integral parameters (e.g., UNIT_LINEAR_SCALE).
-	//
-	// Possible values:
-	//   "NONE" - By default, no scaling is applied.
-	//   "UNIT_LINEAR_SCALE" - Scales the feasible space to (0, 1) linearly.
-	//   "UNIT_LOG_SCALE" - Scales the feasible space logarithmically to (0,
-	// 1). The entire feasible
-	// space must be strictly positive.
-	//   "UNIT_REVERSE_LOG_SCALE" - Scales the feasible space "reverse"
-	// logarithmically to (0, 1). The result
-	// is that values close to the top of the feasible space are spread out
-	// more
-	// than points near the bottom. The entire feasible space must be
-	// strictly
-	// positive.
-	ScaleType string `json:"scaleType,omitempty"`
-
-	// Type: The type of the parameter.
-	//
-	// Possible values:
-	//   "PARAMETER_TYPE_UNSPECIFIED" - Parameter type must be specified.
-	// Unspecified values will be treated
-	// as an error.
-	//   "DOUBLE" - Type for real-valued parameters.
-	//   "INTEGER" - Type for integral parameters.
-	//   "CATEGORICAL" - The parameter is categorical, with a value chosen
-	// from the categories
-	// field.
-	//   "DISCRETE" - The parameter is real valued, with a fixed set of
-	// feasible points. If
-	// type==DISCRETE, feasible_points must be provided, and
-	// {min_value, max_value} will be ignored.
-	Type string `json:"type,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "Categories") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *GoogleCloudMlV1alpha3__ParameterConfig) MarshalJSON() ([]byte, error) {
-	type noMethod GoogleCloudMlV1alpha3__ParameterConfig
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// GoogleCloudMlV1alpha3__ParameterServerSpec: Represents a
-// specification of parameter servers.
-type GoogleCloudMlV1alpha3__ParameterServerSpec struct {
-	// ReplicaCount: The required number of parameter servers. Defaults to
-	// 1.
-	ReplicaCount uint64 `json:"replicaCount,omitempty,string"`
-
-	// Resources: Resource requirements for a single parameter server.
-	// If not specified, default parameter server configuration will be
-	// used.
-	Resources *GoogleCloudMlV1alpha3__ResourceSpec `json:"resources,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "ReplicaCount") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *GoogleCloudMlV1alpha3__ParameterServerSpec) MarshalJSON() ([]byte, error) {
-	type noMethod GoogleCloudMlV1alpha3__ParameterServerSpec
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// GoogleCloudMlV1alpha3__PredictionJobResult: Represents the result of
-// the longrunning.Operation created by the
-// SubmitPredictionJob method.
-type GoogleCloudMlV1alpha3__PredictionJobResult struct {
-	// InstancesProcessed: The number of data instances processed
-	InstancesProcessed uint64 `json:"instancesProcessed,omitempty,string"`
-
-	// OutputUri: The URI of the output dir provided at job creation time.
-	OutputUri string `json:"outputUri,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "InstancesProcessed")
-	// to unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *GoogleCloudMlV1alpha3__PredictionJobResult) MarshalJSON() ([]byte, error) {
-	type noMethod GoogleCloudMlV1alpha3__PredictionJobResult
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// GoogleCloudMlV1alpha3__ResourceSpec: Resource specification for a
-// program running inside a VM.
-type GoogleCloudMlV1alpha3__ResourceSpec struct {
-	// Cpus: The number of CPUs.
-	Cpus uint64 `json:"cpus,omitempty,string"`
-
-	// Disk: The required disk size (in bytes).
-	Disk uint64 `json:"disk,omitempty,string"`
-
-	// Gpus: The number of GPUs. Only allowed to be set within WorkerSpec.
-	Gpus uint64 `json:"gpus,omitempty,string"`
-
-	// Ram: The required RAM size (in bytes).
-	Ram uint64 `json:"ram,omitempty,string"`
-
-	// ForceSendFields is a list of field names (e.g. "Cpus") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *GoogleCloudMlV1alpha3__ResourceSpec) MarshalJSON() ([]byte, error) {
-	type noMethod GoogleCloudMlV1alpha3__ResourceSpec
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// GoogleCloudMlV1alpha3__SubmitPredictionJobRequest: Request to submit
-// a batch prediction job against a trained model.
-type GoogleCloudMlV1alpha3__SubmitPredictionJobRequest struct {
-	// InputUris: URIs of the TFRecord input data files. May contain
-	// file-system appropriate
-	// wildcards (Google Cloud Storage prefixes, for example.).
-	InputUris []string `json:"inputUris,omitempty"`
-
-	// JobName: The job name. Must be unique within the project.
-	JobName string `json:"jobName,omitempty"`
-
-	// OutputUri: The uri to which output is written, a Google Cloud Storage
-	// prefix
-	// for example.
-	OutputUri string `json:"outputUri,omitempty"`
-
-	// Parent: The name of the model against which prediction should be
-	// performed. It is
-	// of the form:
-	// /projects/project_id/models/model_name/versions/version_id.
-	// The version information may be omitted, in which case prediction
-	// is
-	// performed against the default version.
-	Parent string `json:"parent,omitempty"`
-
-	// Zone: Optional. The Google Compute Engine zone to run the training
-	// job in.
-	// If not specified, the system will pick a zone based on the
-	// job
-	// requirements. It is the user's responsibility to procure quota
-	// in this zone.
-	Zone string `json:"zone,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "InputUris") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *GoogleCloudMlV1alpha3__SubmitPredictionJobRequest) MarshalJSON() ([]byte, error) {
-	type noMethod GoogleCloudMlV1alpha3__SubmitPredictionJobRequest
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// GoogleCloudMlV1alpha3__SubmitTrainingJobRequest: Request message for
-// the SubmitTrainingJob method.
-type GoogleCloudMlV1alpha3__SubmitTrainingJobRequest struct {
-	// EvalDataPaths: The URIs of the data used for evaluation.
-	EvalDataPaths []string `json:"evalDataPaths,omitempty"`
-
-	// Hyperparameters: Optional set of Hyperparameters to tune.
-	Hyperparameters *GoogleCloudMlV1alpha3__HyperparameterSpec `json:"hyperparameters,omitempty"`
-
-	// JobArgs: Additional command line arguments to pass to the program.
-	JobArgs []string `json:"jobArgs,omitempty"`
-
-	// JobName: The job name. Must be unique within the project.
-	JobName string `json:"jobName,omitempty"`
-
-	// LogLevel: Specify minimun log levels.
-	//
-	// Possible values:
-	//   "UNKNOWN" - No log level specified.
-	//   "DEBUG" - Debug logs and above will be saved.
-	//   "INFO" - Info logs and above will be saved.
-	//   "WARNING" - Warning logs and above will be saved.
-	//   "ERROR" - Error logs and above will be saved.
-	//   "CRITICAL" - Only critical logs will be saved.
-	LogLevel string `json:"logLevel,omitempty"`
-
-	// MasterSpec: Specification of master workers. The first master
-	// worker
-	// will be the task monitored for job success/failure.
-	MasterSpec *GoogleCloudMlV1alpha3__MasterSpec `json:"masterSpec,omitempty"`
-
-	// MetadataPath: Optional. The URI of the file containing metadata.
-	MetadataPath string `json:"metadataPath,omitempty"`
-
-	// ModuleName: The python module name to run after installing the
-	// trainer_uri packages.
-	// The worker will be given a flag telling the type of the
-	// process:
-	// worker, parameter server or evaluator. Required if docker_image is
-	// not set.
-	ModuleName string `json:"moduleName,omitempty"`
-
-	// OutputPath: The URI of the Google Cloud Storage location to which
-	// output should be
-	// written. This URI may have additional subdirectories appended to it,
-	// e.g.,
-	// during hyperparameter tuning, and the possibly modified URI is passed
-	// to
-	// the binary as the --output_path flag. Training binaries should
-	// generally
-	// respect this parameter for their output and are required to do so
-	// when
-	// launching from Google Cloud Dataflow or when using hyperparameter
-	// tuning.
-	OutputPath string `json:"outputPath,omitempty"`
-
-	// Parent: The project name.
-	Parent string `json:"parent,omitempty"`
-
-	// PsSpec: Specification of parameter servers.
-	PsSpec *GoogleCloudMlV1alpha3__ParameterServerSpec `json:"psSpec,omitempty"`
-
-	// TensorflowVersion: The version of TensorFlow to use. If unset,
-	// defaults to LATEST.
-	//
-	// Possible values:
-	//   "LATEST" - Equivalent to the latest supported version, i.e., the
-	// last version
-	// in this list of enums.
-	//   "V_0_9_1" - Tensorflow version 0.9.1
-	TensorflowVersion string `json:"tensorflowVersion,omitempty"`
-
-	// TrainDataPaths: The URIs of the training data.
-	TrainDataPaths []string `json:"trainDataPaths,omitempty"`
-
-	// TrainerUri: Tarball Python Packages from Google Cloud Storage with
-	// the training program
-	// and any additional dependencies. At least one is required if
-	// docker_image
-	// is not set.
-	TrainerUri []string `json:"trainerUri,omitempty"`
-
-	// WorkerSpec: Specification of workers.
-	WorkerSpec *GoogleCloudMlV1alpha3__WorkerSpec `json:"workerSpec,omitempty"`
-
-	// Zone: Optional. The Google Compute Engine zone to run the training
-	// job in.
-	// If not specified, the system will pick a zone based on the
-	// job
-	// requirements. It is the user's responsibility to procure quota
-	// in this zone.
-	Zone string `json:"zone,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "EvalDataPaths") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *GoogleCloudMlV1alpha3__SubmitTrainingJobRequest) MarshalJSON() ([]byte, error) {
-	type noMethod GoogleCloudMlV1alpha3__SubmitTrainingJobRequest
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// GoogleCloudMlV1alpha3__TrainingJobResult: Represents the result of
-// the longrunning.Operation created by the
-// SubmitTrainingJob method.
-type GoogleCloudMlV1alpha3__TrainingJobResult struct {
-	// OutputPath: The URI of the output location provided at job creation
-	// time.
-	OutputPath string `json:"outputPath,omitempty"`
-
-	// Runs: Results for individual Hyperparameter runs.
-	Runs []*GoogleCloudMlV1alpha3__HyperparameterJobResult `json:"runs,omitempty"`
-
-	// RunsCompleted: The number of tuning runs completed successfully.
-	RunsCompleted uint64 `json:"runsCompleted,omitempty,string"`
-
-	// StepsCompleted: The accomplished number of steps.
-	StepsCompleted uint64 `json:"stepsCompleted,omitempty,string"`
-
-	// ForceSendFields is a list of field names (e.g. "OutputPath") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *GoogleCloudMlV1alpha3__TrainingJobResult) MarshalJSON() ([]byte, error) {
-	type noMethod GoogleCloudMlV1alpha3__TrainingJobResult
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// GoogleCloudMlV1alpha3__Version: Represents a version of the model.
-type GoogleCloudMlV1alpha3__Version struct {
-	// CreateTime: The creation time of the version.
-	CreateTime string `json:"createTime,omitempty"`
-
-	// IsDefault: Whether the version is default within the model.
-	IsDefault bool `json:"isDefault,omitempty"`
-
-	// LastUseTime: The last usage time of the version.
-	LastUseTime string `json:"lastUseTime,omitempty"`
-
-	// Name: The user-specified name of the model version.
-	Name string `json:"name,omitempty"`
-
-	// OriginUri: Google Cloud Storage location containing the model graph,
-	// weights and
-	// additional metadata at the moment when the version is created.
-	OriginUri string `json:"originUri,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "CreateTime") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *GoogleCloudMlV1alpha3__Version) MarshalJSON() ([]byte, error) {
-	type noMethod GoogleCloudMlV1alpha3__Version
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// GoogleCloudMlV1alpha3__WorkerSpec: Represents a specification of
-// training workers.
-type GoogleCloudMlV1alpha3__WorkerSpec struct {
-	// ReplicaCount: The required number of workers. Defaults to 1.
-	ReplicaCount uint64 `json:"replicaCount,omitempty,string"`
-
-	// Resources: Resource requirements for a single worker. Optional.
-	// If not specified, default worker configuration will be used.
-	Resources *GoogleCloudMlV1alpha3__ResourceSpec `json:"resources,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "ReplicaCount") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *GoogleCloudMlV1alpha3__WorkerSpec) MarshalJSON() ([]byte, error) {
-	type noMethod GoogleCloudMlV1alpha3__WorkerSpec
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
@@ -842,15 +234,14 @@ func (s *GoogleCloudMlV1beta1HyperparameterOutputHyperparameterMetric) MarshalJS
 type GoogleCloudMlV1beta1__CancelJobRequest struct {
 }
 
-// GoogleCloudMlV1beta1__GetConfigResponse: Returns service
-// configuration associated with a given project.
+// GoogleCloudMlV1beta1__GetConfigResponse: Returns service account
+// information associated with a project.
 type GoogleCloudMlV1beta1__GetConfigResponse struct {
 	// ServiceAccount: The service account Cloud ML uses to access resources
 	// in the project.
 	ServiceAccount string `json:"serviceAccount,omitempty"`
 
-	// ServiceAccountProject: Project number associated with
-	// 'service_account'.
+	// ServiceAccountProject: The project number for `service_account`.
 	ServiceAccountProject int64 `json:"serviceAccountProject,omitempty,string"`
 
 	// ServerResponse contains the HTTP response code and headers from the
@@ -873,7 +264,12 @@ func (s *GoogleCloudMlV1beta1__GetConfigResponse) MarshalJSON() ([]byte, error) 
 }
 
 // GoogleCloudMlV1beta1__HyperparameterOutput: Represents the result of
-// a hyperparameter tuning trial from a training job.
+// a single hyperparameter tuning trial from a
+// training job. The TrainingOutput object that is returned on
+// successful
+// completion of a training job with hyperparameter tuning includes a
+// list
+// of HyperparameterOutput objects, one for each successful trial.
 type GoogleCloudMlV1beta1__HyperparameterOutput struct {
 	// AllMetrics: All recorded object metrics for this trial.
 	AllMetrics []*GoogleCloudMlV1beta1HyperparameterOutputHyperparameterMetric `json:"allMetrics,omitempty"`
@@ -905,8 +301,11 @@ func (s *GoogleCloudMlV1beta1__HyperparameterOutput) MarshalJSON() ([]byte, erro
 // GoogleCloudMlV1beta1__HyperparameterSpec: Represents a set of
 // hyperparameters to optimize.
 type GoogleCloudMlV1beta1__HyperparameterSpec struct {
-	// Goal: Required. Should the evaluation metric be maximized or
-	// minimized?
+	// Goal: Required. The type of goal to use for tuning. Available types
+	// are
+	// `MAXIMIZE` and `MINIMIZE`.
+	//
+	// Defaults to `MAXIMIZE`.
 	//
 	// Possible values:
 	//   "GOAL_TYPE_UNSPECIFIED" - Goal Type will default to maximize.
@@ -914,17 +313,27 @@ type GoogleCloudMlV1beta1__HyperparameterSpec struct {
 	//   "MINIMIZE" - Minimize the goal metric.
 	Goal string `json:"goal,omitempty"`
 
-	// MaxParallelTrials: Optional. How many training trials should be run
-	// in parallel.
-	// More parallelization will be faster, but parallel trials only
-	// benefit
-	// from the information gained by previous trials.
+	// MaxParallelTrials: Optional. The number of training trials to run
+	// concurrently.
+	// You can reduce the time it takes to perform hyperparameter tuning by
+	// adding
+	// trials in parallel. However, each trail only benefits from the
+	// information
+	// gained in completed trials. That means that a trial does not get
+	// access to
+	// the results of trials running at the same time, which could reduce
+	// the
+	// quality of the overall optimization.
+	//
 	// Each trial will use the same scale tier and machine types.
+	//
 	// Defaults to one.
 	MaxParallelTrials int64 `json:"maxParallelTrials,omitempty"`
 
 	// MaxTrials: Optional. How many training trials should be attempted to
-	// optimize.
+	// optimize
+	// the specified hyperparameters.
+	//
 	// Defaults to one.
 	MaxTrials int64 `json:"maxTrials,omitempty"`
 
@@ -974,10 +383,10 @@ type GoogleCloudMlV1beta1__Job struct {
 	//
 	// Possible values:
 	//   "STATE_UNSPECIFIED" - The job state is unspecified.
-	//   "QUEUED" - The job has been just created and is awaiting to be
-	// processed.
-	//   "PREPARING" - The job is being prepared to run.
-	//   "RUNNING" - Training or prediction is in progress.
+	//   "QUEUED" - The job has been just created and processing has not yet
+	// begun.
+	//   "PREPARING" - The service is preparing to run the job.
+	//   "RUNNING" - The job is in progress.
 	//   "SUCCEEDED" - The job completed successfully.
 	//   "FAILED" - The job failed.
 	// `error_message` should contain the details of the failure.
@@ -1018,8 +427,9 @@ type GoogleCloudMlV1beta1__ListJobsResponse struct {
 	// Jobs: The list of jobs.
 	Jobs []*GoogleCloudMlV1beta1__Job `json:"jobs,omitempty"`
 
-	// NextPageToken: Optional pagination token to use for retrieving the
-	// next page of results.
+	// NextPageToken: Optional. Pass this token as the `page_token` field of
+	// the request for a
+	// subsequent call.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
@@ -1047,8 +457,9 @@ type GoogleCloudMlV1beta1__ListModelsResponse struct {
 	// Models: The list of models.
 	Models []*GoogleCloudMlV1beta1__Model `json:"models,omitempty"`
 
-	// NextPageToken: Optional pagination token to use for retrieving the
-	// next page of results.
+	// NextPageToken: Optional. Pass this token as the `page_token` field of
+	// the request for a
+	// subsequent call.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
@@ -1073,8 +484,9 @@ func (s *GoogleCloudMlV1beta1__ListModelsResponse) MarshalJSON() ([]byte, error)
 // GoogleCloudMlV1beta1__ListVersionsResponse: Response message for the
 // ListVersions method.
 type GoogleCloudMlV1beta1__ListVersionsResponse struct {
-	// NextPageToken: Optional pagination token to use for retrieving the
-	// next page of results.
+	// NextPageToken: Optional. Pass this token as the `page_token` field of
+	// the request for a
+	// subsequent call.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
 	// Versions: The list of versions.
@@ -1099,17 +511,33 @@ func (s *GoogleCloudMlV1beta1__ListVersionsResponse) MarshalJSON() ([]byte, erro
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// GoogleCloudMlV1beta1__Model: Represents a machine learning model
-// resource that can be used to perform
-// prediction.
+// GoogleCloudMlV1beta1__Model: Represents a machine learning
+// solution.
+//
+// A model can have multiple versions, each of which is a deployed,
+// trained
+// model ready to receive prediction requests. The model itself is just
+// a
+// container.
 type GoogleCloudMlV1beta1__Model struct {
-	// DefaultVersion: Output only. The default version of the model.
+	// DefaultVersion: Output only. The default version of the model. This
+	// version will be used to
+	// handle prediction requests that do not specify a version.
+	//
+	// You can change the default version by
+	// calling
+	// [projects.methods.versions.setDefault](/ml/reference/rest/v1be
+	// ta1/projects.models.versions/setDefault).
 	DefaultVersion *GoogleCloudMlV1beta1__Version `json:"defaultVersion,omitempty"`
 
-	// Description: Optional. The description of the model.
+	// Description: Optional. The description specified for the model when
+	// it was created.
 	Description string `json:"description,omitempty"`
 
-	// Name: Required. The user-specified name of the model.
+	// Name: Required. The name specified for the model when it was
+	// created.
+	//
+	// The model name must be unique within the project it is created in.
 	Name string `json:"name,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
@@ -1132,20 +560,36 @@ func (s *GoogleCloudMlV1beta1__Model) MarshalJSON() ([]byte, error) {
 }
 
 // GoogleCloudMlV1beta1__OperationMetadata: Represents the metadata of
-// the longrunning.Operation.
+// the long-running operation.
 type GoogleCloudMlV1beta1__OperationMetadata struct {
-	// CreateTime: When the operation was submitted.
+	// CreateTime: The time the operation was submitted.
 	CreateTime string `json:"createTime,omitempty"`
 
-	// EndTime: When the operation processing was completed.
+	// EndTime: The time operation processing completed.
 	EndTime string `json:"endTime,omitempty"`
 
-	// IsCancellationRequested: Whether the cancellation of this operation
-	// has been requested.
+	// IsCancellationRequested: Indicates whether a request to cancel this
+	// operation has been made.
 	IsCancellationRequested bool `json:"isCancellationRequested,omitempty"`
 
-	// StartTime: When the operation processing was started.
+	// ModelName: Contains the name of the model associated with the
+	// operation.
+	ModelName string `json:"modelName,omitempty"`
+
+	// OperationType: The operation type.
+	//
+	// Possible values:
+	//   "OPERATION_TYPE_UNSPECIFIED" - Unspecified operation type.
+	//   "CREATE_VERSION" - An operation to create a new version.
+	//   "DELETE_VERSION" - An operation to delete an existing version.
+	//   "DELETE_MODEL" - An operation to delete an existing model.
+	OperationType string `json:"operationType,omitempty"`
+
+	// StartTime: The time operation processing started.
 	StartTime string `json:"startTime,omitempty"`
+
+	// Version: Contains the version associated with the operation.
+	Version *GoogleCloudMlV1beta1__Version `json:"version,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "CreateTime") to
 	// unconditionally include in API requests. By default, fields with
@@ -1175,7 +619,7 @@ type GoogleCloudMlV1beta1__ParameterSpec struct {
 	// this
 	// parameter might have possible settings of 1.5, 2.5, and 4.0. This
 	// list
-	// shouldn't be too large - probably not more than 1,000 points.
+	// should not contain more than 1,000 values.
 	DiscreteValues []float64 `json:"discreteValues,omitempty"`
 
 	// MaxValue: Required if typeis `DOUBLE` or `INTEGER`. This field
@@ -1221,9 +665,9 @@ type GoogleCloudMlV1beta1__ParameterSpec struct {
 	// Type: Required. The type of the parameter.
 	//
 	// Possible values:
-	//   "PARAMETER_TYPE_UNSPECIFIED" - Parameter type must be specified.
-	// Unspecified values will be treated
-	// as an error.
+	//   "PARAMETER_TYPE_UNSPECIFIED" - You must specify a valid type. Using
+	// this unspecified type will result in
+	// an error.
 	//   "DOUBLE" - Type for real-valued parameters.
 	//   "INTEGER" - Type for integral parameters.
 	//   "CATEGORICAL" - The parameter is categorical, with a value chosen
@@ -1253,160 +697,126 @@ func (s *GoogleCloudMlV1beta1__ParameterSpec) MarshalJSON() ([]byte, error) {
 // GoogleCloudMlV1beta1__PredictRequest: Request for predictions to be
 // issued against a trained model.
 //
-// The body of the request consists of a single JSON object with a
-// single
-// top-level field:
+// The body of the request is a single JSON object with a single
+// top-level
+// field:
 //
-//  * `instances`: a list of JSON values representing the instances to
+// <dl>
+//   <dt>instances</dt>
+//   <dd>A JSON array containing values representing the instances to
 // use for
-//  prediction.
+//       prediction.</dd>
+// </dl>
 //
-// The structure of each element of the instances list is the type of
-// data
-// your model expects to work on. There are two types of instances:
-// those
-// that include named inputs and those that do not.
+// The structure of each element of the instances list is determined by
+// your
+// model's input definition. Instances can include named inputs or can
+// contain
+// only unlabeled values.
 //
-// Most data does not include named inputs. In this case, each instance
-// will
-// be a JSON boolean, number, string, or (possibly deeply nested) list
-// of
-// any of the above. For instance, if your model accepts rows of CSV
-// data,
-// then each element is a string; if each data instance is a vector of
-// ints
-// or floats, use a JSON list of numbers, etc. More examples are as
-// follows:
+// Most data does not include named inputs. Some instances will be
+// simple
+// JSON values (boolean, number, or string). However, instances are
+// often lists
+// of simple values, or complex nested lists. Here are some examples of
+// request
+// bodies:
 //
+// CSV data with each row encoded as a string value:
 // <pre>
-// # CSV data
-//
-// {"instances": ["1.0,true,\\"x\\"", "-2.0,false,\\"y\\""]}
-//
-// # Text
-//
-// {"instances": ["the quick brown fox", "la bruja le dio"]}
-//
-// # Sentences, each a list of words (vectors of
-// strings).
-//
-// {"instances": [["the","quick","brown"], ["la","bruja","le"]]}
-//
-// # Three instances, each a floating point scalar, e.g., to compute
-// f(x).
-//
-// {"instances": [0.0, 1.1, 2.2]}  # 3 instances (integer scalars)
-//
-// # Two instances, each a 3 element vecor of ints.
-//
-// {"instances": [[0,1,2], [3,4,5],...]}
-//
-// # A single instance, which is 2x3 matrix of ints.
-//
-// {"instances": [[[0,1,2], [3,4,5]], ...]}
-//
-// # A single image represented as a 3-dimensional list with
-// dimesions:
-//
-// # height, width, and channels (3).
-//
-// {"instances": [[[[0,1,2], [3,4,5], …]]]]}
+// {"instances": ["1.0,true,\\"x\\"",
+// "-2.0,false,\\"y\\""]}
 // </pre>
-//
-//  Importantly, if your data is not UTF-8 (the only currently
-// supported
-//  character set), you will need to base64 encode the data and mark it
-// as
-//  binary. The latter is accomplished by using a JSON object of the
-// form:
+// Plain text:
+// <pre>
+// {"instances": ["the quick brown fox", "la bruja le
+// dio"]}
+// </pre>
+// Sentences encoded as lists of words (vectors of
+// strings):
+// <pre>
+// {"instances": [["the","quick","brown"],
+// ["la","bruja","le"]]}
+// </pre>
+// Floating point scalar values:
+// <pre>
+// {"instances": [0.0, 1.1, 2.2]}
+// </pre>
+// Vectors of integers:
+// <pre>
+// {"instances": [[0, 1, 2], [3, 4, 5],...]}
+// </pre>
+// Tensors (in this case, two-dimensional tensors):
+// <pre>
+// {"instances": [[[0, 1, 2], [3, 4, 5]], ...]}
+// </pre>
+// Images represented as a three-dimensional list. In this encoding
+// scheme the
+// first two dimensions represent the rows and columns of the image, and
+// the
+// third contains the R, G, and B values for each
+// pixel.
+// <pre>
+// {"instances": [[[[138, 30, 66], [130, 20, 56], ...]]]]}
+// </pre>
+// Data must be encoded as UTF-8. If your data uses another character
+// encoding,
+// you must base64 encode the data and mark it as binary. To mark a JSON
+// string
+// as binary, replace it with an object with a single attribute named
+// `b`:
 // <pre>{"b": "..."} </pre>
-// in place of any JSON string that is base64 encoded. For
-// example:
+// For example:
 //
+// Two Serialized tf.Examples (fake data, for illustrative purposes
+// only):
 // <pre>
-// # Two Serialized tf.Examples (fake data, for illustrative purposes
-// only)
-//
-// {"instances": [{"b": "X5ad6u"}, {"b": "IA9j4nx"}]}
-//
-// # Two JPEG image byte strings (fake data, for illustrative purposes
-// only)
-//
-// {"instances": [{"b": "ASa8asdf"}, {"b": "JLK7ljk3"}]}
+// {"instances": [{"b64": "X5ad6u"}, {"b64": "IA9j4nx"}]}
 // </pre>
-//
-// In the case that your data includes named references, you will send
-// a
-// JSON object with the named references as the keys. For instance,
-// if
-// you used Cloud ML's preprocessing library and used the JSON
-// key-value
-// pair data format, you would send instances as follows:
-//
+// Two JPEG image byte strings (fake data, for illustrative purposes
+// only):
 // <pre>
-// # JSON input data to be preprocessed.
+// {"instances": [{"b64": "ASa8asdf"}, {"b64": "JLK7ljk3"}]}
+// </pre>
+// If your data includes named references, format each instance as a
+// JSON object
+// with the named references as the keys:
 //
+// JSON input data to be preprocessed:
+// <pre>
 // {"instances": [{"a": 1.0,  "b": true,  "c": "x"},
 //                {"a": -2.0, "b": false, "c": "y"}]}
 // </pre>
+// Some models have an underlying TensorFlow graph that accepts multiple
+// input
+// tensors. In this case, you should use the names of JSON name/value
+// pairs to
+// identify the input tensors, as shown in the following exmaples:
 //
-// Another use case is if your underlying TensorFlow graph contains
-// multiple
-// input tensors, then the keys would be the aliases to the input
-// tensors, e.g.,
-//
+// For a graph with input tensor aliases "tag" (string) and
+// "image"
+// (base64-encoded string):
 // <pre>
-// # Graph with input tensor aliases "tag" (string) and "image"
-// (base64
-//
-// # encoded string).
-//
-// {"instances": [{"tag": "beach", "image": {"b": "ASa8asdf"}},
-//                {"tag": "car", "image": {"b": "JLK7ljk3"}}]}
-//
-// # Graph with input tensor aliases "tag" (string) and "image"
-//
-// # (3-dimensional array of 8-bit ints).
-//
-// {"instances": [{"tag": "beach", "image": [[[263,1,10], [262,2,11],
-// ...]]},
-//                {"tag": "car", "image": [[[10,11,24], [23,10,15],
+// {"instances": [{"tag": "beach", "image": {"b64": "ASa8asdf"}},
+//                {"tag": "car", "image": {"b64":
+// "JLK7ljk3"}}]}
+// </pre>
+// For a graph with input tensor aliases "tag" (string) and
+// "image"
+// (3-dimensional array of 8-bit ints):
+// <pre>
+// {"instances": [{"tag": "beach", "image": [[[263, 1, 10], [262, 2,
+// 11], ...]]},
+//                {"tag": "car", "image": [[[10, 11, 24], [23, 10, 15],
 // ...]]}]}
 // </pre>
-//
-// There is a one-to-one correspondence between the predictions and
-// the
-// instances in the request. Each individual prediction takes the same
-// form
-// as an instance in the request, namely JSON strings, numbers,
-// booleans, or
-// lists thereof. If your model has more than one output tensor,
-// each
-// prediction will be a JSON object with the keys being the output
-// aliases
-// in the graph.
-//
-// Examples:
-//
-// <pre>
-// # Predictions for three input instances, predictions are an integer
-// label,
-//
-// # e.g., a digit in digit recognition
-//
-// {"predictions": [5, 4, 3]}
-//
-// # Predictions for two input instances in a two-class
-// classification
-//
-// # problem. The labels are strings and scores are the probability of
-// "car"
-//
-// # and "beach".
-//
-// {"predictions": [{"label": "beach", "scores": [0.1, 0.9]},
-// {"label": "car", "scores": [0.75, 0.25]}]}
-// </pre>
+// If the call is successful, the response body will contain one
+// prediction
+// entry per instance in the request body. If prediction fails for
+// any
+// instance, the response body will contain no predictions and will
+// contian
+// a single error entry instead.
 type GoogleCloudMlV1beta1__PredictRequest struct {
 	// HttpBody:
 	// Required. The prediction request body.
@@ -1427,85 +837,6 @@ func (s *GoogleCloudMlV1beta1__PredictRequest) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// GoogleCloudMlV1beta1__PredictResponse: Response with predictions
-// produced by a trained model.
-type GoogleCloudMlV1beta1__PredictResponse struct {
-	// HttpBody: The prediction response body.
-	//
-	// Responses are very similar to requests. There are two top-level
-	// fields,
-	// each of which are JSON lists:
-	//
-	//  * `predictions`: The list of predictions for each of the inputs
-	// in the request.
-	//  * `error`: An error message if any instance produced an
-	// error.
-	//
-	// There is a one-to-one correspondence between the predictions and
-	// the
-	// instances in the request. Each individual prediction takes the same
-	// form
-	// as an instance in the request, namely JSON strings, numbers,
-	// booleans,
-	// or lists thereof. If your model has more than one output tensor,
-	// each
-	// prediction will be a JSON object with the keys being the output
-	// aliases
-	// in the graph.
-	//
-	// If there is an error processing any single instance, no
-	// predictions
-	// are returned and the `error` field is populated with the error
-	// message.
-	//
-	// Examples:
-	//
-	// <pre>
-	// # Predictions for three input instances, predictions are an integer
-	// label,
-	//
-	// # e.g., a digit in digit recognition
-	//
-	// {"predictions": [5, 4, 3]}
-	//
-	// # Predictions for two input instances in a two-class
-	// classification
-	//
-	// # problem. The labels are strings and scores are the probability
-	// of
-	//
-	// # "car" and "beach".
-	//
-	// {"predictions": [{"label": "beach", "scores": [0.1, 0.9]},
-	//                  {"label": "car", "scores": [0.75, 0.25]}]}
-	//
-	// # An error:
-	//
-	//  {"error": "Divide by zero"}
-	// </pre>
-	//
-	// Required. The body of the response.
-	HttpBody *GoogleApi__HttpBody `json:"httpBody,omitempty"`
-
-	// ServerResponse contains the HTTP response code and headers from the
-	// server.
-	googleapi.ServerResponse `json:"-"`
-
-	// ForceSendFields is a list of field names (e.g. "HttpBody") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *GoogleCloudMlV1beta1__PredictResponse) MarshalJSON() ([]byte, error) {
-	type noMethod GoogleCloudMlV1beta1__PredictResponse
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
 // GoogleCloudMlV1beta1__PredictionInput: Represents input parameters
 // for a prediction job.
 type GoogleCloudMlV1beta1__PredictionInput struct {
@@ -1517,23 +848,45 @@ type GoogleCloudMlV1beta1__PredictionInput struct {
 	// the
 	// new-line character.
 	//   "TF_RECORD" - The source file is a TFRecord file.
+	//   "TF_RECORD_GZIP" - The source file is a GZIP-compressed TFRecord
+	// file.
 	DataFormat string `json:"dataFormat,omitempty"`
 
-	// InputPaths: Required. The GCS location of the input data files. May
-	// contain wildcards.
+	// InputPaths: Required. The Google Cloud Storage location of the input
+	// data files.
+	// May contain wildcards.
 	InputPaths []string `json:"inputPaths,omitempty"`
 
-	// ModelName: The name of the model. The default version will be used.
+	// MaxWorkerCount: Optional. The maximum number of workers to be used
+	// for parallel processing.
+	// Defaults to 10 if not specified.
+	MaxWorkerCount int64 `json:"maxWorkerCount,omitempty,string"`
+
+	// ModelName: Use this field if you want to use the default version for
+	// the specified
+	// model. The string must use the following
+	// format:
+	//
+	// "projects/<var>[YOUR_PROJECT]</var>/models/<var>[YOUR_MODEL]
+	// </var>"
 	ModelName string `json:"modelName,omitempty"`
 
-	// OutputPath: Required. The output GCS location.
+	// OutputPath: Required. The output Google Cloud Storage location.
 	OutputPath string `json:"outputPath,omitempty"`
 
 	// Region: Required. The Google Compute Engine region to run the
 	// prediction job in.
 	Region string `json:"region,omitempty"`
 
-	// VersionName: The version to be used.
+	// VersionName: Use this field if you want to specify a version of the
+	// model to use. The
+	// string is formatted the same way as `model_version`, with the
+	// addition
+	// of the version
+	// information:
+	//
+	// "projects/<var>[YOUR_PROJECT]</var>/models/<var>YOUR_MO
+	// DEL/versions/<var>[YOUR_VERSION]</var>"
 	VersionName string `json:"versionName,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "DataFormat") to
@@ -1557,8 +910,8 @@ type GoogleCloudMlV1beta1__PredictionOutput struct {
 	// ErrorCount: The number of data instances which resulted in errors.
 	ErrorCount int64 `json:"errorCount,omitempty,string"`
 
-	// OutputPath: The output GCS location provided at the job creation
-	// time.
+	// OutputPath: The output Google Cloud Storage location provided at the
+	// job creation time.
 	OutputPath string `json:"outputPath,omitempty"`
 
 	// PredictionCount: The number of generated predictions.
@@ -1593,16 +946,50 @@ type GoogleCloudMlV1beta1__TrainingInput struct {
 	// Hyperparameters: Optional. The set of Hyperparameters to tune.
 	Hyperparameters *GoogleCloudMlV1beta1__HyperparameterSpec `json:"hyperparameters,omitempty"`
 
-	// MasterType: Optional. Specifies the master machine type.
+	// MasterType: Optional. Specifies the type of virtual machine to use
+	// for your training
+	// job's master worker.
+	//
 	// The following types are supported:
 	//
-	// - `standard`
-	// - `large_model`
-	// - `complex_model`
-	// - `accelerated_s`
-	// - `accelerated_m`
+	// <dl>
+	//   <dt>standard</dt>
+	//   <dd>
+	//   A basic machine configuration suitable for training simple models
+	// with
+	//   small to moderate datasets.
+	//   </dd>
+	//   <dt>large_model</dt>
+	//   <dd>
+	//   A machine with a lot of memory, specially suited for parameter
+	// servers
+	//   when your model is large (having many hidden layers or layers with
+	// very
+	//   large numbers of nodes).
+	//   </dd>
+	//   <dt>complex_model_s</dt>
+	//   <dd>
+	//   A machine suitable for the master and workers of the cluster when
+	// your
+	//   model requires more computation than the standard machine can
+	// handle
+	//   satisfactorily.
+	//   </dd>
+	//   <dt>complex_model_m</dt>
+	//   <dd>
+	//   A machine with roughly twice the number of cores and roughly double
+	// the
+	//   memory of <code suppresswarning="true">complex_model_s</code>.
+	//   </dd>
+	//   <dt>complex_model_l</dt>
+	//   <dd>
+	//   A machine with roughly twice the number of cores and roughly double
+	// the
+	//   memory of <code suppresswarning="true">complex_model_m</code>.
+	//   </dd>
+	// </dl>
 	//
-	// Cannot be used in combination with a standard scale tier.
+	// You must set this value when `scaleTier` is set to `CUSTOM`.
 	MasterType string `json:"masterType,omitempty"`
 
 	// PackageUris: Required. The Google Cloud Storage location of the
@@ -1610,20 +997,28 @@ type GoogleCloudMlV1beta1__TrainingInput struct {
 	// the training program and any additional dependencies.
 	PackageUris []string `json:"packageUris,omitempty"`
 
-	// ParameterServerCount: Optional. Specifies the required amount of
-	// parameter server replicas.
-	// Cannot be used in combination with a standard scale tier.
+	// ParameterServerCount: Optional. The number of parameter server
+	// replicas to use for the training
+	// job. Each replica in the cluster will be of the type specified
+	// in
+	// `parameter_server_type`.
+	//
+	// This value can only be used when `scale_tier` is set to `CUSTOM`.If
+	// you
+	// set this value, you must also set `parameter_server_type`.
 	ParameterServerCount int64 `json:"parameterServerCount,omitempty,string"`
 
-	// ParameterServerType: Optional. Specifies the parameter server machine
-	// type.
-	// The following types are supported:
+	// ParameterServerType: Optional. Specifies the type of virtual machine
+	// to use for your training
+	// job's parameter server.
 	//
-	// - `standard`
-	// - `large_model`
-	// - `complex_model`
+	// The supported values are the same as those described in the entry
+	// for
+	// `master_type`.
 	//
-	// Cannot be used in combination with a standard scale tier.
+	// This value must be present when `scaleTier` is set to `CUSTOM`
+	// and
+	// `parameter_server_count` is greater than zero.
 	ParameterServerType string `json:"parameterServerType,omitempty"`
 
 	// PythonModule: Required. The Python module name to run after
@@ -1634,45 +1029,74 @@ type GoogleCloudMlV1beta1__TrainingInput struct {
 	// training job in.
 	Region string `json:"region,omitempty"`
 
-	// ScaleTier: Required. Specifies the machine types, the amounts of
+	// ScaleTier: Required. Specifies the machine types, the number of
 	// replicas for workers
 	// and parameter servers.
 	//
 	// Possible values:
-	//   "BASIC" - A single worker instance and no parameter servers.
-	//   "STANDARD_1" - A few workers and one parameter server.
-	//   "STANDARD_2" - A medium amount of workers and a few parameter
+	//   "BASIC" - A single worker instance. This tier is suitable for
+	// learning how to use
+	// Cloud ML, and for experimenting with new models using small datasets.
+	//   "STANDARD_1" - Many workers and a few parameter servers.
+	//   "PREMIUM_1" - A large number of workers with many parameter
 	// servers.
-	//   "PREMIUM_1" - A large amount of worker with more parameter servers.
-	//   "PREMIUM_2" - A very large amount of workers with even more
-	// parameter servers.
-	//   "CUSTOM" - Specify your own amounts of replicas in the
-	// `worker_count` and
-	// `parameter_server_count` fields, as well as machine types for the
-	// master,
-	// the workers and the parameter servers.
+	//   "CUSTOM" - The CUSTOM tier is not a set tier, but rather enables
+	// you to use your
+	// own cluster specification. When you use this tier, set values
+	// to
+	// configure your processing cluster according to these guidelines:
+	//
+	// *   You _must_ set `TrainingInput.masterType` to specify the type
+	//     of machine to use for your master node. This is the only
+	// required
+	//     setting.
+	//
+	// *   You _may_ set `TrainingInput.workerCount` to specify the number
+	// of
+	//     workers to use. If you specify one or more workers, you _must_
+	// also
+	//     set `TrainingInput.workerType` to specify the type of machine to
+	// use
+	//     for your worker nodes.
+	//
+	// *   You _may_ set `TrainingInput.parameterServerCount` to specify
+	// the
+	//     number of parameter servers to use. If you specify one or more
+	//     parameter servers, you _must_ also set
+	//     `TrainingInput.parameterServerType` to specify the type of
+	// machine to
+	//     use for your parameter servers.
+	//
+	// Note that all of your workers must use the same machine type, which
+	// can
+	// be different from your parameter server type and master type.
+	// Your
+	// parameter servers must likewise use the same machine type, which can
+	// be
+	// different from your worker type and master type.
 	ScaleTier string `json:"scaleTier,omitempty"`
 
-	// TensorflowVersion: Optional. The version of TensorFlow to use. For
-	// example,
-	// "0.10.1" or "latest".
-	TensorflowVersion string `json:"tensorflowVersion,omitempty"`
-
-	// WorkerCount: Optional. Specifies the required amount of worker
-	// replicas.
-	// Cannot be used in combination with a standard scale tier.
+	// WorkerCount: Optional. The number of worker replicas to use for the
+	// training job. Each
+	// replica in the cluster will be of the type specified in
+	// `worker_type`.
+	//
+	// This value can only be used when `scale_tier` is set to `CUSTOM`. If
+	// you
+	// set this value, you must also set `worker_type`.
 	WorkerCount int64 `json:"workerCount,omitempty,string"`
 
-	// WorkerType: Optional. Specifies the worker machine type.
-	// The following types are supported:
+	// WorkerType: Optional. Specifies the type of virtual machine to use
+	// for your training
+	// job's worker nodes.
 	//
-	// - `standard`
-	// - `large_model`
-	// - `complex_model`
-	// - `accelerated_s`
-	// - `accelerated_m`
+	// The supported values are the same as those described in the entry
+	// for
+	// `masterType`.
 	//
-	// Cannot be used in combination with a standard scale tier.
+	// This value must be present when `scaleTier` is set to `CUSTOM`
+	// and
+	// `workerCount` is greater than zero.
 	WorkerType string `json:"workerType,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Args") to
@@ -1691,13 +1115,22 @@ func (s *GoogleCloudMlV1beta1__TrainingInput) MarshalJSON() ([]byte, error) {
 }
 
 // GoogleCloudMlV1beta1__TrainingOutput: Represents results of a
-// training job.
+// training job. Output only.
 type GoogleCloudMlV1beta1__TrainingOutput struct {
-	// CompletedTrialCount: The number of tuning trials completed
-	// successfully.
+	// CompletedTrialCount: The number of hyperparameter tuning trials that
+	// completed successfully.
+	// Only set for hyperparameter tuning jobs.
 	CompletedTrialCount int64 `json:"completedTrialCount,omitempty,string"`
 
+	// ConsumedMLUnits: The amount of ML units consumed by the job.
+	ConsumedMLUnits float64 `json:"consumedMLUnits,omitempty"`
+
+	// IsHyperparameterTuningJob: Whether this job is a hyperparameter
+	// tuning job.
+	IsHyperparameterTuningJob bool `json:"isHyperparameterTuningJob,omitempty"`
+
 	// Trials: Results for individual Hyperparameter trials.
+	// Only set for hyperparameter tuning jobs.
 	Trials []*GoogleCloudMlV1beta1__HyperparameterOutput `json:"trials,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "CompletedTrialCount")
@@ -1715,28 +1148,67 @@ func (s *GoogleCloudMlV1beta1__TrainingOutput) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// GoogleCloudMlV1beta1__Version: Represents a version of the model.
+// GoogleCloudMlV1beta1__Version: Represents a version of the
+// model.
+//
+// Each version is a trained model deployed in the cloud, ready to
+// handle
+// prediction requests. A model can have multiple versions. You can
+// get
+// information about all of the versions of a given model by
+// calling
+// [projects.models.versions.list](/ml/reference/rest/v1beta1/pro
+// jects.models.versions/list).
 type GoogleCloudMlV1beta1__Version struct {
-	// CreateTime: Output only. The creation time of the version.
+	// CreateTime: Output only. The time the version was created.
 	CreateTime string `json:"createTime,omitempty"`
 
-	// DeploymentUri: Required. Google Cloud Storage object containing the
-	// model graph, weights
-	// and additional metadata at the moment when the version is created.
+	// DeploymentUri: Required. The Google Cloud Storage location of the
+	// trained model used to
+	// create the version. See the
+	// [overview of model deployment](/ml/docs/concepts/deployment-overview)
+	// for
+	// more informaiton.
+	//
+	// When passing Version
+	// to
+	// [projects.models.versions.create](/ml/reference/rest/v1beta1/projec
+	// ts.models.versions/create)
+	// the model service uses the specified location as the source of the
+	// model.
+	// Once deployed, the model version is hosted by the prediction service,
+	// so
+	// this location is useful only as a historical record.
 	DeploymentUri string `json:"deploymentUri,omitempty"`
 
-	// Description: Optional. The description of the model version.
+	// Description: Optional. The description specified for the version when
+	// it was created.
 	Description string `json:"description,omitempty"`
 
-	// IsDefault: Output only. Whether the version is default within the
-	// model.
+	// IsDefault: Output only. If true, this version will be used to handle
+	// prediction
+	// requests that do not specify a version.
+	//
+	// You can change the default version by
+	// calling
+	// [projects.methods.versions.setDefault](/ml/reference/rest/v1be
+	// ta1/projects.models.versions/setDefault).
 	IsDefault bool `json:"isDefault,omitempty"`
 
-	// LastUseTime: Output only. The last usage time of the version.
+	// LastUseTime: Output only. The time the version was last used for
+	// prediction.
 	LastUseTime string `json:"lastUseTime,omitempty"`
 
-	// Name: Required.The user-specified name of the model version.
+	// Name: Required.The name specified for the version when it was
+	// created.
+	//
+	// The version name must be unique within the model it is created in.
 	Name string `json:"name,omitempty"`
+
+	// OnlinePredictionLogging: Optional. If true, enables StackDriver
+	// Logging for online prediction.
+	// Default is false.
+	OnlinePredictionLogging bool `json:"onlinePredictionLogging,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
@@ -1797,7 +1269,8 @@ type GoogleLongrunning__Operation struct {
 	// available.
 	Done bool `json:"done,omitempty"`
 
-	// Error: The error result of the operation in case of failure.
+	// Error: The error result of the operation in case of failure or
+	// cancellation.
 	Error *GoogleRpc__Status `json:"error,omitempty"`
 
 	// Metadata: Service-specific metadata associated with the operation.
@@ -1997,7 +1470,13 @@ type ProjectsGetConfigCall struct {
 	ctx_         context.Context
 }
 
-// GetConfig: Get the service config associated with a given project.
+// GetConfig: Get the service account information associated with your
+// project. You need
+// this information in order to grant the service account persmissions
+// for
+// the Google Cloud Storage location where you put your model training
+// code
+// for training the model with Google Cloud Machine Learning.
 func (r *ProjectsService) GetConfig(projectsId string) *ProjectsGetConfigCall {
 	c := &ProjectsGetConfigCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectsId = projectsId
@@ -2090,7 +1569,7 @@ func (c *ProjectsGetConfigCall) Do(opts ...googleapi.CallOption) (*GoogleCloudMl
 	}
 	return ret, nil
 	// {
-	//   "description": "Get the service config associated with a given project.",
+	//   "description": "Get the service account information associated with your project. You need\nthis information in order to grant the service account persmissions for\nthe Google Cloud Storage location where you put your model training code\nfor training the model with Google Cloud Machine Learning.",
 	//   "flatPath": "v1beta1/projects/{projectsId}:getConfig",
 	//   "httpMethod": "GET",
 	//   "id": "ml.projects.getConfig",
@@ -2099,7 +1578,7 @@ func (c *ProjectsGetConfigCall) Do(opts ...googleapi.CallOption) (*GoogleCloudMl
 	//   ],
 	//   "parameters": {
 	//     "projectsId": {
-	//       "description": "Part of `name`. Required. The project name.",
+	//       "description": "Part of `name`. Required. The project name.\n\nAuthorization: requires `Viewer` role on the specified project.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -2127,6 +1606,69 @@ type ProjectsPredictCall struct {
 }
 
 // Predict: Performs prediction on the data in the request.
+//
+// Responses are very similar to requests. There are two top-level
+// fields,
+// each of which are JSON lists:
+//
+// <dl>
+//   <dt>predictions</dt>
+//   <dd>The list of predictions, one per instance in the request.</dd>
+//   <dt>error</dt>
+//   <dd>An error message returned instead of a prediction list if any
+//       instance produced an error.</dd>
+// </dl>
+//
+// If the call is successful, the response body will contain one
+// prediction
+// entry per instance in the request body. If prediction fails for
+// any
+// instance, the response body will contain no predictions and will
+// contian
+// a single error entry instead.
+//
+// Even though there is one prediction per instance, the format of
+// a
+// prediction is not directly related to the format of an
+// instance.
+// Predictions take whatever format is specified in the outputs
+// collection
+// defined in the model. The collection of predictions is returned in a
+// JSON
+// list. Each member of the list can be a simple value, a list, or a
+// JSON
+// object of any complexity. If your model has more than one output
+// tensor,
+// each prediction will be a JSON object containing a name/value pair
+// for each
+// output. The names identify the output aliases in the graph.
+//
+// The following examples show some possible responses:
+//
+// A simple set of predictions for three input instances, where
+// each
+// prediction is an integer value:
+// <pre>
+// {"predictions": [5, 4, 3]}
+// </pre>
+// A more complex set of predictions, each containing two named values
+// that
+// correspond to output tensors, named **label** and **scores**
+// respectively.
+// The value of **label** is the predicted category ("car" or "beach")
+// and
+// **scores** contains a list of probabilities for that instance across
+// the
+// possible categories.
+// <pre>
+// {"predictions": [{"label": "beach", "scores": [0.1, 0.9]},
+//                  {"label": "car", "scores": [0.75, 0.25]}]}
+// </pre>
+// A response when there is an error processing an input
+// instance:
+// <pre>
+// {"error": "Divide by zero"}
+// </pre>
 func (r *ProjectsService) Predict(projectsId string, googlecloudmlv1beta1__predictrequest *GoogleCloudMlV1beta1__PredictRequest) *ProjectsPredictCall {
 	c := &ProjectsPredictCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectsId = projectsId
@@ -2174,14 +1716,13 @@ func (c *ProjectsPredictCall) doRequest(alt string) (*http.Response, error) {
 }
 
 // Do executes the "ml.projects.predict" call.
-// Exactly one of *GoogleCloudMlV1beta1__PredictResponse or error will
-// be non-nil. Any non-2xx status code is an error. Response headers are
-// in either
-// *GoogleCloudMlV1beta1__PredictResponse.ServerResponse.Header or (if a
-// response was returned at all) in error.(*googleapi.Error).Header. Use
+// Exactly one of *GoogleApi__HttpBody or error will be non-nil. Any
+// non-2xx status code is an error. Response headers are in either
+// *GoogleApi__HttpBody.ServerResponse.Header or (if a response was
+// returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *ProjectsPredictCall) Do(opts ...googleapi.CallOption) (*GoogleCloudMlV1beta1__PredictResponse, error) {
+func (c *ProjectsPredictCall) Do(opts ...googleapi.CallOption) (*GoogleApi__HttpBody, error) {
 	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
@@ -2200,7 +1741,7 @@ func (c *ProjectsPredictCall) Do(opts ...googleapi.CallOption) (*GoogleCloudMlV1
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	ret := &GoogleCloudMlV1beta1__PredictResponse{
+	ret := &GoogleApi__HttpBody{
 		ServerResponse: googleapi.ServerResponse{
 			Header:         res.Header,
 			HTTPStatusCode: res.StatusCode,
@@ -2212,7 +1753,7 @@ func (c *ProjectsPredictCall) Do(opts ...googleapi.CallOption) (*GoogleCloudMlV1
 	}
 	return ret, nil
 	// {
-	//   "description": "Performs prediction on the data in the request.",
+	//   "description": "Performs prediction on the data in the request.\n\nResponses are very similar to requests. There are two top-level fields,\neach of which are JSON lists:\n\n\u003cdl\u003e\n  \u003cdt\u003epredictions\u003c/dt\u003e\n  \u003cdd\u003eThe list of predictions, one per instance in the request.\u003c/dd\u003e\n  \u003cdt\u003eerror\u003c/dt\u003e\n  \u003cdd\u003eAn error message returned instead of a prediction list if any\n      instance produced an error.\u003c/dd\u003e\n\u003c/dl\u003e\n\nIf the call is successful, the response body will contain one prediction\nentry per instance in the request body. If prediction fails for any\ninstance, the response body will contain no predictions and will contian\na single error entry instead.\n\nEven though there is one prediction per instance, the format of a\nprediction is not directly related to the format of an instance.\nPredictions take whatever format is specified in the outputs collection\ndefined in the model. The collection of predictions is returned in a JSON\nlist. Each member of the list can be a simple value, a list, or a JSON\nobject of any complexity. If your model has more than one output tensor,\neach prediction will be a JSON object containing a name/value pair for each\noutput. The names identify the output aliases in the graph.\n\nThe following examples show some possible responses:\n\nA simple set of predictions for three input instances, where each\nprediction is an integer value:\n\u003cpre\u003e\n{\"predictions\": [5, 4, 3]}\n\u003c/pre\u003e\nA more complex set of predictions, each containing two named values that\ncorrespond to output tensors, named **label** and **scores** respectively.\nThe value of **label** is the predicted category (\"car\" or \"beach\") and\n**scores** contains a list of probabilities for that instance across the\npossible categories.\n\u003cpre\u003e\n{\"predictions\": [{\"label\": \"beach\", \"scores\": [0.1, 0.9]},\n                 {\"label\": \"car\", \"scores\": [0.75, 0.25]}]}\n\u003c/pre\u003e\nA response when there is an error processing an input instance:\n\u003cpre\u003e\n{\"error\": \"Divide by zero\"}\n\u003c/pre\u003e",
 	//   "flatPath": "v1beta1/projects/{projectsId}:predict",
 	//   "httpMethod": "POST",
 	//   "id": "ml.projects.predict",
@@ -2221,7 +1762,7 @@ func (c *ProjectsPredictCall) Do(opts ...googleapi.CallOption) (*GoogleCloudMlV1
 	//   ],
 	//   "parameters": {
 	//     "projectsId": {
-	//       "description": "Part of `name`. Required. The resource name of a model or a version.",
+	//       "description": "Part of `name`. Required. The resource name of a model or a version.\n\nAuthorization: requires `Viewer` role on the parent project.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -2232,7 +1773,7 @@ func (c *ProjectsPredictCall) Do(opts ...googleapi.CallOption) (*GoogleCloudMlV1
 	//     "$ref": "GoogleCloudMlV1beta1__PredictRequest"
 	//   },
 	//   "response": {
-	//     "$ref": "GoogleCloudMlV1beta1__PredictResponse"
+	//     "$ref": "GoogleApi__HttpBody"
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform"
@@ -2252,7 +1793,7 @@ type ProjectsJobsCancelCall struct {
 	ctx_                                   context.Context
 }
 
-// Cancel: Cancel a running job.
+// Cancel: Cancels a running job.
 func (r *ProjectsJobsService) Cancel(projectsId string, jobsId string, googlecloudmlv1beta1__canceljobrequest *GoogleCloudMlV1beta1__CancelJobRequest) *ProjectsJobsCancelCall {
 	c := &ProjectsJobsCancelCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectsId = projectsId
@@ -2339,7 +1880,7 @@ func (c *ProjectsJobsCancelCall) Do(opts ...googleapi.CallOption) (*GoogleProtob
 	}
 	return ret, nil
 	// {
-	//   "description": "Cancel a running job.",
+	//   "description": "Cancels a running job.",
 	//   "flatPath": "v1beta1/projects/{projectsId}/jobs/{jobsId}:cancel",
 	//   "httpMethod": "POST",
 	//   "id": "ml.projects.jobs.cancel",
@@ -2355,7 +1896,7 @@ func (c *ProjectsJobsCancelCall) Do(opts ...googleapi.CallOption) (*GoogleProtob
 	//       "type": "string"
 	//     },
 	//     "projectsId": {
-	//       "description": "Part of `name`. Required. The name of the job.",
+	//       "description": "Part of `name`. Required. The name of the job to cancel.\n\nAuthorization: requires `Editor` role on the parent project.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -2385,7 +1926,7 @@ type ProjectsJobsCreateCall struct {
 	ctx_                      context.Context
 }
 
-// Create: Create a training or a prediction job.
+// Create: Creates a training or a batch prediction job.
 func (r *ProjectsJobsService) Create(projectsId string, googlecloudmlv1beta1__job *GoogleCloudMlV1beta1__Job) *ProjectsJobsCreateCall {
 	c := &ProjectsJobsCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectsId = projectsId
@@ -2470,7 +2011,7 @@ func (c *ProjectsJobsCreateCall) Do(opts ...googleapi.CallOption) (*GoogleCloudM
 	}
 	return ret, nil
 	// {
-	//   "description": "Create a training or a prediction job.",
+	//   "description": "Creates a training or a batch prediction job.",
 	//   "flatPath": "v1beta1/projects/{projectsId}/jobs",
 	//   "httpMethod": "POST",
 	//   "id": "ml.projects.jobs.create",
@@ -2479,7 +2020,7 @@ func (c *ProjectsJobsCreateCall) Do(opts ...googleapi.CallOption) (*GoogleCloudM
 	//   ],
 	//   "parameters": {
 	//     "projectsId": {
-	//       "description": "Part of `parent`. Required. The project name.",
+	//       "description": "Part of `parent`. Required. The project name.\n\nAuthorization: requires `Editor` role on the specified project.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -2510,7 +2051,7 @@ type ProjectsJobsGetCall struct {
 	ctx_         context.Context
 }
 
-// Get: Describe a job.
+// Get: Describes a job.
 func (r *ProjectsJobsService) Get(projectsId string, jobsId string) *ProjectsJobsGetCall {
 	c := &ProjectsJobsGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectsId = projectsId
@@ -2604,7 +2145,7 @@ func (c *ProjectsJobsGetCall) Do(opts ...googleapi.CallOption) (*GoogleCloudMlV1
 	}
 	return ret, nil
 	// {
-	//   "description": "Describe a job.",
+	//   "description": "Describes a job.",
 	//   "flatPath": "v1beta1/projects/{projectsId}/jobs/{jobsId}",
 	//   "httpMethod": "GET",
 	//   "id": "ml.projects.jobs.get",
@@ -2620,7 +2161,7 @@ func (c *ProjectsJobsGetCall) Do(opts ...googleapi.CallOption) (*GoogleCloudMlV1
 	//       "type": "string"
 	//     },
 	//     "projectsId": {
-	//       "description": "Part of `name`. Required. The name of the job.",
+	//       "description": "Part of `name`. Required. The name of the job to get the description of.\n\nAuthorization: requires `Viewer` role on the parent project.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -2647,7 +2188,7 @@ type ProjectsJobsListCall struct {
 	ctx_         context.Context
 }
 
-// List: List jobs in the project.
+// List: Lists the jobs in the project.
 func (r *ProjectsJobsService) List(projectsId string) *ProjectsJobsListCall {
 	c := &ProjectsJobsListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectsId = projectsId
@@ -2661,21 +2202,24 @@ func (c *ProjectsJobsListCall) Filter(filter string) *ProjectsJobsListCall {
 	return c
 }
 
-// OrderBy sets the optional parameter "orderBy": Specifies the ordering
-// of the jobs.
-func (c *ProjectsJobsListCall) OrderBy(orderBy string) *ProjectsJobsListCall {
-	c.urlParams_.Set("orderBy", orderBy)
-	return c
-}
-
-// PageSize sets the optional parameter "pageSize": The page size.
+// PageSize sets the optional parameter "pageSize": The number of jobs
+// to retrieve per "page" of results. If there
+// are more remaining results than this number, the response message
+// will
+// contain a valid value in the `next_page_token` field.
+//
+// The default value is 20, and the maximum page size is 100.
 func (c *ProjectsJobsListCall) PageSize(pageSize int64) *ProjectsJobsListCall {
 	c.urlParams_.Set("pageSize", fmt.Sprint(pageSize))
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": A token for
-// continuing the enumeration.
+// PageToken sets the optional parameter "pageToken": A page token to
+// request the next page of results.
+//
+// You get the token from the `next_page_token` field of the response
+// from
+// the previous call.
 func (c *ProjectsJobsListCall) PageToken(pageToken string) *ProjectsJobsListCall {
 	c.urlParams_.Set("pageToken", pageToken)
 	return c
@@ -2767,7 +2311,7 @@ func (c *ProjectsJobsListCall) Do(opts ...googleapi.CallOption) (*GoogleCloudMlV
 	}
 	return ret, nil
 	// {
-	//   "description": "List jobs in the project.",
+	//   "description": "Lists the jobs in the project.",
 	//   "flatPath": "v1beta1/projects/{projectsId}/jobs",
 	//   "httpMethod": "GET",
 	//   "id": "ml.projects.jobs.list",
@@ -2780,24 +2324,19 @@ func (c *ProjectsJobsListCall) Do(opts ...googleapi.CallOption) (*GoogleCloudMlV
 	//       "location": "query",
 	//       "type": "string"
 	//     },
-	//     "orderBy": {
-	//       "description": "Optional. Specifies the ordering of the jobs.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
 	//     "pageSize": {
-	//       "description": "Optional. The page size.",
+	//       "description": "Optional. The number of jobs to retrieve per \"page\" of results. If there\nare more remaining results than this number, the response message will\ncontain a valid value in the `next_page_token` field.\n\nThe default value is 20, and the maximum page size is 100.",
 	//       "format": "int32",
 	//       "location": "query",
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. A token for continuing the enumeration.",
+	//       "description": "Optional. A page token to request the next page of results.\n\nYou get the token from the `next_page_token` field of the response from\nthe previous call.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "projectsId": {
-	//       "description": "Part of `parent`. Required. The name of the project whose jobs are to be listed.",
+	//       "description": "Part of `parent`. Required. The name of the project for which to list jobs.\n\nAuthorization: requires `Viewer` role on the specified project.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -2845,8 +2384,15 @@ type ProjectsModelsCreateCall struct {
 	ctx_                        context.Context
 }
 
-// Create: Create a model which will later contain a set of model
+// Create: Creates a model which will later contain one or more
 // versions.
+//
+// You must add at least one version before you can request predictions
+// from
+// the model. Add versions by
+// calling
+// [projects.models.versions.create](/ml/reference/rest/v1beta1/p
+// rojects.models.versions/create).
 func (r *ProjectsModelsService) Create(projectsId string, googlecloudmlv1beta1__model *GoogleCloudMlV1beta1__Model) *ProjectsModelsCreateCall {
 	c := &ProjectsModelsCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectsId = projectsId
@@ -2931,7 +2477,7 @@ func (c *ProjectsModelsCreateCall) Do(opts ...googleapi.CallOption) (*GoogleClou
 	}
 	return ret, nil
 	// {
-	//   "description": "Create a model which will later contain a set of model versions.",
+	//   "description": "Creates a model which will later contain one or more versions.\n\nYou must add at least one version before you can request predictions from\nthe model. Add versions by calling\n[projects.models.versions.create](/ml/reference/rest/v1beta1/projects.models.versions/create).",
 	//   "flatPath": "v1beta1/projects/{projectsId}/models",
 	//   "httpMethod": "POST",
 	//   "id": "ml.projects.models.create",
@@ -2940,7 +2486,7 @@ func (c *ProjectsModelsCreateCall) Do(opts ...googleapi.CallOption) (*GoogleClou
 	//   ],
 	//   "parameters": {
 	//     "projectsId": {
-	//       "description": "Part of `parent`. Required. The project name.",
+	//       "description": "Part of `parent`. Required. The project name.\n\nAuthorization: requires `Editor` role on the specified project.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -2970,7 +2516,14 @@ type ProjectsModelsDeleteCall struct {
 	ctx_       context.Context
 }
 
-// Delete: Delete the model and all versions in it.
+// Delete: Deletes a model.
+//
+// You can only delete a model if there are no versions in it. You can
+// delete
+// versions by
+// calling
+// [projects.models.versions.delete](/ml/reference/rest/v1beta1/p
+// rojects.models.versions/delete).
 func (r *ProjectsModelsService) Delete(projectsId string, modelsId string) *ProjectsModelsDeleteCall {
 	c := &ProjectsModelsDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectsId = projectsId
@@ -3014,13 +2567,13 @@ func (c *ProjectsModelsDeleteCall) doRequest(alt string) (*http.Response, error)
 }
 
 // Do executes the "ml.projects.models.delete" call.
-// Exactly one of *GoogleProtobuf__Empty or error will be non-nil. Any
-// non-2xx status code is an error. Response headers are in either
-// *GoogleProtobuf__Empty.ServerResponse.Header or (if a response was
-// returned at all) in error.(*googleapi.Error).Header. Use
+// Exactly one of *GoogleLongrunning__Operation or error will be
+// non-nil. Any non-2xx status code is an error. Response headers are in
+// either *GoogleLongrunning__Operation.ServerResponse.Header or (if a
+// response was returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *ProjectsModelsDeleteCall) Do(opts ...googleapi.CallOption) (*GoogleProtobuf__Empty, error) {
+func (c *ProjectsModelsDeleteCall) Do(opts ...googleapi.CallOption) (*GoogleLongrunning__Operation, error) {
 	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
@@ -3039,7 +2592,7 @@ func (c *ProjectsModelsDeleteCall) Do(opts ...googleapi.CallOption) (*GoogleProt
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	ret := &GoogleProtobuf__Empty{
+	ret := &GoogleLongrunning__Operation{
 		ServerResponse: googleapi.ServerResponse{
 			Header:         res.Header,
 			HTTPStatusCode: res.StatusCode,
@@ -3051,7 +2604,7 @@ func (c *ProjectsModelsDeleteCall) Do(opts ...googleapi.CallOption) (*GoogleProt
 	}
 	return ret, nil
 	// {
-	//   "description": "Delete the model and all versions in it.",
+	//   "description": "Deletes a model.\n\nYou can only delete a model if there are no versions in it. You can delete\nversions by calling\n[projects.models.versions.delete](/ml/reference/rest/v1beta1/projects.models.versions/delete).",
 	//   "flatPath": "v1beta1/projects/{projectsId}/models/{modelsId}",
 	//   "httpMethod": "DELETE",
 	//   "id": "ml.projects.models.delete",
@@ -3067,7 +2620,7 @@ func (c *ProjectsModelsDeleteCall) Do(opts ...googleapi.CallOption) (*GoogleProt
 	//       "type": "string"
 	//     },
 	//     "projectsId": {
-	//       "description": "Part of `name`. Required. The name of the model.",
+	//       "description": "Part of `name`. Required. The name of the model.\n\nAuthorization: requires `Editor` role on the parent project.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -3075,7 +2628,7 @@ func (c *ProjectsModelsDeleteCall) Do(opts ...googleapi.CallOption) (*GoogleProt
 	//   },
 	//   "path": "v1beta1/projects/{projectsId}/models/{modelsId}",
 	//   "response": {
-	//     "$ref": "GoogleProtobuf__Empty"
+	//     "$ref": "GoogleLongrunning__Operation"
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform"
@@ -3095,7 +2648,11 @@ type ProjectsModelsGetCall struct {
 	ctx_         context.Context
 }
 
-// Get: Describe a model and versions in it.
+// Get: Gets information about a model, including its name, the
+// description (if
+// set), and the default version (if at least one version of the model
+// has
+// been deployed).
 func (r *ProjectsModelsService) Get(projectsId string, modelsId string) *ProjectsModelsGetCall {
 	c := &ProjectsModelsGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectsId = projectsId
@@ -3189,7 +2746,7 @@ func (c *ProjectsModelsGetCall) Do(opts ...googleapi.CallOption) (*GoogleCloudMl
 	}
 	return ret, nil
 	// {
-	//   "description": "Describe a model and versions in it.",
+	//   "description": "Gets information about a model, including its name, the description (if\nset), and the default version (if at least one version of the model has\nbeen deployed).",
 	//   "flatPath": "v1beta1/projects/{projectsId}/models/{modelsId}",
 	//   "httpMethod": "GET",
 	//   "id": "ml.projects.models.get",
@@ -3205,7 +2762,7 @@ func (c *ProjectsModelsGetCall) Do(opts ...googleapi.CallOption) (*GoogleCloudMl
 	//       "type": "string"
 	//     },
 	//     "projectsId": {
-	//       "description": "Part of `name`. Required. The name of the model.",
+	//       "description": "Part of `name`. Required. The name of the model.\n\nAuthorization: requires `Viewer` role on the parent project.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -3232,35 +2789,35 @@ type ProjectsModelsListCall struct {
 	ctx_         context.Context
 }
 
-// List: List models in the project.
+// List: Lists the models in a project.
+//
+// Each project can contain multiple models, and each model can have
+// multiple
+// versions.
 func (r *ProjectsModelsService) List(projectsId string) *ProjectsModelsListCall {
 	c := &ProjectsModelsListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectsId = projectsId
 	return c
 }
 
-// Filter sets the optional parameter "filter": Specifies the subset of
-// models to retrieve.
-func (c *ProjectsModelsListCall) Filter(filter string) *ProjectsModelsListCall {
-	c.urlParams_.Set("filter", filter)
-	return c
-}
-
-// OrderBy sets the optional parameter "orderBy": Specifies the ordering
-// of the models.
-func (c *ProjectsModelsListCall) OrderBy(orderBy string) *ProjectsModelsListCall {
-	c.urlParams_.Set("orderBy", orderBy)
-	return c
-}
-
-// PageSize sets the optional parameter "pageSize": The page size.
+// PageSize sets the optional parameter "pageSize": The number of models
+// to retrieve per "page" of results. If there
+// are more remaining results than this number, the response message
+// will
+// contain a valid value in the `next_page_token` field.
+//
+// The default value is 20, and the maximum page size is 100.
 func (c *ProjectsModelsListCall) PageSize(pageSize int64) *ProjectsModelsListCall {
 	c.urlParams_.Set("pageSize", fmt.Sprint(pageSize))
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": A token for for
-// continuing the enumeration.
+// PageToken sets the optional parameter "pageToken": A page token to
+// request the next page of results.
+//
+// You get the token from the `next_page_token` field of the response
+// from
+// the previous call.
 func (c *ProjectsModelsListCall) PageToken(pageToken string) *ProjectsModelsListCall {
 	c.urlParams_.Set("pageToken", pageToken)
 	return c
@@ -3353,7 +2910,7 @@ func (c *ProjectsModelsListCall) Do(opts ...googleapi.CallOption) (*GoogleCloudM
 	}
 	return ret, nil
 	// {
-	//   "description": "List models in the project.",
+	//   "description": "Lists the models in a project.\n\nEach project can contain multiple models, and each model can have multiple\nversions.",
 	//   "flatPath": "v1beta1/projects/{projectsId}/models",
 	//   "httpMethod": "GET",
 	//   "id": "ml.projects.models.list",
@@ -3361,29 +2918,19 @@ func (c *ProjectsModelsListCall) Do(opts ...googleapi.CallOption) (*GoogleCloudM
 	//     "projectsId"
 	//   ],
 	//   "parameters": {
-	//     "filter": {
-	//       "description": "Optional. Specifies the subset of models to retrieve.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "orderBy": {
-	//       "description": "Optional. Specifies the ordering of the models.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
 	//     "pageSize": {
-	//       "description": "Optional. The page size.",
+	//       "description": "Optional. The number of models to retrieve per \"page\" of results. If there\nare more remaining results than this number, the response message will\ncontain a valid value in the `next_page_token` field.\n\nThe default value is 20, and the maximum page size is 100.",
 	//       "format": "int32",
 	//       "location": "query",
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. A token for for continuing the enumeration.",
+	//       "description": "Optional. A page token to request the next page of results.\n\nYou get the token from the `next_page_token` field of the response from\nthe previous call.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "projectsId": {
-	//       "description": "Part of `parent`. Required. The name of the project whose models are to be listed.",
+	//       "description": "Part of `parent`. Required. The name of the project whose models are to be listed.\n\nAuthorization: requires `Viewer` role on the specified project.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -3432,9 +2979,21 @@ type ProjectsModelsVersionsCreateCall struct {
 	ctx_                          context.Context
 }
 
-// Create: Upload a trained TensorFlow model version. The result of the
-// operation
-// is a Version.
+// Create: Creates a new version of a model from a trained TensorFlow
+// model.
+//
+// If the version created in the cloud by this call is the first
+// deployed
+// version of the specified model, it will be made the default version
+// of the
+// model. When you add a version to a model that already has one or
+// more
+// versions, the default version does not automatically change. If you
+// want a
+// new version to be the default, you must
+// call
+// [projects.models.versions.setDefault](/ml/reference/rest/v1beta1/
+// projects.models.versions/setDefault).
 func (r *ProjectsModelsVersionsService) Create(projectsId string, modelsId string, googlecloudmlv1beta1__version *GoogleCloudMlV1beta1__Version) *ProjectsModelsVersionsCreateCall {
 	c := &ProjectsModelsVersionsCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectsId = projectsId
@@ -3521,7 +3080,7 @@ func (c *ProjectsModelsVersionsCreateCall) Do(opts ...googleapi.CallOption) (*Go
 	}
 	return ret, nil
 	// {
-	//   "description": "Upload a trained TensorFlow model version. The result of the operation\nis a Version.",
+	//   "description": "Creates a new version of a model from a trained TensorFlow model.\n\nIf the version created in the cloud by this call is the first deployed\nversion of the specified model, it will be made the default version of the\nmodel. When you add a version to a model that already has one or more\nversions, the default version does not automatically change. If you want a\nnew version to be the default, you must call\n[projects.models.versions.setDefault](/ml/reference/rest/v1beta1/projects.models.versions/setDefault).",
 	//   "flatPath": "v1beta1/projects/{projectsId}/models/{modelsId}/versions",
 	//   "httpMethod": "POST",
 	//   "id": "ml.projects.models.versions.create",
@@ -3537,7 +3096,7 @@ func (c *ProjectsModelsVersionsCreateCall) Do(opts ...googleapi.CallOption) (*Go
 	//       "type": "string"
 	//     },
 	//     "projectsId": {
-	//       "description": "Part of `parent`. Required. The name of the model.",
+	//       "description": "Part of `parent`. Required. The name of the model.\n\nAuthorization: requires `Editor` role on the parent project.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -3568,7 +3127,15 @@ type ProjectsModelsVersionsDeleteCall struct {
 	ctx_       context.Context
 }
 
-// Delete: Delete a version.
+// Delete: Deletes a model version.
+//
+// Each model can have multiple versions deployed and in use at any
+// given
+// time. Use this method to remove a single version.
+//
+// Note: You cannot delete the version that is set as the default
+// version
+// of the model unless it is the only remaining version.
 func (r *ProjectsModelsVersionsService) Delete(projectsId string, modelsId string, versionsId string) *ProjectsModelsVersionsDeleteCall {
 	c := &ProjectsModelsVersionsDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectsId = projectsId
@@ -3614,13 +3181,13 @@ func (c *ProjectsModelsVersionsDeleteCall) doRequest(alt string) (*http.Response
 }
 
 // Do executes the "ml.projects.models.versions.delete" call.
-// Exactly one of *GoogleProtobuf__Empty or error will be non-nil. Any
-// non-2xx status code is an error. Response headers are in either
-// *GoogleProtobuf__Empty.ServerResponse.Header or (if a response was
-// returned at all) in error.(*googleapi.Error).Header. Use
+// Exactly one of *GoogleLongrunning__Operation or error will be
+// non-nil. Any non-2xx status code is an error. Response headers are in
+// either *GoogleLongrunning__Operation.ServerResponse.Header or (if a
+// response was returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *ProjectsModelsVersionsDeleteCall) Do(opts ...googleapi.CallOption) (*GoogleProtobuf__Empty, error) {
+func (c *ProjectsModelsVersionsDeleteCall) Do(opts ...googleapi.CallOption) (*GoogleLongrunning__Operation, error) {
 	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
@@ -3639,7 +3206,7 @@ func (c *ProjectsModelsVersionsDeleteCall) Do(opts ...googleapi.CallOption) (*Go
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	ret := &GoogleProtobuf__Empty{
+	ret := &GoogleLongrunning__Operation{
 		ServerResponse: googleapi.ServerResponse{
 			Header:         res.Header,
 			HTTPStatusCode: res.StatusCode,
@@ -3651,7 +3218,7 @@ func (c *ProjectsModelsVersionsDeleteCall) Do(opts ...googleapi.CallOption) (*Go
 	}
 	return ret, nil
 	// {
-	//   "description": "Delete a version.",
+	//   "description": "Deletes a model version.\n\nEach model can have multiple versions deployed and in use at any given\ntime. Use this method to remove a single version.\n\nNote: You cannot delete the version that is set as the default version\nof the model unless it is the only remaining version.",
 	//   "flatPath": "v1beta1/projects/{projectsId}/models/{modelsId}/versions/{versionsId}",
 	//   "httpMethod": "DELETE",
 	//   "id": "ml.projects.models.versions.delete",
@@ -3668,7 +3235,7 @@ func (c *ProjectsModelsVersionsDeleteCall) Do(opts ...googleapi.CallOption) (*Go
 	//       "type": "string"
 	//     },
 	//     "projectsId": {
-	//       "description": "Part of `name`. Required. The name of the version.",
+	//       "description": "Part of `name`. Required. The name of the version. You can get the names of all the\nversions of a model by calling\n[projects.models.versions.list](/ml/reference/rest/v1beta1/projects.models.versions/list).\n\nAuthorization: requires `Editor` role on the parent project.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -3682,7 +3249,7 @@ func (c *ProjectsModelsVersionsDeleteCall) Do(opts ...googleapi.CallOption) (*Go
 	//   },
 	//   "path": "v1beta1/projects/{projectsId}/models/{modelsId}/versions/{versionsId}",
 	//   "response": {
-	//     "$ref": "GoogleProtobuf__Empty"
+	//     "$ref": "GoogleLongrunning__Operation"
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform"
@@ -3703,7 +3270,15 @@ type ProjectsModelsVersionsGetCall struct {
 	ctx_         context.Context
 }
 
-// Get: Get version metadata.
+// Get: Gets information about a model version.
+//
+// Models can have multiple versions. You can
+// call
+// [projects.models.versions.list](/ml/reference/rest/v1beta1/projec
+// ts.models.versions/list)
+// to get the same information that this method returns for all of
+// the
+// versions of a model.
 func (r *ProjectsModelsVersionsService) Get(projectsId string, modelsId string, versionsId string) *ProjectsModelsVersionsGetCall {
 	c := &ProjectsModelsVersionsGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectsId = projectsId
@@ -3799,7 +3374,7 @@ func (c *ProjectsModelsVersionsGetCall) Do(opts ...googleapi.CallOption) (*Googl
 	}
 	return ret, nil
 	// {
-	//   "description": "Get version metadata.",
+	//   "description": "Gets information about a model version.\n\nModels can have multiple versions. You can call\n[projects.models.versions.list](/ml/reference/rest/v1beta1/projects.models.versions/list)\nto get the same information that this method returns for all of the\nversions of a model.",
 	//   "flatPath": "v1beta1/projects/{projectsId}/models/{modelsId}/versions/{versionsId}",
 	//   "httpMethod": "GET",
 	//   "id": "ml.projects.models.versions.get",
@@ -3816,7 +3391,7 @@ func (c *ProjectsModelsVersionsGetCall) Do(opts ...googleapi.CallOption) (*Googl
 	//       "type": "string"
 	//     },
 	//     "projectsId": {
-	//       "description": "Part of `name`. Required. The name of the version.",
+	//       "description": "Part of `name`. Required. The name of the version.\n\nAuthorization: requires `Viewer` role on the parent project.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -3850,7 +3425,13 @@ type ProjectsModelsVersionsListCall struct {
 	ctx_         context.Context
 }
 
-// List: List versions in the model.
+// List: Gets basic information about all the versions of a model.
+//
+// If you expect that a model has a lot of versions, or if you need to
+// handle
+// only a limited number of results at a time, you can request that the
+// list
+// be retrieved in batches (called pages):
 func (r *ProjectsModelsVersionsService) List(projectsId string, modelsId string) *ProjectsModelsVersionsListCall {
 	c := &ProjectsModelsVersionsListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectsId = projectsId
@@ -3858,28 +3439,24 @@ func (r *ProjectsModelsVersionsService) List(projectsId string, modelsId string)
 	return c
 }
 
-// Filter sets the optional parameter "filter": Specifies the subset of
-// versions to retrieve.
-func (c *ProjectsModelsVersionsListCall) Filter(filter string) *ProjectsModelsVersionsListCall {
-	c.urlParams_.Set("filter", filter)
-	return c
-}
-
-// OrderBy sets the optional parameter "orderBy": Specifies the ordering
-// of the versions.
-func (c *ProjectsModelsVersionsListCall) OrderBy(orderBy string) *ProjectsModelsVersionsListCall {
-	c.urlParams_.Set("orderBy", orderBy)
-	return c
-}
-
-// PageSize sets the optional parameter "pageSize": The page size.
+// PageSize sets the optional parameter "pageSize": The number of
+// versions to retrieve per "page" of results. If
+// there are more remaining results than this number, the response
+// message
+// will contain a valid value in the `next_page_token` field.
+//
+// The default value is 20, and the maximum page size is 100.
 func (c *ProjectsModelsVersionsListCall) PageSize(pageSize int64) *ProjectsModelsVersionsListCall {
 	c.urlParams_.Set("pageSize", fmt.Sprint(pageSize))
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": A token for
-// continuing the enumeration.
+// PageToken sets the optional parameter "pageToken": A page token to
+// request the next page of results.
+//
+// You get the token from the `next_page_token` field of the response
+// from
+// the previous call.
 func (c *ProjectsModelsVersionsListCall) PageToken(pageToken string) *ProjectsModelsVersionsListCall {
 	c.urlParams_.Set("pageToken", pageToken)
 	return c
@@ -3973,7 +3550,7 @@ func (c *ProjectsModelsVersionsListCall) Do(opts ...googleapi.CallOption) (*Goog
 	}
 	return ret, nil
 	// {
-	//   "description": "List versions in the model.",
+	//   "description": "Gets basic information about all the versions of a model.\n\nIf you expect that a model has a lot of versions, or if you need to handle\nonly a limited number of results at a time, you can request that the list\nbe retrieved in batches (called pages):",
 	//   "flatPath": "v1beta1/projects/{projectsId}/models/{modelsId}/versions",
 	//   "httpMethod": "GET",
 	//   "id": "ml.projects.models.versions.list",
@@ -3982,35 +3559,25 @@ func (c *ProjectsModelsVersionsListCall) Do(opts ...googleapi.CallOption) (*Goog
 	//     "modelsId"
 	//   ],
 	//   "parameters": {
-	//     "filter": {
-	//       "description": "Optional. Specifies the subset of versions to retrieve.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
 	//     "modelsId": {
 	//       "description": "Part of `parent`. See documentation of `projectsId`.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
 	//     },
-	//     "orderBy": {
-	//       "description": "Optional. Specifies the ordering of the versions.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
 	//     "pageSize": {
-	//       "description": "Optional. The page size.",
+	//       "description": "Optional. The number of versions to retrieve per \"page\" of results. If\nthere are more remaining results than this number, the response message\nwill contain a valid value in the `next_page_token` field.\n\nThe default value is 20, and the maximum page size is 100.",
 	//       "format": "int32",
 	//       "location": "query",
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "Optional. A token for continuing the enumeration.",
+	//       "description": "Optional. A page token to request the next page of results.\n\nYou get the token from the `next_page_token` field of the response from\nthe previous call.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "projectsId": {
-	//       "description": "Part of `parent`. Required. The name of the model whose versions are to be listed.",
+	//       "description": "Part of `parent`. Required. The name of the model for which to list the version.\n\nAuthorization: requires `Viewer` role on the parent project.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -4060,7 +3627,18 @@ type ProjectsModelsVersionsSetDefaultCall struct {
 	ctx_                                           context.Context
 }
 
-// SetDefault: Mark the version as default within the model.
+// SetDefault: Designates a version to be the default for the
+// model.
+//
+// The default version is used for prediction requests made against the
+// model
+// that don't specify a version.
+//
+// The first version to be created for a model is automatically set as
+// the
+// default. You must make any subsequent changes to the default
+// version
+// setting manually using this method.
 func (r *ProjectsModelsVersionsService) SetDefault(projectsId string, modelsId string, versionsId string, googlecloudmlv1beta1__setdefaultversionrequest *GoogleCloudMlV1beta1__SetDefaultVersionRequest) *ProjectsModelsVersionsSetDefaultCall {
 	c := &ProjectsModelsVersionsSetDefaultCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectsId = projectsId
@@ -4149,7 +3727,7 @@ func (c *ProjectsModelsVersionsSetDefaultCall) Do(opts ...googleapi.CallOption) 
 	}
 	return ret, nil
 	// {
-	//   "description": "Mark the version as default within the model.",
+	//   "description": "Designates a version to be the default for the model.\n\nThe default version is used for prediction requests made against the model\nthat don't specify a version.\n\nThe first version to be created for a model is automatically set as the\ndefault. You must make any subsequent changes to the default version\nsetting manually using this method.",
 	//   "flatPath": "v1beta1/projects/{projectsId}/models/{modelsId}/versions/{versionsId}:setDefault",
 	//   "httpMethod": "POST",
 	//   "id": "ml.projects.models.versions.setDefault",
@@ -4166,7 +3744,7 @@ func (c *ProjectsModelsVersionsSetDefaultCall) Do(opts ...googleapi.CallOption) 
 	//       "type": "string"
 	//     },
 	//     "projectsId": {
-	//       "description": "Part of `name`. Required. The version name which is being made default within the model.",
+	//       "description": "Part of `name`. Required. The name of the version to make the default for the model. You\ncan get the names of all the versions of a model by calling\n[projects.models.versions.list](/ml/reference/rest/v1beta1/projects.models.versions/list).\n\nAuthorization: requires `Editor` role on the parent project.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -4213,7 +3791,13 @@ type ProjectsOperationsCancelCall struct {
 // Operations.GetOperation or
 // other methods to check whether the cancellation succeeded or whether
 // the
-// operation completed despite cancellation.
+// operation completed despite cancellation. On successful
+// cancellation,
+// the operation is not deleted; instead, it becomes an operation
+// with
+// an Operation.error value with a google.rpc.Status.code of
+// 1,
+// corresponding to `Code.CANCELLED`.
 func (r *ProjectsOperationsService) Cancel(projectsId string, operationsId string) *ProjectsOperationsCancelCall {
 	c := &ProjectsOperationsCancelCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.projectsId = projectsId
@@ -4294,7 +3878,7 @@ func (c *ProjectsOperationsCancelCall) Do(opts ...googleapi.CallOption) (*Google
 	}
 	return ret, nil
 	// {
-	//   "description": "Starts asynchronous cancellation on a long-running operation.  The server\nmakes a best effort to cancel the operation, but success is not\nguaranteed.  If the server doesn't support this method, it returns\n`google.rpc.Code.UNIMPLEMENTED`.  Clients can use\nOperations.GetOperation or\nother methods to check whether the cancellation succeeded or whether the\noperation completed despite cancellation.",
+	//   "description": "Starts asynchronous cancellation on a long-running operation.  The server\nmakes a best effort to cancel the operation, but success is not\nguaranteed.  If the server doesn't support this method, it returns\n`google.rpc.Code.UNIMPLEMENTED`.  Clients can use\nOperations.GetOperation or\nother methods to check whether the cancellation succeeded or whether the\noperation completed despite cancellation. On successful cancellation,\nthe operation is not deleted; instead, it becomes an operation with\nan Operation.error value with a google.rpc.Status.code of 1,\ncorresponding to `Code.CANCELLED`.",
 	//   "flatPath": "v1beta1/projects/{projectsId}/operations/{operationsId}:cancel",
 	//   "httpMethod": "POST",
 	//   "id": "ml.projects.operations.cancel",

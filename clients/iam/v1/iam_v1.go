@@ -120,51 +120,6 @@ type RolesService struct {
 	s *Service
 }
 
-// AuditConfigDelta: One delta entry for AuditConfig. Each individual
-// change (only one
-// exempted_member in each entry) to a AuditConfig will be a separate
-// entry.
-type AuditConfigDelta struct {
-	// Action: The action that was performed on an audit configuration in a
-	// policy.
-	// Required
-	//
-	// Possible values:
-	//   "ACTION_UNSPECIFIED" - Unspecified.
-	//   "ADD" - Addition of an audit configuration.
-	//   "REMOVE" - Removal of an audit configuration.
-	Action string `json:"action,omitempty"`
-
-	// ExemptedMember: A single identity that is exempted from "data access"
-	// audit
-	// logging for the `service` specified above.
-	// Follows the same format of Binding.members.
-	// Required
-	ExemptedMember string `json:"exemptedMember,omitempty"`
-
-	// Service: Specifies a service that will be enabled for "data access"
-	// audit
-	// logging.
-	// For example, `resourcemanager`, `storage`, `compute`.
-	// `allServices` is a special value that covers all services.
-	// Required
-	Service string `json:"service,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "Action") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *AuditConfigDelta) MarshalJSON() ([]byte, error) {
-	type noMethod AuditConfigDelta
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
 // AuditData: Audit log information specific to Cloud IAM. This message
 // is serialized
 // as an `Any` type in the `ServiceData` message of an
@@ -206,6 +161,7 @@ type Binding struct {
 	// * `user:{emailid}`: An email address that represents a specific
 	// Google
 	//    account. For example, `alice@gmail.com` or `joe@example.com`.
+	//
 	//
 	// * `serviceAccount:{emailid}`: An email address that represents a
 	// service
@@ -333,7 +289,7 @@ type CreateServiceAccountRequest struct {
 	// service account
 	// email address and a stable unique id. It is unique within a
 	// project,
-	// must be 1-63 characters long, and match the regular
+	// must be 6-30 characters long, and match the regular
 	// expression
 	// `[a-z]([-a-z0-9]*[a-z0-9])` to comply with RFC1035.
 	AccountId string `json:"accountId,omitempty"`
@@ -519,14 +475,11 @@ func (s *Policy) MarshalJSON() ([]byte, error) {
 
 // PolicyDelta: The difference delta between two policies.
 type PolicyDelta struct {
-	// AuditConfigDeltas: The delta for AuditConfigs between two policies.
-	AuditConfigDeltas []*AuditConfigDelta `json:"auditConfigDeltas,omitempty"`
-
 	// BindingDeltas: The delta for Bindings between two policies.
 	BindingDeltas []*BindingDelta `json:"bindingDeltas,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "AuditConfigDeltas")
-	// to unconditionally include in API requests. By default, fields with
+	// ForceSendFields is a list of field names (e.g. "BindingDeltas") to
+	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
 	// server regardless of whether the field is empty or not. This may be
@@ -592,13 +545,21 @@ func (s *QueryGrantableRolesResponse) MarshalJSON() ([]byte, error) {
 
 // Role: A role in the Identity and Access Management API.
 type Role struct {
+	Deleted bool `json:"deleted,omitempty"`
+
 	// Description: Optional.  A human-readable description for the role.
 	Description string `json:"description,omitempty"`
 
 	// Name: The name of the role.
 	//
-	// Examples of roles names are:
-	// `roles/editor`, `roles/viewer` and `roles/logging.viewer`.
+	// When Role is used in CreateRole, the role name must not be set.
+	//
+	// When Role is used in output and other input such as UpdateRole, the
+	// role
+	// name is the complete path, e.g., roles/logging.viewer for curated
+	// roles
+	// and organizations/{ORGANIZATION_ID}/roles/logging.viewer for custom
+	// roles.
 	Name string `json:"name,omitempty"`
 
 	// Title: Optional.  A human-readable title for the role.  Typically
@@ -606,7 +567,9 @@ type Role struct {
 	// is limited to 100 UTF-8 bytes.
 	Title string `json:"title,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "Description") to
+	Trashed bool `json:"trashed,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Deleted") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -636,13 +599,14 @@ func (s *Role) MarshalJSON() ([]byte, error) {
 // returned
 // in util::Status's ResourceInfo.resource_name in the format
 // of
-// projects/{project}/serviceAccounts/{email}. The caller can use the
-// name in
-// other methods to access the account.
+// projects/{PROJECT_ID}/serviceAccounts/{SERVICE_ACCOUNT_EMAIL}. The
+// caller can
+// use the name in other methods to access the account.
 //
 // All other methods can identify the service account using the
 // format
-// `projects/{project}/serviceAccounts/{account}`.
+// `projects/{PROJECT_ID}/serviceAccounts/{SERVICE_ACCOUNT_EMAIL}`
+// .
 // Using `-` as a wildcard for the project will infer the project
 // from
 // the account. The `account` value can be the `email` address or
@@ -662,7 +626,8 @@ type ServiceAccount struct {
 
 	// Name: The resource name of the service account in the following
 	// format:
-	// `projects/{project}/serviceAccounts/{account}`.
+	// `projects/{PROJECT_ID}/serviceAccounts/{SERVICE_ACCOUNT_EMAIL}
+	// `.
 	//
 	// Requests using `-` as a wildcard for the project will infer the
 	// project
@@ -672,7 +637,8 @@ type ServiceAccount struct {
 	//
 	// In responses the resource name will always be in the
 	// format
-	// `projects/{project}/serviceAccounts/{email}`.
+	// `projects/{PROJECT_ID}/serviceAccounts/{SERVICE_ACCOUNT_EMAIL}`
+	// .
 	Name string `json:"name,omitempty"`
 
 	// Oauth2ClientId: @OutputOnly. The OAuth2 client id for the service
@@ -744,7 +710,8 @@ type ServiceAccountKey struct {
 
 	// Name: The resource name of the service account key in the following
 	// format
-	// `projects/{project}/serviceAccounts/{account}/keys/{key}`.
+	// `projects/{PROJECT_ID}/serviceAccounts/{SERVICE_ACCOUNT_EMAIL}/
+	// keys/{key}`.
 	Name string `json:"name,omitempty"`
 
 	// PrivateKeyData: The private key data. Only provided in
@@ -1032,7 +999,7 @@ func (c *ProjectsServiceAccountsCreateCall) Do(opts ...googleapi.CallOption) (*S
 	//     "name": {
 	//       "description": "Required. The resource name of the project associated with the service\naccounts, such as `projects/my-project-123`.",
 	//       "location": "path",
-	//       "pattern": "^projects/[^/]*$",
+	//       "pattern": "^projects/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
@@ -1148,9 +1115,9 @@ func (c *ProjectsServiceAccountsDeleteCall) Do(opts ...googleapi.CallOption) (*E
 	//   ],
 	//   "parameters": {
 	//     "name": {
-	//       "description": "The resource name of the service account in the following format:\n`projects/{project}/serviceAccounts/{account}`.\nUsing `-` as a wildcard for the project will infer the project from\nthe account. The `account` value can be the `email` address or the\n`unique_id` of the service account.",
+	//       "description": "The resource name of the service account in the following format:\n`projects/{PROJECT_ID}/serviceAccounts/{SERVICE_ACCOUNT_EMAIL}`.\nUsing `-` as a wildcard for the project will infer the project from\nthe account. The `account` value can be the `email` address or the\n`unique_id` of the service account.",
 	//       "location": "path",
-	//       "pattern": "^projects/[^/]*/serviceAccounts/[^/]*$",
+	//       "pattern": "^projects/[^/]+/serviceAccounts/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
@@ -1277,9 +1244,9 @@ func (c *ProjectsServiceAccountsGetCall) Do(opts ...googleapi.CallOption) (*Serv
 	//   ],
 	//   "parameters": {
 	//     "name": {
-	//       "description": "The resource name of the service account in the following format:\n`projects/{project}/serviceAccounts/{account}`.\nUsing `-` as a wildcard for the project will infer the project from\nthe account. The `account` value can be the `email` address or the\n`unique_id` of the service account.",
+	//       "description": "The resource name of the service account in the following format:\n`projects/{PROJECT_ID}/serviceAccounts/{SERVICE_ACCOUNT_EMAIL}`.\nUsing `-` as a wildcard for the project will infer the project from\nthe account. The `account` value can be the `email` address or the\n`unique_id` of the service account.",
 	//       "location": "path",
-	//       "pattern": "^projects/[^/]*/serviceAccounts/[^/]*$",
+	//       "pattern": "^projects/[^/]+/serviceAccounts/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
@@ -1396,7 +1363,7 @@ func (c *ProjectsServiceAccountsGetIamPolicyCall) Do(opts ...googleapi.CallOptio
 	//     "resource": {
 	//       "description": "REQUIRED: The resource for which the policy is being requested.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
 	//       "location": "path",
-	//       "pattern": "^projects/[^/]*/serviceAccounts/[^/]*$",
+	//       "pattern": "^projects/[^/]+/serviceAccounts/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
@@ -1545,7 +1512,7 @@ func (c *ProjectsServiceAccountsListCall) Do(opts ...googleapi.CallOption) (*Lis
 	//     "name": {
 	//       "description": "Required. The resource name of the project associated with the service\naccounts, such as `projects/my-project-123`.",
 	//       "location": "path",
-	//       "pattern": "^projects/[^/]*$",
+	//       "pattern": "^projects/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     },
@@ -1701,7 +1668,7 @@ func (c *ProjectsServiceAccountsSetIamPolicyCall) Do(opts ...googleapi.CallOptio
 	//     "resource": {
 	//       "description": "REQUIRED: The resource for which the policy is being specified.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
 	//       "location": "path",
-	//       "pattern": "^projects/[^/]*/serviceAccounts/[^/]*$",
+	//       "pattern": "^projects/[^/]+/serviceAccounts/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
@@ -1825,9 +1792,9 @@ func (c *ProjectsServiceAccountsSignBlobCall) Do(opts ...googleapi.CallOption) (
 	//   ],
 	//   "parameters": {
 	//     "name": {
-	//       "description": "The resource name of the service account in the following format:\n`projects/{project}/serviceAccounts/{account}`.\nUsing `-` as a wildcard for the project will infer the project from\nthe account. The `account` value can be the `email` address or the\n`unique_id` of the service account.",
+	//       "description": "The resource name of the service account in the following format:\n`projects/{PROJECT_ID}/serviceAccounts/{SERVICE_ACCOUNT_EMAIL}`.\nUsing `-` as a wildcard for the project will infer the project from\nthe account. The `account` value can be the `email` address or the\n`unique_id` of the service account.",
 	//       "location": "path",
-	//       "pattern": "^projects/[^/]*/serviceAccounts/[^/]*$",
+	//       "pattern": "^projects/[^/]+/serviceAccounts/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
@@ -1954,7 +1921,7 @@ func (c *ProjectsServiceAccountsTestIamPermissionsCall) Do(opts ...googleapi.Cal
 	//     "resource": {
 	//       "description": "REQUIRED: The resource for which the policy detail is being requested.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
 	//       "location": "path",
-	//       "pattern": "^projects/[^/]*/serviceAccounts/[^/]*$",
+	//       "pattern": "^projects/[^/]+/serviceAccounts/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
@@ -2081,9 +2048,9 @@ func (c *ProjectsServiceAccountsUpdateCall) Do(opts ...googleapi.CallOption) (*S
 	//   ],
 	//   "parameters": {
 	//     "name": {
-	//       "description": "The resource name of the service account in the following format:\n`projects/{project}/serviceAccounts/{account}`.\n\nRequests using `-` as a wildcard for the project will infer the project\nfrom the `account` and the `account` value can be the `email` address or\nthe `unique_id` of the service account.\n\nIn responses the resource name will always be in the format\n`projects/{project}/serviceAccounts/{email}`.",
+	//       "description": "The resource name of the service account in the following format:\n`projects/{PROJECT_ID}/serviceAccounts/{SERVICE_ACCOUNT_EMAIL}`.\n\nRequests using `-` as a wildcard for the project will infer the project\nfrom the `account` and the `account` value can be the `email` address or\nthe `unique_id` of the service account.\n\nIn responses the resource name will always be in the format\n`projects/{PROJECT_ID}/serviceAccounts/{SERVICE_ACCOUNT_EMAIL}`.",
 	//       "location": "path",
-	//       "pattern": "^projects/[^/]*/serviceAccounts/[^/]*$",
+	//       "pattern": "^projects/[^/]+/serviceAccounts/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
@@ -2207,9 +2174,9 @@ func (c *ProjectsServiceAccountsKeysCreateCall) Do(opts ...googleapi.CallOption)
 	//   ],
 	//   "parameters": {
 	//     "name": {
-	//       "description": "The resource name of the service account in the following format:\n`projects/{project}/serviceAccounts/{account}`.\nUsing `-` as a wildcard for the project will infer the project from\nthe account. The `account` value can be the `email` address or the\n`unique_id` of the service account.",
+	//       "description": "The resource name of the service account in the following format:\n`projects/{PROJECT_ID}/serviceAccounts/{SERVICE_ACCOUNT_EMAIL}`.\nUsing `-` as a wildcard for the project will infer the project from\nthe account. The `account` value can be the `email` address or the\n`unique_id` of the service account.",
 	//       "location": "path",
-	//       "pattern": "^projects/[^/]*/serviceAccounts/[^/]*$",
+	//       "pattern": "^projects/[^/]+/serviceAccounts/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
@@ -2325,9 +2292,9 @@ func (c *ProjectsServiceAccountsKeysDeleteCall) Do(opts ...googleapi.CallOption)
 	//   ],
 	//   "parameters": {
 	//     "name": {
-	//       "description": "The resource name of the service account key in the following format:\n`projects/{project}/serviceAccounts/{account}/keys/{key}`.\nUsing `-` as a wildcard for the project will infer the project from\nthe account. The `account` value can be the `email` address or the\n`unique_id` of the service account.",
+	//       "description": "The resource name of the service account key in the following format:\n`projects/{PROJECT_ID}/serviceAccounts/{SERVICE_ACCOUNT_EMAIL}/keys/{key}`.\nUsing `-` as a wildcard for the project will infer the project from\nthe account. The `account` value can be the `email` address or the\n`unique_id` of the service account.",
 	//       "location": "path",
-	//       "pattern": "^projects/[^/]*/serviceAccounts/[^/]*/keys/[^/]*$",
+	//       "pattern": "^projects/[^/]+/serviceAccounts/[^/]+/keys/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
@@ -2468,9 +2435,9 @@ func (c *ProjectsServiceAccountsKeysGetCall) Do(opts ...googleapi.CallOption) (*
 	//   ],
 	//   "parameters": {
 	//     "name": {
-	//       "description": "The resource name of the service account key in the following format:\n`projects/{project}/serviceAccounts/{account}/keys/{key}`.\n\nUsing `-` as a wildcard for the project will infer the project from\nthe account. The `account` value can be the `email` address or the\n`unique_id` of the service account.",
+	//       "description": "The resource name of the service account key in the following format:\n`projects/{PROJECT_ID}/serviceAccounts/{SERVICE_ACCOUNT_EMAIL}/keys/{key}`.\n\nUsing `-` as a wildcard for the project will infer the project from\nthe account. The `account` value can be the `email` address or the\n`unique_id` of the service account.",
 	//       "location": "path",
-	//       "pattern": "^projects/[^/]*/serviceAccounts/[^/]*/keys/[^/]*$",
+	//       "pattern": "^projects/[^/]+/serviceAccounts/[^/]+/keys/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     },
@@ -2632,9 +2599,9 @@ func (c *ProjectsServiceAccountsKeysListCall) Do(opts ...googleapi.CallOption) (
 	//       "type": "string"
 	//     },
 	//     "name": {
-	//       "description": "The resource name of the service account in the following format:\n`projects/{project}/serviceAccounts/{account}`.\n\nUsing `-` as a wildcard for the project, will infer the project from\nthe account. The `account` value can be the `email` address or the\n`unique_id` of the service account.",
+	//       "description": "The resource name of the service account in the following format:\n`projects/{PROJECT_ID}/serviceAccounts/{SERVICE_ACCOUNT_EMAIL}`.\n\nUsing `-` as a wildcard for the project, will infer the project from\nthe account. The `account` value can be the `email` address or the\n`unique_id` of the service account.",
 	//       "location": "path",
-	//       "pattern": "^projects/[^/]*/serviceAccounts/[^/]*$",
+	//       "pattern": "^projects/[^/]+/serviceAccounts/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }

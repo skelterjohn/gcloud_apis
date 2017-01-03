@@ -581,6 +581,111 @@ func Servicemanagement_v1_ServicesConfigsSubmit(context Context, args ...string)
 	return nil
 }
 
+func Servicemanagement_v1_ServicesConsumersList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("serviceName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/services/{serviceName}/consumers", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--consumerId=VALUE]"
+
+		usageBits += " [--pageSize=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewServicesConsumersService(api_service)
+
+	queryParamNames := map[string]bool{
+		"consumerId": false,
+		"pageSize":   false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"serviceName",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_serviceName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_serviceName)
+
+	// Set query parameters.
+	if value, ok := flagValues["consumerId"]; ok {
+		query_consumerId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.ConsumerId(query_consumerId)
+	}
+	if value, ok := flagValues["pageSize"]; ok {
+		query_pageSize, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.PageSize(query_pageSize)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func Servicemanagement_v1_ServicesConvertConfig(context Context, args ...string) error {
 
 	usageFunc := func() {
@@ -1603,6 +1708,8 @@ func Servicemanagement_v1_ServicesList(context Context, args ...string) error {
 
 		usageBits += " [--category=VALUE]"
 
+		usageBits += " [--consumerId=VALUE]"
+
 		usageBits += " [--consumerProjectId=VALUE]"
 
 		usageBits += " [--expand=VALUE]"
@@ -1626,6 +1733,7 @@ func Servicemanagement_v1_ServicesList(context Context, args ...string) error {
 
 	queryParamNames := map[string]bool{
 		"category":          false,
+		"consumerId":        false,
 		"consumerProjectId": false,
 		"expand":            false,
 		"pageSize":          false,
@@ -1664,6 +1772,13 @@ func Servicemanagement_v1_ServicesList(context Context, args ...string) error {
 			return err
 		}
 		call.Category(query_category)
+	}
+	if value, ok := flagValues["consumerId"]; ok {
+		query_consumerId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.ConsumerId(query_consumerId)
 	}
 	if value, ok := flagValues["consumerProjectId"]; ok {
 		query_consumerProjectId, err := commands_util.ConvertValue_string(value)
@@ -1800,117 +1915,6 @@ func Servicemanagement_v1_ServicesPatch(context Context, args ...string) error {
 	}
 
 	call := service.Patch(param_serviceName,
-		request,
-	)
-
-	// Set query parameters.
-	if value, ok := flagValues["updateMask"]; ok {
-		query_updateMask, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.UpdateMask(query_updateMask)
-	}
-
-	response, err := call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Servicemanagement_v1_ServicesPatchConfig(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("serviceName"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1/services/{serviceName}/config", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
-
-		usageBits += " [--updateMask=VALUE]"
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		commands_util.PrintRequestExample(&api_client.Service{})
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewServicesService(api_service)
-
-	queryParamNames := map[string]bool{
-		"updateMask": false,
-	}
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
-
-	for k, r := range queryParamNames {
-		if _, ok := flagValues[k]; r && !ok {
-			return fmt.Errorf("missing required flag %q", "--"+k)
-		}
-	}
-
-	// Only positional arguments should remain in args.
-	if len(args) == 0 || len(args) > 2 {
-		usageFunc()
-	}
-
-	request := &api_client.Service{}
-	if len(args) == 2 {
-		err = commands_util.PopulateRequestFromFilename(&request, args[1])
-		if err != nil {
-			return err
-		}
-	}
-
-	// Any flags that aren't query parameters are applied to the request.
-	keyValues := map[string]string{}
-	for k, v := range flagValues {
-		if _, ok := queryParamNames[k]; !ok {
-			keyValues[k] = v
-		}
-	}
-
-	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
-	if err != nil {
-		return err
-	}
-
-	expectedParams := []string{
-		"serviceName",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_serviceName, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-
-	call := service.PatchConfig(param_serviceName,
 		request,
 	)
 
@@ -2896,117 +2900,6 @@ func Servicemanagement_v1_ServicesUpdateAccessPolicy(context Context, args ...st
 	call := service.UpdateAccessPolicy(param_serviceName,
 		request,
 	)
-
-	response, err := call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Servicemanagement_v1_ServicesUpdateConfig(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("serviceName"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1/services/{serviceName}/config", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
-
-		usageBits += " [--updateMask=VALUE]"
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		commands_util.PrintRequestExample(&api_client.Service{})
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewServicesService(api_service)
-
-	queryParamNames := map[string]bool{
-		"updateMask": false,
-	}
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
-
-	for k, r := range queryParamNames {
-		if _, ok := flagValues[k]; r && !ok {
-			return fmt.Errorf("missing required flag %q", "--"+k)
-		}
-	}
-
-	// Only positional arguments should remain in args.
-	if len(args) == 0 || len(args) > 2 {
-		usageFunc()
-	}
-
-	request := &api_client.Service{}
-	if len(args) == 2 {
-		err = commands_util.PopulateRequestFromFilename(&request, args[1])
-		if err != nil {
-			return err
-		}
-	}
-
-	// Any flags that aren't query parameters are applied to the request.
-	keyValues := map[string]string{}
-	for k, v := range flagValues {
-		if _, ok := queryParamNames[k]; !ok {
-			keyValues[k] = v
-		}
-	}
-
-	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
-	if err != nil {
-		return err
-	}
-
-	expectedParams := []string{
-		"serviceName",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_serviceName, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-
-	call := service.UpdateConfig(param_serviceName,
-		request,
-	)
-
-	// Set query parameters.
-	if value, ok := flagValues["updateMask"]; ok {
-		query_updateMask, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.UpdateMask(query_updateMask)
-	}
 
 	response, err := call.Do()
 	if err != nil {

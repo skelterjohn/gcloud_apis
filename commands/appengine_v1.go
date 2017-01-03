@@ -23,7 +23,7 @@ import (
 	"os"
 	"strings"
 
-	api_client "github.com/skelterjohn/gcloud_apis/clients/ml/v1alpha3"
+	api_client "github.com/skelterjohn/gcloud_apis/clients/appengine/v1"
 	"github.com/skelterjohn/gcloud_apis/commands_util"
 )
 
@@ -33,74 +33,14 @@ var _ = io.Copy
 var _ = os.Stdin
 var _ = strings.Split
 
-func Ml_v1alpha3_ProjectsGetConfig(context Context, args ...string) error {
+func Appengine_v1_AppsCreate(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v1alpha3/projects/{projectsId}:getConfig", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewProjectsService(api_service)
-
-	// Only positional arguments should remain in args.
-	if len(args) != 1 {
-		usageFunc()
-	}
-
-	expectedParams := []string{
-		"projectsId",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-
-	call := service.GetConfig(param_projectsId)
-
-	response, err := call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Ml_v1alpha3_ProjectsHyperparameters(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1alpha3/projects/{projectsId}/hyperparameters", "+") {
+			if strings.Contains("v1/apps", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -110,7 +50,7 @@ func Ml_v1alpha3_ProjectsHyperparameters(context Context, args ...string) error 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		commands_util.PrintRequestExample(&api_client.GoogleCloudMlV1alpha3__GetHyperparametersRequest{})
+		commands_util.PrintRequestExample(&api_client.Application{})
 
 		os.Exit(1)
 	}
@@ -119,7 +59,7 @@ func Ml_v1alpha3_ProjectsHyperparameters(context Context, args ...string) error 
 	if err != nil {
 		return err
 	}
-	service := api_client.NewProjectsService(api_service)
+	service := api_client.NewAppsService(api_service)
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
@@ -131,7 +71,7 @@ func Ml_v1alpha3_ProjectsHyperparameters(context Context, args ...string) error 
 		usageFunc()
 	}
 
-	request := &api_client.GoogleCloudMlV1alpha3__GetHyperparametersRequest{}
+	request := &api_client.Application{}
 	if len(args) == 2 {
 		err = commands_util.PopulateRequestFromFilename(&request, args[1])
 		if err != nil {
@@ -146,20 +86,13 @@ func Ml_v1alpha3_ProjectsHyperparameters(context Context, args ...string) error 
 		return err
 	}
 
-	expectedParams := []string{
-		"projectsId",
-	}
+	expectedParams := []string{}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-
-	call := service.Hyperparameters(param_projectsId,
+	call := service.Create(
 		request,
 	)
 
@@ -176,190 +109,15 @@ func Ml_v1alpha3_ProjectsHyperparameters(context Context, args ...string) error 
 	return nil
 }
 
-func Ml_v1alpha3_ProjectsModelsCreate(context Context, args ...string) error {
+func Appengine_v1_AppsGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v1alpha3/projects/{projectsId}/models", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		commands_util.PrintRequestExample(&api_client.GoogleCloudMlV1alpha3__Model{})
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewProjectsModelsService(api_service)
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
-
-	// Only positional arguments should remain in args.
-	if len(args) == 0 || len(args) > 2 {
-		usageFunc()
-	}
-
-	request := &api_client.GoogleCloudMlV1alpha3__Model{}
-	if len(args) == 2 {
-		err = commands_util.PopulateRequestFromFilename(&request, args[1])
-		if err != nil {
-			return err
-		}
-	}
-
-	keyValues := flagValues
-
-	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
-	if err != nil {
-		return err
-	}
-
-	expectedParams := []string{
-		"projectsId",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-
-	call := service.Create(param_projectsId,
-		request,
-	)
-
-	response, err := call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Ml_v1alpha3_ProjectsModelsCreateVersion(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("modelsId"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1alpha3/projects/{projectsId}/models/{modelsId}", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		commands_util.PrintRequestExample(&api_client.GoogleCloudMlV1alpha3__Version{})
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewProjectsModelsService(api_service)
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
-
-	// Only positional arguments should remain in args.
-	if len(args) == 0 || len(args) > 2 {
-		usageFunc()
-	}
-
-	request := &api_client.GoogleCloudMlV1alpha3__Version{}
-	if len(args) == 2 {
-		err = commands_util.PopulateRequestFromFilename(&request, args[1])
-		if err != nil {
-			return err
-		}
-	}
-
-	keyValues := flagValues
-
-	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
-	if err != nil {
-		return err
-	}
-
-	expectedParams := []string{
-		"projectsId",
-		"modelsId",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_modelsId, err := commands_util.ConvertValue_string(paramValues[1])
-	if err != nil {
-		return err
-	}
-
-	call := service.CreateVersion(param_projectsId, param_modelsId,
-		request,
-	)
-
-	response, err := call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Ml_v1alpha3_ProjectsModelsDelete(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("modelsId"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1alpha3/projects/{projectsId}/models/{modelsId}", "+") {
+			if strings.Contains("v1/{+name}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -375,7 +133,7 @@ func Ml_v1alpha3_ProjectsModelsDelete(context Context, args ...string) error {
 	if err != nil {
 		return err
 	}
-	service := api_client.NewProjectsModelsService(api_service)
+	service := api_client.NewAppsService(api_service)
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -383,24 +141,19 @@ func Ml_v1alpha3_ProjectsModelsDelete(context Context, args ...string) error {
 	}
 
 	expectedParams := []string{
-		"projectsId",
-		"modelsId",
+		"name",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_modelsId, err := commands_util.ConvertValue_string(paramValues[1])
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Delete(param_projectsId, param_modelsId)
+	call := service.Get(param_name)
 
 	response, err := call.Do()
 	if err != nil {
@@ -415,16 +168,15 @@ func Ml_v1alpha3_ProjectsModelsDelete(context Context, args ...string) error {
 	return nil
 }
 
-func Ml_v1alpha3_ProjectsModelsGet(context Context, args ...string) error {
+func Appengine_v1_AppsLocationsGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("modelsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v1alpha3/projects/{projectsId}/models/{modelsId}", "+") {
+			if strings.Contains("v1/{+name}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -440,7 +192,7 @@ func Ml_v1alpha3_ProjectsModelsGet(context Context, args ...string) error {
 	if err != nil {
 		return err
 	}
-	service := api_client.NewProjectsModelsService(api_service)
+	service := api_client.NewAppsLocationsService(api_service)
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -448,24 +200,19 @@ func Ml_v1alpha3_ProjectsModelsGet(context Context, args ...string) error {
 	}
 
 	expectedParams := []string{
-		"projectsId",
-		"modelsId",
+		"name",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_modelsId, err := commands_util.ConvertValue_string(paramValues[1])
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Get(param_projectsId, param_modelsId)
+	call := service.Get(param_name)
 
 	response, err := call.Do()
 	if err != nil {
@@ -480,684 +227,15 @@ func Ml_v1alpha3_ProjectsModelsGet(context Context, args ...string) error {
 	return nil
 }
 
-func Ml_v1alpha3_ProjectsModelsList(context Context, args ...string) error {
+func Appengine_v1_AppsLocationsList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v1alpha3/projects/{projectsId}/models", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		usageBits += " [--filter=VALUE]"
-
-		usageBits += " [--orderBy=VALUE]"
-
-		usageBits += " [--pageSize=VALUE]"
-
-		usageBits += " [--pageToken=VALUE]"
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewProjectsModelsService(api_service)
-
-	queryParamNames := map[string]bool{
-		"filter":    false,
-		"orderBy":   false,
-		"pageSize":  false,
-		"pageToken": false,
-	}
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
-
-	for k, r := range queryParamNames {
-		if _, ok := flagValues[k]; r && !ok {
-			return fmt.Errorf("missing required flag %q", "--"+k)
-		}
-	}
-
-	// Only positional arguments should remain in args.
-	if len(args) != 1 {
-		usageFunc()
-	}
-
-	expectedParams := []string{
-		"projectsId",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-
-	call := service.List(param_projectsId)
-
-	// Set query parameters.
-	if value, ok := flagValues["filter"]; ok {
-		query_filter, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.Filter(query_filter)
-	}
-	if value, ok := flagValues["orderBy"]; ok {
-		query_orderBy, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.OrderBy(query_orderBy)
-	}
-	if value, ok := flagValues["pageSize"]; ok {
-		query_pageSize, err := commands_util.ConvertValue_int64(value)
-		if err != nil {
-			return err
-		}
-		call.PageSize(query_pageSize)
-	}
-	if value, ok := flagValues["pageToken"]; ok {
-		query_pageToken, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.PageToken(query_pageToken)
-	}
-
-	response, err := call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Ml_v1alpha3_ProjectsModelsVersionsDelete(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("modelsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("versionsId"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1alpha3/projects/{projectsId}/models/{modelsId}/versions/{versionsId}", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewProjectsModelsVersionsService(api_service)
-
-	// Only positional arguments should remain in args.
-	if len(args) != 1 {
-		usageFunc()
-	}
-
-	expectedParams := []string{
-		"projectsId",
-		"modelsId",
-		"versionsId",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_modelsId, err := commands_util.ConvertValue_string(paramValues[1])
-	if err != nil {
-		return err
-	}
-	param_versionsId, err := commands_util.ConvertValue_string(paramValues[2])
-	if err != nil {
-		return err
-	}
-
-	call := service.Delete(param_projectsId, param_modelsId, param_versionsId)
-
-	response, err := call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Ml_v1alpha3_ProjectsModelsVersionsGet(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("modelsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("versionsId"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1alpha3/projects/{projectsId}/models/{modelsId}/versions/{versionsId}", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewProjectsModelsVersionsService(api_service)
-
-	// Only positional arguments should remain in args.
-	if len(args) != 1 {
-		usageFunc()
-	}
-
-	expectedParams := []string{
-		"projectsId",
-		"modelsId",
-		"versionsId",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_modelsId, err := commands_util.ConvertValue_string(paramValues[1])
-	if err != nil {
-		return err
-	}
-	param_versionsId, err := commands_util.ConvertValue_string(paramValues[2])
-	if err != nil {
-		return err
-	}
-
-	call := service.Get(param_projectsId, param_modelsId, param_versionsId)
-
-	response, err := call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Ml_v1alpha3_ProjectsModelsVersionsList(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("modelsId"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1alpha3/projects/{projectsId}/models/{modelsId}/versions", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		usageBits += " [--filter=VALUE]"
-
-		usageBits += " [--orderBy=VALUE]"
-
-		usageBits += " [--pageSize=VALUE]"
-
-		usageBits += " [--pageToken=VALUE]"
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewProjectsModelsVersionsService(api_service)
-
-	queryParamNames := map[string]bool{
-		"filter":    false,
-		"orderBy":   false,
-		"pageSize":  false,
-		"pageToken": false,
-	}
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
-
-	for k, r := range queryParamNames {
-		if _, ok := flagValues[k]; r && !ok {
-			return fmt.Errorf("missing required flag %q", "--"+k)
-		}
-	}
-
-	// Only positional arguments should remain in args.
-	if len(args) != 1 {
-		usageFunc()
-	}
-
-	expectedParams := []string{
-		"projectsId",
-		"modelsId",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_modelsId, err := commands_util.ConvertValue_string(paramValues[1])
-	if err != nil {
-		return err
-	}
-
-	call := service.List(param_projectsId, param_modelsId)
-
-	// Set query parameters.
-	if value, ok := flagValues["filter"]; ok {
-		query_filter, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.Filter(query_filter)
-	}
-	if value, ok := flagValues["orderBy"]; ok {
-		query_orderBy, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.OrderBy(query_orderBy)
-	}
-	if value, ok := flagValues["pageSize"]; ok {
-		query_pageSize, err := commands_util.ConvertValue_int64(value)
-		if err != nil {
-			return err
-		}
-		call.PageSize(query_pageSize)
-	}
-	if value, ok := flagValues["pageToken"]; ok {
-		query_pageToken, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.PageToken(query_pageToken)
-	}
-
-	response, err := call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Ml_v1alpha3_ProjectsModelsVersionsSetDefault(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("modelsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("versionsId"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1alpha3/projects/{projectsId}/models/{modelsId}/versions/{versionsId}:setDefault", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		commands_util.PrintRequestExample(&api_client.GoogleCloudMlV1alpha3__SetDefaultVersionRequest{})
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewProjectsModelsVersionsService(api_service)
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
-
-	// Only positional arguments should remain in args.
-	if len(args) == 0 || len(args) > 2 {
-		usageFunc()
-	}
-
-	request := &api_client.GoogleCloudMlV1alpha3__SetDefaultVersionRequest{}
-	if len(args) == 2 {
-		err = commands_util.PopulateRequestFromFilename(&request, args[1])
-		if err != nil {
-			return err
-		}
-	}
-
-	keyValues := flagValues
-
-	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
-	if err != nil {
-		return err
-	}
-
-	expectedParams := []string{
-		"projectsId",
-		"modelsId",
-		"versionsId",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_modelsId, err := commands_util.ConvertValue_string(paramValues[1])
-	if err != nil {
-		return err
-	}
-	param_versionsId, err := commands_util.ConvertValue_string(paramValues[2])
-	if err != nil {
-		return err
-	}
-
-	call := service.SetDefault(param_projectsId, param_modelsId, param_versionsId,
-		request,
-	)
-
-	response, err := call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Ml_v1alpha3_ProjectsOperationsCancel(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("operationsId"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1alpha3/projects/{projectsId}/operations/{operationsId}:cancel", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewProjectsOperationsService(api_service)
-
-	// Only positional arguments should remain in args.
-	if len(args) != 1 {
-		usageFunc()
-	}
-
-	expectedParams := []string{
-		"projectsId",
-		"operationsId",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_operationsId, err := commands_util.ConvertValue_string(paramValues[1])
-	if err != nil {
-		return err
-	}
-
-	call := service.Cancel(param_projectsId, param_operationsId)
-
-	response, err := call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Ml_v1alpha3_ProjectsOperationsDelete(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("operationsId"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1alpha3/projects/{projectsId}/operations/{operationsId}", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewProjectsOperationsService(api_service)
-
-	// Only positional arguments should remain in args.
-	if len(args) != 1 {
-		usageFunc()
-	}
-
-	expectedParams := []string{
-		"projectsId",
-		"operationsId",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_operationsId, err := commands_util.ConvertValue_string(paramValues[1])
-	if err != nil {
-		return err
-	}
-
-	call := service.Delete(param_projectsId, param_operationsId)
-
-	response, err := call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Ml_v1alpha3_ProjectsOperationsGet(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("operationsId"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1alpha3/projects/{projectsId}/operations/{operationsId}", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewProjectsOperationsService(api_service)
-
-	// Only positional arguments should remain in args.
-	if len(args) != 1 {
-		usageFunc()
-	}
-
-	expectedParams := []string{
-		"projectsId",
-		"operationsId",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_operationsId, err := commands_util.ConvertValue_string(paramValues[1])
-	if err != nil {
-		return err
-	}
-
-	call := service.Get(param_projectsId, param_operationsId)
-
-	response, err := call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Ml_v1alpha3_ProjectsOperationsList(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v1alpha3/projects/{projectsId}/operations", "+") {
+			if strings.Contains("v1/{+name}/locations", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -1179,7 +257,7 @@ func Ml_v1alpha3_ProjectsOperationsList(context Context, args ...string) error {
 	if err != nil {
 		return err
 	}
-	service := api_client.NewProjectsOperationsService(api_service)
+	service := api_client.NewAppsLocationsService(api_service)
 
 	queryParamNames := map[string]bool{
 		"filter":    false,
@@ -1204,19 +282,19 @@ func Ml_v1alpha3_ProjectsOperationsList(context Context, args ...string) error {
 	}
 
 	expectedParams := []string{
-		"projectsId",
+		"name",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.List(param_projectsId)
+	call := service.List(param_name)
 
 	// Set query parameters.
 	if value, ok := flagValues["filter"]; ok {
@@ -1254,15 +332,290 @@ func Ml_v1alpha3_ProjectsOperationsList(context Context, args ...string) error {
 	return nil
 }
 
-func Ml_v1alpha3_ProjectsPredict(context Context, args ...string) error {
+func Appengine_v1_AppsOperationsGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v1alpha3/projects/{projectsId}:predict", "+") {
+			if strings.Contains("v1/{+name}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewAppsOperationsService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"name",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_name)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Appengine_v1_AppsOperationsList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/{+name}/operations", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--pageSize=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewAppsOperationsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":    false,
+		"pageSize":  false,
+		"pageToken": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"name",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_name)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["pageSize"]; ok {
+		query_pageSize, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.PageSize(query_pageSize)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Appengine_v1_AppsPatch(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/{+name}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		usageBits += " [--updateMask=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Application{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewAppsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"updateMask": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.Application{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"name",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Patch(param_name,
+		request,
+	)
+
+	// Set query parameters.
+	if value, ok := flagValues["updateMask"]; ok {
+		query_updateMask, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.UpdateMask(query_updateMask)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Appengine_v1_AppsRepair(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/{+name}:repair", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -1272,7 +625,7 @@ func Ml_v1alpha3_ProjectsPredict(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		commands_util.PrintRequestExample(&api_client.GoogleCloudMlV1alpha3__PredictRequest{})
+		commands_util.PrintRequestExample(&api_client.RepairApplicationRequest{})
 
 		os.Exit(1)
 	}
@@ -1281,7 +634,7 @@ func Ml_v1alpha3_ProjectsPredict(context Context, args ...string) error {
 	if err != nil {
 		return err
 	}
-	service := api_client.NewProjectsService(api_service)
+	service := api_client.NewAppsService(api_service)
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
@@ -1293,7 +646,7 @@ func Ml_v1alpha3_ProjectsPredict(context Context, args ...string) error {
 		usageFunc()
 	}
 
-	request := &api_client.GoogleCloudMlV1alpha3__PredictRequest{}
+	request := &api_client.RepairApplicationRequest{}
 	if len(args) == 2 {
 		err = commands_util.PopulateRequestFromFilename(&request, args[1])
 		if err != nil {
@@ -1309,19 +662,19 @@ func Ml_v1alpha3_ProjectsPredict(context Context, args ...string) error {
 	}
 
 	expectedParams := []string{
-		"projectsId",
+		"name",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Predict(param_projectsId,
+	call := service.Repair(param_name,
 		request,
 	)
 
@@ -1338,15 +691,349 @@ func Ml_v1alpha3_ProjectsPredict(context Context, args ...string) error {
 	return nil
 }
 
-func Ml_v1alpha3_ProjectsReportMetric(context Context, args ...string) error {
+func Appengine_v1_AppsServicesDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v1alpha3/projects/{projectsId}:reportMetric", "+") {
+			if strings.Contains("v1/{+name}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewAppsServicesService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"name",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Delete(param_name)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Appengine_v1_AppsServicesGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/{+name}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewAppsServicesService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"name",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_name)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Appengine_v1_AppsServicesList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("parent"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/{+parent}/services", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--pageSize=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewAppsServicesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"pageSize":  false,
+		"pageToken": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"parent",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_parent, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_parent)
+
+	// Set query parameters.
+	if value, ok := flagValues["pageSize"]; ok {
+		query_pageSize, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.PageSize(query_pageSize)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Appengine_v1_AppsServicesPatch(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/{+name}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		usageBits += " [--migrateTraffic=VALUE]"
+
+		usageBits += " [--updateMask=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Service{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewAppsServicesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"migrateTraffic": false,
+		"updateMask":     false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.Service{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"name",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Patch(param_name,
+		request,
+	)
+
+	// Set query parameters.
+	if value, ok := flagValues["migrateTraffic"]; ok {
+		query_migrateTraffic, err := commands_util.ConvertValue_bool(value)
+		if err != nil {
+			return err
+		}
+		call.MigrateTraffic(query_migrateTraffic)
+	}
+	if value, ok := flagValues["updateMask"]; ok {
+		query_updateMask, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.UpdateMask(query_updateMask)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Appengine_v1_AppsServicesVersionsCreate(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("parent"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/{+parent}/versions", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -1356,7 +1043,7 @@ func Ml_v1alpha3_ProjectsReportMetric(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		commands_util.PrintRequestExample(&api_client.GoogleCloudMlV1alpha3__ReportMetricRequest{})
+		commands_util.PrintRequestExample(&api_client.Version{})
 
 		os.Exit(1)
 	}
@@ -1365,7 +1052,7 @@ func Ml_v1alpha3_ProjectsReportMetric(context Context, args ...string) error {
 	if err != nil {
 		return err
 	}
-	service := api_client.NewProjectsService(api_service)
+	service := api_client.NewAppsServicesVersionsService(api_service)
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
@@ -1377,7 +1064,7 @@ func Ml_v1alpha3_ProjectsReportMetric(context Context, args ...string) error {
 		usageFunc()
 	}
 
-	request := &api_client.GoogleCloudMlV1alpha3__ReportMetricRequest{}
+	request := &api_client.Version{}
 	if len(args) == 2 {
 		err = commands_util.PopulateRequestFromFilename(&request, args[1])
 		if err != nil {
@@ -1393,19 +1080,19 @@ func Ml_v1alpha3_ProjectsReportMetric(context Context, args ...string) error {
 	}
 
 	expectedParams := []string{
-		"projectsId",
+		"parent",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_parent, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.ReportMetric(param_projectsId,
+	call := service.Create(param_parent,
 		request,
 	)
 
@@ -1422,15 +1109,159 @@ func Ml_v1alpha3_ProjectsReportMetric(context Context, args ...string) error {
 	return nil
 }
 
-func Ml_v1alpha3_ProjectsSubmitPredictionJob(context Context, args ...string) error {
+func Appengine_v1_AppsServicesVersionsDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v1alpha3/projects/{projectsId}:submitPredictionJob", "+") {
+			if strings.Contains("v1/{+name}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewAppsServicesVersionsService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"name",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Delete(param_name)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Appengine_v1_AppsServicesVersionsGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/{+name}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--view=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewAppsServicesVersionsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"view": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"name",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_name)
+
+	// Set query parameters.
+	if value, ok := flagValues["view"]; ok {
+		query_view, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.View(query_view)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Appengine_v1_AppsServicesVersionsInstancesDebug(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/{+name}:debug", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -1440,7 +1271,7 @@ func Ml_v1alpha3_ProjectsSubmitPredictionJob(context Context, args ...string) er
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		commands_util.PrintRequestExample(&api_client.GoogleCloudMlV1alpha3__SubmitPredictionJobRequest{})
+		commands_util.PrintRequestExample(&api_client.DebugInstanceRequest{})
 
 		os.Exit(1)
 	}
@@ -1449,7 +1280,7 @@ func Ml_v1alpha3_ProjectsSubmitPredictionJob(context Context, args ...string) er
 	if err != nil {
 		return err
 	}
-	service := api_client.NewProjectsService(api_service)
+	service := api_client.NewAppsServicesVersionsInstancesService(api_service)
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
@@ -1461,7 +1292,7 @@ func Ml_v1alpha3_ProjectsSubmitPredictionJob(context Context, args ...string) er
 		usageFunc()
 	}
 
-	request := &api_client.GoogleCloudMlV1alpha3__SubmitPredictionJobRequest{}
+	request := &api_client.DebugInstanceRequest{}
 	if len(args) == 2 {
 		err = commands_util.PopulateRequestFromFilename(&request, args[1])
 		if err != nil {
@@ -1477,19 +1308,19 @@ func Ml_v1alpha3_ProjectsSubmitPredictionJob(context Context, args ...string) er
 	}
 
 	expectedParams := []string{
-		"projectsId",
+		"name",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.SubmitPredictionJob(param_projectsId,
+	call := service.Debug(param_name,
 		request,
 	)
 
@@ -1506,25 +1337,22 @@ func Ml_v1alpha3_ProjectsSubmitPredictionJob(context Context, args ...string) er
 	return nil
 }
 
-func Ml_v1alpha3_ProjectsSubmitTrainingJob(context Context, args ...string) error {
+func Appengine_v1_AppsServicesVersionsInstancesDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v1alpha3/projects/{projectsId}:submitTrainingJob", "+") {
+			if strings.Contains("v1/{+name}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
 			}
 		}
 
-		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
-
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		commands_util.PrintRequestExample(&api_client.GoogleCloudMlV1alpha3__SubmitTrainingJobRequest{})
 
 		os.Exit(1)
 	}
@@ -1533,11 +1361,344 @@ func Ml_v1alpha3_ProjectsSubmitTrainingJob(context Context, args ...string) erro
 	if err != nil {
 		return err
 	}
-	service := api_client.NewProjectsService(api_service)
+	service := api_client.NewAppsServicesVersionsInstancesService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"name",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Delete(param_name)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Appengine_v1_AppsServicesVersionsInstancesGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/{+name}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewAppsServicesVersionsInstancesService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"name",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_name)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Appengine_v1_AppsServicesVersionsInstancesList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("parent"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/{+parent}/instances", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--pageSize=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewAppsServicesVersionsInstancesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"pageSize":  false,
+		"pageToken": false,
+	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"parent",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_parent, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_parent)
+
+	// Set query parameters.
+	if value, ok := flagValues["pageSize"]; ok {
+		query_pageSize, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.PageSize(query_pageSize)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Appengine_v1_AppsServicesVersionsList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("parent"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/{+parent}/versions", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--pageSize=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		usageBits += " [--view=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewAppsServicesVersionsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"pageSize":  false,
+		"pageToken": false,
+		"view":      false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"parent",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_parent, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_parent)
+
+	// Set query parameters.
+	if value, ok := flagValues["pageSize"]; ok {
+		query_pageSize, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.PageSize(query_pageSize)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+	if value, ok := flagValues["view"]; ok {
+		query_view, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.View(query_view)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Appengine_v1_AppsServicesVersionsPatch(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("name"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/{+name}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		usageBits += " [--updateMask=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Version{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewAppsServicesVersionsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"updateMask": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -1545,7 +1706,7 @@ func Ml_v1alpha3_ProjectsSubmitTrainingJob(context Context, args ...string) erro
 		usageFunc()
 	}
 
-	request := &api_client.GoogleCloudMlV1alpha3__SubmitTrainingJobRequest{}
+	request := &api_client.Version{}
 	if len(args) == 2 {
 		err = commands_util.PopulateRequestFromFilename(&request, args[1])
 		if err != nil {
@@ -1553,7 +1714,13 @@ func Ml_v1alpha3_ProjectsSubmitTrainingJob(context Context, args ...string) erro
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -1561,21 +1728,30 @@ func Ml_v1alpha3_ProjectsSubmitTrainingJob(context Context, args ...string) erro
 	}
 
 	expectedParams := []string{
-		"projectsId",
+		"name",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_name, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.SubmitTrainingJob(param_projectsId,
+	call := service.Patch(param_name,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["updateMask"]; ok {
+		query_updateMask, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.UpdateMask(query_updateMask)
+	}
 
 	response, err := call.Do()
 	if err != nil {

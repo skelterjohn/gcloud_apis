@@ -1,6 +1,6 @@
 // Package genomics provides access to the Genomics API.
 //
-// See https://cloud.google.com/genomics/
+// See https://cloud.google.com/genomics
 //
 // Usage example:
 //
@@ -506,6 +506,7 @@ type Binding struct {
 	// Google
 	//    account. For example, `alice@gmail.com` or `joe@example.com`.
 	//
+	//
 	// * `serviceAccount:{emailid}`: An email address that represents a
 	// service
 	//    account. For example,
@@ -834,8 +835,7 @@ type Dataset struct {
 	// Name: The dataset name.
 	Name string `json:"name,omitempty"`
 
-	// ProjectId: The Google Developers Console project ID that this dataset
-	// belongs to.
+	// ProjectId: The Google Cloud project ID that this dataset belongs to.
 	ProjectId string `json:"projectId,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
@@ -998,8 +998,8 @@ type ExportReadGroupSetRequest struct {
 	// An error will be returned if the URI already contains data.
 	ExportUri string `json:"exportUri,omitempty"`
 
-	// ProjectId: Required. The Google Developers Console project ID that
-	// owns this
+	// ProjectId: Required. The Google Cloud project ID that owns
+	// this
 	// export. The caller must have WRITE access to this project.
 	ProjectId string `json:"projectId,omitempty"`
 
@@ -1144,6 +1144,16 @@ type ImportReadGroupSetsRequest struct {
 	// [BAM
 	// files](https://samtools.github.io/hts-specs/SAMv1.pdf)
 	// in Google Cloud Storage.
+	// Those URIs can include wildcards (*), but do not add or
+	// remove
+	// matching files before import has completed.
+	//
+	// Note that Google Cloud Storage object listing is only
+	// eventually
+	// consistent: files added may be not be immediately visible
+	// to
+	// everyone. Thus, if using a wildcard it is preferable not to start
+	// the import immediately after the files are created.
 	SourceUris []string `json:"sourceUris,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "DatasetId") to
@@ -1189,11 +1199,11 @@ type ImportVariantsRequest struct {
 	//
 	// Possible values:
 	//   "FORMAT_UNSPECIFIED"
-	//   "FORMAT_VCF" - VCF (Variant Call Format). The VCF files should be
-	// uncompressed. gVCF is
+	//   "FORMAT_VCF" - VCF (Variant Call Format). The VCF files may be gzip
+	// compressed. gVCF is
 	// also supported.
 	//   "FORMAT_COMPLETE_GENOMICS" - Complete Genomics masterVarBeta
-	// format. The masterVarBeta files should
+	// format. The masterVarBeta files may
 	// be bzip2 compressed.
 	Format string `json:"format,omitempty"`
 
@@ -1482,7 +1492,8 @@ type Operation struct {
 	// available.
 	Done bool `json:"done,omitempty"`
 
-	// Error: The error result of the operation in case of failure.
+	// Error: The error result of the operation in case of failure or
+	// cancellation.
 	Error *Status `json:"error,omitempty"`
 
 	// Metadata: An OperationMetadata object. This will always be returned
@@ -1496,7 +1507,7 @@ type Operation struct {
 
 	// Response: If importing ReadGroupSets, an ImportReadGroupSetsResponse
 	// is returned. If importing Variants, an ImportVariantsResponse is
-	// returned. For exports, an empty response is returned.
+	// returned. For pipelines and exports, an empty response is returned.
 	Response OperationResponse `json:"response,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
@@ -1553,9 +1564,9 @@ func (s *OperationEvent) MarshalJSON() ([]byte, error) {
 
 // OperationMetadata1: Metadata describing an Operation.
 type OperationMetadata1 struct {
-	// ClientId: Optionally provided by the caller when submitting the
-	// request that creates
-	// the operation.
+	// ClientId: This field is deprecated. Use `labels` instead. Optionally
+	// provided by the
+	// caller when submitting the request that creates the operation.
 	ClientId string `json:"clientId,omitempty"`
 
 	// CreateTime: The time at which the job was submitted to the Genomics
@@ -1570,6 +1581,11 @@ type OperationMetadata1 struct {
 	// This also contains any warnings that were generated during import
 	// or export.
 	Events []*OperationEvent `json:"events,omitempty"`
+
+	// Labels: Optionally provided by the caller when submitting the request
+	// that creates
+	// the operation.
+	Labels map[string]string `json:"labels,omitempty"`
 
 	// ProjectId: The Google Cloud Project in which the job is scoped.
 	ProjectId string `json:"projectId,omitempty"`
@@ -3249,176 +3265,6 @@ func (s *Status) MarshalJSON() ([]byte, error) {
 }
 
 type StatusDetails interface{}
-
-// StreamReadsRequest: The stream reads request.
-type StreamReadsRequest struct {
-	// End: The end position of the range on the reference, 0-based
-	// exclusive. If
-	// specified, `referenceName` must also be specified.
-	End int64 `json:"end,omitempty,string"`
-
-	// ProjectId: The Google Developers Console project ID or number which
-	// will be billed
-	// for this access. The caller must have WRITE access to this
-	// project.
-	// Required.
-	ProjectId string `json:"projectId,omitempty"`
-
-	// ReadGroupSetId: The ID of the read group set from which to stream
-	// reads.
-	ReadGroupSetId string `json:"readGroupSetId,omitempty"`
-
-	// ReferenceName: The reference sequence name, for example `chr1`,
-	// `1`, or `chrX`. If set to *, only unmapped reads are
-	// returned.
-	ReferenceName string `json:"referenceName,omitempty"`
-
-	// Shard: Restricts results to a shard containing approximately
-	// `1/totalShards`
-	// of the normal response payload for this query. Results from a
-	// sharded
-	// request are disjoint from those returned by all queries which differ
-	// only
-	// in their shard parameter. A shard may yield 0 results; this is
-	// especially
-	// likely for large values of `totalShards`.
-	//
-	// Valid values are `[0, totalShards)`.
-	Shard int64 `json:"shard,omitempty"`
-
-	// Start: The start position of the range on the reference, 0-based
-	// inclusive. If
-	// specified, `referenceName` must also be specified.
-	Start int64 `json:"start,omitempty,string"`
-
-	// TotalShards: Specifying `totalShards` causes a disjoint subset of the
-	// normal response
-	// payload to be returned for each query with a unique `shard`
-	// parameter
-	// specified. A best effort is made to yield equally sized shards.
-	// Sharding
-	// can be used to distribute processing amongst workers, where each
-	// worker is
-	// assigned a unique `shard` number and all workers specify the
-	// same
-	// `totalShards` number. The union of reads returned for all sharded
-	// queries
-	// `[0, totalShards)` is equal to those returned by a single unsharded
-	// query.
-	//
-	// Queries for different values of `totalShards` with common divisors
-	// will
-	// share shard boundaries. For example, streaming `shard` 2 of
-	// 5
-	// `totalShards` yields the same results as streaming `shard`s 4 and 5
-	// of 10
-	// `totalShards`. This property can be leveraged for adaptive retries.
-	TotalShards int64 `json:"totalShards,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "End") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *StreamReadsRequest) MarshalJSON() ([]byte, error) {
-	type noMethod StreamReadsRequest
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-type StreamReadsResponse struct {
-	Alignments []*Read `json:"alignments,omitempty"`
-
-	// ServerResponse contains the HTTP response code and headers from the
-	// server.
-	googleapi.ServerResponse `json:"-"`
-
-	// ForceSendFields is a list of field names (e.g. "Alignments") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *StreamReadsResponse) MarshalJSON() ([]byte, error) {
-	type noMethod StreamReadsResponse
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// StreamVariantsRequest: The stream variants request.
-type StreamVariantsRequest struct {
-	// CallSetIds: Only return variant calls which belong to call sets with
-	// these IDs.
-	// Leaving this blank returns all variant calls.
-	CallSetIds []string `json:"callSetIds,omitempty"`
-
-	// End: The end of the window (0-based, exclusive) for which
-	// overlapping
-	// variants should be returned.
-	End int64 `json:"end,omitempty,string"`
-
-	// ProjectId: The Google Developers Console project ID or number which
-	// will be billed
-	// for this access. The caller must have WRITE access to this
-	// project.
-	// Required.
-	ProjectId string `json:"projectId,omitempty"`
-
-	// ReferenceName: Required. Only return variants in this reference
-	// sequence.
-	ReferenceName string `json:"referenceName,omitempty"`
-
-	// Start: The beginning of the window (0-based, inclusive) for
-	// which
-	// overlapping variants should be returned.
-	Start int64 `json:"start,omitempty,string"`
-
-	// VariantSetId: The variant set ID from which to stream variants.
-	VariantSetId string `json:"variantSetId,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "CallSetIds") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *StreamVariantsRequest) MarshalJSON() ([]byte, error) {
-	type noMethod StreamVariantsRequest
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-type StreamVariantsResponse struct {
-	Variants []*Variant `json:"variants,omitempty"`
-
-	// ServerResponse contains the HTTP response code and headers from the
-	// server.
-	googleapi.ServerResponse `json:"-"`
-
-	// ForceSendFields is a list of field names (e.g. "Variants") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *StreamVariantsResponse) MarshalJSON() ([]byte, error) {
-	type noMethod StreamVariantsResponse
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
 
 // TestIamPermissionsRequest: Request message for `TestIamPermissions`
 // method.
@@ -6558,7 +6404,7 @@ func (c *DatasetsGetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Policy, er
 	//     "resource": {
 	//       "description": "REQUIRED: The resource for which policy is being specified. Format is\n`datasets/\u003cdataset ID\u003e`.",
 	//       "location": "path",
-	//       "pattern": "^datasets/[^/]*$",
+	//       "pattern": "^datasets/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
@@ -6619,7 +6465,7 @@ func (c *DatasetsListCall) PageToken(pageToken string) *DatasetsListCall {
 }
 
 // ProjectId sets the optional parameter "projectId": Required. The
-// project to list datasets for.
+// Google Cloud project ID to list datasets for.
 func (c *DatasetsListCall) ProjectId(projectId string) *DatasetsListCall {
 	c.urlParams_.Set("projectId", projectId)
 	return c
@@ -6726,7 +6572,7 @@ func (c *DatasetsListCall) Do(opts ...googleapi.CallOption) (*ListDatasetsRespon
 	//       "type": "string"
 	//     },
 	//     "projectId": {
-	//       "description": "Required. The project to list datasets for.",
+	//       "description": "Required. The Google Cloud project ID to list datasets for.",
 	//       "location": "query",
 	//       "type": "string"
 	//     }
@@ -7035,7 +6881,7 @@ func (c *DatasetsSetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Policy, er
 	//     "resource": {
 	//       "description": "REQUIRED: The resource for which policy is being specified. Format is\n`datasets/\u003cdataset ID\u003e`.",
 	//       "location": "path",
-	//       "pattern": "^datasets/[^/]*$",
+	//       "pattern": "^datasets/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
@@ -7173,7 +7019,7 @@ func (c *DatasetsTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (*Test
 	//     "resource": {
 	//       "description": "REQUIRED: The resource for which policy is being specified. Format is\n`datasets/\u003cdataset ID\u003e`.",
 	//       "location": "path",
-	//       "pattern": "^datasets/[^/]*$",
+	//       "pattern": "^datasets/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
@@ -7439,7 +7285,7 @@ func (c *OperationsCancelCall) Do(opts ...googleapi.CallOption) (*Empty, error) 
 	//     "name": {
 	//       "description": "The name of the operation resource to be cancelled.",
 	//       "location": "path",
-	//       "pattern": "^operations/.*$",
+	//       "pattern": "^operations/.+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
@@ -7576,7 +7422,7 @@ func (c *OperationsGetCall) Do(opts ...googleapi.CallOption) (*Operation, error)
 	//     "name": {
 	//       "description": "The name of the operation resource.",
 	//       "location": "path",
-	//       "pattern": "^operations/.*$",
+	//       "pattern": "^operations/.+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
@@ -7624,12 +7470,15 @@ func (r *OperationsService) List(name string) *OperationsListCall {
 // * status&#58; Can be `RUNNING`, `SUCCESS`, `FAILURE`, or `CANCELED`.
 // Only
 //   one status may be specified.
+// * labels.key where key is a label key.
 //
 // Examples&#58;
 //
 // * `projectId = my-project AND createTime >= 1432140000`
 // * `projectId = my-project AND createTime >= 1432140000 AND createTime
 // <= 1432150000 AND status = RUNNING`
+// * `projectId = my-project AND labels.color = *`
+// * `projectId = my-project AND labels.color = red`
 func (c *OperationsListCall) Filter(filter string) *OperationsListCall {
 	c.urlParams_.Set("filter", filter)
 	return c
@@ -7744,7 +7593,7 @@ func (c *OperationsListCall) Do(opts ...googleapi.CallOption) (*ListOperationsRe
 	//   ],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "A string for filtering Operations.\nThe following filter fields are supported\u0026#58;\n\n* projectId\u0026#58; Required. Corresponds to\n  OperationMetadata.projectId.\n* createTime\u0026#58; The time this job was created, in seconds from the\n  [epoch](http://en.wikipedia.org/wiki/Unix_time). Can use `\u003e=` and/or `\u003c=`\n  operators.\n* status\u0026#58; Can be `RUNNING`, `SUCCESS`, `FAILURE`, or `CANCELED`. Only\n  one status may be specified.\n\nExamples\u0026#58;\n\n* `projectId = my-project AND createTime \u003e= 1432140000`\n* `projectId = my-project AND createTime \u003e= 1432140000 AND createTime \u003c= 1432150000 AND status = RUNNING`",
+	//       "description": "A string for filtering Operations.\nThe following filter fields are supported\u0026#58;\n\n* projectId\u0026#58; Required. Corresponds to\n  OperationMetadata.projectId.\n* createTime\u0026#58; The time this job was created, in seconds from the\n  [epoch](http://en.wikipedia.org/wiki/Unix_time). Can use `\u003e=` and/or `\u003c=`\n  operators.\n* status\u0026#58; Can be `RUNNING`, `SUCCESS`, `FAILURE`, or `CANCELED`. Only\n  one status may be specified.\n* labels.key where key is a label key.\n\nExamples\u0026#58;\n\n* `projectId = my-project AND createTime \u003e= 1432140000`\n* `projectId = my-project AND createTime \u003e= 1432140000 AND createTime \u003c= 1432150000 AND status = RUNNING`\n* `projectId = my-project AND labels.color = *`\n* `projectId = my-project AND labels.color = red`",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
@@ -9032,120 +8881,6 @@ func (c *ReadsSearchCall) Do(opts ...googleapi.CallOption) (*SearchReadsResponse
 	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/genomics",
 	//     "https://www.googleapis.com/auth/genomics.readonly"
-	//   ]
-	// }
-
-}
-
-// method id "genomics.reads.stream":
-
-type ReadsStreamCall struct {
-	s                  *Service
-	streamreadsrequest *StreamReadsRequest
-	urlParams_         gensupport.URLParams
-	ctx_               context.Context
-}
-
-// Stream: Returns a stream of all the reads matching the search
-// request, ordered
-// by reference name, position, and ID.
-func (r *ReadsService) Stream(streamreadsrequest *StreamReadsRequest) *ReadsStreamCall {
-	c := &ReadsStreamCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.streamreadsrequest = streamreadsrequest
-	return c
-}
-
-// Fields allows partial responses to be retrieved. See
-// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
-// for more information.
-func (c *ReadsStreamCall) Fields(s ...googleapi.Field) *ReadsStreamCall {
-	c.urlParams_.Set("fields", googleapi.CombineFields(s))
-	return c
-}
-
-// Context sets the context to be used in this call's Do method. Any
-// pending HTTP request will be aborted if the provided context is
-// canceled.
-func (c *ReadsStreamCall) Context(ctx context.Context) *ReadsStreamCall {
-	c.ctx_ = ctx
-	return c
-}
-
-func (c *ReadsStreamCall) doRequest(alt string) (*http.Response, error) {
-	reqHeaders := make(http.Header)
-	reqHeaders.Set("User-Agent", c.s.userAgent())
-	var body io.Reader = nil
-	body, err := googleapi.WithoutDataWrapper.JSONReader(c.streamreadsrequest)
-	if err != nil {
-		return nil, err
-	}
-	reqHeaders.Set("Content-Type", "application/json")
-	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/reads:stream")
-	urls += "?" + c.urlParams_.Encode()
-	req, _ := http.NewRequest("POST", urls, body)
-	req.Header = reqHeaders
-	googleapi.SetOpaque(req.URL)
-	if c.ctx_ != nil {
-		return ctxhttp.Do(c.ctx_, c.s.client, req)
-	}
-	return c.s.client.Do(req)
-}
-
-// Do executes the "genomics.reads.stream" call.
-// Exactly one of *StreamReadsResponse or error will be non-nil. Any
-// non-2xx status code is an error. Response headers are in either
-// *StreamReadsResponse.ServerResponse.Header or (if a response was
-// returned at all) in error.(*googleapi.Error).Header. Use
-// googleapi.IsNotModified to check whether the returned error was
-// because http.StatusNotModified was returned.
-func (c *ReadsStreamCall) Do(opts ...googleapi.CallOption) (*StreamReadsResponse, error) {
-	gensupport.SetOptions(c.urlParams_, opts...)
-	res, err := c.doRequest("json")
-	if res != nil && res.StatusCode == http.StatusNotModified {
-		if res.Body != nil {
-			res.Body.Close()
-		}
-		return nil, &googleapi.Error{
-			Code:   res.StatusCode,
-			Header: res.Header,
-		}
-	}
-	if err != nil {
-		return nil, err
-	}
-	defer googleapi.CloseBody(res)
-	if err := googleapi.CheckResponse(res); err != nil {
-		return nil, err
-	}
-	ret := &StreamReadsResponse{
-		ServerResponse: googleapi.ServerResponse{
-			Header:         res.Header,
-			HTTPStatusCode: res.StatusCode,
-		},
-	}
-	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
-		return nil, err
-	}
-	return ret, nil
-	// {
-	//   "description": "Returns a stream of all the reads matching the search request, ordered\nby reference name, position, and ID.",
-	//   "flatPath": "v1/reads:stream",
-	//   "httpMethod": "POST",
-	//   "id": "genomics.reads.stream",
-	//   "parameterOrder": [],
-	//   "parameters": {},
-	//   "path": "v1/reads:stream",
-	//   "request": {
-	//     "$ref": "StreamReadsRequest"
-	//   },
-	//   "response": {
-	//     "$ref": "StreamReadsResponse"
-	//   },
-	//   "scopes": [
-	//     "https://www.googleapis.com/auth/cloud-platform",
-	//     "https://www.googleapis.com/auth/genomics"
 	//   ]
 	// }
 
@@ -10915,120 +10650,6 @@ func (c *VariantsSearchCall) Do(opts ...googleapi.CallOption) (*SearchVariantsRe
 	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/genomics",
 	//     "https://www.googleapis.com/auth/genomics.readonly"
-	//   ]
-	// }
-
-}
-
-// method id "genomics.variants.stream":
-
-type VariantsStreamCall struct {
-	s                     *Service
-	streamvariantsrequest *StreamVariantsRequest
-	urlParams_            gensupport.URLParams
-	ctx_                  context.Context
-}
-
-// Stream: Returns a stream of all the variants matching the search
-// request, ordered
-// by reference name, position, and ID.
-func (r *VariantsService) Stream(streamvariantsrequest *StreamVariantsRequest) *VariantsStreamCall {
-	c := &VariantsStreamCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.streamvariantsrequest = streamvariantsrequest
-	return c
-}
-
-// Fields allows partial responses to be retrieved. See
-// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
-// for more information.
-func (c *VariantsStreamCall) Fields(s ...googleapi.Field) *VariantsStreamCall {
-	c.urlParams_.Set("fields", googleapi.CombineFields(s))
-	return c
-}
-
-// Context sets the context to be used in this call's Do method. Any
-// pending HTTP request will be aborted if the provided context is
-// canceled.
-func (c *VariantsStreamCall) Context(ctx context.Context) *VariantsStreamCall {
-	c.ctx_ = ctx
-	return c
-}
-
-func (c *VariantsStreamCall) doRequest(alt string) (*http.Response, error) {
-	reqHeaders := make(http.Header)
-	reqHeaders.Set("User-Agent", c.s.userAgent())
-	var body io.Reader = nil
-	body, err := googleapi.WithoutDataWrapper.JSONReader(c.streamvariantsrequest)
-	if err != nil {
-		return nil, err
-	}
-	reqHeaders.Set("Content-Type", "application/json")
-	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/variants:stream")
-	urls += "?" + c.urlParams_.Encode()
-	req, _ := http.NewRequest("POST", urls, body)
-	req.Header = reqHeaders
-	googleapi.SetOpaque(req.URL)
-	if c.ctx_ != nil {
-		return ctxhttp.Do(c.ctx_, c.s.client, req)
-	}
-	return c.s.client.Do(req)
-}
-
-// Do executes the "genomics.variants.stream" call.
-// Exactly one of *StreamVariantsResponse or error will be non-nil. Any
-// non-2xx status code is an error. Response headers are in either
-// *StreamVariantsResponse.ServerResponse.Header or (if a response was
-// returned at all) in error.(*googleapi.Error).Header. Use
-// googleapi.IsNotModified to check whether the returned error was
-// because http.StatusNotModified was returned.
-func (c *VariantsStreamCall) Do(opts ...googleapi.CallOption) (*StreamVariantsResponse, error) {
-	gensupport.SetOptions(c.urlParams_, opts...)
-	res, err := c.doRequest("json")
-	if res != nil && res.StatusCode == http.StatusNotModified {
-		if res.Body != nil {
-			res.Body.Close()
-		}
-		return nil, &googleapi.Error{
-			Code:   res.StatusCode,
-			Header: res.Header,
-		}
-	}
-	if err != nil {
-		return nil, err
-	}
-	defer googleapi.CloseBody(res)
-	if err := googleapi.CheckResponse(res); err != nil {
-		return nil, err
-	}
-	ret := &StreamVariantsResponse{
-		ServerResponse: googleapi.ServerResponse{
-			Header:         res.Header,
-			HTTPStatusCode: res.StatusCode,
-		},
-	}
-	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
-		return nil, err
-	}
-	return ret, nil
-	// {
-	//   "description": "Returns a stream of all the variants matching the search request, ordered\nby reference name, position, and ID.",
-	//   "flatPath": "v1/variants:stream",
-	//   "httpMethod": "POST",
-	//   "id": "genomics.variants.stream",
-	//   "parameterOrder": [],
-	//   "parameters": {},
-	//   "path": "v1/variants:stream",
-	//   "request": {
-	//     "$ref": "StreamVariantsRequest"
-	//   },
-	//   "response": {
-	//     "$ref": "StreamVariantsResponse"
-	//   },
-	//   "scopes": [
-	//     "https://www.googleapis.com/auth/cloud-platform",
-	//     "https://www.googleapis.com/auth/genomics"
 	//   ]
 	// }
 

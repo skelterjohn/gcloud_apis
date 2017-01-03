@@ -4,7 +4,7 @@
 //
 // Usage example:
 //
-//   import "github.com/skelterjohn/gcloud_apis/clients/cloudfunctions/v1beta1"
+//   import "github.com/skelterjohn/gcloud_apis/clients/cloudfunctions/v1beta2"
 //   ...
 //   cloudfunctionsService, err := cloudfunctions.New(oauthHttpClient)
 package cloudfunctions
@@ -40,9 +40,9 @@ var _ = strings.Replace
 var _ = context.Canceled
 var _ = ctxhttp.Do
 
-const apiId = "cloudfunctions:v1beta1"
+const apiId = "cloudfunctions:v1beta2"
 const apiName = "cloudfunctions"
-const apiVersion = "v1beta1"
+const apiVersion = "v1beta2"
 const basePath = "https://cloudfunctions.googleapis.com/"
 
 // OAuth2 scopes used by this API.
@@ -90,7 +90,6 @@ type OperationsService struct {
 func NewProjectsService(s *Service) *ProjectsService {
 	rs := &ProjectsService{s: s}
 	rs.Locations = NewProjectsLocationsService(s)
-	rs.Regions = NewProjectsRegionsService(s)
 	return rs
 }
 
@@ -98,37 +97,26 @@ type ProjectsService struct {
 	s *Service
 
 	Locations *ProjectsLocationsService
-
-	Regions *ProjectsRegionsService
 }
 
 func NewProjectsLocationsService(s *Service) *ProjectsLocationsService {
 	rs := &ProjectsLocationsService{s: s}
+	rs.Functions = NewProjectsLocationsFunctionsService(s)
 	return rs
 }
 
 type ProjectsLocationsService struct {
 	s *Service
+
+	Functions *ProjectsLocationsFunctionsService
 }
 
-func NewProjectsRegionsService(s *Service) *ProjectsRegionsService {
-	rs := &ProjectsRegionsService{s: s}
-	rs.Functions = NewProjectsRegionsFunctionsService(s)
+func NewProjectsLocationsFunctionsService(s *Service) *ProjectsLocationsFunctionsService {
+	rs := &ProjectsLocationsFunctionsService{s: s}
 	return rs
 }
 
-type ProjectsRegionsService struct {
-	s *Service
-
-	Functions *ProjectsRegionsFunctionsService
-}
-
-func NewProjectsRegionsFunctionsService(s *Service) *ProjectsRegionsFunctionsService {
-	rs := &ProjectsRegionsFunctionsService{s: s}
-	return rs
-}
-
-type ProjectsRegionsFunctionsService struct {
+type ProjectsLocationsFunctionsService struct {
 	s *Service
 }
 
@@ -187,43 +175,16 @@ func (s *CallFunctionResponse) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// FunctionTrigger: Describes binding of computation to the event
-// source.
-type FunctionTrigger struct {
-	// GsUri: Google Cloud Storage resource whose changes trigger the
-	// events.
-	// Currently, it must have the form gs://<bucket>/ (that is, it must
-	// refer
-	// to a bucket, rather than an object).
-	GsUri string `json:"gsUri,omitempty"`
-
-	// PubsubTopic: A pub/sub type of source.
-	PubsubTopic string `json:"pubsubTopic,omitempty"`
-
-	// WebTrigger: A web endpoint (e.g. HTTP) type of source that can be
-	// trigger via URL.
-	WebTrigger *WebTrigger `json:"webTrigger,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "GsUri") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *FunctionTrigger) MarshalJSON() ([]byte, error) {
-	type noMethod FunctionTrigger
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// HostedFunction: Describes a cloud function that contains user
+// CloudFunction: Describes a cloud function that contains user
 // computation executed in
 // response to an event. It encapsulate function and triggers
 // configurations.
-type HostedFunction struct {
+type CloudFunction struct {
+	// AvailableMemoryMb: The amount of memory in MB available for a
+	// function.
+	// Defaults to 256MB.
+	AvailableMemoryMb int64 `json:"availableMemoryMb,omitempty"`
+
 	// EntryPoint: The name of the function (as defined in source code) that
 	// will be
 	// executed. Defaults to the resource name suffix, if not specified.
@@ -236,35 +197,71 @@ type HostedFunction struct {
 	// in source_location.
 	EntryPoint string `json:"entryPoint,omitempty"`
 
-	// GcsUrl: GCS URL pointing to the zip archive which contains the
+	// EventTrigger: A source that fires events in response to a condition
+	// in another service.
+	EventTrigger *EventTrigger `json:"eventTrigger,omitempty"`
+
+	// GcsTrigger: Google Cloud Storage resource whose changes trigger the
+	// events.
+	// Currently, it must have the form gs://<bucket>/ (that is, it must
+	// refer
+	// to a bucket, rather than an object).
+	//
+	// Deprecated: To be removed by Beta.
+	// Replacement:
+	//   condition_trigger: {
+	//     action: "sources/cloud.pubsub/actions/publish"
+	//     resource: "projects/[PROJECT_NAME]/buckets/[BUCKET_NAME]"
+	//   }
+	GcsTrigger string `json:"gcsTrigger,omitempty"`
+
+	// GcsUrl: Google Cloud Storage URL pointing to the zip archive which
+	// contains the
 	// function.
+	//
+	// Deprecated: To be removed by Beta.
+	// Replacement: source_archive_url
 	GcsUrl string `json:"gcsUrl,omitempty"`
 
-	// LatestOperation: [Output only] Name of the most recent operation
-	// modifying the function. If
+	// HttpsTrigger: A https endpoint type of source that can be trigger via
+	// URL.
+	HttpsTrigger *HTTPSTrigger `json:"httpsTrigger,omitempty"`
+
+	// LatestOperation: Name of the most recent operation modifying the
+	// function. If
 	// the function status is DEPLOYING or DELETING, then it points to the
 	// active
-	// operation.
+	// operation. Output only.
 	LatestOperation string `json:"latestOperation,omitempty"`
 
 	// Name: A user-defined name of the function. Function names must be
 	// unique
-	// globally and match pattern: projects/*/regions/*/functions/*
+	// globally and match pattern: projects/*/locations/*/functions/*
 	Name string `json:"name,omitempty"`
 
-	// OauthScopes: The set of Google API scopes to be made available to the
-	// function while
-	// it is being executed. Values should be in the format of
-	// scope
-	// developer codes, for example:
-	// "https://www.googleapis.com/auth/compute".
-	OauthScopes []string `json:"oauthScopes,omitempty"`
+	// PubsubTrigger: A pub/sub type of source.
+	//
+	// Deprecated: To be removed by Beta.
+	// Replacement:
+	//   condition_trigger: {
+	//     action: "sources/cloud.pubsub/actions/publish"
+	//     resource: "projects/[PROJECT_ID]/topics/[TOPIC_NAME]"
+	//   }
+	PubsubTrigger string `json:"pubsubTrigger,omitempty"`
+
+	// ServiceAccount: The service account of the function. Output only.
+	ServiceAccount string `json:"serviceAccount,omitempty"`
+
+	// SourceArchiveUrl: The URL, starting with gs://, pointing to the zip
+	// archive which contains
+	// the function.
+	SourceArchiveUrl string `json:"sourceArchiveUrl,omitempty"`
 
 	// SourceRepository: The hosted repository where the function is
 	// defined.
 	SourceRepository *SourceRepository `json:"sourceRepository,omitempty"`
 
-	// Status: [Output only] Status of the function deployment.
+	// Status: Status of the function deployment. Output only.
 	//
 	// Possible values:
 	//   "STATUS_UNSPECIFIED" - Status not specified.
@@ -276,21 +273,72 @@ type HostedFunction struct {
 	//   "DELETING" - Deletion in progress.
 	Status string `json:"status,omitempty"`
 
-	// Timeout: The cloud function execution timeout. Execution is
-	// considered failed and
+	// Timeout: The function execution timeout. Execution is considered
+	// failed and
 	// can be terminated if the function is not completed at the end of
 	// the
 	// timeout period. Defaults to 60 seconds.
 	Timeout string `json:"timeout,omitempty"`
 
-	// Triggers: List of triggers.
-	Triggers []*FunctionTrigger `json:"triggers,omitempty"`
-
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
 	googleapi.ServerResponse `json:"-"`
 
-	// ForceSendFields is a list of field names (e.g. "EntryPoint") to
+	// ForceSendFields is a list of field names (e.g. "AvailableMemoryMb")
+	// to unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *CloudFunction) MarshalJSON() ([]byte, error) {
+	type noMethod CloudFunction
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// EventTrigger: Describes EventTrigger, used to request events be sent
+// from another
+// service.
+type EventTrigger struct {
+	// EventType: event_type names contain the service that is sending an
+	// event and the kind
+	// of event that was fired. Must be of the form
+	// providers/*/eventTypes/*
+	// e.g. Directly handle a Message published to Google Cloud PubSub
+	//      providers/cloud.pubsub/eventTypes/topic.publish
+	//
+	//      Handle an object changing in Google Cloud Storage
+	//      providers/cloud.storage/eventTypes/object.change
+	//
+	//      Handle a write to the Firebase Realtime Database
+	//      providers/firebase.database/eventTypes/data.write
+	EventType string `json:"eventType,omitempty"`
+
+	// Path: Optional path within the resource that should be used to filter
+	// events.
+	// Named wildcards may be written in curly brackets (e.g. {variable}).
+	// The
+	// value that matched this parameter will be included  in the
+	// event
+	// parameters. e.g. users/{userId}/profilePic
+	// Path is not supported for all actions.
+	Path string `json:"path,omitempty"`
+
+	// Resource: Which instance of the source's service should send events.
+	// E.g. for PubSub
+	// this would be a PubSub topic at projects/*/topics/*. For Google
+	// Cloud
+	// Storage this would be a bucket at projects/*/buckets/*. For any
+	// source
+	// that only supports one instance per-project, this should be the name
+	// of the
+	// project (projects/*)
+	Resource string `json:"resource,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "EventType") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -299,8 +347,29 @@ type HostedFunction struct {
 	ForceSendFields []string `json:"-"`
 }
 
-func (s *HostedFunction) MarshalJSON() ([]byte, error) {
-	type noMethod HostedFunction
+func (s *EventTrigger) MarshalJSON() ([]byte, error) {
+	type noMethod EventTrigger
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// HTTPSTrigger: Describes HTTPSTrigger, could be used to connect web
+// hooks to function.
+type HTTPSTrigger struct {
+	// Url: [Output only] The deployed url for the function.
+	Url string `json:"url,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Url") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *HTTPSTrigger) MarshalJSON() ([]byte, error) {
+	type noMethod HTTPSTrigger
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
@@ -308,7 +377,7 @@ func (s *HostedFunction) MarshalJSON() ([]byte, error) {
 // ListFunctionsResponse: Response for the ListFunctions method.
 type ListFunctionsResponse struct {
 	// Functions: The functions that match the request.
-	Functions []*HostedFunction `json:"functions,omitempty"`
+	Functions []*CloudFunction `json:"functions,omitempty"`
 
 	// NextPageToken: If not empty, indicates that there may be more
 	// functions that match
@@ -337,7 +406,7 @@ func (s *ListFunctionsResponse) MarshalJSON() ([]byte, error) {
 }
 
 // ListLocationsResponse: The response message for
-// LocationService.ListLocations.
+// Locations.ListLocations.
 type ListLocationsResponse struct {
 	// Locations: A list of locations that matches the specified filter in
 	// the request.
@@ -414,7 +483,8 @@ type Operation struct {
 	// available.
 	Done bool `json:"done,omitempty"`
 
-	// Error: The error result of the operation in case of failure.
+	// Error: The error result of the operation in case of failure or
+	// cancellation.
 	Error *Status `json:"error,omitempty"`
 
 	// Metadata: Service-specific metadata associated with the operation.
@@ -473,14 +543,18 @@ type OperationMetadata interface{}
 
 type OperationResponse interface{}
 
-// OperationMetadata1: Metadata describing an Operation
-type OperationMetadata1 struct {
+// OperationMetadataV1Beta2: Metadata describing an Operation
+//
+// See description of cl/108626115 for the reason why the metadata
+// proto
+// message contains the API version.
+type OperationMetadataV1Beta2 struct {
 	// Request: The original request that started the operation.
-	Request OperationMetadataRequest `json:"request,omitempty"`
+	Request OperationMetadataV1Beta2Request `json:"request,omitempty"`
 
 	// Target: Target of the operation - for
 	// example
-	// projects/project-1/regions/region-1/functions/function-1
+	// projects/project-1/locations/region-1/functions/function-1
 	Target string `json:"target,omitempty"`
 
 	// Type: Type of operation.
@@ -501,13 +575,13 @@ type OperationMetadata1 struct {
 	ForceSendFields []string `json:"-"`
 }
 
-func (s *OperationMetadata1) MarshalJSON() ([]byte, error) {
-	type noMethod OperationMetadata1
+func (s *OperationMetadataV1Beta2) MarshalJSON() ([]byte, error) {
+	type noMethod OperationMetadataV1Beta2
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-type OperationMetadataRequest interface{}
+type OperationMetadataV1Beta2Request interface{}
 
 // SourceRepository: Describes the location of the function source in a
 // remote repository.
@@ -516,15 +590,15 @@ type SourceRepository struct {
 	// fetched.
 	Branch string `json:"branch,omitempty"`
 
-	// DeployedRevision: [Output only] The id of the revision that was
-	// resolved at the moment of
+	// DeployedRevision: The id of the revision that was resolved at the
+	// moment of
 	// function creation or update. For example when a user deployed from
 	// a
 	// branch, it will be the revision id of the latest change on this
 	// branch at
 	// that time. If user deployed from revision then this value will be
 	// always
-	// equal to the revision specified by the user.
+	// equal to the revision specified by the user. Output only.
 	DeployedRevision string `json:"deployedRevision,omitempty"`
 
 	// RepositoryUrl: URL to the hosted repository where the function is
@@ -681,33 +755,6 @@ func (s *Status) MarshalJSON() ([]byte, error) {
 
 type StatusDetails interface{}
 
-// WebTrigger: Describes WebTrigger, could be used to connect web hooks
-// to function.
-type WebTrigger struct {
-	// Protocol: Protocol accepted by WebTrigger.
-	//
-	// Possible values:
-	//   "HTTP" - HTTP protocol
-	Protocol string `json:"protocol,omitempty"`
-
-	// Url: [Output only] The deployed url for the function.
-	Url string `json:"url,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "Protocol") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *WebTrigger) MarshalJSON() ([]byte, error) {
-	type noMethod WebTrigger
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
 // method id "cloudfunctions.operations.get":
 
 type OperationsGetCall struct {
@@ -763,7 +810,7 @@ func (c *OperationsGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+name}")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	req.Header = reqHeaders
@@ -815,7 +862,7 @@ func (c *OperationsGetCall) Do(opts ...googleapi.CallOption) (*Operation, error)
 	return ret, nil
 	// {
 	//   "description": "Gets the latest state of a long-running operation.  Clients can use this\nmethod to poll the operation result at intervals as recommended by the API\nservice.",
-	//   "flatPath": "v1beta1/operations/{operationsId}",
+	//   "flatPath": "v1beta2/operations/{operationsId}",
 	//   "httpMethod": "GET",
 	//   "id": "cloudfunctions.operations.get",
 	//   "parameterOrder": [
@@ -825,12 +872,12 @@ func (c *OperationsGetCall) Do(opts ...googleapi.CallOption) (*Operation, error)
 	//     "name": {
 	//       "description": "The name of the operation resource.",
 	//       "location": "path",
-	//       "pattern": "^operations/[^/]*$",
+	//       "pattern": "^operations/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/{+name}",
+	//   "path": "v1beta2/{+name}",
 	//   "response": {
 	//     "$ref": "Operation"
 	//   },
@@ -914,7 +961,7 @@ func (c *ProjectsLocationsListCall) doRequest(alt string) (*http.Response, error
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+name}/locations")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+name}/locations")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	req.Header = reqHeaders
@@ -966,7 +1013,7 @@ func (c *ProjectsLocationsListCall) Do(opts ...googleapi.CallOption) (*ListLocat
 	return ret, nil
 	// {
 	//   "description": "Lists information about the supported locations for this service.",
-	//   "flatPath": "v1beta1/projects/{projectsId}/locations",
+	//   "flatPath": "v1beta2/projects/{projectsId}/locations",
 	//   "httpMethod": "GET",
 	//   "id": "cloudfunctions.projects.locations.list",
 	//   "parameterOrder": [
@@ -981,7 +1028,7 @@ func (c *ProjectsLocationsListCall) Do(opts ...googleapi.CallOption) (*ListLocat
 	//     "name": {
 	//       "description": "The resource that owns the locations collection, if applicable.",
 	//       "location": "path",
-	//       "pattern": "^projects/[^/]*$",
+	//       "pattern": "^projects/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     },
@@ -997,7 +1044,7 @@ func (c *ProjectsLocationsListCall) Do(opts ...googleapi.CallOption) (*ListLocat
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/{+name}/locations",
+	//   "path": "v1beta2/{+name}/locations",
 	//   "response": {
 	//     "$ref": "ListLocationsResponse"
 	//   },
@@ -1029,9 +1076,9 @@ func (c *ProjectsLocationsListCall) Pages(ctx context.Context, f func(*ListLocat
 	}
 }
 
-// method id "cloudfunctions.projects.regions.functions.call":
+// method id "cloudfunctions.projects.locations.functions.call":
 
-type ProjectsRegionsFunctionsCallCall struct {
+type ProjectsLocationsFunctionsCallCall struct {
 	s                   *Service
 	name                string
 	callfunctionrequest *CallFunctionRequest
@@ -1042,8 +1089,8 @@ type ProjectsRegionsFunctionsCallCall struct {
 // Call: Invokes synchronously deployed function. To be used for
 // testing, very
 // limited traffic allowed.
-func (r *ProjectsRegionsFunctionsService) Call(name string, callfunctionrequest *CallFunctionRequest) *ProjectsRegionsFunctionsCallCall {
-	c := &ProjectsRegionsFunctionsCallCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+func (r *ProjectsLocationsFunctionsService) Call(name string, callfunctionrequest *CallFunctionRequest) *ProjectsLocationsFunctionsCallCall {
+	c := &ProjectsLocationsFunctionsCallCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
 	c.callfunctionrequest = callfunctionrequest
 	return c
@@ -1052,7 +1099,7 @@ func (r *ProjectsRegionsFunctionsService) Call(name string, callfunctionrequest 
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
-func (c *ProjectsRegionsFunctionsCallCall) Fields(s ...googleapi.Field) *ProjectsRegionsFunctionsCallCall {
+func (c *ProjectsLocationsFunctionsCallCall) Fields(s ...googleapi.Field) *ProjectsLocationsFunctionsCallCall {
 	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
@@ -1060,12 +1107,12 @@ func (c *ProjectsRegionsFunctionsCallCall) Fields(s ...googleapi.Field) *Project
 // Context sets the context to be used in this call's Do method. Any
 // pending HTTP request will be aborted if the provided context is
 // canceled.
-func (c *ProjectsRegionsFunctionsCallCall) Context(ctx context.Context) *ProjectsRegionsFunctionsCallCall {
+func (c *ProjectsLocationsFunctionsCallCall) Context(ctx context.Context) *ProjectsLocationsFunctionsCallCall {
 	c.ctx_ = ctx
 	return c
 }
 
-func (c *ProjectsRegionsFunctionsCallCall) doRequest(alt string) (*http.Response, error) {
+func (c *ProjectsLocationsFunctionsCallCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
@@ -1075,7 +1122,7 @@ func (c *ProjectsRegionsFunctionsCallCall) doRequest(alt string) (*http.Response
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+name}:call")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+name}:call")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	req.Header = reqHeaders
@@ -1088,14 +1135,14 @@ func (c *ProjectsRegionsFunctionsCallCall) doRequest(alt string) (*http.Response
 	return c.s.client.Do(req)
 }
 
-// Do executes the "cloudfunctions.projects.regions.functions.call" call.
+// Do executes the "cloudfunctions.projects.locations.functions.call" call.
 // Exactly one of *CallFunctionResponse or error will be non-nil. Any
 // non-2xx status code is an error. Response headers are in either
 // *CallFunctionResponse.ServerResponse.Header or (if a response was
 // returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *ProjectsRegionsFunctionsCallCall) Do(opts ...googleapi.CallOption) (*CallFunctionResponse, error) {
+func (c *ProjectsLocationsFunctionsCallCall) Do(opts ...googleapi.CallOption) (*CallFunctionResponse, error) {
 	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
@@ -1127,9 +1174,9 @@ func (c *ProjectsRegionsFunctionsCallCall) Do(opts ...googleapi.CallOption) (*Ca
 	return ret, nil
 	// {
 	//   "description": "Invokes synchronously deployed function. To be used for testing, very\nlimited traffic allowed.",
-	//   "flatPath": "v1beta1/projects/{projectsId}/regions/{regionsId}/functions/{functionsId}:call",
+	//   "flatPath": "v1beta2/projects/{projectsId}/locations/{locationsId}/functions/{functionsId}:call",
 	//   "httpMethod": "POST",
-	//   "id": "cloudfunctions.projects.regions.functions.call",
+	//   "id": "cloudfunctions.projects.locations.functions.call",
 	//   "parameterOrder": [
 	//     "name"
 	//   ],
@@ -1137,12 +1184,12 @@ func (c *ProjectsRegionsFunctionsCallCall) Do(opts ...googleapi.CallOption) (*Ca
 	//     "name": {
 	//       "description": "The name of the function to be called.",
 	//       "location": "path",
-	//       "pattern": "^projects/[^/]*/regions/[^/]*/functions/[^/]*$",
+	//       "pattern": "^projects/[^/]+/locations/[^/]+/functions/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/{+name}:call",
+	//   "path": "v1beta2/{+name}:call",
 	//   "request": {
 	//     "$ref": "CallFunctionRequest"
 	//   },
@@ -1156,30 +1203,32 @@ func (c *ProjectsRegionsFunctionsCallCall) Do(opts ...googleapi.CallOption) (*Ca
 
 }
 
-// method id "cloudfunctions.projects.regions.functions.create":
+// method id "cloudfunctions.projects.locations.functions.create":
 
-type ProjectsRegionsFunctionsCreateCall struct {
-	s              *Service
-	location       string
-	hostedfunction *HostedFunction
-	urlParams_     gensupport.URLParams
-	ctx_           context.Context
+type ProjectsLocationsFunctionsCreateCall struct {
+	s             *Service
+	location      string
+	cloudfunction *CloudFunction
+	urlParams_    gensupport.URLParams
+	ctx_          context.Context
 }
 
 // Create: Creates a new function. If a function with the given name
 // already exists in
-// the specified project, it will return ALREADY_EXISTS error.
-func (r *ProjectsRegionsFunctionsService) Create(location string, hostedfunction *HostedFunction) *ProjectsRegionsFunctionsCreateCall {
-	c := &ProjectsRegionsFunctionsCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+// the specified project, the long running operation will
+// return
+// ALREADY_EXISTS error.
+func (r *ProjectsLocationsFunctionsService) Create(location string, cloudfunction *CloudFunction) *ProjectsLocationsFunctionsCreateCall {
+	c := &ProjectsLocationsFunctionsCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.location = location
-	c.hostedfunction = hostedfunction
+	c.cloudfunction = cloudfunction
 	return c
 }
 
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
-func (c *ProjectsRegionsFunctionsCreateCall) Fields(s ...googleapi.Field) *ProjectsRegionsFunctionsCreateCall {
+func (c *ProjectsLocationsFunctionsCreateCall) Fields(s ...googleapi.Field) *ProjectsLocationsFunctionsCreateCall {
 	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
@@ -1187,22 +1236,22 @@ func (c *ProjectsRegionsFunctionsCreateCall) Fields(s ...googleapi.Field) *Proje
 // Context sets the context to be used in this call's Do method. Any
 // pending HTTP request will be aborted if the provided context is
 // canceled.
-func (c *ProjectsRegionsFunctionsCreateCall) Context(ctx context.Context) *ProjectsRegionsFunctionsCreateCall {
+func (c *ProjectsLocationsFunctionsCreateCall) Context(ctx context.Context) *ProjectsLocationsFunctionsCreateCall {
 	c.ctx_ = ctx
 	return c
 }
 
-func (c *ProjectsRegionsFunctionsCreateCall) doRequest(alt string) (*http.Response, error) {
+func (c *ProjectsLocationsFunctionsCreateCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
-	body, err := googleapi.WithoutDataWrapper.JSONReader(c.hostedfunction)
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.cloudfunction)
 	if err != nil {
 		return nil, err
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+location}/functions")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+location}/functions")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	req.Header = reqHeaders
@@ -1215,14 +1264,14 @@ func (c *ProjectsRegionsFunctionsCreateCall) doRequest(alt string) (*http.Respon
 	return c.s.client.Do(req)
 }
 
-// Do executes the "cloudfunctions.projects.regions.functions.create" call.
+// Do executes the "cloudfunctions.projects.locations.functions.create" call.
 // Exactly one of *Operation or error will be non-nil. Any non-2xx
 // status code is an error. Response headers are in either
 // *Operation.ServerResponse.Header or (if a response was returned at
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *ProjectsRegionsFunctionsCreateCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
+func (c *ProjectsLocationsFunctionsCreateCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
 	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
@@ -1253,25 +1302,25 @@ func (c *ProjectsRegionsFunctionsCreateCall) Do(opts ...googleapi.CallOption) (*
 	}
 	return ret, nil
 	// {
-	//   "description": "Creates a new function. If a function with the given name already exists in\nthe specified project, it will return ALREADY_EXISTS error.",
-	//   "flatPath": "v1beta1/projects/{projectsId}/regions/{regionsId}/functions",
+	//   "description": "Creates a new function. If a function with the given name already exists in\nthe specified project, the long running operation will return\nALREADY_EXISTS error.",
+	//   "flatPath": "v1beta2/projects/{projectsId}/locations/{locationsId}/functions",
 	//   "httpMethod": "POST",
-	//   "id": "cloudfunctions.projects.regions.functions.create",
+	//   "id": "cloudfunctions.projects.locations.functions.create",
 	//   "parameterOrder": [
 	//     "location"
 	//   ],
 	//   "parameters": {
 	//     "location": {
-	//       "description": "The project and region in which the function should be created, specified\nin the format: projects/*/regions/*",
+	//       "description": "The project and location in which the function should be created, specified\nin the format: projects/*/locations/*",
 	//       "location": "path",
-	//       "pattern": "^projects/[^/]*/regions/[^/]*$",
+	//       "pattern": "^projects/[^/]+/locations/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/{+location}/functions",
+	//   "path": "v1beta2/{+location}/functions",
 	//   "request": {
-	//     "$ref": "HostedFunction"
+	//     "$ref": "CloudFunction"
 	//   },
 	//   "response": {
 	//     "$ref": "Operation"
@@ -1283,9 +1332,9 @@ func (c *ProjectsRegionsFunctionsCreateCall) Do(opts ...googleapi.CallOption) (*
 
 }
 
-// method id "cloudfunctions.projects.regions.functions.delete":
+// method id "cloudfunctions.projects.locations.functions.delete":
 
-type ProjectsRegionsFunctionsDeleteCall struct {
+type ProjectsLocationsFunctionsDeleteCall struct {
 	s          *Service
 	name       string
 	urlParams_ gensupport.URLParams
@@ -1297,8 +1346,8 @@ type ProjectsRegionsFunctionsDeleteCall struct {
 // given function is used by some trigger, the trigger will be updated
 // to
 // remove this function.
-func (r *ProjectsRegionsFunctionsService) Delete(name string) *ProjectsRegionsFunctionsDeleteCall {
-	c := &ProjectsRegionsFunctionsDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+func (r *ProjectsLocationsFunctionsService) Delete(name string) *ProjectsLocationsFunctionsDeleteCall {
+	c := &ProjectsLocationsFunctionsDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
 	return c
 }
@@ -1306,7 +1355,7 @@ func (r *ProjectsRegionsFunctionsService) Delete(name string) *ProjectsRegionsFu
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
-func (c *ProjectsRegionsFunctionsDeleteCall) Fields(s ...googleapi.Field) *ProjectsRegionsFunctionsDeleteCall {
+func (c *ProjectsLocationsFunctionsDeleteCall) Fields(s ...googleapi.Field) *ProjectsLocationsFunctionsDeleteCall {
 	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
@@ -1314,17 +1363,17 @@ func (c *ProjectsRegionsFunctionsDeleteCall) Fields(s ...googleapi.Field) *Proje
 // Context sets the context to be used in this call's Do method. Any
 // pending HTTP request will be aborted if the provided context is
 // canceled.
-func (c *ProjectsRegionsFunctionsDeleteCall) Context(ctx context.Context) *ProjectsRegionsFunctionsDeleteCall {
+func (c *ProjectsLocationsFunctionsDeleteCall) Context(ctx context.Context) *ProjectsLocationsFunctionsDeleteCall {
 	c.ctx_ = ctx
 	return c
 }
 
-func (c *ProjectsRegionsFunctionsDeleteCall) doRequest(alt string) (*http.Response, error) {
+func (c *ProjectsLocationsFunctionsDeleteCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+name}")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
 	req.Header = reqHeaders
@@ -1337,14 +1386,14 @@ func (c *ProjectsRegionsFunctionsDeleteCall) doRequest(alt string) (*http.Respon
 	return c.s.client.Do(req)
 }
 
-// Do executes the "cloudfunctions.projects.regions.functions.delete" call.
+// Do executes the "cloudfunctions.projects.locations.functions.delete" call.
 // Exactly one of *Operation or error will be non-nil. Any non-2xx
 // status code is an error. Response headers are in either
 // *Operation.ServerResponse.Header or (if a response was returned at
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *ProjectsRegionsFunctionsDeleteCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
+func (c *ProjectsLocationsFunctionsDeleteCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
 	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
@@ -1376,9 +1425,9 @@ func (c *ProjectsRegionsFunctionsDeleteCall) Do(opts ...googleapi.CallOption) (*
 	return ret, nil
 	// {
 	//   "description": "Deletes a function with the given name from the specified project. If the\ngiven function is used by some trigger, the trigger will be updated to\nremove this function.",
-	//   "flatPath": "v1beta1/projects/{projectsId}/regions/{regionsId}/functions/{functionsId}",
+	//   "flatPath": "v1beta2/projects/{projectsId}/locations/{locationsId}/functions/{functionsId}",
 	//   "httpMethod": "DELETE",
-	//   "id": "cloudfunctions.projects.regions.functions.delete",
+	//   "id": "cloudfunctions.projects.locations.functions.delete",
 	//   "parameterOrder": [
 	//     "name"
 	//   ],
@@ -1386,12 +1435,12 @@ func (c *ProjectsRegionsFunctionsDeleteCall) Do(opts ...googleapi.CallOption) (*
 	//     "name": {
 	//       "description": "The name of the function which should be deleted.",
 	//       "location": "path",
-	//       "pattern": "^projects/[^/]*/regions/[^/]*/functions/[^/]*$",
+	//       "pattern": "^projects/[^/]+/locations/[^/]+/functions/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/{+name}",
+	//   "path": "v1beta2/{+name}",
 	//   "response": {
 	//     "$ref": "Operation"
 	//   },
@@ -1402,9 +1451,9 @@ func (c *ProjectsRegionsFunctionsDeleteCall) Do(opts ...googleapi.CallOption) (*
 
 }
 
-// method id "cloudfunctions.projects.regions.functions.get":
+// method id "cloudfunctions.projects.locations.functions.get":
 
-type ProjectsRegionsFunctionsGetCall struct {
+type ProjectsLocationsFunctionsGetCall struct {
 	s            *Service
 	name         string
 	urlParams_   gensupport.URLParams
@@ -1414,8 +1463,8 @@ type ProjectsRegionsFunctionsGetCall struct {
 
 // Get: Returns a function with the given name from the requested
 // project.
-func (r *ProjectsRegionsFunctionsService) Get(name string) *ProjectsRegionsFunctionsGetCall {
-	c := &ProjectsRegionsFunctionsGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+func (r *ProjectsLocationsFunctionsService) Get(name string) *ProjectsLocationsFunctionsGetCall {
+	c := &ProjectsLocationsFunctionsGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
 	return c
 }
@@ -1423,7 +1472,7 @@ func (r *ProjectsRegionsFunctionsService) Get(name string) *ProjectsRegionsFunct
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
-func (c *ProjectsRegionsFunctionsGetCall) Fields(s ...googleapi.Field) *ProjectsRegionsFunctionsGetCall {
+func (c *ProjectsLocationsFunctionsGetCall) Fields(s ...googleapi.Field) *ProjectsLocationsFunctionsGetCall {
 	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
@@ -1433,7 +1482,7 @@ func (c *ProjectsRegionsFunctionsGetCall) Fields(s ...googleapi.Field) *Projects
 // getting updates only after the object has changed since the last
 // request. Use googleapi.IsNotModified to check whether the response
 // error from Do is the result of In-None-Match.
-func (c *ProjectsRegionsFunctionsGetCall) IfNoneMatch(entityTag string) *ProjectsRegionsFunctionsGetCall {
+func (c *ProjectsLocationsFunctionsGetCall) IfNoneMatch(entityTag string) *ProjectsLocationsFunctionsGetCall {
 	c.ifNoneMatch_ = entityTag
 	return c
 }
@@ -1441,12 +1490,12 @@ func (c *ProjectsRegionsFunctionsGetCall) IfNoneMatch(entityTag string) *Project
 // Context sets the context to be used in this call's Do method. Any
 // pending HTTP request will be aborted if the provided context is
 // canceled.
-func (c *ProjectsRegionsFunctionsGetCall) Context(ctx context.Context) *ProjectsRegionsFunctionsGetCall {
+func (c *ProjectsLocationsFunctionsGetCall) Context(ctx context.Context) *ProjectsLocationsFunctionsGetCall {
 	c.ctx_ = ctx
 	return c
 }
 
-func (c *ProjectsRegionsFunctionsGetCall) doRequest(alt string) (*http.Response, error) {
+func (c *ProjectsLocationsFunctionsGetCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	if c.ifNoneMatch_ != "" {
@@ -1454,7 +1503,7 @@ func (c *ProjectsRegionsFunctionsGetCall) doRequest(alt string) (*http.Response,
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+name}")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	req.Header = reqHeaders
@@ -1467,14 +1516,14 @@ func (c *ProjectsRegionsFunctionsGetCall) doRequest(alt string) (*http.Response,
 	return c.s.client.Do(req)
 }
 
-// Do executes the "cloudfunctions.projects.regions.functions.get" call.
-// Exactly one of *HostedFunction or error will be non-nil. Any non-2xx
+// Do executes the "cloudfunctions.projects.locations.functions.get" call.
+// Exactly one of *CloudFunction or error will be non-nil. Any non-2xx
 // status code is an error. Response headers are in either
-// *HostedFunction.ServerResponse.Header or (if a response was returned
+// *CloudFunction.ServerResponse.Header or (if a response was returned
 // at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *ProjectsRegionsFunctionsGetCall) Do(opts ...googleapi.CallOption) (*HostedFunction, error) {
+func (c *ProjectsLocationsFunctionsGetCall) Do(opts ...googleapi.CallOption) (*CloudFunction, error) {
 	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
@@ -1493,7 +1542,7 @@ func (c *ProjectsRegionsFunctionsGetCall) Do(opts ...googleapi.CallOption) (*Hos
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	ret := &HostedFunction{
+	ret := &CloudFunction{
 		ServerResponse: googleapi.ServerResponse{
 			Header:         res.Header,
 			HTTPStatusCode: res.StatusCode,
@@ -1506,9 +1555,9 @@ func (c *ProjectsRegionsFunctionsGetCall) Do(opts ...googleapi.CallOption) (*Hos
 	return ret, nil
 	// {
 	//   "description": "Returns a function with the given name from the requested project.",
-	//   "flatPath": "v1beta1/projects/{projectsId}/regions/{regionsId}/functions/{functionsId}",
+	//   "flatPath": "v1beta2/projects/{projectsId}/locations/{locationsId}/functions/{functionsId}",
 	//   "httpMethod": "GET",
-	//   "id": "cloudfunctions.projects.regions.functions.get",
+	//   "id": "cloudfunctions.projects.locations.functions.get",
 	//   "parameterOrder": [
 	//     "name"
 	//   ],
@@ -1516,14 +1565,14 @@ func (c *ProjectsRegionsFunctionsGetCall) Do(opts ...googleapi.CallOption) (*Hos
 	//     "name": {
 	//       "description": "The name of the function which details should be obtained.",
 	//       "location": "path",
-	//       "pattern": "^projects/[^/]*/regions/[^/]*/functions/[^/]*$",
+	//       "pattern": "^projects/[^/]+/locations/[^/]+/functions/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/{+name}",
+	//   "path": "v1beta2/{+name}",
 	//   "response": {
-	//     "$ref": "HostedFunction"
+	//     "$ref": "CloudFunction"
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform"
@@ -1532,9 +1581,9 @@ func (c *ProjectsRegionsFunctionsGetCall) Do(opts ...googleapi.CallOption) (*Hos
 
 }
 
-// method id "cloudfunctions.projects.regions.functions.list":
+// method id "cloudfunctions.projects.locations.functions.list":
 
-type ProjectsRegionsFunctionsListCall struct {
+type ProjectsLocationsFunctionsListCall struct {
 	s            *Service
 	location     string
 	urlParams_   gensupport.URLParams
@@ -1542,17 +1591,17 @@ type ProjectsRegionsFunctionsListCall struct {
 	ctx_         context.Context
 }
 
-// List: Returns a list of all functions that belong to the requested
+// List: Returns a list of functions that belong to the requested
 // project.
-func (r *ProjectsRegionsFunctionsService) List(location string) *ProjectsRegionsFunctionsListCall {
-	c := &ProjectsRegionsFunctionsListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+func (r *ProjectsLocationsFunctionsService) List(location string) *ProjectsLocationsFunctionsListCall {
+	c := &ProjectsLocationsFunctionsListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.location = location
 	return c
 }
 
 // PageSize sets the optional parameter "pageSize": Maximum number of
-// functions to return.
-func (c *ProjectsRegionsFunctionsListCall) PageSize(pageSize int64) *ProjectsRegionsFunctionsListCall {
+// functions to return per call.
+func (c *ProjectsLocationsFunctionsListCall) PageSize(pageSize int64) *ProjectsLocationsFunctionsListCall {
 	c.urlParams_.Set("pageSize", fmt.Sprint(pageSize))
 	return c
 }
@@ -1562,7 +1611,7 @@ func (c *ProjectsRegionsFunctionsListCall) PageSize(pageSize int64) *ProjectsReg
 // this is a continuation of a prior ListFunctions call, and that
 // the
 // system should return the next page of data.
-func (c *ProjectsRegionsFunctionsListCall) PageToken(pageToken string) *ProjectsRegionsFunctionsListCall {
+func (c *ProjectsLocationsFunctionsListCall) PageToken(pageToken string) *ProjectsLocationsFunctionsListCall {
 	c.urlParams_.Set("pageToken", pageToken)
 	return c
 }
@@ -1570,7 +1619,7 @@ func (c *ProjectsRegionsFunctionsListCall) PageToken(pageToken string) *Projects
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
-func (c *ProjectsRegionsFunctionsListCall) Fields(s ...googleapi.Field) *ProjectsRegionsFunctionsListCall {
+func (c *ProjectsLocationsFunctionsListCall) Fields(s ...googleapi.Field) *ProjectsLocationsFunctionsListCall {
 	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
@@ -1580,7 +1629,7 @@ func (c *ProjectsRegionsFunctionsListCall) Fields(s ...googleapi.Field) *Project
 // getting updates only after the object has changed since the last
 // request. Use googleapi.IsNotModified to check whether the response
 // error from Do is the result of In-None-Match.
-func (c *ProjectsRegionsFunctionsListCall) IfNoneMatch(entityTag string) *ProjectsRegionsFunctionsListCall {
+func (c *ProjectsLocationsFunctionsListCall) IfNoneMatch(entityTag string) *ProjectsLocationsFunctionsListCall {
 	c.ifNoneMatch_ = entityTag
 	return c
 }
@@ -1588,12 +1637,12 @@ func (c *ProjectsRegionsFunctionsListCall) IfNoneMatch(entityTag string) *Projec
 // Context sets the context to be used in this call's Do method. Any
 // pending HTTP request will be aborted if the provided context is
 // canceled.
-func (c *ProjectsRegionsFunctionsListCall) Context(ctx context.Context) *ProjectsRegionsFunctionsListCall {
+func (c *ProjectsLocationsFunctionsListCall) Context(ctx context.Context) *ProjectsLocationsFunctionsListCall {
 	c.ctx_ = ctx
 	return c
 }
 
-func (c *ProjectsRegionsFunctionsListCall) doRequest(alt string) (*http.Response, error) {
+func (c *ProjectsLocationsFunctionsListCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	if c.ifNoneMatch_ != "" {
@@ -1601,7 +1650,7 @@ func (c *ProjectsRegionsFunctionsListCall) doRequest(alt string) (*http.Response
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+location}/functions")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+location}/functions")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	req.Header = reqHeaders
@@ -1614,14 +1663,14 @@ func (c *ProjectsRegionsFunctionsListCall) doRequest(alt string) (*http.Response
 	return c.s.client.Do(req)
 }
 
-// Do executes the "cloudfunctions.projects.regions.functions.list" call.
+// Do executes the "cloudfunctions.projects.locations.functions.list" call.
 // Exactly one of *ListFunctionsResponse or error will be non-nil. Any
 // non-2xx status code is an error. Response headers are in either
 // *ListFunctionsResponse.ServerResponse.Header or (if a response was
 // returned at all) in error.(*googleapi.Error).Header. Use
 // googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *ProjectsRegionsFunctionsListCall) Do(opts ...googleapi.CallOption) (*ListFunctionsResponse, error) {
+func (c *ProjectsLocationsFunctionsListCall) Do(opts ...googleapi.CallOption) (*ListFunctionsResponse, error) {
 	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
@@ -1652,23 +1701,23 @@ func (c *ProjectsRegionsFunctionsListCall) Do(opts ...googleapi.CallOption) (*Li
 	}
 	return ret, nil
 	// {
-	//   "description": "Returns a list of all functions that belong to the requested project.",
-	//   "flatPath": "v1beta1/projects/{projectsId}/regions/{regionsId}/functions",
+	//   "description": "Returns a list of functions that belong to the requested project.",
+	//   "flatPath": "v1beta2/projects/{projectsId}/locations/{locationsId}/functions",
 	//   "httpMethod": "GET",
-	//   "id": "cloudfunctions.projects.regions.functions.list",
+	//   "id": "cloudfunctions.projects.locations.functions.list",
 	//   "parameterOrder": [
 	//     "location"
 	//   ],
 	//   "parameters": {
 	//     "location": {
-	//       "description": "The project and region from which functions should be listed, specified\nin the format: projects/*/regions/*",
+	//       "description": "The project and location from which the function should be listed,\nspecified in the format: projects/*/locations/*\nIf you want to list functions in all locations, use '-' in place of a\nlocation.",
 	//       "location": "path",
-	//       "pattern": "^projects/[^/]*/regions/[^/]*$",
+	//       "pattern": "^projects/[^/]+/locations/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "pageSize": {
-	//       "description": "Maximum number of functions to return.",
+	//       "description": "Maximum number of functions to return per call.",
 	//       "format": "int32",
 	//       "location": "query",
 	//       "type": "integer"
@@ -1679,7 +1728,7 @@ func (c *ProjectsRegionsFunctionsListCall) Do(opts ...googleapi.CallOption) (*Li
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/{+location}/functions",
+	//   "path": "v1beta2/{+location}/functions",
 	//   "response": {
 	//     "$ref": "ListFunctionsResponse"
 	//   },
@@ -1693,7 +1742,7 @@ func (c *ProjectsRegionsFunctionsListCall) Do(opts ...googleapi.CallOption) (*Li
 // Pages invokes f for each page of results.
 // A non-nil error returned from f will halt the iteration.
 // The provided context supersedes any context provided to the Context method.
-func (c *ProjectsRegionsFunctionsListCall) Pages(ctx context.Context, f func(*ListFunctionsResponse) error) error {
+func (c *ProjectsLocationsFunctionsListCall) Pages(ctx context.Context, f func(*ListFunctionsResponse) error) error {
 	c.ctx_ = ctx
 	defer c.PageToken(c.urlParams_.Get("pageToken")) // reset paging to original point
 	for {
@@ -1711,28 +1760,28 @@ func (c *ProjectsRegionsFunctionsListCall) Pages(ctx context.Context, f func(*Li
 	}
 }
 
-// method id "cloudfunctions.projects.regions.functions.update":
+// method id "cloudfunctions.projects.locations.functions.update":
 
-type ProjectsRegionsFunctionsUpdateCall struct {
-	s              *Service
-	name           string
-	hostedfunction *HostedFunction
-	urlParams_     gensupport.URLParams
-	ctx_           context.Context
+type ProjectsLocationsFunctionsUpdateCall struct {
+	s             *Service
+	name          string
+	cloudfunction *CloudFunction
+	urlParams_    gensupport.URLParams
+	ctx_          context.Context
 }
 
 // Update: Updates existing function.
-func (r *ProjectsRegionsFunctionsService) Update(name string, hostedfunction *HostedFunction) *ProjectsRegionsFunctionsUpdateCall {
-	c := &ProjectsRegionsFunctionsUpdateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+func (r *ProjectsLocationsFunctionsService) Update(name string, cloudfunction *CloudFunction) *ProjectsLocationsFunctionsUpdateCall {
+	c := &ProjectsLocationsFunctionsUpdateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
-	c.hostedfunction = hostedfunction
+	c.cloudfunction = cloudfunction
 	return c
 }
 
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
-func (c *ProjectsRegionsFunctionsUpdateCall) Fields(s ...googleapi.Field) *ProjectsRegionsFunctionsUpdateCall {
+func (c *ProjectsLocationsFunctionsUpdateCall) Fields(s ...googleapi.Field) *ProjectsLocationsFunctionsUpdateCall {
 	c.urlParams_.Set("fields", googleapi.CombineFields(s))
 	return c
 }
@@ -1740,22 +1789,22 @@ func (c *ProjectsRegionsFunctionsUpdateCall) Fields(s ...googleapi.Field) *Proje
 // Context sets the context to be used in this call's Do method. Any
 // pending HTTP request will be aborted if the provided context is
 // canceled.
-func (c *ProjectsRegionsFunctionsUpdateCall) Context(ctx context.Context) *ProjectsRegionsFunctionsUpdateCall {
+func (c *ProjectsLocationsFunctionsUpdateCall) Context(ctx context.Context) *ProjectsLocationsFunctionsUpdateCall {
 	c.ctx_ = ctx
 	return c
 }
 
-func (c *ProjectsRegionsFunctionsUpdateCall) doRequest(alt string) (*http.Response, error) {
+func (c *ProjectsLocationsFunctionsUpdateCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders := make(http.Header)
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
-	body, err := googleapi.WithoutDataWrapper.JSONReader(c.hostedfunction)
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.cloudfunction)
 	if err != nil {
 		return nil, err
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+name}")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PUT", urls, body)
 	req.Header = reqHeaders
@@ -1768,14 +1817,14 @@ func (c *ProjectsRegionsFunctionsUpdateCall) doRequest(alt string) (*http.Respon
 	return c.s.client.Do(req)
 }
 
-// Do executes the "cloudfunctions.projects.regions.functions.update" call.
+// Do executes the "cloudfunctions.projects.locations.functions.update" call.
 // Exactly one of *Operation or error will be non-nil. Any non-2xx
 // status code is an error. Response headers are in either
 // *Operation.ServerResponse.Header or (if a response was returned at
 // all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
 // to check whether the returned error was because
 // http.StatusNotModified was returned.
-func (c *ProjectsRegionsFunctionsUpdateCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
+func (c *ProjectsLocationsFunctionsUpdateCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
 	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
@@ -1807,9 +1856,9 @@ func (c *ProjectsRegionsFunctionsUpdateCall) Do(opts ...googleapi.CallOption) (*
 	return ret, nil
 	// {
 	//   "description": "Updates existing function.",
-	//   "flatPath": "v1beta1/projects/{projectsId}/regions/{regionsId}/functions/{functionsId}",
+	//   "flatPath": "v1beta2/projects/{projectsId}/locations/{locationsId}/functions/{functionsId}",
 	//   "httpMethod": "PUT",
-	//   "id": "cloudfunctions.projects.regions.functions.update",
+	//   "id": "cloudfunctions.projects.locations.functions.update",
 	//   "parameterOrder": [
 	//     "name"
 	//   ],
@@ -1817,14 +1866,14 @@ func (c *ProjectsRegionsFunctionsUpdateCall) Do(opts ...googleapi.CallOption) (*
 	//     "name": {
 	//       "description": "The name of the function to be updated.",
 	//       "location": "path",
-	//       "pattern": "^projects/[^/]*/regions/[^/]*/functions/[^/]*$",
+	//       "pattern": "^projects/[^/]+/locations/[^/]+/functions/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/{+name}",
+	//   "path": "v1beta2/{+name}",
 	//   "request": {
-	//     "$ref": "HostedFunction"
+	//     "$ref": "CloudFunction"
 	//   },
 	//   "response": {
 	//     "$ref": "Operation"

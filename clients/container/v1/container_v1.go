@@ -416,6 +416,48 @@ func (s *AuthorizeResponse) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
+// AutoUpgradeOptions: AutoUpgradeOptions defines the set of options for
+// the user to control how
+// the Auto Upgrades will proceed.
+type AutoUpgradeOptions struct {
+	// AutoUpgradeStartTime: [Output only] This field is set when upgrades
+	// are about to commence
+	// with the approximate start time for the upgrades,
+	// in
+	// [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.
+	AutoUpgradeStartTime string `json:"autoUpgradeStartTime,omitempty"`
+
+	// Description: [Output only] This field is set when upgrades are about
+	// to commence
+	// with the description of the upgrade.
+	Description string `json:"description,omitempty"`
+
+	// RequestedUpgradeStartTime: User requested start time,
+	// in
+	// [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.
+	RequestedUpgradeStartTime string `json:"requestedUpgradeStartTime,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g.
+	// "AutoUpgradeStartTime") to unconditionally include in API requests.
+	// By default, fields with empty values are omitted from API requests.
+	// However, any non-pointer, non-interface field appearing in
+	// ForceSendFields will be sent to the server regardless of whether the
+	// field is empty or not. This may be used to include empty fields in
+	// Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *AutoUpgradeOptions) MarshalJSON() ([]byte, error) {
+	type noMethod AutoUpgradeOptions
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// CancelOperationRequest: CancelOperationRequest cancels a single
+// operation.
+type CancelOperationRequest struct {
+}
+
 // Cluster: A Google Container Engine cluster.
 type Cluster struct {
 	// AddonsConfig: Configurations for the various addons available to run
@@ -461,7 +503,8 @@ type Cluster struct {
 	// the kubernetes version of the master and nodes.
 	// The cluster has no SLA for uptime and master/node upgrades are
 	// disabled.
-	// Alpha enabled clusters are automatically deleted two weeks after
+	// Alpha enabled clusters are automatically deleted thirty days
+	// after
 	// creation.
 	EnableKubernetesAlpha bool `json:"enableKubernetesAlpha,omitempty"`
 
@@ -475,6 +518,12 @@ type Cluster struct {
 	// and
 	// password information.
 	Endpoint string `json:"endpoint,omitempty"`
+
+	// ExpireTime: [Output only] The time the cluster will be
+	// automatically
+	// deleted in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text
+	// format.
+	ExpireTime string `json:"expireTime,omitempty"`
 
 	// InitialClusterVersion: [Output only] The software version of the
 	// master endpoint and kubelets used
@@ -846,6 +895,44 @@ type CreateTokenRequest struct {
 
 func (s *CreateTokenRequest) MarshalJSON() ([]byte, error) {
 	type noMethod CreateTokenRequest
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// Empty: A generic empty message that you can re-use to avoid defining
+// duplicated
+// empty messages in your APIs. A typical example is to use it as the
+// request
+// or the response type of an API method. For instance:
+//
+//     service Foo {
+//       rpc Bar(google.protobuf.Empty) returns
+// (google.protobuf.Empty);
+//     }
+//
+// The JSON representation for `Empty` is empty JSON object `{}`.
+type Empty struct {
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+}
+
+// ExtraValue: ExtraValue allows the extra field to be a mapstringstring
+type ExtraValue struct {
+	// Items: items, if empty, will result in an empty slice
+	Items []string `json:"items,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Items") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *ExtraValue) MarshalJSON() ([]byte, error) {
+	type noMethod ExtraValue
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
@@ -1314,6 +1401,14 @@ type NodeConfig struct {
 	// added.
 	OauthScopes []string `json:"oauthScopes,omitempty"`
 
+	// Preemptible: Whether the nodes are created as preemptible VM
+	// instances.
+	// See:
+	// https://cloud.google.com/compute/docs/instances/preemptible for
+	// more
+	// inforamtion about preemptible VM instances.
+	Preemptible bool `json:"preemptible,omitempty"`
+
 	// ServiceAccount: The Google Cloud Platform Service Account to be used
 	// by the node VMs. If
 	// no Service Account is specified, the "default" service account is
@@ -1340,6 +1435,34 @@ type NodeConfig struct {
 
 func (s *NodeConfig) MarshalJSON() ([]byte, error) {
 	type noMethod NodeConfig
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// NodeManagement: NodeManagement defines the set of node management
+// services turned on for the
+// node pool.
+type NodeManagement struct {
+	// AutoRepair: Whether the nodes will be automatically repaired.
+	AutoRepair bool `json:"autoRepair,omitempty"`
+
+	// AutoUpgrade: Whether the nodes will be automatically upgraded.
+	AutoUpgrade bool `json:"autoUpgrade,omitempty"`
+
+	// UpgradeOptions: Specifies the Auto Upgrade knobs for the node pool.
+	UpgradeOptions *AutoUpgradeOptions `json:"upgradeOptions,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "AutoRepair") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *NodeManagement) MarshalJSON() ([]byte, error) {
+	type noMethod NodeManagement
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
@@ -1378,6 +1501,9 @@ type NodePool struct {
 	// groups](/compute/docs/instance-groups/) associated with this
 	// node pool.
 	InstanceGroupUrls []string `json:"instanceGroupUrls,omitempty"`
+
+	// Management: NodeManagement configuration for this NodePool.
+	Management *NodeManagement `json:"management,omitempty"`
 
 	// Name: The name of the node pool.
 	Name string `json:"name,omitempty"`
@@ -1543,6 +1669,7 @@ type Operation struct {
 	//   "UPDATE_CLUSTER" - Cluster update.
 	//   "CREATE_NODE_POOL" - Node pool create.
 	//   "DELETE_NODE_POOL" - Node pool delete.
+	//   "SET_NODE_POOL_MANAGEMENT" - Set node pool management.
 	OperationType string `json:"operationType,omitempty"`
 
 	// SelfLink: Server-defined URL for the resource.
@@ -1555,6 +1682,7 @@ type Operation struct {
 	//   "PENDING" - The operation has been created.
 	//   "RUNNING" - The operation is currently running.
 	//   "DONE" - The operation is done, either cancelled or completed.
+	//   "ABORTING" - The operation is aborting.
 	Status string `json:"status,omitempty"`
 
 	// StatusMessage: If an error has occurred, a textual description of the
@@ -1632,6 +1760,14 @@ func (s *ResourceAttributes) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
+// RollbackNodePoolUpgradeRequest: RollbackNodePoolUpgradeRequest
+// rollbacks the previously Aborted or Failed
+// NodePool upgrade. This will be an no-op if the last upgrade
+// successfully
+// completed.
+type RollbackNodePoolUpgradeRequest struct {
+}
+
 // ServerConfig: Container Engine service configuration.
 type ServerConfig struct {
 	// BuildClientInfo: apiserver build BuildData::ClientInfo()
@@ -1646,6 +1782,9 @@ type ServerConfig struct {
 
 	// ValidImageTypes: List of valid image types.
 	ValidImageTypes []string `json:"validImageTypes,omitempty"`
+
+	// ValidMasterVersions: List of valid master versions.
+	ValidMasterVersions []string `json:"validMasterVersions,omitempty"`
 
 	// ValidNodeVersions: List of valid node upgrade target versions.
 	ValidNodeVersions []string `json:"validNodeVersions,omitempty"`
@@ -1665,6 +1804,28 @@ type ServerConfig struct {
 
 func (s *ServerConfig) MarshalJSON() ([]byte, error) {
 	type noMethod ServerConfig
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// SetNodePoolManagementRequest: SetNodePoolManagementRequest sets the
+// node management properties of a node
+// pool.
+type SetNodePoolManagementRequest struct {
+	// Management: NodeManagement configuration for the node pool.
+	Management *NodeManagement `json:"management,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Management") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *SetNodePoolManagementRequest) MarshalJSON() ([]byte, error) {
+	type noMethod SetNodePoolManagementRequest
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
@@ -1703,9 +1864,18 @@ func (s *SignedUrls) MarshalJSON() ([]byte, error) {
 // in
 // pkg/apis/authorization/v1beta1/types.go
 type SubjectAccessReviewSpec struct {
-	// Groups: Any groups this user may be a part of (this is not used for
-	// GKE IAM).
-	Groups []string `json:"groups,omitempty"`
+	// Extra: Any "extra" data from the user being authorized. Note:
+	// normally this field
+	// would be called "extras", but we have to match the struct in
+	// Kubernetes.
+	Extra map[string]ExtraValue `json:"extra,omitempty"`
+
+	// Group: Any groups this user may be a part of (this is not used for
+	// GKE IAM). Note:
+	// normally this field would be called "groups", but we have to match
+	// the
+	// struct in Kubernetes.
+	Group []string `json:"group,omitempty"`
 
 	// NonResourceAttributes: The attributes of the request for a
 	// non-resource request. If this field is
@@ -1720,7 +1890,7 @@ type SubjectAccessReviewSpec struct {
 	// User: The user making the request.
 	User string `json:"user,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "Groups") to
+	// ForceSendFields is a list of field names (e.g. "Extra") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -4128,6 +4298,460 @@ func (c *ProjectsZonesClustersNodePoolsListCall) Do(opts ...googleapi.CallOption
 	//   "path": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/nodePools",
 	//   "response": {
 	//     "$ref": "ListNodePoolsResponse"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform"
+	//   ]
+	// }
+
+}
+
+// method id "container.projects.zones.clusters.nodePools.rollback":
+
+type ProjectsZonesClustersNodePoolsRollbackCall struct {
+	s                              *Service
+	projectId                      string
+	zone                           string
+	clusterId                      string
+	nodePoolId                     string
+	rollbacknodepoolupgraderequest *RollbackNodePoolUpgradeRequest
+	urlParams_                     gensupport.URLParams
+	ctx_                           context.Context
+}
+
+// Rollback: Roll back the previously Aborted or Failed NodePool
+// upgrade.
+// This will be an no-op if the last upgrade successfully completed.
+func (r *ProjectsZonesClustersNodePoolsService) Rollback(projectId string, zone string, clusterId string, nodePoolId string, rollbacknodepoolupgraderequest *RollbackNodePoolUpgradeRequest) *ProjectsZonesClustersNodePoolsRollbackCall {
+	c := &ProjectsZonesClustersNodePoolsRollbackCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.projectId = projectId
+	c.zone = zone
+	c.clusterId = clusterId
+	c.nodePoolId = nodePoolId
+	c.rollbacknodepoolupgraderequest = rollbacknodepoolupgraderequest
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *ProjectsZonesClustersNodePoolsRollbackCall) Fields(s ...googleapi.Field) *ProjectsZonesClustersNodePoolsRollbackCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsZonesClustersNodePoolsRollbackCall) Context(ctx context.Context) *ProjectsZonesClustersNodePoolsRollbackCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsZonesClustersNodePoolsRollbackCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.rollbacknodepoolupgraderequest)
+	if err != nil {
+		return nil, err
+	}
+	reqHeaders.Set("Content-Type", "application/json")
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/nodePools/{nodePoolId}:rollback")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"projectId":  c.projectId,
+		"zone":       c.zone,
+		"clusterId":  c.clusterId,
+		"nodePoolId": c.nodePoolId,
+	})
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "container.projects.zones.clusters.nodePools.rollback" call.
+// Exactly one of *Operation or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *Operation.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *ProjectsZonesClustersNodePoolsRollbackCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Operation{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Roll back the previously Aborted or Failed NodePool upgrade.\nThis will be an no-op if the last upgrade successfully completed.",
+	//   "flatPath": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/nodePools/{nodePoolId}:rollback",
+	//   "httpMethod": "POST",
+	//   "id": "container.projects.zones.clusters.nodePools.rollback",
+	//   "parameterOrder": [
+	//     "projectId",
+	//     "zone",
+	//     "clusterId",
+	//     "nodePoolId"
+	//   ],
+	//   "parameters": {
+	//     "clusterId": {
+	//       "description": "The name of the cluster to rollback.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "nodePoolId": {
+	//       "description": "The name of the node pool to rollback.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "projectId": {
+	//       "description": "The Google Developers Console [project ID or project\nnumber](https://support.google.com/cloud/answer/6158840).",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the Google Compute Engine\n[zone](/compute/docs/zones#available) in which the cluster\nresides.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/nodePools/{nodePoolId}:rollback",
+	//   "request": {
+	//     "$ref": "RollbackNodePoolUpgradeRequest"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform"
+	//   ]
+	// }
+
+}
+
+// method id "container.projects.zones.clusters.nodePools.setManagement":
+
+type ProjectsZonesClustersNodePoolsSetManagementCall struct {
+	s                            *Service
+	projectId                    string
+	zone                         string
+	clusterId                    string
+	nodePoolId                   string
+	setnodepoolmanagementrequest *SetNodePoolManagementRequest
+	urlParams_                   gensupport.URLParams
+	ctx_                         context.Context
+}
+
+// SetManagement: Sets the NodeManagement options for a node pool.
+func (r *ProjectsZonesClustersNodePoolsService) SetManagement(projectId string, zone string, clusterId string, nodePoolId string, setnodepoolmanagementrequest *SetNodePoolManagementRequest) *ProjectsZonesClustersNodePoolsSetManagementCall {
+	c := &ProjectsZonesClustersNodePoolsSetManagementCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.projectId = projectId
+	c.zone = zone
+	c.clusterId = clusterId
+	c.nodePoolId = nodePoolId
+	c.setnodepoolmanagementrequest = setnodepoolmanagementrequest
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *ProjectsZonesClustersNodePoolsSetManagementCall) Fields(s ...googleapi.Field) *ProjectsZonesClustersNodePoolsSetManagementCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsZonesClustersNodePoolsSetManagementCall) Context(ctx context.Context) *ProjectsZonesClustersNodePoolsSetManagementCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsZonesClustersNodePoolsSetManagementCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.setnodepoolmanagementrequest)
+	if err != nil {
+		return nil, err
+	}
+	reqHeaders.Set("Content-Type", "application/json")
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/nodePools/{nodePoolId}/setManagement")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"projectId":  c.projectId,
+		"zone":       c.zone,
+		"clusterId":  c.clusterId,
+		"nodePoolId": c.nodePoolId,
+	})
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "container.projects.zones.clusters.nodePools.setManagement" call.
+// Exactly one of *Operation or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *Operation.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *ProjectsZonesClustersNodePoolsSetManagementCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Operation{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Sets the NodeManagement options for a node pool.",
+	//   "flatPath": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/nodePools/{nodePoolId}/setManagement",
+	//   "httpMethod": "POST",
+	//   "id": "container.projects.zones.clusters.nodePools.setManagement",
+	//   "parameterOrder": [
+	//     "projectId",
+	//     "zone",
+	//     "clusterId",
+	//     "nodePoolId"
+	//   ],
+	//   "parameters": {
+	//     "clusterId": {
+	//       "description": "The name of the cluster to update.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "nodePoolId": {
+	//       "description": "The name of the node pool to update.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "projectId": {
+	//       "description": "The Google Developers Console [project ID or project\nnumber](https://support.google.com/cloud/answer/6158840).",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the Google Compute Engine\n[zone](/compute/docs/zones#available) in which the cluster\nresides.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "v1/projects/{projectId}/zones/{zone}/clusters/{clusterId}/nodePools/{nodePoolId}/setManagement",
+	//   "request": {
+	//     "$ref": "SetNodePoolManagementRequest"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform"
+	//   ]
+	// }
+
+}
+
+// method id "container.projects.zones.operations.cancel":
+
+type ProjectsZonesOperationsCancelCall struct {
+	s                      *Service
+	projectId              string
+	zone                   string
+	operationId            string
+	canceloperationrequest *CancelOperationRequest
+	urlParams_             gensupport.URLParams
+	ctx_                   context.Context
+}
+
+// Cancel: Cancels the specified operation.
+func (r *ProjectsZonesOperationsService) Cancel(projectId string, zone string, operationId string, canceloperationrequest *CancelOperationRequest) *ProjectsZonesOperationsCancelCall {
+	c := &ProjectsZonesOperationsCancelCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.projectId = projectId
+	c.zone = zone
+	c.operationId = operationId
+	c.canceloperationrequest = canceloperationrequest
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *ProjectsZonesOperationsCancelCall) Fields(s ...googleapi.Field) *ProjectsZonesOperationsCancelCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsZonesOperationsCancelCall) Context(ctx context.Context) *ProjectsZonesOperationsCancelCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsZonesOperationsCancelCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.canceloperationrequest)
+	if err != nil {
+		return nil, err
+	}
+	reqHeaders.Set("Content-Type", "application/json")
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/zones/{zone}/operations/{operationId}:cancel")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"projectId":   c.projectId,
+		"zone":        c.zone,
+		"operationId": c.operationId,
+	})
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "container.projects.zones.operations.cancel" call.
+// Exactly one of *Empty or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Empty.ServerResponse.Header or (if a response was returned at all)
+// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
+// check whether the returned error was because http.StatusNotModified
+// was returned.
+func (c *ProjectsZonesOperationsCancelCall) Do(opts ...googleapi.CallOption) (*Empty, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Empty{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Cancels the specified operation.",
+	//   "flatPath": "v1/projects/{projectId}/zones/{zone}/operations/{operationId}:cancel",
+	//   "httpMethod": "POST",
+	//   "id": "container.projects.zones.operations.cancel",
+	//   "parameterOrder": [
+	//     "projectId",
+	//     "zone",
+	//     "operationId"
+	//   ],
+	//   "parameters": {
+	//     "operationId": {
+	//       "description": "The server-assigned `name` of the operation.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "projectId": {
+	//       "description": "The Google Developers Console [project ID or project\nnumber](https://support.google.com/cloud/answer/6158840).",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the Google Compute Engine\n[zone](/compute/docs/zones#available) in which the operation resides.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "v1/projects/{projectId}/zones/{zone}/operations/{operationId}:cancel",
+	//   "request": {
+	//     "$ref": "CancelOperationRequest"
+	//   },
+	//   "response": {
+	//     "$ref": "Empty"
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform"

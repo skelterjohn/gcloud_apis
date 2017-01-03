@@ -52,6 +52,8 @@ func Compute_v1_AddressesAggregatedList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -68,6 +70,7 @@ func Compute_v1_AddressesAggregatedList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -116,6 +119,13 @@ func Compute_v1_AddressesAggregatedList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -390,6 +400,8 @@ func Compute_v1_AddressesList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -406,6 +418,7 @@ func Compute_v1_AddressesList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -460,6 +473,13 @@ func Compute_v1_AddressesList(context Context, args ...string) error {
 		}
 		call.MaxResults(query_maxResults)
 	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
+	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
 		if err != nil {
@@ -500,6 +520,8 @@ func Compute_v1_AutoscalersAggregatedList(context Context, args ...string) error
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -516,6 +538,7 @@ func Compute_v1_AutoscalersAggregatedList(context Context, args ...string) error
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -564,6 +587,13 @@ func Compute_v1_AutoscalersAggregatedList(context Context, args ...string) error
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -838,6 +868,8 @@ func Compute_v1_AutoscalersList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -854,6 +886,7 @@ func Compute_v1_AutoscalersList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -907,6 +940,13 @@ func Compute_v1_AutoscalersList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -1144,6 +1184,121 @@ func Compute_v1_AutoscalersUpdate(context Context, args ...string) error {
 			return err
 		}
 		call.Autoscaler(query_autoscaler)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_BackendServicesAggregatedList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/aggregated/backendServices", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--orderBy=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewBackendServicesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"orderBy":    false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.AggregatedList(param_project)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
 	}
 
 	response, err := call.Do()
@@ -1482,6 +1637,8 @@ func Compute_v1_BackendServicesList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -1498,6 +1655,7 @@ func Compute_v1_BackendServicesList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -1546,6 +1704,13 @@ func Compute_v1_BackendServicesList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -1767,6 +1932,8 @@ func Compute_v1_DiskTypesAggregatedList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -1783,6 +1950,7 @@ func Compute_v1_DiskTypesAggregatedList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -1831,6 +1999,13 @@ func Compute_v1_DiskTypesAggregatedList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -1944,6 +2119,8 @@ func Compute_v1_DiskTypesList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -1960,6 +2137,7 @@ func Compute_v1_DiskTypesList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -2014,6 +2192,13 @@ func Compute_v1_DiskTypesList(context Context, args ...string) error {
 		}
 		call.MaxResults(query_maxResults)
 	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
+	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
 		if err != nil {
@@ -2054,6 +2239,8 @@ func Compute_v1_DisksAggregatedList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -2070,6 +2257,7 @@ func Compute_v1_DisksAggregatedList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -2118,6 +2306,13 @@ func Compute_v1_DisksAggregatedList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -2515,6 +2710,8 @@ func Compute_v1_DisksList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -2531,6 +2728,7 @@ func Compute_v1_DisksList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -2584,6 +2782,13 @@ func Compute_v1_DisksList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -2935,6 +3140,8 @@ func Compute_v1_FirewallsList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -2951,6 +3158,7 @@ func Compute_v1_FirewallsList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -2999,6 +3207,13 @@ func Compute_v1_FirewallsList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -3220,6 +3435,8 @@ func Compute_v1_ForwardingRulesAggregatedList(context Context, args ...string) e
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -3236,6 +3453,7 @@ func Compute_v1_ForwardingRulesAggregatedList(context Context, args ...string) e
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -3284,6 +3502,13 @@ func Compute_v1_ForwardingRulesAggregatedList(context Context, args ...string) e
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -3558,6 +3783,8 @@ func Compute_v1_ForwardingRulesList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -3574,6 +3801,7 @@ func Compute_v1_ForwardingRulesList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -3627,6 +3855,13 @@ func Compute_v1_ForwardingRulesList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -3978,6 +4213,8 @@ func Compute_v1_GlobalAddressesList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -3994,6 +4231,7 @@ func Compute_v1_GlobalAddressesList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -4042,6 +4280,13 @@ func Compute_v1_GlobalAddressesList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -4297,6 +4542,8 @@ func Compute_v1_GlobalForwardingRulesList(context Context, args ...string) error
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -4313,6 +4560,7 @@ func Compute_v1_GlobalForwardingRulesList(context Context, args ...string) error
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -4361,6 +4609,13 @@ func Compute_v1_GlobalForwardingRulesList(context Context, args ...string) error
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -4492,6 +4747,8 @@ func Compute_v1_GlobalOperationsAggregatedList(context Context, args ...string) 
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -4508,6 +4765,7 @@ func Compute_v1_GlobalOperationsAggregatedList(context Context, args ...string) 
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -4556,6 +4814,13 @@ func Compute_v1_GlobalOperationsAggregatedList(context Context, args ...string) 
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -4721,6 +4986,8 @@ func Compute_v1_GlobalOperationsList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -4737,6 +5004,7 @@ func Compute_v1_GlobalOperationsList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -4785,6 +5053,13 @@ func Compute_v1_GlobalOperationsList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -5040,6 +5315,8 @@ func Compute_v1_HealthChecksList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -5056,6 +5333,7 @@ func Compute_v1_HealthChecksList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -5104,6 +5382,13 @@ func Compute_v1_HealthChecksList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -5539,6 +5824,8 @@ func Compute_v1_HttpHealthChecksList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -5555,6 +5842,7 @@ func Compute_v1_HttpHealthChecksList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -5603,6 +5891,13 @@ func Compute_v1_HttpHealthChecksList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -6038,6 +6333,8 @@ func Compute_v1_HttpsHealthChecksList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -6054,6 +6351,7 @@ func Compute_v1_HttpsHealthChecksList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -6102,6 +6400,13 @@ func Compute_v1_HttpsHealthChecksList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -6692,6 +6997,8 @@ func Compute_v1_ImagesList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -6708,6 +7015,7 @@ func Compute_v1_ImagesList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -6756,6 +7064,13 @@ func Compute_v1_ImagesList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -6893,6 +7208,8 @@ func Compute_v1_InstanceGroupManagersAggregatedList(context Context, args ...str
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -6909,6 +7226,7 @@ func Compute_v1_InstanceGroupManagersAggregatedList(context Context, args ...str
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -6957,6 +7275,13 @@ func Compute_v1_InstanceGroupManagersAggregatedList(context Context, args ...str
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -7327,6 +7652,8 @@ func Compute_v1_InstanceGroupManagersList(context Context, args ...string) error
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -7343,6 +7670,7 @@ func Compute_v1_InstanceGroupManagersList(context Context, args ...string) error
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -7397,6 +7725,13 @@ func Compute_v1_InstanceGroupManagersList(context Context, args ...string) error
 		}
 		call.MaxResults(query_maxResults)
 	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
+	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
 		if err != nil {
@@ -7435,6 +7770,14 @@ func Compute_v1_InstanceGroupManagersListManagedInstances(context Context, args 
 			}
 		}
 
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--order_by=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -7445,6 +7788,24 @@ func Compute_v1_InstanceGroupManagersListManagedInstances(context Context, args 
 		return err
 	}
 	service := api_client.NewInstanceGroupManagersService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"order_by":   false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -7475,6 +7836,36 @@ func Compute_v1_InstanceGroupManagersListManagedInstances(context Context, args 
 	}
 
 	call := service.ListManagedInstances(param_project, param_zone, param_instanceGroupManager)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["order_by"]; ok {
+		query_order_by, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_order_by)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -7985,6 +8376,8 @@ func Compute_v1_InstanceGroupsAggregatedList(context Context, args ...string) er
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -8001,6 +8394,7 @@ func Compute_v1_InstanceGroupsAggregatedList(context Context, args ...string) er
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -8049,6 +8443,13 @@ func Compute_v1_InstanceGroupsAggregatedList(context Context, args ...string) er
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -8323,6 +8724,8 @@ func Compute_v1_InstanceGroupsList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -8339,6 +8742,7 @@ func Compute_v1_InstanceGroupsList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -8393,6 +8797,13 @@ func Compute_v1_InstanceGroupsList(context Context, args ...string) error {
 		}
 		call.MaxResults(query_maxResults)
 	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
+	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
 		if err != nil {
@@ -8437,6 +8848,8 @@ func Compute_v1_InstanceGroupsListInstances(context Context, args ...string) err
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -8454,6 +8867,7 @@ func Compute_v1_InstanceGroupsListInstances(context Context, args ...string) err
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -8535,6 +8949,13 @@ func Compute_v1_InstanceGroupsListInstances(context Context, args ...string) err
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -8982,6 +9403,8 @@ func Compute_v1_InstanceTemplatesList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -8998,6 +9421,7 @@ func Compute_v1_InstanceTemplatesList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -9046,6 +9470,13 @@ func Compute_v1_InstanceTemplatesList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -9206,6 +9637,8 @@ func Compute_v1_InstancesAggregatedList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -9222,6 +9655,7 @@ func Compute_v1_InstancesAggregatedList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -9270,6 +9704,13 @@ func Compute_v1_InstancesAggregatedList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -9743,6 +10184,8 @@ func Compute_v1_InstancesGetSerialPortOutput(context Context, args ...string) er
 
 		usageBits += " [--port=VALUE]"
 
+		usageBits += " [--start=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -9755,7 +10198,8 @@ func Compute_v1_InstancesGetSerialPortOutput(context Context, args ...string) er
 	service := api_client.NewInstancesService(api_service)
 
 	queryParamNames := map[string]bool{
-		"port": false,
+		"port":  false,
+		"start": false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -9806,6 +10250,13 @@ func Compute_v1_InstancesGetSerialPortOutput(context Context, args ...string) er
 			return err
 		}
 		call.Port(query_port)
+	}
+	if value, ok := flagValues["start"]; ok {
+		query_start, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.Start(query_start)
 	}
 
 	response, err := call.Do()
@@ -9931,6 +10382,8 @@ func Compute_v1_InstancesList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -9947,6 +10400,7 @@ func Compute_v1_InstancesList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -10000,6 +10454,13 @@ func Compute_v1_InstancesList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -10482,6 +10943,102 @@ func Compute_v1_InstancesSetScheduling(context Context, args ...string) error {
 	return nil
 }
 
+func Compute_v1_InstancesSetServiceAccount(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/zones/{zone}/instances/{instance}/setServiceAccount", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstancesSetServiceAccountRequest{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstancesService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.InstancesSetServiceAccountRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+		"instance",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.SetServiceAccount(param_project, param_zone, param_instance,
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func Compute_v1_InstancesSetTags(context Context, args ...string) error {
 
 	usageFunc := func() {
@@ -10900,6 +11457,8 @@ func Compute_v1_MachineTypesAggregatedList(context Context, args ...string) erro
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -10916,6 +11475,7 @@ func Compute_v1_MachineTypesAggregatedList(context Context, args ...string) erro
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -10964,6 +11524,13 @@ func Compute_v1_MachineTypesAggregatedList(context Context, args ...string) erro
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -11077,6 +11644,8 @@ func Compute_v1_MachineTypesList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -11093,6 +11662,7 @@ func Compute_v1_MachineTypesList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -11146,6 +11716,13 @@ func Compute_v1_MachineTypesList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -11401,6 +11978,8 @@ func Compute_v1_NetworksList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -11417,6 +11996,7 @@ func Compute_v1_NetworksList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -11466,6 +12046,13 @@ func Compute_v1_NetworksList(context Context, args ...string) error {
 		}
 		call.MaxResults(query_maxResults)
 	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
+	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
 		if err != nil {
@@ -11473,6 +12060,71 @@ func Compute_v1_NetworksList(context Context, args ...string) error {
 		}
 		call.PageToken(query_pageToken)
 	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_NetworksSwitchToCustomMode(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("network"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/global/networks/{network}/switchToCustomMode", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewNetworksService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"network",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_network, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.SwitchToCustomMode(param_project, param_network)
 
 	response, err := call.Do()
 	if err != nil {
@@ -11882,6 +12534,2724 @@ func Compute_v1_ProjectsSetUsageExportBucket(context Context, args ...string) er
 	return nil
 }
 
+func Compute_v1_RegionAutoscalersDelete(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("autoscaler"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/autoscalers/{autoscaler}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionAutoscalersService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+		"autoscaler",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_autoscaler, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.Delete(param_project, param_region, param_autoscaler)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionAutoscalersGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("autoscaler"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/autoscalers/{autoscaler}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionAutoscalersService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+		"autoscaler",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_autoscaler, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_project, param_region, param_autoscaler)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionAutoscalersInsert(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/autoscalers", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Autoscaler{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionAutoscalersService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.Autoscaler{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.Insert(param_project, param_region,
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionAutoscalersList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/autoscalers", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--orderBy=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionAutoscalersService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"orderBy":    false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_project, param_region)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionAutoscalersPatch(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("autoscaler"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/autoscalers", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		usageBits += " --autoscaler=VALUE"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Autoscaler{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionAutoscalersService(api_service)
+
+	queryParamNames := map[string]bool{
+		"autoscaler": true,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.Autoscaler{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_autoscaler, err := commands_util.ConvertValue_string(flagValues["autoscaler"])
+	if err != nil {
+		return err
+	}
+
+	call := service.Patch(param_project, param_region, param_autoscaler,
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionAutoscalersUpdate(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/autoscalers", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		usageBits += " [--autoscaler=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Autoscaler{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionAutoscalersService(api_service)
+
+	queryParamNames := map[string]bool{
+		"autoscaler": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.Autoscaler{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.Update(param_project, param_region,
+		request,
+	)
+
+	// Set query parameters.
+	if value, ok := flagValues["autoscaler"]; ok {
+		query_autoscaler, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Autoscaler(query_autoscaler)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionBackendServicesDelete(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("backendService"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/backendServices/{backendService}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionBackendServicesService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+		"backendService",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_backendService, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.Delete(param_project, param_region, param_backendService)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionBackendServicesGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("backendService"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/backendServices/{backendService}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionBackendServicesService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+		"backendService",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_backendService, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_project, param_region, param_backendService)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionBackendServicesGetHealth(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("backendService"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/backendServices/{backendService}/getHealth", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ResourceGroupReference{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionBackendServicesService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.ResourceGroupReference{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+		"backendService",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_backendService, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.GetHealth(param_project, param_region, param_backendService,
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionBackendServicesInsert(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/backendServices", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.BackendService{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionBackendServicesService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.BackendService{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.Insert(param_project, param_region,
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionBackendServicesList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/backendServices", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--orderBy=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionBackendServicesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"orderBy":    false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_project, param_region)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionBackendServicesPatch(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("backendService"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/backendServices/{backendService}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.BackendService{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionBackendServicesService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.BackendService{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+		"backendService",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_backendService, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.Patch(param_project, param_region, param_backendService,
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionBackendServicesUpdate(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("backendService"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/backendServices/{backendService}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.BackendService{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionBackendServicesService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.BackendService{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+		"backendService",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_backendService, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.Update(param_project, param_region, param_backendService,
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionInstanceGroupManagersAbandonInstances(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instanceGroupManager"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/instanceGroupManagers/{instanceGroupManager}/abandonInstances", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.RegionInstanceGroupManagersAbandonInstancesRequest{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionInstanceGroupManagersService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.RegionInstanceGroupManagersAbandonInstancesRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+		"instanceGroupManager",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroupManager, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.AbandonInstances(param_project, param_region, param_instanceGroupManager,
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionInstanceGroupManagersDelete(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instanceGroupManager"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/instanceGroupManagers/{instanceGroupManager}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionInstanceGroupManagersService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+		"instanceGroupManager",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroupManager, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.Delete(param_project, param_region, param_instanceGroupManager)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionInstanceGroupManagersDeleteInstances(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instanceGroupManager"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/instanceGroupManagers/{instanceGroupManager}/deleteInstances", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.RegionInstanceGroupManagersDeleteInstancesRequest{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionInstanceGroupManagersService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.RegionInstanceGroupManagersDeleteInstancesRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+		"instanceGroupManager",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroupManager, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.DeleteInstances(param_project, param_region, param_instanceGroupManager,
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionInstanceGroupManagersGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instanceGroupManager"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/instanceGroupManagers/{instanceGroupManager}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionInstanceGroupManagersService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+		"instanceGroupManager",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroupManager, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_project, param_region, param_instanceGroupManager)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionInstanceGroupManagersInsert(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/instanceGroupManagers", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstanceGroupManager{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionInstanceGroupManagersService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.InstanceGroupManager{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.Insert(param_project, param_region,
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionInstanceGroupManagersList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/instanceGroupManagers", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--orderBy=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionInstanceGroupManagersService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"orderBy":    false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_project, param_region)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionInstanceGroupManagersListManagedInstances(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instanceGroupManager"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/instanceGroupManagers/{instanceGroupManager}/listManagedInstances", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--order_by=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionInstanceGroupManagersService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"order_by":   false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+		"instanceGroupManager",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroupManager, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.ListManagedInstances(param_project, param_region, param_instanceGroupManager)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["order_by"]; ok {
+		query_order_by, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_order_by)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionInstanceGroupManagersRecreateInstances(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instanceGroupManager"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/instanceGroupManagers/{instanceGroupManager}/recreateInstances", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.RegionInstanceGroupManagersRecreateRequest{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionInstanceGroupManagersService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.RegionInstanceGroupManagersRecreateRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+		"instanceGroupManager",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroupManager, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.RecreateInstances(param_project, param_region, param_instanceGroupManager,
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionInstanceGroupManagersResize(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instanceGroupManager"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("size"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/instanceGroupManagers/{instanceGroupManager}/resize", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " --size=VALUE"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionInstanceGroupManagersService(api_service)
+
+	queryParamNames := map[string]bool{
+		"size": true,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+		"instanceGroupManager",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroupManager, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+	param_size, err := commands_util.ConvertValue_int64(flagValues["size"])
+	if err != nil {
+		return err
+	}
+
+	call := service.Resize(param_project, param_region, param_instanceGroupManager, param_size)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionInstanceGroupManagersSetInstanceTemplate(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instanceGroupManager"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/instanceGroupManagers/{instanceGroupManager}/setInstanceTemplate", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.RegionInstanceGroupManagersSetTemplateRequest{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionInstanceGroupManagersService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.RegionInstanceGroupManagersSetTemplateRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+		"instanceGroupManager",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroupManager, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.SetInstanceTemplate(param_project, param_region, param_instanceGroupManager,
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionInstanceGroupManagersSetTargetPools(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instanceGroupManager"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/instanceGroupManagers/{instanceGroupManager}/setTargetPools", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.RegionInstanceGroupManagersSetTargetPoolsRequest{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionInstanceGroupManagersService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.RegionInstanceGroupManagersSetTargetPoolsRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+		"instanceGroupManager",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroupManager, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.SetTargetPools(param_project, param_region, param_instanceGroupManager,
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionInstanceGroupsGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instanceGroup"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/instanceGroups/{instanceGroup}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionInstanceGroupsService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+		"instanceGroup",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroup, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_project, param_region, param_instanceGroup)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionInstanceGroupsList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/instanceGroups", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--orderBy=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionInstanceGroupsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"orderBy":    false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_project, param_region)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionInstanceGroupsListInstances(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instanceGroup"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/instanceGroups/{instanceGroup}/listInstances", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--orderBy=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.RegionInstanceGroupsListInstancesRequest{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionInstanceGroupsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"orderBy":    false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.RegionInstanceGroupsListInstancesRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+		"instanceGroup",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroup, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.ListInstances(param_project, param_region, param_instanceGroup,
+		request,
+	)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_RegionInstanceGroupsSetNamedPorts(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instanceGroup"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/instanceGroups/{instanceGroup}/setNamedPorts", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.RegionInstanceGroupsSetNamedPortsRequest{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionInstanceGroupsService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.RegionInstanceGroupsSetNamedPortsRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+		"instanceGroup",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instanceGroup, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.SetNamedPorts(param_project, param_region, param_instanceGroup,
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func Compute_v1_RegionOperationsDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
@@ -12038,6 +15408,8 @@ func Compute_v1_RegionOperationsList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -12054,6 +15426,7 @@ func Compute_v1_RegionOperationsList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -12107,6 +15480,13 @@ func Compute_v1_RegionOperationsList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -12213,6 +15593,8 @@ func Compute_v1_RegionsList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -12229,6 +15611,7 @@ func Compute_v1_RegionsList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -12278,6 +15661,13 @@ func Compute_v1_RegionsList(context Context, args ...string) error {
 		}
 		call.MaxResults(query_maxResults)
 	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
+	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
 		if err != nil {
@@ -12318,6 +15708,8 @@ func Compute_v1_RoutersAggregatedList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -12334,6 +15726,7 @@ func Compute_v1_RoutersAggregatedList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -12382,6 +15775,13 @@ func Compute_v1_RoutersAggregatedList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -12727,6 +16127,8 @@ func Compute_v1_RoutersList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -12743,6 +16145,7 @@ func Compute_v1_RoutersList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -12796,6 +16199,13 @@ func Compute_v1_RoutersList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -13339,6 +16749,8 @@ func Compute_v1_RoutesList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -13355,6 +16767,7 @@ func Compute_v1_RoutesList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -13403,6 +16816,13 @@ func Compute_v1_RoutesList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -13574,6 +16994,8 @@ func Compute_v1_SnapshotsList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -13590,6 +17012,7 @@ func Compute_v1_SnapshotsList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -13638,6 +17061,13 @@ func Compute_v1_SnapshotsList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -13893,6 +17323,8 @@ func Compute_v1_SslCertificatesList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -13909,6 +17341,7 @@ func Compute_v1_SslCertificatesList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -13958,6 +17391,13 @@ func Compute_v1_SslCertificatesList(context Context, args ...string) error {
 		}
 		call.MaxResults(query_maxResults)
 	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
+	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
 		if err != nil {
@@ -13998,6 +17438,8 @@ func Compute_v1_SubnetworksAggregatedList(context Context, args ...string) error
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -14014,6 +17456,7 @@ func Compute_v1_SubnetworksAggregatedList(context Context, args ...string) error
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -14062,6 +17505,13 @@ func Compute_v1_SubnetworksAggregatedList(context Context, args ...string) error
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -14141,6 +17591,102 @@ func Compute_v1_SubnetworksDelete(context Context, args ...string) error {
 	}
 
 	call := service.Delete(param_project, param_region, param_subnetwork)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_SubnetworksExpandIpCidrRange(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("subnetwork"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/subnetworks/{subnetwork}/expandIpCidrRange", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.SubnetworksExpandIpCidrRangeRequest{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewSubnetworksService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.SubnetworksExpandIpCidrRangeRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+		"subnetwork",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_subnetwork, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.ExpandIpCidrRange(param_project, param_region, param_subnetwork,
+		request,
+	)
 
 	response, err := call.Do()
 	if err != nil {
@@ -14336,6 +17882,8 @@ func Compute_v1_SubnetworksList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -14352,6 +17900,7 @@ func Compute_v1_SubnetworksList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -14405,6 +17954,13 @@ func Compute_v1_SubnetworksList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -14660,6 +18216,8 @@ func Compute_v1_TargetHttpProxiesList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -14676,6 +18234,7 @@ func Compute_v1_TargetHttpProxiesList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -14724,6 +18283,13 @@ func Compute_v1_TargetHttpProxiesList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -15069,6 +18635,8 @@ func Compute_v1_TargetHttpsProxiesList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -15085,6 +18653,7 @@ func Compute_v1_TargetHttpsProxiesList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -15133,6 +18702,13 @@ func Compute_v1_TargetHttpsProxiesList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -15354,6 +18930,8 @@ func Compute_v1_TargetInstancesAggregatedList(context Context, args ...string) e
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -15370,6 +18948,7 @@ func Compute_v1_TargetInstancesAggregatedList(context Context, args ...string) e
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -15418,6 +18997,13 @@ func Compute_v1_TargetInstancesAggregatedList(context Context, args ...string) e
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -15692,6 +19278,8 @@ func Compute_v1_TargetInstancesList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -15708,6 +19296,7 @@ func Compute_v1_TargetInstancesList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -15761,6 +19350,13 @@ func Compute_v1_TargetInstancesList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -15994,6 +19590,8 @@ func Compute_v1_TargetPoolsAggregatedList(context Context, args ...string) error
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -16010,6 +19608,7 @@ func Compute_v1_TargetPoolsAggregatedList(context Context, args ...string) error
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -16058,6 +19657,13 @@ func Compute_v1_TargetPoolsAggregatedList(context Context, args ...string) error
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -16428,6 +20034,8 @@ func Compute_v1_TargetPoolsList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -16444,6 +20052,7 @@ func Compute_v1_TargetPoolsList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -16497,6 +20106,13 @@ func Compute_v1_TargetPoolsList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -17067,6 +20683,8 @@ func Compute_v1_TargetSslProxiesList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -17083,6 +20701,7 @@ func Compute_v1_TargetSslProxiesList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -17131,6 +20750,13 @@ func Compute_v1_TargetSslProxiesList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -17442,6 +21068,8 @@ func Compute_v1_TargetVpnGatewaysAggregatedList(context Context, args ...string)
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -17458,6 +21086,7 @@ func Compute_v1_TargetVpnGatewaysAggregatedList(context Context, args ...string)
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -17506,6 +21135,13 @@ func Compute_v1_TargetVpnGatewaysAggregatedList(context Context, args ...string)
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -17780,6 +21416,8 @@ func Compute_v1_TargetVpnGatewaysList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -17796,6 +21434,7 @@ func Compute_v1_TargetVpnGatewaysList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -17849,6 +21488,13 @@ func Compute_v1_TargetVpnGatewaysList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -18194,6 +21840,8 @@ func Compute_v1_UrlMapsList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -18210,6 +21858,7 @@ func Compute_v1_UrlMapsList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -18258,6 +21907,13 @@ func Compute_v1_UrlMapsList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -18569,6 +22225,8 @@ func Compute_v1_VpnTunnelsAggregatedList(context Context, args ...string) error 
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -18585,6 +22243,7 @@ func Compute_v1_VpnTunnelsAggregatedList(context Context, args ...string) error 
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -18633,6 +22292,13 @@ func Compute_v1_VpnTunnelsAggregatedList(context Context, args ...string) error 
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -18907,6 +22573,8 @@ func Compute_v1_VpnTunnelsList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -18923,6 +22591,7 @@ func Compute_v1_VpnTunnelsList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -18976,6 +22645,13 @@ func Compute_v1_VpnTunnelsList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -19154,6 +22830,8 @@ func Compute_v1_ZoneOperationsList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -19170,6 +22848,7 @@ func Compute_v1_ZoneOperationsList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -19223,6 +22902,13 @@ func Compute_v1_ZoneOperationsList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -19329,6 +23015,8 @@ func Compute_v1_ZonesList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -19345,6 +23033,7 @@ func Compute_v1_ZonesList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -19393,6 +23082,13 @@ func Compute_v1_ZonesList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)

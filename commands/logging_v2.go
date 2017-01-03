@@ -23,7 +23,7 @@ import (
 	"os"
 	"strings"
 
-	api_client "github.com/skelterjohn/gcloud_apis/clients/logging/v2beta1"
+	api_client "github.com/skelterjohn/gcloud_apis/clients/logging/v2"
 	"github.com/skelterjohn/gcloud_apis/commands_util"
 )
 
@@ -33,16 +33,15 @@ var _ = io.Copy
 var _ = os.Stdin
 var _ = strings.Split
 
-func Logging_v2beta1_BillingAccountsLogsDelete(context Context, args ...string) error {
+func Logging_v2_BillingAccountsLogsDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("billingAccountsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("logsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("logName"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/billingAccounts/{billingAccountsId}/logs/{logsId}", "+") {
+			if strings.Contains("v2/{+logName}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -66,24 +65,19 @@ func Logging_v2beta1_BillingAccountsLogsDelete(context Context, args ...string) 
 	}
 
 	expectedParams := []string{
-		"billingAccountsId",
-		"logsId",
+		"logName",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_billingAccountsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_logsId, err := commands_util.ConvertValue_string(paramValues[1])
+	param_logName, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Delete(param_billingAccountsId, param_logsId)
+	call := service.Delete(param_logName)
 
 	response, err := call.Do()
 	if err != nil {
@@ -98,15 +92,15 @@ func Logging_v2beta1_BillingAccountsLogsDelete(context Context, args ...string) 
 	return nil
 }
 
-func Logging_v2beta1_BillingAccountsLogsList(context Context, args ...string) error {
+func Logging_v2_BillingAccountsLogsList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("billingAccountsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("parent"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/billingAccounts/{billingAccountsId}/logs", "+") {
+			if strings.Contains("v2/{+parent}/logs", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -116,10 +110,6 @@ func Logging_v2beta1_BillingAccountsLogsList(context Context, args ...string) er
 		usageBits += " [--pageSize=VALUE]"
 
 		usageBits += " [--pageToken=VALUE]"
-
-		usageBits += " [--resourceIndexPrefix=VALUE]"
-
-		usageBits += " [--resourceType=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
@@ -131,117 +121,6 @@ func Logging_v2beta1_BillingAccountsLogsList(context Context, args ...string) er
 		return err
 	}
 	service := api_client.NewBillingAccountsLogsService(api_service)
-
-	queryParamNames := map[string]bool{
-		"pageSize":            false,
-		"pageToken":           false,
-		"resourceIndexPrefix": false,
-		"resourceType":        false,
-	}
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
-
-	for k, r := range queryParamNames {
-		if _, ok := flagValues[k]; r && !ok {
-			return fmt.Errorf("missing required flag %q", "--"+k)
-		}
-	}
-
-	// Only positional arguments should remain in args.
-	if len(args) != 1 {
-		usageFunc()
-	}
-
-	expectedParams := []string{
-		"billingAccountsId",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_billingAccountsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-
-	call := service.List(param_billingAccountsId)
-
-	// Set query parameters.
-	if value, ok := flagValues["pageSize"]; ok {
-		query_pageSize, err := commands_util.ConvertValue_int64(value)
-		if err != nil {
-			return err
-		}
-		call.PageSize(query_pageSize)
-	}
-	if value, ok := flagValues["pageToken"]; ok {
-		query_pageToken, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.PageToken(query_pageToken)
-	}
-	if value, ok := flagValues["resourceIndexPrefix"]; ok {
-		query_resourceIndexPrefix, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.ResourceIndexPrefix(query_resourceIndexPrefix)
-	}
-	if value, ok := flagValues["resourceType"]; ok {
-		query_resourceType, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.ResourceType(query_resourceType)
-	}
-
-	response, err := call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Logging_v2beta1_BillingAccountsResourceKeysList(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("billingAccountsId"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/billingAccounts/{billingAccountsId}/resourceKeys", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		usageBits += " [--pageSize=VALUE]"
-
-		usageBits += " [--pageToken=VALUE]"
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewBillingAccountsResourceKeysService(api_service)
 
 	queryParamNames := map[string]bool{
 		"pageSize":  false,
@@ -265,19 +144,19 @@ func Logging_v2beta1_BillingAccountsResourceKeysList(context Context, args ...st
 	}
 
 	expectedParams := []string{
-		"billingAccountsId",
+		"parent",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_billingAccountsId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_parent, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.List(param_billingAccountsId)
+	call := service.List(param_parent)
 
 	// Set query parameters.
 	if value, ok := flagValues["pageSize"]; ok {
@@ -308,25 +187,249 @@ func Logging_v2beta1_BillingAccountsResourceKeysList(context Context, args ...st
 	return nil
 }
 
-func Logging_v2beta1_BillingAccountsResourceTypesValuesList(context Context, args ...string) error {
+func Logging_v2_BillingAccountsSinksCreate(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("billingAccountsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("resourceTypesId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("parent"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/billingAccounts/{billingAccountsId}/resourceTypes/{resourceTypesId}/values", "+") {
+			if strings.Contains("v2/{+parent}/sinks", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
 			}
 		}
 
-		usageBits += " [--depth=VALUE]"
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
-		usageBits += " [--indexPrefix=VALUE]"
+		usageBits += " [--uniqueWriterIdentity=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.LogSink{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewBillingAccountsSinksService(api_service)
+
+	queryParamNames := map[string]bool{
+		"uniqueWriterIdentity": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.LogSink{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"parent",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_parent, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Create(param_parent,
+		request,
+	)
+
+	// Set query parameters.
+	if value, ok := flagValues["uniqueWriterIdentity"]; ok {
+		query_uniqueWriterIdentity, err := commands_util.ConvertValue_bool(value)
+		if err != nil {
+			return err
+		}
+		call.UniqueWriterIdentity(query_uniqueWriterIdentity)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Logging_v2_BillingAccountsSinksDelete(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("sinkName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v2/{+sinkName}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewBillingAccountsSinksService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"sinkName",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_sinkName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Delete(param_sinkName)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Logging_v2_BillingAccountsSinksGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("sinkName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v2/{+sinkName}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewBillingAccountsSinksService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"sinkName",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_sinkName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_sinkName)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Logging_v2_BillingAccountsSinksList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("parent"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v2/{+parent}/sinks", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--pageSize=VALUE]"
 
@@ -341,13 +444,11 @@ func Logging_v2beta1_BillingAccountsResourceTypesValuesList(context Context, arg
 	if err != nil {
 		return err
 	}
-	service := api_client.NewBillingAccountsResourceTypesValuesService(api_service)
+	service := api_client.NewBillingAccountsSinksService(api_service)
 
 	queryParamNames := map[string]bool{
-		"depth":       false,
-		"indexPrefix": false,
-		"pageSize":    false,
-		"pageToken":   false,
+		"pageSize":  false,
+		"pageToken": false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -367,40 +468,21 @@ func Logging_v2beta1_BillingAccountsResourceTypesValuesList(context Context, arg
 	}
 
 	expectedParams := []string{
-		"billingAccountsId",
-		"resourceTypesId",
+		"parent",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_billingAccountsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_resourceTypesId, err := commands_util.ConvertValue_string(paramValues[1])
+	param_parent, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.List(param_billingAccountsId, param_resourceTypesId)
+	call := service.List(param_parent)
 
 	// Set query parameters.
-	if value, ok := flagValues["depth"]; ok {
-		query_depth, err := commands_util.ConvertValue_int64(value)
-		if err != nil {
-			return err
-		}
-		call.Depth(query_depth)
-	}
-	if value, ok := flagValues["indexPrefix"]; ok {
-		query_indexPrefix, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.IndexPrefix(query_indexPrefix)
-	}
 	if value, ok := flagValues["pageSize"]; ok {
 		query_pageSize, err := commands_util.ConvertValue_int64(value)
 		if err != nil {
@@ -429,14 +511,125 @@ func Logging_v2beta1_BillingAccountsResourceTypesValuesList(context Context, arg
 	return nil
 }
 
-func Logging_v2beta1_EntriesList(context Context, args ...string) error {
+func Logging_v2_BillingAccountsSinksUpdate(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("sinkName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v2/{+sinkName}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		usageBits += " [--uniqueWriterIdentity=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.LogSink{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewBillingAccountsSinksService(api_service)
+
+	queryParamNames := map[string]bool{
+		"uniqueWriterIdentity": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.LogSink{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"sinkName",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_sinkName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Update(param_sinkName,
+		request,
+	)
+
+	// Set query parameters.
+	if value, ok := flagValues["uniqueWriterIdentity"]; ok {
+		query_uniqueWriterIdentity, err := commands_util.ConvertValue_bool(value)
+		if err != nil {
+			return err
+		}
+		call.UniqueWriterIdentity(query_uniqueWriterIdentity)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Logging_v2_EntriesList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/entries:list", "+") {
+			if strings.Contains("v2/entries:list", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -505,90 +698,14 @@ func Logging_v2beta1_EntriesList(context Context, args ...string) error {
 	return nil
 }
 
-func Logging_v2beta1_EntriesRead(context Context, args ...string) error {
+func Logging_v2_EntriesWrite(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/entries:read", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		commands_util.PrintRequestExample(&api_client.ReadLogEntriesRequest{})
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewEntriesService(api_service)
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
-
-	// Only positional arguments should remain in args.
-	if len(args) == 0 || len(args) > 2 {
-		usageFunc()
-	}
-
-	request := &api_client.ReadLogEntriesRequest{}
-	if len(args) == 2 {
-		err = commands_util.PopulateRequestFromFilename(&request, args[1])
-		if err != nil {
-			return err
-		}
-	}
-
-	keyValues := flagValues
-
-	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
-	if err != nil {
-		return err
-	}
-
-	expectedParams := []string{}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	call := service.Read(
-		request,
-	)
-
-	response, err := call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Logging_v2beta1_EntriesWrite(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/entries:write", "+") {
+			if strings.Contains("v2/entries:write", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -657,27 +774,20 @@ func Logging_v2beta1_EntriesWrite(context Context, args ...string) error {
 	return nil
 }
 
-func Logging_v2beta1_GetLogsUsage(context Context, args ...string) error {
+func Logging_v2_FoldersLogsDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("logName"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/logs_usage", "+") {
+			if strings.Contains("v2/{+logName}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
 			}
 		}
-
-		usageBits += " [--endTime=VALUE]"
-
-		usageBits += " [--resourceName=VALUE]"
-
-		usageBits += " [--resourceTier=VALUE]"
-
-		usageBits += " [--startTime=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
@@ -688,13 +798,74 @@ func Logging_v2beta1_GetLogsUsage(context Context, args ...string) error {
 	if err != nil {
 		return err
 	}
-	service := api_client.NewV2beta1Service(api_service)
+	service := api_client.NewFoldersLogsService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"logName",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_logName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Delete(param_logName)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Logging_v2_FoldersLogsList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("parent"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v2/{+parent}/logs", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--pageSize=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewFoldersLogsService(api_service)
 
 	queryParamNames := map[string]bool{
-		"endTime":      false,
-		"resourceName": false,
-		"resourceTier": false,
-		"startTime":    false,
+		"pageSize":  false,
+		"pageToken": false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -713,42 +884,35 @@ func Logging_v2beta1_GetLogsUsage(context Context, args ...string) error {
 		usageFunc()
 	}
 
-	expectedParams := []string{}
+	expectedParams := []string{
+		"parent",
+	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	call := service.GetLogsUsage()
+	param_parent, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_parent)
 
 	// Set query parameters.
-	if value, ok := flagValues["endTime"]; ok {
-		query_endTime, err := commands_util.ConvertValue_string(value)
+	if value, ok := flagValues["pageSize"]; ok {
+		query_pageSize, err := commands_util.ConvertValue_int64(value)
 		if err != nil {
 			return err
 		}
-		call.EndTime(query_endTime)
+		call.PageSize(query_pageSize)
 	}
-	if value, ok := flagValues["resourceName"]; ok {
-		query_resourceName, err := commands_util.ConvertValue_string(value)
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
 		if err != nil {
 			return err
 		}
-		call.ResourceName(query_resourceName)
-	}
-	if value, ok := flagValues["resourceTier"]; ok {
-		query_resourceTier, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.ResourceTier(query_resourceTier)
-	}
-	if value, ok := flagValues["startTime"]; ok {
-		query_startTime, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.StartTime(query_startTime)
+		call.PageToken(query_pageToken)
 	}
 
 	response, err := call.Do()
@@ -764,14 +928,449 @@ func Logging_v2beta1_GetLogsUsage(context Context, args ...string) error {
 	return nil
 }
 
-func Logging_v2beta1_MonitoredResourceDescriptorsList(context Context, args ...string) error {
+func Logging_v2_FoldersSinksCreate(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("parent"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v2/{+parent}/sinks", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		usageBits += " [--uniqueWriterIdentity=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.LogSink{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewFoldersSinksService(api_service)
+
+	queryParamNames := map[string]bool{
+		"uniqueWriterIdentity": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.LogSink{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"parent",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_parent, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Create(param_parent,
+		request,
+	)
+
+	// Set query parameters.
+	if value, ok := flagValues["uniqueWriterIdentity"]; ok {
+		query_uniqueWriterIdentity, err := commands_util.ConvertValue_bool(value)
+		if err != nil {
+			return err
+		}
+		call.UniqueWriterIdentity(query_uniqueWriterIdentity)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Logging_v2_FoldersSinksDelete(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("sinkName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v2/{+sinkName}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewFoldersSinksService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"sinkName",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_sinkName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Delete(param_sinkName)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Logging_v2_FoldersSinksGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("sinkName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v2/{+sinkName}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewFoldersSinksService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"sinkName",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_sinkName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_sinkName)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Logging_v2_FoldersSinksList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("parent"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v2/{+parent}/sinks", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--pageSize=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewFoldersSinksService(api_service)
+
+	queryParamNames := map[string]bool{
+		"pageSize":  false,
+		"pageToken": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"parent",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_parent, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_parent)
+
+	// Set query parameters.
+	if value, ok := flagValues["pageSize"]; ok {
+		query_pageSize, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.PageSize(query_pageSize)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Logging_v2_FoldersSinksUpdate(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("sinkName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v2/{+sinkName}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		usageBits += " [--uniqueWriterIdentity=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.LogSink{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewFoldersSinksService(api_service)
+
+	queryParamNames := map[string]bool{
+		"uniqueWriterIdentity": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.LogSink{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"sinkName",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_sinkName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Update(param_sinkName,
+		request,
+	)
+
+	// Set query parameters.
+	if value, ok := flagValues["uniqueWriterIdentity"]; ok {
+		query_uniqueWriterIdentity, err := commands_util.ConvertValue_bool(value)
+		if err != nil {
+			return err
+		}
+		call.UniqueWriterIdentity(query_uniqueWriterIdentity)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Logging_v2_MonitoredResourceDescriptorsList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/monitoredResourceDescriptors", "+") {
+			if strings.Contains("v2/monitoredResourceDescriptors", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -851,16 +1450,15 @@ func Logging_v2beta1_MonitoredResourceDescriptorsList(context Context, args ...s
 	return nil
 }
 
-func Logging_v2beta1_OrganizationsLogsDelete(context Context, args ...string) error {
+func Logging_v2_OrganizationsLogsDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("organizationsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("logsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("logName"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/organizations/{organizationsId}/logs/{logsId}", "+") {
+			if strings.Contains("v2/{+logName}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -884,24 +1482,19 @@ func Logging_v2beta1_OrganizationsLogsDelete(context Context, args ...string) er
 	}
 
 	expectedParams := []string{
-		"organizationsId",
-		"logsId",
+		"logName",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_organizationsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_logsId, err := commands_util.ConvertValue_string(paramValues[1])
+	param_logName, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Delete(param_organizationsId, param_logsId)
+	call := service.Delete(param_logName)
 
 	response, err := call.Do()
 	if err != nil {
@@ -916,15 +1509,15 @@ func Logging_v2beta1_OrganizationsLogsDelete(context Context, args ...string) er
 	return nil
 }
 
-func Logging_v2beta1_OrganizationsLogsList(context Context, args ...string) error {
+func Logging_v2_OrganizationsLogsList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("organizationsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("parent"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/organizations/{organizationsId}/logs", "+") {
+			if strings.Contains("v2/{+parent}/logs", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -934,10 +1527,6 @@ func Logging_v2beta1_OrganizationsLogsList(context Context, args ...string) erro
 		usageBits += " [--pageSize=VALUE]"
 
 		usageBits += " [--pageToken=VALUE]"
-
-		usageBits += " [--resourceIndexPrefix=VALUE]"
-
-		usageBits += " [--resourceType=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
@@ -949,117 +1538,6 @@ func Logging_v2beta1_OrganizationsLogsList(context Context, args ...string) erro
 		return err
 	}
 	service := api_client.NewOrganizationsLogsService(api_service)
-
-	queryParamNames := map[string]bool{
-		"pageSize":            false,
-		"pageToken":           false,
-		"resourceIndexPrefix": false,
-		"resourceType":        false,
-	}
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
-
-	for k, r := range queryParamNames {
-		if _, ok := flagValues[k]; r && !ok {
-			return fmt.Errorf("missing required flag %q", "--"+k)
-		}
-	}
-
-	// Only positional arguments should remain in args.
-	if len(args) != 1 {
-		usageFunc()
-	}
-
-	expectedParams := []string{
-		"organizationsId",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_organizationsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-
-	call := service.List(param_organizationsId)
-
-	// Set query parameters.
-	if value, ok := flagValues["pageSize"]; ok {
-		query_pageSize, err := commands_util.ConvertValue_int64(value)
-		if err != nil {
-			return err
-		}
-		call.PageSize(query_pageSize)
-	}
-	if value, ok := flagValues["pageToken"]; ok {
-		query_pageToken, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.PageToken(query_pageToken)
-	}
-	if value, ok := flagValues["resourceIndexPrefix"]; ok {
-		query_resourceIndexPrefix, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.ResourceIndexPrefix(query_resourceIndexPrefix)
-	}
-	if value, ok := flagValues["resourceType"]; ok {
-		query_resourceType, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.ResourceType(query_resourceType)
-	}
-
-	response, err := call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Logging_v2beta1_OrganizationsResourceKeysList(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("organizationsId"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/organizations/{organizationsId}/resourceKeys", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		usageBits += " [--pageSize=VALUE]"
-
-		usageBits += " [--pageToken=VALUE]"
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewOrganizationsResourceKeysService(api_service)
 
 	queryParamNames := map[string]bool{
 		"pageSize":  false,
@@ -1083,19 +1561,19 @@ func Logging_v2beta1_OrganizationsResourceKeysList(context Context, args ...stri
 	}
 
 	expectedParams := []string{
-		"organizationsId",
+		"parent",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_organizationsId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_parent, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.List(param_organizationsId)
+	call := service.List(param_parent)
 
 	// Set query parameters.
 	if value, ok := flagValues["pageSize"]; ok {
@@ -1126,25 +1604,249 @@ func Logging_v2beta1_OrganizationsResourceKeysList(context Context, args ...stri
 	return nil
 }
 
-func Logging_v2beta1_OrganizationsResourceTypesValuesList(context Context, args ...string) error {
+func Logging_v2_OrganizationsSinksCreate(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("organizationsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("resourceTypesId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("parent"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/organizations/{organizationsId}/resourceTypes/{resourceTypesId}/values", "+") {
+			if strings.Contains("v2/{+parent}/sinks", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
 			}
 		}
 
-		usageBits += " [--depth=VALUE]"
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
-		usageBits += " [--indexPrefix=VALUE]"
+		usageBits += " [--uniqueWriterIdentity=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.LogSink{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewOrganizationsSinksService(api_service)
+
+	queryParamNames := map[string]bool{
+		"uniqueWriterIdentity": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.LogSink{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"parent",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_parent, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Create(param_parent,
+		request,
+	)
+
+	// Set query parameters.
+	if value, ok := flagValues["uniqueWriterIdentity"]; ok {
+		query_uniqueWriterIdentity, err := commands_util.ConvertValue_bool(value)
+		if err != nil {
+			return err
+		}
+		call.UniqueWriterIdentity(query_uniqueWriterIdentity)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Logging_v2_OrganizationsSinksDelete(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("sinkName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v2/{+sinkName}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewOrganizationsSinksService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"sinkName",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_sinkName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Delete(param_sinkName)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Logging_v2_OrganizationsSinksGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("sinkName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v2/{+sinkName}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewOrganizationsSinksService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"sinkName",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_sinkName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_sinkName)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Logging_v2_OrganizationsSinksList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("parent"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v2/{+parent}/sinks", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
 
 		usageBits += " [--pageSize=VALUE]"
 
@@ -1159,13 +1861,11 @@ func Logging_v2beta1_OrganizationsResourceTypesValuesList(context Context, args 
 	if err != nil {
 		return err
 	}
-	service := api_client.NewOrganizationsResourceTypesValuesService(api_service)
+	service := api_client.NewOrganizationsSinksService(api_service)
 
 	queryParamNames := map[string]bool{
-		"depth":       false,
-		"indexPrefix": false,
-		"pageSize":    false,
-		"pageToken":   false,
+		"pageSize":  false,
+		"pageToken": false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -1185,40 +1885,21 @@ func Logging_v2beta1_OrganizationsResourceTypesValuesList(context Context, args 
 	}
 
 	expectedParams := []string{
-		"organizationsId",
-		"resourceTypesId",
+		"parent",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_organizationsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_resourceTypesId, err := commands_util.ConvertValue_string(paramValues[1])
+	param_parent, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.List(param_organizationsId, param_resourceTypesId)
+	call := service.List(param_parent)
 
 	// Set query parameters.
-	if value, ok := flagValues["depth"]; ok {
-		query_depth, err := commands_util.ConvertValue_int64(value)
-		if err != nil {
-			return err
-		}
-		call.Depth(query_depth)
-	}
-	if value, ok := flagValues["indexPrefix"]; ok {
-		query_indexPrefix, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.IndexPrefix(query_indexPrefix)
-	}
 	if value, ok := flagValues["pageSize"]; ok {
 		query_pageSize, err := commands_util.ConvertValue_int64(value)
 		if err != nil {
@@ -1247,16 +1928,126 @@ func Logging_v2beta1_OrganizationsResourceTypesValuesList(context Context, args 
 	return nil
 }
 
-func Logging_v2beta1_ProjectsLogsDelete(context Context, args ...string) error {
+func Logging_v2_OrganizationsSinksUpdate(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("logsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("sinkName"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/projects/{projectsId}/logs/{logsId}", "+") {
+			if strings.Contains("v2/{+sinkName}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		usageBits += " [--uniqueWriterIdentity=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.LogSink{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewOrganizationsSinksService(api_service)
+
+	queryParamNames := map[string]bool{
+		"uniqueWriterIdentity": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.LogSink{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"sinkName",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_sinkName, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Update(param_sinkName,
+		request,
+	)
+
+	// Set query parameters.
+	if value, ok := flagValues["uniqueWriterIdentity"]; ok {
+		query_uniqueWriterIdentity, err := commands_util.ConvertValue_bool(value)
+		if err != nil {
+			return err
+		}
+		call.UniqueWriterIdentity(query_uniqueWriterIdentity)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Logging_v2_ProjectsLogsDelete(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("logName"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v2/{+logName}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -1280,24 +2071,19 @@ func Logging_v2beta1_ProjectsLogsDelete(context Context, args ...string) error {
 	}
 
 	expectedParams := []string{
-		"projectsId",
-		"logsId",
+		"logName",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_logsId, err := commands_util.ConvertValue_string(paramValues[1])
+	param_logName, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Delete(param_projectsId, param_logsId)
+	call := service.Delete(param_logName)
 
 	response, err := call.Do()
 	if err != nil {
@@ -1312,15 +2098,15 @@ func Logging_v2beta1_ProjectsLogsDelete(context Context, args ...string) error {
 	return nil
 }
 
-func Logging_v2beta1_ProjectsLogsList(context Context, args ...string) error {
+func Logging_v2_ProjectsLogsList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("parent"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/projects/{projectsId}/logs", "+") {
+			if strings.Contains("v2/{+parent}/logs", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -1330,10 +2116,6 @@ func Logging_v2beta1_ProjectsLogsList(context Context, args ...string) error {
 		usageBits += " [--pageSize=VALUE]"
 
 		usageBits += " [--pageToken=VALUE]"
-
-		usageBits += " [--resourceIndexPrefix=VALUE]"
-
-		usageBits += " [--resourceType=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
@@ -1347,10 +2129,8 @@ func Logging_v2beta1_ProjectsLogsList(context Context, args ...string) error {
 	service := api_client.NewProjectsLogsService(api_service)
 
 	queryParamNames := map[string]bool{
-		"pageSize":            false,
-		"pageToken":           false,
-		"resourceIndexPrefix": false,
-		"resourceType":        false,
+		"pageSize":  false,
+		"pageToken": false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -1370,19 +2150,19 @@ func Logging_v2beta1_ProjectsLogsList(context Context, args ...string) error {
 	}
 
 	expectedParams := []string{
-		"projectsId",
+		"parent",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_parent, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.List(param_projectsId)
+	call := service.List(param_parent)
 
 	// Set query parameters.
 	if value, ok := flagValues["pageSize"]; ok {
@@ -1399,20 +2179,6 @@ func Logging_v2beta1_ProjectsLogsList(context Context, args ...string) error {
 		}
 		call.PageToken(query_pageToken)
 	}
-	if value, ok := flagValues["resourceIndexPrefix"]; ok {
-		query_resourceIndexPrefix, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.ResourceIndexPrefix(query_resourceIndexPrefix)
-	}
-	if value, ok := flagValues["resourceType"]; ok {
-		query_resourceType, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.ResourceType(query_resourceType)
-	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -1427,15 +2193,15 @@ func Logging_v2beta1_ProjectsLogsList(context Context, args ...string) error {
 	return nil
 }
 
-func Logging_v2beta1_ProjectsMetricsCreate(context Context, args ...string) error {
+func Logging_v2_ProjectsMetricsCreate(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("parent"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/projects/{projectsId}/metrics", "+") {
+			if strings.Contains("v2/{+parent}/metrics", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -1482,19 +2248,19 @@ func Logging_v2beta1_ProjectsMetricsCreate(context Context, args ...string) erro
 	}
 
 	expectedParams := []string{
-		"projectsId",
+		"parent",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_parent, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Create(param_projectsId,
+	call := service.Create(param_parent,
 		request,
 	)
 
@@ -1511,16 +2277,15 @@ func Logging_v2beta1_ProjectsMetricsCreate(context Context, args ...string) erro
 	return nil
 }
 
-func Logging_v2beta1_ProjectsMetricsDelete(context Context, args ...string) error {
+func Logging_v2_ProjectsMetricsDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("metricsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("metricName"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/projects/{projectsId}/metrics/{metricsId}", "+") {
+			if strings.Contains("v2/{+metricName}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -1544,24 +2309,19 @@ func Logging_v2beta1_ProjectsMetricsDelete(context Context, args ...string) erro
 	}
 
 	expectedParams := []string{
-		"projectsId",
-		"metricsId",
+		"metricName",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_metricsId, err := commands_util.ConvertValue_string(paramValues[1])
+	param_metricName, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Delete(param_projectsId, param_metricsId)
+	call := service.Delete(param_metricName)
 
 	response, err := call.Do()
 	if err != nil {
@@ -1576,16 +2336,15 @@ func Logging_v2beta1_ProjectsMetricsDelete(context Context, args ...string) erro
 	return nil
 }
 
-func Logging_v2beta1_ProjectsMetricsGet(context Context, args ...string) error {
+func Logging_v2_ProjectsMetricsGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("metricsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("metricName"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/projects/{projectsId}/metrics/{metricsId}", "+") {
+			if strings.Contains("v2/{+metricName}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -1609,24 +2368,19 @@ func Logging_v2beta1_ProjectsMetricsGet(context Context, args ...string) error {
 	}
 
 	expectedParams := []string{
-		"projectsId",
-		"metricsId",
+		"metricName",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_metricsId, err := commands_util.ConvertValue_string(paramValues[1])
+	param_metricName, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Get(param_projectsId, param_metricsId)
+	call := service.Get(param_metricName)
 
 	response, err := call.Do()
 	if err != nil {
@@ -1641,15 +2395,15 @@ func Logging_v2beta1_ProjectsMetricsGet(context Context, args ...string) error {
 	return nil
 }
 
-func Logging_v2beta1_ProjectsMetricsList(context Context, args ...string) error {
+func Logging_v2_ProjectsMetricsList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("parent"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/projects/{projectsId}/metrics", "+") {
+			if strings.Contains("v2/{+parent}/metrics", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -1693,19 +2447,19 @@ func Logging_v2beta1_ProjectsMetricsList(context Context, args ...string) error 
 	}
 
 	expectedParams := []string{
-		"projectsId",
+		"parent",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_parent, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.List(param_projectsId)
+	call := service.List(param_parent)
 
 	// Set query parameters.
 	if value, ok := flagValues["pageSize"]; ok {
@@ -1736,16 +2490,15 @@ func Logging_v2beta1_ProjectsMetricsList(context Context, args ...string) error 
 	return nil
 }
 
-func Logging_v2beta1_ProjectsMetricsUpdate(context Context, args ...string) error {
+func Logging_v2_ProjectsMetricsUpdate(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("metricsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("metricName"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/projects/{projectsId}/metrics/{metricsId}", "+") {
+			if strings.Contains("v2/{+metricName}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -1792,24 +2545,19 @@ func Logging_v2beta1_ProjectsMetricsUpdate(context Context, args ...string) erro
 	}
 
 	expectedParams := []string{
-		"projectsId",
-		"metricsId",
+		"metricName",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_metricsId, err := commands_util.ConvertValue_string(paramValues[1])
+	param_metricName, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Update(param_projectsId, param_metricsId,
+	call := service.Update(param_metricName,
 		request,
 	)
 
@@ -1826,231 +2574,15 @@ func Logging_v2beta1_ProjectsMetricsUpdate(context Context, args ...string) erro
 	return nil
 }
 
-func Logging_v2beta1_ProjectsResourceKeysList(context Context, args ...string) error {
+func Logging_v2_ProjectsSinksCreate(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("parent"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/projects/{projectsId}/resourceKeys", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		usageBits += " [--pageSize=VALUE]"
-
-		usageBits += " [--pageToken=VALUE]"
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewProjectsResourceKeysService(api_service)
-
-	queryParamNames := map[string]bool{
-		"pageSize":  false,
-		"pageToken": false,
-	}
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
-
-	for k, r := range queryParamNames {
-		if _, ok := flagValues[k]; r && !ok {
-			return fmt.Errorf("missing required flag %q", "--"+k)
-		}
-	}
-
-	// Only positional arguments should remain in args.
-	if len(args) != 1 {
-		usageFunc()
-	}
-
-	expectedParams := []string{
-		"projectsId",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-
-	call := service.List(param_projectsId)
-
-	// Set query parameters.
-	if value, ok := flagValues["pageSize"]; ok {
-		query_pageSize, err := commands_util.ConvertValue_int64(value)
-		if err != nil {
-			return err
-		}
-		call.PageSize(query_pageSize)
-	}
-	if value, ok := flagValues["pageToken"]; ok {
-		query_pageToken, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.PageToken(query_pageToken)
-	}
-
-	response, err := call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Logging_v2beta1_ProjectsResourceTypesValuesList(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("resourceTypesId"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/projects/{projectsId}/resourceTypes/{resourceTypesId}/values", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		usageBits += " [--depth=VALUE]"
-
-		usageBits += " [--indexPrefix=VALUE]"
-
-		usageBits += " [--pageSize=VALUE]"
-
-		usageBits += " [--pageToken=VALUE]"
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewProjectsResourceTypesValuesService(api_service)
-
-	queryParamNames := map[string]bool{
-		"depth":       false,
-		"indexPrefix": false,
-		"pageSize":    false,
-		"pageToken":   false,
-	}
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
-
-	for k, r := range queryParamNames {
-		if _, ok := flagValues[k]; r && !ok {
-			return fmt.Errorf("missing required flag %q", "--"+k)
-		}
-	}
-
-	// Only positional arguments should remain in args.
-	if len(args) != 1 {
-		usageFunc()
-	}
-
-	expectedParams := []string{
-		"projectsId",
-		"resourceTypesId",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_resourceTypesId, err := commands_util.ConvertValue_string(paramValues[1])
-	if err != nil {
-		return err
-	}
-
-	call := service.List(param_projectsId, param_resourceTypesId)
-
-	// Set query parameters.
-	if value, ok := flagValues["depth"]; ok {
-		query_depth, err := commands_util.ConvertValue_int64(value)
-		if err != nil {
-			return err
-		}
-		call.Depth(query_depth)
-	}
-	if value, ok := flagValues["indexPrefix"]; ok {
-		query_indexPrefix, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.IndexPrefix(query_indexPrefix)
-	}
-	if value, ok := flagValues["pageSize"]; ok {
-		query_pageSize, err := commands_util.ConvertValue_int64(value)
-		if err != nil {
-			return err
-		}
-		call.PageSize(query_pageSize)
-	}
-	if value, ok := flagValues["pageToken"]; ok {
-		query_pageToken, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.PageToken(query_pageToken)
-	}
-
-	response, err := call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Logging_v2beta1_ProjectsSinksCreate(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/projects/{projectsId}/sinks", "+") {
+			if strings.Contains("v2/{+parent}/sinks", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -2058,6 +2590,8 @@ func Logging_v2beta1_ProjectsSinksCreate(context Context, args ...string) error 
 		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		usageBits += " [--uniqueWriterIdentity=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.LogSink{})
@@ -2071,9 +2605,19 @@ func Logging_v2beta1_ProjectsSinksCreate(context Context, args ...string) error 
 	}
 	service := api_client.NewProjectsSinksService(api_service)
 
+	queryParamNames := map[string]bool{
+		"uniqueWriterIdentity": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -2089,7 +2633,13 @@ func Logging_v2beta1_ProjectsSinksCreate(context Context, args ...string) error 
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -2097,22 +2647,31 @@ func Logging_v2beta1_ProjectsSinksCreate(context Context, args ...string) error 
 	}
 
 	expectedParams := []string{
-		"projectsId",
+		"parent",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_parent, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Create(param_projectsId,
+	call := service.Create(param_parent,
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["uniqueWriterIdentity"]; ok {
+		query_uniqueWriterIdentity, err := commands_util.ConvertValue_bool(value)
+		if err != nil {
+			return err
+		}
+		call.UniqueWriterIdentity(query_uniqueWriterIdentity)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -2126,16 +2685,15 @@ func Logging_v2beta1_ProjectsSinksCreate(context Context, args ...string) error 
 	return nil
 }
 
-func Logging_v2beta1_ProjectsSinksDelete(context Context, args ...string) error {
+func Logging_v2_ProjectsSinksDelete(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("sinksId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("sinkName"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/projects/{projectsId}/sinks/{sinksId}", "+") {
+			if strings.Contains("v2/{+sinkName}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -2159,24 +2717,19 @@ func Logging_v2beta1_ProjectsSinksDelete(context Context, args ...string) error 
 	}
 
 	expectedParams := []string{
-		"projectsId",
-		"sinksId",
+		"sinkName",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_sinksId, err := commands_util.ConvertValue_string(paramValues[1])
+	param_sinkName, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Delete(param_projectsId, param_sinksId)
+	call := service.Delete(param_sinkName)
 
 	response, err := call.Do()
 	if err != nil {
@@ -2191,16 +2744,15 @@ func Logging_v2beta1_ProjectsSinksDelete(context Context, args ...string) error 
 	return nil
 }
 
-func Logging_v2beta1_ProjectsSinksGet(context Context, args ...string) error {
+func Logging_v2_ProjectsSinksGet(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("sinksId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("sinkName"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/projects/{projectsId}/sinks/{sinksId}", "+") {
+			if strings.Contains("v2/{+sinkName}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -2224,24 +2776,19 @@ func Logging_v2beta1_ProjectsSinksGet(context Context, args ...string) error {
 	}
 
 	expectedParams := []string{
-		"projectsId",
-		"sinksId",
+		"sinkName",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_sinksId, err := commands_util.ConvertValue_string(paramValues[1])
+	param_sinkName, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Get(param_projectsId, param_sinksId)
+	call := service.Get(param_sinkName)
 
 	response, err := call.Do()
 	if err != nil {
@@ -2256,15 +2803,15 @@ func Logging_v2beta1_ProjectsSinksGet(context Context, args ...string) error {
 	return nil
 }
 
-func Logging_v2beta1_ProjectsSinksList(context Context, args ...string) error {
+func Logging_v2_ProjectsSinksList(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("parent"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/projects/{projectsId}/sinks", "+") {
+			if strings.Contains("v2/{+parent}/sinks", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -2308,19 +2855,19 @@ func Logging_v2beta1_ProjectsSinksList(context Context, args ...string) error {
 	}
 
 	expectedParams := []string{
-		"projectsId",
+		"parent",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
+	param_parent, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.List(param_projectsId)
+	call := service.List(param_parent)
 
 	// Set query parameters.
 	if value, ok := flagValues["pageSize"]; ok {
@@ -2351,16 +2898,15 @@ func Logging_v2beta1_ProjectsSinksList(context Context, args ...string) error {
 	return nil
 }
 
-func Logging_v2beta1_ProjectsSinksUpdate(context Context, args ...string) error {
+func Logging_v2_ProjectsSinksUpdate(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
 		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("projectsId"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("sinksId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("sinkName"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("v2beta1/projects/{projectsId}/sinks/{sinksId}", "+") {
+			if strings.Contains("v2/{+sinkName}", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -2368,6 +2914,8 @@ func Logging_v2beta1_ProjectsSinksUpdate(context Context, args ...string) error 
 		}
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		usageBits += " [--uniqueWriterIdentity=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.LogSink{})
@@ -2381,9 +2929,19 @@ func Logging_v2beta1_ProjectsSinksUpdate(context Context, args ...string) error 
 	}
 	service := api_client.NewProjectsSinksService(api_service)
 
+	queryParamNames := map[string]bool{
+		"uniqueWriterIdentity": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -2399,7 +2957,13 @@ func Logging_v2beta1_ProjectsSinksUpdate(context Context, args ...string) error 
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -2407,26 +2971,30 @@ func Logging_v2beta1_ProjectsSinksUpdate(context Context, args ...string) error 
 	}
 
 	expectedParams := []string{
-		"projectsId",
-		"sinksId",
+		"sinkName",
 	}
 	paramValues := commands_util.SplitParamValues(args[0])
 	if len(paramValues) != len(expectedParams) {
 		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
 	}
 
-	param_projectsId, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_sinksId, err := commands_util.ConvertValue_string(paramValues[1])
+	param_sinkName, err := commands_util.ConvertValue_string(paramValues[0])
 	if err != nil {
 		return err
 	}
 
-	call := service.Update(param_projectsId, param_sinksId,
+	call := service.Update(param_sinkName,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["uniqueWriterIdentity"]; ok {
+		query_uniqueWriterIdentity, err := commands_util.ConvertValue_bool(value)
+		if err != nil {
+			return err
+		}
+		call.UniqueWriterIdentity(query_uniqueWriterIdentity)
+	}
 
 	response, err := call.Do()
 	if err != nil {

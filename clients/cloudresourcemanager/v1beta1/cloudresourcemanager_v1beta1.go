@@ -137,6 +137,7 @@ type Binding struct {
 	// Google
 	//    account. For example, `alice@gmail.com` or `joe@example.com`.
 	//
+	//
 	// * `serviceAccount:{emailid}`: An email address that represents a
 	// service
 	//    account. For example,
@@ -191,6 +192,83 @@ type Empty struct {
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
 	googleapi.ServerResponse `json:"-"`
+}
+
+// FolderOperation: Metadata describing a long running folder operation
+type FolderOperation struct {
+	// DestinationParent: The resource name of the folder or organization we
+	// are either creating
+	// the folder under or moving the folder to.
+	DestinationParent string `json:"destinationParent,omitempty"`
+
+	// DisplayName: The display name of the folder.
+	DisplayName string `json:"displayName,omitempty"`
+
+	// OperationType: The type of this operation.
+	//
+	// Possible values:
+	//   "OPERATION_TYPE_UNSPECIFIED" - Operation type not specified.
+	//   "CREATE" - A create folder operation.
+	//   "MOVE" - A move folder operation.
+	OperationType string `json:"operationType,omitempty"`
+
+	// SourceParent: The resource name of the folder's parent.
+	// Only applicable when the operation_type is MOVE.
+	SourceParent string `json:"sourceParent,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "DestinationParent")
+	// to unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *FolderOperation) MarshalJSON() ([]byte, error) {
+	type noMethod FolderOperation
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// FolderOperationError: A classification of the Folder Operation error.
+type FolderOperationError struct {
+	// ErrorMessageId: The type of operation error experienced.
+	//
+	// Possible values:
+	//   "ERROR_TYPE_UNSPECIFIED" - The error type was unrecognized or
+	// unspecified.
+	//   "FOLDER_HEIGHT_VIOLATION" - The attempted action would violate the
+	// max folder depth constraint.
+	//   "MAX_CHILD_FOLDERS_VIOLATION" - The attempted action would violate
+	// the max child folders constraint.
+	//   "FOLDER_NAME_UNIQUENESS_VIOLATION" - The attempted action would
+	// violate the locally-unique folder
+	// display_name constraint.
+	//   "RESOURCE_DELETED" - The resource being moved has been deleted.
+	//   "PARENT_DELETED" - The resource a folder was being added to has
+	// been deleted.
+	//   "CYCLE_INTRODUCED_ERROR" - The attempted action would introduce
+	// cycle in resource path.
+	//   "FOLDER_ALREADY_BEING_MOVED" - The attempted action would move a
+	// folder that is already being moved.
+	//   "FOLDER_TO_DELETE_NON_EMPTY" - The folder the caller is trying to
+	// delete contains active resources.
+	ErrorMessageId string `json:"errorMessageId,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "ErrorMessageId") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *FolderOperationError) MarshalJSON() ([]byte, error) {
+	type noMethod FolderOperationError
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
 // GetAncestryRequest: The request sent to the
@@ -567,7 +645,12 @@ type Project struct {
 	//
 	// The only supported parent type is "organization". Once set, the
 	// parent
-	// cannot be modified.
+	// cannot be modified. The `parent` can be set on creation or using
+	// the
+	// `UpdateProject` method; the end user must have
+	// the
+	// `resourcemanager.projects.create` permission on the
+	// parent.
 	//
 	// Read-write.
 	Parent *ResourceId `json:"parent,omitempty"`
@@ -604,6 +687,40 @@ type Project struct {
 
 func (s *Project) MarshalJSON() ([]byte, error) {
 	type noMethod Project
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// ProjectCreationStatus: A status object which is used as the
+// `metadata` field for the Operation
+// returned by CreateProject. It provides insight for when significant
+// phases of
+// Project creation have completed.
+type ProjectCreationStatus struct {
+	// CreateTime: Creation time of the project creation workflow.
+	CreateTime string `json:"createTime,omitempty"`
+
+	// Gettable: True if the project can be retrieved using GetProject. No
+	// other operations
+	// on the project are guaranteed to work until the project creation
+	// is
+	// complete.
+	Gettable bool `json:"gettable,omitempty"`
+
+	// Ready: True if the project creation process is complete.
+	Ready bool `json:"ready,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "CreateTime") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *ProjectCreationStatus) MarshalJSON() ([]byte, error) {
+	type noMethod ProjectCreationStatus
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }

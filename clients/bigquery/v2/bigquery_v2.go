@@ -405,12 +405,8 @@ type Dataset struct {
 
 	// Labels: [Experimental] The labels associated with this dataset. You
 	// can use these to organize and group your datasets. You can set this
-	// property when inserting or updating a dataset. Label keys and values
-	// can be no longer than 63 characters, can only contain letters,
-	// numeric characters, underscores and dashes. International characters
-	// are allowed. Label values are optional. Label keys must start with a
-	// letter and must be unique within a dataset. Both keys and values are
-	// additionally constrained to be <= 128 bytes in size.
+	// property when inserting or updating a dataset. See Labeling Datasets
+	// for more information.
 	Labels map[string]string `json:"labels,omitempty"`
 
 	// LastModifiedTime: [Output-only] The date when this dataset or any of
@@ -647,6 +643,9 @@ type ExplainQueryStage struct {
 
 	// RecordsWritten: Number of records written by the stage.
 	RecordsWritten int64 `json:"recordsWritten,omitempty,string"`
+
+	// Status: Current status for the stage.
+	Status string `json:"status,omitempty"`
 
 	// Steps: List of operations within the stage in dependency order
 	// (approximately chronological).
@@ -984,6 +983,15 @@ type JobConfiguration struct {
 	// Extract: [Pick one] Configures an extract job.
 	Extract *JobConfigurationExtract `json:"extract,omitempty"`
 
+	// Labels: [Experimental] The labels associated with this job. You can
+	// use these to organize and group your jobs. Label keys and values can
+	// be no longer than 63 characters, can only contain letters, numeric
+	// characters, underscores and dashes. International characters are
+	// allowed. Label values are optional. Label keys must start with a
+	// letter and must be unique within a dataset. Both keys and values are
+	// additionally constrained to be <= 128 bytes in size.
+	Labels map[string]string `json:"labels,omitempty"`
+
 	// Load: [Pick one] Configures a load job.
 	Load *JobConfigurationLoad `json:"load,omitempty"`
 
@@ -1116,6 +1124,15 @@ type JobConfigurationLoad struct {
 	// result. The default value is 0, which requires that all records are
 	// valid.
 	MaxBadRecords int64 `json:"maxBadRecords,omitempty"`
+
+	// NullMarker: [Optional] Specifies a string that represents a null
+	// value in a CSV file. For example, if you specify "\N", BigQuery
+	// interprets "\N" as a null value when loading a CSV file. The default
+	// value is the empty string. If you set this property to a custom
+	// value, BigQuery still interprets the empty string as a null value for
+	// all data types except for STRING and BYTE. For STRING and BYTE
+	// columns, BigQuery interprets the empty string as an empty value.
+	NullMarker string `json:"nullMarker,omitempty"`
 
 	// ProjectionFields: [Experimental] If sourceFormat is set to
 	// "DATASTORE_BACKUP", indicates which entity properties to load into
@@ -1267,12 +1284,11 @@ type JobConfigurationQuery struct {
 	// Query: [Required] BigQuery SQL query to execute.
 	Query string `json:"query,omitempty"`
 
-	// QueryParameters: [Experimental] Query parameters for Standard SQL
-	// queries.
+	// QueryParameters: Query parameters for standard SQL queries.
 	QueryParameters []*QueryParameter `json:"queryParameters,omitempty"`
 
 	// SchemaUpdateOptions: [Experimental] Allows the schema of the
-	// desitination table to be updated as a side effect of the query job.
+	// destination table to be updated as a side effect of the query job.
 	// Schema update options are supported in two cases: when
 	// writeDisposition is WRITE_APPEND; when writeDisposition is
 	// WRITE_TRUNCATE and the destination table is a partition of a table,
@@ -1289,9 +1305,9 @@ type JobConfigurationQuery struct {
 	// source can then be queried as if it were a standard BigQuery table.
 	TableDefinitions map[string]ExternalDataConfiguration `json:"tableDefinitions,omitempty"`
 
-	// UseLegacySql: [Experimental] Specifies whether to use BigQuery's
-	// legacy SQL dialect for this query. The default value is true. If set
-	// to false, the query will use BigQuery's standard SQL:
+	// UseLegacySql: Specifies whether to use BigQuery's legacy SQL dialect
+	// for this query. The default value is true. If set to false, the query
+	// will use BigQuery's standard SQL:
 	// https://cloud.google.com/bigquery/sql-reference/ When useLegacySql is
 	// set to false, the values of allowLargeResults and flattenResults are
 	// ignored; query will be run as if allowLargeResults is true and
@@ -1556,6 +1572,10 @@ type JobStatistics2 struct {
 	// Schema: [Output-only, Experimental] The schema of the results.
 	// Present only for successful dry run of non-legacy SQL queries.
 	Schema *TableSchema `json:"schema,omitempty"`
+
+	// StatementType: [Output-only, Experimental] The type of query
+	// statement, if valid.
+	StatementType string `json:"statementType,omitempty"`
 
 	// TotalBytesBilled: [Output-only] Total bytes billed for the job.
 	TotalBytesBilled int64 `json:"totalBytesBilled,omitempty,string"`
@@ -1838,7 +1858,7 @@ type QueryParameterValue struct {
 
 	// StructValues: [Optional] The struct field values, in order of the
 	// struct type's declaration.
-	StructValues []*QueryParameterValue `json:"structValues,omitempty"`
+	StructValues map[string]QueryParameterValue `json:"structValues,omitempty"`
 
 	// Value: [Optional] The value of this value, if a simple scalar type.
 	Value string `json:"value,omitempty"`
@@ -1907,9 +1927,9 @@ type QueryRequest struct {
 	// results. The default value is 10000 milliseconds (10 seconds).
 	TimeoutMs int64 `json:"timeoutMs,omitempty"`
 
-	// UseLegacySql: [Experimental] Specifies whether to use BigQuery's
-	// legacy SQL dialect for this query. The default value is true. If set
-	// to false, the query will use BigQuery's standard SQL:
+	// UseLegacySql: Specifies whether to use BigQuery's legacy SQL dialect
+	// for this query. The default value is true. If set to false, the query
+	// will use BigQuery's standard SQL:
 	// https://cloud.google.com/bigquery/sql-reference/ When useLegacySql is
 	// set to false, the values of allowLargeResults and flattenResults are
 	// ignored; query will be run as if allowLargeResults is true and
@@ -2071,6 +2091,15 @@ type Table struct {
 
 	// Kind: [Output-only] The type of the resource.
 	Kind string `json:"kind,omitempty"`
+
+	// Labels: [Experimental] The labels associated with this table. You can
+	// use these to organize and group your tables. Label keys and values
+	// can be no longer than 63 characters, can only contain letters,
+	// numeric characters, underscores and dashes. International characters
+	// are allowed. Label values are optional. Label keys must start with a
+	// letter and must be unique within a dataset. Both keys and values are
+	// additionally constrained to be <= 128 bytes in size.
+	Labels map[string]string `json:"labels,omitempty"`
 
 	// LastModifiedTime: [Output-only] The time when this table was last
 	// modified, in milliseconds since the epoch.
@@ -2331,8 +2360,10 @@ type TableFieldSchema struct {
 	Name string `json:"name,omitempty"`
 
 	// Type: [Required] The field data type. Possible values include STRING,
-	// BYTES, INTEGER, FLOAT, BOOLEAN, TIMESTAMP or RECORD (where RECORD
-	// indicates that the field contains a nested schema).
+	// BYTES, INTEGER, INT64 (same as INTEGER), FLOAT, FLOAT64 (same as
+	// FLOAT), BOOLEAN, BOOL (same as BOOLEAN), TIMESTAMP, DATE, TIME,
+	// DATETIME, RECORD (where RECORD indicates that the field contains a
+	// nested schema) or STRUCT (same as RECORD).
 	Type string `json:"type,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Description") to
@@ -2395,11 +2426,18 @@ type TableListTables struct {
 	// Kind: The resource type.
 	Kind string `json:"kind,omitempty"`
 
+	// Labels: [Experimental] The labels associated with this table. You can
+	// use these to organize and group your tables.
+	Labels map[string]string `json:"labels,omitempty"`
+
 	// TableReference: A reference uniquely identifying the table.
 	TableReference *TableReference `json:"tableReference,omitempty"`
 
 	// Type: The type of table. Possible values are: TABLE, VIEW.
 	Type string `json:"type,omitempty"`
+
+	// View: Additional details for a view.
+	View *TableListTablesView `json:"view,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "FriendlyName") to
 	// unconditionally include in API requests. By default, fields with
@@ -2412,6 +2450,27 @@ type TableListTables struct {
 
 func (s *TableListTables) MarshalJSON() ([]byte, error) {
 	type noMethod TableListTables
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// TableListTablesView: Additional details for a view.
+type TableListTablesView struct {
+	// UseLegacySql: True if view is defined in legacy SQL dialect, false if
+	// in standard SQL.
+	UseLegacySql bool `json:"useLegacySql,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "UseLegacySql") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *TableListTablesView) MarshalJSON() ([]byte, error) {
+	type noMethod TableListTablesView
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
@@ -2536,9 +2595,9 @@ type ViewDefinition struct {
 	// referenced.
 	Query string `json:"query,omitempty"`
 
-	// UseLegacySql: [Experimental] Specifies whether to use BigQuery's
-	// legacy SQL for this view. The default value is true. If set to false,
-	// the view will use BigQuery's standard SQL:
+	// UseLegacySql: Specifies whether to use BigQuery's legacy SQL for this
+	// view. The default value is true. If set to false, the view will use
+	// BigQuery's standard SQL:
 	// https://cloud.google.com/bigquery/sql-reference/ Queries and views
 	// that reference this view must use the same flag value.
 	UseLegacySql bool `json:"useLegacySql,omitempty"`
@@ -2964,11 +3023,9 @@ func (c *DatasetsListCall) All(all bool) *DatasetsListCall {
 
 // Filter sets the optional parameter "filter": An expression for
 // filtering the results of the request by label. The syntax is
-// "labels.[:]". Multiple filters can be ANDed together by connecting
-// with a space. Example: "labels.department:receiving labels.active".
-// See
-// https://cloud.google.com/bigquery/docs/labeling-datasets#filtering_datasets_using_labels for
-// details.
+// "labels.<name>[:<value>]". Multiple filters can be ANDed together by
+// connecting with a space. Example: "labels.department:receiving
+// labels.active". See Filtering datasets using labels for details.
 func (c *DatasetsListCall) Filter(filter string) *DatasetsListCall {
 	c.urlParams_.Set("filter", filter)
 	return c
@@ -3086,7 +3143,7 @@ func (c *DatasetsListCall) Do(opts ...googleapi.CallOption) (*DatasetList, error
 	//       "type": "boolean"
 	//     },
 	//     "filter": {
-	//       "description": "An expression for filtering the results of the request by label. The syntax is \"labels.[:]\". Multiple filters can be ANDed together by connecting with a space. Example: \"labels.department:receiving labels.active\". See https://cloud.google.com/bigquery/docs/labeling-datasets#filtering_datasets_using_labels for details.",
+	//       "description": "An expression for filtering the results of the request by label. The syntax is \"labels.\u003cname\u003e[:\u003cvalue\u003e]\". Multiple filters can be ANDed together by connecting with a space. Example: \"labels.department:receiving labels.active\". See Filtering datasets using labels for details.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
@@ -3457,7 +3514,7 @@ func (c *JobsCancelCall) doRequest(alt string) (*http.Response, error) {
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "project/{projectId}/jobs/{jobId}/cancel")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "projects/{projectId}/jobs/{jobId}/cancel")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	req.Header = reqHeaders
@@ -3530,7 +3587,7 @@ func (c *JobsCancelCall) Do(opts ...googleapi.CallOption) (*JobCancelResponse, e
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "project/{projectId}/jobs/{jobId}/cancel",
+	//   "path": "projects/{projectId}/jobs/{jobId}/cancel",
 	//   "response": {
 	//     "$ref": "JobCancelResponse"
 	//   },

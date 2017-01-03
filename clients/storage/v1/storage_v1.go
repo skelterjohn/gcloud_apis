@@ -75,6 +75,7 @@ func New(client *http.Client) (*Service, error) {
 	s.Notifications = NewNotificationsService(s)
 	s.ObjectAccessControls = NewObjectAccessControlsService(s)
 	s.Objects = NewObjectsService(s)
+	s.Projects = NewProjectsService(s)
 	return s, nil
 }
 
@@ -96,6 +97,8 @@ type Service struct {
 	ObjectAccessControls *ObjectAccessControlsService
 
 	Objects *ObjectsService
+
+	Projects *ProjectsService
 }
 
 func (s *Service) userAgent() string {
@@ -168,6 +171,27 @@ type ObjectsService struct {
 	s *Service
 }
 
+func NewProjectsService(s *Service) *ProjectsService {
+	rs := &ProjectsService{s: s}
+	rs.ServiceAccount = NewProjectsServiceAccountService(s)
+	return rs
+}
+
+type ProjectsService struct {
+	s *Service
+
+	ServiceAccount *ProjectsServiceAccountService
+}
+
+func NewProjectsServiceAccountService(s *Service) *ProjectsServiceAccountService {
+	rs := &ProjectsServiceAccountService{s: s}
+	return rs
+}
+
+type ProjectsServiceAccountService struct {
+	s *Service
+}
+
 // Bucket: A bucket.
 type Bucket struct {
 	// Acl: Access controls on the bucket.
@@ -180,10 +204,6 @@ type Bucket struct {
 	// DefaultObjectAcl: Default access controls to apply to new objects
 	// when no ACL is provided.
 	DefaultObjectAcl []*ObjectAccessControl `json:"defaultObjectAcl,omitempty"`
-
-	// Encryption: Encryption configuration used by default for newly
-	// inserted objects, when no encryption config is specified.
-	Encryption *BucketEncryption `json:"encryption,omitempty"`
 
 	// Etag: HTTP 1.1 Entity tag for the bucket.
 	Etag string `json:"etag,omitempty"`
@@ -226,10 +246,13 @@ type Bucket struct {
 	// SelfLink: The URI of this bucket.
 	SelfLink string `json:"selfLink,omitempty"`
 
-	// StorageClass: The bucket's storage class. This defines how objects in
-	// the bucket are stored and determines the SLA and the cost of storage.
-	// Values include STANDARD, NEARLINE and DURABLE_REDUCED_AVAILABILITY.
-	// Defaults to STANDARD. For more information, see storage classes.
+	// StorageClass: The bucket's default storage class, used whenever no
+	// storageClass is specified for a newly-created object. This defines
+	// how objects in the bucket are stored and determines the SLA and the
+	// cost of storage. Values include MULTI_REGIONAL, REGIONAL, STANDARD,
+	// NEARLINE, COLDLINE, and DURABLE_REDUCED_AVAILABILITY. If this value
+	// is not specified when the bucket is created, it will default to
+	// STANDARD. For more information, see storage classes.
 	StorageClass string `json:"storageClass,omitempty"`
 
 	// TimeCreated: The creation time of the bucket in RFC 3339 format.
@@ -300,26 +323,6 @@ func (s *BucketCors) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// BucketEncryption: Encryption configuration used by default for newly
-// inserted objects, when no encryption config is specified.
-type BucketEncryption struct {
-	DefaultKmsKeyName string `json:"default_kms_key_name,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "DefaultKmsKeyName")
-	// to unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *BucketEncryption) MarshalJSON() ([]byte, error) {
-	type noMethod BucketEncryption
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
 // BucketLifecycle: The bucket's lifecycle configuration. See lifecycle
 // management for more information.
 type BucketLifecycle struct {
@@ -366,10 +369,15 @@ func (s *BucketLifecycleRule) MarshalJSON() ([]byte, error) {
 
 // BucketLifecycleRuleAction: The action to take.
 type BucketLifecycleRuleAction struct {
-	// Type: Type of the action. Currently, only Delete is supported.
+	// StorageClass: Target storage class. Required iff the type of the
+	// action is SetStorageClass.
+	StorageClass string `json:"storageClass,omitempty"`
+
+	// Type: Type of the action. Currently, only Delete and SetStorageClass
+	// are supported.
 	Type string `json:"type,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "Type") to
+	// ForceSendFields is a list of field names (e.g. "StorageClass") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -400,6 +408,12 @@ type BucketLifecycleRuleCondition struct {
 	// this condition matches live objects; if the value is false, it
 	// matches archived objects.
 	IsLive bool `json:"isLive,omitempty"`
+
+	// MatchesStorageClass: Objects having any of the storage classes
+	// specified by this condition will be matched. Values include
+	// MULTI_REGIONAL, REGIONAL, NEARLINE, COLDLINE, STANDARD, and
+	// DURABLE_REDUCED_AVAILABILITY.
+	MatchesStorageClass []string `json:"matchesStorageClass,omitempty"`
 
 	// NumNewerVersions: Relevant only for versioned objects. If the value
 	// is N, this condition is satisfied when there are at least N versions
@@ -815,9 +829,6 @@ func (s *ComposeRequestSourceObjectsObjectPreconditions) MarshalJSON() ([]byte, 
 
 // Notification: A subscription to receive Google PubSub notifications.
 type Notification struct {
-	// Bucket: The name of the bucket this subscription is particular to.
-	Bucket string `json:"bucket,omitempty"`
-
 	// CustomAttributes: An optional list of additional attributes to attach
 	// to each Cloud PubSub message published for this notification
 	// subscription.
@@ -837,17 +848,12 @@ type Notification struct {
 	// storage#notification.
 	Kind string `json:"kind,omitempty"`
 
-	// ObjectMetadataFormat: If payload_content is OBJECT_METADATA, controls
-	// the format of that metadata. Otherwise, must not be set.
-	ObjectMetadataFormat string `json:"object_metadata_format,omitempty"`
-
 	// ObjectNamePrefix: If present, only apply this notification
 	// configuration to object names that begin with this prefix.
 	ObjectNamePrefix string `json:"object_name_prefix,omitempty"`
 
-	// PayloadContent: The desired content of the Payload. Defaults to
-	// OBJECT_METADATA.
-	PayloadContent string `json:"payload_content,omitempty"`
+	// PayloadFormat: The desired content of the Payload.
+	PayloadFormat string `json:"payload_format,omitempty"`
 
 	// SelfLink: The canonical URL of this notification.
 	SelfLink string `json:"selfLink,omitempty"`
@@ -862,7 +868,7 @@ type Notification struct {
 	// server.
 	googleapi.ServerResponse `json:"-"`
 
-	// ForceSendFields is a list of field names (e.g. "Bucket") to
+	// ForceSendFields is a list of field names (e.g. "CustomAttributes") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -960,10 +966,6 @@ type Object struct {
 	// storage#object.
 	Kind string `json:"kind,omitempty"`
 
-	// KmsKeyName: Cloud KMS Key used to encrypt this object, if the object
-	// is encrypted by such a key.
-	KmsKeyName string `json:"kmsKeyName,omitempty"`
-
 	// Md5Hash: MD5 hash of the data; encoded using base64. For more
 	// information about using the MD5 hash, see Hashes and ETags: Best
 	// Practices.
@@ -1005,6 +1007,11 @@ type Object struct {
 	// be returned if and only if this version of the object has been
 	// deleted.
 	TimeDeleted string `json:"timeDeleted,omitempty"`
+
+	// TimeStorageClassUpdated: The time at which the object's storage class
+	// was last changed. When the object is initially created, it will be
+	// set to timeCreated.
+	TimeStorageClassUpdated string `json:"timeStorageClassUpdated,omitempty"`
 
 	// Updated: The modification time of the object metadata in RFC 3339
 	// format.
@@ -1111,7 +1118,8 @@ type ObjectAccessControl struct {
 	// Etag: HTTP 1.1 Entity tag for the access-control entry.
 	Etag string `json:"etag,omitempty"`
 
-	// Generation: The content generation of the object.
+	// Generation: The content generation of the object, if applied to an
+	// object.
 	Generation int64 `json:"generation,omitempty,string"`
 
 	// Id: The ID of the access-control entry.
@@ -1121,7 +1129,7 @@ type ObjectAccessControl struct {
 	// this is always storage#objectAccessControl.
 	Kind string `json:"kind,omitempty"`
 
-	// Object: The name of the object.
+	// Object: The name of the object, if applied to an object.
 	Object string `json:"object,omitempty"`
 
 	// ProjectTeam: The project team associated with the entity, if any.
@@ -1179,7 +1187,7 @@ func (s *ObjectAccessControlProjectTeam) MarshalJSON() ([]byte, error) {
 // ObjectAccessControls: An access-control list.
 type ObjectAccessControls struct {
 	// Items: The list of items.
-	Items []interface{} `json:"items,omitempty"`
+	Items []*ObjectAccessControl `json:"items,omitempty"`
 
 	// Kind: The kind of item this is. For lists of object access control
 	// entries, this is always storage#objectAccessControls.
@@ -1397,6 +1405,35 @@ type RewriteResponse struct {
 
 func (s *RewriteResponse) MarshalJSON() ([]byte, error) {
 	type noMethod RewriteResponse
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// ServiceAccount: A subscription to receive Google PubSub
+// notifications.
+type ServiceAccount struct {
+	// EmailAddress: The ID of the notification.
+	EmailAddress string `json:"email_address,omitempty"`
+
+	// Kind: The kind of item this is. For notifications, this is always
+	// storage#notification.
+	Kind string `json:"kind,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "EmailAddress") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *ServiceAccount) MarshalJSON() ([]byte, error) {
+	type noMethod ServiceAccount
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
@@ -3083,7 +3120,9 @@ type BucketsPatchCall struct {
 	ctx_       context.Context
 }
 
-// Patch: Updates a bucket. This method supports patch semantics.
+// Patch: Updates a bucket. Changes to the bucket will be readable
+// immediately after writing, but configuration changes may take time to
+// propagate. This method supports patch semantics.
 func (r *BucketsService) Patch(bucket string, bucket2 *Bucket) *BucketsPatchCall {
 	c := &BucketsPatchCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.bucket = bucket
@@ -3236,7 +3275,7 @@ func (c *BucketsPatchCall) Do(opts ...googleapi.CallOption) (*Bucket, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Updates a bucket. This method supports patch semantics.",
+	//   "description": "Updates a bucket. Changes to the bucket will be readable immediately after writing, but configuration changes may take time to propagate. This method supports patch semantics.",
 	//   "httpMethod": "PATCH",
 	//   "id": "storage.buckets.patch",
 	//   "parameterOrder": [
@@ -3606,7 +3645,9 @@ type BucketsUpdateCall struct {
 	ctx_       context.Context
 }
 
-// Update: Updates a bucket.
+// Update: Updates a bucket. Changes to the bucket will be readable
+// immediately after writing, but configuration changes may take time to
+// propagate.
 func (r *BucketsService) Update(bucket string, bucket2 *Bucket) *BucketsUpdateCall {
 	c := &BucketsUpdateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.bucket = bucket
@@ -3759,7 +3800,7 @@ func (c *BucketsUpdateCall) Do(opts ...googleapi.CallOption) (*Bucket, error) {
 	}
 	return ret, nil
 	// {
-	//   "description": "Updates a bucket.",
+	//   "description": "Updates a bucket. Changes to the bucket will be readable immediately after writing, but configuration changes may take time to propagate.",
 	//   "httpMethod": "PUT",
 	//   "id": "storage.buckets.update",
 	//   "parameterOrder": [
@@ -4729,14 +4770,16 @@ func (c *DefaultObjectAccessControlsUpdateCall) Do(opts ...googleapi.CallOption)
 
 type NotificationsDeleteCall struct {
 	s            *Service
+	bucket       string
 	notification string
 	urlParams_   gensupport.URLParams
 	ctx_         context.Context
 }
 
 // Delete: Permanently deletes a notification subscription.
-func (r *NotificationsService) Delete(notification string) *NotificationsDeleteCall {
+func (r *NotificationsService) Delete(bucket string, notification string) *NotificationsDeleteCall {
 	c := &NotificationsDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.bucket = bucket
 	c.notification = notification
 	return c
 }
@@ -4762,11 +4805,12 @@ func (c *NotificationsDeleteCall) doRequest(alt string) (*http.Response, error) 
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "notifications/{notification}")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "b/{bucket}/notificationConfigs/{notification}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
+		"bucket":       c.bucket,
 		"notification": c.notification,
 	})
 	if c.ctx_ != nil {
@@ -4792,9 +4836,16 @@ func (c *NotificationsDeleteCall) Do(opts ...googleapi.CallOption) error {
 	//   "httpMethod": "DELETE",
 	//   "id": "storage.notifications.delete",
 	//   "parameterOrder": [
+	//     "bucket",
 	//     "notification"
 	//   ],
 	//   "parameters": {
+	//     "bucket": {
+	//       "description": "The parent bucket of the notification.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
 	//     "notification": {
 	//       "description": "ID of the notification to delete.",
 	//       "location": "path",
@@ -4802,7 +4853,7 @@ func (c *NotificationsDeleteCall) Do(opts ...googleapi.CallOption) error {
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "notifications/{notification}",
+	//   "path": "b/{bucket}/notificationConfigs/{notification}",
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/devstorage.full_control",
@@ -4816,6 +4867,7 @@ func (c *NotificationsDeleteCall) Do(opts ...googleapi.CallOption) error {
 
 type NotificationsGetCall struct {
 	s            *Service
+	bucket       string
 	notification string
 	urlParams_   gensupport.URLParams
 	ifNoneMatch_ string
@@ -4823,8 +4875,9 @@ type NotificationsGetCall struct {
 }
 
 // Get: View a notification configuration.
-func (r *NotificationsService) Get(notification string) *NotificationsGetCall {
+func (r *NotificationsService) Get(bucket string, notification string) *NotificationsGetCall {
 	c := &NotificationsGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.bucket = bucket
 	c.notification = notification
 	return c
 }
@@ -4863,11 +4916,12 @@ func (c *NotificationsGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "notifications/{notification}")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "b/{bucket}/notificationConfigs/{notification}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
+		"bucket":       c.bucket,
 		"notification": c.notification,
 	})
 	if c.ctx_ != nil {
@@ -4918,9 +4972,16 @@ func (c *NotificationsGetCall) Do(opts ...googleapi.CallOption) (*Notification, 
 	//   "httpMethod": "GET",
 	//   "id": "storage.notifications.get",
 	//   "parameterOrder": [
+	//     "bucket",
 	//     "notification"
 	//   ],
 	//   "parameters": {
+	//     "bucket": {
+	//       "description": "The parent bucket of the notification.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
 	//     "notification": {
 	//       "description": "Notification ID",
 	//       "location": "path",
@@ -4928,7 +4989,7 @@ func (c *NotificationsGetCall) Do(opts ...googleapi.CallOption) (*Notification, 
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "notifications/{notification}",
+	//   "path": "b/{bucket}/notificationConfigs/{notification}",
 	//   "response": {
 	//     "$ref": "Notification"
 	//   },
@@ -4947,14 +5008,16 @@ func (c *NotificationsGetCall) Do(opts ...googleapi.CallOption) (*Notification, 
 
 type NotificationsInsertCall struct {
 	s            *Service
+	bucket       string
 	notification *Notification
 	urlParams_   gensupport.URLParams
 	ctx_         context.Context
 }
 
 // Insert: Creates a notification subscription for a given bucket.
-func (r *NotificationsService) Insert(notification *Notification) *NotificationsInsertCall {
+func (r *NotificationsService) Insert(bucket string, notification *Notification) *NotificationsInsertCall {
 	c := &NotificationsInsertCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.bucket = bucket
 	c.notification = notification
 	return c
 }
@@ -4985,11 +5048,13 @@ func (c *NotificationsInsertCall) doRequest(alt string) (*http.Response, error) 
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "notifications")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "b/{bucket}/notificationConfigs")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	req.Header = reqHeaders
-	googleapi.SetOpaque(req.URL)
+	googleapi.Expand(req.URL, map[string]string{
+		"bucket": c.bucket,
+	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
 	}
@@ -5037,7 +5102,18 @@ func (c *NotificationsInsertCall) Do(opts ...googleapi.CallOption) (*Notificatio
 	//   "description": "Creates a notification subscription for a given bucket.",
 	//   "httpMethod": "POST",
 	//   "id": "storage.notifications.insert",
-	//   "path": "notifications",
+	//   "parameterOrder": [
+	//     "bucket"
+	//   ],
+	//   "parameters": {
+	//     "bucket": {
+	//       "description": "The parent bucket of the notification.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "b/{bucket}/notificationConfigs",
 	//   "request": {
 	//     "$ref": "Notification"
 	//   },
@@ -5057,6 +5133,7 @@ func (c *NotificationsInsertCall) Do(opts ...googleapi.CallOption) (*Notificatio
 
 type NotificationsListCall struct {
 	s            *Service
+	bucket       string
 	urlParams_   gensupport.URLParams
 	ifNoneMatch_ string
 	ctx_         context.Context
@@ -5066,7 +5143,7 @@ type NotificationsListCall struct {
 // bucket.
 func (r *NotificationsService) List(bucket string) *NotificationsListCall {
 	c := &NotificationsListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.urlParams_.Set("bucket", bucket)
+	c.bucket = bucket
 	return c
 }
 
@@ -5104,11 +5181,13 @@ func (c *NotificationsListCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "notifications")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "b/{bucket}/notificationConfigs")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	req.Header = reqHeaders
-	googleapi.SetOpaque(req.URL)
+	googleapi.Expand(req.URL, map[string]string{
+		"bucket": c.bucket,
+	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
 	}
@@ -5162,12 +5241,12 @@ func (c *NotificationsListCall) Do(opts ...googleapi.CallOption) (*Notifications
 	//   "parameters": {
 	//     "bucket": {
 	//       "description": "Name of a GCS bucket.",
-	//       "location": "query",
+	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "notifications",
+	//   "path": "b/{bucket}/notificationConfigs",
 	//   "response": {
 	//     "$ref": "Notifications"
 	//   },
@@ -6141,16 +6220,6 @@ func (c *ObjectsComposeCall) IfMetagenerationMatch(ifMetagenerationMatch int64) 
 	return c
 }
 
-// KmsKeyName sets the optional parameter "kmsKeyName": Resource name of
-// the Cloud KMS key, of the form
-// projects/my-project/locations/global/keyRings/my-kr/cryptoKeys/my-key,
-//  that will be used to encrypt the object. Overrides the object
-// metadata's kms_key_name value, if any.
-func (c *ObjectsComposeCall) KmsKeyName(kmsKeyName string) *ObjectsComposeCall {
-	c.urlParams_.Set("kmsKeyName", kmsKeyName)
-	return c
-}
-
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
@@ -6295,11 +6364,6 @@ func (c *ObjectsComposeCall) Do(opts ...googleapi.CallOption) (*Object, error) {
 	//     "ifMetagenerationMatch": {
 	//       "description": "Makes the operation conditional on whether the object's current metageneration matches the given value.",
 	//       "format": "int64",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "kmsKeyName": {
-	//       "description": "Resource name of the Cloud KMS key, of the form projects/my-project/locations/global/keyRings/my-kr/cryptoKeys/my-key, that will be used to encrypt the object. Overrides the object metadata's kms_key_name value, if any.",
 	//       "location": "query",
 	//       "type": "string"
 	//     }
@@ -7338,16 +7402,6 @@ func (c *ObjectsInsertCall) IfMetagenerationNotMatch(ifMetagenerationNotMatch in
 	return c
 }
 
-// KmsKeyName sets the optional parameter "kmsKeyName": Resource name of
-// the Cloud KMS key, of the form
-// projects/my-project/locations/global/keyRings/my-kr/cryptoKeys/my-key,
-//  that will be used to encrypt the object. Overrides the object
-// metadata's kms_key_name value, if any.
-func (c *ObjectsInsertCall) KmsKeyName(kmsKeyName string) *ObjectsInsertCall {
-	c.urlParams_.Set("kmsKeyName", kmsKeyName)
-	return c
-}
-
 // Name sets the optional parameter "name": Name of the object. Required
 // when the object metadata is not otherwise provided. Overrides the
 // object metadata's name value, if any. For information about how to
@@ -7616,11 +7670,6 @@ func (c *ObjectsInsertCall) Do(opts ...googleapi.CallOption) (*Object, error) {
 	//     "ifMetagenerationNotMatch": {
 	//       "description": "Makes the operation conditional on whether the object's current metageneration does not match the given value.",
 	//       "format": "int64",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "kmsKeyName": {
-	//       "description": "Resource name of the Cloud KMS key, of the form projects/my-project/locations/global/keyRings/my-kr/cryptoKeys/my-key, that will be used to encrypt the object. Overrides the object metadata's kms_key_name value, if any.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
@@ -8225,17 +8274,6 @@ func (r *ObjectsService) Rewrite(sourceBucket string, sourceObject string, desti
 	return c
 }
 
-// DestinationKmsKeyName sets the optional parameter
-// "destinationKmsKeyName": Resource name of the Cloud KMS key, of the
-// form
-// projects/my-project/locations/global/keyRings/my-kr/cryptoKeys/my-key,
-//  that will be used to encrypt the object. Overrides the object
-// metadata's kms_key_name value, if any.
-func (c *ObjectsRewriteCall) DestinationKmsKeyName(destinationKmsKeyName string) *ObjectsRewriteCall {
-	c.urlParams_.Set("destinationKmsKeyName", destinationKmsKeyName)
-	return c
-}
-
 // DestinationPredefinedAcl sets the optional parameter
 // "destinationPredefinedAcl": Apply a predefined set of access controls
 // to the destination object.
@@ -8466,11 +8504,6 @@ func (c *ObjectsRewriteCall) Do(opts ...googleapi.CallOption) (*RewriteResponse,
 	//       "description": "Name of the bucket in which to store the new object. Overrides the provided object metadata's bucket value, if any.",
 	//       "location": "path",
 	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "destinationKmsKeyName": {
-	//       "description": "Resource name of the Cloud KMS key, of the form projects/my-project/locations/global/keyRings/my-kr/cryptoKeys/my-key, that will be used to encrypt the object. Overrides the object metadata's kms_key_name value, if any.",
-	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "destinationObject": {
@@ -9427,6 +9460,137 @@ func (c *ObjectsWatchAllCall) Do(opts ...googleapi.CallOption) (*Channel, error)
 	//     "https://www.googleapis.com/auth/devstorage.read_write"
 	//   ],
 	//   "supportsSubscription": true
+	// }
+
+}
+
+// method id "storage.projects.serviceAccount.get":
+
+type ProjectsServiceAccountGetCall struct {
+	s            *Service
+	projectId    string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
+}
+
+// Get: Get the email address of this project's GCS service account.
+func (r *ProjectsServiceAccountService) Get(projectId string) *ProjectsServiceAccountGetCall {
+	c := &ProjectsServiceAccountGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.projectId = projectId
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *ProjectsServiceAccountGetCall) Fields(s ...googleapi.Field) *ProjectsServiceAccountGetCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *ProjectsServiceAccountGetCall) IfNoneMatch(entityTag string) *ProjectsServiceAccountGetCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsServiceAccountGetCall) Context(ctx context.Context) *ProjectsServiceAccountGetCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsServiceAccountGetCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		reqHeaders.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	var body io.Reader = nil
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "projects/{projectId}/serviceAccount")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"projectId": c.projectId,
+	})
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "storage.projects.serviceAccount.get" call.
+// Exactly one of *ServiceAccount or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *ServiceAccount.ServerResponse.Header or (if a response was returned
+// at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *ProjectsServiceAccountGetCall) Do(opts ...googleapi.CallOption) (*ServiceAccount, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &ServiceAccount{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Get the email address of this project's GCS service account.",
+	//   "httpMethod": "GET",
+	//   "id": "storage.projects.serviceAccount.get",
+	//   "parameterOrder": [
+	//     "projectId"
+	//   ],
+	//   "parameters": {
+	//     "projectId": {
+	//       "description": "Project ID",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "projects/{projectId}/serviceAccount",
+	//   "response": {
+	//     "$ref": "ServiceAccount"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only",
+	//     "https://www.googleapis.com/auth/devstorage.full_control",
+	//     "https://www.googleapis.com/auth/devstorage.read_only",
+	//     "https://www.googleapis.com/auth/devstorage.read_write"
+	//   ]
 	// }
 
 }

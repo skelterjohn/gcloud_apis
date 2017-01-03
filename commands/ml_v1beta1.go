@@ -348,8 +348,6 @@ func Ml_v1beta1_ProjectsJobsList(context Context, args ...string) error {
 
 		usageBits += " [--filter=VALUE]"
 
-		usageBits += " [--orderBy=VALUE]"
-
 		usageBits += " [--pageSize=VALUE]"
 
 		usageBits += " [--pageToken=VALUE]"
@@ -367,7 +365,6 @@ func Ml_v1beta1_ProjectsJobsList(context Context, args ...string) error {
 
 	queryParamNames := map[string]bool{
 		"filter":    false,
-		"orderBy":   false,
 		"pageSize":  false,
 		"pageToken": false,
 	}
@@ -410,13 +407,6 @@ func Ml_v1beta1_ProjectsJobsList(context Context, args ...string) error {
 			return err
 		}
 		call.Filter(query_filter)
-	}
-	if value, ok := flagValues["orderBy"]; ok {
-		query_orderBy, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageSize"]; ok {
 		query_pageSize, err := commands_util.ConvertValue_int64(value)
@@ -675,10 +665,6 @@ func Ml_v1beta1_ProjectsModelsList(context Context, args ...string) error {
 			}
 		}
 
-		usageBits += " [--filter=VALUE]"
-
-		usageBits += " [--orderBy=VALUE]"
-
 		usageBits += " [--pageSize=VALUE]"
 
 		usageBits += " [--pageToken=VALUE]"
@@ -695,8 +681,6 @@ func Ml_v1beta1_ProjectsModelsList(context Context, args ...string) error {
 	service := api_client.NewProjectsModelsService(api_service)
 
 	queryParamNames := map[string]bool{
-		"filter":    false,
-		"orderBy":   false,
 		"pageSize":  false,
 		"pageToken": false,
 	}
@@ -733,20 +717,6 @@ func Ml_v1beta1_ProjectsModelsList(context Context, args ...string) error {
 	call := service.List(param_projectsId)
 
 	// Set query parameters.
-	if value, ok := flagValues["filter"]; ok {
-		query_filter, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.Filter(query_filter)
-	}
-	if value, ok := flagValues["orderBy"]; ok {
-		query_orderBy, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.OrderBy(query_orderBy)
-	}
 	if value, ok := flagValues["pageSize"]; ok {
 		query_pageSize, err := commands_util.ConvertValue_int64(value)
 		if err != nil {
@@ -1023,10 +993,6 @@ func Ml_v1beta1_ProjectsModelsVersionsList(context Context, args ...string) erro
 			}
 		}
 
-		usageBits += " [--filter=VALUE]"
-
-		usageBits += " [--orderBy=VALUE]"
-
 		usageBits += " [--pageSize=VALUE]"
 
 		usageBits += " [--pageToken=VALUE]"
@@ -1043,8 +1009,6 @@ func Ml_v1beta1_ProjectsModelsVersionsList(context Context, args ...string) erro
 	service := api_client.NewProjectsModelsVersionsService(api_service)
 
 	queryParamNames := map[string]bool{
-		"filter":    false,
-		"orderBy":   false,
 		"pageSize":  false,
 		"pageToken": false,
 	}
@@ -1086,20 +1050,6 @@ func Ml_v1beta1_ProjectsModelsVersionsList(context Context, args ...string) erro
 	call := service.List(param_projectsId, param_modelsId)
 
 	// Set query parameters.
-	if value, ok := flagValues["filter"]; ok {
-		query_filter, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.Filter(query_filter)
-	}
-	if value, ok := flagValues["orderBy"]; ok {
-		query_orderBy, err := commands_util.ConvertValue_string(value)
-		if err != nil {
-			return err
-		}
-		call.OrderBy(query_orderBy)
-	}
 	if value, ok := flagValues["pageSize"]; ok {
 		query_pageSize, err := commands_util.ConvertValue_int64(value)
 		if err != nil {

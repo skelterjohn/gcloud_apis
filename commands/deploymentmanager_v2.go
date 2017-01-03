@@ -139,6 +139,8 @@ func Deploymentmanager_v2_DeploymentsDelete(context Context, args ...string) err
 			}
 		}
 
+		usageBits += " [--deletePolicy=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -149,6 +151,21 @@ func Deploymentmanager_v2_DeploymentsDelete(context Context, args ...string) err
 		return err
 	}
 	service := api_client.NewDeploymentsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"deletePolicy": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -174,6 +191,15 @@ func Deploymentmanager_v2_DeploymentsDelete(context Context, args ...string) err
 	}
 
 	call := service.Delete(param_project, param_deployment)
+
+	// Set query parameters.
+	if value, ok := flagValues["deletePolicy"]; ok {
+		query_deletePolicy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.DeletePolicy(query_deletePolicy)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -239,6 +265,71 @@ func Deploymentmanager_v2_DeploymentsGet(context Context, args ...string) error 
 	}
 
 	call := service.Get(param_project, param_deployment)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Deploymentmanager_v2_DeploymentsGetIamPolicy(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("resource"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/global/deployments/{resource}/getIamPolicy", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewDeploymentsService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"resource",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_resource, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.GetIamPolicy(param_project, param_resource)
 
 	response, err := call.Do()
 	if err != nil {
@@ -383,6 +474,8 @@ func Deploymentmanager_v2_DeploymentsList(context Context, args ...string) error
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -399,6 +492,7 @@ func Deploymentmanager_v2_DeploymentsList(context Context, args ...string) error
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -447,6 +541,13 @@ func Deploymentmanager_v2_DeploymentsList(context Context, args ...string) error
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -606,6 +707,96 @@ func Deploymentmanager_v2_DeploymentsPatch(context Context, args ...string) erro
 	return nil
 }
 
+func Deploymentmanager_v2_DeploymentsSetIamPolicy(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("resource"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/global/deployments/{resource}/setIamPolicy", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Policy{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewDeploymentsService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.Policy{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"resource",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_resource, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.SetIamPolicy(param_project, param_resource,
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func Deploymentmanager_v2_DeploymentsStop(context Context, args ...string) error {
 
 	usageFunc := func() {
@@ -680,6 +871,96 @@ func Deploymentmanager_v2_DeploymentsStop(context Context, args ...string) error
 	}
 
 	call := service.Stop(param_project, param_deployment,
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Deploymentmanager_v2_DeploymentsTestIamPermissions(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("resource"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/global/deployments/{resource}/testIamPermissions", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewDeploymentsService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.TestPermissionsRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"resource",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_resource, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.TestIamPermissions(param_project, param_resource,
 		request,
 	)
 
@@ -924,6 +1205,8 @@ func Deploymentmanager_v2_ManifestsList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -940,6 +1223,7 @@ func Deploymentmanager_v2_ManifestsList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -993,6 +1277,13 @@ func Deploymentmanager_v2_ManifestsList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -1099,6 +1390,8 @@ func Deploymentmanager_v2_OperationsList(context Context, args ...string) error 
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -1115,6 +1408,7 @@ func Deploymentmanager_v2_OperationsList(context Context, args ...string) error 
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -1163,6 +1457,13 @@ func Deploymentmanager_v2_OperationsList(context Context, args ...string) error 
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
@@ -1276,6 +1577,8 @@ func Deploymentmanager_v2_ResourcesList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -1292,6 +1595,7 @@ func Deploymentmanager_v2_ResourcesList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -1346,6 +1650,13 @@ func Deploymentmanager_v2_ResourcesList(context Context, args ...string) error {
 		}
 		call.MaxResults(query_maxResults)
 	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
+	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
 		if err != nil {
@@ -1386,6 +1697,8 @@ func Deploymentmanager_v2_TypesList(context Context, args ...string) error {
 
 		usageBits += " [--maxResults=VALUE]"
 
+		usageBits += " [--orderBy=VALUE]"
+
 		usageBits += " [--pageToken=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -1402,6 +1715,7 @@ func Deploymentmanager_v2_TypesList(context Context, args ...string) error {
 	queryParamNames := map[string]bool{
 		"filter":     false,
 		"maxResults": false,
+		"orderBy":    false,
 		"pageToken":  false,
 	}
 
@@ -1450,6 +1764,13 @@ func Deploymentmanager_v2_TypesList(context Context, args ...string) error {
 			return err
 		}
 		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
 	}
 	if value, ok := flagValues["pageToken"]; ok {
 		query_pageToken, err := commands_util.ConvertValue_string(value)
