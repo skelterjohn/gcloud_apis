@@ -21,6 +21,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"strings"
 
 	"golang.org/x/oauth2"
 )
@@ -44,8 +45,9 @@ func (cts cliTokenSource) Token() (*oauth2.Token, error) {
 	if err != nil {
 		return nil, fmt.Errorf("problem getting gcloud token: %v", err)
 	}
+	token := strings.TrimSpace(string(output))
 	return &oauth2.Token{
-		AccessToken: string(output),
+		AccessToken: token,
 	}, nil
 }
 
