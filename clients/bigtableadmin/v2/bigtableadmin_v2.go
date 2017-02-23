@@ -490,6 +490,17 @@ type Instance struct {
 	//   "PRODUCTION" - An instance meant for production use. `serve_nodes`
 	// must be set
 	// on the cluster.
+	//   "DEVELOPMENT" - The instance is meant for development and testing
+	// purposes only; it has
+	// no performance or uptime guarantees and is not covered by SLA.
+	// After a development instance is created, it can be upgraded
+	// by
+	// updating the instance to type `PRODUCTION`. An instance created
+	// as a production instance cannot be changed to a development
+	// instance.
+	// When creating a development instance, `serve_nodes` on the cluster
+	// must
+	// not be set.
 	Type string `json:"type,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
@@ -2405,7 +2416,7 @@ func (c *ProjectsInstancesClustersCreateCall) Do(opts ...googleapi.CallOption) (
 	//       "type": "string"
 	//     },
 	//     "parent": {
-	//       "description": "The unique name of the instance in which to create the new cluster.\nValues are of the form\n`projects/\u003cproject\u003e/instances/\u003cinstance\u003e/clusters/a-z*`.",
+	//       "description": "The unique name of the instance in which to create the new cluster.\nValues are of the form\n`projects/\u003cproject\u003e/instances/\u003cinstance\u003e`.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]+/instances/[^/]+$",
 	//       "required": true,

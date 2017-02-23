@@ -238,11 +238,6 @@ type AuthenticateRequest struct {
 
 	// Metadata: "pkg/api/types".ObjectMeta
 	// TODO (b/30563544): Remove these unused fields.
-	// If cl/129007035 is rolled out to the prod envelope before b/28297888
-	// is
-	// fixed, we can change this to a google.protobuf.Any. Until then, only
-	// the
-	// fields that are acutally populated by the Token Webhook Authenticator
 	Metadata *ObjectMeta `json:"metadata,omitempty"`
 
 	// Spec: The information about the request being evaluated. It contains
@@ -342,11 +337,6 @@ type AuthorizeRequest struct {
 
 	// Metadata: Fields from "pkg/api/types".ObjectMeta
 	// TODO (b/30563544): Remove these unused fields.
-	// If cl/129007035 is rolled out to the prod envelope before b/28297888
-	// is
-	// fixed, we can change this to a google.protobuf.Any. Until then, only
-	// the
-	// fields that are acutally populated by the Token Webhook Authenticator
 	Metadata *ObjectMeta `json:"metadata,omitempty"`
 
 	// Spec: The information about the user action being evaluated.
@@ -456,6 +446,169 @@ func (s *AutoUpgradeOptions) MarshalJSON() ([]byte, error) {
 // CancelOperationRequest: CancelOperationRequest cancels a single
 // operation.
 type CancelOperationRequest struct {
+}
+
+// CertificateSigningRequest: A request to sign a certificate. These
+// fields must match the OSS definition
+// in "pkg/apis/certificates/v1beta1", with additional fields prepending
+// as part
+// of the "SignCertificate" rpc definition.
+type CertificateSigningRequest struct {
+	// ApiVersion: The api version of the CertificateSigningRequest object.
+	ApiVersion string `json:"apiVersion,omitempty"`
+
+	// ClusterId: The name of this master's cluster.
+	ClusterId string `json:"clusterId,omitempty"`
+
+	// Kind: The "kind" of the CertificateSigningRequest object.
+	Kind string `json:"kind,omitempty"`
+
+	// MasterProjectId: The hosted master project in which this master
+	// resides.  This can be
+	// either a [project ID or
+	// project
+	// number](https://support.google.com/cloud/answer/6158840).
+	MasterProjectId string `json:"masterProjectId,omitempty"`
+
+	// Metadata: Additional metadata about the Kubernetes object.
+	Metadata *ObjectMeta `json:"metadata,omitempty"`
+
+	// ProjectNumber: The project number for which the certificate is being
+	// signed. This is the
+	// project in which this master's cluster resides.
+	//
+	// This is an int64, so it must be a project number, not a project ID.
+	ProjectNumber int64 `json:"projectNumber,omitempty,string"`
+
+	// Spec: The specification holds information about the certificate
+	// requesting to be
+	// signed.
+	Spec *CertificateSigningRequestSpec `json:"spec,omitempty"`
+
+	// Status: The status is populated at response time, and holds
+	// information about the
+	// success or failure of the operation along with the signed
+	// certificate.
+	Status *CertificateSigningRequestStatus `json:"status,omitempty"`
+
+	// Zone: The zone of this master's cluster.
+	Zone string `json:"zone,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "ApiVersion") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *CertificateSigningRequest) MarshalJSON() ([]byte, error) {
+	type noMethod CertificateSigningRequest
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// CertificateSigningRequestCondition: A detailed condition of the state
+// of the certificate signing request, such as
+// whether it has been approved or denied. This must match the OSS
+// definition in
+// "pkg/apis/certificates/v1beta1".
+type CertificateSigningRequestCondition struct {
+	// LastUpdateTime: The timestamp of the last update to this condition.
+	LastUpdateTime string `json:"lastUpdateTime,omitempty"`
+
+	// Message: A human-readable message with details about the request
+	// state.
+	Message string `json:"message,omitempty"`
+
+	// Reason: A brief reason for the request state.
+	Reason string `json:"reason,omitempty"`
+
+	// Type: The request approval state, currently either Approved or
+	// Denied.
+	Type string `json:"type,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "LastUpdateTime") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *CertificateSigningRequestCondition) MarshalJSON() ([]byte, error) {
+	type noMethod CertificateSigningRequestCondition
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// CertificateSigningRequestSpec: The specification for a certificate to
+// be signed. This must match the OSS
+// definition in "pkg/apis/certificates/v1beta1".
+type CertificateSigningRequestSpec struct {
+	// Groups: An optional list of groups for this request.
+	Groups []string `json:"groups,omitempty"`
+
+	// Request: The PEM-encoded body of the certificate.
+	Request string `json:"request,omitempty"`
+
+	// Uid: An optional UID for the CSR object.
+	Uid string `json:"uid,omitempty"`
+
+	// Usages: Allowed usages that the certificate will be valid for.
+	// See: https://tools.ietf.org/html/rfc5280#section-4.2.1.3
+	//      https://tools.ietf.org/html/rfc5280#section-4.2.1.12
+	Usages []string `json:"usages,omitempty"`
+
+	// Username: Information about the requesting user (if relevant).
+	Username string `json:"username,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Groups") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *CertificateSigningRequestSpec) MarshalJSON() ([]byte, error) {
+	type noMethod CertificateSigningRequestSpec
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// CertificateSigningRequestStatus: The status of the certificate
+// signing request, populated at response time.
+// This must match the OSS definition in
+// "pkg/apis/certificates/v1beta1".
+type CertificateSigningRequestStatus struct {
+	// Certificate: The bytes of the signed certificate, on success.
+	Certificate string `json:"certificate,omitempty"`
+
+	// Conditions: Conditions applied to the request, such as approval or
+	// denial.
+	Conditions []*CertificateSigningRequestCondition `json:"conditions,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Certificate") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *CertificateSigningRequestStatus) MarshalJSON() ([]byte, error) {
+	type noMethod CertificateSigningRequestStatus
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
 // Cluster: A Google Container Engine cluster.
@@ -735,12 +888,8 @@ type ClusterUpdate struct {
 	// (e.g. `n1-standard-8`) to change the master to.
 	DesiredMasterMachineType string `json:"desiredMasterMachineType,omitempty"`
 
-	// DesiredMasterVersion:
-	// Whitelisted and internal users can change the master to any
-	// version.
-	//
-	// The Kubernetes version to change the master to. The only valid value
-	// is the
+	// DesiredMasterVersion: The Kubernetes version to change the master to.
+	// The only valid value is the
 	// latest supported version. Use "-" to have the server automatically
 	// select
 	// the latest version.
@@ -1037,11 +1186,6 @@ type ImageReviewRequest struct {
 
 	// Metadata: Fields from "pkg/api/types".ObjectMeta
 	// TODO (b/30563544): Remove these unused fields.
-	// If cl/129007035 is rolled out to the prod envelope before b/28297888
-	// is
-	// fixed, we can change this to a google.protobuf.Any. Until then, only
-	// the
-	// fields that are acutally populated by the Token Webhook Authenticator
 	Metadata *ObjectMeta `json:"metadata,omitempty"`
 
 	// Spec: The information about the user action being evaluated.
@@ -1624,13 +1768,41 @@ func (s *NonResourceAttributes) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// ObjectMeta: The fields from "pkg/api/types".ObjectMeta that actually
-// get filled in on
-// Authenticate/Authorize requests.
+// ObjectMeta: This maps to the
+// "apimachinery/pkg/apis/meta/v1".ObjectMeta type, although
+// not all fields are populated and represented here.
+// TODO (b/30563544, b/34947157): Remove unused fields.
+//
+// Currently, if a request includes metadata fields that aren't
+// explicitly
+// modeled here, the caller will receive a 400 response instead of
+// ignoring the
+// unrecognized fields. We should consider following b/28297888 to
+// enable
+// "ignore_unknown_fields" in order to make this less brittle.
 type ObjectMeta struct {
 	// CreationTimestamp: Timestamp representing the server time when this
 	// object was created.
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
+
+	// GenerateName: An optional prefix, used by the server, to generate a
+	// unique name ONLY IF
+	// the name field has not been provided.
+	GenerateName string `json:"generateName,omitempty"`
+
+	// Name: The name of the resource, unique within a namespace.
+	Name string `json:"name,omitempty"`
+
+	// ResourceVersion: An opaque value that represents the internal version
+	// of this object that
+	// can be used by clients to determine when objects have changed.
+	ResourceVersion string `json:"resourceVersion,omitempty"`
+
+	// SelfLink: A URL representing this object.
+	SelfLink string `json:"selfLink,omitempty"`
+
+	// Uid: A unique identifier in time and space for this object.
+	Uid string `json:"uid,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "CreationTimestamp")
 	// to unconditionally include in API requests. By default, fields with
@@ -2562,6 +2734,163 @@ func (c *MasterProjectsZonesImagereviewCall) Do(opts ...googleapi.CallOption) (*
 	//   },
 	//   "response": {
 	//     "$ref": "ImageReviewResponse"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/userinfo.email"
+	//   ]
+	// }
+
+}
+
+// method id "container.masterProjects.zones.signcertificate":
+
+type MasterProjectsZonesSigncertificateCall struct {
+	s                         *Service
+	masterProjectId           string
+	zone                      string
+	projectNumber             int64
+	clusterId                 string
+	certificatesigningrequest *CertificateSigningRequest
+	urlParams_                gensupport.URLParams
+	ctx_                      context.Context
+}
+
+// Signcertificate: Signs a CertificateSigningRequest (CSR) with the
+// cluster's certificate
+// authority (CA).
+func (r *MasterProjectsZonesService) Signcertificate(masterProjectId string, zone string, projectNumber int64, clusterId string, certificatesigningrequest *CertificateSigningRequest) *MasterProjectsZonesSigncertificateCall {
+	c := &MasterProjectsZonesSigncertificateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.masterProjectId = masterProjectId
+	c.zone = zone
+	c.projectNumber = projectNumber
+	c.clusterId = clusterId
+	c.certificatesigningrequest = certificatesigningrequest
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *MasterProjectsZonesSigncertificateCall) Fields(s ...googleapi.Field) *MasterProjectsZonesSigncertificateCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *MasterProjectsZonesSigncertificateCall) Context(ctx context.Context) *MasterProjectsZonesSigncertificateCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *MasterProjectsZonesSigncertificateCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.certificatesigningrequest)
+	if err != nil {
+		return nil, err
+	}
+	reqHeaders.Set("Content-Type", "application/json")
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/masterProjects/{masterProjectId}/zones/{zone}/{projectNumber}/{clusterId}/signcertificate")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"masterProjectId": c.masterProjectId,
+		"zone":            c.zone,
+		"projectNumber":   strconv.FormatInt(c.projectNumber, 10),
+		"clusterId":       c.clusterId,
+	})
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "container.masterProjects.zones.signcertificate" call.
+// Exactly one of *CertificateSigningRequest or error will be non-nil.
+// Any non-2xx status code is an error. Response headers are in either
+// *CertificateSigningRequest.ServerResponse.Header or (if a response
+// was returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *MasterProjectsZonesSigncertificateCall) Do(opts ...googleapi.CallOption) (*CertificateSigningRequest, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &CertificateSigningRequest{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Signs a CertificateSigningRequest (CSR) with the cluster's certificate\nauthority (CA).",
+	//   "flatPath": "v1/masterProjects/{masterProjectId}/zones/{zone}/{projectNumber}/{clusterId}/signcertificate",
+	//   "httpMethod": "POST",
+	//   "id": "container.masterProjects.zones.signcertificate",
+	//   "parameterOrder": [
+	//     "masterProjectId",
+	//     "zone",
+	//     "projectNumber",
+	//     "clusterId"
+	//   ],
+	//   "parameters": {
+	//     "clusterId": {
+	//       "description": "The name of this master's cluster.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "masterProjectId": {
+	//       "description": "The hosted master project in which this master resides.  This can be\neither a [project ID or project\nnumber](https://support.google.com/cloud/answer/6158840).",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "projectNumber": {
+	//       "description": "The project number for which the certificate is being signed. This is the\nproject in which this master's cluster resides.\n\nThis is an int64, so it must be a project number, not a project ID.",
+	//       "format": "int64",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The zone of this master's cluster.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "v1/masterProjects/{masterProjectId}/zones/{zone}/{projectNumber}/{clusterId}/signcertificate",
+	//   "request": {
+	//     "$ref": "CertificateSigningRequest"
+	//   },
+	//   "response": {
+	//     "$ref": "CertificateSigningRequest"
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/userinfo.email"

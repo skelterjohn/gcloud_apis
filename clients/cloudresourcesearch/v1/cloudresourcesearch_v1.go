@@ -87,297 +87,23 @@ type ResourcesService struct {
 	s *Service
 }
 
-// BillingAccount: A billing account in [Google
-// Cloud
-// Console](https://console.cloud.google.com/). You can assign a billing
-// account
-// to one or more projects.
-type BillingAccount struct {
-	// DisplayName: The display name given to the billing account, such as
-	// `My Billing
-	// Account`. This name is displayed in the Google Cloud Console.
-	DisplayName string `json:"displayName,omitempty"`
-
-	// Name: The resource name of the billing account. The resource name has
-	// the form
-	// `billingAccounts/{billing_account_id}`. For
-	// example,
-	// `billingAccounts/012345-567890-ABCDEF` would be the resource name
-	// for
-	// billing account `012345-567890-ABCDEF`.
-	Name string `json:"name,omitempty"`
-
-	// Open: True if the billing account is open, and will therefore be
-	// charged for any
-	// usage on associated projects. False if the billing account is closed,
-	// and
-	// therefore projects associated with it will be unable to use paid
-	// services.
-	Open bool `json:"open,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "DisplayName") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *BillingAccount) MarshalJSON() ([]byte, error) {
-	type noMethod BillingAccount
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// Organization: The root node in the resource hierarchy to which a
-// particular entity's
-// (e.g., company) resources belong.
-type Organization struct {
-	// CreationTime: Timestamp when the Organization was created. Assigned
-	// by the server.
-	// @OutputOnly
-	CreationTime string `json:"creationTime,omitempty"`
-
-	// DisplayName: A friendly string to be used to refer to the
-	// Organization in the UI.
-	// Assigned by the server, set to the firm name of the Google For
-	// Work
-	// customer that owns this organization.
-	// @OutputOnly
-	DisplayName string `json:"displayName,omitempty"`
-
-	// LifecycleState: The organization's current lifecycle state. Assigned
-	// by the server.
-	// @OutputOnly
-	//
-	// Possible values:
-	//   "LIFECYCLE_STATE_UNSPECIFIED" - Unspecified state.  This is only
-	// useful for distinguishing unset values.
-	//   "ACTIVE" - The normal and active state.
-	//   "DELETE_REQUESTED" - The organization has been marked for deletion
-	// by the user.
-	LifecycleState string `json:"lifecycleState,omitempty"`
-
-	// Name: Output Only. The resource name of the organization. This is
-	// the
-	// organization's relative path in the API. Its format
-	// is
-	// "organizations/[organization_id]". For example, "organizations/1234".
-	Name string `json:"name,omitempty"`
-
-	// OrganizationId: An immutable id for the Organization that is assigned
-	// on creation. This
-	// should be omitted when creating a new Organization.
-	// This field is read-only.
-	// This field is deprecated and will be removed in v1. Use name instead.
-	OrganizationId string `json:"organizationId,omitempty"`
-
-	// Owner: The owner of this Organization. The owner should be specified
-	// on
-	// creation. Once set, it cannot be changed.
-	// This field is required.
-	Owner *OrganizationOwner `json:"owner,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "CreationTime") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *Organization) MarshalJSON() ([]byte, error) {
-	type noMethod Organization
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// OrganizationOwner: The entity that owns an Organization. The lifetime
-// of the Organization and
-// all of its descendants are bound to the `OrganizationOwner`. If
-// the
-// `OrganizationOwner` is deleted, the Organization and all its
-// descendants will
-// be deleted.
-type OrganizationOwner struct {
-	// DirectoryCustomerId: The Google for Work customer id used in the
-	// Directory API.
-	DirectoryCustomerId string `json:"directoryCustomerId,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "DirectoryCustomerId")
-	// to unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *OrganizationOwner) MarshalJSON() ([]byte, error) {
-	type noMethod OrganizationOwner
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// Project: A Project is a high-level Google Cloud Platform entity.  It
-// is a
-// container for ACLs, APIs, AppEngine Apps, VMs, and other
-// Google Cloud Platform resources.
-type Project struct {
-	// CreateTime: Creation time.
-	//
-	// Read-only.
-	CreateTime string `json:"createTime,omitempty"`
-
-	// Labels: The labels associated with this Project.
-	//
-	// Label keys must be between 1 and 63 characters long and must
-	// conform
-	// to the following regular expression:
-	// \[a-z\](\[-a-z0-9\]*\[a-z0-9\])?.
-	//
-	// Label values must be between 0 and 63 characters long and must
-	// conform
-	// to the regular expression (\[a-z\](\[-a-z0-9\]*\[a-z0-9\])?)?.
-	//
-	// No more than 256 labels can be associated with a given
-	// resource.
-	//
-	// Clients should store labels in a representation such as JSON that
-	// does not
-	// depend on specific characters being disallowed.
-	//
-	// Example: <code>"environment" : "dev"</code>
-	//
-	// Read-write.
-	Labels map[string]string `json:"labels,omitempty"`
-
-	// LifecycleState: The Project lifecycle state.
-	//
-	// Read-only.
-	//
-	// Possible values:
-	//   "LIFECYCLE_STATE_UNSPECIFIED" - Unspecified state.  This is only
-	// used/useful for distinguishing
-	// unset values.
-	//   "ACTIVE" - The normal and active state.
-	//   "DELETE_REQUESTED" - The project has been marked for deletion by
-	// the user
-	// (by invoking DeleteProject)
-	// or by the system (Google Cloud Platform).
-	// This can generally be reversed by invoking UndeleteProject.
-	//   "DELETE_IN_PROGRESS" - This lifecycle state is no longer used and
-	// is not returned by the API.
-	LifecycleState string `json:"lifecycleState,omitempty"`
-
-	// Name: The user-assigned display name of the Project.
-	// It must be 4 to 30 characters.
-	// Allowed characters are: lowercase and uppercase letters,
-	// numbers,
-	// hyphen, single-quote, double-quote, space, and exclamation
-	// point.
-	//
-	// Example: <code>My Project</code>
-	//
-	// Read-write.
-	Name string `json:"name,omitempty"`
-
-	// Parent: An optional reference to a parent Resource.
-	//
-	// The only supported parent type is "organization". Once set, the
-	// parent
-	// cannot be modified. The `parent` can be set on creation or using
-	// the
-	// `UpdateProject` method; the end user must have
-	// the
-	// `resourcemanager.projects.create` permission on the
-	// parent.
-	//
-	// Read-write.
-	Parent *ResourceId `json:"parent,omitempty"`
-
-	// ProjectId: The unique, user-assigned ID of the Project.
-	// It must be 6 to 30 lowercase letters, digits, or hyphens.
-	// It must start with a letter.
-	// Trailing hyphens are prohibited.
-	//
-	// Example: <code>tokyo-rain-123</code>
-	//
-	// Read-only after creation.
-	ProjectId string `json:"projectId,omitempty"`
-
-	// ProjectNumber: The number uniquely identifying the project.
-	//
-	// Example: <code>415104041262</code>
-	//
-	// Read-only.
-	ProjectNumber int64 `json:"projectNumber,omitempty,string"`
-
-	// ForceSendFields is a list of field names (e.g. "CreateTime") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *Project) MarshalJSON() ([]byte, error) {
-	type noMethod Project
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// ResourceId: A container to reference an id for any resource type. A
-// `resource` in Google
-// Cloud Platform is a generic term for something you (a developer) may
-// want to
-// interact with through one of our API's. Some examples are an
-// AppEngine app,
-// a Compute Engine instance, a Cloud SQL database, and so on.
-type ResourceId struct {
-	// Id: Required field for the type-specific id. This should correspond
-	// to the id
-	// used in the type-specific API's.
-	Id string `json:"id,omitempty"`
-
-	// Type: Required field representing the resource type this id is
-	// for.
-	// At present, the valid types are "project" and "organization".
-	Type string `json:"type,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "Id") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *ResourceId) MarshalJSON() ([]byte, error) {
-	type noMethod ResourceId
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// SearchResponse: Response message for Search().
+// SearchResponse: Response message for `resources.search`.
 type SearchResponse struct {
-	// MatchedCount: The approximate number of documents that match the
-	// query. It is greater
-	// than or equal to the number of documents actually returned.
+	// MatchedCount: The approximate total number of resources that match
+	// the query.  It will
+	// never be less than the number of resources returned so far, but it
+	// can
+	// change as additional pages of results are returned.
 	MatchedCount int64 `json:"matchedCount,omitempty,string"`
 
-	// NextPageToken: If there are more results, retrieve them by invoking
-	// search call with the
-	// same arguments and this `nextPageToken`. If there are no more
-	// results, this
-	// field is not set.
+	// NextPageToken: If there are more results than those appearing in this
+	// response, then
+	// `next_page_token` is included.  To get the next set of results, call
+	// this
+	// method again using the value of `next_page_token` as `page_token`.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
-	// Results: The list of resources that match the search query.
+	// Results: A list of resources that match the search query.
 	Results []*SearchResult `json:"results,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
@@ -399,42 +125,44 @@ func (s *SearchResponse) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// SearchResult: A single Google Cloud Platform resource returned in
-// SearchResourcesResponse.
+// SearchResult: A single Google Cloud Platform resource.
 type SearchResult struct {
 	// DiscoveryType: The JSON schema name listed in the discovery
 	// document.
-	// Example: Project
+	// Example: `Project`.
 	DiscoveryType string `json:"discoveryType,omitempty"`
 
 	// DiscoveryUrl: The URL of the discovery document containing the
 	// resource's JSON schema.
-	// Example: https://cloudresourcemanager.googleapis.com/$discovery/rest
+	// Example:
+	// `https://cloudresourcemanager.googleapis.com/$discovery/rest`.
 	DiscoveryUrl string `json:"discoveryUrl,omitempty"`
 
 	// Resource: The matched resource, expressed as a JSON object.
 	Resource SearchResultResource `json:"resource,omitempty"`
 
-	// ResourceName: The RPC resource name. It is a scheme-less URI that
-	// includes the DNS-
-	// compatible API service name. It does not include API version, or
-	// support
-	// %-encoding.
+	// ResourceName: The RPC resource name: a scheme-less URI that includes
+	// the DNS-compatible
+	// API service name. The URI does not include an API version and does
+	// not
+	// support %-encoding.
 	// Example:
-	// //cloudresourcemanager.googleapis.com/projects/my-project-123
+	// `//cloudresourcemanager.googleapis.com/projects/my-project-123`.
 	ResourceName string `json:"resourceName,omitempty"`
 
 	// ResourceType: A domain-scoped name that describes the protocol buffer
 	// message type.
-	// Example: type.googleapis.com/google.cloud.resourcemanager.v1.Project
+	// Example:
+	// `type.googleapis.com/google.cloud.resourcemanager.v1.Project`.
 	ResourceType string `json:"resourceType,omitempty"`
 
-	// ResourceUrl: The REST URL for accessing the resource. HTTP GET on the
-	// `resource_url`
-	// would return a JSON object equivalent to the `resource`
-	// below.
+	// ResourceUrl: The REST URL for accessing the resource. An HTTP GET
+	// operation using this
+	// URL returns an object equivalent to the value in the `resource`
+	// field.
 	// Example:
-	// https://cloudresourcemanager.googleapis.com/v1/projects/my-project-123
+	// `https://cloudresourcemanager.googleapis.com/v1/projec
+	// ts/my-project-123`.
 	ResourceUrl string `json:"resourceUrl,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "DiscoveryType") to
@@ -463,58 +191,70 @@ type ResourcesSearchCall struct {
 	ctx_         context.Context
 }
 
-// Search: Lists accessible Google Cloud Platform resources that match
-// the query. A
-// resource is accessible to the caller if they have the IAM .get
-// permission
-// for it.
+// Search: Lists accessible Google Cloud Platform resources that match a
+// query. A
+// resource is accessible to the caller if the caller has permission
+// to perform a GET operation on the resource.
 func (r *ResourcesService) Search() *ResourcesSearchCall {
 	c := &ResourcesSearchCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	return c
 }
 
-// OrderBy sets the optional parameter "orderBy": Comma-separated list
-// of string fields for sorting on the search result,
-// including fields from the resources and the built-in fields
-// (`resourceName`
-// and `resourceType`). Strings are sorted as binary strings based on
-// their
-// UTF-8 encoding.
+// OrderBy sets the optional parameter "orderBy": A comma-separated list
+// of string-valued fields for sorting the
+// results.  If this field is omitted, then the order of results is
+// not
+// defined. You can use fields from the resource schemas as well as
+// the
+// built-in fields `resourceName` and `resourceType`. Field values are
+// ordered
+// by their UTF-8 encodings.
 //
-// The default sorting order is ascending. To specify descending order
-// for a
-// field, a suffix " desc" should be appended to the field name.
-// For
-// example: `orderBy="foo desc,bar".
+// Fields are sorted in ascending order by default. To sort a field in
+// descending
+// order, append " desc" to the field name. For example, the
+// `order_by`
+// value "resource_type desc,resource_name" sorts results by resource
+// type
+// in descending order; resources with the same type are returned in
+// ascending
+// order of their names.
 func (c *ResourcesSearchCall) OrderBy(orderBy string) *ResourcesSearchCall {
 	c.urlParams_.Set("orderBy", orderBy)
 	return c
 }
 
 // PageSize sets the optional parameter "pageSize": The maximum number
-// of search results to return per page. Searches perform
-// best when the `pageSize` is kept as small as possible. If not
-// specified, 20
-// results are returned per page. At most 1000 results are returned per
-// page.
+// of resources to return from this request.  The
+// presence of `next_page_token` in the response indicates that more
+// resources
+// are available.  The default value of `page_size` is 20 and the
+// maximum
+// value is 1000.
 func (c *ResourcesSearchCall) PageSize(pageSize int64) *ResourcesSearchCall {
 	c.urlParams_.Set("pageSize", fmt.Sprint(pageSize))
 	return c
 }
 
-// PageToken sets the optional parameter "pageToken": A `nextPageToken`
-// returned from previous SearchResources call as the
-// starting point for this call.
+// PageToken sets the optional parameter "pageToken": If present, then
+// retrieve the next batch of results from the
+// preceding call to this method.  `page_token` must be the value
+// of
+// `next_page_token` from the previous response.  The values of other
+// method
+// parameters, including the query and sort order, must be identical to
+// those
+// in the previous call.
 func (c *ResourcesSearchCall) PageToken(pageToken string) *ResourcesSearchCall {
 	c.urlParams_.Set("pageToken", pageToken)
 	return c
 }
 
-// Query sets the optional parameter "query": The query string in search
-// query syntax. If the query is missing or empty,
-// all resources are returned.
+// Query sets the optional parameter "query": The query string. If the
+// query is missing or empty,
+// all accessible resources are returned.
 //
-// Any field in a supported resource type's JSON schema may be specified
+// Any field in a supported resource type's schema may be specified
 // in
 // the query. Additionally, every resource has a `@type` field whose
 // value is
@@ -522,16 +262,17 @@ func (c *ResourcesSearchCall) PageToken(pageToken string) *ResourcesSearchCall {
 // more
 // information.
 //
-// Example: The following query searches for all Google Compute Engine
+// Example: The following query searches for accessible Compute Engine
 // VM
-// instances accessible to the caller. The query is further restricted
-// on the
-// `labels` and `machineType` fields of the resource. Only VM instances
-// with
-// the label `env` set to "prod" and `machineType` including a token
-// phrase
-// with the prefix "n1-stand" are matched.
-//   @type:Instance labels.env:prod machineType:n1-stand*
+// instances (`@type:Instance`) that have an `env` label value of `prod`
+// and
+// that have a machine type that starts with "n1-stand":
+//
+//     @type:Instance labels.env:prod machineType:n1-stand*
+//
+// For more information, see [Search
+// Queries](/resource-search/docs/search-queries)
+// and [Resource Types](/resource-search/docs/reference/Resource.Types).
 func (c *ResourcesSearchCall) Query(query string) *ResourcesSearchCall {
 	c.urlParams_.Set("query", query)
 	return c
@@ -620,30 +361,30 @@ func (c *ResourcesSearchCall) Do(opts ...googleapi.CallOption) (*SearchResponse,
 	}
 	return ret, nil
 	// {
-	//   "description": "Lists accessible Google Cloud Platform resources that match the query. A\nresource is accessible to the caller if they have the IAM .get permission\nfor it.",
+	//   "description": "Lists accessible Google Cloud Platform resources that match a query. A\nresource is accessible to the caller if the caller has permission\nto perform a GET operation on the resource.",
 	//   "flatPath": "v1/resources:search",
 	//   "httpMethod": "GET",
 	//   "id": "cloudresourcesearch.resources.search",
 	//   "parameterOrder": [],
 	//   "parameters": {
 	//     "orderBy": {
-	//       "description": "Comma-separated list of string fields for sorting on the search result,\nincluding fields from the resources and the built-in fields (`resourceName`\nand `resourceType`). Strings are sorted as binary strings based on their\nUTF-8 encoding.\n\nThe default sorting order is ascending. To specify descending order for a\nfield, a suffix `\" desc\"` should be appended to the field name. For\nexample: `orderBy=\"foo desc,bar\"`.",
+	//       "description": "Optional. A comma-separated list of string-valued fields for sorting the\nresults.  If this field is omitted, then the order of results is not\ndefined. You can use fields from the resource schemas as well as the\nbuilt-in fields `resourceName` and `resourceType`. Field values are ordered\nby their UTF-8 encodings.\n\nFields are sorted in ascending order by default. To sort a field in descending\norder, append `\" desc\"` to the field name. For example, the `order_by`\nvalue `\"resource_type desc,resource_name\"` sorts results by resource type\nin descending order; resources with the same type are returned in ascending\norder of their names.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "pageSize": {
-	//       "description": "The maximum number of search results to return per page. Searches perform\nbest when the `pageSize` is kept as small as possible. If not specified, 20\nresults are returned per page. At most 1000 results are returned per page.",
+	//       "description": "Optional. The maximum number of resources to return from this request.  The\npresence of `next_page_token` in the response indicates that more resources\nare available.  The default value of `page_size` is 20 and the maximum\nvalue is 1000.",
 	//       "format": "int32",
 	//       "location": "query",
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "A `nextPageToken` returned from previous SearchResources call as the\nstarting point for this call.",
+	//       "description": "Optional. If present, then retrieve the next batch of results from the\npreceding call to this method.  `page_token` must be the value of\n`next_page_token` from the previous response.  The values of other method\nparameters, including the query and sort order, must be identical to those\nin the previous call.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
 	//     "query": {
-	//       "description": "The query string in search query syntax. If the query is missing or empty,\nall resources are returned.\n\nAny field in a supported resource type's JSON schema may be specified in\nthe query. Additionally, every resource has a `@type` field whose value is\nthe resource's type URL. See `SearchResult.resource_type` for more\ninformation.\n\nExample: The following query searches for all Google Compute Engine VM\ninstances accessible to the caller. The query is further restricted on the\n`labels` and `machineType` fields of the resource. Only VM instances with\nthe label `env` set to \"prod\" and `machineType` including a token phrase\nwith the prefix \"n1-stand\" are matched.\n  @type:Instance labels.env:prod machineType:n1-stand*",
+	//       "description": "Optional. The query string. If the query is missing or empty,\nall accessible resources are returned.\n\nAny field in a supported resource type's schema may be specified in\nthe query. Additionally, every resource has a `@type` field whose value is\nthe resource's type URL. See `SearchResult.resource_type` for more\ninformation.\n\nExample: The following query searches for accessible Compute Engine VM\ninstances (`@type:Instance`) that have an `env` label value of `prod` and\nthat have a machine type that starts with `\"n1-stand\"`:\n\n    @type:Instance labels.env:prod machineType:n1-stand*\n\nFor more information, see [Search Queries](/resource-search/docs/search-queries)\nand [Resource Types](/resource-search/docs/reference/Resource.Types).",
 	//       "location": "query",
 	//       "type": "string"
 	//     }

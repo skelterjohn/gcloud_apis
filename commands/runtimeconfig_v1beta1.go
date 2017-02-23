@@ -1088,6 +1088,8 @@ func Runtimeconfig_v1beta1_ProjectsConfigsVariablesList(context Context, args ..
 
 		usageBits += " [--pageToken=VALUE]"
 
+		usageBits += " [--returnValues=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -1100,9 +1102,10 @@ func Runtimeconfig_v1beta1_ProjectsConfigsVariablesList(context Context, args ..
 	service := api_client.NewProjectsConfigsVariablesService(api_service)
 
 	queryParamNames := map[string]bool{
-		"filter":    false,
-		"pageSize":  false,
-		"pageToken": false,
+		"filter":       false,
+		"pageSize":     false,
+		"pageToken":    false,
+		"returnValues": false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -1157,6 +1160,13 @@ func Runtimeconfig_v1beta1_ProjectsConfigsVariablesList(context Context, args ..
 			return err
 		}
 		call.PageToken(query_pageToken)
+	}
+	if value, ok := flagValues["returnValues"]; ok {
+		query_returnValues, err := commands_util.ConvertValue_bool(value)
+		if err != nil {
+			return err
+		}
+		call.ReturnValues(query_returnValues)
 	}
 
 	response, err := call.Do()

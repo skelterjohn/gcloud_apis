@@ -33,6 +33,313 @@ var _ = io.Copy
 var _ = os.Stdin
 var _ = strings.Split
 
+func Compute_alpha_AcceleratorTypesAggregatedList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/aggregated/acceleratorTypes", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--orderBy=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewAcceleratorTypesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"orderBy":    false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.AggregatedList(param_project)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_alpha_AcceleratorTypesGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("acceleratorType"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/zones/{zone}/acceleratorTypes/{acceleratorType}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewAcceleratorTypesService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+		"acceleratorType",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_acceleratorType, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_project, param_zone, param_acceleratorType)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_alpha_AcceleratorTypesList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/zones/{zone}/acceleratorTypes", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--orderBy=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewAcceleratorTypesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"orderBy":    false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_project, param_zone)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func Compute_alpha_AddressesAggregatedList(context Context, args ...string) error {
 
 	usageFunc := func() {
@@ -165,6 +472,8 @@ func Compute_alpha_AddressesDelete(context Context, args ...string) error {
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -175,6 +484,21 @@ func Compute_alpha_AddressesDelete(context Context, args ...string) error {
 		return err
 	}
 	service := api_client.NewAddressesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -205,6 +529,15 @@ func Compute_alpha_AddressesDelete(context Context, args ...string) error {
 	}
 
 	call := service.Delete(param_project, param_region, param_address)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -308,6 +641,8 @@ func Compute_alpha_AddressesInsert(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Address{})
 
@@ -320,9 +655,19 @@ func Compute_alpha_AddressesInsert(context Context, args ...string) error {
 	}
 	service := api_client.NewAddressesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -338,7 +683,13 @@ func Compute_alpha_AddressesInsert(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -366,6 +717,15 @@ func Compute_alpha_AddressesInsert(context Context, args ...string) error {
 	call := service.Insert(param_project, param_region,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -520,6 +880,8 @@ func Compute_alpha_AddressesSetLabels(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.RegionSetLabelsRequest{})
 
@@ -532,9 +894,19 @@ func Compute_alpha_AddressesSetLabels(context Context, args ...string) error {
 	}
 	service := api_client.NewAddressesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -550,7 +922,13 @@ func Compute_alpha_AddressesSetLabels(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -583,6 +961,15 @@ func Compute_alpha_AddressesSetLabels(context Context, args ...string) error {
 	call := service.SetLabels(param_project, param_region, param_resource,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -825,6 +1212,8 @@ func Compute_alpha_AutoscalersDelete(context Context, args ...string) error {
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -835,6 +1224,21 @@ func Compute_alpha_AutoscalersDelete(context Context, args ...string) error {
 		return err
 	}
 	service := api_client.NewAutoscalersService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -865,6 +1269,15 @@ func Compute_alpha_AutoscalersDelete(context Context, args ...string) error {
 	}
 
 	call := service.Delete(param_project, param_zone, param_autoscaler)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -968,6 +1381,8 @@ func Compute_alpha_AutoscalersInsert(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Autoscaler{})
 
@@ -980,9 +1395,19 @@ func Compute_alpha_AutoscalersInsert(context Context, args ...string) error {
 	}
 	service := api_client.NewAutoscalersService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -998,7 +1423,13 @@ func Compute_alpha_AutoscalersInsert(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -1026,6 +1457,15 @@ func Compute_alpha_AutoscalersInsert(context Context, args ...string) error {
 	call := service.Insert(param_project, param_zone,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -1182,6 +1622,8 @@ func Compute_alpha_AutoscalersPatch(context Context, args ...string) error {
 
 		usageBits += " --autoscaler=VALUE"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Autoscaler{})
 
@@ -1196,6 +1638,7 @@ func Compute_alpha_AutoscalersPatch(context Context, args ...string) error {
 
 	queryParamNames := map[string]bool{
 		"autoscaler": true,
+		"requestId":  false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -1260,6 +1703,15 @@ func Compute_alpha_AutoscalersPatch(context Context, args ...string) error {
 	call := service.Patch(param_project, param_zone, param_autoscaler,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -1390,6 +1842,8 @@ func Compute_alpha_AutoscalersUpdate(context Context, args ...string) error {
 
 		usageBits += " [--autoscaler=VALUE]"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Autoscaler{})
 
@@ -1404,6 +1858,7 @@ func Compute_alpha_AutoscalersUpdate(context Context, args ...string) error {
 
 	queryParamNames := map[string]bool{
 		"autoscaler": false,
+		"requestId":  false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -1473,6 +1928,13 @@ func Compute_alpha_AutoscalersUpdate(context Context, args ...string) error {
 		}
 		call.Autoscaler(query_autoscaler)
 	}
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -1503,6 +1965,8 @@ func Compute_alpha_BackendBucketsDelete(context Context, args ...string) error {
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -1513,6 +1977,21 @@ func Compute_alpha_BackendBucketsDelete(context Context, args ...string) error {
 		return err
 	}
 	service := api_client.NewBackendBucketsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -1538,6 +2017,15 @@ func Compute_alpha_BackendBucketsDelete(context Context, args ...string) error {
 	}
 
 	call := service.Delete(param_project, param_backendBucket)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -1699,6 +2187,8 @@ func Compute_alpha_BackendBucketsInsert(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.BackendBucket{})
 
@@ -1711,9 +2201,19 @@ func Compute_alpha_BackendBucketsInsert(context Context, args ...string) error {
 	}
 	service := api_client.NewBackendBucketsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -1729,7 +2229,13 @@ func Compute_alpha_BackendBucketsInsert(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -1752,6 +2258,15 @@ func Compute_alpha_BackendBucketsInsert(context Context, args ...string) error {
 	call := service.Insert(param_project,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -1899,6 +2414,8 @@ func Compute_alpha_BackendBucketsPatch(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.BackendBucket{})
 
@@ -1911,9 +2428,19 @@ func Compute_alpha_BackendBucketsPatch(context Context, args ...string) error {
 	}
 	service := api_client.NewBackendBucketsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -1929,7 +2456,13 @@ func Compute_alpha_BackendBucketsPatch(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -1957,6 +2490,15 @@ func Compute_alpha_BackendBucketsPatch(context Context, args ...string) error {
 	call := service.Patch(param_project, param_backendBucket,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -2169,6 +2711,8 @@ func Compute_alpha_BackendBucketsUpdate(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.BackendBucket{})
 
@@ -2181,9 +2725,19 @@ func Compute_alpha_BackendBucketsUpdate(context Context, args ...string) error {
 	}
 	service := api_client.NewBackendBucketsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -2199,7 +2753,13 @@ func Compute_alpha_BackendBucketsUpdate(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -2227,6 +2787,15 @@ func Compute_alpha_BackendBucketsUpdate(context Context, args ...string) error {
 	call := service.Update(param_project, param_backendBucket,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -2372,6 +2941,8 @@ func Compute_alpha_BackendServicesDelete(context Context, args ...string) error 
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -2382,6 +2953,21 @@ func Compute_alpha_BackendServicesDelete(context Context, args ...string) error 
 		return err
 	}
 	service := api_client.NewBackendServicesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -2407,6 +2993,15 @@ func Compute_alpha_BackendServicesDelete(context Context, args ...string) error 
 	}
 
 	call := service.Delete(param_project, param_backendService)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -2593,6 +3188,8 @@ func Compute_alpha_BackendServicesInsert(context Context, args ...string) error 
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.BackendService{})
 
@@ -2605,9 +3202,19 @@ func Compute_alpha_BackendServicesInsert(context Context, args ...string) error 
 	}
 	service := api_client.NewBackendServicesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -2623,7 +3230,13 @@ func Compute_alpha_BackendServicesInsert(context Context, args ...string) error 
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -2646,6 +3259,15 @@ func Compute_alpha_BackendServicesInsert(context Context, args ...string) error 
 	call := service.Insert(param_project,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -2793,6 +3415,8 @@ func Compute_alpha_BackendServicesPatch(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.BackendService{})
 
@@ -2805,9 +3429,19 @@ func Compute_alpha_BackendServicesPatch(context Context, args ...string) error {
 	}
 	service := api_client.NewBackendServicesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -2823,7 +3457,13 @@ func Compute_alpha_BackendServicesPatch(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -2851,6 +3491,15 @@ func Compute_alpha_BackendServicesPatch(context Context, args ...string) error {
 	call := service.Patch(param_project, param_backendService,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -2973,6 +3622,8 @@ func Compute_alpha_BackendServicesUpdate(context Context, args ...string) error 
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.BackendService{})
 
@@ -2985,9 +3636,19 @@ func Compute_alpha_BackendServicesUpdate(context Context, args ...string) error 
 	}
 	service := api_client.NewBackendServicesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -3003,7 +3664,13 @@ func Compute_alpha_BackendServicesUpdate(context Context, args ...string) error 
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -3031,6 +3698,15 @@ func Compute_alpha_BackendServicesUpdate(context Context, args ...string) error 
 	call := service.Update(param_project, param_backendService,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -3321,77 +3997,6 @@ func Compute_alpha_CommitmentsGet(context Context, args ...string) error {
 	return nil
 }
 
-func Compute_alpha_CommitmentsGetIamPolicy(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("resource"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("{project}/zones/{zone}/commitments/{resource}/getIamPolicy", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewCommitmentsService(api_service)
-
-	// Only positional arguments should remain in args.
-	if len(args) != 1 {
-		usageFunc()
-	}
-
-	expectedParams := []string{
-		"project",
-		"zone",
-		"resource",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_project, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
-	if err != nil {
-		return err
-	}
-	param_resource, err := commands_util.ConvertValue_string(paramValues[2])
-	if err != nil {
-		return err
-	}
-
-	call := service.GetIamPolicy(param_project, param_zone, param_resource)
-
-	response, err := call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func Compute_alpha_CommitmentsInsert(context Context, args ...string) error {
 
 	usageFunc := func() {
@@ -3410,6 +4015,8 @@ func Compute_alpha_CommitmentsInsert(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Commitment{})
 
@@ -3422,9 +4029,19 @@ func Compute_alpha_CommitmentsInsert(context Context, args ...string) error {
 	}
 	service := api_client.NewCommitmentsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -3440,7 +4057,13 @@ func Compute_alpha_CommitmentsInsert(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -3468,6 +4091,15 @@ func Compute_alpha_CommitmentsInsert(context Context, args ...string) error {
 	call := service.Insert(param_project, param_zone,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -3589,102 +4221,6 @@ func Compute_alpha_CommitmentsList(context Context, args ...string) error {
 		}
 		call.PageToken(query_pageToken)
 	}
-
-	response, err := call.Do()
-	if err != nil {
-		return err
-	}
-
-	err = commands_util.PrintResponse(response)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Compute_alpha_CommitmentsSetIamPolicy(context Context, args ...string) error {
-
-	usageFunc := func() {
-		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
-		var pathParams []string
-		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
-		pathParams = append(pathParams, commands_util.AngrySnakes("resource"))
-
-		if len(pathParams) != 0 {
-			if strings.Contains("{project}/zones/{zone}/commitments/{resource}/setIamPolicy", "+") {
-				usageBits += " @" + strings.Join(pathParams, "@")
-			} else {
-				usageBits += " " + strings.Join(pathParams, "/")
-			}
-		}
-
-		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
-
-		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		commands_util.PrintRequestExample(&api_client.Policy{})
-
-		os.Exit(1)
-	}
-
-	api_service, err := api_client.New(context.Client)
-	if err != nil {
-		return err
-	}
-	service := api_client.NewCommitmentsService(api_service)
-
-	args, flagValues, err := commands_util.ExtractFlagValues(args)
-	if err != nil {
-		return err
-	}
-
-	// Only positional arguments should remain in args.
-	if len(args) == 0 || len(args) > 2 {
-		usageFunc()
-	}
-
-	request := &api_client.Policy{}
-	if len(args) == 2 {
-		err = commands_util.PopulateRequestFromFilename(&request, args[1])
-		if err != nil {
-			return err
-		}
-	}
-
-	keyValues := flagValues
-
-	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
-	if err != nil {
-		return err
-	}
-
-	expectedParams := []string{
-		"project",
-		"zone",
-		"resource",
-	}
-	paramValues := commands_util.SplitParamValues(args[0])
-	if len(paramValues) != len(expectedParams) {
-		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
-	}
-
-	param_project, err := commands_util.ConvertValue_string(paramValues[0])
-	if err != nil {
-		return err
-	}
-	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
-	if err != nil {
-		return err
-	}
-	param_resource, err := commands_util.ConvertValue_string(paramValues[2])
-	if err != nil {
-		return err
-	}
-
-	call := service.SetIamPolicy(param_project, param_zone, param_resource,
-		request,
-	)
 
 	response, err := call.Do()
 	if err != nil {
@@ -4238,6 +4774,8 @@ func Compute_alpha_DisksCreateSnapshot(context Context, args ...string) error {
 
 		usageBits += " [--guestFlush=VALUE]"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Snapshot{})
 
@@ -4252,6 +4790,7 @@ func Compute_alpha_DisksCreateSnapshot(context Context, args ...string) error {
 
 	queryParamNames := map[string]bool{
 		"guestFlush": false,
+		"requestId":  false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -4326,6 +4865,13 @@ func Compute_alpha_DisksCreateSnapshot(context Context, args ...string) error {
 		}
 		call.GuestFlush(query_guestFlush)
 	}
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -4357,6 +4903,8 @@ func Compute_alpha_DisksDelete(context Context, args ...string) error {
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -4367,6 +4915,21 @@ func Compute_alpha_DisksDelete(context Context, args ...string) error {
 		return err
 	}
 	service := api_client.NewDisksService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -4397,6 +4960,15 @@ func Compute_alpha_DisksDelete(context Context, args ...string) error {
 	}
 
 	call := service.Delete(param_project, param_zone, param_disk)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -4482,6 +5054,77 @@ func Compute_alpha_DisksGet(context Context, args ...string) error {
 	return nil
 }
 
+func Compute_alpha_DisksGetIamPolicy(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("resource"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/zones/{zone}/disks/{resource}/getIamPolicy", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewDisksService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+		"resource",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_resource, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.GetIamPolicy(param_project, param_zone, param_resource)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func Compute_alpha_DisksInsert(context Context, args ...string) error {
 
 	usageFunc := func() {
@@ -4500,6 +5143,8 @@ func Compute_alpha_DisksInsert(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		usageBits += " [--sourceImage=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -4515,6 +5160,7 @@ func Compute_alpha_DisksInsert(context Context, args ...string) error {
 	service := api_client.NewDisksService(api_service)
 
 	queryParamNames := map[string]bool{
+		"requestId":   false,
 		"sourceImage": false,
 	}
 
@@ -4578,6 +5224,13 @@ func Compute_alpha_DisksInsert(context Context, args ...string) error {
 	)
 
 	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 	if value, ok := flagValues["sourceImage"]; ok {
 		query_sourceImage, err := commands_util.ConvertValue_string(value)
 		if err != nil {
@@ -4739,6 +5392,8 @@ func Compute_alpha_DisksResize(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.DisksResizeRequest{})
 
@@ -4751,9 +5406,19 @@ func Compute_alpha_DisksResize(context Context, args ...string) error {
 	}
 	service := api_client.NewDisksService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -4769,7 +5434,13 @@ func Compute_alpha_DisksResize(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -4803,6 +5474,15 @@ func Compute_alpha_DisksResize(context Context, args ...string) error {
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -4816,7 +5496,7 @@ func Compute_alpha_DisksResize(context Context, args ...string) error {
 	return nil
 }
 
-func Compute_alpha_DisksSetLabels(context Context, args ...string) error {
+func Compute_alpha_DisksSetIamPolicy(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
@@ -4826,7 +5506,7 @@ func Compute_alpha_DisksSetLabels(context Context, args ...string) error {
 		pathParams = append(pathParams, commands_util.AngrySnakes("resource"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("{project}/zones/{zone}/disks/{resource}/setLabels", "+") {
+			if strings.Contains("{project}/zones/{zone}/disks/{resource}/setIamPolicy", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -4836,7 +5516,7 @@ func Compute_alpha_DisksSetLabels(context Context, args ...string) error {
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
-		commands_util.PrintRequestExample(&api_client.ZoneSetLabelsRequest{})
+		commands_util.PrintRequestExample(&api_client.Policy{})
 
 		os.Exit(1)
 	}
@@ -4857,7 +5537,7 @@ func Compute_alpha_DisksSetLabels(context Context, args ...string) error {
 		usageFunc()
 	}
 
-	request := &api_client.ZoneSetLabelsRequest{}
+	request := &api_client.Policy{}
 	if len(args) == 2 {
 		err = commands_util.PopulateRequestFromFilename(&request, args[1])
 		if err != nil {
@@ -4895,9 +5575,132 @@ func Compute_alpha_DisksSetLabels(context Context, args ...string) error {
 		return err
 	}
 
+	call := service.SetIamPolicy(param_project, param_zone, param_resource,
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_alpha_DisksSetLabels(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("resource"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/zones/{zone}/disks/{resource}/setLabels", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		usageBits += " [--requestId=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.ZoneSetLabelsRequest{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewDisksService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.ZoneSetLabelsRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+		"resource",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_resource, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
 	call := service.SetLabels(param_project, param_zone, param_resource,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -5024,6 +5827,8 @@ func Compute_alpha_FirewallsDelete(context Context, args ...string) error {
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -5034,6 +5839,21 @@ func Compute_alpha_FirewallsDelete(context Context, args ...string) error {
 		return err
 	}
 	service := api_client.NewFirewallsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -5059,6 +5879,15 @@ func Compute_alpha_FirewallsDelete(context Context, args ...string) error {
 	}
 
 	call := service.Delete(param_project, param_firewall)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -5155,6 +5984,8 @@ func Compute_alpha_FirewallsInsert(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Firewall{})
 
@@ -5167,9 +5998,19 @@ func Compute_alpha_FirewallsInsert(context Context, args ...string) error {
 	}
 	service := api_client.NewFirewallsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -5185,7 +6026,13 @@ func Compute_alpha_FirewallsInsert(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -5208,6 +6055,15 @@ func Compute_alpha_FirewallsInsert(context Context, args ...string) error {
 	call := service.Insert(param_project,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -5355,6 +6211,8 @@ func Compute_alpha_FirewallsPatch(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Firewall{})
 
@@ -5367,9 +6225,19 @@ func Compute_alpha_FirewallsPatch(context Context, args ...string) error {
 	}
 	service := api_client.NewFirewallsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -5385,7 +6253,13 @@ func Compute_alpha_FirewallsPatch(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -5413,6 +6287,15 @@ func Compute_alpha_FirewallsPatch(context Context, args ...string) error {
 	call := service.Patch(param_project, param_firewall,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -5535,6 +6418,8 @@ func Compute_alpha_FirewallsUpdate(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Firewall{})
 
@@ -5547,9 +6432,19 @@ func Compute_alpha_FirewallsUpdate(context Context, args ...string) error {
 	}
 	service := api_client.NewFirewallsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -5565,7 +6460,13 @@ func Compute_alpha_FirewallsUpdate(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -5593,6 +6494,15 @@ func Compute_alpha_FirewallsUpdate(context Context, args ...string) error {
 	call := service.Update(param_project, param_firewall,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -5739,6 +6649,8 @@ func Compute_alpha_ForwardingRulesDelete(context Context, args ...string) error 
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -5749,6 +6661,21 @@ func Compute_alpha_ForwardingRulesDelete(context Context, args ...string) error 
 		return err
 	}
 	service := api_client.NewForwardingRulesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -5779,6 +6706,15 @@ func Compute_alpha_ForwardingRulesDelete(context Context, args ...string) error 
 	}
 
 	call := service.Delete(param_project, param_region, param_forwardingRule)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -5882,6 +6818,8 @@ func Compute_alpha_ForwardingRulesInsert(context Context, args ...string) error 
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.ForwardingRule{})
 
@@ -5894,9 +6832,19 @@ func Compute_alpha_ForwardingRulesInsert(context Context, args ...string) error 
 	}
 	service := api_client.NewForwardingRulesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -5912,7 +6860,13 @@ func Compute_alpha_ForwardingRulesInsert(context Context, args ...string) error 
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -5940,6 +6894,15 @@ func Compute_alpha_ForwardingRulesInsert(context Context, args ...string) error 
 	call := service.Insert(param_project, param_region,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -6094,6 +7057,8 @@ func Compute_alpha_ForwardingRulesSetLabels(context Context, args ...string) err
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.RegionSetLabelsRequest{})
 
@@ -6106,9 +7071,19 @@ func Compute_alpha_ForwardingRulesSetLabels(context Context, args ...string) err
 	}
 	service := api_client.NewForwardingRulesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -6124,7 +7099,13 @@ func Compute_alpha_ForwardingRulesSetLabels(context Context, args ...string) err
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -6158,6 +7139,15 @@ func Compute_alpha_ForwardingRulesSetLabels(context Context, args ...string) err
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -6190,6 +7180,8 @@ func Compute_alpha_ForwardingRulesSetTarget(context Context, args ...string) err
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.TargetReference{})
 
@@ -6202,9 +7194,19 @@ func Compute_alpha_ForwardingRulesSetTarget(context Context, args ...string) err
 	}
 	service := api_client.NewForwardingRulesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -6220,7 +7222,13 @@ func Compute_alpha_ForwardingRulesSetTarget(context Context, args ...string) err
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -6253,6 +7261,15 @@ func Compute_alpha_ForwardingRulesSetTarget(context Context, args ...string) err
 	call := service.SetTarget(param_project, param_region, param_forwardingRule,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -6379,6 +7396,8 @@ func Compute_alpha_GlobalAddressesDelete(context Context, args ...string) error 
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -6389,6 +7408,21 @@ func Compute_alpha_GlobalAddressesDelete(context Context, args ...string) error 
 		return err
 	}
 	service := api_client.NewGlobalAddressesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -6414,6 +7448,15 @@ func Compute_alpha_GlobalAddressesDelete(context Context, args ...string) error 
 	}
 
 	call := service.Delete(param_project, param_address)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -6510,6 +7553,8 @@ func Compute_alpha_GlobalAddressesInsert(context Context, args ...string) error 
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Address{})
 
@@ -6522,9 +7567,19 @@ func Compute_alpha_GlobalAddressesInsert(context Context, args ...string) error 
 	}
 	service := api_client.NewGlobalAddressesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -6540,7 +7595,13 @@ func Compute_alpha_GlobalAddressesInsert(context Context, args ...string) error 
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -6563,6 +7624,15 @@ func Compute_alpha_GlobalAddressesInsert(context Context, args ...string) error 
 	call := service.Insert(param_project,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -6888,6 +7958,8 @@ func Compute_alpha_GlobalForwardingRulesDelete(context Context, args ...string) 
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -6898,6 +7970,21 @@ func Compute_alpha_GlobalForwardingRulesDelete(context Context, args ...string) 
 		return err
 	}
 	service := api_client.NewGlobalForwardingRulesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -6923,6 +8010,15 @@ func Compute_alpha_GlobalForwardingRulesDelete(context Context, args ...string) 
 	}
 
 	call := service.Delete(param_project, param_forwardingRule)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -7019,6 +8115,8 @@ func Compute_alpha_GlobalForwardingRulesInsert(context Context, args ...string) 
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.ForwardingRule{})
 
@@ -7031,9 +8129,19 @@ func Compute_alpha_GlobalForwardingRulesInsert(context Context, args ...string) 
 	}
 	service := api_client.NewGlobalForwardingRulesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -7049,7 +8157,13 @@ func Compute_alpha_GlobalForwardingRulesInsert(context Context, args ...string) 
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -7072,6 +8186,15 @@ func Compute_alpha_GlobalForwardingRulesInsert(context Context, args ...string) 
 	call := service.Insert(param_project,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -7309,6 +8432,8 @@ func Compute_alpha_GlobalForwardingRulesSetTarget(context Context, args ...strin
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.TargetReference{})
 
@@ -7321,9 +8446,19 @@ func Compute_alpha_GlobalForwardingRulesSetTarget(context Context, args ...strin
 	}
 	service := api_client.NewGlobalForwardingRulesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -7339,7 +8474,13 @@ func Compute_alpha_GlobalForwardingRulesSetTarget(context Context, args ...strin
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -7367,6 +8508,15 @@ func Compute_alpha_GlobalForwardingRulesSetTarget(context Context, args ...strin
 	call := service.SetTarget(param_project, param_forwardingRule,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -7841,6 +8991,8 @@ func Compute_alpha_HealthChecksDelete(context Context, args ...string) error {
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -7851,6 +9003,21 @@ func Compute_alpha_HealthChecksDelete(context Context, args ...string) error {
 		return err
 	}
 	service := api_client.NewHealthChecksService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -7876,6 +9043,15 @@ func Compute_alpha_HealthChecksDelete(context Context, args ...string) error {
 	}
 
 	call := service.Delete(param_project, param_healthCheck)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -7972,6 +9148,8 @@ func Compute_alpha_HealthChecksInsert(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.HealthCheck{})
 
@@ -7984,9 +9162,19 @@ func Compute_alpha_HealthChecksInsert(context Context, args ...string) error {
 	}
 	service := api_client.NewHealthChecksService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -8002,7 +9190,13 @@ func Compute_alpha_HealthChecksInsert(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -8025,6 +9219,15 @@ func Compute_alpha_HealthChecksInsert(context Context, args ...string) error {
 	call := service.Insert(param_project,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -8172,6 +9375,8 @@ func Compute_alpha_HealthChecksPatch(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.HealthCheck{})
 
@@ -8184,9 +9389,19 @@ func Compute_alpha_HealthChecksPatch(context Context, args ...string) error {
 	}
 	service := api_client.NewHealthChecksService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -8202,7 +9417,13 @@ func Compute_alpha_HealthChecksPatch(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -8230,6 +9451,15 @@ func Compute_alpha_HealthChecksPatch(context Context, args ...string) error {
 	call := service.Patch(param_project, param_healthCheck,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -8352,6 +9582,8 @@ func Compute_alpha_HealthChecksUpdate(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.HealthCheck{})
 
@@ -8364,9 +9596,19 @@ func Compute_alpha_HealthChecksUpdate(context Context, args ...string) error {
 	}
 	service := api_client.NewHealthChecksService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -8382,7 +9624,13 @@ func Compute_alpha_HealthChecksUpdate(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -8410,6 +9658,15 @@ func Compute_alpha_HealthChecksUpdate(context Context, args ...string) error {
 	call := service.Update(param_project, param_healthCheck,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -8863,6 +10120,8 @@ func Compute_alpha_HostsDelete(context Context, args ...string) error {
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -8873,6 +10132,21 @@ func Compute_alpha_HostsDelete(context Context, args ...string) error {
 		return err
 	}
 	service := api_client.NewHostsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -8903,6 +10177,15 @@ func Compute_alpha_HostsDelete(context Context, args ...string) error {
 	}
 
 	call := service.Delete(param_project, param_zone, param_host)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -9077,6 +10360,8 @@ func Compute_alpha_HostsInsert(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Host{})
 
@@ -9089,9 +10374,19 @@ func Compute_alpha_HostsInsert(context Context, args ...string) error {
 	}
 	service := api_client.NewHostsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -9107,7 +10402,13 @@ func Compute_alpha_HostsInsert(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -9135,6 +10436,15 @@ func Compute_alpha_HostsInsert(context Context, args ...string) error {
 	call := service.Insert(param_project, param_zone,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -9478,6 +10788,8 @@ func Compute_alpha_HttpHealthChecksDelete(context Context, args ...string) error
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -9488,6 +10800,21 @@ func Compute_alpha_HttpHealthChecksDelete(context Context, args ...string) error
 		return err
 	}
 	service := api_client.NewHttpHealthChecksService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -9513,6 +10840,15 @@ func Compute_alpha_HttpHealthChecksDelete(context Context, args ...string) error
 	}
 
 	call := service.Delete(param_project, param_httpHealthCheck)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -9609,6 +10945,8 @@ func Compute_alpha_HttpHealthChecksInsert(context Context, args ...string) error
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.HttpHealthCheck{})
 
@@ -9621,9 +10959,19 @@ func Compute_alpha_HttpHealthChecksInsert(context Context, args ...string) error
 	}
 	service := api_client.NewHttpHealthChecksService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -9639,7 +10987,13 @@ func Compute_alpha_HttpHealthChecksInsert(context Context, args ...string) error
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -9662,6 +11016,15 @@ func Compute_alpha_HttpHealthChecksInsert(context Context, args ...string) error
 	call := service.Insert(param_project,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -9809,6 +11172,8 @@ func Compute_alpha_HttpHealthChecksPatch(context Context, args ...string) error 
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.HttpHealthCheck{})
 
@@ -9821,9 +11186,19 @@ func Compute_alpha_HttpHealthChecksPatch(context Context, args ...string) error 
 	}
 	service := api_client.NewHttpHealthChecksService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -9839,7 +11214,13 @@ func Compute_alpha_HttpHealthChecksPatch(context Context, args ...string) error 
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -9867,6 +11248,15 @@ func Compute_alpha_HttpHealthChecksPatch(context Context, args ...string) error 
 	call := service.Patch(param_project, param_httpHealthCheck,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -9989,6 +11379,8 @@ func Compute_alpha_HttpHealthChecksUpdate(context Context, args ...string) error
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.HttpHealthCheck{})
 
@@ -10001,9 +11393,19 @@ func Compute_alpha_HttpHealthChecksUpdate(context Context, args ...string) error
 	}
 	service := api_client.NewHttpHealthChecksService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -10019,7 +11421,13 @@ func Compute_alpha_HttpHealthChecksUpdate(context Context, args ...string) error
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -10047,6 +11455,15 @@ func Compute_alpha_HttpHealthChecksUpdate(context Context, args ...string) error
 	call := service.Update(param_project, param_httpHealthCheck,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -10077,6 +11494,8 @@ func Compute_alpha_HttpsHealthChecksDelete(context Context, args ...string) erro
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -10087,6 +11506,21 @@ func Compute_alpha_HttpsHealthChecksDelete(context Context, args ...string) erro
 		return err
 	}
 	service := api_client.NewHttpsHealthChecksService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -10112,6 +11546,15 @@ func Compute_alpha_HttpsHealthChecksDelete(context Context, args ...string) erro
 	}
 
 	call := service.Delete(param_project, param_httpsHealthCheck)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -10208,6 +11651,8 @@ func Compute_alpha_HttpsHealthChecksInsert(context Context, args ...string) erro
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.HttpsHealthCheck{})
 
@@ -10220,9 +11665,19 @@ func Compute_alpha_HttpsHealthChecksInsert(context Context, args ...string) erro
 	}
 	service := api_client.NewHttpsHealthChecksService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -10238,7 +11693,13 @@ func Compute_alpha_HttpsHealthChecksInsert(context Context, args ...string) erro
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -10261,6 +11722,15 @@ func Compute_alpha_HttpsHealthChecksInsert(context Context, args ...string) erro
 	call := service.Insert(param_project,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -10408,6 +11878,8 @@ func Compute_alpha_HttpsHealthChecksPatch(context Context, args ...string) error
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.HttpsHealthCheck{})
 
@@ -10420,9 +11892,19 @@ func Compute_alpha_HttpsHealthChecksPatch(context Context, args ...string) error
 	}
 	service := api_client.NewHttpsHealthChecksService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -10438,7 +11920,13 @@ func Compute_alpha_HttpsHealthChecksPatch(context Context, args ...string) error
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -10466,6 +11954,15 @@ func Compute_alpha_HttpsHealthChecksPatch(context Context, args ...string) error
 	call := service.Patch(param_project, param_httpsHealthCheck,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -10588,6 +12085,8 @@ func Compute_alpha_HttpsHealthChecksUpdate(context Context, args ...string) erro
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.HttpsHealthCheck{})
 
@@ -10600,9 +12099,19 @@ func Compute_alpha_HttpsHealthChecksUpdate(context Context, args ...string) erro
 	}
 	service := api_client.NewHttpsHealthChecksService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -10618,7 +12127,13 @@ func Compute_alpha_HttpsHealthChecksUpdate(context Context, args ...string) erro
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -10646,6 +12161,15 @@ func Compute_alpha_HttpsHealthChecksUpdate(context Context, args ...string) erro
 	call := service.Update(param_project, param_httpsHealthCheck,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -10676,6 +12200,8 @@ func Compute_alpha_ImagesDelete(context Context, args ...string) error {
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -10686,6 +12212,21 @@ func Compute_alpha_ImagesDelete(context Context, args ...string) error {
 		return err
 	}
 	service := api_client.NewImagesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -10711,6 +12252,15 @@ func Compute_alpha_ImagesDelete(context Context, args ...string) error {
 	}
 
 	call := service.Delete(param_project, param_image)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -10743,6 +12293,8 @@ func Compute_alpha_ImagesDeprecate(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.DeprecationStatus{})
 
@@ -10755,9 +12307,19 @@ func Compute_alpha_ImagesDeprecate(context Context, args ...string) error {
 	}
 	service := api_client.NewImagesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -10773,7 +12335,13 @@ func Compute_alpha_ImagesDeprecate(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -10801,6 +12369,15 @@ func Compute_alpha_ImagesDeprecate(context Context, args ...string) error {
 	call := service.Deprecate(param_project, param_image,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -10945,6 +12522,71 @@ func Compute_alpha_ImagesGetFromFamily(context Context, args ...string) error {
 	return nil
 }
 
+func Compute_alpha_ImagesGetIamPolicy(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("resource"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/global/images/{resource}/getIamPolicy", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewImagesService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"resource",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_resource, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.GetIamPolicy(param_project, param_resource)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func Compute_alpha_ImagesInsert(context Context, args ...string) error {
 
 	usageFunc := func() {
@@ -10962,6 +12604,10 @@ func Compute_alpha_ImagesInsert(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--forceCreation=VALUE]"
+
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Image{})
 
@@ -10974,9 +12620,20 @@ func Compute_alpha_ImagesInsert(context Context, args ...string) error {
 	}
 	service := api_client.NewImagesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"forceCreation": false,
+		"requestId":     false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -10992,7 +12649,13 @@ func Compute_alpha_ImagesInsert(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -11015,6 +12678,22 @@ func Compute_alpha_ImagesInsert(context Context, args ...string) error {
 	call := service.Insert(param_project,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["forceCreation"]; ok {
+		query_forceCreation, err := commands_util.ConvertValue_bool(value)
+		if err != nil {
+			return err
+		}
+		call.ForceCreation(query_forceCreation)
+	}
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -11130,6 +12809,96 @@ func Compute_alpha_ImagesList(context Context, args ...string) error {
 		}
 		call.PageToken(query_pageToken)
 	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_alpha_ImagesSetIamPolicy(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("resource"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/global/images/{resource}/setIamPolicy", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Policy{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewImagesService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.Policy{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"resource",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_resource, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.SetIamPolicy(param_project, param_resource,
+		request,
+	)
 
 	response, err := call.Do()
 	if err != nil {
@@ -11343,6 +13112,8 @@ func Compute_alpha_InstanceGroupManagersAbandonInstances(context Context, args .
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.InstanceGroupManagersAbandonInstancesRequest{})
 
@@ -11355,9 +13126,19 @@ func Compute_alpha_InstanceGroupManagersAbandonInstances(context Context, args .
 	}
 	service := api_client.NewInstanceGroupManagersService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -11373,7 +13154,13 @@ func Compute_alpha_InstanceGroupManagersAbandonInstances(context Context, args .
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -11406,6 +13193,15 @@ func Compute_alpha_InstanceGroupManagersAbandonInstances(context Context, args .
 	call := service.AbandonInstances(param_project, param_zone, param_instanceGroupManager,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -11552,6 +13348,8 @@ func Compute_alpha_InstanceGroupManagersDelete(context Context, args ...string) 
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -11562,6 +13360,21 @@ func Compute_alpha_InstanceGroupManagersDelete(context Context, args ...string) 
 		return err
 	}
 	service := api_client.NewInstanceGroupManagersService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -11592,6 +13405,15 @@ func Compute_alpha_InstanceGroupManagersDelete(context Context, args ...string) 
 	}
 
 	call := service.Delete(param_project, param_zone, param_instanceGroupManager)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -11625,6 +13447,8 @@ func Compute_alpha_InstanceGroupManagersDeleteInstances(context Context, args ..
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.InstanceGroupManagersDeleteInstancesRequest{})
 
@@ -11637,9 +13461,19 @@ func Compute_alpha_InstanceGroupManagersDeleteInstances(context Context, args ..
 	}
 	service := api_client.NewInstanceGroupManagersService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -11655,7 +13489,13 @@ func Compute_alpha_InstanceGroupManagersDeleteInstances(context Context, args ..
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -11688,6 +13528,15 @@ func Compute_alpha_InstanceGroupManagersDeleteInstances(context Context, args ..
 	call := service.DeleteInstances(param_project, param_zone, param_instanceGroupManager,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -11791,6 +13640,8 @@ func Compute_alpha_InstanceGroupManagersInsert(context Context, args ...string) 
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.InstanceGroupManager{})
 
@@ -11803,9 +13654,19 @@ func Compute_alpha_InstanceGroupManagersInsert(context Context, args ...string) 
 	}
 	service := api_client.NewInstanceGroupManagersService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -11821,7 +13682,13 @@ func Compute_alpha_InstanceGroupManagersInsert(context Context, args ...string) 
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -11849,6 +13716,15 @@ func Compute_alpha_InstanceGroupManagersInsert(context Context, args ...string) 
 	call := service.Insert(param_project, param_zone,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -12130,6 +14006,8 @@ func Compute_alpha_InstanceGroupManagersPatch(context Context, args ...string) e
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.InstanceGroupManager{})
 
@@ -12142,9 +14020,19 @@ func Compute_alpha_InstanceGroupManagersPatch(context Context, args ...string) e
 	}
 	service := api_client.NewInstanceGroupManagersService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -12160,7 +14048,13 @@ func Compute_alpha_InstanceGroupManagersPatch(context Context, args ...string) e
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -12194,6 +14088,15 @@ func Compute_alpha_InstanceGroupManagersPatch(context Context, args ...string) e
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -12226,6 +14129,8 @@ func Compute_alpha_InstanceGroupManagersRecreateInstances(context Context, args 
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.InstanceGroupManagersRecreateInstancesRequest{})
 
@@ -12238,9 +14143,19 @@ func Compute_alpha_InstanceGroupManagersRecreateInstances(context Context, args 
 	}
 	service := api_client.NewInstanceGroupManagersService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -12256,7 +14171,13 @@ func Compute_alpha_InstanceGroupManagersRecreateInstances(context Context, args 
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -12290,6 +14211,15 @@ func Compute_alpha_InstanceGroupManagersRecreateInstances(context Context, args 
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -12321,6 +14251,8 @@ func Compute_alpha_InstanceGroupManagersResize(context Context, args ...string) 
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		usageBits += " --size=VALUE"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -12335,7 +14267,8 @@ func Compute_alpha_InstanceGroupManagersResize(context Context, args ...string) 
 	service := api_client.NewInstanceGroupManagersService(api_service)
 
 	queryParamNames := map[string]bool{
-		"size": true,
+		"requestId": false,
+		"size":      true,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -12383,6 +14316,15 @@ func Compute_alpha_InstanceGroupManagersResize(context Context, args ...string) 
 
 	call := service.Resize(param_project, param_zone, param_instanceGroupManager, param_size)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -12415,6 +14357,8 @@ func Compute_alpha_InstanceGroupManagersResizeAdvanced(context Context, args ...
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.InstanceGroupManagersResizeAdvancedRequest{})
 
@@ -12427,9 +14371,19 @@ func Compute_alpha_InstanceGroupManagersResizeAdvanced(context Context, args ...
 	}
 	service := api_client.NewInstanceGroupManagersService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -12445,7 +14399,13 @@ func Compute_alpha_InstanceGroupManagersResizeAdvanced(context Context, args ...
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -12479,6 +14439,15 @@ func Compute_alpha_InstanceGroupManagersResizeAdvanced(context Context, args ...
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -12511,6 +14480,8 @@ func Compute_alpha_InstanceGroupManagersSetAutoHealingPolicies(context Context, 
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.InstanceGroupManagersSetAutoHealingRequest{})
 
@@ -12523,9 +14494,19 @@ func Compute_alpha_InstanceGroupManagersSetAutoHealingPolicies(context Context, 
 	}
 	service := api_client.NewInstanceGroupManagersService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -12541,7 +14522,13 @@ func Compute_alpha_InstanceGroupManagersSetAutoHealingPolicies(context Context, 
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -12575,6 +14562,15 @@ func Compute_alpha_InstanceGroupManagersSetAutoHealingPolicies(context Context, 
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -12607,6 +14603,8 @@ func Compute_alpha_InstanceGroupManagersSetInstanceTemplate(context Context, arg
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.InstanceGroupManagersSetInstanceTemplateRequest{})
 
@@ -12619,9 +14617,19 @@ func Compute_alpha_InstanceGroupManagersSetInstanceTemplate(context Context, arg
 	}
 	service := api_client.NewInstanceGroupManagersService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -12637,7 +14645,13 @@ func Compute_alpha_InstanceGroupManagersSetInstanceTemplate(context Context, arg
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -12671,6 +14685,15 @@ func Compute_alpha_InstanceGroupManagersSetInstanceTemplate(context Context, arg
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -12703,6 +14726,8 @@ func Compute_alpha_InstanceGroupManagersSetTargetPools(context Context, args ...
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.InstanceGroupManagersSetTargetPoolsRequest{})
 
@@ -12715,9 +14740,19 @@ func Compute_alpha_InstanceGroupManagersSetTargetPools(context Context, args ...
 	}
 	service := api_client.NewInstanceGroupManagersService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -12733,7 +14768,13 @@ func Compute_alpha_InstanceGroupManagersSetTargetPools(context Context, args ...
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -12766,6 +14807,15 @@ func Compute_alpha_InstanceGroupManagersSetTargetPools(context Context, args ...
 	call := service.SetTargetPools(param_project, param_zone, param_instanceGroupManager,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -12895,6 +14945,8 @@ func Compute_alpha_InstanceGroupManagersUpdate(context Context, args ...string) 
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.InstanceGroupManager{})
 
@@ -12907,9 +14959,19 @@ func Compute_alpha_InstanceGroupManagersUpdate(context Context, args ...string) 
 	}
 	service := api_client.NewInstanceGroupManagersService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -12925,7 +14987,13 @@ func Compute_alpha_InstanceGroupManagersUpdate(context Context, args ...string) 
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -12959,6 +15027,15 @@ func Compute_alpha_InstanceGroupManagersUpdate(context Context, args ...string) 
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -12991,6 +15068,8 @@ func Compute_alpha_InstanceGroupsAddInstances(context Context, args ...string) e
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.InstanceGroupsAddInstancesRequest{})
 
@@ -13003,9 +15082,19 @@ func Compute_alpha_InstanceGroupsAddInstances(context Context, args ...string) e
 	}
 	service := api_client.NewInstanceGroupsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -13021,7 +15110,13 @@ func Compute_alpha_InstanceGroupsAddInstances(context Context, args ...string) e
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -13054,6 +15149,15 @@ func Compute_alpha_InstanceGroupsAddInstances(context Context, args ...string) e
 	call := service.AddInstances(param_project, param_zone, param_instanceGroup,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -13200,6 +15304,8 @@ func Compute_alpha_InstanceGroupsDelete(context Context, args ...string) error {
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -13210,6 +15316,21 @@ func Compute_alpha_InstanceGroupsDelete(context Context, args ...string) error {
 		return err
 	}
 	service := api_client.NewInstanceGroupsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -13240,6 +15361,15 @@ func Compute_alpha_InstanceGroupsDelete(context Context, args ...string) error {
 	}
 
 	call := service.Delete(param_project, param_zone, param_instanceGroup)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -13343,6 +15473,8 @@ func Compute_alpha_InstanceGroupsInsert(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.InstanceGroup{})
 
@@ -13355,9 +15487,19 @@ func Compute_alpha_InstanceGroupsInsert(context Context, args ...string) error {
 	}
 	service := api_client.NewInstanceGroupsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -13373,7 +15515,13 @@ func Compute_alpha_InstanceGroupsInsert(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -13401,6 +15549,15 @@ func Compute_alpha_InstanceGroupsInsert(context Context, args ...string) error {
 	call := service.Insert(param_project, param_zone,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -13708,6 +15865,8 @@ func Compute_alpha_InstanceGroupsRemoveInstances(context Context, args ...string
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.InstanceGroupsRemoveInstancesRequest{})
 
@@ -13720,9 +15879,19 @@ func Compute_alpha_InstanceGroupsRemoveInstances(context Context, args ...string
 	}
 	service := api_client.NewInstanceGroupsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -13738,7 +15907,13 @@ func Compute_alpha_InstanceGroupsRemoveInstances(context Context, args ...string
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -13772,6 +15947,15 @@ func Compute_alpha_InstanceGroupsRemoveInstances(context Context, args ...string
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -13804,6 +15988,8 @@ func Compute_alpha_InstanceGroupsSetNamedPorts(context Context, args ...string) 
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.InstanceGroupsSetNamedPortsRequest{})
 
@@ -13816,9 +16002,19 @@ func Compute_alpha_InstanceGroupsSetNamedPorts(context Context, args ...string) 
 	}
 	service := api_client.NewInstanceGroupsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -13834,7 +16030,13 @@ func Compute_alpha_InstanceGroupsSetNamedPorts(context Context, args ...string) 
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -13867,6 +16069,15 @@ func Compute_alpha_InstanceGroupsSetNamedPorts(context Context, args ...string) 
 	call := service.SetNamedPorts(param_project, param_zone, param_instanceGroup,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -13993,6 +16204,8 @@ func Compute_alpha_InstanceTemplatesDelete(context Context, args ...string) erro
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -14003,6 +16216,21 @@ func Compute_alpha_InstanceTemplatesDelete(context Context, args ...string) erro
 		return err
 	}
 	service := api_client.NewInstanceTemplatesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -14028,6 +16256,15 @@ func Compute_alpha_InstanceTemplatesDelete(context Context, args ...string) erro
 	}
 
 	call := service.Delete(param_project, param_instanceTemplate)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -14124,6 +16361,8 @@ func Compute_alpha_InstanceTemplatesInsert(context Context, args ...string) erro
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.InstanceTemplate{})
 
@@ -14136,9 +16375,19 @@ func Compute_alpha_InstanceTemplatesInsert(context Context, args ...string) erro
 	}
 	service := api_client.NewInstanceTemplatesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -14154,7 +16403,13 @@ func Compute_alpha_InstanceTemplatesInsert(context Context, args ...string) erro
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -14177,6 +16432,15 @@ func Compute_alpha_InstanceTemplatesInsert(context Context, args ...string) erro
 	call := service.Insert(param_project,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -14418,6 +16682,8 @@ func Compute_alpha_InstancesAddAccessConfig(context Context, args ...string) err
 
 		usageBits += " --networkInterface=VALUE"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.AccessConfig{})
 
@@ -14432,6 +16698,7 @@ func Compute_alpha_InstancesAddAccessConfig(context Context, args ...string) err
 
 	queryParamNames := map[string]bool{
 		"networkInterface": true,
+		"requestId":        false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -14501,6 +16768,15 @@ func Compute_alpha_InstancesAddAccessConfig(context Context, args ...string) err
 	call := service.AddAccessConfig(param_project, param_zone, param_instance, param_networkInterface,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -14651,6 +16927,8 @@ func Compute_alpha_InstancesAttachDisk(context Context, args ...string) error {
 
 		usageBits += " [--forceAttach=VALUE]"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.AttachedDisk{})
 
@@ -14665,6 +16943,7 @@ func Compute_alpha_InstancesAttachDisk(context Context, args ...string) error {
 
 	queryParamNames := map[string]bool{
 		"forceAttach": false,
+		"requestId":   false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -14739,6 +17018,13 @@ func Compute_alpha_InstancesAttachDisk(context Context, args ...string) error {
 		}
 		call.ForceAttach(query_forceAttach)
 	}
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -14770,6 +17056,8 @@ func Compute_alpha_InstancesDelete(context Context, args ...string) error {
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -14780,6 +17068,21 @@ func Compute_alpha_InstancesDelete(context Context, args ...string) error {
 		return err
 	}
 	service := api_client.NewInstancesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -14810,6 +17113,15 @@ func Compute_alpha_InstancesDelete(context Context, args ...string) error {
 	}
 
 	call := service.Delete(param_project, param_zone, param_instance)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -14847,6 +17159,8 @@ func Compute_alpha_InstancesDeleteAccessConfig(context Context, args ...string) 
 
 		usageBits += " --networkInterface=VALUE"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -14861,6 +17175,7 @@ func Compute_alpha_InstancesDeleteAccessConfig(context Context, args ...string) 
 	queryParamNames := map[string]bool{
 		"accessConfig":     true,
 		"networkInterface": true,
+		"requestId":        false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -14912,6 +17227,15 @@ func Compute_alpha_InstancesDeleteAccessConfig(context Context, args ...string) 
 
 	call := service.DeleteAccessConfig(param_project, param_zone, param_instance, param_accessConfig, param_networkInterface)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -14945,6 +17269,8 @@ func Compute_alpha_InstancesDetachDisk(context Context, args ...string) error {
 
 		usageBits += " --deviceName=VALUE"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -14958,6 +17284,7 @@ func Compute_alpha_InstancesDetachDisk(context Context, args ...string) error {
 
 	queryParamNames := map[string]bool{
 		"deviceName": true,
+		"requestId":  false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -15004,6 +17331,15 @@ func Compute_alpha_InstancesDetachDisk(context Context, args ...string) error {
 	}
 
 	call := service.DetachDisk(param_project, param_zone, param_instance, param_deviceName)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -15285,6 +17621,8 @@ func Compute_alpha_InstancesInsert(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Instance{})
 
@@ -15297,9 +17635,19 @@ func Compute_alpha_InstancesInsert(context Context, args ...string) error {
 	}
 	service := api_client.NewInstancesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -15315,7 +17663,13 @@ func Compute_alpha_InstancesInsert(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -15343,6 +17697,15 @@ func Compute_alpha_InstancesInsert(context Context, args ...string) error {
 	call := service.Insert(param_project, param_zone,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -15495,6 +17858,8 @@ func Compute_alpha_InstancesReset(context Context, args ...string) error {
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -15505,6 +17870,21 @@ func Compute_alpha_InstancesReset(context Context, args ...string) error {
 		return err
 	}
 	service := api_client.NewInstancesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -15535,6 +17915,15 @@ func Compute_alpha_InstancesReset(context Context, args ...string) error {
 	}
 
 	call := service.Reset(param_project, param_zone, param_instance)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -15572,6 +17961,8 @@ func Compute_alpha_InstancesSetDiskAutoDelete(context Context, args ...string) e
 
 		usageBits += " --deviceName=VALUE"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -15586,6 +17977,7 @@ func Compute_alpha_InstancesSetDiskAutoDelete(context Context, args ...string) e
 	queryParamNames := map[string]bool{
 		"autoDelete": true,
 		"deviceName": true,
+		"requestId":  false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -15636,6 +18028,15 @@ func Compute_alpha_InstancesSetDiskAutoDelete(context Context, args ...string) e
 	}
 
 	call := service.SetDiskAutoDelete(param_project, param_zone, param_instance, param_autoDelete, param_deviceName)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -15765,6 +18166,8 @@ func Compute_alpha_InstancesSetLabels(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.InstancesSetLabelsRequest{})
 
@@ -15777,9 +18180,19 @@ func Compute_alpha_InstancesSetLabels(context Context, args ...string) error {
 	}
 	service := api_client.NewInstancesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -15795,7 +18208,13 @@ func Compute_alpha_InstancesSetLabels(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -15829,6 +18248,138 @@ func Compute_alpha_InstancesSetLabels(context Context, args ...string) error {
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_alpha_InstancesSetMachineResources(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/zones/{zone}/instances/{instance}/setMachineResources", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		usageBits += " [--requestId=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstancesSetMachineResourcesRequest{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstancesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.InstancesSetMachineResourcesRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+		"instance",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.SetMachineResources(param_project, param_zone, param_instance,
+		request,
+	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -15861,6 +18412,8 @@ func Compute_alpha_InstancesSetMachineType(context Context, args ...string) erro
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.InstancesSetMachineTypeRequest{})
 
@@ -15873,9 +18426,19 @@ func Compute_alpha_InstancesSetMachineType(context Context, args ...string) erro
 	}
 	service := api_client.NewInstancesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -15891,7 +18454,13 @@ func Compute_alpha_InstancesSetMachineType(context Context, args ...string) erro
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -15925,6 +18494,15 @@ func Compute_alpha_InstancesSetMachineType(context Context, args ...string) erro
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -15957,6 +18535,8 @@ func Compute_alpha_InstancesSetMetadata(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Metadata{})
 
@@ -15969,9 +18549,19 @@ func Compute_alpha_InstancesSetMetadata(context Context, args ...string) error {
 	}
 	service := api_client.NewInstancesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -15987,7 +18577,13 @@ func Compute_alpha_InstancesSetMetadata(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -16021,6 +18617,138 @@ func Compute_alpha_InstancesSetMetadata(context Context, args ...string) error {
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_alpha_InstancesSetMinCpuPlatform(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/zones/{zone}/instances/{instance}/setMinCpuPlatform", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		usageBits += " [--requestId=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.InstancesSetMinCpuPlatformRequest{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstancesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.InstancesSetMinCpuPlatformRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+		"instance",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.SetMinCpuPlatform(param_project, param_zone, param_instance,
+		request,
+	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -16053,6 +18781,8 @@ func Compute_alpha_InstancesSetScheduling(context Context, args ...string) error
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Scheduling{})
 
@@ -16065,9 +18795,19 @@ func Compute_alpha_InstancesSetScheduling(context Context, args ...string) error
 	}
 	service := api_client.NewInstancesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -16083,7 +18823,13 @@ func Compute_alpha_InstancesSetScheduling(context Context, args ...string) error
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -16117,6 +18863,15 @@ func Compute_alpha_InstancesSetScheduling(context Context, args ...string) error
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -16149,6 +18904,8 @@ func Compute_alpha_InstancesSetServiceAccount(context Context, args ...string) e
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.InstancesSetServiceAccountRequest{})
 
@@ -16161,9 +18918,19 @@ func Compute_alpha_InstancesSetServiceAccount(context Context, args ...string) e
 	}
 	service := api_client.NewInstancesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -16179,7 +18946,13 @@ func Compute_alpha_InstancesSetServiceAccount(context Context, args ...string) e
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -16213,6 +18986,15 @@ func Compute_alpha_InstancesSetServiceAccount(context Context, args ...string) e
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -16245,6 +19027,8 @@ func Compute_alpha_InstancesSetTags(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Tags{})
 
@@ -16257,9 +19041,19 @@ func Compute_alpha_InstancesSetTags(context Context, args ...string) error {
 	}
 	service := api_client.NewInstancesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -16275,7 +19069,13 @@ func Compute_alpha_InstancesSetTags(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -16309,6 +19109,15 @@ func Compute_alpha_InstancesSetTags(context Context, args ...string) error {
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -16322,7 +19131,7 @@ func Compute_alpha_InstancesSetTags(context Context, args ...string) error {
 	return nil
 }
 
-func Compute_alpha_InstancesStart(context Context, args ...string) error {
+func Compute_alpha_InstancesSimulateMaintenanceEvent(context Context, args ...string) error {
 
 	usageFunc := func() {
 		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
@@ -16332,7 +19141,7 @@ func Compute_alpha_InstancesStart(context Context, args ...string) error {
 		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
 
 		if len(pathParams) != 0 {
-			if strings.Contains("{project}/zones/{zone}/instances/{instance}/start", "+") {
+			if strings.Contains("{project}/zones/{zone}/instances/{instance}/simulateMaintenanceEvent", "+") {
 				usageBits += " @" + strings.Join(pathParams, "@")
 			} else {
 				usageBits += " " + strings.Join(pathParams, "/")
@@ -16378,7 +19187,104 @@ func Compute_alpha_InstancesStart(context Context, args ...string) error {
 		return err
 	}
 
+	call := service.SimulateMaintenanceEvent(param_project, param_zone, param_instance)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_alpha_InstancesStart(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("instance"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/zones/{zone}/instances/{instance}/start", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--requestId=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewInstancesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"zone",
+		"instance",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_instance, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
 	call := service.Start(param_project, param_zone, param_instance)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -16412,6 +19318,8 @@ func Compute_alpha_InstancesStartWithEncryptionKey(context Context, args ...stri
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.InstancesStartWithEncryptionKeyRequest{})
 
@@ -16424,9 +19332,19 @@ func Compute_alpha_InstancesStartWithEncryptionKey(context Context, args ...stri
 	}
 	service := api_client.NewInstancesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -16442,7 +19360,13 @@ func Compute_alpha_InstancesStartWithEncryptionKey(context Context, args ...stri
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -16476,6 +19400,15 @@ func Compute_alpha_InstancesStartWithEncryptionKey(context Context, args ...stri
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -16508,6 +19441,8 @@ func Compute_alpha_InstancesStop(context Context, args ...string) error {
 
 		usageBits += " [--discardLocalSsd=VALUE]"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -16521,6 +19456,7 @@ func Compute_alpha_InstancesStop(context Context, args ...string) error {
 
 	queryParamNames := map[string]bool{
 		"discardLocalSsd": false,
+		"requestId":       false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -16572,6 +19508,13 @@ func Compute_alpha_InstancesStop(context Context, args ...string) error {
 		}
 		call.DiscardLocalSsd(query_discardLocalSsd)
 	}
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -16605,6 +19548,8 @@ func Compute_alpha_InstancesSuspend(context Context, args ...string) error {
 
 		usageBits += " [--discardLocalSsd=VALUE]"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -16618,6 +19563,7 @@ func Compute_alpha_InstancesSuspend(context Context, args ...string) error {
 
 	queryParamNames := map[string]bool{
 		"discardLocalSsd": false,
+		"requestId":       false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -16668,6 +19614,13 @@ func Compute_alpha_InstancesSuspend(context Context, args ...string) error {
 			return err
 		}
 		call.DiscardLocalSsd(query_discardLocalSsd)
+	}
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
 	}
 
 	response, err := call.Do()
@@ -16801,6 +19754,8 @@ func Compute_alpha_InstancesUpdateAccessConfig(context Context, args ...string) 
 
 		usageBits += " --networkInterface=VALUE"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.AccessConfig{})
 
@@ -16815,6 +19770,7 @@ func Compute_alpha_InstancesUpdateAccessConfig(context Context, args ...string) 
 
 	queryParamNames := map[string]bool{
 		"networkInterface": true,
+		"requestId":        false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -16885,6 +19841,15 @@ func Compute_alpha_InstancesUpdateAccessConfig(context Context, args ...string) 
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -16949,6 +19914,117 @@ func Compute_alpha_LicensesGet(context Context, args ...string) error {
 	}
 
 	call := service.Get(param_project, param_license)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_alpha_LicensesInsert(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/global/licenses", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		usageBits += " [--requestId=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.License{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewLicensesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.License{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Insert(param_project,
+		request,
+	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -17288,6 +20364,8 @@ func Compute_alpha_NetworksAddPeering(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.NetworksAddPeeringRequest{})
 
@@ -17300,9 +20378,19 @@ func Compute_alpha_NetworksAddPeering(context Context, args ...string) error {
 	}
 	service := api_client.NewNetworksService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -17318,7 +20406,13 @@ func Compute_alpha_NetworksAddPeering(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -17346,6 +20440,15 @@ func Compute_alpha_NetworksAddPeering(context Context, args ...string) error {
 	call := service.AddPeering(param_project, param_network,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -17376,6 +20479,8 @@ func Compute_alpha_NetworksDelete(context Context, args ...string) error {
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -17386,6 +20491,21 @@ func Compute_alpha_NetworksDelete(context Context, args ...string) error {
 		return err
 	}
 	service := api_client.NewNetworksService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -17411,6 +20531,15 @@ func Compute_alpha_NetworksDelete(context Context, args ...string) error {
 	}
 
 	call := service.Delete(param_project, param_network)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -17507,6 +20636,8 @@ func Compute_alpha_NetworksInsert(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Network{})
 
@@ -17519,9 +20650,19 @@ func Compute_alpha_NetworksInsert(context Context, args ...string) error {
 	}
 	service := api_client.NewNetworksService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -17537,7 +20678,13 @@ func Compute_alpha_NetworksInsert(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -17560,6 +20707,15 @@ func Compute_alpha_NetworksInsert(context Context, args ...string) error {
 	call := service.Insert(param_project,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -17707,6 +20863,8 @@ func Compute_alpha_NetworksRemovePeering(context Context, args ...string) error 
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.NetworksRemovePeeringRequest{})
 
@@ -17719,9 +20877,19 @@ func Compute_alpha_NetworksRemovePeering(context Context, args ...string) error 
 	}
 	service := api_client.NewNetworksService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -17737,7 +20905,13 @@ func Compute_alpha_NetworksRemovePeering(context Context, args ...string) error 
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -17765,6 +20939,15 @@ func Compute_alpha_NetworksRemovePeering(context Context, args ...string) error 
 	call := service.RemovePeering(param_project, param_network,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -17795,6 +20978,8 @@ func Compute_alpha_NetworksSwitchToCustomMode(context Context, args ...string) e
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -17805,6 +20990,21 @@ func Compute_alpha_NetworksSwitchToCustomMode(context Context, args ...string) e
 		return err
 	}
 	service := api_client.NewNetworksService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -17830,6 +21030,15 @@ func Compute_alpha_NetworksSwitchToCustomMode(context Context, args ...string) e
 	}
 
 	call := service.SwitchToCustomMode(param_project, param_network)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -17949,6 +21158,8 @@ func Compute_alpha_ProjectsDisableXpnHost(context Context, args ...string) error
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -17959,6 +21170,21 @@ func Compute_alpha_ProjectsDisableXpnHost(context Context, args ...string) error
 		return err
 	}
 	service := api_client.NewProjectsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -17979,6 +21205,15 @@ func Compute_alpha_ProjectsDisableXpnHost(context Context, args ...string) error
 	}
 
 	call := service.DisableXpnHost(param_project)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -18010,6 +21245,8 @@ func Compute_alpha_ProjectsDisableXpnResource(context Context, args ...string) e
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.ProjectsDisableXpnResourceRequest{})
 
@@ -18022,9 +21259,19 @@ func Compute_alpha_ProjectsDisableXpnResource(context Context, args ...string) e
 	}
 	service := api_client.NewProjectsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -18040,7 +21287,13 @@ func Compute_alpha_ProjectsDisableXpnResource(context Context, args ...string) e
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -18063,6 +21316,15 @@ func Compute_alpha_ProjectsDisableXpnResource(context Context, args ...string) e
 	call := service.DisableXpnResource(param_project,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -18092,6 +21354,8 @@ func Compute_alpha_ProjectsEnableXpnHost(context Context, args ...string) error 
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -18102,6 +21366,21 @@ func Compute_alpha_ProjectsEnableXpnHost(context Context, args ...string) error 
 		return err
 	}
 	service := api_client.NewProjectsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -18122,6 +21401,15 @@ func Compute_alpha_ProjectsEnableXpnHost(context Context, args ...string) error 
 	}
 
 	call := service.EnableXpnHost(param_project)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -18153,6 +21441,8 @@ func Compute_alpha_ProjectsEnableXpnResource(context Context, args ...string) er
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.ProjectsEnableXpnResourceRequest{})
 
@@ -18165,9 +21455,19 @@ func Compute_alpha_ProjectsEnableXpnResource(context Context, args ...string) er
 	}
 	service := api_client.NewProjectsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -18183,7 +21483,13 @@ func Compute_alpha_ProjectsEnableXpnResource(context Context, args ...string) er
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -18206,6 +21512,15 @@ func Compute_alpha_ProjectsEnableXpnResource(context Context, args ...string) er
 	call := service.EnableXpnResource(param_project,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -18611,6 +21926,8 @@ func Compute_alpha_ProjectsMoveDisk(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.DiskMoveRequest{})
 
@@ -18623,9 +21940,19 @@ func Compute_alpha_ProjectsMoveDisk(context Context, args ...string) error {
 	}
 	service := api_client.NewProjectsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -18641,7 +21968,13 @@ func Compute_alpha_ProjectsMoveDisk(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -18664,6 +21997,15 @@ func Compute_alpha_ProjectsMoveDisk(context Context, args ...string) error {
 	call := service.MoveDisk(param_project,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -18695,6 +22037,8 @@ func Compute_alpha_ProjectsMoveInstance(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.InstanceMoveRequest{})
 
@@ -18707,9 +22051,19 @@ func Compute_alpha_ProjectsMoveInstance(context Context, args ...string) error {
 	}
 	service := api_client.NewProjectsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -18725,7 +22079,13 @@ func Compute_alpha_ProjectsMoveInstance(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -18748,6 +22108,15 @@ func Compute_alpha_ProjectsMoveInstance(context Context, args ...string) error {
 	call := service.MoveInstance(param_project,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -18779,6 +22148,8 @@ func Compute_alpha_ProjectsSetCommonInstanceMetadata(context Context, args ...st
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Metadata{})
 
@@ -18791,9 +22162,19 @@ func Compute_alpha_ProjectsSetCommonInstanceMetadata(context Context, args ...st
 	}
 	service := api_client.NewProjectsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -18809,7 +22190,13 @@ func Compute_alpha_ProjectsSetCommonInstanceMetadata(context Context, args ...st
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -18832,6 +22219,15 @@ func Compute_alpha_ProjectsSetCommonInstanceMetadata(context Context, args ...st
 	call := service.SetCommonInstanceMetadata(param_project,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -18863,6 +22259,8 @@ func Compute_alpha_ProjectsSetDefaultServiceAccount(context Context, args ...str
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.ProjectsSetDefaultServiceAccountRequest{})
 
@@ -18875,9 +22273,19 @@ func Compute_alpha_ProjectsSetDefaultServiceAccount(context Context, args ...str
 	}
 	service := api_client.NewProjectsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -18893,7 +22301,13 @@ func Compute_alpha_ProjectsSetDefaultServiceAccount(context Context, args ...str
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -18916,6 +22330,15 @@ func Compute_alpha_ProjectsSetDefaultServiceAccount(context Context, args ...str
 	call := service.SetDefaultServiceAccount(param_project,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -18947,6 +22370,8 @@ func Compute_alpha_ProjectsSetUsageExportBucket(context Context, args ...string)
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.UsageExportLocation{})
 
@@ -18959,9 +22384,19 @@ func Compute_alpha_ProjectsSetUsageExportBucket(context Context, args ...string)
 	}
 	service := api_client.NewProjectsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -18977,7 +22412,13 @@ func Compute_alpha_ProjectsSetUsageExportBucket(context Context, args ...string)
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -19000,6 +22441,15 @@ func Compute_alpha_ProjectsSetUsageExportBucket(context Context, args ...string)
 	call := service.SetUsageExportBucket(param_project,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -19031,6 +22481,8 @@ func Compute_alpha_RegionAutoscalersDelete(context Context, args ...string) erro
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -19041,6 +22493,21 @@ func Compute_alpha_RegionAutoscalersDelete(context Context, args ...string) erro
 		return err
 	}
 	service := api_client.NewRegionAutoscalersService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -19071,6 +22538,15 @@ func Compute_alpha_RegionAutoscalersDelete(context Context, args ...string) erro
 	}
 
 	call := service.Delete(param_project, param_region, param_autoscaler)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -19174,6 +22650,8 @@ func Compute_alpha_RegionAutoscalersInsert(context Context, args ...string) erro
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Autoscaler{})
 
@@ -19186,9 +22664,19 @@ func Compute_alpha_RegionAutoscalersInsert(context Context, args ...string) erro
 	}
 	service := api_client.NewRegionAutoscalersService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -19204,7 +22692,13 @@ func Compute_alpha_RegionAutoscalersInsert(context Context, args ...string) erro
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -19232,6 +22726,15 @@ func Compute_alpha_RegionAutoscalersInsert(context Context, args ...string) erro
 	call := service.Insert(param_project, param_region,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -19388,6 +22891,8 @@ func Compute_alpha_RegionAutoscalersPatch(context Context, args ...string) error
 
 		usageBits += " --autoscaler=VALUE"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Autoscaler{})
 
@@ -19402,6 +22907,7 @@ func Compute_alpha_RegionAutoscalersPatch(context Context, args ...string) error
 
 	queryParamNames := map[string]bool{
 		"autoscaler": true,
+		"requestId":  false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -19466,6 +22972,15 @@ func Compute_alpha_RegionAutoscalersPatch(context Context, args ...string) error
 	call := service.Patch(param_project, param_region, param_autoscaler,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -19596,6 +23111,8 @@ func Compute_alpha_RegionAutoscalersUpdate(context Context, args ...string) erro
 
 		usageBits += " [--autoscaler=VALUE]"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Autoscaler{})
 
@@ -19610,6 +23127,7 @@ func Compute_alpha_RegionAutoscalersUpdate(context Context, args ...string) erro
 
 	queryParamNames := map[string]bool{
 		"autoscaler": false,
+		"requestId":  false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -19679,6 +23197,13 @@ func Compute_alpha_RegionAutoscalersUpdate(context Context, args ...string) erro
 		}
 		call.Autoscaler(query_autoscaler)
 	}
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -19710,6 +23235,8 @@ func Compute_alpha_RegionBackendServicesDelete(context Context, args ...string) 
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -19720,6 +23247,21 @@ func Compute_alpha_RegionBackendServicesDelete(context Context, args ...string) 
 		return err
 	}
 	service := api_client.NewRegionBackendServicesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -19750,6 +23292,15 @@ func Compute_alpha_RegionBackendServicesDelete(context Context, args ...string) 
 	}
 
 	call := service.Delete(param_project, param_region, param_backendService)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -19949,6 +23500,8 @@ func Compute_alpha_RegionBackendServicesInsert(context Context, args ...string) 
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.BackendService{})
 
@@ -19961,9 +23514,19 @@ func Compute_alpha_RegionBackendServicesInsert(context Context, args ...string) 
 	}
 	service := api_client.NewRegionBackendServicesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -19979,7 +23542,13 @@ func Compute_alpha_RegionBackendServicesInsert(context Context, args ...string) 
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -20007,6 +23576,15 @@ func Compute_alpha_RegionBackendServicesInsert(context Context, args ...string) 
 	call := service.Insert(param_project, param_region,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -20161,6 +23739,8 @@ func Compute_alpha_RegionBackendServicesPatch(context Context, args ...string) e
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.BackendService{})
 
@@ -20173,9 +23753,19 @@ func Compute_alpha_RegionBackendServicesPatch(context Context, args ...string) e
 	}
 	service := api_client.NewRegionBackendServicesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -20191,7 +23781,13 @@ func Compute_alpha_RegionBackendServicesPatch(context Context, args ...string) e
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -20224,6 +23820,15 @@ func Compute_alpha_RegionBackendServicesPatch(context Context, args ...string) e
 	call := service.Patch(param_project, param_region, param_backendService,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -20353,6 +23958,8 @@ func Compute_alpha_RegionBackendServicesUpdate(context Context, args ...string) 
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.BackendService{})
 
@@ -20365,9 +23972,19 @@ func Compute_alpha_RegionBackendServicesUpdate(context Context, args ...string) 
 	}
 	service := api_client.NewRegionBackendServicesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -20383,7 +24000,13 @@ func Compute_alpha_RegionBackendServicesUpdate(context Context, args ...string) 
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -20414,6 +24037,420 @@ func Compute_alpha_RegionBackendServicesUpdate(context Context, args ...string) 
 	}
 
 	call := service.Update(param_project, param_region, param_backendService,
+		request,
+	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_alpha_RegionCommitmentsGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("commitment"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/commitments/{commitment}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionCommitmentsService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+		"commitment",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_commitment, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_project, param_region, param_commitment)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_alpha_RegionCommitmentsInsert(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/commitments", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		usageBits += " [--requestId=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Commitment{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionCommitmentsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.Commitment{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.Insert(param_project, param_region,
+		request,
+	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_alpha_RegionCommitmentsList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/commitments", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--orderBy=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionCommitmentsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"orderBy":    false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_project, param_region)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_alpha_RegionCommitmentsTestIamPermissions(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("resource"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/regions/{region}/commitments/{resource}/testIamPermissions", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.TestPermissionsRequest{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewRegionCommitmentsService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.TestPermissionsRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"region",
+		"resource",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_resource, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.TestIamPermissions(param_project, param_region, param_resource,
 		request,
 	)
 
@@ -20643,6 +24680,8 @@ func Compute_alpha_RegionDisksCreateSnapshot(context Context, args ...string) er
 
 		usageBits += " [--guestFlush=VALUE]"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Snapshot{})
 
@@ -20657,6 +24696,7 @@ func Compute_alpha_RegionDisksCreateSnapshot(context Context, args ...string) er
 
 	queryParamNames := map[string]bool{
 		"guestFlush": false,
+		"requestId":  false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -20731,6 +24771,13 @@ func Compute_alpha_RegionDisksCreateSnapshot(context Context, args ...string) er
 		}
 		call.GuestFlush(query_guestFlush)
 	}
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -20762,6 +24809,8 @@ func Compute_alpha_RegionDisksDelete(context Context, args ...string) error {
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -20772,6 +24821,21 @@ func Compute_alpha_RegionDisksDelete(context Context, args ...string) error {
 		return err
 	}
 	service := api_client.NewRegionDisksService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -20802,6 +24866,15 @@ func Compute_alpha_RegionDisksDelete(context Context, args ...string) error {
 	}
 
 	call := service.Delete(param_project, param_region, param_disk)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -20905,6 +24978,8 @@ func Compute_alpha_RegionDisksInsert(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		usageBits += " [--sourceImage=VALUE]"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -20920,6 +24995,7 @@ func Compute_alpha_RegionDisksInsert(context Context, args ...string) error {
 	service := api_client.NewRegionDisksService(api_service)
 
 	queryParamNames := map[string]bool{
+		"requestId":   false,
 		"sourceImage": false,
 	}
 
@@ -20983,6 +25059,13 @@ func Compute_alpha_RegionDisksInsert(context Context, args ...string) error {
 	)
 
 	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 	if value, ok := flagValues["sourceImage"]; ok {
 		query_sourceImage, err := commands_util.ConvertValue_string(value)
 		if err != nil {
@@ -21144,6 +25227,8 @@ func Compute_alpha_RegionDisksResize(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.RegionDisksResizeRequest{})
 
@@ -21156,9 +25241,19 @@ func Compute_alpha_RegionDisksResize(context Context, args ...string) error {
 	}
 	service := api_client.NewRegionDisksService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -21174,7 +25269,13 @@ func Compute_alpha_RegionDisksResize(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -21208,6 +25309,15 @@ func Compute_alpha_RegionDisksResize(context Context, args ...string) error {
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -21240,6 +25350,8 @@ func Compute_alpha_RegionDisksSetLabels(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.RegionSetLabelsRequest{})
 
@@ -21252,9 +25364,19 @@ func Compute_alpha_RegionDisksSetLabels(context Context, args ...string) error {
 	}
 	service := api_client.NewRegionDisksService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -21270,7 +25392,13 @@ func Compute_alpha_RegionDisksSetLabels(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -21303,6 +25431,15 @@ func Compute_alpha_RegionDisksSetLabels(context Context, args ...string) error {
 	call := service.SetLabels(param_project, param_region, param_resource,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -21432,6 +25569,8 @@ func Compute_alpha_RegionInstanceGroupManagersAbandonInstances(context Context, 
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.RegionInstanceGroupManagersAbandonInstancesRequest{})
 
@@ -21444,9 +25583,19 @@ func Compute_alpha_RegionInstanceGroupManagersAbandonInstances(context Context, 
 	}
 	service := api_client.NewRegionInstanceGroupManagersService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -21462,7 +25611,13 @@ func Compute_alpha_RegionInstanceGroupManagersAbandonInstances(context Context, 
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -21496,6 +25651,15 @@ func Compute_alpha_RegionInstanceGroupManagersAbandonInstances(context Context, 
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -21526,6 +25690,8 @@ func Compute_alpha_RegionInstanceGroupManagersDelete(context Context, args ...st
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -21536,6 +25702,21 @@ func Compute_alpha_RegionInstanceGroupManagersDelete(context Context, args ...st
 		return err
 	}
 	service := api_client.NewRegionInstanceGroupManagersService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -21566,6 +25747,15 @@ func Compute_alpha_RegionInstanceGroupManagersDelete(context Context, args ...st
 	}
 
 	call := service.Delete(param_project, param_region, param_instanceGroupManager)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -21599,6 +25789,8 @@ func Compute_alpha_RegionInstanceGroupManagersDeleteInstances(context Context, a
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.RegionInstanceGroupManagersDeleteInstancesRequest{})
 
@@ -21611,9 +25803,19 @@ func Compute_alpha_RegionInstanceGroupManagersDeleteInstances(context Context, a
 	}
 	service := api_client.NewRegionInstanceGroupManagersService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -21629,7 +25831,13 @@ func Compute_alpha_RegionInstanceGroupManagersDeleteInstances(context Context, a
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -21662,6 +25870,15 @@ func Compute_alpha_RegionInstanceGroupManagersDeleteInstances(context Context, a
 	call := service.DeleteInstances(param_project, param_region, param_instanceGroupManager,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -21765,6 +25982,8 @@ func Compute_alpha_RegionInstanceGroupManagersInsert(context Context, args ...st
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.InstanceGroupManager{})
 
@@ -21777,9 +25996,19 @@ func Compute_alpha_RegionInstanceGroupManagersInsert(context Context, args ...st
 	}
 	service := api_client.NewRegionInstanceGroupManagersService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -21795,7 +26024,13 @@ func Compute_alpha_RegionInstanceGroupManagersInsert(context Context, args ...st
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -21823,6 +26058,15 @@ func Compute_alpha_RegionInstanceGroupManagersInsert(context Context, args ...st
 	call := service.Insert(param_project, param_region,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -22104,6 +26348,8 @@ func Compute_alpha_RegionInstanceGroupManagersPatch(context Context, args ...str
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.InstanceGroupManager{})
 
@@ -22116,9 +26362,19 @@ func Compute_alpha_RegionInstanceGroupManagersPatch(context Context, args ...str
 	}
 	service := api_client.NewRegionInstanceGroupManagersService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -22134,7 +26390,13 @@ func Compute_alpha_RegionInstanceGroupManagersPatch(context Context, args ...str
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -22168,6 +26430,15 @@ func Compute_alpha_RegionInstanceGroupManagersPatch(context Context, args ...str
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -22200,6 +26471,8 @@ func Compute_alpha_RegionInstanceGroupManagersRecreateInstances(context Context,
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.RegionInstanceGroupManagersRecreateRequest{})
 
@@ -22212,9 +26485,19 @@ func Compute_alpha_RegionInstanceGroupManagersRecreateInstances(context Context,
 	}
 	service := api_client.NewRegionInstanceGroupManagersService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -22230,7 +26513,13 @@ func Compute_alpha_RegionInstanceGroupManagersRecreateInstances(context Context,
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -22264,6 +26553,15 @@ func Compute_alpha_RegionInstanceGroupManagersRecreateInstances(context Context,
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -22295,6 +26593,8 @@ func Compute_alpha_RegionInstanceGroupManagersResize(context Context, args ...st
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		usageBits += " --size=VALUE"
 
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
@@ -22309,7 +26609,8 @@ func Compute_alpha_RegionInstanceGroupManagersResize(context Context, args ...st
 	service := api_client.NewRegionInstanceGroupManagersService(api_service)
 
 	queryParamNames := map[string]bool{
-		"size": true,
+		"requestId": false,
+		"size":      true,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -22357,6 +26658,15 @@ func Compute_alpha_RegionInstanceGroupManagersResize(context Context, args ...st
 
 	call := service.Resize(param_project, param_region, param_instanceGroupManager, param_size)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -22389,6 +26699,8 @@ func Compute_alpha_RegionInstanceGroupManagersSetAutoHealingPolicies(context Con
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.RegionInstanceGroupManagersSetAutoHealingRequest{})
 
@@ -22401,9 +26713,19 @@ func Compute_alpha_RegionInstanceGroupManagersSetAutoHealingPolicies(context Con
 	}
 	service := api_client.NewRegionInstanceGroupManagersService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -22419,7 +26741,13 @@ func Compute_alpha_RegionInstanceGroupManagersSetAutoHealingPolicies(context Con
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -22453,6 +26781,15 @@ func Compute_alpha_RegionInstanceGroupManagersSetAutoHealingPolicies(context Con
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -22485,6 +26822,8 @@ func Compute_alpha_RegionInstanceGroupManagersSetInstanceTemplate(context Contex
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.RegionInstanceGroupManagersSetTemplateRequest{})
 
@@ -22497,9 +26836,19 @@ func Compute_alpha_RegionInstanceGroupManagersSetInstanceTemplate(context Contex
 	}
 	service := api_client.NewRegionInstanceGroupManagersService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -22515,7 +26864,13 @@ func Compute_alpha_RegionInstanceGroupManagersSetInstanceTemplate(context Contex
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -22549,6 +26904,15 @@ func Compute_alpha_RegionInstanceGroupManagersSetInstanceTemplate(context Contex
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -22581,6 +26945,8 @@ func Compute_alpha_RegionInstanceGroupManagersSetTargetPools(context Context, ar
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.RegionInstanceGroupManagersSetTargetPoolsRequest{})
 
@@ -22593,9 +26959,19 @@ func Compute_alpha_RegionInstanceGroupManagersSetTargetPools(context Context, ar
 	}
 	service := api_client.NewRegionInstanceGroupManagersService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -22611,7 +26987,13 @@ func Compute_alpha_RegionInstanceGroupManagersSetTargetPools(context Context, ar
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -22644,6 +27026,15 @@ func Compute_alpha_RegionInstanceGroupManagersSetTargetPools(context Context, ar
 	call := service.SetTargetPools(param_project, param_region, param_instanceGroupManager,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -22773,6 +27164,8 @@ func Compute_alpha_RegionInstanceGroupManagersUpdate(context Context, args ...st
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.InstanceGroupManager{})
 
@@ -22785,9 +27178,19 @@ func Compute_alpha_RegionInstanceGroupManagersUpdate(context Context, args ...st
 	}
 	service := api_client.NewRegionInstanceGroupManagersService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -22803,7 +27206,13 @@ func Compute_alpha_RegionInstanceGroupManagersUpdate(context Context, args ...st
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -22836,6 +27245,15 @@ func Compute_alpha_RegionInstanceGroupManagersUpdate(context Context, args ...st
 	call := service.Update(param_project, param_region, param_instanceGroupManager,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -23214,6 +27632,8 @@ func Compute_alpha_RegionInstanceGroupsSetNamedPorts(context Context, args ...st
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.RegionInstanceGroupsSetNamedPortsRequest{})
 
@@ -23226,9 +27646,19 @@ func Compute_alpha_RegionInstanceGroupsSetNamedPorts(context Context, args ...st
 	}
 	service := api_client.NewRegionInstanceGroupsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -23244,7 +27674,13 @@ func Compute_alpha_RegionInstanceGroupsSetNamedPorts(context Context, args ...st
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -23277,6 +27713,15 @@ func Compute_alpha_RegionInstanceGroupsSetNamedPorts(context Context, args ...st
 	call := service.SetNamedPorts(param_project, param_region, param_instanceGroup,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -23956,6 +28401,8 @@ func Compute_alpha_RoutersDelete(context Context, args ...string) error {
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -23966,6 +28413,21 @@ func Compute_alpha_RoutersDelete(context Context, args ...string) error {
 		return err
 	}
 	service := api_client.NewRoutersService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -23996,6 +28458,15 @@ func Compute_alpha_RoutersDelete(context Context, args ...string) error {
 	}
 
 	call := service.Delete(param_project, param_region, param_router)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -24170,6 +28641,8 @@ func Compute_alpha_RoutersInsert(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Router{})
 
@@ -24182,9 +28655,19 @@ func Compute_alpha_RoutersInsert(context Context, args ...string) error {
 	}
 	service := api_client.NewRoutersService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -24200,7 +28683,13 @@ func Compute_alpha_RoutersInsert(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -24228,6 +28717,15 @@ func Compute_alpha_RoutersInsert(context Context, args ...string) error {
 	call := service.Insert(param_project, param_region,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -24382,6 +28880,8 @@ func Compute_alpha_RoutersPatch(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Router{})
 
@@ -24394,9 +28894,19 @@ func Compute_alpha_RoutersPatch(context Context, args ...string) error {
 	}
 	service := api_client.NewRoutersService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -24412,7 +28922,13 @@ func Compute_alpha_RoutersPatch(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -24445,6 +28961,15 @@ func Compute_alpha_RoutersPatch(context Context, args ...string) error {
 	call := service.Patch(param_project, param_region, param_router,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -24670,6 +29195,8 @@ func Compute_alpha_RoutersUpdate(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Router{})
 
@@ -24682,9 +29209,19 @@ func Compute_alpha_RoutersUpdate(context Context, args ...string) error {
 	}
 	service := api_client.NewRoutersService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -24700,7 +29237,13 @@ func Compute_alpha_RoutersUpdate(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -24734,6 +29277,15 @@ func Compute_alpha_RoutersUpdate(context Context, args ...string) error {
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -24763,6 +29315,8 @@ func Compute_alpha_RoutesDelete(context Context, args ...string) error {
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -24773,6 +29327,21 @@ func Compute_alpha_RoutesDelete(context Context, args ...string) error {
 		return err
 	}
 	service := api_client.NewRoutesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -24798,6 +29367,15 @@ func Compute_alpha_RoutesDelete(context Context, args ...string) error {
 	}
 
 	call := service.Delete(param_project, param_route)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -24894,6 +29472,8 @@ func Compute_alpha_RoutesInsert(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Route{})
 
@@ -24906,9 +29486,19 @@ func Compute_alpha_RoutesInsert(context Context, args ...string) error {
 	}
 	service := api_client.NewRoutesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -24924,7 +29514,13 @@ func Compute_alpha_RoutesInsert(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -24947,6 +29543,15 @@ func Compute_alpha_RoutesInsert(context Context, args ...string) error {
 	call := service.Insert(param_project,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -25182,6 +29787,8 @@ func Compute_alpha_SnapshotsDelete(context Context, args ...string) error {
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -25192,6 +29799,21 @@ func Compute_alpha_SnapshotsDelete(context Context, args ...string) error {
 		return err
 	}
 	service := api_client.NewSnapshotsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -25217,6 +29839,15 @@ func Compute_alpha_SnapshotsDelete(context Context, args ...string) error {
 	}
 
 	call := service.Delete(param_project, param_snapshot)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -25282,6 +29913,71 @@ func Compute_alpha_SnapshotsGet(context Context, args ...string) error {
 	}
 
 	call := service.Get(param_project, param_snapshot)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_alpha_SnapshotsGetIamPolicy(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("resource"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/global/snapshots/{resource}/getIamPolicy", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewSnapshotsService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"resource",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_resource, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.GetIamPolicy(param_project, param_resource)
 
 	response, err := call.Do()
 	if err != nil {
@@ -25397,6 +30093,96 @@ func Compute_alpha_SnapshotsList(context Context, args ...string) error {
 		}
 		call.PageToken(query_pageToken)
 	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_alpha_SnapshotsSetIamPolicy(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("resource"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/global/snapshots/{resource}/setIamPolicy", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Policy{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewSnapshotsService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.Policy{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"resource",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_resource, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.SetIamPolicy(param_project, param_resource,
+		request,
+	)
 
 	response, err := call.Do()
 	if err != nil {
@@ -25607,6 +30393,8 @@ func Compute_alpha_SslCertificatesDelete(context Context, args ...string) error 
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -25617,6 +30405,21 @@ func Compute_alpha_SslCertificatesDelete(context Context, args ...string) error 
 		return err
 	}
 	service := api_client.NewSslCertificatesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -25642,6 +30445,15 @@ func Compute_alpha_SslCertificatesDelete(context Context, args ...string) error 
 	}
 
 	call := service.Delete(param_project, param_sslCertificate)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -25738,6 +30550,8 @@ func Compute_alpha_SslCertificatesInsert(context Context, args ...string) error 
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.SslCertificate{})
 
@@ -25750,9 +30564,19 @@ func Compute_alpha_SslCertificatesInsert(context Context, args ...string) error 
 	}
 	service := api_client.NewSslCertificatesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -25768,7 +30592,13 @@ func Compute_alpha_SslCertificatesInsert(context Context, args ...string) error 
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -25791,6 +30621,15 @@ func Compute_alpha_SslCertificatesInsert(context Context, args ...string) error 
 	call := service.Insert(param_project,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -26142,6 +30981,8 @@ func Compute_alpha_SubnetworksDelete(context Context, args ...string) error {
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -26152,6 +30993,21 @@ func Compute_alpha_SubnetworksDelete(context Context, args ...string) error {
 		return err
 	}
 	service := api_client.NewSubnetworksService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -26182,6 +31038,15 @@ func Compute_alpha_SubnetworksDelete(context Context, args ...string) error {
 	}
 
 	call := service.Delete(param_project, param_region, param_subnetwork)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -26215,6 +31080,8 @@ func Compute_alpha_SubnetworksExpandIpCidrRange(context Context, args ...string)
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.SubnetworksExpandIpCidrRangeRequest{})
 
@@ -26227,9 +31094,19 @@ func Compute_alpha_SubnetworksExpandIpCidrRange(context Context, args ...string)
 	}
 	service := api_client.NewSubnetworksService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -26245,7 +31122,13 @@ func Compute_alpha_SubnetworksExpandIpCidrRange(context Context, args ...string)
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -26278,6 +31161,15 @@ func Compute_alpha_SubnetworksExpandIpCidrRange(context Context, args ...string)
 	call := service.ExpandIpCidrRange(param_project, param_region, param_subnetwork,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -26452,6 +31344,8 @@ func Compute_alpha_SubnetworksInsert(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Subnetwork{})
 
@@ -26464,9 +31358,19 @@ func Compute_alpha_SubnetworksInsert(context Context, args ...string) error {
 	}
 	service := api_client.NewSubnetworksService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -26482,7 +31386,13 @@ func Compute_alpha_SubnetworksInsert(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -26510,6 +31420,15 @@ func Compute_alpha_SubnetworksInsert(context Context, args ...string) error {
 	call := service.Insert(param_project, param_region,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -26760,6 +31679,8 @@ func Compute_alpha_SubnetworksSetPrivateIpGoogleAccess(context Context, args ...
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.SubnetworksSetPrivateIpGoogleAccessRequest{})
 
@@ -26772,9 +31693,19 @@ func Compute_alpha_SubnetworksSetPrivateIpGoogleAccess(context Context, args ...
 	}
 	service := api_client.NewSubnetworksService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -26790,7 +31721,13 @@ func Compute_alpha_SubnetworksSetPrivateIpGoogleAccess(context Context, args ...
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -26823,6 +31760,15 @@ func Compute_alpha_SubnetworksSetPrivateIpGoogleAccess(context Context, args ...
 	call := service.SetPrivateIpGoogleAccess(param_project, param_region, param_subnetwork,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -26949,6 +31895,8 @@ func Compute_alpha_TargetHttpProxiesDelete(context Context, args ...string) erro
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -26959,6 +31907,21 @@ func Compute_alpha_TargetHttpProxiesDelete(context Context, args ...string) erro
 		return err
 	}
 	service := api_client.NewTargetHttpProxiesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -26984,6 +31947,15 @@ func Compute_alpha_TargetHttpProxiesDelete(context Context, args ...string) erro
 	}
 
 	call := service.Delete(param_project, param_targetHttpProxy)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -27080,6 +32052,8 @@ func Compute_alpha_TargetHttpProxiesInsert(context Context, args ...string) erro
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.TargetHttpProxy{})
 
@@ -27092,9 +32066,19 @@ func Compute_alpha_TargetHttpProxiesInsert(context Context, args ...string) erro
 	}
 	service := api_client.NewTargetHttpProxiesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -27110,7 +32094,13 @@ func Compute_alpha_TargetHttpProxiesInsert(context Context, args ...string) erro
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -27133,6 +32123,15 @@ func Compute_alpha_TargetHttpProxiesInsert(context Context, args ...string) erro
 	call := service.Insert(param_project,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -27280,6 +32279,8 @@ func Compute_alpha_TargetHttpProxiesSetUrlMap(context Context, args ...string) e
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.UrlMapReference{})
 
@@ -27292,9 +32293,19 @@ func Compute_alpha_TargetHttpProxiesSetUrlMap(context Context, args ...string) e
 	}
 	service := api_client.NewTargetHttpProxiesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -27310,7 +32321,13 @@ func Compute_alpha_TargetHttpProxiesSetUrlMap(context Context, args ...string) e
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -27338,6 +32355,15 @@ func Compute_alpha_TargetHttpProxiesSetUrlMap(context Context, args ...string) e
 	call := service.SetUrlMap(param_project, param_targetHttpProxy,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -27458,6 +32484,8 @@ func Compute_alpha_TargetHttpsProxiesDelete(context Context, args ...string) err
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -27468,6 +32496,21 @@ func Compute_alpha_TargetHttpsProxiesDelete(context Context, args ...string) err
 		return err
 	}
 	service := api_client.NewTargetHttpsProxiesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -27493,6 +32536,15 @@ func Compute_alpha_TargetHttpsProxiesDelete(context Context, args ...string) err
 	}
 
 	call := service.Delete(param_project, param_targetHttpsProxy)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -27589,6 +32641,8 @@ func Compute_alpha_TargetHttpsProxiesInsert(context Context, args ...string) err
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.TargetHttpsProxy{})
 
@@ -27601,9 +32655,19 @@ func Compute_alpha_TargetHttpsProxiesInsert(context Context, args ...string) err
 	}
 	service := api_client.NewTargetHttpsProxiesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -27619,7 +32683,13 @@ func Compute_alpha_TargetHttpsProxiesInsert(context Context, args ...string) err
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -27642,6 +32712,15 @@ func Compute_alpha_TargetHttpsProxiesInsert(context Context, args ...string) err
 	call := service.Insert(param_project,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -27789,6 +32868,8 @@ func Compute_alpha_TargetHttpsProxiesSetSslCertificates(context Context, args ..
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.TargetHttpsProxiesSetSslCertificatesRequest{})
 
@@ -27801,9 +32882,19 @@ func Compute_alpha_TargetHttpsProxiesSetSslCertificates(context Context, args ..
 	}
 	service := api_client.NewTargetHttpsProxiesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -27819,7 +32910,13 @@ func Compute_alpha_TargetHttpsProxiesSetSslCertificates(context Context, args ..
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -27847,6 +32944,15 @@ func Compute_alpha_TargetHttpsProxiesSetSslCertificates(context Context, args ..
 	call := service.SetSslCertificates(param_project, param_targetHttpsProxy,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -27879,6 +32985,8 @@ func Compute_alpha_TargetHttpsProxiesSetUrlMap(context Context, args ...string) 
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.UrlMapReference{})
 
@@ -27891,9 +32999,19 @@ func Compute_alpha_TargetHttpsProxiesSetUrlMap(context Context, args ...string) 
 	}
 	service := api_client.NewTargetHttpsProxiesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -27909,7 +33027,13 @@ func Compute_alpha_TargetHttpsProxiesSetUrlMap(context Context, args ...string) 
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -27937,6 +33061,15 @@ func Compute_alpha_TargetHttpsProxiesSetUrlMap(context Context, args ...string) 
 	call := service.SetUrlMap(param_project, param_targetHttpsProxy,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -28173,6 +33306,8 @@ func Compute_alpha_TargetInstancesDelete(context Context, args ...string) error 
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -28183,6 +33318,21 @@ func Compute_alpha_TargetInstancesDelete(context Context, args ...string) error 
 		return err
 	}
 	service := api_client.NewTargetInstancesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -28213,6 +33363,15 @@ func Compute_alpha_TargetInstancesDelete(context Context, args ...string) error 
 	}
 
 	call := service.Delete(param_project, param_zone, param_targetInstance)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -28316,6 +33475,8 @@ func Compute_alpha_TargetInstancesInsert(context Context, args ...string) error 
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.TargetInstance{})
 
@@ -28328,9 +33489,19 @@ func Compute_alpha_TargetInstancesInsert(context Context, args ...string) error 
 	}
 	service := api_client.NewTargetInstancesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -28346,7 +33517,13 @@ func Compute_alpha_TargetInstancesInsert(context Context, args ...string) error 
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -28374,6 +33551,15 @@ func Compute_alpha_TargetInstancesInsert(context Context, args ...string) error 
 	call := service.Insert(param_project, param_zone,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -28624,6 +33810,8 @@ func Compute_alpha_TargetPoolsAddHealthCheck(context Context, args ...string) er
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.TargetPoolsAddHealthCheckRequest{})
 
@@ -28636,9 +33824,19 @@ func Compute_alpha_TargetPoolsAddHealthCheck(context Context, args ...string) er
 	}
 	service := api_client.NewTargetPoolsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -28654,7 +33852,13 @@ func Compute_alpha_TargetPoolsAddHealthCheck(context Context, args ...string) er
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -28688,6 +33892,15 @@ func Compute_alpha_TargetPoolsAddHealthCheck(context Context, args ...string) er
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -28720,6 +33933,8 @@ func Compute_alpha_TargetPoolsAddInstance(context Context, args ...string) error
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.TargetPoolsAddInstanceRequest{})
 
@@ -28732,9 +33947,19 @@ func Compute_alpha_TargetPoolsAddInstance(context Context, args ...string) error
 	}
 	service := api_client.NewTargetPoolsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -28750,7 +33975,13 @@ func Compute_alpha_TargetPoolsAddInstance(context Context, args ...string) error
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -28783,6 +34014,15 @@ func Compute_alpha_TargetPoolsAddInstance(context Context, args ...string) error
 	call := service.AddInstance(param_project, param_region, param_targetPool,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -28929,6 +34169,8 @@ func Compute_alpha_TargetPoolsDelete(context Context, args ...string) error {
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -28939,6 +34181,21 @@ func Compute_alpha_TargetPoolsDelete(context Context, args ...string) error {
 		return err
 	}
 	service := api_client.NewTargetPoolsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -28969,6 +34226,15 @@ func Compute_alpha_TargetPoolsDelete(context Context, args ...string) error {
 	}
 
 	call := service.Delete(param_project, param_region, param_targetPool)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -29168,6 +34434,8 @@ func Compute_alpha_TargetPoolsInsert(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.TargetPool{})
 
@@ -29180,9 +34448,19 @@ func Compute_alpha_TargetPoolsInsert(context Context, args ...string) error {
 	}
 	service := api_client.NewTargetPoolsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -29198,7 +34476,13 @@ func Compute_alpha_TargetPoolsInsert(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -29226,6 +34510,15 @@ func Compute_alpha_TargetPoolsInsert(context Context, args ...string) error {
 	call := service.Insert(param_project, param_region,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -29380,6 +34673,8 @@ func Compute_alpha_TargetPoolsRemoveHealthCheck(context Context, args ...string)
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.TargetPoolsRemoveHealthCheckRequest{})
 
@@ -29392,9 +34687,19 @@ func Compute_alpha_TargetPoolsRemoveHealthCheck(context Context, args ...string)
 	}
 	service := api_client.NewTargetPoolsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -29410,7 +34715,13 @@ func Compute_alpha_TargetPoolsRemoveHealthCheck(context Context, args ...string)
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -29444,6 +34755,15 @@ func Compute_alpha_TargetPoolsRemoveHealthCheck(context Context, args ...string)
 		request,
 	)
 
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
+
 	response, err := call.Do()
 	if err != nil {
 		return err
@@ -29476,6 +34796,8 @@ func Compute_alpha_TargetPoolsRemoveInstance(context Context, args ...string) er
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.TargetPoolsRemoveInstanceRequest{})
 
@@ -29488,9 +34810,19 @@ func Compute_alpha_TargetPoolsRemoveInstance(context Context, args ...string) er
 	}
 	service := api_client.NewTargetPoolsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -29506,7 +34838,13 @@ func Compute_alpha_TargetPoolsRemoveInstance(context Context, args ...string) er
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -29539,6 +34877,15 @@ func Compute_alpha_TargetPoolsRemoveInstance(context Context, args ...string) er
 	call := service.RemoveInstance(param_project, param_region, param_targetPool,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -29574,6 +34921,8 @@ func Compute_alpha_TargetPoolsSetBackup(context Context, args ...string) error {
 
 		usageBits += " [--failoverRatio=VALUE]"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.TargetReference{})
 
@@ -29588,6 +34937,7 @@ func Compute_alpha_TargetPoolsSetBackup(context Context, args ...string) error {
 
 	queryParamNames := map[string]bool{
 		"failoverRatio": false,
+		"requestId":     false,
 	}
 
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
@@ -29661,6 +35011,13 @@ func Compute_alpha_TargetPoolsSetBackup(context Context, args ...string) error {
 			return err
 		}
 		call.FailoverRatio(query_failoverRatio)
+	}
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
 	}
 
 	response, err := call.Do()
@@ -29788,6 +35145,8 @@ func Compute_alpha_TargetSslProxiesDelete(context Context, args ...string) error
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -29798,6 +35157,21 @@ func Compute_alpha_TargetSslProxiesDelete(context Context, args ...string) error
 		return err
 	}
 	service := api_client.NewTargetSslProxiesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -29823,6 +35197,15 @@ func Compute_alpha_TargetSslProxiesDelete(context Context, args ...string) error
 	}
 
 	call := service.Delete(param_project, param_targetSslProxy)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -29919,6 +35302,8 @@ func Compute_alpha_TargetSslProxiesInsert(context Context, args ...string) error
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.TargetSslProxy{})
 
@@ -29931,9 +35316,19 @@ func Compute_alpha_TargetSslProxiesInsert(context Context, args ...string) error
 	}
 	service := api_client.NewTargetSslProxiesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -29949,7 +35344,13 @@ func Compute_alpha_TargetSslProxiesInsert(context Context, args ...string) error
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -29972,6 +35373,15 @@ func Compute_alpha_TargetSslProxiesInsert(context Context, args ...string) error
 	call := service.Insert(param_project,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -30119,6 +35529,8 @@ func Compute_alpha_TargetSslProxiesSetBackendService(context Context, args ...st
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.TargetSslProxiesSetBackendServiceRequest{})
 
@@ -30131,9 +35543,19 @@ func Compute_alpha_TargetSslProxiesSetBackendService(context Context, args ...st
 	}
 	service := api_client.NewTargetSslProxiesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -30149,7 +35571,13 @@ func Compute_alpha_TargetSslProxiesSetBackendService(context Context, args ...st
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -30177,6 +35605,15 @@ func Compute_alpha_TargetSslProxiesSetBackendService(context Context, args ...st
 	call := service.SetBackendService(param_project, param_targetSslProxy,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -30209,6 +35646,8 @@ func Compute_alpha_TargetSslProxiesSetProxyHeader(context Context, args ...strin
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.TargetSslProxiesSetProxyHeaderRequest{})
 
@@ -30221,9 +35660,19 @@ func Compute_alpha_TargetSslProxiesSetProxyHeader(context Context, args ...strin
 	}
 	service := api_client.NewTargetSslProxiesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -30239,7 +35688,13 @@ func Compute_alpha_TargetSslProxiesSetProxyHeader(context Context, args ...strin
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -30267,6 +35722,15 @@ func Compute_alpha_TargetSslProxiesSetProxyHeader(context Context, args ...strin
 	call := service.SetProxyHeader(param_project, param_targetSslProxy,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -30299,6 +35763,8 @@ func Compute_alpha_TargetSslProxiesSetSslCertificates(context Context, args ...s
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.TargetSslProxiesSetSslCertificatesRequest{})
 
@@ -30311,9 +35777,19 @@ func Compute_alpha_TargetSslProxiesSetSslCertificates(context Context, args ...s
 	}
 	service := api_client.NewTargetSslProxiesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -30329,7 +35805,13 @@ func Compute_alpha_TargetSslProxiesSetSslCertificates(context Context, args ...s
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -30357,6 +35839,15 @@ func Compute_alpha_TargetSslProxiesSetSslCertificates(context Context, args ...s
 	call := service.SetSslCertificates(param_project, param_targetSslProxy,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -30477,6 +35968,8 @@ func Compute_alpha_TargetTcpProxiesDelete(context Context, args ...string) error
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -30487,6 +35980,21 @@ func Compute_alpha_TargetTcpProxiesDelete(context Context, args ...string) error
 		return err
 	}
 	service := api_client.NewTargetTcpProxiesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -30512,6 +36020,15 @@ func Compute_alpha_TargetTcpProxiesDelete(context Context, args ...string) error
 	}
 
 	call := service.Delete(param_project, param_targetTcpProxy)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -30608,6 +36125,8 @@ func Compute_alpha_TargetTcpProxiesInsert(context Context, args ...string) error
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.TargetTcpProxy{})
 
@@ -30620,9 +36139,19 @@ func Compute_alpha_TargetTcpProxiesInsert(context Context, args ...string) error
 	}
 	service := api_client.NewTargetTcpProxiesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -30638,7 +36167,13 @@ func Compute_alpha_TargetTcpProxiesInsert(context Context, args ...string) error
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -30661,6 +36196,15 @@ func Compute_alpha_TargetTcpProxiesInsert(context Context, args ...string) error
 	call := service.Insert(param_project,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -30808,6 +36352,8 @@ func Compute_alpha_TargetTcpProxiesSetBackendService(context Context, args ...st
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.TargetTcpProxiesSetBackendServiceRequest{})
 
@@ -30820,9 +36366,19 @@ func Compute_alpha_TargetTcpProxiesSetBackendService(context Context, args ...st
 	}
 	service := api_client.NewTargetTcpProxiesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -30838,7 +36394,13 @@ func Compute_alpha_TargetTcpProxiesSetBackendService(context Context, args ...st
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -30866,6 +36428,15 @@ func Compute_alpha_TargetTcpProxiesSetBackendService(context Context, args ...st
 	call := service.SetBackendService(param_project, param_targetTcpProxy,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -30898,6 +36469,8 @@ func Compute_alpha_TargetTcpProxiesSetProxyHeader(context Context, args ...strin
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.TargetTcpProxiesSetProxyHeaderRequest{})
 
@@ -30910,9 +36483,19 @@ func Compute_alpha_TargetTcpProxiesSetProxyHeader(context Context, args ...strin
 	}
 	service := api_client.NewTargetTcpProxiesService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -30928,7 +36511,13 @@ func Compute_alpha_TargetTcpProxiesSetProxyHeader(context Context, args ...strin
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -30956,6 +36545,15 @@ func Compute_alpha_TargetTcpProxiesSetProxyHeader(context Context, args ...strin
 	call := service.SetProxyHeader(param_project, param_targetTcpProxy,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -31192,6 +36790,8 @@ func Compute_alpha_TargetVpnGatewaysDelete(context Context, args ...string) erro
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -31202,6 +36802,21 @@ func Compute_alpha_TargetVpnGatewaysDelete(context Context, args ...string) erro
 		return err
 	}
 	service := api_client.NewTargetVpnGatewaysService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -31232,6 +36847,15 @@ func Compute_alpha_TargetVpnGatewaysDelete(context Context, args ...string) erro
 	}
 
 	call := service.Delete(param_project, param_region, param_targetVpnGateway)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -31335,6 +36959,8 @@ func Compute_alpha_TargetVpnGatewaysInsert(context Context, args ...string) erro
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.TargetVpnGateway{})
 
@@ -31347,9 +36973,19 @@ func Compute_alpha_TargetVpnGatewaysInsert(context Context, args ...string) erro
 	}
 	service := api_client.NewTargetVpnGatewaysService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -31365,7 +37001,13 @@ func Compute_alpha_TargetVpnGatewaysInsert(context Context, args ...string) erro
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -31393,6 +37035,15 @@ func Compute_alpha_TargetVpnGatewaysInsert(context Context, args ...string) erro
 	call := service.Insert(param_project, param_region,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -31640,6 +37291,8 @@ func Compute_alpha_UrlMapsDelete(context Context, args ...string) error {
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -31650,6 +37303,21 @@ func Compute_alpha_UrlMapsDelete(context Context, args ...string) error {
 		return err
 	}
 	service := api_client.NewUrlMapsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -31675,6 +37343,15 @@ func Compute_alpha_UrlMapsDelete(context Context, args ...string) error {
 	}
 
 	call := service.Delete(param_project, param_urlMap)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -31771,6 +37448,8 @@ func Compute_alpha_UrlMapsInsert(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.UrlMap{})
 
@@ -31783,9 +37462,19 @@ func Compute_alpha_UrlMapsInsert(context Context, args ...string) error {
 	}
 	service := api_client.NewUrlMapsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -31801,7 +37490,13 @@ func Compute_alpha_UrlMapsInsert(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -31824,6 +37519,15 @@ func Compute_alpha_UrlMapsInsert(context Context, args ...string) error {
 	call := service.Insert(param_project,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -31856,6 +37560,8 @@ func Compute_alpha_UrlMapsInvalidateCache(context Context, args ...string) error
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.CacheInvalidationRule{})
 
@@ -31868,9 +37574,19 @@ func Compute_alpha_UrlMapsInvalidateCache(context Context, args ...string) error
 	}
 	service := api_client.NewUrlMapsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -31886,7 +37602,13 @@ func Compute_alpha_UrlMapsInvalidateCache(context Context, args ...string) error
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -31914,6 +37636,15 @@ func Compute_alpha_UrlMapsInvalidateCache(context Context, args ...string) error
 	call := service.InvalidateCache(param_project, param_urlMap,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -32061,6 +37792,8 @@ func Compute_alpha_UrlMapsPatch(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.UrlMap{})
 
@@ -32073,9 +37806,19 @@ func Compute_alpha_UrlMapsPatch(context Context, args ...string) error {
 	}
 	service := api_client.NewUrlMapsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -32091,7 +37834,13 @@ func Compute_alpha_UrlMapsPatch(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -32119,6 +37868,15 @@ func Compute_alpha_UrlMapsPatch(context Context, args ...string) error {
 	call := service.Patch(param_project, param_urlMap,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -32241,6 +37999,8 @@ func Compute_alpha_UrlMapsUpdate(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.UrlMap{})
 
@@ -32253,9 +38013,19 @@ func Compute_alpha_UrlMapsUpdate(context Context, args ...string) error {
 	}
 	service := api_client.NewUrlMapsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -32271,7 +38041,13 @@ func Compute_alpha_UrlMapsUpdate(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -32299,6 +38075,15 @@ func Compute_alpha_UrlMapsUpdate(context Context, args ...string) error {
 	call := service.Update(param_project, param_urlMap,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -32535,6 +38320,8 @@ func Compute_alpha_VpnTunnelsDelete(context Context, args ...string) error {
 			}
 		}
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -32545,6 +38332,21 @@ func Compute_alpha_VpnTunnelsDelete(context Context, args ...string) error {
 		return err
 	}
 	service := api_client.NewVpnTunnelsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -32575,6 +38377,15 @@ func Compute_alpha_VpnTunnelsDelete(context Context, args ...string) error {
 	}
 
 	call := service.Delete(param_project, param_region, param_vpnTunnel)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -32678,6 +38489,8 @@ func Compute_alpha_VpnTunnelsInsert(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.VpnTunnel{})
 
@@ -32690,9 +38503,19 @@ func Compute_alpha_VpnTunnelsInsert(context Context, args ...string) error {
 	}
 	service := api_client.NewVpnTunnelsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -32708,7 +38531,13 @@ func Compute_alpha_VpnTunnelsInsert(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -32736,6 +38565,15 @@ func Compute_alpha_VpnTunnelsInsert(context Context, args ...string) error {
 	call := service.Insert(param_project, param_region,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -32890,6 +38728,8 @@ func Compute_alpha_VpnTunnelsSetLabels(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--requestId=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.RegionSetLabelsRequest{})
 
@@ -32902,9 +38742,19 @@ func Compute_alpha_VpnTunnelsSetLabels(context Context, args ...string) error {
 	}
 	service := api_client.NewVpnTunnelsService(api_service)
 
+	queryParamNames := map[string]bool{
+		"requestId": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -32920,7 +38770,13 @@ func Compute_alpha_VpnTunnelsSetLabels(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -32953,6 +38809,15 @@ func Compute_alpha_VpnTunnelsSetLabels(context Context, args ...string) error {
 	call := service.SetLabels(param_project, param_region, param_resource,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["requestId"]; ok {
+		query_requestId, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.RequestId(query_requestId)
+	}
 
 	response, err := call.Do()
 	if err != nil {

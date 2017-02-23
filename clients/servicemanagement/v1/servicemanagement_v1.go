@@ -285,18 +285,66 @@ func (s *Api) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// AuditConfig: Provides the configuration for non-admin_activity
-// logging for a service.
-// Controls exemptions and specific log sub-types.
+// AuditConfig: Specifies the audit configuration for a service.
+// It consists of which permission types are logged, and what
+// identities, if
+// any, are exempted from logging.
+// An AuditConifg must have one or more AuditLogConfigs.
+//
+// If there are AuditConfigs for both `allServices` and a specific
+// service,
+// the union of the two AuditConfigs is used for that service: the
+// log_types
+// specified in each AuditConfig are enabled, and the exempted_members
+// in each
+// AuditConfig are exempted.
+// Example Policy with multiple AuditConfigs:
+// {
+//   "audit_configs": [
+//     {
+//       "service": "allServices"
+//       "audit_log_configs": [
+//         {
+//           "log_type": "DATA_READ",
+//           "exempted_members": [
+//             "user:foo@gmail.com"
+//           ]
+//         },
+//         {
+//           "log_type": "DATA_WRITE",
+//         },
+//         {
+//           "log_type": "ADMIN_READ",
+//         }
+//       ]
+//     },
+//     {
+//       "service": "fooservice@googleapis.com"
+//       "audit_log_configs": [
+//         {
+//           "log_type": "DATA_READ",
+//         },
+//         {
+//           "log_type": "DATA_WRITE",
+//           "exempted_members": [
+//             "user:bar@gmail.com"
+//           ]
+//         }
+//       ]
+//     }
+//   ]
+// }
+// For fooservice, this policy enables DATA_READ, DATA_WRITE and
+// ADMIN_READ
+// logging. It also exempts foo@gmail.com from DATA_READ logging,
+// and
+// bar@gmail.com from DATA_WRITE logging.
 type AuditConfig struct {
-	// AuditLogConfigs: The configuration for each type of logging
+	// AuditLogConfigs: The configuration for logging of each type of
+	// permission.
 	// Next ID: 4
 	AuditLogConfigs []*AuditLogConfig `json:"auditLogConfigs,omitempty"`
 
-	// ExemptedMembers: Specifies the identities that are exempted from
-	// "data access" audit
-	// logging for the `service` specified above.
-	// Follows the same format of Binding.members.
 	ExemptedMembers []string `json:"exemptedMembers,omitempty"`
 
 	// Service: Specifies a service that will be enabled for audit
@@ -320,10 +368,31 @@ func (s *AuditConfig) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// AuditLogConfig: Provides the configuration for a sub-type of logging.
+// AuditLogConfig: Provides the configuration for logging a type of
+// permissions.
+// Example:
+//
+//     {
+//       "audit_log_configs": [
+//         {
+//           "log_type": "DATA_READ",
+//           "exempted_members": [
+//             "user:foo@gmail.com"
+//           ]
+//         },
+//         {
+//           "log_type": "DATA_WRITE",
+//         }
+//       ]
+//     }
+//
+// This enables 'DATA_READ' and 'DATA_WRITE' logging, while
+// exempting
+// foo@gmail.com from DATA_READ logging.
 type AuditLogConfig struct {
-	// ExemptedMembers: Specifies the identities that are exempted from this
-	// type of logging
+	// ExemptedMembers: Specifies the identities that do not cause logging
+	// for this type of
+	// permission.
 	// Follows the same format of Binding.members.
 	ExemptedMembers []string `json:"exemptedMembers,omitempty"`
 
@@ -331,9 +400,9 @@ type AuditLogConfig struct {
 	//
 	// Possible values:
 	//   "LOG_TYPE_UNSPECIFIED" - Default case. Should never be this.
-	//   "ADMIN_READ" - Log admin reads
-	//   "DATA_WRITE" - Log data writes
-	//   "DATA_READ" - Log data reads
+	//   "ADMIN_READ" - Admin reads. Example: CloudIAM getIamPolicy
+	//   "DATA_WRITE" - Data writes. Example: CloudSQL Users create
+	//   "DATA_READ" - Data reads. Example: CloudSQL Users list
 	LogType string `json:"logType,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "ExemptedMembers") to
@@ -579,6 +648,38 @@ func (s *AuthenticationRule) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
+// AuthorizationConfig: Configuration of authorization.
+//
+// This section determines the authorization provider, if unspecified,
+// then no
+// authorization check will be done.
+//
+// Example:
+//
+//     experimental:
+//       authorization:
+//         provider: firebaserules.googleapis.com
+type AuthorizationConfig struct {
+	// Provider: The name of the authorization provider, such
+	// as
+	// firebaserules.googleapis.com.
+	Provider string `json:"provider,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Provider") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *AuthorizationConfig) MarshalJSON() ([]byte, error) {
+	type noMethod AuthorizationConfig
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
 // Backend: `Backend` defines the backend configuration for a service.
 type Backend struct {
 	// Rules: A list of API backend rules that apply to individual API
@@ -786,6 +887,18 @@ type Condition struct {
 	//   "ATTRIBUTION" - The principal (even if an authority selector is
 	// present), which
 	// must only be used for attribution, not authorization.
+	//   "APPROVER" - An approver (distinct from the requester) that has
+	// authorized this
+	// request.
+	// When used with IN, the condition indicates that one of the
+	// approvers
+	// associated with the request matches the specified principal, or is
+	// a
+	// member of the specified group. Approvers can only grant
+	// additional
+	// access, and are thus only used in a strictly positive context
+	// (e.g. ALLOW/IN or DENY/NOT_IN).
+	// See: go/rpc-security-policy-dynamicauth.
 	Iam string `json:"iam,omitempty"`
 
 	// Op: An operator to apply the subject with.
@@ -1874,6 +1987,28 @@ func (s *EnumValue) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
+// Experimental: Experimental service configuration. These configuration
+// options can
+// only be used by whitelisted users.
+type Experimental struct {
+	// Authorization: Authorization configuration.
+	Authorization *AuthorizationConfig `json:"authorization,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Authorization") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *Experimental) MarshalJSON() ([]byte, error) {
+	type noMethod Experimental
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
 // Field: A single field of a message type.
 type Field struct {
 	// Cardinality: The field cardinality.
@@ -2368,16 +2503,18 @@ type HttpRule struct {
 	// Get: Used for listing and getting information about resources.
 	Get string `json:"get,omitempty"`
 
-	// MediaDownload: Do not use this. For media support, add
-	// instead
-	// [][google.bytestream.RestByteStream] as an API to your
-	// configuration.
+	// MediaDownload: Use this only for Scotty Requests. Do not use this for
+	// bytestream methods.
+	// For media support, add instead [][google.bytestream.RestByteStream]
+	// as an
+	// API to your configuration.
 	MediaDownload *MediaDownload `json:"mediaDownload,omitempty"`
 
-	// MediaUpload: Do not use this. For media support, add
-	// instead
+	// MediaUpload: Use this only for Scotty Requests. Do not use this for
+	// media support using
+	// Bytestream, add instead
 	// [][google.bytestream.RestByteStream] as an API to your
-	// configuration.
+	// configuration for Bytestream methods.
 	MediaUpload *MediaUpload `json:"mediaUpload,omitempty"`
 
 	// Patch: Used for updating a resource.
@@ -2820,15 +2957,22 @@ func (s *ManagedService) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// MediaDownload: Do not use this. For media support, add
-// instead
-// [][google.bytestream.RestByteStream] as an API to your
-// configuration.
+// MediaDownload: Use this only for Scotty Requests. Do not use this for
+// media support using
+// Bytestream, add instead [][google.bytestream.RestByteStream] as an
+// API to
+// your configuration for Bytestream methods.
 type MediaDownload struct {
+	// DownloadService: DO NOT USE THIS FIELD UNTIL THIS WARNING IS
+	// REMOVED.
+	//
+	// Specify name of the download service if one is used for download.
+	DownloadService string `json:"downloadService,omitempty"`
+
 	// Enabled: Whether download is enabled.
 	Enabled bool `json:"enabled,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "Enabled") to
+	// ForceSendFields is a list of field names (e.g. "DownloadService") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -2843,13 +2987,20 @@ func (s *MediaDownload) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// MediaUpload: Do not use this. For media support, add
-// instead
-// [][google.bytestream.RestByteStream] as an API to your
-// configuration.
+// MediaUpload: Use this only for Scotty Requests. Do not use this for
+// media support using
+// Bytestream, add instead [][google.bytestream.RestByteStream] as an
+// API to
+// your configuration for Bytestream methods.
 type MediaUpload struct {
 	// Enabled: Whether upload is enabled.
 	Enabled bool `json:"enabled,omitempty"`
+
+	// UploadService: DO NOT USE THIS FIELD UNTIL THIS WARNING IS
+	// REMOVED.
+	//
+	// Specify name of the upload service if one is used for upload.
+	UploadService string `json:"uploadService,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Enabled") to
 	// unconditionally include in API requests. By default, fields with
@@ -3674,15 +3825,8 @@ func (s *Page) MarshalJSON() ([]byte, error) {
 // For a description of IAM and its features, see the
 // [IAM developer's guide](https://cloud.google.com/iam).
 type Policy struct {
-	// AuditConfigs: Specifies audit logging configs for "data
-	// access".
-	// "data access": generally refers to data reads/writes and admin
-	// reads.
-	// "admin activity": generally refers to admin writes.
-	//
-	// Note: `AuditConfig` doesn't apply to "admin activity", which
-	// always
-	// enables audit logging.
+	// AuditConfigs: Specifies cloud audit logging configuration for this
+	// policy.
 	AuditConfigs []*AuditConfig `json:"auditConfigs,omitempty"`
 
 	// Bindings: Associates a list of `members` to a `role`.
@@ -3904,7 +4048,10 @@ func (s *QuotaBucketId) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// QuotaGroup: `QuotaGroup` defines a set of quota limits to enforce.
+// QuotaGroup: `QuotaGroup` defines a set of quota limits to
+// enforce.
+//
+// Used by group-based quotas only.
 type QuotaGroup struct {
 	// Billable: Indicates if the quota limits defined in this quota group
 	// apply to
@@ -4002,6 +4149,8 @@ type QuotaLimit struct {
 	// Similarly, a value of -1 will indicate an unlimited quota. No
 	// other
 	// negative values are allowed.
+	//
+	// Used by group-based quotas only.
 	DefaultLimit int64 `json:"defaultLimit,omitempty,string"`
 
 	// Description: Optional. User-visible, extended description for this
@@ -4026,6 +4175,8 @@ type QuotaLimit struct {
 	// support only "100s" and "1d" for now. Additional support will be
 	// added in
 	// the future. "0" indicates indefinite duration.
+	//
+	// Used by group-based quotas only.
 	Duration string `json:"duration,omitempty"`
 
 	// FreeTier: Free tier value displayed in the Developers Console for
@@ -4039,7 +4190,24 @@ type QuotaLimit struct {
 	// it
 	// defaults to 0, indicating that there is no free tier for this
 	// service.
+	//
+	// Used by group-based quotas only.
 	FreeTier int64 `json:"freeTier,omitempty,string"`
+
+	// IsPrecise: Whether the quota limit needs to be enforced
+	// precisely.
+	//
+	// Note that precise quota limits are more expensive to enforce. Make a
+	// quota
+	// limit precise only if it is necessary.
+	//
+	// Precise rate quota is not currently supported. An error will be
+	// raised if
+	// a rate quota is specified to be precise.
+	// Imprecise allocation quota is not currently supported.
+	//
+	// Used by metric-based quotas only.
+	IsPrecise bool `json:"isPrecise,omitempty"`
 
 	// LimitBy: Limit type to use for enforcing this quota limit. Each
 	// unique value gets
@@ -4052,6 +4220,8 @@ type QuotaLimit struct {
 	// that uses client project type, all users making requests through the
 	// same
 	// client application project share a single pool of tokens.
+	//
+	// Used by group-based quotas only.
 	//
 	// Possible values:
 	//   "CLIENT_PROJECT" - ID of the project owned by the client
@@ -4073,15 +4243,34 @@ type QuotaLimit struct {
 	// To allow clients to apply overrides with no upper bound, set this to
 	// -1,
 	// indicating unlimited maximum quota.
+	//
+	// Used by group-based quotas only.
 	MaxLimit int64 `json:"maxLimit,omitempty,string"`
 
-	// Name: Name of the quota limit.  Must be unique within the quota
-	// group.
-	// This name is used to refer to the limit when overriding the limit
-	// on
-	// a per-project basis.  If a name is not provided, it will be
-	// generated
-	// from the limit_by and duration fields.
+	// Metric: The name of the metric this quota limit applies to. The quota
+	// limits with
+	// the same metric will be checked together during runtime. The metric
+	// must be
+	// defined within the service config.
+	//
+	// Used by metric-based quotas only.
+	Metric string `json:"metric,omitempty"`
+
+	// Name: Name of the quota limit. The name is used to refer to the limit
+	// when
+	// overriding the default limit on per-consumer basis.
+	//
+	// For group-based quota limits, the name must be unique within the
+	// quota
+	// group. If a name is not provided, it will be generated from the
+	// limit_by
+	// and duration fields.
+	//
+	// For metric-based quota limits, the name must be provided, and it must
+	// be
+	// unique within the service. The name can only include
+	// alphanumeric
+	// characters as well as '-'.
 	//
 	// The maximum length of the limit name is 64 characters.
 	//
@@ -4095,6 +4284,100 @@ type QuotaLimit struct {
 	// without
 	// affecting the identity of the limit.
 	Name string `json:"name,omitempty"`
+
+	// Unit: Specify the unit of the quota limit. It uses the same syntax
+	// as
+	// Metric.unit. The supported unit kinds are determined by the
+	// quota
+	// backend system.
+	//
+	// The [Google Service
+	// Control](https://cloud.google.com/service-control)
+	// supports the following unit components:
+	// * One of the time intevals:
+	//   * "/min"  for quota every minute.
+	//   * "/d"  for quota every 24 hours, starting 00:00 US Pacific Time.
+	//   * Otherwise the quota won't be reset by time, such as storage
+	// limit.
+	// * One and only one of the granted containers:
+	//   * "/{organization}" quota for an organization.
+	//   * "/{project}" quota for a project.
+	//   * "/{folder}" quota for a folder.
+	//   * "/{resource}" quota for a universal resource.
+	// * Zero or more quota segmentation dimension. Not all combos are
+	// valid.
+	//   * "/{user}" quota for every user GAIA ID or client ip address.
+	//     User GAIA ID has precedence over client ip address.
+	//   * "/{region}" quota for every region. Not to be used with time
+	// intervals.
+	//   * Otherwise the resources granted on the target is not segmented.
+	//   * "/{zone}" quota for every zone. Not to be used with time
+	// intervals.
+	//   * Otherwise the resources granted on the target is not segmented.
+	//   * "/{resource}" quota for a resource associated with a project or
+	// org.
+	//
+	// Here are some examples:
+	// * "1/min/{project}" for quota per minute per project.
+	// * "1/min/{user}" for quota per minute per user.
+	// * "1/min/{organization}" for quota per minute per
+	// organization.
+	//
+	// Note: the order of unit components is insignificant.
+	// The "1" at the beginning is required to follow the metric unit
+	// syntax.
+	//
+	// Used by metric-based quotas only.
+	Unit string `json:"unit,omitempty"`
+
+	// Values: Tiered limit values. Also allows for regional or zone
+	// overrides for these
+	// values if "/{region}" or "/{zone}" is specified in the unit
+	// field.
+	//
+	// Currently supported tiers from low to high:
+	// VERY_LOW, LOW, STANDARD, HIGH, VERY_HIGH
+	//
+	// To apply different limit values for users according to their tiers,
+	// specify
+	// the values for the tiers you want to differentiate. For
+	// example:
+	// {LOW:100, STANDARD:500, HIGH:1000, VERY_HIGH:5000}
+	//
+	// The limit value for each tier is optional except for the tier
+	// STANDARD.
+	// The limit value for an unspecified tier falls to the value of its
+	// next
+	// tier towards tier STANDARD. For the above example, the limit value
+	// for tier
+	// STANDARD is 500.
+	//
+	// To apply the same limit value for all users, just specify limit value
+	// for
+	// tier STANDARD. For example: {STANDARD:500}.
+	//
+	// To apply a regional overide for a tier, add a map entry with
+	// key
+	// "<TIER>/<region>", where <region> is a region name. Similarly, for a
+	// zone
+	// override, add a map entry with key "<TIER>/{zone}".
+	// Further, a wildcard can be used at the end of a zone name in order
+	// to
+	// specify zone level overrides. For example:
+	// LOW: 10, STANDARD: 50, HIGH: 100,
+	// LOW/us-central1: 20, STANDARD/us-central1: 60, HIGH/us-central1:
+	// 200,
+	// LOW/us-central1-*: 10, STANDARD/us-central1-*: 20,
+	// HIGH/us-central1-*: 80
+	//
+	// The regional overrides tier set for each region must be the same
+	// as
+	// the tier set for default limit values. Same rule applies for zone
+	// overrides
+	// tier as well.
+	//
+	// Used by metric-based quotas only.
+	Values map[string]string `json:"values,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "DefaultLimit") to
 	// unconditionally include in API requests. By default, fields with
@@ -4502,6 +4785,9 @@ type Service1 struct {
 	//     - name: google.someapi.v1.SomeEnum
 	Enums []*Enum `json:"enums,omitempty"`
 
+	// Experimental: Experimental configuration.
+	Experimental *Experimental `json:"experimental,omitempty"`
+
 	// Http: HTTP configuration.
 	Http *Http `json:"http,omitempty"`
 
@@ -4590,77 +4876,6 @@ type Service1 struct {
 
 func (s *Service1) MarshalJSON() ([]byte, error) {
 	type noMethod Service1
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// ServiceAccessList: List of users and groups that are granted access
-// to a service or visibility
-// label.
-type ServiceAccessList struct {
-	// Members: Members that are granted access.
-	//
-	// - "user:{$user_email}" - Grant access to an individual user
-	// - "group:{$group_email}" - Grant access to direct members of the
-	// group
-	// - "domain:{$domain}" - Grant access to all members of the domain. For
-	// now,
-	//      domain membership check will be similar to Devconsole/TT check:
-	//      compare domain part of the user email to configured domain
-	// name.
-	//      When IAM integration is complete, this will be replaced with
-	// IAM
-	//      check.
-	Members []string `json:"members,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "Members") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *ServiceAccessList) MarshalJSON() ([]byte, error) {
-	type noMethod ServiceAccessList
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields)
-}
-
-// ServiceAccessPolicy: Policy describing who can access a service and
-// any visibility labels on that
-// service.
-type ServiceAccessPolicy struct {
-	// AccessList: ACL for access to the unrestricted surface of the
-	// service.
-	AccessList *ServiceAccessList `json:"accessList,omitempty"`
-
-	// ServiceName: The service protected by this policy.
-	ServiceName string `json:"serviceName,omitempty"`
-
-	// VisibilityLabelAccessLists: ACLs for access to restricted parts of
-	// the service.  The map key is the
-	// visibility label that is being controlled.  Note that access to any
-	// label
-	// also implies access to the unrestricted surface.
-	VisibilityLabelAccessLists map[string]ServiceAccessList `json:"visibilityLabelAccessLists,omitempty"`
-
-	// ServerResponse contains the HTTP response code and headers from the
-	// server.
-	googleapi.ServerResponse `json:"-"`
-
-	// ForceSendFields is a list of field names (e.g. "AccessList") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-}
-
-func (s *ServiceAccessPolicy) MarshalJSON() ([]byte, error) {
-	type noMethod ServiceAccessPolicy
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
@@ -4846,11 +5061,12 @@ type Step struct {
 	//
 	// Possible values:
 	//   "STATUS_UNSPECIFIED" - Unspecifed code.
-	//   "DONE" - The step has completed without errors.
-	//   "NOT_STARTED" - The step has not started yet.
-	//   "IN_PROGRESS" - The step is in progress.
-	//   "FAILED" - The step has completed with errors.
-	//   "CANCELLED" - The step has completed with cancellation.
+	//   "DONE" - The operation or step has completed without errors.
+	//   "NOT_STARTED" - The operation or step has not started yet.
+	//   "IN_PROGRESS" - The operation or step is in progress.
+	//   "FAILED" - The operation or step has completed with errors.
+	//   "CANCELLED" - The operation or step has completed with
+	// cancellation.
 	Status string `json:"status,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Description") to
@@ -6645,137 +6861,6 @@ func (c *ServicesGetCall) Do(opts ...googleapi.CallOption) (*ManagedService, err
 
 }
 
-// method id "servicemanagement.services.getAccessPolicy":
-
-type ServicesGetAccessPolicyCall struct {
-	s            *Service
-	serviceName  string
-	urlParams_   gensupport.URLParams
-	ifNoneMatch_ string
-	ctx_         context.Context
-}
-
-// GetAccessPolicy: Producer method to retrieve current policy.
-func (r *ServicesService) GetAccessPolicy(serviceName string) *ServicesGetAccessPolicyCall {
-	c := &ServicesGetAccessPolicyCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.serviceName = serviceName
-	return c
-}
-
-// Fields allows partial responses to be retrieved. See
-// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
-// for more information.
-func (c *ServicesGetAccessPolicyCall) Fields(s ...googleapi.Field) *ServicesGetAccessPolicyCall {
-	c.urlParams_.Set("fields", googleapi.CombineFields(s))
-	return c
-}
-
-// IfNoneMatch sets the optional parameter which makes the operation
-// fail if the object's ETag matches the given value. This is useful for
-// getting updates only after the object has changed since the last
-// request. Use googleapi.IsNotModified to check whether the response
-// error from Do is the result of In-None-Match.
-func (c *ServicesGetAccessPolicyCall) IfNoneMatch(entityTag string) *ServicesGetAccessPolicyCall {
-	c.ifNoneMatch_ = entityTag
-	return c
-}
-
-// Context sets the context to be used in this call's Do method. Any
-// pending HTTP request will be aborted if the provided context is
-// canceled.
-func (c *ServicesGetAccessPolicyCall) Context(ctx context.Context) *ServicesGetAccessPolicyCall {
-	c.ctx_ = ctx
-	return c
-}
-
-func (c *ServicesGetAccessPolicyCall) doRequest(alt string) (*http.Response, error) {
-	reqHeaders := make(http.Header)
-	reqHeaders.Set("User-Agent", c.s.userAgent())
-	if c.ifNoneMatch_ != "" {
-		reqHeaders.Set("If-None-Match", c.ifNoneMatch_)
-	}
-	var body io.Reader = nil
-	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/services/{serviceName}/accessPolicy")
-	urls += "?" + c.urlParams_.Encode()
-	req, _ := http.NewRequest("GET", urls, body)
-	req.Header = reqHeaders
-	googleapi.Expand(req.URL, map[string]string{
-		"serviceName": c.serviceName,
-	})
-	if c.ctx_ != nil {
-		return ctxhttp.Do(c.ctx_, c.s.client, req)
-	}
-	return c.s.client.Do(req)
-}
-
-// Do executes the "servicemanagement.services.getAccessPolicy" call.
-// Exactly one of *ServiceAccessPolicy or error will be non-nil. Any
-// non-2xx status code is an error. Response headers are in either
-// *ServiceAccessPolicy.ServerResponse.Header or (if a response was
-// returned at all) in error.(*googleapi.Error).Header. Use
-// googleapi.IsNotModified to check whether the returned error was
-// because http.StatusNotModified was returned.
-func (c *ServicesGetAccessPolicyCall) Do(opts ...googleapi.CallOption) (*ServiceAccessPolicy, error) {
-	gensupport.SetOptions(c.urlParams_, opts...)
-	res, err := c.doRequest("json")
-	if res != nil && res.StatusCode == http.StatusNotModified {
-		if res.Body != nil {
-			res.Body.Close()
-		}
-		return nil, &googleapi.Error{
-			Code:   res.StatusCode,
-			Header: res.Header,
-		}
-	}
-	if err != nil {
-		return nil, err
-	}
-	defer googleapi.CloseBody(res)
-	if err := googleapi.CheckResponse(res); err != nil {
-		return nil, err
-	}
-	ret := &ServiceAccessPolicy{
-		ServerResponse: googleapi.ServerResponse{
-			Header:         res.Header,
-			HTTPStatusCode: res.StatusCode,
-		},
-	}
-	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
-		return nil, err
-	}
-	return ret, nil
-	// {
-	//   "description": "Producer method to retrieve current policy.",
-	//   "flatPath": "v1/services/{serviceName}/accessPolicy",
-	//   "httpMethod": "GET",
-	//   "id": "servicemanagement.services.getAccessPolicy",
-	//   "parameterOrder": [
-	//     "serviceName"
-	//   ],
-	//   "parameters": {
-	//     "serviceName": {
-	//       "description": "The name of the service.  For example: `example.googleapis.com`.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     }
-	//   },
-	//   "path": "v1/services/{serviceName}/accessPolicy",
-	//   "response": {
-	//     "$ref": "ServiceAccessPolicy"
-	//   },
-	//   "scopes": [
-	//     "https://www.googleapis.com/auth/cloud-platform",
-	//     "https://www.googleapis.com/auth/cloud-platform.read-only",
-	//     "https://www.googleapis.com/auth/service.management",
-	//     "https://www.googleapis.com/auth/service.management.readonly"
-	//   ]
-	// }
-
-}
-
 // method id "servicemanagement.services.getConfig":
 
 type ServicesGetConfigCall struct {
@@ -6798,6 +6883,18 @@ func (r *ServicesService) GetConfig(serviceName string) *ServicesGetConfigCall {
 // service configuration resource.
 func (c *ServicesGetConfigCall) ConfigId(configId string) *ServicesGetConfigCall {
 	c.urlParams_.Set("configId", configId)
+	return c
+}
+
+// View sets the optional parameter "view": Specifies which parts of the
+// Service Config should be returned in the
+// response.
+//
+// Possible values:
+//   "BASIC"
+//   "FULL"
+func (c *ServicesGetConfigCall) View(view string) *ServicesGetConfigCall {
+	c.urlParams_.Set("view", view)
 	return c
 }
 
@@ -6903,6 +7000,15 @@ func (c *ServicesGetConfigCall) Do(opts ...googleapi.CallOption) (*Service1, err
 	//       "description": "The name of the service.  See the [overview](/service-management/overview)\nfor naming requirements.  For example: `example.googleapis.com`.",
 	//       "location": "path",
 	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "view": {
+	//       "description": "Specifies which parts of the Service Config should be returned in the\nresponse.",
+	//       "enum": [
+	//         "BASIC",
+	//         "FULL"
+	//       ],
+	//       "location": "query",
 	//       "type": "string"
 	//     }
 	//   },
@@ -7027,7 +7133,7 @@ func (c *ServicesGetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Policy, er
 	//   ],
 	//   "parameters": {
 	//     "servicesId": {
-	//       "description": "Part of `resource`. REQUIRED: The resource for which the policy is being requested.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
+	//       "description": "Part of `resource`. REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -7059,11 +7165,11 @@ type ServicesListCall struct {
 
 // List: Lists managed services.
 //
-// If called without any authentication, it returns only the public
-// services.
-// If called with authentication, it returns all services that the
-// caller has
-// "servicemanagement.services.get" permission for.
+// Returns all public services. For authenticated users, also returns
+// all
+// services the calling user has "servicemanagement.services.get"
+// permission
+// for.
 //
 // **BETA:** If the caller specifies the `consumer_id`, it returns only
 // the
@@ -7226,7 +7332,7 @@ func (c *ServicesListCall) Do(opts ...googleapi.CallOption) (*ListServicesRespon
 	}
 	return ret, nil
 	// {
-	//   "description": "Lists managed services.\n\nIf called without any authentication, it returns only the public services.\nIf called with authentication, it returns all services that the caller has\n\"servicemanagement.services.get\" permission for.\n\n**BETA:** If the caller specifies the `consumer_id`, it returns only the\nservices enabled on the consumer. The `consumer_id` must have the format\nof \"project:{PROJECT-ID}\".",
+	//   "description": "Lists managed services.\n\nReturns all public services. For authenticated users, also returns all\nservices the calling user has \"servicemanagement.services.get\" permission\nfor.\n\n**BETA:** If the caller specifies the `consumer_id`, it returns only the\nservices enabled on the consumer. The `consumer_id` must have the format\nof \"project:{PROJECT-ID}\".",
 	//   "flatPath": "v1/services",
 	//   "httpMethod": "GET",
 	//   "id": "servicemanagement.services.list",
@@ -7553,7 +7659,7 @@ func (c *ServicesSetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Policy, er
 	//   ],
 	//   "parameters": {
 	//     "servicesId": {
-	//       "description": "Part of `resource`. REQUIRED: The resource for which the policy is being specified.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
+	//       "description": "Part of `resource`. REQUIRED: The resource for which the policy is being specified.\nSee the operation documentation for the appropriate value for this field.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -7589,6 +7695,12 @@ type ServicesTestIamPermissionsCall struct {
 // If the resource does not exist, this will return an empty set
 // of
 // permissions, not a NOT_FOUND error.
+//
+// Note: This operation is designed to be used for building
+// permission-aware
+// UIs and command-line tools, not for authorization checking. This
+// operation
+// may "fail open" without warning.
 func (r *ServicesService) TestIamPermissions(servicesId string, testiampermissionsrequest *TestIamPermissionsRequest) *ServicesTestIamPermissionsCall {
 	c := &ServicesTestIamPermissionsCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.servicesId = servicesId
@@ -7673,7 +7785,7 @@ func (c *ServicesTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (*Test
 	}
 	return ret, nil
 	// {
-	//   "description": "Returns permissions that a caller has on the specified resource.\nIf the resource does not exist, this will return an empty set of\npermissions, not a NOT_FOUND error.",
+	//   "description": "Returns permissions that a caller has on the specified resource.\nIf the resource does not exist, this will return an empty set of\npermissions, not a NOT_FOUND error.\n\nNote: This operation is designed to be used for building permission-aware\nUIs and command-line tools, not for authorization checking. This operation\nmay \"fail open\" without warning.",
 	//   "flatPath": "v1/services/{servicesId}:testIamPermissions",
 	//   "httpMethod": "POST",
 	//   "id": "servicemanagement.services.testIamPermissions",
@@ -7682,7 +7794,7 @@ func (c *ServicesTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (*Test
 	//   ],
 	//   "parameters": {
 	//     "servicesId": {
-	//       "description": "Part of `resource`. REQUIRED: The resource for which the policy detail is being requested.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
+	//       "description": "Part of `resource`. REQUIRED: The resource for which the policy detail is being requested.\nSee the operation documentation for the appropriate value for this field.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -7962,134 +8074,6 @@ func (c *ServicesUpdateCall) Do(opts ...googleapi.CallOption) (*Operation, error
 	//   },
 	//   "response": {
 	//     "$ref": "Operation"
-	//   },
-	//   "scopes": [
-	//     "https://www.googleapis.com/auth/cloud-platform",
-	//     "https://www.googleapis.com/auth/service.management"
-	//   ]
-	// }
-
-}
-
-// method id "servicemanagement.services.updateAccessPolicy":
-
-type ServicesUpdateAccessPolicyCall struct {
-	s                   *Service
-	serviceName         string
-	serviceaccesspolicy *ServiceAccessPolicy
-	urlParams_          gensupport.URLParams
-	ctx_                context.Context
-}
-
-// UpdateAccessPolicy: Producer method to update the current policy.
-// This method will return an
-// error if the policy is too large (more than 50 entries across all
-// lists).
-func (r *ServicesService) UpdateAccessPolicy(serviceName string, serviceaccesspolicy *ServiceAccessPolicy) *ServicesUpdateAccessPolicyCall {
-	c := &ServicesUpdateAccessPolicyCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.serviceName = serviceName
-	c.serviceaccesspolicy = serviceaccesspolicy
-	return c
-}
-
-// Fields allows partial responses to be retrieved. See
-// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
-// for more information.
-func (c *ServicesUpdateAccessPolicyCall) Fields(s ...googleapi.Field) *ServicesUpdateAccessPolicyCall {
-	c.urlParams_.Set("fields", googleapi.CombineFields(s))
-	return c
-}
-
-// Context sets the context to be used in this call's Do method. Any
-// pending HTTP request will be aborted if the provided context is
-// canceled.
-func (c *ServicesUpdateAccessPolicyCall) Context(ctx context.Context) *ServicesUpdateAccessPolicyCall {
-	c.ctx_ = ctx
-	return c
-}
-
-func (c *ServicesUpdateAccessPolicyCall) doRequest(alt string) (*http.Response, error) {
-	reqHeaders := make(http.Header)
-	reqHeaders.Set("User-Agent", c.s.userAgent())
-	var body io.Reader = nil
-	body, err := googleapi.WithoutDataWrapper.JSONReader(c.serviceaccesspolicy)
-	if err != nil {
-		return nil, err
-	}
-	reqHeaders.Set("Content-Type", "application/json")
-	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/services/{serviceName}/accessPolicy")
-	urls += "?" + c.urlParams_.Encode()
-	req, _ := http.NewRequest("PUT", urls, body)
-	req.Header = reqHeaders
-	googleapi.Expand(req.URL, map[string]string{
-		"serviceName": c.serviceName,
-	})
-	if c.ctx_ != nil {
-		return ctxhttp.Do(c.ctx_, c.s.client, req)
-	}
-	return c.s.client.Do(req)
-}
-
-// Do executes the "servicemanagement.services.updateAccessPolicy" call.
-// Exactly one of *ServiceAccessPolicy or error will be non-nil. Any
-// non-2xx status code is an error. Response headers are in either
-// *ServiceAccessPolicy.ServerResponse.Header or (if a response was
-// returned at all) in error.(*googleapi.Error).Header. Use
-// googleapi.IsNotModified to check whether the returned error was
-// because http.StatusNotModified was returned.
-func (c *ServicesUpdateAccessPolicyCall) Do(opts ...googleapi.CallOption) (*ServiceAccessPolicy, error) {
-	gensupport.SetOptions(c.urlParams_, opts...)
-	res, err := c.doRequest("json")
-	if res != nil && res.StatusCode == http.StatusNotModified {
-		if res.Body != nil {
-			res.Body.Close()
-		}
-		return nil, &googleapi.Error{
-			Code:   res.StatusCode,
-			Header: res.Header,
-		}
-	}
-	if err != nil {
-		return nil, err
-	}
-	defer googleapi.CloseBody(res)
-	if err := googleapi.CheckResponse(res); err != nil {
-		return nil, err
-	}
-	ret := &ServiceAccessPolicy{
-		ServerResponse: googleapi.ServerResponse{
-			Header:         res.Header,
-			HTTPStatusCode: res.StatusCode,
-		},
-	}
-	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
-		return nil, err
-	}
-	return ret, nil
-	// {
-	//   "description": "Producer method to update the current policy.  This method will return an\nerror if the policy is too large (more than 50 entries across all lists).",
-	//   "flatPath": "v1/services/{serviceName}/accessPolicy",
-	//   "httpMethod": "PUT",
-	//   "id": "servicemanagement.services.updateAccessPolicy",
-	//   "parameterOrder": [
-	//     "serviceName"
-	//   ],
-	//   "parameters": {
-	//     "serviceName": {
-	//       "description": "The name of the service.  For example: `example.googleapis.com`.\nIf set, policy's service_name should be same as this one.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     }
-	//   },
-	//   "path": "v1/services/{serviceName}/accessPolicy",
-	//   "request": {
-	//     "$ref": "ServiceAccessPolicy"
-	//   },
-	//   "response": {
-	//     "$ref": "ServiceAccessPolicy"
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",
@@ -8388,6 +8372,18 @@ func (r *ServicesConfigsService) Get(serviceName string, configId string) *Servi
 	return c
 }
 
+// View sets the optional parameter "view": Specifies which parts of the
+// Service Config should be returned in the
+// response.
+//
+// Possible values:
+//   "BASIC"
+//   "FULL"
+func (c *ServicesConfigsGetCall) View(view string) *ServicesConfigsGetCall {
+	c.urlParams_.Set("view", view)
+	return c
+}
+
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
@@ -8493,6 +8489,15 @@ func (c *ServicesConfigsGetCall) Do(opts ...googleapi.CallOption) (*Service1, er
 	//       "description": "The name of the service.  See the [overview](/service-management/overview)\nfor naming requirements.  For example: `example.googleapis.com`.",
 	//       "location": "path",
 	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "view": {
+	//       "description": "Specifies which parts of the Service Config should be returned in the\nresponse.",
+	//       "enum": [
+	//         "BASIC",
+	//         "FULL"
+	//       ],
+	//       "location": "query",
 	//       "type": "string"
 	//     }
 	//   },

@@ -985,11 +985,10 @@ type JobConfiguration struct {
 
 	// Labels: [Experimental] The labels associated with this job. You can
 	// use these to organize and group your jobs. Label keys and values can
-	// be no longer than 63 characters, can only contain letters, numeric
-	// characters, underscores and dashes. International characters are
-	// allowed. Label values are optional. Label keys must start with a
-	// letter and must be unique within a dataset. Both keys and values are
-	// additionally constrained to be <= 128 bytes in size.
+	// be no longer than 63 characters, can only contain lowercase letters,
+	// numeric characters, underscores and dashes. International characters
+	// are allowed. Label values are optional. Label keys must start with a
+	// letter and each label in the list must have a different key.
 	Labels map[string]string `json:"labels,omitempty"`
 
 	// Load: [Pick one] Configures a load job.
@@ -1269,8 +1268,9 @@ type JobConfigurationQuery struct {
 	// your project default.
 	MaximumBytesBilled int64 `json:"maximumBytesBilled,omitempty,string"`
 
-	// ParameterMode: [Experimental] Standard SQL only. Whether to use
-	// positional (?) or named (@myparam) query parameters in this query.
+	// ParameterMode: [Experimental] Standard SQL only. Set to POSITIONAL to
+	// use positional (?) query parameters or to NAMED to use named
+	// (@myparam) query parameters in this query.
 	ParameterMode string `json:"parameterMode,omitempty"`
 
 	// PreserveNulls: [Deprecated] This property is deprecated.
@@ -1902,8 +1902,9 @@ type QueryRequest struct {
 	// only the byte limit applies.
 	MaxResults int64 `json:"maxResults,omitempty"`
 
-	// ParameterMode: [Experimental] Standard SQL only. Whether to use
-	// positional (?) or named (@myparam) query parameters in this query.
+	// ParameterMode: [Experimental] Standard SQL only. Set to POSITIONAL to
+	// use positional (?) query parameters or to NAMED to use named
+	// (@myparam) query parameters in this query.
 	ParameterMode string `json:"parameterMode,omitempty"`
 
 	// PreserveNulls: [Deprecated] This property is deprecated.
@@ -2094,11 +2095,11 @@ type Table struct {
 
 	// Labels: [Experimental] The labels associated with this table. You can
 	// use these to organize and group your tables. Label keys and values
-	// can be no longer than 63 characters, can only contain letters,
-	// numeric characters, underscores and dashes. International characters
-	// are allowed. Label values are optional. Label keys must start with a
-	// letter and must be unique within a dataset. Both keys and values are
-	// additionally constrained to be <= 128 bytes in size.
+	// can be no longer than 63 characters, can only contain lowercase
+	// letters, numeric characters, underscores and dashes. International
+	// characters are allowed. Label values are optional. Label keys must
+	// start with a letter and each label in the list must have a different
+	// key.
 	Labels map[string]string `json:"labels,omitempty"`
 
 	// LastModifiedTime: [Output-only] The time when this table was last

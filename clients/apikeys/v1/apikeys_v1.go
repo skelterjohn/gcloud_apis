@@ -163,6 +163,10 @@ type ApiKey struct {
 	// AndroidKeyDetails: Key details that are specific to android keys.
 	AndroidKeyDetails *AndroidKeyDetails `json:"androidKeyDetails,omitempty"`
 
+	// ApiTargetKeyDetails: API Target key details. These restrict which API
+	// a key can be used on.
+	ApiTargetKeyDetails *ApiTargetKeyDetails `json:"apiTargetKeyDetails,omitempty"`
+
 	// BrowserKeyDetails: Key details that are specific to browser keys.
 	BrowserKeyDetails *BrowserKeyDetails `json:"browserKeyDetails,omitempty"`
 
@@ -222,6 +226,64 @@ type ApiKey struct {
 
 func (s *ApiKey) MarshalJSON() ([]byte, error) {
 	type noMethod ApiKey
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// ApiTarget: A restriction for a specific service and optionally one or
+// multiple
+// specific methods. Both fields are not case sensitive.
+type ApiTarget struct {
+	// Methods: An optional list of one or more methods that can be
+	// called.
+	// If empty, all methods for the service are allowed. A wildcard
+	// (*) can be used as the last
+	// symbol.
+	// Examples:
+	// google.api.apikeys.v1.ApiKeys.ListApiKeys
+	// google.api
+	// .apikeys.v1.ApiKeys.Get*
+	// google.api.apikeys.v1.ApiKeys.Delete*
+	Methods []string `json:"methods,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Methods") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *ApiTarget) MarshalJSON() ([]byte, error) {
+	type noMethod ApiTarget
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// ApiTargetKeyDetails: Key details that specify which APIs a key is
+// allowed to be used on.
+type ApiTargetKeyDetails struct {
+	// ApiTargets: A restriction for a specific service and optionally one
+	// or
+	// multiple specific methods. Requests will be allowed if they
+	// match any of these restrictions. If no restrictions are
+	// specified, all targets are allowed.
+	// Key is the service name for this restriction
+	// Example: apikeys.googleapis.com
+	ApiTargets map[string]ApiTarget `json:"apiTargets,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "ApiTargets") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *ApiTargetKeyDetails) MarshalJSON() ([]byte, error) {
+	type noMethod ApiTargetKeyDetails
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }

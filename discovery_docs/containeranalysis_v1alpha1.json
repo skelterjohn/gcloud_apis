@@ -137,7 +137,7 @@
           "type": "string"
         },
         "kind": {
-          "description": "This explicitly denotes which of the occurrence details is specified.\n@OutputOnly",
+          "description": "This explicitly denotes which of the occurrence details is specified.\nThis field can be used as a filter in list requests.\n@OutputOnly",
           "enumDescriptions": [
             "Unknown",
             "The note and occurrence represent a package vulnerability.",
@@ -941,7 +941,7 @@
           "type": "string"
         },
         "kind": {
-          "description": "This explicitly denotes which kind of note is specified.\n@OutputOnly",
+          "description": "This explicitly denotes which kind of note is specified.\nThis field can be used as a filter in list requests.\n@OutputOnly",
           "enumDescriptions": [
             "Unknown",
             "The note and occurrence represent a package vulnerability.",
@@ -1261,7 +1261,7 @@
           }
         },
         "auditConfigs": {
-          "description": "Specifies audit logging configs for \"data access\".\n\"data access\": generally refers to data reads\/writes and admin reads.\n\"admin activity\": generally refers to admin writes.\n\nNote: `AuditConfig` doesn't apply to \"admin activity\", which always\nenables audit logging.",
+          "description": "Specifies cloud audit logging configuration for this policy.",
           "type": "array",
           "items": {
             "$ref": "AuditConfig"
@@ -1305,7 +1305,7 @@
     },
     "AuditConfig": {
       "id": "AuditConfig",
-      "description": "Provides the configuration for non-admin_activity logging for a service.\nControls exemptions and specific log sub-types.",
+      "description": "Specifies the audit configuration for a service.\nIt consists of which permission types are logged, and what identities, if\nany, are exempted from logging.\nAn AuditConifg must have one or more AuditLogConfigs.\n\nIf there are AuditConfigs for both `allServices` and a specific service,\nthe union of the two AuditConfigs is used for that service: the log_types\nspecified in each AuditConfig are enabled, and the exempted_members in each\nAuditConfig are exempted.\nExample Policy with multiple AuditConfigs:\n{\n  \"audit_configs\": [\n    {\n      \"service\": \"allServices\"\n      \"audit_log_configs\": [\n        {\n          \"log_type\": \"DATA_READ\",\n          \"exempted_members\": [\n            \"user:foo@gmail.com\"\n          ]\n        },\n        {\n          \"log_type\": \"DATA_WRITE\",\n        },\n        {\n          \"log_type\": \"ADMIN_READ\",\n        }\n      ]\n    },\n    {\n      \"service\": \"fooservice@googleapis.com\"\n      \"audit_log_configs\": [\n        {\n          \"log_type\": \"DATA_READ\",\n        },\n        {\n          \"log_type\": \"DATA_WRITE\",\n          \"exempted_members\": [\n            \"user:bar@gmail.com\"\n          ]\n        }\n      ]\n    }\n  ]\n}\nFor fooservice, this policy enables DATA_READ, DATA_WRITE and ADMIN_READ\nlogging. It also exempts foo@gmail.com from DATA_READ logging, and\nbar@gmail.com from DATA_WRITE logging.",
       "type": "object",
       "properties": {
         "service": {
@@ -1313,14 +1313,14 @@
           "type": "string"
         },
         "exemptedMembers": {
-          "description": "Specifies the identities that are exempted from \"data access\" audit\nlogging for the `service` specified above.\nFollows the same format of Binding.members.",
+
           "type": "array",
           "items": {
             "type": "string"
           }
         },
         "auditLogConfigs": {
-          "description": "The configuration for each type of logging\nNext ID: 4",
+          "description": "The configuration for logging of each type of permission.\nNext ID: 4",
           "type": "array",
           "items": {
             "$ref": "AuditLogConfig"
@@ -1330,16 +1330,16 @@
     },
     "AuditLogConfig": {
       "id": "AuditLogConfig",
-      "description": "Provides the configuration for a sub-type of logging.",
+      "description": "Provides the configuration for logging a type of permissions.\nExample:\n\n    {\n      \"audit_log_configs\": [\n        {\n          \"log_type\": \"DATA_READ\",\n          \"exempted_members\": [\n            \"user:foo@gmail.com\"\n          ]\n        },\n        {\n          \"log_type\": \"DATA_WRITE\",\n        }\n      ]\n    }\n\nThis enables 'DATA_READ' and 'DATA_WRITE' logging, while exempting\nfoo@gmail.com from DATA_READ logging.",
       "type": "object",
       "properties": {
         "logType": {
           "description": "The log type that this config enables.",
           "enumDescriptions": [
             "Default case. Should never be this.",
-            "Log admin reads",
-            "Log data writes",
-            "Log data reads"
+            "Admin reads. Example: CloudIAM getIamPolicy",
+            "Data writes. Example: CloudSQL Users create",
+            "Data reads. Example: CloudSQL Users list"
           ],
           "type": "string",
           "enum": [
@@ -1350,7 +1350,7 @@
           ]
         },
         "exemptedMembers": {
-          "description": "Specifies the identities that are exempted from this type of logging\nFollows the same format of Binding.members.",
+          "description": "Specifies the identities that do not cause logging for this type of\npermission.\nFollows the same format of Binding.members.",
           "type": "array",
           "items": {
             "type": "string"
@@ -1434,13 +1434,15 @@
           "enumDescriptions": [
             "Default non-attribute.",
             "Either principal or (if present) authority selector.",
-            "The principal (even if an authority selector is present), which\nmust only be used for attribution, not authorization."
+            "The principal (even if an authority selector is present), which\nmust only be used for attribution, not authorization.",
+            "An approver (distinct from the requester) that has authorized this\nrequest.\nWhen used with IN, the condition indicates that one of the approvers\nassociated with the request matches the specified principal, or is a\nmember of the specified group. Approvers can only grant additional\naccess, and are thus only used in a strictly positive context\n(e.g. ALLOW\/IN or DENY\/NOT_IN).\nSee: go\/rpc-security-policy-dynamicauth."
           ],
           "type": "string",
           "enum": [
             "NO_ATTR",
             "AUTHORITY",
-            "ATTRIBUTION"
+            "ATTRIBUTION",
+            "APPROVER"
           ]
         },
         "sys": {
@@ -1777,7 +1779,7 @@
               "description": "Sets the access control policy on the specified note or occurrence\nresource.\nRequires \"containeranalysis.notes.setIamPolicy\" or\n\"containeranalysis.occurrences.setIamPolicy\" permission if the resource is\na note or occurrence, respectively.\nAttempting this RPC on a resource without the needed permission will note\nin a PERMISSION_DENIED error.\nAttempting this RPC on a non-existent resource will note in a NOT_FOUND\nerror if the user has list permission on the project, or a\nPERMISSION_DENIED error otherwise.",
               "parameters": {
                 "resource": {
-                  "description": "REQUIRED: The resource for which the policy is being specified.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects\/{project}`.",
+                  "description": "REQUIRED: The resource for which the policy is being specified.\nSee the operation documentation for the appropriate value for this field.",
                   "location": "path",
                   "required": true,
                   "pattern": "^projects\/[^\/]+\/occurrences\/[^\/]+$",
@@ -1805,7 +1807,7 @@
               "description": "Gets the access control policy for a note or occurrence resource.\nRequires \"containeranalysis.notes.setIamPolicy\" or\n\"containeranalysis.occurrences.setIamPolicy\" permission if the resource is\na note or occurrence, respectively.\nAttempting this RPC on a resource without the needed permission will note\nin a PERMISSION_DENIED error.\nAttempting this RPC on a non-existent resource will note in a NOT_FOUND\nerror if the user has list permission on the project,\nor a PERMISSION_DENIED error otherwise.",
               "parameters": {
                 "resource": {
-                  "description": "REQUIRED: The resource for which the policy is being requested.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects\/{project}`.",
+                  "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
                   "location": "path",
                   "required": true,
                   "pattern": "^projects\/[^\/]+\/occurrences\/[^\/]+$",
@@ -1833,7 +1835,7 @@
               "description": "Returns permissions that a caller has on the specified note or occurrence\nresource.\nRequires list permission on the project (e.g., \"storage.objects.list\" on\nthe containing bucket for testing permission of an object).\nAttempting this RPC on a non-existent resource will note in a NOT_FOUND\nerror if the user has list permission on the project,\nor a PERMISSION_DENIED error otherwise.",
               "parameters": {
                 "resource": {
-                  "description": "REQUIRED: The resource for which the policy detail is being requested.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects\/{project}`.",
+                  "description": "REQUIRED: The resource for which the policy detail is being requested.\nSee the operation documentation for the appropriate value for this field.",
                   "location": "path",
                   "required": true,
                   "pattern": "^projects\/[^\/]+\/occurrences\/[^\/]+$",
@@ -2027,7 +2029,7 @@
               "description": "Sets the access control policy on the specified note or occurrence\nresource.\nRequires \"containeranalysis.notes.setIamPolicy\" or\n\"containeranalysis.occurrences.setIamPolicy\" permission if the resource is\na note or occurrence, respectively.\nAttempting this RPC on a resource without the needed permission will note\nin a PERMISSION_DENIED error.\nAttempting this RPC on a non-existent resource will note in a NOT_FOUND\nerror if the user has list permission on the project, or a\nPERMISSION_DENIED error otherwise.",
               "parameters": {
                 "resource": {
-                  "description": "REQUIRED: The resource for which the policy is being specified.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects\/{project}`.",
+                  "description": "REQUIRED: The resource for which the policy is being specified.\nSee the operation documentation for the appropriate value for this field.",
                   "location": "path",
                   "required": true,
                   "pattern": "^projects\/[^\/]+\/notes\/[^\/]+$",
@@ -2055,7 +2057,7 @@
               "description": "Gets the access control policy for a note or occurrence resource.\nRequires \"containeranalysis.notes.setIamPolicy\" or\n\"containeranalysis.occurrences.setIamPolicy\" permission if the resource is\na note or occurrence, respectively.\nAttempting this RPC on a resource without the needed permission will note\nin a PERMISSION_DENIED error.\nAttempting this RPC on a non-existent resource will note in a NOT_FOUND\nerror if the user has list permission on the project,\nor a PERMISSION_DENIED error otherwise.",
               "parameters": {
                 "resource": {
-                  "description": "REQUIRED: The resource for which the policy is being requested.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects\/{project}`.",
+                  "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
                   "location": "path",
                   "required": true,
                   "pattern": "^projects\/[^\/]+\/notes\/[^\/]+$",
@@ -2083,7 +2085,7 @@
               "description": "Returns permissions that a caller has on the specified note or occurrence\nresource.\nRequires list permission on the project (e.g., \"storage.objects.list\" on\nthe containing bucket for testing permission of an object).\nAttempting this RPC on a non-existent resource will note in a NOT_FOUND\nerror if the user has list permission on the project,\nor a PERMISSION_DENIED error otherwise.",
               "parameters": {
                 "resource": {
-                  "description": "REQUIRED: The resource for which the policy detail is being requested.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects\/{project}`.",
+                  "description": "REQUIRED: The resource for which the policy detail is being requested.\nSee the operation documentation for the appropriate value for this field.",
                   "location": "path",
                   "required": true,
                   "pattern": "^projects\/[^\/]+\/notes\/[^\/]+$",
@@ -2329,7 +2331,7 @@
               "description": "Sets the access control policy on the specified note or occurrence\nresource.\nRequires \"containeranalysis.notes.setIamPolicy\" or\n\"containeranalysis.occurrences.setIamPolicy\" permission if the resource is\na note or occurrence, respectively.\nAttempting this RPC on a resource without the needed permission will note\nin a PERMISSION_DENIED error.\nAttempting this RPC on a non-existent resource will note in a NOT_FOUND\nerror if the user has list permission on the project, or a\nPERMISSION_DENIED error otherwise.",
               "parameters": {
                 "resource": {
-                  "description": "REQUIRED: The resource for which the policy is being specified.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects\/{project}`.",
+                  "description": "REQUIRED: The resource for which the policy is being specified.\nSee the operation documentation for the appropriate value for this field.",
                   "location": "path",
                   "required": true,
                   "pattern": "^providers\/[^\/]+\/notes\/[^\/]+$",
@@ -2357,7 +2359,7 @@
               "description": "Gets the access control policy for a note or occurrence resource.\nRequires \"containeranalysis.notes.setIamPolicy\" or\n\"containeranalysis.occurrences.setIamPolicy\" permission if the resource is\na note or occurrence, respectively.\nAttempting this RPC on a resource without the needed permission will note\nin a PERMISSION_DENIED error.\nAttempting this RPC on a non-existent resource will note in a NOT_FOUND\nerror if the user has list permission on the project,\nor a PERMISSION_DENIED error otherwise.",
               "parameters": {
                 "resource": {
-                  "description": "REQUIRED: The resource for which the policy is being requested.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects\/{project}`.",
+                  "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
                   "location": "path",
                   "required": true,
                   "pattern": "^providers\/[^\/]+\/notes\/[^\/]+$",
@@ -2385,7 +2387,7 @@
               "description": "Returns permissions that a caller has on the specified note or occurrence\nresource.\nRequires list permission on the project (e.g., \"storage.objects.list\" on\nthe containing bucket for testing permission of an object).\nAttempting this RPC on a non-existent resource will note in a NOT_FOUND\nerror if the user has list permission on the project,\nor a PERMISSION_DENIED error otherwise.",
               "parameters": {
                 "resource": {
-                  "description": "REQUIRED: The resource for which the policy detail is being requested.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects\/{project}`.",
+                  "description": "REQUIRED: The resource for which the policy detail is being requested.\nSee the operation documentation for the appropriate value for this field.",
                   "location": "path",
                   "required": true,
                   "pattern": "^providers\/[^\/]+\/notes\/[^\/]+$",

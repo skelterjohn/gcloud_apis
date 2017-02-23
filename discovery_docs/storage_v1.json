@@ -4,7 +4,7 @@
  "id": "storage:v1",
  "name": "storage",
  "version": "v1",
- "revision": "20170103",
+ "revision": "20170223",
  "title": "Cloud Storage JSON API",
  "description": "Stores and retrieves potentially large, immutable data objects.",
  "ownerDomain": "google.com",
@@ -155,7 +155,7 @@
     },
     "id": {
      "type": "string",
-     "description": "The ID of the bucket."
+     "description": "The ID of the bucket. For buckets, the id and name properities are the same."
     },
     "kind": {
      "type": "string",
@@ -690,7 +690,7 @@
     },
     "id": {
      "type": "string",
-     "description": "The ID of the object."
+     "description": "The ID of the object, including the bucket name, object name, and generation number."
     },
     "kind": {
      "type": "string",
@@ -720,7 +720,7 @@
     },
     "name": {
      "type": "string",
-     "description": "The name of this object. Required if not specified by URL parameter."
+     "description": "The name of the object. Required if not specified by URL parameter."
     },
     "owner": {
      "type": "object",
@@ -1419,7 +1419,8 @@
      "parameters": {
       "maxResults": {
        "type": "integer",
-       "description": "Maximum number of buckets to return.",
+       "description": "Maximum number of buckets to return in a single response. The service will use this parameter or 1,000 items, whichever is smaller.",
+       "default": "1000",
        "format": "uint32",
        "minimum": "0",
        "location": "query"
@@ -2832,7 +2833,8 @@
       },
       "maxResults": {
        "type": "integer",
-       "description": "Maximum number of items plus prefixes to return. As duplicate prefixes are omitted, fewer total results may be returned than requested. The default value of this parameter is 1,000 items.",
+       "description": "Maximum number of items plus prefixes to return in a single page of responses. As duplicate prefixes are omitted, fewer total results may be returned than requested. The service will use this parameter or 1,000 items, whichever is smaller.",
+       "default": "1000",
        "format": "uint32",
        "minimum": "0",
        "location": "query"
@@ -3334,7 +3336,8 @@
       },
       "maxResults": {
        "type": "integer",
-       "description": "Maximum number of items plus prefixes to return. As duplicate prefixes are omitted, fewer total results may be returned than requested. The default value of this parameter is 1,000 items.",
+       "description": "Maximum number of items plus prefixes to return in a single page of responses. As duplicate prefixes are omitted, fewer total results may be returned than requested. The service will use this parameter or 1,000 items, whichever is smaller.",
+       "default": "1000",
        "format": "uint32",
        "minimum": "0",
        "location": "query"

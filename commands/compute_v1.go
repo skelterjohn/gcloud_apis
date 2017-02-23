@@ -1199,6 +1199,515 @@ func Compute_v1_AutoscalersUpdate(context Context, args ...string) error {
 	return nil
 }
 
+func Compute_v1_BackendBucketsDelete(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("backendBucket"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/global/backendBuckets/{backendBucket}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewBackendBucketsService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"backendBucket",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_backendBucket, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.Delete(param_project, param_backendBucket)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_BackendBucketsGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("backendBucket"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/global/backendBuckets/{backendBucket}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewBackendBucketsService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+		"backendBucket",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_backendBucket, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_project, param_backendBucket)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_BackendBucketsInsert(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/global/backendBuckets", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.BackendBucket{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewBackendBucketsService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.BackendBucket{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Insert(param_project,
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_BackendBucketsList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/global/backendBuckets", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--filter=VALUE]"
+
+		usageBits += " [--maxResults=VALUE]"
+
+		usageBits += " [--orderBy=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewBackendBucketsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter":     false,
+		"maxResults": false,
+		"orderBy":    false,
+		"pageToken":  false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"project",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_project)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+	if value, ok := flagValues["maxResults"]; ok {
+		query_maxResults, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.MaxResults(query_maxResults)
+	}
+	if value, ok := flagValues["orderBy"]; ok {
+		query_orderBy, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.OrderBy(query_orderBy)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_BackendBucketsPatch(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("backendBucket"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/global/backendBuckets/{backendBucket}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.BackendBucket{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewBackendBucketsService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.BackendBucket{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"backendBucket",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_backendBucket, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.Patch(param_project, param_backendBucket,
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Compute_v1_BackendBucketsUpdate(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("project"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("backendBucket"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{project}/global/backendBuckets/{backendBucket}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.BackendBucket{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewBackendBucketsService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.BackendBucket{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"project",
+		"backendBucket",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_project, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_backendBucket, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+
+	call := service.Update(param_project, param_backendBucket,
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func Compute_v1_BackendServicesAggregatedList(context Context, args ...string) error {
 
 	usageFunc := func() {
@@ -2354,6 +2863,8 @@ func Compute_v1_DisksCreateSnapshot(context Context, args ...string) error {
 
 		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
 
+		usageBits += " [--guestFlush=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 		commands_util.PrintRequestExample(&api_client.Snapshot{})
 
@@ -2366,9 +2877,19 @@ func Compute_v1_DisksCreateSnapshot(context Context, args ...string) error {
 	}
 	service := api_client.NewDisksService(api_service)
 
+	queryParamNames := map[string]bool{
+		"guestFlush": false,
+	}
+
 	args, flagValues, err := commands_util.ExtractFlagValues(args)
 	if err != nil {
 		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
 	}
 
 	// Only positional arguments should remain in args.
@@ -2384,7 +2905,13 @@ func Compute_v1_DisksCreateSnapshot(context Context, args ...string) error {
 		}
 	}
 
-	keyValues := flagValues
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
 
 	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
 	if err != nil {
@@ -2417,6 +2944,15 @@ func Compute_v1_DisksCreateSnapshot(context Context, args ...string) error {
 	call := service.CreateSnapshot(param_project, param_zone, param_disk,
 		request,
 	)
+
+	// Set query parameters.
+	if value, ok := flagValues["guestFlush"]; ok {
+		query_guestFlush, err := commands_util.ConvertValue_bool(value)
+		if err != nil {
+			return err
+		}
+		call.GuestFlush(query_guestFlush)
+	}
 
 	response, err := call.Do()
 	if err != nil {

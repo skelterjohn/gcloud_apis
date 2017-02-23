@@ -409,9 +409,9 @@ type Organization struct {
 
 	// DisplayName: A friendly string to be used to refer to the
 	// Organization in the UI.
-	// Assigned by the server, set to the firm name of the Google For
-	// Work
-	// customer that owns this organization.
+	// Assigned by the server, set to the primary domain of the G
+	// Suite
+	// customer that owns the organization.
 	// @OutputOnly
 	DisplayName string `json:"displayName,omitempty"`
 
@@ -580,7 +580,7 @@ func (s *Policy) MarshalJSON() ([]byte, error) {
 
 // Project: A Project is a high-level Google Cloud Platform entity.  It
 // is a
-// container for ACLs, APIs, AppEngine Apps, VMs, and other
+// container for ACLs, APIs, App Engine Apps, VMs, and other
 // Google Cloud Platform resources.
 type Project struct {
 	// CreateTime: Creation time.
@@ -607,7 +607,6 @@ type Project struct {
 	// depend on specific characters being disallowed.
 	//
 	// Example: <code>"environment" : "dev"</code>
-	//
 	// Read-write.
 	Labels map[string]string `json:"labels,omitempty"`
 
@@ -637,7 +636,6 @@ type Project struct {
 	// point.
 	//
 	// Example: <code>My Project</code>
-	//
 	// Read-write.
 	Name string `json:"name,omitempty"`
 
@@ -661,14 +659,12 @@ type Project struct {
 	// Trailing hyphens are prohibited.
 	//
 	// Example: <code>tokyo-rain-123</code>
-	//
 	// Read-only after creation.
 	ProjectId string `json:"projectId,omitempty"`
 
 	// ProjectNumber: The number uniquely identifying the project.
 	//
 	// Example: <code>415104041262</code>
-	//
 	// Read-only.
 	ProjectNumber int64 `json:"projectNumber,omitempty,string"`
 
@@ -729,8 +725,8 @@ func (s *ProjectCreationStatus) MarshalJSON() ([]byte, error) {
 // `resource` in Google
 // Cloud Platform is a generic term for something you (a developer) may
 // want to
-// interact with through one of our API's. Some examples are an
-// AppEngine app,
+// interact with through one of our API's. Some examples are an App
+// Engine app,
 // a Compute Engine instance, a Cloud SQL database, and so on.
 type ResourceId struct {
 	// Id: Required field for the type-specific id. This should correspond
@@ -1094,7 +1090,7 @@ func (c *OrganizationsGetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Polic
 	//   ],
 	//   "parameters": {
 	//     "organizationsId": {
-	//       "description": "Part of `resource`. REQUIRED: The resource for which the policy is being requested.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
+	//       "description": "Part of `resource`. REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -1423,7 +1419,7 @@ func (c *OrganizationsSetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Polic
 	//   ],
 	//   "parameters": {
 	//     "organizationsId": {
-	//       "description": "Part of `resource`. REQUIRED: The resource for which the policy is being specified.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
+	//       "description": "Part of `resource`. REQUIRED: The resource for which the policy is being specified.\nSee the operation documentation for the appropriate value for this field.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -1550,7 +1546,7 @@ func (c *OrganizationsTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (
 	//   ],
 	//   "parameters": {
 	//     "organizationsId": {
-	//       "description": "Part of `resource`. REQUIRED: The resource for which the policy detail is being requested.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
+	//       "description": "Part of `resource`. REQUIRED: The resource for which the policy detail is being requested.\nSee the operation documentation for the appropriate value for this field.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -2338,7 +2334,7 @@ func (c *ProjectsGetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Policy, er
 	//   ],
 	//   "parameters": {
 	//     "resource": {
-	//       "description": "REQUIRED: The resource for which the policy is being requested.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
+	//       "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -2719,7 +2715,7 @@ func (c *ProjectsSetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Policy, er
 	//   ],
 	//   "parameters": {
 	//     "resource": {
-	//       "description": "REQUIRED: The resource for which the policy is being specified.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
+	//       "description": "REQUIRED: The resource for which the policy is being specified.\nSee the operation documentation for the appropriate value for this field.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"
@@ -2844,7 +2840,7 @@ func (c *ProjectsTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (*Test
 	//   ],
 	//   "parameters": {
 	//     "resource": {
-	//       "description": "REQUIRED: The resource for which the policy detail is being requested.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects/{project}`.",
+	//       "description": "REQUIRED: The resource for which the policy detail is being requested.\nSee the operation documentation for the appropriate value for this field.",
 	//       "location": "path",
 	//       "required": true,
 	//       "type": "string"

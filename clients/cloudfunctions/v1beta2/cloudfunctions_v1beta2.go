@@ -120,7 +120,7 @@ type ProjectsLocationsFunctionsService struct {
 	s *Service
 }
 
-// CallFunctionRequest: Request for the CallFunction method.
+// CallFunctionRequest: Request for the `CallFunction` method.
 type CallFunctionRequest struct {
 	// Data: Input to be passed to the function.
 	Data string `json:"data,omitempty"`
@@ -140,7 +140,7 @@ func (s *CallFunctionRequest) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// CallFunctionResponse: Response of CallFunction method.
+// CallFunctionResponse: Response of `CallFunction` method.
 type CallFunctionResponse struct {
 	// Error: Either system or user-function generated error. Set if
 	// execution
@@ -191,65 +191,33 @@ type CloudFunction struct {
 	// For
 	// backward compatibility, if function with given name is not found,
 	// then the
-	// system will try to use function named 'function'.
+	// system will try to use function named "function".
 	// For Node.js this is name of a function exported by the module
 	// specified
-	// in source_location.
+	// in `source_location`.
 	EntryPoint string `json:"entryPoint,omitempty"`
 
 	// EventTrigger: A source that fires events in response to a condition
 	// in another service.
 	EventTrigger *EventTrigger `json:"eventTrigger,omitempty"`
 
-	// GcsTrigger: Google Cloud Storage resource whose changes trigger the
-	// events.
-	// Currently, it must have the form gs://<bucket>/ (that is, it must
-	// refer
-	// to a bucket, rather than an object).
-	//
-	// Deprecated: To be removed by Beta.
-	// Replacement:
-	//   condition_trigger: {
-	//     action: "sources/cloud.pubsub/actions/publish"
-	//     resource: "projects/[PROJECT_NAME]/buckets/[BUCKET_NAME]"
-	//   }
-	GcsTrigger string `json:"gcsTrigger,omitempty"`
-
-	// GcsUrl: Google Cloud Storage URL pointing to the zip archive which
-	// contains the
-	// function.
-	//
-	// Deprecated: To be removed by Beta.
-	// Replacement: source_archive_url
-	GcsUrl string `json:"gcsUrl,omitempty"`
-
-	// HttpsTrigger: A https endpoint type of source that can be trigger via
-	// URL.
+	// HttpsTrigger: A https endpoint type of source that can be triggered
+	// via URL.
 	HttpsTrigger *HTTPSTrigger `json:"httpsTrigger,omitempty"`
 
-	// LatestOperation: Name of the most recent operation modifying the
-	// function. If
-	// the function status is DEPLOYING or DELETING, then it points to the
-	// active
-	// operation. Output only.
+	// LatestOperation: Output only. Name of the most recent operation
+	// modifying the function. If
+	// the function status is `DEPLOYING` or `DELETING`, then it points to
+	// the
+	// active operation.
 	LatestOperation string `json:"latestOperation,omitempty"`
 
 	// Name: A user-defined name of the function. Function names must be
 	// unique
-	// globally and match pattern: projects/*/locations/*/functions/*
+	// globally and match pattern `projects/*/locations/*/functions/*`
 	Name string `json:"name,omitempty"`
 
-	// PubsubTrigger: A pub/sub type of source.
-	//
-	// Deprecated: To be removed by Beta.
-	// Replacement:
-	//   condition_trigger: {
-	//     action: "sources/cloud.pubsub/actions/publish"
-	//     resource: "projects/[PROJECT_ID]/topics/[TOPIC_NAME]"
-	//   }
-	PubsubTrigger string `json:"pubsubTrigger,omitempty"`
-
-	// ServiceAccount: The service account of the function. Output only.
+	// ServiceAccount: Output only. The service account of the function.
 	ServiceAccount string `json:"serviceAccount,omitempty"`
 
 	// SourceArchiveUrl: The URL, starting with gs://, pointing to the zip
@@ -261,7 +229,7 @@ type CloudFunction struct {
 	// defined.
 	SourceRepository *SourceRepository `json:"sourceRepository,omitempty"`
 
-	// Status: Status of the function deployment. Output only.
+	// Status: Output only. Status of the function deployment.
 	//
 	// Possible values:
 	//   "STATUS_UNSPECIFIED" - Status not specified.
@@ -279,6 +247,10 @@ type CloudFunction struct {
 	// the
 	// timeout period. Defaults to 60 seconds.
 	Timeout string `json:"timeout,omitempty"`
+
+	// UpdateTime: Output only. The last update timestamp of a cloud
+	// function.
+	UpdateTime string `json:"updateTime,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
@@ -303,39 +275,31 @@ func (s *CloudFunction) MarshalJSON() ([]byte, error) {
 // from another
 // service.
 type EventTrigger struct {
-	// EventType: event_type names contain the service that is sending an
-	// event and the kind
-	// of event that was fired. Must be of the form
-	// providers/*/eventTypes/*
-	// e.g. Directly handle a Message published to Google Cloud PubSub
-	//      providers/cloud.pubsub/eventTypes/topic.publish
+	// EventType: `event_type` names contain the service that is sending an
+	// event and the
+	// kind of event that was fired. Must be of the
+	// form
+	// `providers/*/eventTypes/*` e.g. Directly handle a Message published
+	// to
+	// Google Cloud PubSub
+	// `providers/cloud.pubsub/eventTypes/topic.publish`
 	//
 	//      Handle an object changing in Google Cloud Storage
-	//      providers/cloud.storage/eventTypes/object.change
+	//      `providers/cloud.storage/eventTypes/object.change`
 	//
 	//      Handle a write to the Firebase Realtime Database
-	//      providers/firebase.database/eventTypes/data.write
+	//      `providers/firebase.database/eventTypes/data.write`
 	EventType string `json:"eventType,omitempty"`
-
-	// Path: Optional path within the resource that should be used to filter
-	// events.
-	// Named wildcards may be written in curly brackets (e.g. {variable}).
-	// The
-	// value that matched this parameter will be included  in the
-	// event
-	// parameters. e.g. users/{userId}/profilePic
-	// Path is not supported for all actions.
-	Path string `json:"path,omitempty"`
 
 	// Resource: Which instance of the source's service should send events.
 	// E.g. for PubSub
-	// this would be a PubSub topic at projects/*/topics/*. For Google
+	// this would be a PubSub topic at `projects/*/topics/*`. For Google
 	// Cloud
-	// Storage this would be a bucket at projects/*/buckets/*. For any
+	// Storage this would be a bucket at `projects/*/buckets/*`. For any
 	// source
 	// that only supports one instance per-project, this should be the name
 	// of the
-	// project (projects/*)
+	// project (`projects/*`)
 	Resource string `json:"resource,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "EventType") to
@@ -356,7 +320,7 @@ func (s *EventTrigger) MarshalJSON() ([]byte, error) {
 // HTTPSTrigger: Describes HTTPSTrigger, could be used to connect web
 // hooks to function.
 type HTTPSTrigger struct {
-	// Url: [Output only] The deployed url for the function.
+	// Url: Output only. The deployed url for the function.
 	Url string `json:"url,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Url") to
@@ -374,15 +338,16 @@ func (s *HTTPSTrigger) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
-// ListFunctionsResponse: Response for the ListFunctions method.
+// ListFunctionsResponse: Response for the `ListFunctions` method.
 type ListFunctionsResponse struct {
 	// Functions: The functions that match the request.
 	Functions []*CloudFunction `json:"functions,omitempty"`
 
 	// NextPageToken: If not empty, indicates that there may be more
 	// functions that match
-	// the request; this value should be passed in a new
-	// ListFunctionsRequest
+	// the request; this value should be passed in a
+	// new
+	// google.cloud.functions.v1beta2.ListFunctionsRequest
 	// to get more functions.
 	NextPageToken string `json:"nextPageToken,omitempty"`
 
@@ -430,6 +395,35 @@ type ListLocationsResponse struct {
 
 func (s *ListLocationsResponse) MarshalJSON() ([]byte, error) {
 	type noMethod ListLocationsResponse
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// ListOperationsResponse: The response message for
+// Operations.ListOperations.
+type ListOperationsResponse struct {
+	// NextPageToken: The standard List next-page token.
+	NextPageToken string `json:"nextPageToken,omitempty"`
+
+	// Operations: A list of operations that matches the specified filter in
+	// the request.
+	Operations []*Operation `json:"operations,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "NextPageToken") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *ListOperationsResponse) MarshalJSON() ([]byte, error) {
+	type noMethod ListOperationsResponse
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
@@ -544,10 +538,6 @@ type OperationMetadata interface{}
 type OperationResponse interface{}
 
 // OperationMetadataV1Beta2: Metadata describing an Operation
-//
-// See description of cl/108626115 for the reason why the metadata
-// proto
-// message contains the API version.
 type OperationMetadataV1Beta2 struct {
 	// Request: The original request that started the operation.
 	Request OperationMetadataV1Beta2Request `json:"request,omitempty"`
@@ -590,15 +580,15 @@ type SourceRepository struct {
 	// fetched.
 	Branch string `json:"branch,omitempty"`
 
-	// DeployedRevision: The id of the revision that was resolved at the
-	// moment of
+	// DeployedRevision: Output only. The id of the revision that was
+	// resolved at the moment of
 	// function creation or update. For example when a user deployed from
 	// a
 	// branch, it will be the revision id of the latest change on this
 	// branch at
 	// that time. If user deployed from revision then this value will be
 	// always
-	// equal to the revision specified by the user. Output only.
+	// equal to the revision specified by the user.
 	DeployedRevision string `json:"deployedRevision,omitempty"`
 
 	// RepositoryUrl: URL to the hosted repository where the function is
@@ -617,7 +607,7 @@ type SourceRepository struct {
 	// defined. The path
 	// should point to the directory where cloud functions files are
 	// located. Use
-	// '/' if the function is defined directly in the root directory of
+	// "/" if the function is defined directly in the root directory of
 	// a
 	// repository.
 	SourcePath string `json:"sourcePath,omitempty"`
@@ -886,6 +876,199 @@ func (c *OperationsGetCall) Do(opts ...googleapi.CallOption) (*Operation, error)
 	//   ]
 	// }
 
+}
+
+// method id "cloudfunctions.operations.list":
+
+type OperationsListCall struct {
+	s            *Service
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
+}
+
+// List: Lists operations that match the specified filter in the
+// request. If the
+// server doesn't support this method, it returns
+// `UNIMPLEMENTED`.
+//
+// NOTE: the `name` binding below allows API services to override the
+// binding
+// to use different resource name schemes, such as `users/*/operations`.
+func (r *OperationsService) List() *OperationsListCall {
+	c := &OperationsListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	return c
+}
+
+// Filter sets the optional parameter "filter": The standard list
+// filter.
+func (c *OperationsListCall) Filter(filter string) *OperationsListCall {
+	c.urlParams_.Set("filter", filter)
+	return c
+}
+
+// Name sets the optional parameter "name": The name of the operation
+// collection.
+func (c *OperationsListCall) Name(name string) *OperationsListCall {
+	c.urlParams_.Set("name", name)
+	return c
+}
+
+// PageSize sets the optional parameter "pageSize": The standard list
+// page size.
+func (c *OperationsListCall) PageSize(pageSize int64) *OperationsListCall {
+	c.urlParams_.Set("pageSize", fmt.Sprint(pageSize))
+	return c
+}
+
+// PageToken sets the optional parameter "pageToken": The standard list
+// page token.
+func (c *OperationsListCall) PageToken(pageToken string) *OperationsListCall {
+	c.urlParams_.Set("pageToken", pageToken)
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *OperationsListCall) Fields(s ...googleapi.Field) *OperationsListCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *OperationsListCall) IfNoneMatch(entityTag string) *OperationsListCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *OperationsListCall) Context(ctx context.Context) *OperationsListCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *OperationsListCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		reqHeaders.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	var body io.Reader = nil
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/operations")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	req.Header = reqHeaders
+	googleapi.SetOpaque(req.URL)
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "cloudfunctions.operations.list" call.
+// Exactly one of *ListOperationsResponse or error will be non-nil. Any
+// non-2xx status code is an error. Response headers are in either
+// *ListOperationsResponse.ServerResponse.Header or (if a response was
+// returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *OperationsListCall) Do(opts ...googleapi.CallOption) (*ListOperationsResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &ListOperationsResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Lists operations that match the specified filter in the request. If the\nserver doesn't support this method, it returns `UNIMPLEMENTED`.\n\nNOTE: the `name` binding below allows API services to override the binding\nto use different resource name schemes, such as `users/*/operations`.",
+	//   "flatPath": "v1beta2/operations",
+	//   "httpMethod": "GET",
+	//   "id": "cloudfunctions.operations.list",
+	//   "parameterOrder": [],
+	//   "parameters": {
+	//     "filter": {
+	//       "description": "The standard list filter.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "name": {
+	//       "description": "The name of the operation collection.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "pageSize": {
+	//       "description": "The standard list page size.",
+	//       "format": "int32",
+	//       "location": "query",
+	//       "type": "integer"
+	//     },
+	//     "pageToken": {
+	//       "description": "The standard list page token.",
+	//       "location": "query",
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "v1beta2/operations",
+	//   "response": {
+	//     "$ref": "ListOperationsResponse"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform"
+	//   ]
+	// }
+
+}
+
+// Pages invokes f for each page of results.
+// A non-nil error returned from f will halt the iteration.
+// The provided context supersedes any context provided to the Context method.
+func (c *OperationsListCall) Pages(ctx context.Context, f func(*ListOperationsResponse) error) error {
+	c.ctx_ = ctx
+	defer c.PageToken(c.urlParams_.Get("pageToken")) // reset paging to original point
+	for {
+		x, err := c.Do()
+		if err != nil {
+			return err
+		}
+		if err := f(x); err != nil {
+			return err
+		}
+		if x.NextPageToken == "" {
+			return nil
+		}
+		c.PageToken(x.NextPageToken)
+	}
 }
 
 // method id "cloudfunctions.projects.locations.list":
@@ -1217,7 +1400,7 @@ type ProjectsLocationsFunctionsCreateCall struct {
 // already exists in
 // the specified project, the long running operation will
 // return
-// ALREADY_EXISTS error.
+// `ALREADY_EXISTS` error.
 func (r *ProjectsLocationsFunctionsService) Create(location string, cloudfunction *CloudFunction) *ProjectsLocationsFunctionsCreateCall {
 	c := &ProjectsLocationsFunctionsCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.location = location
@@ -1302,7 +1485,7 @@ func (c *ProjectsLocationsFunctionsCreateCall) Do(opts ...googleapi.CallOption) 
 	}
 	return ret, nil
 	// {
-	//   "description": "Creates a new function. If a function with the given name already exists in\nthe specified project, the long running operation will return\nALREADY_EXISTS error.",
+	//   "description": "Creates a new function. If a function with the given name already exists in\nthe specified project, the long running operation will return\n`ALREADY_EXISTS` error.",
 	//   "flatPath": "v1beta2/projects/{projectsId}/locations/{locationsId}/functions",
 	//   "httpMethod": "POST",
 	//   "id": "cloudfunctions.projects.locations.functions.create",
@@ -1311,7 +1494,7 @@ func (c *ProjectsLocationsFunctionsCreateCall) Do(opts ...googleapi.CallOption) 
 	//   ],
 	//   "parameters": {
 	//     "location": {
-	//       "description": "The project and location in which the function should be created, specified\nin the format: projects/*/locations/*",
+	//       "description": "The project and location in which the function should be created, specified\nin the format `projects/*/locations/*`",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]+/locations/[^/]+$",
 	//       "required": true,
@@ -1607,8 +1790,9 @@ func (c *ProjectsLocationsFunctionsListCall) PageSize(pageSize int64) *ProjectsL
 }
 
 // PageToken sets the optional parameter "pageToken": The value returned
-// by the last ListFunctionsResponse; indicates that
-// this is a continuation of a prior ListFunctions call, and that
+// by the last
+// `ListFunctionsResponse`; indicates that
+// this is a continuation of a prior `ListFunctions` call, and that
 // the
 // system should return the next page of data.
 func (c *ProjectsLocationsFunctionsListCall) PageToken(pageToken string) *ProjectsLocationsFunctionsListCall {
@@ -1710,7 +1894,7 @@ func (c *ProjectsLocationsFunctionsListCall) Do(opts ...googleapi.CallOption) (*
 	//   ],
 	//   "parameters": {
 	//     "location": {
-	//       "description": "The project and location from which the function should be listed,\nspecified in the format: projects/*/locations/*\nIf you want to list functions in all locations, use '-' in place of a\nlocation.",
+	//       "description": "The project and location from which the function should be listed,\nspecified in the format `projects/*/locations/*`\nIf you want to list functions in all locations, use \"-\" in place of a\nlocation.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]+/locations/[^/]+$",
 	//       "required": true,
@@ -1723,7 +1907,7 @@ func (c *ProjectsLocationsFunctionsListCall) Do(opts ...googleapi.CallOption) (*
 	//       "type": "integer"
 	//     },
 	//     "pageToken": {
-	//       "description": "The value returned by the last ListFunctionsResponse; indicates that\nthis is a continuation of a prior ListFunctions call, and that the\nsystem should return the next page of data.",
+	//       "description": "The value returned by the last\n`ListFunctionsResponse`; indicates that\nthis is a continuation of a prior `ListFunctions` call, and that the\nsystem should return the next page of data.",
 	//       "location": "query",
 	//       "type": "string"
 	//     }

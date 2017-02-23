@@ -2060,6 +2060,222 @@ func Dataflow_v1b3_ProjectsTemplatesCreate(context Context, args ...string) erro
 	return nil
 }
 
+func Dataflow_v1b3_ProjectsTemplatesGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1b3/projects/{projectId}/templates:get", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--gcsPath=VALUE]"
+
+		usageBits += " [--view=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewProjectsTemplatesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"gcsPath": false,
+		"view":    false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"projectId",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_projectId)
+
+	// Set query parameters.
+	if value, ok := flagValues["gcsPath"]; ok {
+		query_gcsPath, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.GcsPath(query_gcsPath)
+	}
+	if value, ok := flagValues["view"]; ok {
+		query_view, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.View(query_view)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Dataflow_v1b3_ProjectsTemplatesLaunch(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1b3/projects/{projectId}/templates:launch", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		usageBits += " [--dryRun=VALUE]"
+
+		usageBits += " [--gcsPath=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.LaunchTemplateParameters{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewProjectsTemplatesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"dryRun":  false,
+		"gcsPath": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.LaunchTemplateParameters{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"projectId",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+
+	call := service.Launch(param_projectId,
+		request,
+	)
+
+	// Set query parameters.
+	if value, ok := flagValues["dryRun"]; ok {
+		query_dryRun, err := commands_util.ConvertValue_bool(value)
+		if err != nil {
+			return err
+		}
+		call.DryRun(query_dryRun)
+	}
+	if value, ok := flagValues["gcsPath"]; ok {
+		query_gcsPath, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.GcsPath(query_gcsPath)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func Dataflow_v1b3_ProjectsWorkerMessages(context Context, args ...string) error {
 
 	usageFunc := func() {

@@ -815,6 +815,83 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsGet(context Context, ar
 	return nil
 }
 
+func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsGetPerfMetricsSummary(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("historyId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("executionId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("stepId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/histories/{historyId}/executions/{executionId}/steps/{stepId}/perfMetricsSummary", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewProjectsHistoriesExecutionsStepsService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"projectId",
+		"historyId",
+		"executionId",
+		"stepId",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_historyId, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_executionId, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+	param_stepId, err := commands_util.ConvertValue_string(paramValues[3])
+	if err != nil {
+		return err
+	}
+
+	call := service.GetPerfMetricsSummary(param_projectId, param_historyId, param_executionId, param_stepId)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsList(context Context, args ...string) error {
 
 	usageFunc := func() {
@@ -1036,6 +1113,623 @@ func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsPatch(context Context, 
 			return err
 		}
 		call.RequestId(query_requestId)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsPerfMetricsSummaryCreate(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("historyId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("executionId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("stepId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/histories/{historyId}/executions/{executionId}/steps/{stepId}/perfMetricsSummary", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.PerfMetricsSummary{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewProjectsHistoriesExecutionsStepsPerfMetricsSummaryService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.PerfMetricsSummary{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"projectId",
+		"historyId",
+		"executionId",
+		"stepId",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_historyId, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_executionId, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+	param_stepId, err := commands_util.ConvertValue_string(paramValues[3])
+	if err != nil {
+		return err
+	}
+
+	call := service.Create(param_projectId, param_historyId, param_executionId, param_stepId,
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsPerfSampleSeriesCreate(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("historyId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("executionId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("stepId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/histories/{historyId}/executions/{executionId}/steps/{stepId}/perfSampleSeries", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.PerfSampleSeries{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewProjectsHistoriesExecutionsStepsPerfSampleSeriesService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.PerfSampleSeries{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"projectId",
+		"historyId",
+		"executionId",
+		"stepId",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_historyId, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_executionId, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+	param_stepId, err := commands_util.ConvertValue_string(paramValues[3])
+	if err != nil {
+		return err
+	}
+
+	call := service.Create(param_projectId, param_historyId, param_executionId, param_stepId,
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsPerfSampleSeriesGet(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("historyId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("executionId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("stepId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("sampleSeriesId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/histories/{historyId}/executions/{executionId}/steps/{stepId}/perfSampleSeries/{sampleSeriesId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewProjectsHistoriesExecutionsStepsPerfSampleSeriesService(api_service)
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"projectId",
+		"historyId",
+		"executionId",
+		"stepId",
+		"sampleSeriesId",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_historyId, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_executionId, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+	param_stepId, err := commands_util.ConvertValue_string(paramValues[3])
+	if err != nil {
+		return err
+	}
+	param_sampleSeriesId, err := commands_util.ConvertValue_string(paramValues[4])
+	if err != nil {
+		return err
+	}
+
+	call := service.Get(param_projectId, param_historyId, param_executionId, param_stepId, param_sampleSeriesId)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsPerfSampleSeriesList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("historyId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("executionId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("stepId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/histories/{historyId}/executions/{executionId}/steps/{stepId}/perfSampleSeries", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--filter=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewProjectsHistoriesExecutionsStepsPerfSampleSeriesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"filter": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"projectId",
+		"historyId",
+		"executionId",
+		"stepId",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_historyId, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_executionId, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+	param_stepId, err := commands_util.ConvertValue_string(paramValues[3])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_projectId, param_historyId, param_executionId, param_stepId)
+
+	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsPerfSampleSeriesSamplesBatchCreate(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("historyId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("executionId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("stepId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("sampleSeriesId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/histories/{historyId}/executions/{executionId}/steps/{stepId}/perfSampleSeries/{sampleSeriesId}/samples:batchCreate", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.BatchCreatePerfSamplesRequest{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewProjectsHistoriesExecutionsStepsPerfSampleSeriesSamplesService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.BatchCreatePerfSamplesRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"projectId",
+		"historyId",
+		"executionId",
+		"stepId",
+		"sampleSeriesId",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_historyId, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_executionId, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+	param_stepId, err := commands_util.ConvertValue_string(paramValues[3])
+	if err != nil {
+		return err
+	}
+	param_sampleSeriesId, err := commands_util.ConvertValue_string(paramValues[4])
+	if err != nil {
+		return err
+	}
+
+	call := service.BatchCreate(param_projectId, param_historyId, param_executionId, param_stepId, param_sampleSeriesId,
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Toolresults_v1beta3_ProjectsHistoriesExecutionsStepsPerfSampleSeriesSamplesList(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("historyId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("executionId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("stepId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("sampleSeriesId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("{projectId}/histories/{historyId}/executions/{executionId}/steps/{stepId}/perfSampleSeries/{sampleSeriesId}/samples", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [--pageSize=VALUE]"
+
+		usageBits += " [--pageToken=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewProjectsHistoriesExecutionsStepsPerfSampleSeriesSamplesService(api_service)
+
+	queryParamNames := map[string]bool{
+		"pageSize":  false,
+		"pageToken": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) != 1 {
+		usageFunc()
+	}
+
+	expectedParams := []string{
+		"projectId",
+		"historyId",
+		"executionId",
+		"stepId",
+		"sampleSeriesId",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_historyId, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_executionId, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+	param_stepId, err := commands_util.ConvertValue_string(paramValues[3])
+	if err != nil {
+		return err
+	}
+	param_sampleSeriesId, err := commands_util.ConvertValue_string(paramValues[4])
+	if err != nil {
+		return err
+	}
+
+	call := service.List(param_projectId, param_historyId, param_executionId, param_stepId, param_sampleSeriesId)
+
+	// Set query parameters.
+	if value, ok := flagValues["pageSize"]; ok {
+		query_pageSize, err := commands_util.ConvertValue_int64(value)
+		if err != nil {
+			return err
+		}
+		call.PageSize(query_pageSize)
+	}
+	if value, ok := flagValues["pageToken"]; ok {
+		query_pageToken, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.PageToken(query_pageToken)
 	}
 
 	response, err := call.Do()

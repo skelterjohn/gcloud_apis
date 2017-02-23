@@ -356,6 +356,97 @@ func (s *AutoscalingSettings) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
+// CPUTime: Modeled after information exposed by /proc/stat.
+type CPUTime struct {
+	// Rate: Average CPU utilization rate (% non-idle cpu / second) since
+	// previous
+	// sample.
+	Rate float64 `json:"rate,omitempty"`
+
+	// Timestamp: Timestamp of the measurement.
+	Timestamp string `json:"timestamp,omitempty"`
+
+	// TotalMs: Total active CPU time across all cores (ie., non-idle) in
+	// milliseconds
+	// since start-up.
+	TotalMs uint64 `json:"totalMs,omitempty,string"`
+
+	// ForceSendFields is a list of field names (e.g. "Rate") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *CPUTime) MarshalJSON() ([]byte, error) {
+	type noMethod CPUTime
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// ComponentSource: Description of an interstitial value between
+// transforms in an execution
+// stage.
+type ComponentSource struct {
+	// Name: Dataflow service generated name for this source.
+	Name string `json:"name,omitempty"`
+
+	// OriginalTransformOrCollection: User name for the original user
+	// transform or collection with which this
+	// source is most closely associated.
+	OriginalTransformOrCollection string `json:"originalTransformOrCollection,omitempty"`
+
+	// UserName: Human-readable name for this transform; may be user or
+	// system generated.
+	UserName string `json:"userName,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Name") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *ComponentSource) MarshalJSON() ([]byte, error) {
+	type noMethod ComponentSource
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// ComponentTransform: Description of a transform executed as part of an
+// execution stage.
+type ComponentTransform struct {
+	// Name: Dataflow service generated name for this source.
+	Name string `json:"name,omitempty"`
+
+	// OriginalTransform: User name for the original user transform with
+	// which this transform is
+	// most closely associated.
+	OriginalTransform string `json:"originalTransform,omitempty"`
+
+	// UserName: Human-readable name for this transform; may be user or
+	// system generated.
+	UserName string `json:"userName,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Name") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *ComponentTransform) MarshalJSON() ([]byte, error) {
+	type noMethod ComponentTransform
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
 // ComputationTopology: All configuration data for a particular
 // Computation.
 type ComputationTopology struct {
@@ -441,6 +532,8 @@ type CounterMetadata struct {
 	//   "AND" - Aggregated value represents the logical 'and' of all
 	// contributed values.
 	//   "SET" - Aggregated value is a set of unique contributed values.
+	//   "DISTRIBUTION" - Aggregated value captures statistics about a
+	// distribution.
 	Kind string `json:"kind,omitempty"`
 
 	// OtherUnits: A string referring to the unit type.
@@ -492,13 +585,21 @@ type CounterStructuredName struct {
 	// Required.
 	Name string `json:"name,omitempty"`
 
+	// Origin: One of the standard Origins defined above.
+	//
+	// Possible values:
+	//   "SYSTEM" - Counter was created by the Dataflow system.
+	//   "USER" - Counter was created by the user.
+	Origin string `json:"origin,omitempty"`
+
+	// OriginNamespace: A string containing a more specific namespace of the
+	// counter's origin.
+	OriginNamespace string `json:"originNamespace,omitempty"`
+
 	// OriginalStepName: System generated name of the original step in the
 	// user's graph, before
 	// optimization.
 	OriginalStepName string `json:"originalStepName,omitempty"`
-
-	// OtherOrigin: A string containing the origin of the counter.
-	OtherOrigin string `json:"otherOrigin,omitempty"`
 
 	// Portion: Portion of this counter, either key or value.
 	//
@@ -507,13 +608,6 @@ type CounterStructuredName struct {
 	//   "KEY" - Counter reports a key.
 	//   "VALUE" - Counter reports a value.
 	Portion string `json:"portion,omitempty"`
-
-	// StandardOrigin: One of the standard Origins defined above.
-	//
-	// Possible values:
-	//   "DATAFLOW" - Counter was created by the Dataflow system.
-	//   "USER" - Counter was created by the user.
-	StandardOrigin string `json:"standardOrigin,omitempty"`
 
 	// WorkerId: ID of a particular worker.
 	WorkerId string `json:"workerId,omitempty"`
@@ -570,6 +664,9 @@ type CounterUpdate struct {
 	// By default this is false, indicating that this counter is reported
 	// as a delta.
 	Cumulative bool `json:"cumulative,omitempty"`
+
+	// Distribution: Distribution data
+	Distribution *DistributionUpdate `json:"distribution,omitempty"`
 
 	// FloatingPoint: Floating point value for Sum, Max, Min.
 	FloatingPoint float64 `json:"floatingPoint,omitempty"`
@@ -798,6 +895,109 @@ func (s *Disk) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
+// DisplayData: Data provided with a pipeline or transform to provide
+// descriptive info.
+type DisplayData struct {
+	// BoolValue: Contains value if the data is of a boolean type.
+	BoolValue bool `json:"boolValue,omitempty"`
+
+	// DurationValue: Contains value if the data is of duration type.
+	DurationValue string `json:"durationValue,omitempty"`
+
+	// FloatValue: Contains value if the data is of float type.
+	FloatValue float64 `json:"floatValue,omitempty"`
+
+	// Int64Value: Contains value if the data is of int64 type.
+	Int64Value int64 `json:"int64Value,omitempty,string"`
+
+	// JavaClassValue: Contains value if the data is of java class type.
+	JavaClassValue string `json:"javaClassValue,omitempty"`
+
+	// Key: The key identifying the display data.
+	// This is intended to be used as a label for the display data
+	// when viewed in a dax monitoring system.
+	Key string `json:"key,omitempty"`
+
+	// Label: An optional label to display in a dax UI for the element.
+	Label string `json:"label,omitempty"`
+
+	// Namespace: The namespace for the key. This is usually a class name or
+	// programming
+	// language namespace (i.e. python module) which defines the display
+	// data.
+	// This allows a dax monitoring system to specially handle the data
+	// and perform custom rendering.
+	Namespace string `json:"namespace,omitempty"`
+
+	// ShortStrValue: A possible additional shorter value to display.
+	// For example a java_class_name_value of com.mypackage.MyDoFn
+	// will be stored with MyDoFn as the short_str_value
+	// and
+	// com.mypackage.MyDoFn as the java_class_name value.
+	// short_str_value can be displayed and java_class_name_value
+	// will be displayed as a tooltip.
+	ShortStrValue string `json:"shortStrValue,omitempty"`
+
+	// StrValue: Contains value if the data is of string type.
+	StrValue string `json:"strValue,omitempty"`
+
+	// TimestampValue: Contains value if the data is of timestamp type.
+	TimestampValue string `json:"timestampValue,omitempty"`
+
+	// Url: An optional full URL.
+	Url string `json:"url,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "BoolValue") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *DisplayData) MarshalJSON() ([]byte, error) {
+	type noMethod DisplayData
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// DistributionUpdate: A metric value representing a distribution.
+type DistributionUpdate struct {
+	// Count: The count of the number of elements present in the
+	// distribution.
+	Count *SplitInt64 `json:"count,omitempty"`
+
+	// Max: The maximum value present in the distribution.
+	Max *SplitInt64 `json:"max,omitempty"`
+
+	// Min: The minimum value present in the distribution.
+	Min *SplitInt64 `json:"min,omitempty"`
+
+	// Sum: Use an int64 since we'd prefer the added precision. If overflow
+	// is a common
+	// problem we can detect it and use an additional int64 or a double.
+	Sum *SplitInt64 `json:"sum,omitempty"`
+
+	// SumOfSquares: Use a double since the sum of squares is likely to
+	// overflow int64.
+	SumOfSquares float64 `json:"sumOfSquares,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Count") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *DistributionUpdate) MarshalJSON() ([]byte, error) {
+	type noMethod DistributionUpdate
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
 // DynamicSourceSplit: When a task splits using
 // WorkItemStatus.dynamic_source_split, this
 // message describes the two parts of the split relative to
@@ -919,6 +1119,62 @@ type EnvironmentSdkPipelineOptions interface{}
 type EnvironmentUserAgent interface{}
 
 type EnvironmentVersion interface{}
+
+// ExecutionStageSummary: Description of the composing transforms,
+// names/ids, and input/outputs of a
+// stage of execution.  Some composing transforms and sources may have
+// been
+// generated by the Dataflow service during execution planning.
+type ExecutionStageSummary struct {
+	// ComponentSource: Collections produced and consumed by component
+	// transforms of this stage.
+	ComponentSource []*ComponentSource `json:"componentSource,omitempty"`
+
+	// ComponentTransform: Transforms that comprise this execution stage.
+	ComponentTransform []*ComponentTransform `json:"componentTransform,omitempty"`
+
+	// Id: Dataflow service generated id for this stage.
+	Id string `json:"id,omitempty"`
+
+	// InputSource: Input sources for this stage.
+	InputSource []*StageSource `json:"inputSource,omitempty"`
+
+	// Kind: Type of tranform this stage is executing.
+	//
+	// Possible values:
+	//   "UNKNOWN_KIND" - Unrecognized transform type.
+	//   "PAR_DO_KIND" - ParDo transform.
+	//   "GROUP_BY_KEY_KIND" - Group By Key transform.
+	//   "FLATTEN_KIND" - Flatten transform.
+	//   "READ_KIND" - Read transform.
+	//   "WRITE_KIND" - Write transform.
+	//   "CONSTANT_KIND" - Constructs from a constant value, such as with
+	// Create.of.
+	//   "SINGLETON_KIND" - Creates a Singleton view of a collection.
+	//   "SHUFFLE_KIND" - Opening or closing a shuffle session, often as
+	// part of a GroupByKey.
+	Kind string `json:"kind,omitempty"`
+
+	// Name: Dataflow service generated name for this stage.
+	Name string `json:"name,omitempty"`
+
+	// OutputSource: Output sources for this stage.
+	OutputSource []*StageSource `json:"outputSource,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "ComponentSource") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *ExecutionStageSummary) MarshalJSON() ([]byte, error) {
+	type noMethod ExecutionStageSummary
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
 
 // FailedLocation: Indicates which location failed to respond to a
 // request for data.
@@ -1054,6 +1310,37 @@ type GetDebugConfigResponse struct {
 
 func (s *GetDebugConfigResponse) MarshalJSON() ([]byte, error) {
 	type noMethod GetDebugConfigResponse
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// GetTemplateResponse: The response to a GetTemplate request.
+type GetTemplateResponse struct {
+	// Metadata: The template metadata describing the template name,
+	// available
+	// parameters, etc.
+	Metadata *TemplateMetadata `json:"metadata,omitempty"`
+
+	// Status: The status of the get template request. Any problems with
+	// the
+	// request will be indicated in the error_details.
+	Status *Status `json:"status,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "Metadata") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *GetTemplateResponse) MarshalJSON() ([]byte, error) {
+	type noMethod GetTemplateResponse
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
@@ -1272,8 +1559,7 @@ type Job struct {
 	// Environment: The environment for the job.
 	Environment *Environment `json:"environment,omitempty"`
 
-	// ExecutionInfo: Information about how the Cloud Dataflow service will
-	// run the job.
+	// ExecutionInfo: Deprecated.
 	ExecutionInfo *JobExecutionInfo `json:"executionInfo,omitempty"`
 
 	// Id: The unique ID of this job.
@@ -1310,6 +1596,15 @@ type Job struct {
 	// expression
 	// `[a-z]([-a-z0-9]{0,38}[a-z0-9])?`
 	Name string `json:"name,omitempty"`
+
+	// PipelineDescription: Preliminary field: The format of this data may
+	// change at any time.
+	// A description of the user pipeline and stages through which it is
+	// executed.
+	// Created by Cloud Dataflow service.  Only retrieved
+	// with
+	// JOB_VIEW_DESCRIPTION or JOB_VIEW_ALL.
+	PipelineDescription *PipelineDescription `json:"pipelineDescription,omitempty"`
 
 	// ProjectId: The ID of the Cloud Platform project that the job belongs
 	// to.
@@ -1690,6 +1985,64 @@ func (s *KeyRangeLocation) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
+// LaunchTemplateParameters: Parameters to provide to the template being
+// launched.
+type LaunchTemplateParameters struct {
+	// Environment: The runtime environment for the job.
+	Environment *RuntimeEnvironment `json:"environment,omitempty"`
+
+	// JobName: Required. The job name to use for the created job.
+	JobName string `json:"jobName,omitempty"`
+
+	// Parameters: The runtime parameters to pass to the job.
+	Parameters map[string]string `json:"parameters,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Environment") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *LaunchTemplateParameters) MarshalJSON() ([]byte, error) {
+	type noMethod LaunchTemplateParameters
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// LaunchTemplateResponse: Response to the request to launch a template.
+type LaunchTemplateResponse struct {
+	// Job: The job that was launched, if the request was not a dry run
+	// and
+	// the job was successfully launched.
+	Job *Job `json:"job,omitempty"`
+
+	// Status: The status of the launch template request. Any problems with
+	// the request
+	// will be indicated in the error_details.
+	Status *Status `json:"status,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "Job") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *LaunchTemplateResponse) MarshalJSON() ([]byte, error) {
+	type noMethod LaunchTemplateResponse
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
 // LeaseWorkItemRequest: Request to lease WorkItems.
 type LeaseWorkItemRequest struct {
 	// CurrentWorkerTime: The current timestamp at the worker.
@@ -2060,6 +2413,8 @@ type NameAndKind struct {
 	//   "AND" - Aggregated value represents the logical 'and' of all
 	// contributed values.
 	//   "SET" - Aggregated value is a set of unique contributed values.
+	//   "DISTRIBUTION" - Aggregated value captures statistics about a
+	// distribution.
 	Kind string `json:"kind,omitempty"`
 
 	// Name: Name of the counter.
@@ -2209,6 +2564,39 @@ func (s *ParallelInstruction) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
+// ParameterMetadata: Metadata for a specific parameter.
+type ParameterMetadata struct {
+	// HelpText: Required. The help text to display for the parameter.
+	HelpText string `json:"helpText,omitempty"`
+
+	// IsOptional: Optional. Whether the parameter is optional. Defaults to
+	// false.
+	IsOptional bool `json:"isOptional,omitempty"`
+
+	// Label: Required. The label to display for the parameter.
+	Label string `json:"label,omitempty"`
+
+	// Name: Required. The name of the parameter.
+	Name string `json:"name,omitempty"`
+
+	// Regexes: Optional. Regexes that the parameter must match.
+	Regexes []string `json:"regexes,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "HelpText") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *ParameterMetadata) MarshalJSON() ([]byte, error) {
+	type noMethod ParameterMetadata
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
 // PartialGroupByKeyInstruction: An instruction that does a partial
 // group-by-key.
 // One input and one output.
@@ -2254,6 +2642,38 @@ func (s *PartialGroupByKeyInstruction) MarshalJSON() ([]byte, error) {
 type PartialGroupByKeyInstructionInputElementCodec interface{}
 
 type PartialGroupByKeyInstructionValueCombiningFn interface{}
+
+// PipelineDescription: A descriptive representation of submitted
+// pipeline as well as the executed
+// form.  This data is provided by the Dataflow service for ease of
+// visualizing
+// the pipeline and interpretting Dataflow provided metrics.
+type PipelineDescription struct {
+	// DisplayData: Pipeline level display data.
+	DisplayData []*DisplayData `json:"displayData,omitempty"`
+
+	// ExecutionPipelineStage: Description of each stage of execution of the
+	// pipeline.
+	ExecutionPipelineStage []*ExecutionStageSummary `json:"executionPipelineStage,omitempty"`
+
+	// OriginalPipelineTransform: Description of each transform in the
+	// pipeline and collections between them.
+	OriginalPipelineTransform []*TransformSummary `json:"originalPipelineTransform,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "DisplayData") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *PipelineDescription) MarshalJSON() ([]byte, error) {
+	type noMethod PipelineDescription
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
 
 // Position: Position defines a position within a collection of data.
 // The value
@@ -2482,17 +2902,11 @@ func (s *ReportedParallelism) MarshalJSON() ([]byte, error) {
 // metrics accumulated from a variety of sources. For more information,
 // see
 // go/df-resource-signals.
-//
-// Note that this proto closely follows the structure of its DFE
-// siblings in its
-// contents.
 type ResourceUtilizationReport struct {
-	// Metrics: Each Struct must parallel DFE worker metrics protos (eg.,
-	// cpu_time metric
-	// will have nested values “timestamp_ms, total_ms, rate”).
-	Metrics []ResourceUtilizationReportMetrics `json:"metrics,omitempty"`
+	// CpuTime: CPU utilization samples.
+	CpuTime []*CPUTime `json:"cpuTime,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "Metrics") to
+	// ForceSendFields is a list of field names (e.g. "CpuTime") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -2506,8 +2920,6 @@ func (s *ResourceUtilizationReport) MarshalJSON() ([]byte, error) {
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
-
-type ResourceUtilizationReportMetrics interface{}
 
 // ResourceUtilizationReportResponse: Service-side response to
 // WorkerMessage reporting resource utilization.
@@ -3204,6 +3616,38 @@ func (s *SplitInt64) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
+// StageSource: Description of an input or output of an execution stage.
+type StageSource struct {
+	// Name: Dataflow service generated name for this source.
+	Name string `json:"name,omitempty"`
+
+	// OriginalTransformOrCollection: User name for the original user
+	// transform or collection with which this
+	// source is most closely associated.
+	OriginalTransformOrCollection string `json:"originalTransformOrCollection,omitempty"`
+
+	// SizeBytes: Size of the source, if measurable.
+	SizeBytes int64 `json:"sizeBytes,omitempty,string"`
+
+	// UserName: Human-readable name for this source; may be user or system
+	// generated.
+	UserName string `json:"userName,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Name") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *StageSource) MarshalJSON() ([]byte, error) {
+	type noMethod StageSource
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
 // StateFamilyConfig: State family configuration.
 type StateFamilyConfig struct {
 	// IsRead: If true, this family corresponds to a read operation.
@@ -3381,6 +3825,7 @@ type Step struct {
 	// Properties: Named properties associated with the step. Each kind
 	// of
 	// predefined step has its own required set of properties.
+	// Must be provided on Create.  Only retrieved with JOB_VIEW_ALL.
 	Properties StepProperties `json:"properties,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Kind") to
@@ -3772,6 +4217,40 @@ func (s *TaskRunnerSettings) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
+// TemplateMetadata: Metadata describing a template.
+type TemplateMetadata struct {
+	// BypassTempDirValidation: If true, will bypass the validation that the
+	// temp directory is
+	// writable. This should only be used with templates for pipelines
+	// that are guaranteed not to need to write to the temp directory,
+	// which is subject to change based on the optimizer.
+	BypassTempDirValidation bool `json:"bypassTempDirValidation,omitempty"`
+
+	// Description: Optional. A description of the template.
+	Description string `json:"description,omitempty"`
+
+	// Name: Required. The name of the template.
+	Name string `json:"name,omitempty"`
+
+	// Parameters: The parameters for the template.
+	Parameters []*ParameterMetadata `json:"parameters,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g.
+	// "BypassTempDirValidation") to unconditionally include in API
+	// requests. By default, fields with empty values are omitted from API
+	// requests. However, any non-pointer, non-interface field appearing in
+	// ForceSendFields will be sent to the server regardless of whether the
+	// field is empty or not. This may be used to include empty fields in
+	// Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *TemplateMetadata) MarshalJSON() ([]byte, error) {
+	type noMethod TemplateMetadata
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
 // TopologyConfig: Global topology of the streaming Dataflow job,
 // including all
 // computations and their sharded locations.
@@ -3805,6 +4284,57 @@ type TopologyConfig struct {
 
 func (s *TopologyConfig) MarshalJSON() ([]byte, error) {
 	type noMethod TopologyConfig
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// TransformSummary: Description of the type, names/ids, and
+// input/outputs for a transform.
+type TransformSummary struct {
+	// DisplayData: Transform-specific display data.
+	DisplayData []*DisplayData `json:"displayData,omitempty"`
+
+	// Id: SDK generated id of this transform instance.
+	Id string `json:"id,omitempty"`
+
+	// InputCollectionName: User names for all collection inputs to this
+	// transform.
+	InputCollectionName []string `json:"inputCollectionName,omitempty"`
+
+	// Kind: Type of transform.
+	//
+	// Possible values:
+	//   "UNKNOWN_KIND" - Unrecognized transform type.
+	//   "PAR_DO_KIND" - ParDo transform.
+	//   "GROUP_BY_KEY_KIND" - Group By Key transform.
+	//   "FLATTEN_KIND" - Flatten transform.
+	//   "READ_KIND" - Read transform.
+	//   "WRITE_KIND" - Write transform.
+	//   "CONSTANT_KIND" - Constructs from a constant value, such as with
+	// Create.of.
+	//   "SINGLETON_KIND" - Creates a Singleton view of a collection.
+	//   "SHUFFLE_KIND" - Opening or closing a shuffle session, often as
+	// part of a GroupByKey.
+	Kind string `json:"kind,omitempty"`
+
+	// Name: User provided name for this transform instance.
+	Name string `json:"name,omitempty"`
+
+	// OutputCollectionName: User  names for all collection outputs to this
+	// transform.
+	OutputCollectionName []string `json:"outputCollectionName,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "DisplayData") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *TransformSummary) MarshalJSON() ([]byte, error) {
+	type noMethod TransformSummary
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
@@ -4709,6 +5239,7 @@ func (c *ProjectsJobsCreateCall) ReplaceJobId(replaceJobId string) *ProjectsJobs
 //   "JOB_VIEW_UNKNOWN"
 //   "JOB_VIEW_SUMMARY"
 //   "JOB_VIEW_ALL"
+//   "JOB_VIEW_DESCRIPTION"
 func (c *ProjectsJobsCreateCall) View(view string) *ProjectsJobsCreateCall {
 	c.urlParams_.Set("view", view)
 	return c
@@ -4820,7 +5351,8 @@ func (c *ProjectsJobsCreateCall) Do(opts ...googleapi.CallOption) (*Job, error) 
 	//       "enum": [
 	//         "JOB_VIEW_UNKNOWN",
 	//         "JOB_VIEW_SUMMARY",
-	//         "JOB_VIEW_ALL"
+	//         "JOB_VIEW_ALL",
+	//         "JOB_VIEW_DESCRIPTION"
 	//       ],
 	//       "location": "query",
 	//       "type": "string"
@@ -4874,6 +5406,7 @@ func (c *ProjectsJobsGetCall) Location(location string) *ProjectsJobsGetCall {
 //   "JOB_VIEW_UNKNOWN"
 //   "JOB_VIEW_SUMMARY"
 //   "JOB_VIEW_ALL"
+//   "JOB_VIEW_DESCRIPTION"
 func (c *ProjectsJobsGetCall) View(view string) *ProjectsJobsGetCall {
 	c.urlParams_.Set("view", view)
 	return c
@@ -4996,7 +5529,8 @@ func (c *ProjectsJobsGetCall) Do(opts ...googleapi.CallOption) (*Job, error) {
 	//       "enum": [
 	//         "JOB_VIEW_UNKNOWN",
 	//         "JOB_VIEW_SUMMARY",
-	//         "JOB_VIEW_ALL"
+	//         "JOB_VIEW_ALL",
+	//         "JOB_VIEW_DESCRIPTION"
 	//       ],
 	//       "location": "query",
 	//       "type": "string"
@@ -5241,6 +5775,7 @@ func (c *ProjectsJobsListCall) PageToken(pageToken string) *ProjectsJobsListCall
 //   "JOB_VIEW_UNKNOWN"
 //   "JOB_VIEW_SUMMARY"
 //   "JOB_VIEW_ALL"
+//   "JOB_VIEW_DESCRIPTION"
 func (c *ProjectsJobsListCall) View(view string) *ProjectsJobsListCall {
 	c.urlParams_.Set("view", view)
 	return c
@@ -5377,7 +5912,8 @@ func (c *ProjectsJobsListCall) Do(opts ...googleapi.CallOption) (*ListJobsRespon
 	//       "enum": [
 	//         "JOB_VIEW_UNKNOWN",
 	//         "JOB_VIEW_SUMMARY",
-	//         "JOB_VIEW_ALL"
+	//         "JOB_VIEW_ALL",
+	//         "JOB_VIEW_DESCRIPTION"
 	//       ],
 	//       "location": "query",
 	//       "type": "string"
@@ -6397,6 +6933,7 @@ func (c *ProjectsLocationsJobsCreateCall) ReplaceJobId(replaceJobId string) *Pro
 //   "JOB_VIEW_UNKNOWN"
 //   "JOB_VIEW_SUMMARY"
 //   "JOB_VIEW_ALL"
+//   "JOB_VIEW_DESCRIPTION"
 func (c *ProjectsLocationsJobsCreateCall) View(view string) *ProjectsLocationsJobsCreateCall {
 	c.urlParams_.Set("view", view)
 	return c
@@ -6511,7 +7048,8 @@ func (c *ProjectsLocationsJobsCreateCall) Do(opts ...googleapi.CallOption) (*Job
 	//       "enum": [
 	//         "JOB_VIEW_UNKNOWN",
 	//         "JOB_VIEW_SUMMARY",
-	//         "JOB_VIEW_ALL"
+	//         "JOB_VIEW_ALL",
+	//         "JOB_VIEW_DESCRIPTION"
 	//       ],
 	//       "location": "query",
 	//       "type": "string"
@@ -6560,6 +7098,7 @@ func (r *ProjectsLocationsJobsService) Get(projectId string, location string, jo
 //   "JOB_VIEW_UNKNOWN"
 //   "JOB_VIEW_SUMMARY"
 //   "JOB_VIEW_ALL"
+//   "JOB_VIEW_DESCRIPTION"
 func (c *ProjectsLocationsJobsGetCall) View(view string) *ProjectsLocationsJobsGetCall {
 	c.urlParams_.Set("view", view)
 	return c
@@ -6685,7 +7224,8 @@ func (c *ProjectsLocationsJobsGetCall) Do(opts ...googleapi.CallOption) (*Job, e
 	//       "enum": [
 	//         "JOB_VIEW_UNKNOWN",
 	//         "JOB_VIEW_SUMMARY",
-	//         "JOB_VIEW_ALL"
+	//         "JOB_VIEW_ALL",
+	//         "JOB_VIEW_DESCRIPTION"
 	//       ],
 	//       "location": "query",
 	//       "type": "string"
@@ -6923,6 +7463,7 @@ func (c *ProjectsLocationsJobsListCall) PageToken(pageToken string) *ProjectsLoc
 //   "JOB_VIEW_UNKNOWN"
 //   "JOB_VIEW_SUMMARY"
 //   "JOB_VIEW_ALL"
+//   "JOB_VIEW_DESCRIPTION"
 func (c *ProjectsLocationsJobsListCall) View(view string) *ProjectsLocationsJobsListCall {
 	c.urlParams_.Set("view", view)
 	return c
@@ -7062,7 +7603,8 @@ func (c *ProjectsLocationsJobsListCall) Do(opts ...googleapi.CallOption) (*ListJ
 	//       "enum": [
 	//         "JOB_VIEW_UNKNOWN",
 	//         "JOB_VIEW_SUMMARY",
-	//         "JOB_VIEW_ALL"
+	//         "JOB_VIEW_ALL",
+	//         "JOB_VIEW_DESCRIPTION"
 	//       ],
 	//       "location": "query",
 	//       "type": "string"
@@ -7909,6 +8451,320 @@ func (c *ProjectsTemplatesCreateCall) Do(opts ...googleapi.CallOption) (*Job, er
 	//   },
 	//   "response": {
 	//     "$ref": "Job"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/userinfo.email"
+	//   ]
+	// }
+
+}
+
+// method id "dataflow.projects.templates.get":
+
+type ProjectsTemplatesGetCall struct {
+	s            *Service
+	projectId    string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
+}
+
+// Get: Get the template associated with a template.
+func (r *ProjectsTemplatesService) Get(projectId string) *ProjectsTemplatesGetCall {
+	c := &ProjectsTemplatesGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.projectId = projectId
+	return c
+}
+
+// GcsPath sets the optional parameter "gcsPath": Required. A Cloud
+// Storage path to the template from which to
+// create the job.
+// Must be a valid Cloud Storage URL, beginning with `gs://`.
+func (c *ProjectsTemplatesGetCall) GcsPath(gcsPath string) *ProjectsTemplatesGetCall {
+	c.urlParams_.Set("gcsPath", gcsPath)
+	return c
+}
+
+// View sets the optional parameter "view": The view to retrieve.
+// Defaults to METADATA_ONLY.
+//
+// Possible values:
+//   "METADATA_ONLY"
+func (c *ProjectsTemplatesGetCall) View(view string) *ProjectsTemplatesGetCall {
+	c.urlParams_.Set("view", view)
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *ProjectsTemplatesGetCall) Fields(s ...googleapi.Field) *ProjectsTemplatesGetCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *ProjectsTemplatesGetCall) IfNoneMatch(entityTag string) *ProjectsTemplatesGetCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsTemplatesGetCall) Context(ctx context.Context) *ProjectsTemplatesGetCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsTemplatesGetCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		reqHeaders.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	var body io.Reader = nil
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1b3/projects/{projectId}/templates:get")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"projectId": c.projectId,
+	})
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "dataflow.projects.templates.get" call.
+// Exactly one of *GetTemplateResponse or error will be non-nil. Any
+// non-2xx status code is an error. Response headers are in either
+// *GetTemplateResponse.ServerResponse.Header or (if a response was
+// returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *ProjectsTemplatesGetCall) Do(opts ...googleapi.CallOption) (*GetTemplateResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &GetTemplateResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Get the template associated with a template.",
+	//   "flatPath": "v1b3/projects/{projectId}/templates:get",
+	//   "httpMethod": "GET",
+	//   "id": "dataflow.projects.templates.get",
+	//   "parameterOrder": [
+	//     "projectId"
+	//   ],
+	//   "parameters": {
+	//     "gcsPath": {
+	//       "description": "Required. A Cloud Storage path to the template from which to\ncreate the job.\nMust be a valid Cloud Storage URL, beginning with `gs://`.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "projectId": {
+	//       "description": "Required. The ID of the Cloud Platform project that the job belongs to.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "view": {
+	//       "description": "The view to retrieve. Defaults to METADATA_ONLY.",
+	//       "enum": [
+	//         "METADATA_ONLY"
+	//       ],
+	//       "location": "query",
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "v1b3/projects/{projectId}/templates:get",
+	//   "response": {
+	//     "$ref": "GetTemplateResponse"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/userinfo.email"
+	//   ]
+	// }
+
+}
+
+// method id "dataflow.projects.templates.launch":
+
+type ProjectsTemplatesLaunchCall struct {
+	s                        *Service
+	projectId                string
+	launchtemplateparameters *LaunchTemplateParameters
+	urlParams_               gensupport.URLParams
+	ctx_                     context.Context
+}
+
+// Launch: Launch a template.
+func (r *ProjectsTemplatesService) Launch(projectId string, launchtemplateparameters *LaunchTemplateParameters) *ProjectsTemplatesLaunchCall {
+	c := &ProjectsTemplatesLaunchCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.projectId = projectId
+	c.launchtemplateparameters = launchtemplateparameters
+	return c
+}
+
+// DryRun sets the optional parameter "dryRun": Whether or not the job
+// should actually be executed after
+// validating parameters. Defaults to false. Validation errors do
+// not cause the HTTP request to fail if true.
+func (c *ProjectsTemplatesLaunchCall) DryRun(dryRun bool) *ProjectsTemplatesLaunchCall {
+	c.urlParams_.Set("dryRun", fmt.Sprint(dryRun))
+	return c
+}
+
+// GcsPath sets the optional parameter "gcsPath": Required. A Cloud
+// Storage path to the template from which to create
+// the job.
+// Must be valid Cloud Storage URL, beginning with 'gs://'.
+func (c *ProjectsTemplatesLaunchCall) GcsPath(gcsPath string) *ProjectsTemplatesLaunchCall {
+	c.urlParams_.Set("gcsPath", gcsPath)
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *ProjectsTemplatesLaunchCall) Fields(s ...googleapi.Field) *ProjectsTemplatesLaunchCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsTemplatesLaunchCall) Context(ctx context.Context) *ProjectsTemplatesLaunchCall {
+	c.ctx_ = ctx
+	return c
+}
+
+func (c *ProjectsTemplatesLaunchCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.launchtemplateparameters)
+	if err != nil {
+		return nil, err
+	}
+	reqHeaders.Set("Content-Type", "application/json")
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1b3/projects/{projectId}/templates:launch")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"projectId": c.projectId,
+	})
+	if c.ctx_ != nil {
+		return ctxhttp.Do(c.ctx_, c.s.client, req)
+	}
+	return c.s.client.Do(req)
+}
+
+// Do executes the "dataflow.projects.templates.launch" call.
+// Exactly one of *LaunchTemplateResponse or error will be non-nil. Any
+// non-2xx status code is an error. Response headers are in either
+// *LaunchTemplateResponse.ServerResponse.Header or (if a response was
+// returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *ProjectsTemplatesLaunchCall) Do(opts ...googleapi.CallOption) (*LaunchTemplateResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &LaunchTemplateResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Launch a template.",
+	//   "flatPath": "v1b3/projects/{projectId}/templates:launch",
+	//   "httpMethod": "POST",
+	//   "id": "dataflow.projects.templates.launch",
+	//   "parameterOrder": [
+	//     "projectId"
+	//   ],
+	//   "parameters": {
+	//     "dryRun": {
+	//       "description": "Whether or not the job should actually be executed after\nvalidating parameters. Defaults to false. Validation errors do\nnot cause the HTTP request to fail if true.",
+	//       "location": "query",
+	//       "type": "boolean"
+	//     },
+	//     "gcsPath": {
+	//       "description": "Required. A Cloud Storage path to the template from which to create\nthe job.\nMust be valid Cloud Storage URL, beginning with 'gs://'.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "projectId": {
+	//       "description": "Required. The ID of the Cloud Platform project that the job belongs to.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "v1b3/projects/{projectId}/templates:launch",
+	//   "request": {
+	//     "$ref": "LaunchTemplateParameters"
+	//   },
+	//   "response": {
+	//     "$ref": "LaunchTemplateResponse"
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform",

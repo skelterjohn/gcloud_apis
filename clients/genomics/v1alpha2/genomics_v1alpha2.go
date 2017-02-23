@@ -1137,10 +1137,16 @@ type SetOperationStatusRequest struct {
 	// HTTP Mapping: 504 Gateway Timeout
 	//   "NOT_FOUND" - Some requested entity (e.g., file or directory) was
 	// not found.
-	// For privacy reasons, this code *may* be returned when the client
-	// does not have the access rights to the entity, though such usage
-	// is
-	// discouraged.
+	//
+	// Note to server developers: if a request is denied for an entire
+	// class
+	// of users, such as gradual feature rollout or undocumented
+	// whitelist,
+	// `NOT_FOUND` may be used. If a request is denied for some users
+	// within
+	// a class of users, such as user-based access control,
+	// `PERMISSION_DENIED`
+	// must be used.
 	//
 	// HTTP Mapping: 404 Not Found
 	//   "ALREADY_EXISTS" - The entity that a client attempted to create
@@ -1155,7 +1161,9 @@ type SetOperationStatusRequest struct {
 	// instead for those errors). `PERMISSION_DENIED` must not be
 	// used if the caller can not be identified (use
 	// `UNAUTHENTICATED`
-	// instead for those errors).
+	// instead for those errors). This error code does not imply the
+	// request is valid or the requested entity exists or satisfies
+	// other pre-conditions.
 	//
 	// HTTP Mapping: 403 Forbidden
 	//   "UNAUTHENTICATED" - The request does not have valid authentication
@@ -2607,6 +2615,9 @@ type PipelinesRunCall struct {
 // is stored and WRITE permission to the project where the pipeline will
 // be
 // run, as VMs will be created and storage will be used.
+//
+// If a pipeline operation is still running after 6 days, it will be
+// canceled.
 func (r *PipelinesService) Run(runpipelinerequest *RunPipelineRequest) *PipelinesRunCall {
 	c := &PipelinesRunCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.runpipelinerequest = runpipelinerequest
@@ -2688,7 +2699,7 @@ func (c *PipelinesRunCall) Do(opts ...googleapi.CallOption) (*Operation, error) 
 	}
 	return ret, nil
 	// {
-	//   "description": "Runs a pipeline. If `pipelineId` is specified in the request, then\nrun a saved pipeline. If `ephemeralPipeline` is specified, then run\nthat pipeline once without saving a copy.\n\nThe caller must have READ permission to the project where the pipeline\nis stored and WRITE permission to the project where the pipeline will be\nrun, as VMs will be created and storage will be used.",
+	//   "description": "Runs a pipeline. If `pipelineId` is specified in the request, then\nrun a saved pipeline. If `ephemeralPipeline` is specified, then run\nthat pipeline once without saving a copy.\n\nThe caller must have READ permission to the project where the pipeline\nis stored and WRITE permission to the project where the pipeline will be\nrun, as VMs will be created and storage will be used.\n\nIf a pipeline operation is still running after 6 days, it will be canceled.",
 	//   "flatPath": "v1alpha2/pipelines:run",
 	//   "httpMethod": "POST",
 	//   "id": "genomics.pipelines.run",

@@ -3,6 +3,7 @@
   "discoveryVersion": "v1",
   "id": "sourcerepo:v1",
   "name": "sourcerepo",
+  "canonicalName": "Cloud Source Repositories",
   "version": "v1",
   "revision": "0",
   "title": "Cloud Source Repositories API",
@@ -175,13 +176,6 @@
         }
       }
     },
-    "CreateRepoRequest": {
-      "id": "CreateRepoRequest",
-      "description": "Request for CreateRepo.",
-      "type": "object",
-      "properties": {
-      }
-    },
     "Empty": {
       "id": "Empty",
       "description": "A generic empty message that you can re-use to avoid defining duplicated\nempty messages in your APIs. A typical example is to use it as the request\nor the response type of an API method. For instance:\n\n    service Foo {\n      rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);\n    }\n\nThe JSON representation for `Empty` is empty JSON object `{}`.",
@@ -223,7 +217,7 @@
           }
         },
         "auditConfigs": {
-          "description": "Specifies audit logging configs for \"data access\".\n\"data access\": generally refers to data reads\/writes and admin reads.\n\"admin activity\": generally refers to admin writes.\n\nNote: `AuditConfig` doesn't apply to \"admin activity\", which always\nenables audit logging.",
+          "description": "Specifies cloud audit logging configuration for this policy.",
           "type": "array",
           "items": {
             "$ref": "AuditConfig"
@@ -267,7 +261,7 @@
     },
     "AuditConfig": {
       "id": "AuditConfig",
-      "description": "Provides the configuration for non-admin_activity logging for a service.\nControls exemptions and specific log sub-types.",
+      "description": "Specifies the audit configuration for a service.\nIt consists of which permission types are logged, and what identities, if\nany, are exempted from logging.\nAn AuditConifg must have one or more AuditLogConfigs.\n\nIf there are AuditConfigs for both `allServices` and a specific service,\nthe union of the two AuditConfigs is used for that service: the log_types\nspecified in each AuditConfig are enabled, and the exempted_members in each\nAuditConfig are exempted.\nExample Policy with multiple AuditConfigs:\n{\n  \"audit_configs\": [\n    {\n      \"service\": \"allServices\"\n      \"audit_log_configs\": [\n        {\n          \"log_type\": \"DATA_READ\",\n          \"exempted_members\": [\n            \"user:foo@gmail.com\"\n          ]\n        },\n        {\n          \"log_type\": \"DATA_WRITE\",\n        },\n        {\n          \"log_type\": \"ADMIN_READ\",\n        }\n      ]\n    },\n    {\n      \"service\": \"fooservice@googleapis.com\"\n      \"audit_log_configs\": [\n        {\n          \"log_type\": \"DATA_READ\",\n        },\n        {\n          \"log_type\": \"DATA_WRITE\",\n          \"exempted_members\": [\n            \"user:bar@gmail.com\"\n          ]\n        }\n      ]\n    }\n  ]\n}\nFor fooservice, this policy enables DATA_READ, DATA_WRITE and ADMIN_READ\nlogging. It also exempts foo@gmail.com from DATA_READ logging, and\nbar@gmail.com from DATA_WRITE logging.",
       "type": "object",
       "properties": {
         "service": {
@@ -275,14 +269,14 @@
           "type": "string"
         },
         "exemptedMembers": {
-          "description": "Specifies the identities that are exempted from \"data access\" audit\nlogging for the `service` specified above.\nFollows the same format of Binding.members.",
+
           "type": "array",
           "items": {
             "type": "string"
           }
         },
         "auditLogConfigs": {
-          "description": "The configuration for each type of logging\nNext ID: 4",
+          "description": "The configuration for logging of each type of permission.\nNext ID: 4",
           "type": "array",
           "items": {
             "$ref": "AuditLogConfig"
@@ -292,16 +286,16 @@
     },
     "AuditLogConfig": {
       "id": "AuditLogConfig",
-      "description": "Provides the configuration for a sub-type of logging.",
+      "description": "Provides the configuration for logging a type of permissions.\nExample:\n\n    {\n      \"audit_log_configs\": [\n        {\n          \"log_type\": \"DATA_READ\",\n          \"exempted_members\": [\n            \"user:foo@gmail.com\"\n          ]\n        },\n        {\n          \"log_type\": \"DATA_WRITE\",\n        }\n      ]\n    }\n\nThis enables 'DATA_READ' and 'DATA_WRITE' logging, while exempting\nfoo@gmail.com from DATA_READ logging.",
       "type": "object",
       "properties": {
         "logType": {
           "description": "The log type that this config enables.",
           "enumDescriptions": [
             "Default case. Should never be this.",
-            "Log admin reads",
-            "Log data writes",
-            "Log data reads"
+            "Admin reads. Example: CloudIAM getIamPolicy",
+            "Data writes. Example: CloudSQL Users create",
+            "Data reads. Example: CloudSQL Users list"
           ],
           "type": "string",
           "enum": [
@@ -312,7 +306,7 @@
           ]
         },
         "exemptedMembers": {
-          "description": "Specifies the identities that are exempted from this type of logging\nFollows the same format of Binding.members.",
+          "description": "Specifies the identities that do not cause logging for this type of\npermission.\nFollows the same format of Binding.members.",
           "type": "array",
           "items": {
             "type": "string"
@@ -396,13 +390,15 @@
           "enumDescriptions": [
             "Default non-attribute.",
             "Either principal or (if present) authority selector.",
-            "The principal (even if an authority selector is present), which\nmust only be used for attribution, not authorization."
+            "The principal (even if an authority selector is present), which\nmust only be used for attribution, not authorization.",
+            "An approver (distinct from the requester) that has authorized this\nrequest.\nWhen used with IN, the condition indicates that one of the approvers\nassociated with the request matches the specified principal, or is a\nmember of the specified group. Approvers can only grant additional\naccess, and are thus only used in a strictly positive context\n(e.g. ALLOW\/IN or DENY\/NOT_IN).\nSee: go\/rpc-security-policy-dynamicauth."
           ],
           "type": "string",
           "enum": [
             "NO_ATTR",
             "AUTHORITY",
-            "ATTRIBUTION"
+            "ATTRIBUTION",
+            "APPROVER"
           ]
         },
         "sys": {
@@ -507,6 +503,34 @@
       "type": "object",
       "properties": {
       }
+    },
+    "TestIamPermissionsRequest": {
+      "id": "TestIamPermissionsRequest",
+      "description": "Request message for `TestIamPermissions` method.",
+      "type": "object",
+      "properties": {
+        "permissions": {
+          "description": "The set of permissions to check for the `resource`. Permissions with\nwildcards (such as '*' or 'storage.*') are not allowed. For more\ninformation see\n[IAM Overview](https:\/\/cloud.google.com\/iam\/docs\/overview#permissions).",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "TestIamPermissionsResponse": {
+      "id": "TestIamPermissionsResponse",
+      "description": "Response message for `TestIamPermissions` method.",
+      "type": "object",
+      "properties": {
+        "permissions": {
+          "description": "A subset of `TestPermissionsRequest.permissions` that the caller is\nallowed.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
     }
   },
   "resources": {
@@ -564,26 +588,26 @@
                 "https://www.googleapis.com/auth/cloud-platform"
               ]
             },
-            "createRepo": {
-              "id": "sourcerepo.projects.repos.createRepo",
-              "path": "v1/{+name}",
-              "flatPath": "v1/projects/{projectsId}/repos/{reposId}",
+            "create": {
+              "id": "sourcerepo.projects.repos.create",
+              "path": "v1/{+parent}/repos",
+              "flatPath": "v1/projects/{projectsId}/repos",
               "httpMethod": "POST",
               "description": "Creates a repo in the given project with the given name..\n\nIf the named repository already exists, `CreateRepo` returns\n`ALREADY_EXISTS`.",
               "parameters": {
-                "name": {
-                  "description": "The name of the repository to create. Values are of the form\n`projects\/<project>\/repos\/<repo>`.",
+                "parent": {
+                  "description": "The project in which to create the repo. Values are of the form\n`projects\/<project>`.",
                   "location": "path",
                   "required": true,
-                  "pattern": "^projects\/[^\/]+\/repos\/.+$",
+                  "pattern": "^projects\/[^\/]+$",
                   "type": "string"
                 }
               },
               "parameterOrder": [
-                "name"
+                "parent"
               ],
               "request": {
-                "$ref": "CreateRepoRequest"
+                "$ref": "Repo"
               },
               "response": {
                 "$ref": "Repo"
@@ -616,71 +640,87 @@
               "scopes": [
                 "https://www.googleapis.com/auth/cloud-platform"
               ]
-            }
-          }
-        }
-      }
-    },
-    "iam": {
-      "resources": {
-        "projects": {
-          "resources": {
-            "repos": {
-              "methods": {
-                "setIamPolicy": {
-                  "id": "sourcerepo.iam.projects.repos.setIamPolicy",
-                  "path": "v1/iam/{+resource}",
-                  "flatPath": "v1/iam/projects/{projectsId}/repos/{reposId}",
-                  "httpMethod": "POST",
-                  "description": "Sets the access control policy on the specified resource. Replaces any\nexisting policy.",
-                  "parameters": {
-                    "resource": {
-                      "description": "REQUIRED: The resource for which the policy is being specified.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects\/{project}`.",
-                      "location": "path",
-                      "required": true,
-                      "pattern": "^projects\/[^\/]+\/repos\/.+$",
-                      "type": "string"
-                    }
-                  },
-                  "parameterOrder": [
-                    "resource"
-                  ],
-                  "request": {
-                    "$ref": "SetIamPolicyRequest"
-                  },
-                  "response": {
-                    "$ref": "Policy"
-                  },
-                  "scopes": [
-                    "https://www.googleapis.com/auth/cloud-platform"
-                  ]
-                },
-                "get": {
-                  "id": "sourcerepo.iam.projects.repos.get",
-                  "path": "v1/iam/{+resource}",
-                  "flatPath": "v1/iam/projects/{projectsId}/repos/{reposId}",
-                  "httpMethod": "GET",
-                  "description": "Gets the access control policy for a resource.\nReturns an empty policy if the resource exists and does not have a policy\nset.",
-                  "parameters": {
-                    "resource": {
-                      "description": "REQUIRED: The resource for which the policy is being requested.\n`resource` is usually specified as a path. For example, a Project\nresource is specified as `projects\/{project}`.",
-                      "location": "path",
-                      "required": true,
-                      "pattern": "^projects\/[^\/]+\/repos\/.+$",
-                      "type": "string"
-                    }
-                  },
-                  "parameterOrder": [
-                    "resource"
-                  ],
-                  "response": {
-                    "$ref": "Policy"
-                  },
-                  "scopes": [
-                    "https://www.googleapis.com/auth/cloud-platform"
-                  ]
+            },
+            "setIamPolicy": {
+              "id": "sourcerepo.projects.repos.setIamPolicy",
+              "path": "v1/{+resource}:setIamPolicy",
+              "flatPath": "v1/projects/{projectsId}/repos/{reposId}:setIamPolicy",
+              "httpMethod": "POST",
+              "description": "Sets the access control policy on the specified resource. Replaces any\nexisting policy.",
+              "parameters": {
+                "resource": {
+                  "description": "REQUIRED: The resource for which the policy is being specified.\nSee the operation documentation for the appropriate value for this field.",
+                  "location": "path",
+                  "required": true,
+                  "pattern": "^projects\/[^\/]+\/repos\/.+$",
+                  "type": "string"
                 }
-              }
+              },
+              "parameterOrder": [
+                "resource"
+              ],
+              "request": {
+                "$ref": "SetIamPolicyRequest"
+              },
+              "response": {
+                "$ref": "Policy"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/cloud-platform"
+              ]
+            },
+            "getIamPolicy": {
+              "id": "sourcerepo.projects.repos.getIamPolicy",
+              "path": "v1/{+resource}:getIamPolicy",
+              "flatPath": "v1/projects/{projectsId}/repos/{reposId}:getIamPolicy",
+              "httpMethod": "GET",
+              "description": "Gets the access control policy for a resource.\nReturns an empty policy if the resource exists and does not have a policy\nset.",
+              "parameters": {
+                "resource": {
+                  "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
+                  "location": "path",
+                  "required": true,
+                  "pattern": "^projects\/[^\/]+\/repos\/.+$",
+                  "type": "string"
+                }
+              },
+              "parameterOrder": [
+                "resource"
+              ],
+              "response": {
+                "$ref": "Policy"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/cloud-platform"
+              ]
+            },
+            "testIamPermissions": {
+              "id": "sourcerepo.projects.repos.testIamPermissions",
+              "path": "v1/{+resource}:testIamPermissions",
+              "flatPath": "v1/projects/{projectsId}/repos/{reposId}:testIamPermissions",
+              "httpMethod": "POST",
+              "description": "Returns permissions that a caller has on the specified resource.\nIf the resource does not exist, this will return an empty set of\npermissions, not a NOT_FOUND error.",
+              "parameters": {
+                "resource": {
+                  "description": "REQUIRED: The resource for which the policy detail is being requested.\nSee the operation documentation for the appropriate value for this field.",
+                  "location": "path",
+                  "required": true,
+                  "pattern": "^projects\/[^\/]+\/repos\/.+$",
+                  "type": "string"
+                }
+              },
+              "parameterOrder": [
+                "resource"
+              ],
+              "request": {
+                "$ref": "TestIamPermissionsRequest"
+              },
+              "response": {
+                "$ref": "TestIamPermissionsResponse"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/cloud-platform"
+              ]
             }
           }
         }

@@ -869,6 +869,8 @@ func Sql_v1beta4_FlagsList(context Context, args ...string) error {
 			}
 		}
 
+		usageBits += " [--databaseVersion=VALUE]"
+
 		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
 
 		os.Exit(1)
@@ -879,6 +881,21 @@ func Sql_v1beta4_FlagsList(context Context, args ...string) error {
 		return err
 	}
 	service := api_client.NewFlagsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"databaseVersion": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
 
 	// Only positional arguments should remain in args.
 	if len(args) != 1 {
@@ -892,6 +909,15 @@ func Sql_v1beta4_FlagsList(context Context, args ...string) error {
 	}
 
 	call := service.List()
+
+	// Set query parameters.
+	if value, ok := flagValues["databaseVersion"]; ok {
+		query_databaseVersion, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.DatabaseVersion(query_databaseVersion)
+	}
 
 	response, err := call.Do()
 	if err != nil {
@@ -1495,6 +1521,8 @@ func Sql_v1beta4_InstancesList(context Context, args ...string) error {
 			}
 		}
 
+		usageBits += " [--filter=VALUE]"
+
 		usageBits += " [--maxResults=VALUE]"
 
 		usageBits += " [--pageToken=VALUE]"
@@ -1511,6 +1539,7 @@ func Sql_v1beta4_InstancesList(context Context, args ...string) error {
 	service := api_client.NewInstancesService(api_service)
 
 	queryParamNames := map[string]bool{
+		"filter":     false,
 		"maxResults": false,
 		"pageToken":  false,
 	}
@@ -1547,6 +1576,13 @@ func Sql_v1beta4_InstancesList(context Context, args ...string) error {
 	call := service.List(param_project)
 
 	// Set query parameters.
+	if value, ok := flagValues["filter"]; ok {
+		query_filter, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.Filter(query_filter)
+	}
 	if value, ok := flagValues["maxResults"]; ok {
 		query_maxResults, err := commands_util.ConvertValue_int64(value)
 		if err != nil {

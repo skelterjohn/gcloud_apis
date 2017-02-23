@@ -964,6 +964,129 @@ func Dataproc_v1_ProjectsRegionsJobsList(context Context, args ...string) error 
 	return nil
 }
 
+func Dataproc_v1_ProjectsRegionsJobsPatch(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("region"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("jobId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/projects/{projectId}/regions/{region}/jobs/{jobId}", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		usageBits += " [--updateMask=VALUE]"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.Job{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewProjectsRegionsJobsService(api_service)
+
+	queryParamNames := map[string]bool{
+		"updateMask": false,
+	}
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	for k, r := range queryParamNames {
+		if _, ok := flagValues[k]; r && !ok {
+			return fmt.Errorf("missing required flag %q", "--"+k)
+		}
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.Job{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	// Any flags that aren't query parameters are applied to the request.
+	keyValues := map[string]string{}
+	for k, v := range flagValues {
+		if _, ok := queryParamNames[k]; !ok {
+			keyValues[k] = v
+		}
+	}
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"projectId",
+		"region",
+		"jobId",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_projectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_region, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_jobId, err := commands_util.ConvertValue_string(paramValues[2])
+	if err != nil {
+		return err
+	}
+
+	call := service.Patch(param_projectId, param_region, param_jobId,
+		request,
+	)
+
+	// Set query parameters.
+	if value, ok := flagValues["updateMask"]; ok {
+		query_updateMask, err := commands_util.ConvertValue_string(value)
+		if err != nil {
+			return err
+		}
+		call.UpdateMask(query_updateMask)
+	}
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func Dataproc_v1_ProjectsRegionsJobsSubmit(context Context, args ...string) error {
 
 	usageFunc := func() {

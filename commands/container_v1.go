@@ -339,6 +339,108 @@ func Container_v1_MasterProjectsZonesImagereview(context Context, args ...string
 	return nil
 }
 
+func Container_v1_MasterProjectsZonesSigncertificate(context Context, args ...string) error {
+
+	usageFunc := func() {
+		usageBits := fmt.Sprintf("gcloud_apis %s", context.InvocationMethod)
+		var pathParams []string
+		pathParams = append(pathParams, commands_util.AngrySnakes("masterProjectId"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("zone"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("projectNumber"))
+		pathParams = append(pathParams, commands_util.AngrySnakes("clusterId"))
+
+		if len(pathParams) != 0 {
+			if strings.Contains("v1/masterProjects/{masterProjectId}/zones/{zone}/{projectNumber}/{clusterId}/signcertificate", "+") {
+				usageBits += " @" + strings.Join(pathParams, "@")
+			} else {
+				usageBits += " " + strings.Join(pathParams, "/")
+			}
+		}
+
+		usageBits += " [REQUEST_FILE|-] [--REQUEST_KEY=VALUE]*"
+
+		fmt.Fprintf(os.Stderr, "Usage:\n\t%s\n", usageBits)
+		commands_util.PrintRequestExample(&api_client.CertificateSigningRequest{})
+
+		os.Exit(1)
+	}
+
+	api_service, err := api_client.New(context.Client)
+	if err != nil {
+		return err
+	}
+	service := api_client.NewMasterProjectsZonesService(api_service)
+
+	args, flagValues, err := commands_util.ExtractFlagValues(args)
+	if err != nil {
+		return err
+	}
+
+	// Only positional arguments should remain in args.
+	if len(args) == 0 || len(args) > 2 {
+		usageFunc()
+	}
+
+	request := &api_client.CertificateSigningRequest{}
+	if len(args) == 2 {
+		err = commands_util.PopulateRequestFromFilename(&request, args[1])
+		if err != nil {
+			return err
+		}
+	}
+
+	keyValues := flagValues
+
+	err = commands_util.OverwriteRequestWithValues(&request, keyValues)
+	if err != nil {
+		return err
+	}
+
+	expectedParams := []string{
+		"masterProjectId",
+		"zone",
+		"projectNumber",
+		"clusterId",
+	}
+	paramValues := commands_util.SplitParamValues(args[0])
+	if len(paramValues) != len(expectedParams) {
+		return commands_util.ErrForWrongParams(expectedParams, paramValues, args)
+	}
+
+	param_masterProjectId, err := commands_util.ConvertValue_string(paramValues[0])
+	if err != nil {
+		return err
+	}
+	param_zone, err := commands_util.ConvertValue_string(paramValues[1])
+	if err != nil {
+		return err
+	}
+	param_projectNumber, err := commands_util.ConvertValue_int64(paramValues[2])
+	if err != nil {
+		return err
+	}
+	param_clusterId, err := commands_util.ConvertValue_string(paramValues[3])
+	if err != nil {
+		return err
+	}
+
+	call := service.Signcertificate(param_masterProjectId, param_zone, param_projectNumber, param_clusterId,
+		request,
+	)
+
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	err = commands_util.PrintResponse(response)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func Container_v1_MasterProjectsZonesSignedUrlsCreate(context Context, args ...string) error {
 
 	usageFunc := func() {

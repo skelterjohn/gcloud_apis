@@ -1033,10 +1033,12 @@ func (s *ResultStorage) MarshalJSON() ([]byte, error) {
 
 // RoboDirective: Directs Robo to interact with a specific UI element if
 // it is encountered
-// during the crawl. Currently, Robo can set text in text fields.
+// during the crawl. Currently, Robo can perform text entry or element
+// click.
 type RoboDirective struct {
-	// InputText: The text that Robo is directed to set.
-	// Required
+	// InputText: The text that Robo is directed to set. If left empty, the
+	// directive will be
+	// treated as a CLICK on the element matching the resource_name.
 	InputText string `json:"inputText,omitempty"`
 
 	// ResourceName: The android resource name of the target UI element
@@ -1385,7 +1387,9 @@ type TestSetup struct {
 	// Optional
 	DirectoriesToPull []string `json:"directoriesToPull,omitempty"`
 
-	// EnvironmentVariables: Environment variables to set for the test.
+	// EnvironmentVariables: Environment variables to set for the test (only
+	// applicable for
+	// instrumentation tests).
 	EnvironmentVariables []*EnvironmentVariable `json:"environmentVariables,omitempty"`
 
 	// FilesToPush: Optional

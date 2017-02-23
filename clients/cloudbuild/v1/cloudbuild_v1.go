@@ -240,6 +240,9 @@ type Build struct {
 	// Steps: Describes the operations to be performed on the workspace.
 	Steps []*BuildStep `json:"steps,omitempty"`
 
+	// Substitutions: Substitutions data for Build resource.
+	Substitutions map[string]string `json:"substitutions,omitempty"`
+
 	// Timeout: Amount of time that this build should be allowed to run, to
 	// second
 	// granularity. If this amount of time elapses, work on the build will
@@ -341,6 +344,11 @@ type BuildStep struct {
 	// this operation's container.
 	Dir string `json:"dir,omitempty"`
 
+	// Entrypoint: Optional entrypoint to be used instead of the build step
+	// image's default
+	// If unset, the image's default will be used.
+	Entrypoint string `json:"entrypoint,omitempty"`
+
 	// Env: A list of environment variable definitions to be used when
 	// running a step.
 	//
@@ -436,6 +444,9 @@ type BuildTrigger struct {
 	//
 	// @OutputOnly
 	Id string `json:"id,omitempty"`
+
+	// Substitutions: Substitutions data for Build resource.
+	Substitutions map[string]string `json:"substitutions,omitempty"`
 
 	// TriggerTemplate: Template describing the types of source changes to
 	// trigger a build.

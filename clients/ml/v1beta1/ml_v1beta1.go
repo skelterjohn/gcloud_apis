@@ -1,4 +1,4 @@
-// Package ml provides access to the Google Cloud Machine Learning.
+// Package ml provides access to the Google Cloud Machine Learning Engine.
 //
 // See https://cloud.google.com/ml/
 //
@@ -205,6 +205,129 @@ func (s *GoogleApi__HttpBody) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields)
 }
 
+// GoogleCloudMlV1__OperationMetadata: Represents the metadata of the
+// long-running operation.
+type GoogleCloudMlV1__OperationMetadata struct {
+	// CreateTime: The time the operation was submitted.
+	CreateTime string `json:"createTime,omitempty"`
+
+	// EndTime: The time operation processing completed.
+	EndTime string `json:"endTime,omitempty"`
+
+	// IsCancellationRequested: Indicates whether a request to cancel this
+	// operation has been made.
+	IsCancellationRequested bool `json:"isCancellationRequested,omitempty"`
+
+	// ModelName: Contains the name of the model associated with the
+	// operation.
+	ModelName string `json:"modelName,omitempty"`
+
+	// OperationType: The operation type.
+	//
+	// Possible values:
+	//   "OPERATION_TYPE_UNSPECIFIED" - Unspecified operation type.
+	//   "CREATE_VERSION" - An operation to create a new version.
+	//   "DELETE_VERSION" - An operation to delete an existing version.
+	//   "DELETE_MODEL" - An operation to delete an existing model.
+	OperationType string `json:"operationType,omitempty"`
+
+	// StartTime: The time operation processing started.
+	StartTime string `json:"startTime,omitempty"`
+
+	// Version: Contains the version associated with the operation.
+	Version *GoogleCloudMlV1__Version `json:"version,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "CreateTime") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *GoogleCloudMlV1__OperationMetadata) MarshalJSON() ([]byte, error) {
+	type noMethod GoogleCloudMlV1__OperationMetadata
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
+// GoogleCloudMlV1__Version: Represents a version of the model.
+//
+// Each version is a trained model deployed in the cloud, ready to
+// handle
+// prediction requests. A model can have multiple versions. You can
+// get
+// information about all of the versions of a given model by
+// calling
+// [projects.models.versions.list](/ml/reference/rest/v1/projects
+// .models.versions/list).
+type GoogleCloudMlV1__Version struct {
+	// CreateTime: Output only. The time the version was created.
+	CreateTime string `json:"createTime,omitempty"`
+
+	// DeploymentUri: Required. The Google Cloud Storage location of the
+	// trained model used to
+	// create the version. See the
+	// [overview of model deployment](/ml/docs/concepts/deployment-overview)
+	// for
+	// more informaiton.
+	//
+	// When passing Version
+	// to
+	// [projects.models.versions.create](/ml/reference/rest/v1/projects.mo
+	// dels.versions/create)
+	// the model service uses the specified location as the source of the
+	// model.
+	// Once deployed, the model version is hosted by the prediction service,
+	// so
+	// this location is useful only as a historical record.
+	DeploymentUri string `json:"deploymentUri,omitempty"`
+
+	// Description: Optional. The description specified for the version when
+	// it was created.
+	Description string `json:"description,omitempty"`
+
+	// IsDefault: Output only. If true, this version will be used to handle
+	// prediction
+	// requests that do not specify a version.
+	//
+	// You can change the default version by
+	// calling
+	// [projects.methods.versions.setDefault](/ml/reference/rest/v1/p
+	// rojects.models.versions/setDefault).
+	IsDefault bool `json:"isDefault,omitempty"`
+
+	// LastUseTime: Output only. The time the version was last used for
+	// prediction.
+	LastUseTime string `json:"lastUseTime,omitempty"`
+
+	// Name: Required.The name specified for the version when it was
+	// created.
+	//
+	// The version name must be unique within the model it is created in.
+	Name string `json:"name,omitempty"`
+
+	// RuntimeVersion: Optional. The Google Cloud ML runtime version to use
+	// for this deployment.
+	// If not set, Google Cloud ML will choose a version.
+	RuntimeVersion string `json:"runtimeVersion,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "CreateTime") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+}
+
+func (s *GoogleCloudMlV1__Version) MarshalJSON() ([]byte, error) {
+	type noMethod GoogleCloudMlV1__Version
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields)
+}
+
 // GoogleCloudMlV1beta1HyperparameterOutputHyperparameterMetric: An
 // observed value of a metric.
 type GoogleCloudMlV1beta1HyperparameterOutputHyperparameterMetric struct {
@@ -312,6 +435,16 @@ type GoogleCloudMlV1beta1__HyperparameterSpec struct {
 	//   "MAXIMIZE" - Maximize the goal metric.
 	//   "MINIMIZE" - Minimize the goal metric.
 	Goal string `json:"goal,omitempty"`
+
+	// HyperparameterMetricTag: Optional. The Tensorflow summary tag name to
+	// use for optimizing trials. For
+	// current versions of Tensorflow, this tag name should exactly match
+	// what is
+	// shown in Tensorboard, including all scopes.  For versions of
+	// Tensorflow
+	// prior to 0.12, this should be only the tag passed to tf.Summary.
+	// By default, "training/hptuning/metric" will be used.
+	HyperparameterMetricTag string `json:"hyperparameterMetricTag,omitempty"`
 
 	// MaxParallelTrials: Optional. The number of training trials to run
 	// concurrently.
@@ -540,6 +673,17 @@ type GoogleCloudMlV1beta1__Model struct {
 	// The model name must be unique within the project it is created in.
 	Name string `json:"name,omitempty"`
 
+	// OnlinePredictionLogging: Optional. If true, enables StackDriver
+	// Logging for online prediction.
+	// Default is false.
+	OnlinePredictionLogging bool `json:"onlinePredictionLogging,omitempty"`
+
+	// Regions: Optional. The list of regions where the model is going to be
+	// deployed.
+	// Currently only one region per model is supported.
+	// Defaults to 'us-central1' if nothing is set.
+	Regions []string `json:"regions,omitempty"`
+
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
 	googleapi.ServerResponse `json:"-"`
@@ -714,7 +858,7 @@ func (s *GoogleCloudMlV1beta1__ParameterSpec) MarshalJSON() ([]byte, error) {
 // contain
 // only unlabeled values.
 //
-// Most data does not include named inputs. Some instances will be
+// Not all data includes named inputs. Some instances will be
 // simple
 // JSON values (boolean, number, or string). However, instances are
 // often lists
@@ -732,11 +876,15 @@ func (s *GoogleCloudMlV1beta1__ParameterSpec) MarshalJSON() ([]byte, error) {
 // {"instances": ["the quick brown fox", "la bruja le
 // dio"]}
 // </pre>
-// Sentences encoded as lists of words (vectors of
-// strings):
+// Sentences encoded as lists of words (vectors of strings):
 // <pre>
-// {"instances": [["the","quick","brown"],
-// ["la","bruja","le"]]}
+// {
+//   "instances": [
+//     ["the","quick","brown"],
+//     ["la","bruja","le"],
+//     ...
+//   ]
+// }
 // </pre>
 // Floating point scalar values:
 // <pre>
@@ -744,28 +892,59 @@ func (s *GoogleCloudMlV1beta1__ParameterSpec) MarshalJSON() ([]byte, error) {
 // </pre>
 // Vectors of integers:
 // <pre>
-// {"instances": [[0, 1, 2], [3, 4, 5],...]}
+// {
+//   "instances": [
+//     [0, 1, 2],
+//     [3, 4, 5],
+//     ...
+//   ]
+// }
 // </pre>
 // Tensors (in this case, two-dimensional tensors):
 // <pre>
-// {"instances": [[[0, 1, 2], [3, 4, 5]], ...]}
+// {
+//   "instances": [
+//     [
+//       [0, 1, 2],
+//       [3, 4, 5]
+//     ],
+//     ...
+//   ]
+// }
 // </pre>
-// Images represented as a three-dimensional list. In this encoding
-// scheme the
-// first two dimensions represent the rows and columns of the image, and
-// the
-// third contains the R, G, and B values for each
+// Images can be represented different ways. In this encoding scheme the
+// first
+// two dimensions represent the rows and columns of the image, and the
+// third
+// contains lists (vectors) of the R, G, and B values for each
 // pixel.
 // <pre>
-// {"instances": [[[[138, 30, 66], [130, 20, 56], ...]]]]}
+// {
+//   "instances": [
+//     [
+//       [
+//         [138, 30, 66],
+//         [130, 20, 56],
+//         ...
+//       ],
+//       [
+//         [126, 38, 61],
+//         [122, 24, 57],
+//         ...
+//       ],
+//       ...
+//     ],
+//     ...
+//   ]
+// }
 // </pre>
-// Data must be encoded as UTF-8. If your data uses another character
-// encoding,
-// you must base64 encode the data and mark it as binary. To mark a JSON
+// JSON strings must be encoded as UTF-8. To send binary data, you
+// must
+// base64-encode the data and mark it as binary. To mark a JSON
 // string
-// as binary, replace it with an object with a single attribute named
-// `b`:
-// <pre>{"b": "..."} </pre>
+// as binary, replace it with a JSON object with a single attribute
+// named `b64`:
+// <pre>{"b64": "..."} </pre>
 // For example:
 //
 // Two Serialized tf.Examples (fake data, for illustrative purposes
@@ -784,8 +963,20 @@ func (s *GoogleCloudMlV1beta1__ParameterSpec) MarshalJSON() ([]byte, error) {
 //
 // JSON input data to be preprocessed:
 // <pre>
-// {"instances": [{"a": 1.0,  "b": true,  "c": "x"},
-//                {"a": -2.0, "b": false, "c": "y"}]}
+// {
+//   "instances": [
+//     {
+//       "a": 1.0,
+//       "b": true,
+//       "c": "x"
+//     },
+//     {
+//       "a": -2.0,
+//       "b": false,
+//       "c": "y"
+//     }
+//   ]
+// }
 // </pre>
 // Some models have an underlying TensorFlow graph that accepts multiple
 // input
@@ -797,18 +988,60 @@ func (s *GoogleCloudMlV1beta1__ParameterSpec) MarshalJSON() ([]byte, error) {
 // "image"
 // (base64-encoded string):
 // <pre>
-// {"instances": [{"tag": "beach", "image": {"b64": "ASa8asdf"}},
-//                {"tag": "car", "image": {"b64":
-// "JLK7ljk3"}}]}
+// {
+//   "instances": [
+//     {
+//       "tag": "beach",
+//       "image": {"b64": "ASa8asdf"}
+//     },
+//     {
+//       "tag": "car",
+//       "image": {"b64": "JLK7ljk3"}
+//     }
+//   ]
+// }
 // </pre>
 // For a graph with input tensor aliases "tag" (string) and
 // "image"
 // (3-dimensional array of 8-bit ints):
 // <pre>
-// {"instances": [{"tag": "beach", "image": [[[263, 1, 10], [262, 2,
-// 11], ...]]},
-//                {"tag": "car", "image": [[[10, 11, 24], [23, 10, 15],
-// ...]]}]}
+// {
+//   "instances": [
+//     {
+//       "tag": "beach",
+//       "image": [
+//         [
+//           [138, 30, 66],
+//           [130, 20, 56],
+//           ...
+//         ],
+//         [
+//           [126, 38, 61],
+//           [122, 24, 57],
+//           ...
+//         ],
+//         ...
+//       ]
+//     },
+//     {
+//       "tag": "car",
+//       "image": [
+//         [
+//           [255, 0, 102],
+//           [255, 0, 97],
+//           ...
+//         ],
+//         [
+//           [254, 1, 101],
+//           [254, 2, 93],
+//           ...
+//         ],
+//         ...
+//       ]
+//     },
+//     ...
+//   ]
+// }
 // </pre>
 // If the call is successful, the response body will contain one
 // prediction
@@ -878,6 +1111,22 @@ type GoogleCloudMlV1beta1__PredictionInput struct {
 	// prediction job in.
 	Region string `json:"region,omitempty"`
 
+	// RuntimeVersion: Optional. The Google Cloud ML runtime version to use
+	// for this batch
+	// prediction. If not set, Google Cloud ML will pick the runtime version
+	// used
+	// during the CreateVersion request for this model version, or choose
+	// the
+	// latest stable version when model version information is not
+	// available
+	// such as when the model is specified by uri.
+	RuntimeVersion string `json:"runtimeVersion,omitempty"`
+
+	// Uri: Use this field if you want to specify a Google Cloud Storage
+	// path for
+	// the model to use.
+	Uri string `json:"uri,omitempty"`
+
 	// VersionName: Use this field if you want to specify a version of the
 	// model to use. The
 	// string is formatted the same way as `model_version`, with the
@@ -909,6 +1158,9 @@ func (s *GoogleCloudMlV1beta1__PredictionInput) MarshalJSON() ([]byte, error) {
 type GoogleCloudMlV1beta1__PredictionOutput struct {
 	// ErrorCount: The number of data instances which resulted in errors.
 	ErrorCount int64 `json:"errorCount,omitempty,string"`
+
+	// NodeHours: Node hours used by the batch prediction job.
+	NodeHours float64 `json:"nodeHours,omitempty"`
 
 	// OutputPath: The output Google Cloud Storage location provided at the
 	// job creation time.
@@ -945,6 +1197,15 @@ type GoogleCloudMlV1beta1__TrainingInput struct {
 
 	// Hyperparameters: Optional. The set of Hyperparameters to tune.
 	Hyperparameters *GoogleCloudMlV1beta1__HyperparameterSpec `json:"hyperparameters,omitempty"`
+
+	// JobDir: Optional. A Google Cloud Storage path in which to store
+	// training outputs
+	// and other data needed for training. This path is passed to your
+	// TensorFlow
+	// program as the 'job_dir' command-line argument. The benefit of
+	// specifying
+	// this field is that Cloud ML validates the path for use in training.
+	JobDir string `json:"jobDir,omitempty"`
 
 	// MasterType: Optional. Specifies the type of virtual machine to use
 	// for your training
@@ -986,6 +1247,21 @@ type GoogleCloudMlV1beta1__TrainingInput struct {
 	//   A machine with roughly twice the number of cores and roughly double
 	// the
 	//   memory of <code suppresswarning="true">complex_model_m</code>.
+	//   </dd>
+	//   <dt>standard_gpu</dt>
+	//   <dd>
+	//   A machine equivalent to <code
+	// suppresswarning="true">standard</code> that
+	//   also includes a
+	//   <a href="ml/docs/how-tos/using-gpus">
+	//   GPU that you can use in your trainer</a>.
+	//   </dd>
+	//   <dt>complex_model_m_gpu</dt>
+	//   <dd>
+	//   A machine equivalent to
+	//   <code suppresswarning="true">coplex_model_m</code> that also
+	// includes
+	//   four GPUs.
 	//   </dd>
 	// </dl>
 	//
@@ -1029,6 +1305,11 @@ type GoogleCloudMlV1beta1__TrainingInput struct {
 	// training job in.
 	Region string `json:"region,omitempty"`
 
+	// RuntimeVersion: Optional. The Google Cloud ML runtime version to use
+	// for training.  If not
+	// set, Google Cloud ML will choose the latest stable version.
+	RuntimeVersion string `json:"runtimeVersion,omitempty"`
+
 	// ScaleTier: Required. Specifies the machine types, the number of
 	// replicas for workers
 	// and parameter servers.
@@ -1040,6 +1321,8 @@ type GoogleCloudMlV1beta1__TrainingInput struct {
 	//   "STANDARD_1" - Many workers and a few parameter servers.
 	//   "PREMIUM_1" - A large number of workers with many parameter
 	// servers.
+	//   "BASIC_GPU" - A single worker instance [with a
+	// GPU](ml/docs/how-tos/using-gpus).
 	//   "CUSTOM" - The CUSTOM tier is not a set tier, but rather enables
 	// you to use your
 	// own cluster specification. When you use this tier, set values
@@ -1205,10 +1488,10 @@ type GoogleCloudMlV1beta1__Version struct {
 	// The version name must be unique within the model it is created in.
 	Name string `json:"name,omitempty"`
 
-	// OnlinePredictionLogging: Optional. If true, enables StackDriver
-	// Logging for online prediction.
-	// Default is false.
-	OnlinePredictionLogging bool `json:"onlinePredictionLogging,omitempty"`
+	// RuntimeVersion: Optional. The Google Cloud ML runtime version to use
+	// for this deployment.
+	// If not set, Google Cloud ML will choose a version.
+	RuntimeVersion string `json:"runtimeVersion,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
@@ -1464,7 +1747,7 @@ type GoogleRpc__StatusDetails interface{}
 
 type ProjectsGetConfigCall struct {
 	s            *Service
-	projectsId   string
+	name         string
 	urlParams_   gensupport.URLParams
 	ifNoneMatch_ string
 	ctx_         context.Context
@@ -1477,9 +1760,9 @@ type ProjectsGetConfigCall struct {
 // the Google Cloud Storage location where you put your model training
 // code
 // for training the model with Google Cloud Machine Learning.
-func (r *ProjectsService) GetConfig(projectsId string) *ProjectsGetConfigCall {
+func (r *ProjectsService) GetConfig(name string) *ProjectsGetConfigCall {
 	c := &ProjectsGetConfigCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
+	c.name = name
 	return c
 }
 
@@ -1517,12 +1800,12 @@ func (c *ProjectsGetConfigCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/projects/{projectsId}:getConfig")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+name}:getConfig")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId": c.projectsId,
+		"name": c.name,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -1574,17 +1857,18 @@ func (c *ProjectsGetConfigCall) Do(opts ...googleapi.CallOption) (*GoogleCloudMl
 	//   "httpMethod": "GET",
 	//   "id": "ml.projects.getConfig",
 	//   "parameterOrder": [
-	//     "projectsId"
+	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "projectsId": {
-	//       "description": "Part of `name`. Required. The project name.\n\nAuthorization: requires `Viewer` role on the specified project.",
+	//     "name": {
+	//       "description": "Required. The project name.\n\nAuthorization: requires `Viewer` role on the specified project.",
 	//       "location": "path",
+	//       "pattern": "^projects/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/projects/{projectsId}:getConfig",
+	//   "path": "v1beta1/{+name}:getConfig",
 	//   "response": {
 	//     "$ref": "GoogleCloudMlV1beta1__GetConfigResponse"
 	//   },
@@ -1599,7 +1883,7 @@ func (c *ProjectsGetConfigCall) Do(opts ...googleapi.CallOption) (*GoogleCloudMl
 
 type ProjectsPredictCall struct {
 	s                                    *Service
-	projectsId                           string
+	name                                 string
 	googlecloudmlv1beta1__predictrequest *GoogleCloudMlV1beta1__PredictRequest
 	urlParams_                           gensupport.URLParams
 	ctx_                                 context.Context
@@ -1607,71 +1891,10 @@ type ProjectsPredictCall struct {
 
 // Predict: Performs prediction on the data in the request.
 //
-// Responses are very similar to requests. There are two top-level
-// fields,
-// each of which are JSON lists:
-//
-// <dl>
-//   <dt>predictions</dt>
-//   <dd>The list of predictions, one per instance in the request.</dd>
-//   <dt>error</dt>
-//   <dd>An error message returned instead of a prediction list if any
-//       instance produced an error.</dd>
-// </dl>
-//
-// If the call is successful, the response body will contain one
-// prediction
-// entry per instance in the request body. If prediction fails for
-// any
-// instance, the response body will contain no predictions and will
-// contian
-// a single error entry instead.
-//
-// Even though there is one prediction per instance, the format of
-// a
-// prediction is not directly related to the format of an
-// instance.
-// Predictions take whatever format is specified in the outputs
-// collection
-// defined in the model. The collection of predictions is returned in a
-// JSON
-// list. Each member of the list can be a simple value, a list, or a
-// JSON
-// object of any complexity. If your model has more than one output
-// tensor,
-// each prediction will be a JSON object containing a name/value pair
-// for each
-// output. The names identify the output aliases in the graph.
-//
-// The following examples show some possible responses:
-//
-// A simple set of predictions for three input instances, where
-// each
-// prediction is an integer value:
-// <pre>
-// {"predictions": [5, 4, 3]}
-// </pre>
-// A more complex set of predictions, each containing two named values
-// that
-// correspond to output tensors, named **label** and **scores**
-// respectively.
-// The value of **label** is the predicted category ("car" or "beach")
-// and
-// **scores** contains a list of probabilities for that instance across
-// the
-// possible categories.
-// <pre>
-// {"predictions": [{"label": "beach", "scores": [0.1, 0.9]},
-//                  {"label": "car", "scores": [0.75, 0.25]}]}
-// </pre>
-// A response when there is an error processing an input
-// instance:
-// <pre>
-// {"error": "Divide by zero"}
-// </pre>
-func (r *ProjectsService) Predict(projectsId string, googlecloudmlv1beta1__predictrequest *GoogleCloudMlV1beta1__PredictRequest) *ProjectsPredictCall {
+// **** REMOVE FROM GENERATED DOCUMENTATION
+func (r *ProjectsService) Predict(name string, googlecloudmlv1beta1__predictrequest *GoogleCloudMlV1beta1__PredictRequest) *ProjectsPredictCall {
 	c := &ProjectsPredictCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
+	c.name = name
 	c.googlecloudmlv1beta1__predictrequest = googlecloudmlv1beta1__predictrequest
 	return c
 }
@@ -1702,12 +1925,12 @@ func (c *ProjectsPredictCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/projects/{projectsId}:predict")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+name}:predict")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId": c.projectsId,
+		"name": c.name,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -1753,22 +1976,23 @@ func (c *ProjectsPredictCall) Do(opts ...googleapi.CallOption) (*GoogleApi__Http
 	}
 	return ret, nil
 	// {
-	//   "description": "Performs prediction on the data in the request.\n\nResponses are very similar to requests. There are two top-level fields,\neach of which are JSON lists:\n\n\u003cdl\u003e\n  \u003cdt\u003epredictions\u003c/dt\u003e\n  \u003cdd\u003eThe list of predictions, one per instance in the request.\u003c/dd\u003e\n  \u003cdt\u003eerror\u003c/dt\u003e\n  \u003cdd\u003eAn error message returned instead of a prediction list if any\n      instance produced an error.\u003c/dd\u003e\n\u003c/dl\u003e\n\nIf the call is successful, the response body will contain one prediction\nentry per instance in the request body. If prediction fails for any\ninstance, the response body will contain no predictions and will contian\na single error entry instead.\n\nEven though there is one prediction per instance, the format of a\nprediction is not directly related to the format of an instance.\nPredictions take whatever format is specified in the outputs collection\ndefined in the model. The collection of predictions is returned in a JSON\nlist. Each member of the list can be a simple value, a list, or a JSON\nobject of any complexity. If your model has more than one output tensor,\neach prediction will be a JSON object containing a name/value pair for each\noutput. The names identify the output aliases in the graph.\n\nThe following examples show some possible responses:\n\nA simple set of predictions for three input instances, where each\nprediction is an integer value:\n\u003cpre\u003e\n{\"predictions\": [5, 4, 3]}\n\u003c/pre\u003e\nA more complex set of predictions, each containing two named values that\ncorrespond to output tensors, named **label** and **scores** respectively.\nThe value of **label** is the predicted category (\"car\" or \"beach\") and\n**scores** contains a list of probabilities for that instance across the\npossible categories.\n\u003cpre\u003e\n{\"predictions\": [{\"label\": \"beach\", \"scores\": [0.1, 0.9]},\n                 {\"label\": \"car\", \"scores\": [0.75, 0.25]}]}\n\u003c/pre\u003e\nA response when there is an error processing an input instance:\n\u003cpre\u003e\n{\"error\": \"Divide by zero\"}\n\u003c/pre\u003e",
+	//   "description": "Performs prediction on the data in the request.\n\n**** REMOVE FROM GENERATED DOCUMENTATION",
 	//   "flatPath": "v1beta1/projects/{projectsId}:predict",
 	//   "httpMethod": "POST",
 	//   "id": "ml.projects.predict",
 	//   "parameterOrder": [
-	//     "projectsId"
+	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "projectsId": {
-	//       "description": "Part of `name`. Required. The resource name of a model or a version.\n\nAuthorization: requires `Viewer` role on the parent project.",
+	//     "name": {
+	//       "description": "Required. The resource name of a model or a version.\n\nAuthorization: requires `Viewer` role on the parent project.",
 	//       "location": "path",
+	//       "pattern": "^projects/.+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/projects/{projectsId}:predict",
+	//   "path": "v1beta1/{+name}:predict",
 	//   "request": {
 	//     "$ref": "GoogleCloudMlV1beta1__PredictRequest"
 	//   },
@@ -1786,18 +2010,16 @@ func (c *ProjectsPredictCall) Do(opts ...googleapi.CallOption) (*GoogleApi__Http
 
 type ProjectsJobsCancelCall struct {
 	s                                      *Service
-	projectsId                             string
-	jobsId                                 string
+	name                                   string
 	googlecloudmlv1beta1__canceljobrequest *GoogleCloudMlV1beta1__CancelJobRequest
 	urlParams_                             gensupport.URLParams
 	ctx_                                   context.Context
 }
 
 // Cancel: Cancels a running job.
-func (r *ProjectsJobsService) Cancel(projectsId string, jobsId string, googlecloudmlv1beta1__canceljobrequest *GoogleCloudMlV1beta1__CancelJobRequest) *ProjectsJobsCancelCall {
+func (r *ProjectsJobsService) Cancel(name string, googlecloudmlv1beta1__canceljobrequest *GoogleCloudMlV1beta1__CancelJobRequest) *ProjectsJobsCancelCall {
 	c := &ProjectsJobsCancelCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
-	c.jobsId = jobsId
+	c.name = name
 	c.googlecloudmlv1beta1__canceljobrequest = googlecloudmlv1beta1__canceljobrequest
 	return c
 }
@@ -1828,13 +2050,12 @@ func (c *ProjectsJobsCancelCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/projects/{projectsId}/jobs/{jobsId}:cancel")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+name}:cancel")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId": c.projectsId,
-		"jobsId":     c.jobsId,
+		"name": c.name,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -1885,24 +2106,18 @@ func (c *ProjectsJobsCancelCall) Do(opts ...googleapi.CallOption) (*GoogleProtob
 	//   "httpMethod": "POST",
 	//   "id": "ml.projects.jobs.cancel",
 	//   "parameterOrder": [
-	//     "projectsId",
-	//     "jobsId"
+	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "jobsId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
+	//     "name": {
+	//       "description": "Required. The name of the job to cancel.\n\nAuthorization: requires `Editor` role on the parent project.",
 	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "projectsId": {
-	//       "description": "Part of `name`. Required. The name of the job to cancel.\n\nAuthorization: requires `Editor` role on the parent project.",
-	//       "location": "path",
+	//       "pattern": "^projects/[^/]+/jobs/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/projects/{projectsId}/jobs/{jobsId}:cancel",
+	//   "path": "v1beta1/{+name}:cancel",
 	//   "request": {
 	//     "$ref": "GoogleCloudMlV1beta1__CancelJobRequest"
 	//   },
@@ -1920,16 +2135,16 @@ func (c *ProjectsJobsCancelCall) Do(opts ...googleapi.CallOption) (*GoogleProtob
 
 type ProjectsJobsCreateCall struct {
 	s                         *Service
-	projectsId                string
+	parent                    string
 	googlecloudmlv1beta1__job *GoogleCloudMlV1beta1__Job
 	urlParams_                gensupport.URLParams
 	ctx_                      context.Context
 }
 
 // Create: Creates a training or a batch prediction job.
-func (r *ProjectsJobsService) Create(projectsId string, googlecloudmlv1beta1__job *GoogleCloudMlV1beta1__Job) *ProjectsJobsCreateCall {
+func (r *ProjectsJobsService) Create(parent string, googlecloudmlv1beta1__job *GoogleCloudMlV1beta1__Job) *ProjectsJobsCreateCall {
 	c := &ProjectsJobsCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
+	c.parent = parent
 	c.googlecloudmlv1beta1__job = googlecloudmlv1beta1__job
 	return c
 }
@@ -1960,12 +2175,12 @@ func (c *ProjectsJobsCreateCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/projects/{projectsId}/jobs")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+parent}/jobs")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId": c.projectsId,
+		"parent": c.parent,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -2016,17 +2231,18 @@ func (c *ProjectsJobsCreateCall) Do(opts ...googleapi.CallOption) (*GoogleCloudM
 	//   "httpMethod": "POST",
 	//   "id": "ml.projects.jobs.create",
 	//   "parameterOrder": [
-	//     "projectsId"
+	//     "parent"
 	//   ],
 	//   "parameters": {
-	//     "projectsId": {
-	//       "description": "Part of `parent`. Required. The project name.\n\nAuthorization: requires `Editor` role on the specified project.",
+	//     "parent": {
+	//       "description": "Required. The project name.\n\nAuthorization: requires `Editor` role on the specified project.",
 	//       "location": "path",
+	//       "pattern": "^projects/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/projects/{projectsId}/jobs",
+	//   "path": "v1beta1/{+parent}/jobs",
 	//   "request": {
 	//     "$ref": "GoogleCloudMlV1beta1__Job"
 	//   },
@@ -2044,18 +2260,16 @@ func (c *ProjectsJobsCreateCall) Do(opts ...googleapi.CallOption) (*GoogleCloudM
 
 type ProjectsJobsGetCall struct {
 	s            *Service
-	projectsId   string
-	jobsId       string
+	name         string
 	urlParams_   gensupport.URLParams
 	ifNoneMatch_ string
 	ctx_         context.Context
 }
 
 // Get: Describes a job.
-func (r *ProjectsJobsService) Get(projectsId string, jobsId string) *ProjectsJobsGetCall {
+func (r *ProjectsJobsService) Get(name string) *ProjectsJobsGetCall {
 	c := &ProjectsJobsGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
-	c.jobsId = jobsId
+	c.name = name
 	return c
 }
 
@@ -2093,13 +2307,12 @@ func (c *ProjectsJobsGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/projects/{projectsId}/jobs/{jobsId}")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId": c.projectsId,
-		"jobsId":     c.jobsId,
+		"name": c.name,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -2150,24 +2363,18 @@ func (c *ProjectsJobsGetCall) Do(opts ...googleapi.CallOption) (*GoogleCloudMlV1
 	//   "httpMethod": "GET",
 	//   "id": "ml.projects.jobs.get",
 	//   "parameterOrder": [
-	//     "projectsId",
-	//     "jobsId"
+	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "jobsId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
+	//     "name": {
+	//       "description": "Required. The name of the job to get the description of.\n\nAuthorization: requires `Viewer` role on the parent project.",
 	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "projectsId": {
-	//       "description": "Part of `name`. Required. The name of the job to get the description of.\n\nAuthorization: requires `Viewer` role on the parent project.",
-	//       "location": "path",
+	//       "pattern": "^projects/[^/]+/jobs/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/projects/{projectsId}/jobs/{jobsId}",
+	//   "path": "v1beta1/{+name}",
 	//   "response": {
 	//     "$ref": "GoogleCloudMlV1beta1__Job"
 	//   },
@@ -2182,16 +2389,16 @@ func (c *ProjectsJobsGetCall) Do(opts ...googleapi.CallOption) (*GoogleCloudMlV1
 
 type ProjectsJobsListCall struct {
 	s            *Service
-	projectsId   string
+	parent       string
 	urlParams_   gensupport.URLParams
 	ifNoneMatch_ string
 	ctx_         context.Context
 }
 
 // List: Lists the jobs in the project.
-func (r *ProjectsJobsService) List(projectsId string) *ProjectsJobsListCall {
+func (r *ProjectsJobsService) List(parent string) *ProjectsJobsListCall {
 	c := &ProjectsJobsListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
+	c.parent = parent
 	return c
 }
 
@@ -2259,12 +2466,12 @@ func (c *ProjectsJobsListCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/projects/{projectsId}/jobs")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+parent}/jobs")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId": c.projectsId,
+		"parent": c.parent,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -2316,7 +2523,7 @@ func (c *ProjectsJobsListCall) Do(opts ...googleapi.CallOption) (*GoogleCloudMlV
 	//   "httpMethod": "GET",
 	//   "id": "ml.projects.jobs.list",
 	//   "parameterOrder": [
-	//     "projectsId"
+	//     "parent"
 	//   ],
 	//   "parameters": {
 	//     "filter": {
@@ -2335,14 +2542,15 @@ func (c *ProjectsJobsListCall) Do(opts ...googleapi.CallOption) (*GoogleCloudMlV
 	//       "location": "query",
 	//       "type": "string"
 	//     },
-	//     "projectsId": {
-	//       "description": "Part of `parent`. Required. The name of the project for which to list jobs.\n\nAuthorization: requires `Viewer` role on the specified project.",
+	//     "parent": {
+	//       "description": "Required. The name of the project for which to list jobs.\n\nAuthorization: requires `Viewer` role on the specified project.",
 	//       "location": "path",
+	//       "pattern": "^projects/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/projects/{projectsId}/jobs",
+	//   "path": "v1beta1/{+parent}/jobs",
 	//   "response": {
 	//     "$ref": "GoogleCloudMlV1beta1__ListJobsResponse"
 	//   },
@@ -2378,7 +2586,7 @@ func (c *ProjectsJobsListCall) Pages(ctx context.Context, f func(*GoogleCloudMlV
 
 type ProjectsModelsCreateCall struct {
 	s                           *Service
-	projectsId                  string
+	parent                      string
 	googlecloudmlv1beta1__model *GoogleCloudMlV1beta1__Model
 	urlParams_                  gensupport.URLParams
 	ctx_                        context.Context
@@ -2393,9 +2601,9 @@ type ProjectsModelsCreateCall struct {
 // calling
 // [projects.models.versions.create](/ml/reference/rest/v1beta1/p
 // rojects.models.versions/create).
-func (r *ProjectsModelsService) Create(projectsId string, googlecloudmlv1beta1__model *GoogleCloudMlV1beta1__Model) *ProjectsModelsCreateCall {
+func (r *ProjectsModelsService) Create(parent string, googlecloudmlv1beta1__model *GoogleCloudMlV1beta1__Model) *ProjectsModelsCreateCall {
 	c := &ProjectsModelsCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
+	c.parent = parent
 	c.googlecloudmlv1beta1__model = googlecloudmlv1beta1__model
 	return c
 }
@@ -2426,12 +2634,12 @@ func (c *ProjectsModelsCreateCall) doRequest(alt string) (*http.Response, error)
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/projects/{projectsId}/models")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+parent}/models")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId": c.projectsId,
+		"parent": c.parent,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -2482,17 +2690,18 @@ func (c *ProjectsModelsCreateCall) Do(opts ...googleapi.CallOption) (*GoogleClou
 	//   "httpMethod": "POST",
 	//   "id": "ml.projects.models.create",
 	//   "parameterOrder": [
-	//     "projectsId"
+	//     "parent"
 	//   ],
 	//   "parameters": {
-	//     "projectsId": {
-	//       "description": "Part of `parent`. Required. The project name.\n\nAuthorization: requires `Editor` role on the specified project.",
+	//     "parent": {
+	//       "description": "Required. The project name.\n\nAuthorization: requires `Editor` role on the specified project.",
 	//       "location": "path",
+	//       "pattern": "^projects/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/projects/{projectsId}/models",
+	//   "path": "v1beta1/{+parent}/models",
 	//   "request": {
 	//     "$ref": "GoogleCloudMlV1beta1__Model"
 	//   },
@@ -2510,8 +2719,7 @@ func (c *ProjectsModelsCreateCall) Do(opts ...googleapi.CallOption) (*GoogleClou
 
 type ProjectsModelsDeleteCall struct {
 	s          *Service
-	projectsId string
-	modelsId   string
+	name       string
 	urlParams_ gensupport.URLParams
 	ctx_       context.Context
 }
@@ -2524,10 +2732,9 @@ type ProjectsModelsDeleteCall struct {
 // calling
 // [projects.models.versions.delete](/ml/reference/rest/v1beta1/p
 // rojects.models.versions/delete).
-func (r *ProjectsModelsService) Delete(projectsId string, modelsId string) *ProjectsModelsDeleteCall {
+func (r *ProjectsModelsService) Delete(name string) *ProjectsModelsDeleteCall {
 	c := &ProjectsModelsDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
-	c.modelsId = modelsId
+	c.name = name
 	return c
 }
 
@@ -2552,13 +2759,12 @@ func (c *ProjectsModelsDeleteCall) doRequest(alt string) (*http.Response, error)
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/projects/{projectsId}/models/{modelsId}")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId": c.projectsId,
-		"modelsId":   c.modelsId,
+		"name": c.name,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -2609,24 +2815,18 @@ func (c *ProjectsModelsDeleteCall) Do(opts ...googleapi.CallOption) (*GoogleLong
 	//   "httpMethod": "DELETE",
 	//   "id": "ml.projects.models.delete",
 	//   "parameterOrder": [
-	//     "projectsId",
-	//     "modelsId"
+	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "modelsId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
+	//     "name": {
+	//       "description": "Required. The name of the model.\n\nAuthorization: requires `Editor` role on the parent project.",
 	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "projectsId": {
-	//       "description": "Part of `name`. Required. The name of the model.\n\nAuthorization: requires `Editor` role on the parent project.",
-	//       "location": "path",
+	//       "pattern": "^projects/[^/]+/models/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/projects/{projectsId}/models/{modelsId}",
+	//   "path": "v1beta1/{+name}",
 	//   "response": {
 	//     "$ref": "GoogleLongrunning__Operation"
 	//   },
@@ -2641,8 +2841,7 @@ func (c *ProjectsModelsDeleteCall) Do(opts ...googleapi.CallOption) (*GoogleLong
 
 type ProjectsModelsGetCall struct {
 	s            *Service
-	projectsId   string
-	modelsId     string
+	name         string
 	urlParams_   gensupport.URLParams
 	ifNoneMatch_ string
 	ctx_         context.Context
@@ -2653,10 +2852,9 @@ type ProjectsModelsGetCall struct {
 // set), and the default version (if at least one version of the model
 // has
 // been deployed).
-func (r *ProjectsModelsService) Get(projectsId string, modelsId string) *ProjectsModelsGetCall {
+func (r *ProjectsModelsService) Get(name string) *ProjectsModelsGetCall {
 	c := &ProjectsModelsGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
-	c.modelsId = modelsId
+	c.name = name
 	return c
 }
 
@@ -2694,13 +2892,12 @@ func (c *ProjectsModelsGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/projects/{projectsId}/models/{modelsId}")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId": c.projectsId,
-		"modelsId":   c.modelsId,
+		"name": c.name,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -2751,24 +2948,18 @@ func (c *ProjectsModelsGetCall) Do(opts ...googleapi.CallOption) (*GoogleCloudMl
 	//   "httpMethod": "GET",
 	//   "id": "ml.projects.models.get",
 	//   "parameterOrder": [
-	//     "projectsId",
-	//     "modelsId"
+	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "modelsId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
+	//     "name": {
+	//       "description": "Required. The name of the model.\n\nAuthorization: requires `Viewer` role on the parent project.",
 	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "projectsId": {
-	//       "description": "Part of `name`. Required. The name of the model.\n\nAuthorization: requires `Viewer` role on the parent project.",
-	//       "location": "path",
+	//       "pattern": "^projects/[^/]+/models/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/projects/{projectsId}/models/{modelsId}",
+	//   "path": "v1beta1/{+name}",
 	//   "response": {
 	//     "$ref": "GoogleCloudMlV1beta1__Model"
 	//   },
@@ -2783,7 +2974,7 @@ func (c *ProjectsModelsGetCall) Do(opts ...googleapi.CallOption) (*GoogleCloudMl
 
 type ProjectsModelsListCall struct {
 	s            *Service
-	projectsId   string
+	parent       string
 	urlParams_   gensupport.URLParams
 	ifNoneMatch_ string
 	ctx_         context.Context
@@ -2794,9 +2985,9 @@ type ProjectsModelsListCall struct {
 // Each project can contain multiple models, and each model can have
 // multiple
 // versions.
-func (r *ProjectsModelsService) List(projectsId string) *ProjectsModelsListCall {
+func (r *ProjectsModelsService) List(parent string) *ProjectsModelsListCall {
 	c := &ProjectsModelsListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
+	c.parent = parent
 	return c
 }
 
@@ -2857,12 +3048,12 @@ func (c *ProjectsModelsListCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/projects/{projectsId}/models")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+parent}/models")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId": c.projectsId,
+		"parent": c.parent,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -2915,7 +3106,7 @@ func (c *ProjectsModelsListCall) Do(opts ...googleapi.CallOption) (*GoogleCloudM
 	//   "httpMethod": "GET",
 	//   "id": "ml.projects.models.list",
 	//   "parameterOrder": [
-	//     "projectsId"
+	//     "parent"
 	//   ],
 	//   "parameters": {
 	//     "pageSize": {
@@ -2929,14 +3120,15 @@ func (c *ProjectsModelsListCall) Do(opts ...googleapi.CallOption) (*GoogleCloudM
 	//       "location": "query",
 	//       "type": "string"
 	//     },
-	//     "projectsId": {
-	//       "description": "Part of `parent`. Required. The name of the project whose models are to be listed.\n\nAuthorization: requires `Viewer` role on the specified project.",
+	//     "parent": {
+	//       "description": "Required. The name of the project whose models are to be listed.\n\nAuthorization: requires `Viewer` role on the specified project.",
 	//       "location": "path",
+	//       "pattern": "^projects/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/projects/{projectsId}/models",
+	//   "path": "v1beta1/{+parent}/models",
 	//   "response": {
 	//     "$ref": "GoogleCloudMlV1beta1__ListModelsResponse"
 	//   },
@@ -2972,8 +3164,7 @@ func (c *ProjectsModelsListCall) Pages(ctx context.Context, f func(*GoogleCloudM
 
 type ProjectsModelsVersionsCreateCall struct {
 	s                             *Service
-	projectsId                    string
-	modelsId                      string
+	parent                        string
 	googlecloudmlv1beta1__version *GoogleCloudMlV1beta1__Version
 	urlParams_                    gensupport.URLParams
 	ctx_                          context.Context
@@ -2994,10 +3185,9 @@ type ProjectsModelsVersionsCreateCall struct {
 // call
 // [projects.models.versions.setDefault](/ml/reference/rest/v1beta1/
 // projects.models.versions/setDefault).
-func (r *ProjectsModelsVersionsService) Create(projectsId string, modelsId string, googlecloudmlv1beta1__version *GoogleCloudMlV1beta1__Version) *ProjectsModelsVersionsCreateCall {
+func (r *ProjectsModelsVersionsService) Create(parent string, googlecloudmlv1beta1__version *GoogleCloudMlV1beta1__Version) *ProjectsModelsVersionsCreateCall {
 	c := &ProjectsModelsVersionsCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
-	c.modelsId = modelsId
+	c.parent = parent
 	c.googlecloudmlv1beta1__version = googlecloudmlv1beta1__version
 	return c
 }
@@ -3028,13 +3218,12 @@ func (c *ProjectsModelsVersionsCreateCall) doRequest(alt string) (*http.Response
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/projects/{projectsId}/models/{modelsId}/versions")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+parent}/versions")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId": c.projectsId,
-		"modelsId":   c.modelsId,
+		"parent": c.parent,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -3085,24 +3274,18 @@ func (c *ProjectsModelsVersionsCreateCall) Do(opts ...googleapi.CallOption) (*Go
 	//   "httpMethod": "POST",
 	//   "id": "ml.projects.models.versions.create",
 	//   "parameterOrder": [
-	//     "projectsId",
-	//     "modelsId"
+	//     "parent"
 	//   ],
 	//   "parameters": {
-	//     "modelsId": {
-	//       "description": "Part of `parent`. See documentation of `projectsId`.",
+	//     "parent": {
+	//       "description": "Required. The name of the model.\n\nAuthorization: requires `Editor` role on the parent project.",
 	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "projectsId": {
-	//       "description": "Part of `parent`. Required. The name of the model.\n\nAuthorization: requires `Editor` role on the parent project.",
-	//       "location": "path",
+	//       "pattern": "^projects/[^/]+/models/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/projects/{projectsId}/models/{modelsId}/versions",
+	//   "path": "v1beta1/{+parent}/versions",
 	//   "request": {
 	//     "$ref": "GoogleCloudMlV1beta1__Version"
 	//   },
@@ -3120,9 +3303,7 @@ func (c *ProjectsModelsVersionsCreateCall) Do(opts ...googleapi.CallOption) (*Go
 
 type ProjectsModelsVersionsDeleteCall struct {
 	s          *Service
-	projectsId string
-	modelsId   string
-	versionsId string
+	name       string
 	urlParams_ gensupport.URLParams
 	ctx_       context.Context
 }
@@ -3136,11 +3317,9 @@ type ProjectsModelsVersionsDeleteCall struct {
 // Note: You cannot delete the version that is set as the default
 // version
 // of the model unless it is the only remaining version.
-func (r *ProjectsModelsVersionsService) Delete(projectsId string, modelsId string, versionsId string) *ProjectsModelsVersionsDeleteCall {
+func (r *ProjectsModelsVersionsService) Delete(name string) *ProjectsModelsVersionsDeleteCall {
 	c := &ProjectsModelsVersionsDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
-	c.modelsId = modelsId
-	c.versionsId = versionsId
+	c.name = name
 	return c
 }
 
@@ -3165,14 +3344,12 @@ func (c *ProjectsModelsVersionsDeleteCall) doRequest(alt string) (*http.Response
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/projects/{projectsId}/models/{modelsId}/versions/{versionsId}")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId": c.projectsId,
-		"modelsId":   c.modelsId,
-		"versionsId": c.versionsId,
+		"name": c.name,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -3223,31 +3400,18 @@ func (c *ProjectsModelsVersionsDeleteCall) Do(opts ...googleapi.CallOption) (*Go
 	//   "httpMethod": "DELETE",
 	//   "id": "ml.projects.models.versions.delete",
 	//   "parameterOrder": [
-	//     "projectsId",
-	//     "modelsId",
-	//     "versionsId"
+	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "modelsId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
+	//     "name": {
+	//       "description": "Required. The name of the version. You can get the names of all the\nversions of a model by calling\n[projects.models.versions.list](/ml/reference/rest/v1beta1/projects.models.versions/list).\n\nAuthorization: requires `Editor` role on the parent project.",
 	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "projectsId": {
-	//       "description": "Part of `name`. Required. The name of the version. You can get the names of all the\nversions of a model by calling\n[projects.models.versions.list](/ml/reference/rest/v1beta1/projects.models.versions/list).\n\nAuthorization: requires `Editor` role on the parent project.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "versionsId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
-	//       "location": "path",
+	//       "pattern": "^projects/[^/]+/models/[^/]+/versions/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/projects/{projectsId}/models/{modelsId}/versions/{versionsId}",
+	//   "path": "v1beta1/{+name}",
 	//   "response": {
 	//     "$ref": "GoogleLongrunning__Operation"
 	//   },
@@ -3262,9 +3426,7 @@ func (c *ProjectsModelsVersionsDeleteCall) Do(opts ...googleapi.CallOption) (*Go
 
 type ProjectsModelsVersionsGetCall struct {
 	s            *Service
-	projectsId   string
-	modelsId     string
-	versionsId   string
+	name         string
 	urlParams_   gensupport.URLParams
 	ifNoneMatch_ string
 	ctx_         context.Context
@@ -3279,11 +3441,9 @@ type ProjectsModelsVersionsGetCall struct {
 // to get the same information that this method returns for all of
 // the
 // versions of a model.
-func (r *ProjectsModelsVersionsService) Get(projectsId string, modelsId string, versionsId string) *ProjectsModelsVersionsGetCall {
+func (r *ProjectsModelsVersionsService) Get(name string) *ProjectsModelsVersionsGetCall {
 	c := &ProjectsModelsVersionsGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
-	c.modelsId = modelsId
-	c.versionsId = versionsId
+	c.name = name
 	return c
 }
 
@@ -3321,14 +3481,12 @@ func (c *ProjectsModelsVersionsGetCall) doRequest(alt string) (*http.Response, e
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/projects/{projectsId}/models/{modelsId}/versions/{versionsId}")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId": c.projectsId,
-		"modelsId":   c.modelsId,
-		"versionsId": c.versionsId,
+		"name": c.name,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -3379,31 +3537,18 @@ func (c *ProjectsModelsVersionsGetCall) Do(opts ...googleapi.CallOption) (*Googl
 	//   "httpMethod": "GET",
 	//   "id": "ml.projects.models.versions.get",
 	//   "parameterOrder": [
-	//     "projectsId",
-	//     "modelsId",
-	//     "versionsId"
+	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "modelsId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
+	//     "name": {
+	//       "description": "Required. The name of the version.\n\nAuthorization: requires `Viewer` role on the parent project.",
 	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "projectsId": {
-	//       "description": "Part of `name`. Required. The name of the version.\n\nAuthorization: requires `Viewer` role on the parent project.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "versionsId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
-	//       "location": "path",
+	//       "pattern": "^projects/[^/]+/models/[^/]+/versions/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/projects/{projectsId}/models/{modelsId}/versions/{versionsId}",
+	//   "path": "v1beta1/{+name}",
 	//   "response": {
 	//     "$ref": "GoogleCloudMlV1beta1__Version"
 	//   },
@@ -3418,8 +3563,7 @@ func (c *ProjectsModelsVersionsGetCall) Do(opts ...googleapi.CallOption) (*Googl
 
 type ProjectsModelsVersionsListCall struct {
 	s            *Service
-	projectsId   string
-	modelsId     string
+	parent       string
 	urlParams_   gensupport.URLParams
 	ifNoneMatch_ string
 	ctx_         context.Context
@@ -3432,10 +3576,9 @@ type ProjectsModelsVersionsListCall struct {
 // only a limited number of results at a time, you can request that the
 // list
 // be retrieved in batches (called pages):
-func (r *ProjectsModelsVersionsService) List(projectsId string, modelsId string) *ProjectsModelsVersionsListCall {
+func (r *ProjectsModelsVersionsService) List(parent string) *ProjectsModelsVersionsListCall {
 	c := &ProjectsModelsVersionsListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
-	c.modelsId = modelsId
+	c.parent = parent
 	return c
 }
 
@@ -3496,13 +3639,12 @@ func (c *ProjectsModelsVersionsListCall) doRequest(alt string) (*http.Response, 
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/projects/{projectsId}/models/{modelsId}/versions")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+parent}/versions")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId": c.projectsId,
-		"modelsId":   c.modelsId,
+		"parent": c.parent,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -3555,16 +3697,9 @@ func (c *ProjectsModelsVersionsListCall) Do(opts ...googleapi.CallOption) (*Goog
 	//   "httpMethod": "GET",
 	//   "id": "ml.projects.models.versions.list",
 	//   "parameterOrder": [
-	//     "projectsId",
-	//     "modelsId"
+	//     "parent"
 	//   ],
 	//   "parameters": {
-	//     "modelsId": {
-	//       "description": "Part of `parent`. See documentation of `projectsId`.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
 	//     "pageSize": {
 	//       "description": "Optional. The number of versions to retrieve per \"page\" of results. If\nthere are more remaining results than this number, the response message\nwill contain a valid value in the `next_page_token` field.\n\nThe default value is 20, and the maximum page size is 100.",
 	//       "format": "int32",
@@ -3576,14 +3711,15 @@ func (c *ProjectsModelsVersionsListCall) Do(opts ...googleapi.CallOption) (*Goog
 	//       "location": "query",
 	//       "type": "string"
 	//     },
-	//     "projectsId": {
-	//       "description": "Part of `parent`. Required. The name of the model for which to list the version.\n\nAuthorization: requires `Viewer` role on the parent project.",
+	//     "parent": {
+	//       "description": "Required. The name of the model for which to list the version.\n\nAuthorization: requires `Viewer` role on the parent project.",
 	//       "location": "path",
+	//       "pattern": "^projects/[^/]+/models/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/projects/{projectsId}/models/{modelsId}/versions",
+	//   "path": "v1beta1/{+parent}/versions",
 	//   "response": {
 	//     "$ref": "GoogleCloudMlV1beta1__ListVersionsResponse"
 	//   },
@@ -3619,9 +3755,7 @@ func (c *ProjectsModelsVersionsListCall) Pages(ctx context.Context, f func(*Goog
 
 type ProjectsModelsVersionsSetDefaultCall struct {
 	s                                              *Service
-	projectsId                                     string
-	modelsId                                       string
-	versionsId                                     string
+	name                                           string
 	googlecloudmlv1beta1__setdefaultversionrequest *GoogleCloudMlV1beta1__SetDefaultVersionRequest
 	urlParams_                                     gensupport.URLParams
 	ctx_                                           context.Context
@@ -3639,11 +3773,9 @@ type ProjectsModelsVersionsSetDefaultCall struct {
 // default. You must make any subsequent changes to the default
 // version
 // setting manually using this method.
-func (r *ProjectsModelsVersionsService) SetDefault(projectsId string, modelsId string, versionsId string, googlecloudmlv1beta1__setdefaultversionrequest *GoogleCloudMlV1beta1__SetDefaultVersionRequest) *ProjectsModelsVersionsSetDefaultCall {
+func (r *ProjectsModelsVersionsService) SetDefault(name string, googlecloudmlv1beta1__setdefaultversionrequest *GoogleCloudMlV1beta1__SetDefaultVersionRequest) *ProjectsModelsVersionsSetDefaultCall {
 	c := &ProjectsModelsVersionsSetDefaultCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
-	c.modelsId = modelsId
-	c.versionsId = versionsId
+	c.name = name
 	c.googlecloudmlv1beta1__setdefaultversionrequest = googlecloudmlv1beta1__setdefaultversionrequest
 	return c
 }
@@ -3674,14 +3806,12 @@ func (c *ProjectsModelsVersionsSetDefaultCall) doRequest(alt string) (*http.Resp
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/projects/{projectsId}/models/{modelsId}/versions/{versionsId}:setDefault")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+name}:setDefault")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId": c.projectsId,
-		"modelsId":   c.modelsId,
-		"versionsId": c.versionsId,
+		"name": c.name,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -3732,31 +3862,18 @@ func (c *ProjectsModelsVersionsSetDefaultCall) Do(opts ...googleapi.CallOption) 
 	//   "httpMethod": "POST",
 	//   "id": "ml.projects.models.versions.setDefault",
 	//   "parameterOrder": [
-	//     "projectsId",
-	//     "modelsId",
-	//     "versionsId"
+	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "modelsId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
+	//     "name": {
+	//       "description": "Required. The name of the version to make the default for the model. You\ncan get the names of all the versions of a model by calling\n[projects.models.versions.list](/ml/reference/rest/v1beta1/projects.models.versions/list).\n\nAuthorization: requires `Editor` role on the parent project.",
 	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "projectsId": {
-	//       "description": "Part of `name`. Required. The name of the version to make the default for the model. You\ncan get the names of all the versions of a model by calling\n[projects.models.versions.list](/ml/reference/rest/v1beta1/projects.models.versions/list).\n\nAuthorization: requires `Editor` role on the parent project.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "versionsId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
-	//       "location": "path",
+	//       "pattern": "^projects/[^/]+/models/[^/]+/versions/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/projects/{projectsId}/models/{modelsId}/versions/{versionsId}:setDefault",
+	//   "path": "v1beta1/{+name}:setDefault",
 	//   "request": {
 	//     "$ref": "GoogleCloudMlV1beta1__SetDefaultVersionRequest"
 	//   },
@@ -3773,11 +3890,10 @@ func (c *ProjectsModelsVersionsSetDefaultCall) Do(opts ...googleapi.CallOption) 
 // method id "ml.projects.operations.cancel":
 
 type ProjectsOperationsCancelCall struct {
-	s            *Service
-	projectsId   string
-	operationsId string
-	urlParams_   gensupport.URLParams
-	ctx_         context.Context
+	s          *Service
+	name       string
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
 }
 
 // Cancel: Starts asynchronous cancellation on a long-running operation.
@@ -3798,10 +3914,9 @@ type ProjectsOperationsCancelCall struct {
 // an Operation.error value with a google.rpc.Status.code of
 // 1,
 // corresponding to `Code.CANCELLED`.
-func (r *ProjectsOperationsService) Cancel(projectsId string, operationsId string) *ProjectsOperationsCancelCall {
+func (r *ProjectsOperationsService) Cancel(name string) *ProjectsOperationsCancelCall {
 	c := &ProjectsOperationsCancelCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
-	c.operationsId = operationsId
+	c.name = name
 	return c
 }
 
@@ -3826,13 +3941,12 @@ func (c *ProjectsOperationsCancelCall) doRequest(alt string) (*http.Response, er
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/projects/{projectsId}/operations/{operationsId}:cancel")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+name}:cancel")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId":   c.projectsId,
-		"operationsId": c.operationsId,
+		"name": c.name,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -3883,24 +3997,18 @@ func (c *ProjectsOperationsCancelCall) Do(opts ...googleapi.CallOption) (*Google
 	//   "httpMethod": "POST",
 	//   "id": "ml.projects.operations.cancel",
 	//   "parameterOrder": [
-	//     "projectsId",
-	//     "operationsId"
+	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "operationsId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
+	//     "name": {
+	//       "description": "The name of the operation resource to be cancelled.",
 	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "projectsId": {
-	//       "description": "Part of `name`. The name of the operation resource to be cancelled.",
-	//       "location": "path",
+	//       "pattern": "^projects/[^/]+/operations/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/projects/{projectsId}/operations/{operationsId}:cancel",
+	//   "path": "v1beta1/{+name}:cancel",
 	//   "response": {
 	//     "$ref": "GoogleProtobuf__Empty"
 	//   },
@@ -3914,11 +4022,10 @@ func (c *ProjectsOperationsCancelCall) Do(opts ...googleapi.CallOption) (*Google
 // method id "ml.projects.operations.delete":
 
 type ProjectsOperationsDeleteCall struct {
-	s            *Service
-	projectsId   string
-	operationsId string
-	urlParams_   gensupport.URLParams
-	ctx_         context.Context
+	s          *Service
+	name       string
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
 }
 
 // Delete: Deletes a long-running operation. This method indicates that
@@ -3928,10 +4035,9 @@ type ProjectsOperationsDeleteCall struct {
 // operation. If the server doesn't support this method, it
 // returns
 // `google.rpc.Code.UNIMPLEMENTED`.
-func (r *ProjectsOperationsService) Delete(projectsId string, operationsId string) *ProjectsOperationsDeleteCall {
+func (r *ProjectsOperationsService) Delete(name string) *ProjectsOperationsDeleteCall {
 	c := &ProjectsOperationsDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
-	c.operationsId = operationsId
+	c.name = name
 	return c
 }
 
@@ -3956,13 +4062,12 @@ func (c *ProjectsOperationsDeleteCall) doRequest(alt string) (*http.Response, er
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/projects/{projectsId}/operations/{operationsId}")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId":   c.projectsId,
-		"operationsId": c.operationsId,
+		"name": c.name,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -4013,24 +4118,18 @@ func (c *ProjectsOperationsDeleteCall) Do(opts ...googleapi.CallOption) (*Google
 	//   "httpMethod": "DELETE",
 	//   "id": "ml.projects.operations.delete",
 	//   "parameterOrder": [
-	//     "projectsId",
-	//     "operationsId"
+	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "operationsId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
+	//     "name": {
+	//       "description": "The name of the operation resource to be deleted.",
 	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "projectsId": {
-	//       "description": "Part of `name`. The name of the operation resource to be deleted.",
-	//       "location": "path",
+	//       "pattern": "^projects/[^/]+/operations/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/projects/{projectsId}/operations/{operationsId}",
+	//   "path": "v1beta1/{+name}",
 	//   "response": {
 	//     "$ref": "GoogleProtobuf__Empty"
 	//   },
@@ -4045,8 +4144,7 @@ func (c *ProjectsOperationsDeleteCall) Do(opts ...googleapi.CallOption) (*Google
 
 type ProjectsOperationsGetCall struct {
 	s            *Service
-	projectsId   string
-	operationsId string
+	name         string
 	urlParams_   gensupport.URLParams
 	ifNoneMatch_ string
 	ctx_         context.Context
@@ -4057,10 +4155,9 @@ type ProjectsOperationsGetCall struct {
 // method to poll the operation result at intervals as recommended by
 // the API
 // service.
-func (r *ProjectsOperationsService) Get(projectsId string, operationsId string) *ProjectsOperationsGetCall {
+func (r *ProjectsOperationsService) Get(name string) *ProjectsOperationsGetCall {
 	c := &ProjectsOperationsGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
-	c.operationsId = operationsId
+	c.name = name
 	return c
 }
 
@@ -4098,13 +4195,12 @@ func (c *ProjectsOperationsGetCall) doRequest(alt string) (*http.Response, error
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/projects/{projectsId}/operations/{operationsId}")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId":   c.projectsId,
-		"operationsId": c.operationsId,
+		"name": c.name,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -4155,24 +4251,18 @@ func (c *ProjectsOperationsGetCall) Do(opts ...googleapi.CallOption) (*GoogleLon
 	//   "httpMethod": "GET",
 	//   "id": "ml.projects.operations.get",
 	//   "parameterOrder": [
-	//     "projectsId",
-	//     "operationsId"
+	//     "name"
 	//   ],
 	//   "parameters": {
-	//     "operationsId": {
-	//       "description": "Part of `name`. See documentation of `projectsId`.",
+	//     "name": {
+	//       "description": "The name of the operation resource.",
 	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "projectsId": {
-	//       "description": "Part of `name`. The name of the operation resource.",
-	//       "location": "path",
+	//       "pattern": "^projects/[^/]+/operations/[^/]+$",
 	//       "required": true,
 	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/projects/{projectsId}/operations/{operationsId}",
+	//   "path": "v1beta1/{+name}",
 	//   "response": {
 	//     "$ref": "GoogleLongrunning__Operation"
 	//   },
@@ -4187,7 +4277,7 @@ func (c *ProjectsOperationsGetCall) Do(opts ...googleapi.CallOption) (*GoogleLon
 
 type ProjectsOperationsListCall struct {
 	s            *Service
-	projectsId   string
+	name         string
 	urlParams_   gensupport.URLParams
 	ifNoneMatch_ string
 	ctx_         context.Context
@@ -4201,9 +4291,9 @@ type ProjectsOperationsListCall struct {
 // NOTE: the `name` binding below allows API services to override the
 // binding
 // to use different resource name schemes, such as `users/*/operations`.
-func (r *ProjectsOperationsService) List(projectsId string) *ProjectsOperationsListCall {
+func (r *ProjectsOperationsService) List(name string) *ProjectsOperationsListCall {
 	c := &ProjectsOperationsListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.projectsId = projectsId
+	c.name = name
 	return c
 }
 
@@ -4262,12 +4352,12 @@ func (c *ProjectsOperationsListCall) doRequest(alt string) (*http.Response, erro
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/projects/{projectsId}/operations")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta1/{+name}/operations")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
 	req.Header = reqHeaders
 	googleapi.Expand(req.URL, map[string]string{
-		"projectsId": c.projectsId,
+		"name": c.name,
 	})
 	if c.ctx_ != nil {
 		return ctxhttp.Do(c.ctx_, c.s.client, req)
@@ -4320,12 +4410,19 @@ func (c *ProjectsOperationsListCall) Do(opts ...googleapi.CallOption) (*GoogleLo
 	//   "httpMethod": "GET",
 	//   "id": "ml.projects.operations.list",
 	//   "parameterOrder": [
-	//     "projectsId"
+	//     "name"
 	//   ],
 	//   "parameters": {
 	//     "filter": {
 	//       "description": "The standard list filter.",
 	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "name": {
+	//       "description": "The name of the operation collection.",
+	//       "location": "path",
+	//       "pattern": "^projects/[^/]+$",
+	//       "required": true,
 	//       "type": "string"
 	//     },
 	//     "pageSize": {
@@ -4338,15 +4435,9 @@ func (c *ProjectsOperationsListCall) Do(opts ...googleapi.CallOption) (*GoogleLo
 	//       "description": "The standard list page token.",
 	//       "location": "query",
 	//       "type": "string"
-	//     },
-	//     "projectsId": {
-	//       "description": "Part of `name`. The name of the operation collection.",
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
 	//     }
 	//   },
-	//   "path": "v1beta1/projects/{projectsId}/operations",
+	//   "path": "v1beta1/{+name}/operations",
 	//   "response": {
 	//     "$ref": "GoogleLongrunning__ListOperationsResponse"
 	//   },
